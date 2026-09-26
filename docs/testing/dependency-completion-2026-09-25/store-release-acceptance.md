@@ -11,7 +11,7 @@ Requirements checked on 2026-09-26; recheck before final submission.
 | Google Play target API | Mobile new apps/updates target API36+ since 2026-08-31 | Final AAB merged manifest, not only Gradle source |
 | Apple SDK | iOS/iPadOS26 SDK+ since 2026-04-28 | Final archive SDK/build metadata |
 | Android 16 KB | API35+ apps must support16KB; current page states update blocking from2027-02-01 | Every packaged native ELF, APK ZIP alignment and real16KB runtime |
-| Play Billing | Billing7 normal submission deadline2026-08-31; extension to11-01 only if approved | Final resolved Billing8+ and library version metadata |
+| Play Billing, if retained | Billing7 normal submission deadline2026-08-31; extension to11-01 only if approved | Audit remaining supported purchase callers; remove unused Billing under Task17 or verify the retained version |
 | Apple age questionnaire | New social-media questions required for submissions fromSeptember2026 | App Store Connect actual answers |
 | Android developer verification | Initial regional enforcement2026-09-30 in Brazil, Indonesia, Singapore and Thailand | Developer and application registration status |
 
@@ -46,16 +46,16 @@ All entries initially pending unless later evidence is recorded explicitly.
 - Permission flows: deny/permanently deny notifications, camera, microphone, media and location; limited-photo access; fullscreen intent unavailable; screen-sharing consent per session, FGS notification and background restrictions. Check iOS Always-location/calendar/AppleMusic descriptions against actual usage.
 - Account deletion: exposed password/Apple/Google/Facebook/wallet/passkey methods; server deletion, retention explanation, retry/cancellation and separate web path. Preserve recoverable wallet ownership and do not destroy assets as a substitute for deleting a service account.
 - Chat/UGC: actual report delivery and block behavior across chat/groups/feed/video, support contact and moderation handling evidence. Existing buttons alone are insufficient.
-- Payments: classify memberships, AI, stickers, gifts, NFTs, mini-app/web checkout and real-world payments; IAP restore/pending/cancel/refund and server entitlement verification; regional exceptions only with actual eligibility and correct storefront behavior.
+- Actual payment routes: remove unplanned points charging under Task17. Classify any remaining wallet, gift, NFT or mini-app checkout by actual behavior; apply purchase rules only where relevant. Free verify points do not require creating products or consumption features.
 - Accessibility/content: VoiceOver/TalkBack, large text, focus and critical payment confirmation; do not submit untested accessibility claims.
 
 ## External evidence still required
 
-The user supplied a United States/Canada product review draft. Current console policy/rejection notices and the evidence below remain unavailable; technical work continues.
+The user confirmed United States/Canada distribution and subsequently clarified that verify points are free encouragement with no purchase or consumption plan. Current console policy/rejection notices and the evidence below remain unavailable; technical work continues.
 
 - Organization developer identity and relevant financial-service/country permissions; classify actual noncustodial wallet, exchange/swap and other services separately.
 - Store privacy/data safety, target audience/age/social or child-safety declarations and reviewer account/contact details.
-- Media/FGS/fullscreen intent declarations; IAP catalog and applicable external-payment program status.
+- Media/FGS/fullscreen intent declarations; payment-program evidence only for actual supported payment routes. No points IAP catalog is required by the corrected product scope.
 - Encryption export classification evidence for existing ITSAppUsesNonExemptEncryption=false; standard algorithms alone are not an organizational certification.
 - Production account deletion, report moderation, push gateway and retention behavior.
 - Final Play prelaunch/console checks and Apple distribution validation/review results.
@@ -77,21 +77,21 @@ Final results must distinguish source checks, artifact checks, device tests and 
 Read-only source findings; classify against real product behavior before selecting remediation. No policy violation is inferred solely from a feature name.
 
 - Mining V1 reaches `MiningUtils.startMining()` / `MiningPluginUtils.start()`, then native `Evmsdk.emit`; V2 calls `runClient(wsUrl, validatorPrivateKey)` via `mining_v2_provider_actions.dart`, `api/mining_api.dart`, Android `MiningHandler.kt:85` and iOS `WalletCorePlugin.swift:509`. The device runs a local SDK with validator signing material. It is not proven to be merely remote monitoring, and these wrappers do not establish PoW or other reward computation. SDK source/vendor technical evidence is needed for computation location, tasks, rewards and background resource use. BLS signing alone is not PoW evidence. Do not rename or review-hide functionality to evade policy.
-- Host `wallet_page.dart:468` exposes Buy → `wallet/pages/iap/iap_page.dart`, with eight `ai.n42.www.n.*` consumable products. The visible purchase listener completes transactions and shows success for purchased/restored; server verification and idempotent entitlement delivery are not visible in that path. Confirm actual product purpose and backend delivery, then test sandbox validation, pending/restart/recovery/refund/failure behavior.
+- Host `wallet_page.dart:468` retains a dormant callback to `wallet/pages/iap/iap_page.dart`, with eight `ai.n42.www.n.*` consumable products. The visible purchase listener completes transactions and shows success for purchased/restored; server verification and idempotent entitlement delivery are not visible in that path. The wallet button is commented out. No loyalty-credit call establishes these N-labeled products as points. Classify this dormant path independently; remove it only if confirmed unsupported, without inventing a fulfillment service.
 - Chat `subscription/subscription_page.dart:44` calls `subscription_service.dart:67`, which stores a local subscription with optional transaction hash. This alone is not payment proof; it must not be presented as completed paid entitlement without an actual verified delivery contract.
 - `chat_page_more_features.dart:497` tips use wallet transfer (default USDT); determine whether genuine personal gifts or purchases of content/benefits.
 - `chat_page_more_features.dart:613` transfers an existing NFT by contract/tokenId/chainId; no sale or paid unlock is established from that route. Validate ownership/chain and actual product purpose.
 - `mini_app_bridge_service.dart:335` permits confirmed wallet transfer (default ETH); classify actual published mini-app products and regional payment requirements rather than exempting arbitrary checkout because it uses crypto.
 - Sticker installation uses `installPack`; no purchase call found in that route. No AI-specific purchase entrypoint was established by this read-only scan.
 
-User has been asked for product/entitlement definitions and mining SDK technical evidence, in addition to distribution regions. Code and artifact remediation that does not depend on those facts continues.
+Product scope is now clarified below; no SKU or consumption documents are requested. Actual native SDK computation still needs source or runtime evidence. Independent remediation continues.
 
 
 ## User-provided product scope (2026-09-26)
 
 - Distribution scope: United States and Canada, clarified by the latest user-supplied draft. Verify the actual console storefront selection before distribution. Do not automatically apply US external-payment exceptions to Canada or other storefronts.
-- Purchased entitlements and validator/mining rewards are both app-use-only points (积分), confirmed nontransferable, nonwithdrawable and nonconvertible to fiat/on-chain assets. Implementation and reward attribution must still be verified.
-- Audit actual point delivery, consumption and reward behavior. Do not classify points as cryptocurrency solely from naming, or assume they are exempt solely because called points.
+- Points are free encouragement for participating in verify, with no planned purchases or consumption. Earlier assumptions about purchased entitlements are superseded. These are product requirements: nontransferable, nonwithdrawable and nonconvertible. Runtime conformance and actual reward attribution still require verification.
+- Audit actual free point display, history and reward behavior. Do not classify points as cryptocurrency solely from naming, or assume they are exempt solely because called points.
 
 
 ## North America storefront verification
@@ -103,49 +103,26 @@ User has been asked for product/entitlement definitions and mining SDK technical
 - Social features require [Google child-safety standards](https://support.google.com/googleplay/android-developer/answer/14747720?hl=en), including public anti-CSAE standards, feedback and response/reporting processes and a contact. Adult targeting alone does not exempt social apps. Apply [Families rules](https://support.google.com/googleplay/android-developer/answer/9893335?hl=en) only where the actual audience makes them applicable.
 
 
-### Points clarification confirmed by user
+### Latest points clarification supersedes the payment workstream
 
-Both purchased and validator/mining reward points are app-use-only: **not transferable, not withdrawable, and not exchangeable for fiat or on-chain tokens**. Verify implementation matches those boundaries and that points are distinct from ordinary blockchain wallet assets. Keep native IAP as the baseline purchase path for US and Canada; no new external-billing feature is needed for this work. Verify authoritative receipt validation, idempotent fulfillment, spend and refund handling against the actual existing ledger/service. Validator SDK computation still requires behavior-based classification; reward naming alone is not proof of off-device computation.
+The user explicitly states that points have no goods/SKU plan and no designed consumption feature. Points are free encouragement for verify participation, with the satisfaction of seeing earned points. The earlier full payment selection and provisional review draft are superseded; no purchase, receipt, spending or refund system is to be added. Missing catalog/service documents are not release blockers.
 
+Apple's purchase rules address paid digital features and Google's billing policy addresses accepting payment; neither requires creating a paid product for free earned display points. See [Apple purchase rules](https://developer.apple.com/app-store/review/guidelines/#in-app-purchase) and [Google payments policy](https://support.google.com/googleplay/android-developer/answer/9858738?hl=en).
 
-## Existing loyalty ledger and confirmed purchase gaps
+Task17 now preserves free points and existing records, removes unplanned paid entrypoints and misleading claims, and removes dependencies only after caller verification. Native validator computation remains a separate behavior-based assessment; the reward name does not establish what the SDK computes.
 
-Read-only follow-up establishes an existing ledger; do not create a duplicate points system.
+## Existing loyalty evidence and limits
 
-- `contracts/loyalty/src/N42LoyaltyPoints.sol` implements operator-only awardFor/awardTaskFor/spendFor and processedRequests. No transfer or redemption-to-token function was found. On-chain nontransferable accounting does not by itself contradict app-only nonconvertible points.
-- `backend/loyalty` authenticates UUID/Token through external AUTH_VERIFY_URL, checks wallet binding, uses an internal token for awards, records PostgreSQL history and submits on-chain awards. Deployment/identity-service ownership remains unverified. Flutter loyalty service defaults to https://api.n42.ai/loyalty/v1.
-- Repository-wide searches did not find Apple/Google store verification, server notifications/RTDN, purchase fulfillment or refunds. Blockchain receipt processing is not store receipt verification. External services may exist and require documentation.
-- IAP product IDs are `ai.n42.www.n.{4,10,20,55,120,280,700,1600}`. Do not infer point quantities from their suffixes. The page listener completes purchased/restored events without visible authenticated ledger fulfillment; listener lifetime is tied to the page.
-- Current on-chain duplicate request rejection does not automatically recover chain-success/PostgreSQL-failure retries. Full purchase integration would need durable transaction state and reconciliation. Existing spendFor cannot alone handle refunds after points were spent.
-- Current loyalty UI offers check-in/referral/history; reward redemption submission was not found. `app_config.dart` disables points/airdrop entrypoints on iOS while IAP remains exposed.
-- Wallet TokenInfo currently uses ordinary coin holdings, with no loyalty mapping found. Preserve this separation. Mining reward RPC/native coin data was not proven to feed loyalty awards; identify the actual reward crediting contract before claiming behavior.
-
-The user selected implementation and verification of the full purchase/fulfillment/spend/refund system before release. Existing dependency/native migration work continues; see the decision and unresolved inputs below.
-
-
-### User decision: complete the full points flow
-
-The user selected full purchase, fulfillment, consumption and refunds before release, and will supply product-point mappings and service details. Task17 is now the dedicated design/implementation workstream; disable-only is not the selected final solution. Technical inputs for SKU mapping, allowed spending and any existing external verification service have been requested. No amounts or business rules are guessed. Task16 final acceptance includes the implemented and verified Task17 behavior.
-
-
-### User-supplied review draft: unresolved catalog and service inputs
-
-The user supplied “N42 App 内部积分与支付说明”, explicitly a product/engineering/compliance review draft for **United States and Canada**. It supplies no approved numeric catalog or service contract. Treat the following as requirements and acceptance constraints, not evidence of implementation or legal approval:
-
-- All eight SKU point quantities remain pending. Never interpret SKU suffixes as price, points or conversion rates. Verify platform availability independently. Catalog approval must include platform, base/bonus/total points, version and effective time. Prices shown to users come from localized store product data; point grants come from the approved server catalog.
-- No spending functions or prices are approved yet. Do not invent chargeable features or enable unapproved catalog entries. Show cost and obtain authorization; freeze the applicable rule version and any authorized maximum in the order.
-- Purchased points must not expire. Keep purchase, bonus, reward, spending and refund adjustment records distinguishable. Precision, rounding, spending order, partial delivery and refunds after spending need explicit rules.
-- Verify store transactions server-side, bind them to the correct account, reject pending/invalid purchases, fulfill idempotently, and complete store processing only after durable fulfillment. Recover balances from the server across devices.
-- Distinguish a refund request, store-approved refund and service-failure point return. Support duplicate/out-of-order notifications and refund reversals. Never debit blockchain wallet assets, or prevent a platform-approved refund because point balance is insufficient.
-- Points, blockchain assets and merchant stored value must remain separately accounted. No point transfers, withdrawals, fiat/crypto exchange, interest, investment return, physical-goods purchase or third-party settlement. Lawful purchase refunds are distinct from discretionary withdrawal.
-- Existing verification/fulfillment/refund services remain unconfirmed. Require documentation/version/owner/interfaces/errors/reconciliation and integration evidence if supplied. Do not infer existence from method names.
-
-**Still required before paid release:** approved eight-SKU mappings; approved spending catalog and delivery rules; spending order and spent/partial refund policy; confirmed purchase beneficiary/account-wallet lifecycle; actual store setup and service credentials through secure deployment configuration; sandbox and production-configuration acceptance evidence. Engineering may prepare disabled catalog validation, durable order processing and tests without fabricating business values. Full paid release remains gated on these inputs and verification.
-
+- `contracts/loyalty/src/N42LoyaltyPoints.sol` contains operator award/spend methods and processed requests. Method availability does not authorize a new spending product or establish deployment.
+- `backend/loyalty` contains authentication, wallet binding, awards and history. Deployment and actual reward attribution remain unverified; do not create a duplicate ledger.
+- Preserve existing host loyalty display/history/check-in behavior and account isolation. Native reward paths are separate; their connection to loyalty has not been established. Do not erase persisted records during UI cleanup.
+- Ordinary wallet TokenInfo holdings are distinct from points. Preserve legitimate wallet swaps and transfers.
+- Chat's configurable redemption and local subscription paths require an exposure audit; the host currently leaves Chat points disabled. A local subscription record is not evidence of a paid entitlement.
+- The dormant host IAP code requires independent classification and caller review; it is not authority to design points products. No store receipt/refund implementation is required for the clarified free-only points scope.
 
 ## Detailed implementation research
 
-- [Points payment design inputs](points-payment-design-inputs.md): existing ledger, platform transaction handling, durable reconciliation and unresolved business rules.
+- [Corrected free-points scope](points-payment-design-inputs.md): authoritative product clarification, bounded cleanup and acceptance criteria.
 - [Account deletion design inputs](account-deletion-design-inputs.md): actual UIA defects, SDK interfaces, OAuth distinction and host/web-service evidence gaps.
 
-Both are research inputs, not approved business catalogs or completed acceptance results.
+These documents do not establish completed runtime or store acceptance.

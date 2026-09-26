@@ -365,7 +365,7 @@ Files: Chat wallet bridge/token/payment URI integration and tests, Chat ARBs/gen
 - [ ] Fix real Chat localization gaps in source without blanket allowlisting or marking untranslated English as passing; regenerate and run audits.
 - [ ] Re-pin any final reviewed Chat SHA, rerun root/local/Chat suites, four Go checks, Rust checks, Chrome audits and final native builds on final source.
 - [ ] Re-query outdated graphs, classify each remaining non-latest dependency with concrete upstream constraints, preserve unchanged deferred coverage gate, and write current results linked to evidence.
-- [ ] Review this phase and continue small commits/pushes. Final whole-branch review, integration and cleanup must include the subsequently added release and points-purchase requirements in Tasks16–17.
+- [ ] Review this phase and continue small commits/pushes. Final whole-branch review, integration and cleanup must include the subsequently added release and corrected free-points requirements in Tasks16–17.
 
 
 ### Task 16: Current Google Play and Apple App Store release acceptance
@@ -387,18 +387,17 @@ Initial official references checked on 2026-09-26:
 - Apple privacy manifests: https://developer.apple.com/documentation/BundleResources/privacy-manifest-files.
 
 
-### Task 17: Complete closed-loop points purchasing, consumption and refunds
+### Task 17: Preserve free verify points and remove unplanned paid flows
 
-User selected on 2026-09-26: complete purchase, fulfillment, consumption and refund handling before the North America release; do not merely disable unfinished chargeable features. Both purchased and validator reward points are app-use-only, nontransferable, nonwithdrawable and nonconvertible to fiat/on-chain tokens. This is a separate architecture/design workstream within the release objective. Task16 remains the final release gate after this implementation.
+The user's latest clarification on 2026-09-26 supersedes the earlier payment selections and review draft: points are free encouragement for participating in verify, with earned totals displayed for satisfaction. There is no points product catalog, planned points purchase or consumption feature. The prior purchase/fulfillment/spend/refund workstream is withdrawn. Missing SKU mappings and payment services are not release blockers; do not ask the user to invent them.
 
-- [ ] Establish a reviewed design and execution plan based on existing contracts/loyalty, backend/loyalty and Flutter loyalty services. Do not create a second ledger or infer SKU quantities from product identifiers.
-- [ ] Obtain server-owned SKU-to-points mapping, supported consumption features/rules and existing service contracts. Clarify refund treatment after partial/full point consumption in the written design. No credentials in source or conversation.
-- [ ] Verify current official Apple/Google purchase/account-binding/receipt/notification/acknowledgement and refund contracts. Preserve US/Canada native IAP baseline; no unrequested alternative-billing feature.
-- [ ] Implement authenticated server verification, durable/idempotent fulfillment and chain/DB reconciliation. Reject wrong account, product, environment and signatures. Client-controlled quantities or internal award tokens are prohibited.
-- [ ] Implement actual allowed consumption and refund reconciliation, including already-consumed points, with no transfer/cash-out/asset-conversion path. Retain ledger/account isolation and recoverable errors.
-- [ ] Connect app lifecycle purchase handling, pending/retry/restart/restoration, balance/consumption UI and truthful subscription/entitlement state. Complete/consume store transactions only after durable fulfillment, according to each platform contract.
-- [ ] Cover duplicate callbacks/notifications, chain-success/index-failure, process death, cancellation/pending, invalid receipts, partial/full refunds and cross-account attempts. Run real platform sandbox checks with configured services; never equate mock tests with store verification.
-- [ ] Independently review small implementation groups, retain deployment/console evidence requirements, and include all changes in final repository and release acceptance. Deployment, contract upgrades or store submission requiring an irreversible external action remain separate final authorization steps; prepare concrete reviewed artifacts first.
+- [ ] Trace actual host and official Chat entrypoints; distinguish free points from wallet crypto assets, swaps and transfers.
+- [ ] Permanently remove confirmed unplanned points purchase entrypoints and misleading paid claims. The dormant N-labeled IAP page has no established loyalty-credit link; classify it independently before deleting its source or dependencies. Audit Chat subscription/redemption exposure separately before removing reusable package APIs; preserve unrelated functionality and persisted records.
+- [ ] Remove IAP dependencies and native artifacts only after confirming no supported caller remains; regenerate locks and platform output with the appropriate tools.
+- [ ] Preserve verify participation, earned balances/history and account isolation. Do not invent earning rules, products, prices, spending, expiry, receipt services or another ledger.
+- [ ] Test absence of unplanned charging routes, correct account-specific display, preserved records and unaffected wallet functions. Record actual runtime and build evidence.
+- [ ] Align store descriptions with actual free behavior. Assess native validator computation, privacy, deletion and UGC under Task16 independently of point naming.
+- [ ] Review, commit and push the small verified changes; include this scope in final integration.
 
 
 ## Active execution queue — 2026-09-26
@@ -407,14 +406,14 @@ User reconfirmed this queue and requested separate commits and pushes for each i
 
 | Order | Item | Acceptance / completion condition | Current state |
 | --- | --- | --- | --- |
-| 0 | Host Dart graph and Reown persistence integration (14A) | Independent review of commits `134d0c9ab` and `1be87c4e8`, fix findings, push each reviewed commit separately | Implemented and tested; review pending |
-| 1 | Android native dependencies and build acceptance (14B) | Resolve final Gradle/Maven graph, build artifacts, verify SQLCipher/native ABI and applicable device regressions; record unresolved vendor evidence | Queued |
-| 2 | iOS/macOS native dependencies and build acceptance (14C) | Resolve Apple locks and deployment floors, unsigned builds, SQLCipher/native linkage and regression evidence | Queued |
+| 0 | Host Dart graph and Reown persistence integration (14A) | Independent review of commits `134d0c9ab` and `1be87c4e8`, fix findings, push each reviewed commit separately | Reviewed, tested and pushed; heartbeat follow-up included |
+| 1 | Android native dependencies and build acceptance (14B) | Resolve final Gradle/Maven graph, build artifacts, verify SQLCipher/native ABI and applicable device regressions; record unresolved vendor evidence | Reviewed, tested and pushed; final integrated runtime checks remain |
+| 2 | iOS/macOS native dependencies and build acceptance (14C) | Resolve Apple locks and deployment floors, unsigned builds, SQLCipher/native linkage and regression evidence | In progress |
 | 3 | Chrome extension upgrade (14D) | Clean install, crypto vectors, tests, lint, types, build, full and production dependency audits | Queued |
 | 4 | Remaining compatibility repairs (15) | Background-call account provenance, exact-asset QR bridge, localization repairs and focused regression acceptance | Queued |
 | 5 | Whole-repository final dependency and security audit (15–16) | Final-source app/Chat/local/Go/Rust/Chrome/native verification, current dependency/vulnerability inventory, evidence for every version cap or unresolved risk | Queued |
-| 6 | Points payment lifecycle (17) | Approved SKU quantities and consumption/refund rules; server verification, idempotent credit, consumption, refund reconciliation and real store sandbox acceptance | Queued; product mapping and service evidence pending |
-| 7 | Store release acceptance for US/Canada (16) | Final artifacts, privacy/permissions, deletion and UGC flows, payment lifecycle, console and organizational evidence; recheck current official policies | Queued; depends on payment and release evidence |
-| 8 | Final integration and merge (15–17) | Independently reviewed small commits pushed, final branch checks and conflict resolution; preserve release/payment gates and report external blockers explicitly | Queued; dependent on preceding acceptance |
+| 6 | Free verify points and unplanned paid-flow cleanup (17) | Preserve earned display/history and account isolation; remove unsupported charging paths and unused dependencies; no invented products or consumption | Source audit complete; implementation queued |
+| 7 | Store release acceptance for US/Canada (16) | Final artifacts, privacy/permissions, deletion and UGC flows, free-points behavior, console and organizational evidence; recheck current official policies | Queued; depends on code and release evidence |
+| 8 | Final integration and merge (15–17) | Independently reviewed small commits pushed, final branch checks and conflict resolution; preserve applicable release gates and report external blockers explicitly | Queued; dependent on preceding acceptance |
 
-Commit subjects must be English. Push only reviewed, verified items to the existing continuation branch; do not force-push or include unrelated workspace changes. Keep tightly coupled dependency migrations atomic. Coverage improvement remains deferred by the user: the unchanged 70% gate is failing at 49.25%, not passed. Store release and points-payment acceptance remain open under Tasks 16–17 and must not be inferred from successful builds.
+Commit subjects must be English. Push only reviewed, verified items to the existing continuation branch; do not force-push or include unrelated workspace changes. Keep tightly coupled dependency migrations atomic. Coverage improvement remains deferred by the user: the unchanged 70% gate is failing at 49.25%, not passed. Store release and free-points cleanup acceptance remain open under Tasks 16–17 and must not be inferred from successful builds.
