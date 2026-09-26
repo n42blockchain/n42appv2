@@ -1,6 +1,6 @@
 module n42/livekit-jwt
 
-go 1.26.0
+go 1.26.8
 
 require github.com/livekit/protocol v1.52.1
 

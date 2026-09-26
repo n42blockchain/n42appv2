@@ -1,6 +1,6 @@
 module github.com/n42/n42appv2/backend/swap
 
-go 1.26.0
+go 1.26.8
 
 require (
 	github.com/ethereum/go-ethereum v1.17.6
