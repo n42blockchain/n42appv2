@@ -5,6 +5,7 @@
 // protocol messages and already-localized interpolation are intentionally included.
 import 'dart:io';
 import 'dart:convert';
+
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
@@ -20,8 +21,8 @@ class Audit extends RecursiveAstVisitor<void> {
     final parent = node.parent;
     final source = parent.toString();
     for (final arg in node.arguments) {
-      final expression = arg is NamedExpression ? arg.expression : arg;
-      final label = arg is NamedExpression ? arg.name.label.name : '';
+      final expression = arg.argumentExpression;
+      final label = arg is NamedArgument ? arg.name.lexeme : '';
       final knownLabel = [
         'label',
         'hintText',

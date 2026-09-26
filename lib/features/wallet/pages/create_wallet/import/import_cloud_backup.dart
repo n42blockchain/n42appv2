@@ -1,4 +1,5 @@
 import 'package:n42_wallet/generated/l10n.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -52,12 +53,11 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   Future<void> _pickFile() async {
     setState(() => _error = '');
 
-    FilePickerResult? result;
+    PlatformFile? result;
     try {
-      result = await FilePicker.pickFiles(
+      result = await FilePicker.pickFile(
         type: FileType.custom,
         allowedExtensions: const ['n42backup', 'json'],
-        withData: false,
       );
     } catch (e) {
       if (!mounted) return;
@@ -65,9 +65,9 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       return;
     }
 
-    if (!mounted || result == null || result.files.isEmpty) return;
+    if (!mounted || result == null) return;
 
-    final path = result.files.first.path;
+    final path = result.path;
     if (path == null) {
       if (!mounted) return;
       setState(() => _error = S.of(context).g_ui_backup_file_access);
@@ -84,7 +84,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         return;
       }
       setState(() {
-        _selectedFileName = result!.files.first.name;
+        _selectedFileName = result!.name;
         _backupContent = content;
       });
     } catch (e) {

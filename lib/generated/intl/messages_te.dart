@@ -1382,9 +1382,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "వాలెట్ కనెక్ట్ చేయండి",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "ఈ పరికరం రూట్ చేయబడింది లేదా జైల్ బ్రేక్ చేయబడిందని తెలుస్తోంది. ప్రమాదం కలిగించిన పరికరంపై వాలెట్ ఉపయోగించడం కీ దొంగతనం మరియు అనధికారిక ప్రవేశానికి ప్రమాదాన్ని పెంచుతుంది. జాగ్రత్తగా కొనసాగండి.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "ఈ పరికరం రూట్ చేయబడింది లేదా జైల్ బ్రేక్ చేయబడిందని తెలుస్తోంది. ప్రమాదం కలిగించిన పరికరంపై వాలెట్ ఉపయోగించడం కీ దొంగతనం మరియు అనధికారిక ప్రవేశానికి ప్రమాదాన్ని పెంచుతుంది. జాగ్రత్తగా కొనసాగండి.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "పరికర సురక్షితం హెచ్చరిక",
     ),

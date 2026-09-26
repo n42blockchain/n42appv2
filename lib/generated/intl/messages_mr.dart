@@ -1311,9 +1311,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "पाकीट जोडा",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "हे डिव्हाइस रूट किंवा जेलब्रेक केलेले दिसते. सुरक्षा धोक्यात आलेल्या डिव्हाइसवर वॉलेट वापरल्याने गुप्त कीची चोरी आणि अनधिकृत प्रवेशाचा धोका वाढतो. सावधपणे पुढे जा.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "हे डिव्हाइस रूट किंवा जेलब्रेक केलेले दिसते. सुरक्षा धोक्यात आलेल्या डिव्हाइसवर वॉलेट वापरल्याने गुप्त कीची चोरी आणि अनधिकृत प्रवेशाचा धोका वाढतो. सावधपणे पुढे जा.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "उपकरण सुरक्षितता चेतावणी",
     ),
@@ -1917,9 +1918,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "व्यवहारावर स्वाक्षरी करण्यासाठी हा QR कोड तुमच्या कीस्टोन डिव्हाइसने स्कॅन करा",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "तुमचा कॅमेरा तुमच्या कीस्टोन डिव्हाइसवर प्रदर्शित होणाऱ्या QR कोडकडे निर्देशित करा",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "तुमचा कॅमेरा तुमच्या कीस्टोन डिव्हाइसवर प्रदर्शित होणाऱ्या QR कोडकडे निर्देशित करा",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("कीस्टोन स्वाक्षरी स्कॅन करा"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

@@ -1401,9 +1401,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "பணப்பையை இணைக்கவும்",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "இந்தச் சாதனம் ரூட் அல்லது ஜெயில்பிரேக் செய்யப்பட்டதாகத் தெரிகிறது. பாதுகாப்பு பாதிக்கப்பட்ட சாதனத்தில் பணப்பையைப் பயன்படுத்துவது ரகசிய விசைகள் திருடப்படுதல் மற்றும் அனுமதியற்ற அணுகல் அபாயத்தை அதிகரிக்கிறது. கவனமாகத் தொடரவும்.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "இந்தச் சாதனம் ரூட் அல்லது ஜெயில்பிரேக் செய்யப்பட்டதாகத் தெரிகிறது. பாதுகாப்பு பாதிக்கப்பட்ட சாதனத்தில் பணப்பையைப் பயன்படுத்துவது ரகசிய விசைகள் திருடப்படுதல் மற்றும் அனுமதியற்ற அணுகல் அபாயத்தை அதிகரிக்கிறது. கவனமாகத் தொடரவும்.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "கருவி பாதுகாப்பு எச்சரிக்கை",
     ),
@@ -2073,9 +2074,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "பரிவர்த்தனையில் கையொப்பமிட உங்கள் கீஸ்டோன் சாதனம் மூலம் இந்த QR குறியீட்டை ஸ்கேன் செய்யவும்",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "உங்கள் கீஸ்டோன் சாதனத்தில் காட்டப்படும் QR குறியீட்டில் உங்கள் கேமராவைச் சுட்டிக்காட்டவும்",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "உங்கள் கீஸ்டோன் சாதனத்தில் காட்டப்படும் QR குறியீட்டில் உங்கள் கேமராவைச் சுட்டிக்காட்டவும்",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage(
           "கீஸ்டோன் கையொப்பத்தை ஸ்கேன் செய்யவும்",

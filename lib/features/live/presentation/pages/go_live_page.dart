@@ -80,7 +80,7 @@ class _GoLivePageState extends State<GoLivePage> {
         name: '直播 ${DateTime.now().toIso8601String()}',
       );
       // 建房后、发布视频前用户退出：房已建但尚无视频/心跳，只需退房。
-      if (!mounted) return _abortStartup(roomId);
+      if (!mounted) return await _abortStartup(roomId);
 
       // 3. 先建立 Matrix 直播层，再尝试发布视频。Matrix 失败必须回滚刚建的
       //    房间；LiveKit 是可降级的视频层，失败时仍允许弹幕、礼物、预测和
@@ -107,7 +107,7 @@ class _GoLivePageState extends State<GoLivePage> {
       }
       // 视频尝试完成、心跳启动前用户退出：按实际加入状态清理。
       if (!mounted) {
-        return _abortStartup(roomId, videoJoined: videoJoined);
+        return await _abortStartup(roomId, videoJoined: videoJoined);
       }
 
       // 发布成功后开始上报直播心跳：立即一拍 + 周期刷新 room state/公共目录，
@@ -117,7 +117,7 @@ class _GoLivePageState extends State<GoLivePage> {
       // 此前的真实 bug——dispose() 因 `_roomId`/`_heartbeat` 尚未赋值而误判
       // "无需清理"，导致这三项资源在后台永久脱管运行，只能杀进程才能停止。
       if (!mounted) {
-        return _abortStartup(
+        return await _abortStartup(
           roomId,
           videoJoined: videoJoined,
           heartbeatStarted: true,
@@ -217,9 +217,8 @@ class _GoLivePageState extends State<GoLivePage> {
     final supported = await _video.toggleTorch();
     if (!mounted) return;
     if (!supported) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('请切换到支持补光灯的后置摄像头')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('请切换到支持补光灯的后置摄像头')));
     } else {
       setState(() {});
     }
@@ -492,9 +491,8 @@ class _RoomIdChip extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Clipboard.setData(ClipboardData(text: roomId));
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('已复制房间号')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('已复制房间号')));
         },
         child: ConstrainedBox(
           // 抬高到可用触控高度（原 ≈26dp < 44dp）。

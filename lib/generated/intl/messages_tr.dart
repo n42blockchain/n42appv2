@@ -1312,9 +1312,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Cüzdanı bağla",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Bu cihaz kök (root) veya jailbreak edilmiş görünüyor. Zarar görmüş bir cihazda cüzdan kullanmak anahtar çalınma ve yetkisiz erişim riskini artırır. Dikkatli olun.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Bu cihaz kök (root) veya jailbreak edilmiş görünüyor. Zarar görmüş bir cihazda cüzdan kullanmak anahtar çalınma ve yetkisiz erişim riskini artırır. Dikkatli olun.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Cihaz Güvenliği Uyarısı",
     ),

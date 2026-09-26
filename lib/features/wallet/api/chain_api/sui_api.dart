@@ -112,7 +112,7 @@ class SuiApi {
 
   Future<Result<dynamic, AppError>> baseRPCSui(
     String method,
-    var value, {
+    dynamic value, {
     bool enableRetry = true,
   }) async {
     try {

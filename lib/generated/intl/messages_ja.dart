@@ -1102,9 +1102,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "ウォレットを接続",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "このデバイスはルート化またはジャイルブレイクされているようです。信頼できないデバイス上でウォレットを使用すると、鍵の盗難や不正アクセスのリスクが高まります。注意して操作してください。",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "このデバイスはルート化またはジャイルブレイクされているようです。信頼できないデバイス上でウォレットを使用すると、鍵の盗難や不正アクセスのリスクが高まります。注意して操作してください。",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "デバイスセキュリティの警告",
     ),

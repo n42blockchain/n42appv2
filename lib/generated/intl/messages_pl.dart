@@ -1332,9 +1332,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Połącz portfel",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "To urządzenie prawdopodobnie ma uprawnienia root lub jailbreak. Korzystanie z portfela na urządzeniu z naruszonymi zabezpieczeniami zwiększa ryzyko kradzieży kluczy i nieuprawnionego dostępu. Zachowaj ostrożność.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "To urządzenie prawdopodobnie ma uprawnienia root lub jailbreak. Korzystanie z portfela na urządzeniu z naruszonymi zabezpieczeniami zwiększa ryzyko kradzieży kluczy i nieuprawnionego dostępu. Zachowaj ostrożność.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Ostrzeżenie o bezpieczeństwie urządzenia",
     ),

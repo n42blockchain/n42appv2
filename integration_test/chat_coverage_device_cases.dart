@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
-import 'package:sqlite3/open.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/core/services/auto_download_policy_service.dart';
 import 'package:n42_chat/src/core/services/biometric_service.dart';
@@ -32,12 +28,6 @@ class _Policy extends Mock implements AutoDownloadPolicyService {}
 typedef DeviceCapture = Future<void> Function(WidgetTester tester, String name);
 
 void registerChatCoverageDeviceCases(DeviceCapture capture) {
-  setUpAll(() async {
-    if (Platform.isAndroid) {
-      await applyWorkaroundToOpenSqlCipherOnOldAndroidVersions();
-      open.overrideFor(OperatingSystem.android, openCipherOnAndroid);
-    }
-  });
   storage_contracts.registerStorageDatabaseBehaviorTests(
     registerCase: (description, body) =>
         testWidgets(description, (tester) async {
@@ -140,9 +130,8 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
     'device protected image and payment detail callbacks obey state',
     (tester) async {
       final policy = _Policy();
-      when(
-        () => policy.shouldAutoDownload(AutoDownloadMediaType.image),
-      ).thenAnswer((_) async => false);
+      when(() => policy.shouldAutoDownload(AutoDownloadMediaType.image))
+          .thenAnswer((_) async => false);
       var viewed = 0;
       var details = 0;
       Widget page({bool consumed = false}) => Scaffold(
@@ -205,9 +194,8 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
       tester.testTextInput.register();
       addTearDown(tester.testTextInput.unregister);
       final repository = _AuthRepository();
-      when(
-        () => repository.loginStateStream,
-      ).thenAnswer((_) => const Stream<bool>.empty());
+      when(() => repository.loginStateStream)
+          .thenAnswer((_) => const Stream<bool>.empty());
       when(
         () => repository.register(
           homeserver: any(named: 'homeserver'),

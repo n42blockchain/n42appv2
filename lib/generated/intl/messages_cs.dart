@@ -1317,9 +1317,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Připojit peněženku",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Toto zařízení je pravděpodobně rootované nebo má jailbreak. Používání peněženky na zařízení s narušeným zabezpečením zvyšuje riziko krádeže klíčů a neoprávněného přístupu. Postupujte opatrně.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Toto zařízení je pravděpodobně rootované nebo má jailbreak. Používání peněženky na zařízení s narušeným zabezpečením zvyšuje riziko krádeže klíčů a neoprávněného přístupu. Postupujte opatrně.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Upozornění na bezpečnost zařízení",
     ),

@@ -1331,9 +1331,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Unganisha pochi",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Kifaa hiki kinaonekana kuwa kimefanyiwa root au jailbreak. Kutumia pochi kwenye kifaa kisicho salama huongeza hatari ya kuibiwa kwa funguo na ufikiaji usioidhinishwa. Endelea kwa tahadhari.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Kifaa hiki kinaonekana kuwa kimefanyiwa root au jailbreak. Kutumia pochi kwenye kifaa kisicho salama huongeza hatari ya kuibiwa kwa funguo na ufikiaji usioidhinishwa. Endelea kwa tahadhari.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Onyo la usalama wa kifaa",
     ),
@@ -1991,9 +1992,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Changanua msimbo huu wa QR kwa kifaa chako cha Keystone ili kutia sahihi muamala",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Elekeza kamera yako kwenye msimbo wa QR unaoonyeshwa kwenye kifaa chako cha Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Elekeza kamera yako kwenye msimbo wa QR unaoonyeshwa kwenye kifaa chako cha Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage(
           "Changanua Sahihi ya Jiwe la Msingi",

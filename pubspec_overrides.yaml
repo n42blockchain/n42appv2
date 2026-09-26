@@ -1,7 +1,21 @@
 dependency_overrides:
+  simple_html_css:
+    path: packages/simple_html_css
+  fl_chart:
+    path: packages/fl_chart
   audioplayers_darwin:
     path: packages/audioplayers_darwin
   webview_flutter_wkwebview:
     path: packages/webview_flutter_wkwebview
-  flutter_secure_storage: ^10.3.4
+  flutter_secure_storage:
+    git:
+      url: https://github.com/n42blockchain/n42appv2.git
+      ref: 9733aa21eb7e4fa98c2aa8a287ef9588960023c2
+      path: packages/flutter_secure_storage
+  facebook_auth_desktop:
+    git:
+      url: https://github.com/n42blockchain/n42appv2.git
+      ref: 9733aa21eb7e4fa98c2aa8a287ef9588960023c2
+      path: packages/facebook_auth_desktop
+  package_info_plus: ^10.2.1
   flutter_facebook_auth: 7.2.0

@@ -1356,9 +1356,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Collega Portafoglio",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Questo dispositivo sembra essere rootato o jailbroken. L\'uso di un portafoglio su un dispositivo compromesso aumenta il rischio di furto delle chiavi e di accesso non autorizzato. Procedi con cautela.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Questo dispositivo sembra essere rootato o jailbroken. L\'uso di un portafoglio su un dispositivo compromesso aumenta il rischio di furto delle chiavi e di accesso non autorizzato. Procedi con cautela.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Avviso Sicurezza Dispositivo",
     ),
@@ -2000,9 +2001,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Scansiona questo codice QR con il tuo dispositivo Keystone per firmare la transazione",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Punta la fotocamera verso il codice QR visualizzato sul tuo dispositivo Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Punta la fotocamera verso il codice QR visualizzato sul tuo dispositivo Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Scansiona la firma trapezoidale"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

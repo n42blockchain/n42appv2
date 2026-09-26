@@ -1,0 +1,9 @@
+{
+  "LICENSE": "128dc0df4850024f80f2abc7f507da20928eba37bde5e93733af06b59cda057b",
+  "lib/simple_html_css.dart": "e49f9c5539c865e9ff401486487c7dba244c62c5d2dc0b0349f247a68caac3cc",
+  "lib/src/css_named_colors.dart": "c9bb26adcc19e8e8ea6eb2cb8335e4414fa7ab329c0f39213deebeb77eabae05",
+  "lib/src/html_stylist.dart": "e25dea1e2c3bd3b999b8678ed7bdd526a693d1758bb5147c4df8cfe9ca8b0f95",
+  "lib/src/internals.dart": "c6bafe011544c981a6086a4c19f1249cf352ee4023c81db816d614fb1accf3ca",
+  "lib/src/utils.dart": "09f1f4960291a7840b2e7cf301bad316d3d3502ec4e19631bd6846821e14a57e",
+  "pubspec.yaml": "13fed48bc4294b1c54d831b6f0799a0eb08760dd03e37a0e7173d23c23c9ae68"
+}

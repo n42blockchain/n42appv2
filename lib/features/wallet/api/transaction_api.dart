@@ -51,7 +51,7 @@ class TransactionApi {
         case 'LTC':
         case 'DASH':
         case 'DOGE':
-          return btcTransactionList(
+          return await btcTransactionList(
             coinMiniName,
             address,
             page: page,

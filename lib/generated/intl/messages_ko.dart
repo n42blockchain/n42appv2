@@ -1075,9 +1075,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "이 사이트는 지갑 주소를 확인하고 거래를 제안받는 것을 요청하고 있습니다. 사용자의 승인 없이는 자금을 이동할 수 없습니다.",
     ),
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage("지갑 연결"),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "이 기기는 루팅되었거나 탈옥된 것으로 보입니다. 보안이 손상된 기기에서 지갑을 사용하면 키 도난과 무단 접근의 위험이 커집니다. 주의하여 진행하세요.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "이 기기는 루팅되었거나 탈옥된 것으로 보입니다. 보안이 손상된 기기에서 지갑을 사용하면 키 도난과 무단 접근의 위험이 커집니다. 주의하여 진행하세요.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "기기 보안 경고",
     ),

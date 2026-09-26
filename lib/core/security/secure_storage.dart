@@ -8,7 +8,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 /// 安全存储服务
 ///
 /// 使用 flutter_secure_storage 进行加密存储
-/// - Android: EncryptedSharedPreferences
+/// - Android: isolated AES-GCM values with Android Keystore key wrapping
 /// - iOS: Keychain
 ///
 /// 安全特性:
@@ -35,15 +35,13 @@ class SecureStorage {
 
   SecureStorage() {
     _storage = const FlutterSecureStorage(
-      // Android：flutter_secure_storage v9+ 默认使用 AES-256-GCM custom cipher，
-      // 同时加密 key 和 value，防止通过文件系统侧信道推断内容。
-      // 注意：encryptedSharedPreferences (Jetpack Security) 在 v11 中已废弃，
-      // 库会在首次访问时自动将旧数据迁移到 custom cipher，无需额外配置。
+      // Values are encrypted; logical preference keys remain visible inside
+      // the app-private file. The reviewed native adapter imports legacy data
+      // before this isolated namespace is opened.
       aOptions: AndroidOptions(
-        // Keep the legacy namespace so existing secure-storage data remains readable.
-        // ignore: deprecated_member_use
-        sharedPreferencesName: 'n42_secure_prefs',
+        storageNamespace: 'n42_secure_v11_wallet',
         preferencesKeyPrefix: 'n42_',
+        resetOnError: false,
       ),
       // iOS：first_unlock_this_device
       // - 设备重启后首次解锁即可访问（适合 App 后台唤醒场景）

@@ -1305,9 +1305,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "बटुआ कनेक्ट करें",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "लगता है कि यह डिवाइस रूट या जेलब्रेक किया गया है। असुरक्षित डिवाइस पर वॉलेट का इस्तेमाल करने से निजी कुंजी की चोरी और अनधिकृत पहुँच का जोखिम बढ़ जाता है। सावधानी से आगे बढ़ें।",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "लगता है कि यह डिवाइस रूट या जेलब्रेक किया गया है। असुरक्षित डिवाइस पर वॉलेट का इस्तेमाल करने से निजी कुंजी की चोरी और अनधिकृत पहुँच का जोखिम बढ़ जाता है। सावधानी से आगे बढ़ें।",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "डिवाइस सुरक्षा चेतावनी",
     ),

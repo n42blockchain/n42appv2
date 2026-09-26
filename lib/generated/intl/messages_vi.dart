@@ -1294,9 +1294,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Kết nối Ví",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Thiết bị này dường như đã được root hoặc jailbreak. Sử dụng ví trên thiết bị bị can thiệp sẽ làm tăng nguy cơ bị đánh cắp khóa và truy cập trái phép. Vui lòng cẩn trọng.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Thiết bị này dường như đã được root hoặc jailbreak. Sử dụng ví trên thiết bị bị can thiệp sẽ làm tăng nguy cơ bị đánh cắp khóa và truy cập trái phép. Vui lòng cẩn trọng.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Cảnh báo bảo mật thiết bị",
     ),
@@ -1930,9 +1931,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Quét mã QR này bằng thiết bị Keystone của bạn để ký giao dịch",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Hướng máy ảnh của bạn vào mã QR được hiển thị trên thiết bị Keystone của bạn",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Hướng máy ảnh của bạn vào mã QR được hiển thị trên thiết bị Keystone của bạn",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Quét chữ ký Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

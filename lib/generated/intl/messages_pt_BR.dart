@@ -1337,9 +1337,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Conectar Carteira",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Este dispositivo parece estar rootado ou jailbroken. Usar uma carteira em um dispositivo comprometido aumenta o risco de roubo de chaves e acesso não autorizado. Prossiga com cautela.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Este dispositivo parece estar rootado ou jailbroken. Usar uma carteira em um dispositivo comprometido aumenta o risco de roubo de chaves e acesso não autorizado. Prossiga com cautela.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Aviso de Segurança do Dispositivo",
     ),

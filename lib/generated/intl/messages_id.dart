@@ -1321,9 +1321,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Hubungkan Dompet",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Perangkat ini tampaknya telah di-root atau di-jailbreak. Menggunakan dompet di perangkat yang telah dirusak meningkatkan risiko pencurian kunci dan akses tidak sah. Lanjutkan dengan hati-hati.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Perangkat ini tampaknya telah di-root atau di-jailbreak. Menggunakan dompet di perangkat yang telah dirusak meningkatkan risiko pencurian kunci dan akses tidak sah. Lanjutkan dengan hati-hati.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Peringatan Keamanan Perangkat",
     ),
@@ -1951,9 +1952,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Pindai kode QR ini dengan perangkat Keystone Anda untuk menandatangani transaksi",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Arahkan kamera Anda ke kode QR yang ditampilkan di perangkat Keystone Anda",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Arahkan kamera Anda ke kode QR yang ditampilkan di perangkat Keystone Anda",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Pindai Tanda Tangan Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

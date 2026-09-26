@@ -1328,9 +1328,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "والیٹ جوڑیں",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "ایسا لگتا ہے کہ یہ ڈیوائس روٹ یا جیل بریک کی گئی ہے۔ غیر محفوظ ڈیوائس پر والیٹ استعمال کرنے سے کلید کی چوری اور غیر مجاز رسائی کا خطرہ بڑھ جاتا ہے۔ احتیاط سے آگے بڑھیں۔",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "ایسا لگتا ہے کہ یہ ڈیوائس روٹ یا جیل بریک کی گئی ہے۔ غیر محفوظ ڈیوائس پر والیٹ استعمال کرنے سے کلید کی چوری اور غیر مجاز رسائی کا خطرہ بڑھ جاتا ہے۔ احتیاط سے آگے بڑھیں۔",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "ڈیوائس کی سیکیورٹی کا انتباہ",
     ),
@@ -1954,9 +1955,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "لین دین پر دستخط کرنے کے لیے اس QR کوڈ کو اپنے Keystone ڈیوائس سے اسکین کریں۔",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "اپنے کی اسٹون ڈیوائس پر دکھائے جانے والے QR کوڈ کی طرف اپنے کیمرے کو پوائنٹ کریں۔",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "اپنے کی اسٹون ڈیوائس پر دکھائے جانے والے QR کوڈ کی طرف اپنے کیمرے کو پوائنٹ کریں۔",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("کی اسٹون دستخط اسکین کریں۔"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

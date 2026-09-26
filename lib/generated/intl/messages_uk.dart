@@ -1350,9 +1350,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Підключити гаманець",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Цей пристрій, схоже, має root-доступ або jailbreak. Використання гаманця на скомпрометованому пристрої збільшує ризик крадіжки ключів та несанкціонованого доступу. Дійте з обережністю.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Цей пристрій, схоже, має root-доступ або jailbreak. Використання гаманця на скомпрометованому пристрої збільшує ризик крадіжки ключів та несанкціонованого доступу. Дійте з обережністю.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Попередження безпеки пристрою",
     ),
@@ -1994,9 +1995,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Відскануйте цей QR-код за допомогою пристрою Keystone, щоб підписати транзакцію",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Наведіть камеру на QR-код, який відображається на вашому пристрої Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Наведіть камеру на QR-код, який відображається на вашому пристрої Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Сканування підпису Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

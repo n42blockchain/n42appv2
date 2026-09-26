@@ -1345,9 +1345,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Подключить кошелёк",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Похоже, на этом устройстве получены root-права или выполнен джейлбрейк. Использование кошелька на устройстве с нарушенной защитой повышает риск кражи ключей и несанкционированного доступа. Будьте осторожны.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Похоже, на этом устройстве получены root-права или выполнен джейлбрейк. Использование кошелька на устройстве с нарушенной защитой повышает риск кражи ключей и несанкционированного доступа. Будьте осторожны.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Предупреждение о безопасности устройства",
     ),
