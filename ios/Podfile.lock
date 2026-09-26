@@ -30,37 +30,6 @@ PODS:
   - curvelib.swift (2.0.0)
   - device_info_plus (0.0.1):
     - Flutter
-  - DKImagePickerController/Core (4.3.9):
-    - DKImagePickerController/ImageDataManager
-    - DKImagePickerController/Resource
-  - DKImagePickerController/ImageDataManager (4.3.9)
-  - DKImagePickerController/PhotoGallery (4.3.9):
-    - DKImagePickerController/Core
-    - DKPhotoGallery
-  - DKImagePickerController/Resource (4.3.9)
-  - DKPhotoGallery (0.0.19):
-    - DKPhotoGallery/Core (= 0.0.19)
-    - DKPhotoGallery/Model (= 0.0.19)
-    - DKPhotoGallery/Preview (= 0.0.19)
-    - DKPhotoGallery/Resource (= 0.0.19)
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Core (0.0.19):
-    - DKPhotoGallery/Model
-    - DKPhotoGallery/Preview
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Model (0.0.19):
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Preview (0.0.19):
-    - DKPhotoGallery/Model
-    - DKPhotoGallery/Resource
-    - SDWebImage
-    - SwiftyGif
-  - DKPhotoGallery/Resource (0.0.19):
-    - SDWebImage
-    - SwiftyGif
   - FBAEMKit (18.0.2):
     - FBSDKCoreKit_Basics (= 18.0.2)
   - FBSDKCoreKit (18.0.2):
@@ -69,9 +38,9 @@ PODS:
   - FBSDKCoreKit_Basics (18.0.2)
   - FBSDKLoginKit (18.0.2):
     - FBSDKCoreKit (= 18.0.2)
-  - file_picker (0.0.1):
-    - DKImagePickerController/PhotoGallery
+  - file_picker_darwin (1.0.0):
     - Flutter
+    - FlutterMacOS
   - Firebase/CoreOnly (12.19.0):
     - FirebaseCore (~> 12.19.0)
   - Firebase/Crashlytics (12.19.0):
@@ -91,7 +60,7 @@ PODS:
     - Firebase/Crashlytics (= 12.19.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (16.5.0):
+  - firebase_messaging (16.7.0):
     - Firebase/Messaging (= 12.19.0)
     - firebase_core
     - Flutter
@@ -155,7 +124,7 @@ PODS:
     - nanopb (~> 3.30910.0)
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
-  - flutter_callkit_incoming (0.0.1):
+  - flutter_callkit_incoming (3.1.6):
     - CryptoSwift
     - Flutter
   - flutter_contacts (0.0.1):
@@ -203,22 +172,22 @@ PODS:
   - geolocator_apple (1.2.0):
     - Flutter
     - FlutterMacOS
-  - google_mlkit_commons (0.12.0):
+  - google_mlkit_commons (0.13.0):
     - Flutter
     - MLKitVision (~> 10.0.0)
-  - google_mlkit_face_detection (0.14.0):
+  - google_mlkit_face_detection (0.15.1):
     - Flutter
     - google_mlkit_commons
     - GoogleMLKit/FaceDetection (~> 9.0.0)
-  - google_mlkit_selfie_segmentation (0.11.0):
+  - google_mlkit_selfie_segmentation (0.12.1):
     - Flutter
     - google_mlkit_commons
     - GoogleMLKit/SegmentationSelfie (~> 9.0.0)
-  - google_mlkit_text_recognition (0.16.0):
+  - google_mlkit_text_recognition (0.17.1):
     - Flutter
     - google_mlkit_commons
     - GoogleMLKit/TextRecognition (~> 9.0.0)
-  - google_mlkit_translation (0.14.0):
+  - google_mlkit_translation (0.15.1):
     - Flutter
     - google_mlkit_commons
     - GoogleMLKit/Translate (~> 9.0.0)
@@ -454,9 +423,6 @@ PODS:
     - Flutter
   - saver_gallery (0.0.1):
     - Flutter
-  - SDWebImage (5.21.7):
-    - SDWebImage/Core (= 5.21.7)
-  - SDWebImage/Core (5.21.7)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -472,17 +438,13 @@ PODS:
   - sqflite_sqlcipher (0.0.1):
     - Flutter
     - FMDB/SQLCipher (~> 2.7.5)
-    - SQLCipher (= 4.10.0)
-  - SQLCipher (4.10.0):
-    - SQLCipher/standard (= 4.10.0)
-  - SQLCipher/common (4.10.0)
-  - SQLCipher/standard (4.10.0):
+    - SQLCipher (= 4.19.0)
+  - SQLCipher (4.19.0):
+    - SQLCipher/standard (= 4.19.0)
+  - SQLCipher/common (4.19.0)
+  - SQLCipher/standard (4.19.0):
     - SQLCipher/common
-  - sqlcipher_flutter_libs (0.0.1):
-    - Flutter
-    - SQLCipher (~> 4.10.0)
   - SSZipArchive (2.6.0)
-  - SwiftyGif (5.4.5)
   - TensorFlowLiteC (0.0.1-nightly.20250619):
     - TensorFlowLiteC/Core (= 0.0.1-nightly.20250619)
   - TensorFlowLiteC/Core (0.0.1-nightly.20250619)
@@ -550,7 +512,7 @@ DEPENDENCIES:
   - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
-  - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - file_picker_darwin (from `.symlinks/plugins/file_picker_darwin/darwin`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
@@ -602,7 +564,7 @@ DEPENDENCIES:
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
-  - sqlcipher_flutter_libs (from `.symlinks/plugins/sqlcipher_flutter_libs/ios`)
+  - SQLCipher (from `../packages/sqlcipher_apple/SQLCipher.podspec.json`)
   - TrustWalletCore (= 4.8.4)
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -622,8 +584,6 @@ SPEC REPOS:
     - BigInt
     - CryptoSwift
     - curvelib.swift
-    - DKImagePickerController
-    - DKPhotoGallery
     - FBAEMKit
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
@@ -673,11 +633,8 @@ SPEC REPOS:
     - PromisesObjC
     - PromisesSwift
     - RecaptchaInterop
-    - SDWebImage
     - Sovran
-    - SQLCipher
     - SSZipArchive
-    - SwiftyGif
     - TensorFlowLiteC
     - TensorFlowLiteSelectTfOps
     - TensorFlowLiteSwift
@@ -704,8 +661,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
-  file_picker:
-    :path: ".symlinks/plugins/file_picker/ios"
+  file_picker_darwin:
+    :path: ".symlinks/plugins/file_picker_darwin/darwin"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -800,8 +757,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   sqflite_sqlcipher:
     :path: ".symlinks/plugins/sqflite_sqlcipher/ios"
-  sqlcipher_flutter_libs:
-    :path: ".symlinks/plugins/sqlcipher_flutter_libs/ios"
+  SQLCipher:
+    :podspec: "../packages/sqlcipher_apple/SQLCipher.podspec.json"
   twitter_login:
     :path: ".symlinks/plugins/twitter_login/ios"
   url_launcher_ios:
@@ -834,18 +791,16 @@ SPEC CHECKSUMS:
   CryptoSwift: e2e7776512f250e66205955da748e7a4e4abffe0
   curvelib.swift: b9223e5cac801effed8a5fe8968e952b3fe427a5
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
-  DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
-  DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   FBAEMKit: 56a4f5a9607957b547b6458b17a98c5bb2736367
   FBSDKCoreKit: 54f1240567e16862ab71c53c33dc347db5c524c5
   FBSDKCoreKit_Basics: eb530cd6a79030dbb11df460aafb2767bcad9028
   FBSDKLoginKit: 6a70798793e499335a98fab1a758d7da34af196e
-  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
+  file_picker_darwin: 4c2b9a50ea44cb3b071381ea0cf48591bdd80251
   Firebase: 7ca191e43724142f79fae653547b3382c45413cc
   firebase_analytics: 99133ddb6f6cf89c0b49cafae131070607abbfa5
   firebase_core: 55de508663ceda7d1dc369a32b327a5655019ae2
   firebase_crashlytics: 289a6a01605d663873a978d9daaa3648edc3f3b5
-  firebase_messaging: 0d1ad5591e2cd7090e5f77970f2a736a99debce2
+  firebase_messaging: df68cb5feefa02766144a50fa5348362a0127008
   FirebaseAnalytics: e9f8c369447e453da23f0455a06e4910bad10de0
   FirebaseCore: c990214798d7c568ad436a15ba7da25c7a278c9a
   FirebaseCoreExtension: 201c78d7491a273d61d8afbf491214276a951e6d
@@ -855,15 +810,15 @@ SPEC CHECKSUMS:
   FirebaseMessaging: c15f48126adbe8b4d3238a5e1fa24bab3ad3e472
   FirebaseRemoteConfigInterop: 90659b3cac8f6de884f2d930fbdbeb711533e142
   FirebaseSessions: 39bcaa7c16b5d8b91d58f495f29ce2988d2f915c
-  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+  flutter_callkit_incoming: b2eaad1ac106ac4c78b4b9827f7e181767438dea
   flutter_contacts: 2ec1d6b62ca2869c3bbb3871bd74d4e3ef157135
   flutter_facebook_auth: fe770ba7c3b26637a955662b84b33c4ab33d3a14
   flutter_gemma: 7ce2780a9f4afaa3ba14efc24841415994e3b2c0
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
   flutter_mining: 56b545081a9941d0f9ef59d0d614184f392ea258
   flutter_new_badger: d75f2b325a864001a5da5e5d519d67a9d92bb1ac
-  flutter_secure_storage_darwin: acdb3f316ed05a3e68f856e0353b133eec373a23
+  flutter_secure_storage_darwin: 46e401699982ee74142909676535e0f6a7321e58
   flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113
   flutter_vodozemac: 46015daf07988356d46784d05ab0c7afca00ff36
   flutter_webrtc: 99283145164f482a16bf7122ef407b5d59d43158
@@ -872,11 +827,11 @@ SPEC CHECKSUMS:
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   geocoding_ios: 33776c9ebb98d037b5e025bb0e7537f6dd19646e
   geolocator_apple: ab36aa0e8b7d7a2d7639b3b4e48308394e8cef5e
-  google_mlkit_commons: b4dfe2f6ae4cbf24010dc6640a28984d01343c86
-  google_mlkit_face_detection: 21baa82ab858694c846f0e0bfa64e3a3ca7bceda
-  google_mlkit_selfie_segmentation: 7fc41b3ef8ba238abf8dc76724da50e44de8aaf0
-  google_mlkit_text_recognition: 9b164471713e3afdb4c129cabe6d1d64fef7e817
-  google_mlkit_translation: 32f759ac50c38fc2eada2cf15fefc86b38faf0f7
+  google_mlkit_commons: b2c0a76e7ef4ff555e70e5d71f21d66ce3d08a97
+  google_mlkit_face_detection: 84144f185c47be63638e22fdd81bbb781875a35b
+  google_mlkit_selfie_segmentation: 79f9cd556d3b7bb4536e2cf97f76ab2952146a63
+  google_mlkit_text_recognition: 5a8cb8b73c765938fb7111de6f5f883b90f15d52
+  google_mlkit_translation: 8be5aeeee6dc8402b2ee8b64a2987e1163f76a7c
   google_sign_in_ios: d66ab4c862f03eb4b3cac147ba2d9d7e56ef03f7
   GoogleAdsOnDeviceConversion: 41f168313b305040f4af27093d3c0af5ba46a9a3
   GoogleAppMeasurement: f2f676480e4c97936df934aa181bc29caea46975
@@ -928,17 +883,14 @@ SPEC CHECKSUMS:
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   record_ios: 980fd386a97a35987d0fce3dfda4b26a38c90f4c
   saver_gallery: c5ace923bbca25bcb925ad9be8847f9dfdd2f36b
-  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sign_in_with_apple: 5e34677a4e74c5f42760f41b3bbe05343e84d171
   Sovran: f8212bb3855042a24689a73ea0219ca5295235da
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
-  sqflite_sqlcipher: 8e5bdaae6b2c254f8a277a564f07bc4e2a8642a3
-  SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
-  sqlcipher_flutter_libs: ae224763b087bffb3a5955fe295a1c460d458cb1
+  sqflite_sqlcipher: 41410d6b1a489fcc3185bf72f07b5a18658d8baf
+  SQLCipher: 62a89478b8a8c35b30caf3f3518faeecd0b7df64
   SSZipArchive: 8a6ee5677c8e304bebc109e39cf0da91ccef22ea
-  SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   TensorFlowLiteC: 215ef57653dd0fa09a474e7d94d79ae64a870b28
   TensorFlowLiteSelectTfOps: c71d7dcd063f5d66ae1b9a85cc5aa993f824eff9
   TensorFlowLiteSwift: 6de8da348de331778167a0f751ad74c41d8b0554
@@ -951,7 +903,7 @@ SPEC CHECKSUMS:
   video_compress: f2133a07762889d67f0711ac831faa26f956980e
   video_player_avfoundation: 3453f792138786248960ca029747fcd9f318ef52
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
-  wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
+  wakelock_plus: d4ca1e4e4bc9de42cb55d57b5bdc158af318e3c6
   walletconnect_pay: f32ca9b9f5c9e29583072b082a6ef7b5d4e12288
   WalletCoreSwiftProtobuf: a4798576a2d309511fc45f81843d348732ec571d
   Web3Auth: 5459b2d5bcdb150c5e84c7229639422cba684814
@@ -961,6 +913,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK-XCFramework: 5e86024eb6276280a679402e471bd77606114f3c
   YttriumWrapper: 64983f0edbf609b800ac3074010224fc5341aaeb
 
-PODFILE CHECKSUM: 9d83ec867938ddb1a630f43659406b01db639a2b
+PODFILE CHECKSUM: b6dd75e277fb5850c235bb7b162fcc124bde5a33
 
 COCOAPODS: 1.17.0

@@ -1,3 +1,5 @@
+require_relative '../scripts/apple_native_settings'
+
 # Uncomment this line to define a global platform for your project
  platform :ios, '16.0'
 
@@ -28,6 +30,7 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
+  pod 'SQLCipher', :podspec => '../packages/sqlcipher_apple/SQLCipher.podspec.json'
   use_frameworks! :linkage => :static
   use_modular_headers!
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
@@ -65,8 +68,10 @@ post_install do |installer|
     end
 
     target.build_configurations.each do |config|
-      # 确保所有 pod 都使用 iOS 16.0 作为最低部署目标
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+      # Raise older pod floors without lowering a dependency's newer requirement.
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = N42AppleNative.deployment_floor(
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'], '16.0'
+      )
       # 统一 Swift 版本为 5.0
       config.build_settings['SWIFT_VERSION'] = '5.0'
       # 修复 Swift 编译问题
@@ -125,9 +130,12 @@ post_install do |installer|
             inherited_index + 1,
             sqlcipher_anchor,
             '-framework',
-            'SQLCipher'
+            'N42SQLCipher'
           )
         end
+        ldflags = N42AppleNative.append_link_flags(
+          ldflags, N42AppleNative.sqlite_link_flags(File.expand_path('..', __dir__))
+        )
         config.build_settings['OTHER_LDFLAGS'] = ldflags
 
         # Exclude MobileSdk.xcframework linking on simulator
@@ -185,14 +193,14 @@ end
 
 # CocoaPods 会在 post_install 之后再次序列化聚合 xcconfig，所以必须在
 # post_integrate 最终清理系统 sqlite 和普通 SQLCipher archive 链接项。Runner
-# 已 force-load SQLCipher（完整兼容 SQLite API）；保留任一项会造成 463 个重复符号。
+# 已通过未定义符号锚点链接 SQLCipher；避免再次链接系统 SQLite。
 post_integrate do |installer|
   Dir.glob(
     "#{installer.sandbox.root}/Target Support Files/Pods-Runner/*.xcconfig"
   ).each do |xcconfig_path|
     contents = File.read(xcconfig_path)
     contents = contents.gsub(/ -l"sqlite3(?:\.0)?"/, '')
-    contents = contents.gsub(/ -framework "SQLCipher"/, '')
+    contents = contents.gsub(/ -framework "N42SQLCipher"/, '')
     File.write(xcconfig_path, contents)
   end
 end

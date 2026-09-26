@@ -1,1 +1,8 @@
 packages/fl_chart/lib/src/utils/canvas_wrapper.dart whitespace=cr-at-eol
+
+# Preserve pristine upstream whitespace in the maintained SQLCipher plugin.
+packages/sqflite_sqlcipher/ios/Classes/SqfliteSqlCipherPlugin.m whitespace=-blank-at-eol,-blank-at-eof
+packages/sqflite_sqlcipher/ios/sqflite_sqlcipher.podspec whitespace=-blank-at-eol,-blank-at-eof
+packages/sqflite_sqlcipher/lib/src/sql_cipher_open_options.dart whitespace=-blank-at-eol,-blank-at-eof
+packages/sqflite_sqlcipher/macos/Classes/SqfliteSqlCipherPlugin.m whitespace=-blank-at-eol,-blank-at-eof
+packages/sqflite_sqlcipher/macos/sqflite_sqlcipher.podspec whitespace=-blank-at-eol,-blank-at-eof

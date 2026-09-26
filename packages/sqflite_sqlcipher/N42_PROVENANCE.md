@@ -1,0 +1,3 @@
+# sqflite_sqlcipher 3.4.1 Apple SQLCipher migration
+
+Retains the published Dart and platform runtime and its MIT license from https://pub.dev/api/archives/sqflite_sqlcipher-3.4.1.tar.gz (SHA-256 `50d05fe0495ed96a85503d9850a49c0936502f44fdba96f403c97e4c9c7043e7`). Only the two Apple podspec SQLCipher constraints change from4.10.0 to4.19.0. Android runtime/manifest remain unchanged; the host already selects4.19.0 on Android. Pristine retained file hashes and exact compressed patch are adjacent. The host supplies a maintained SQLCipher podspec because upstream CocoaPods distribution stops at4.10.0. Remove this path source when official upstream supports the selected Apple SQLCipher release.

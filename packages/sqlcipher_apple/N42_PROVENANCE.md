@@ -1,0 +1,5 @@
+# SQLCipher 4.19.0 Apple build metadata
+
+Builds unmodified SQLCipher source commit `c4b275a47932888216bade83aff2bbc73df0ff85` (official v4.19.0 tag) using CocoaPods. Source https://github.com/sqlcipher/sqlcipher ; BSD-3-Clause license retained here and in downloaded source.
+
+The podspec derives from the official CocoaPods SQLCipher4.10.0 spec https://github.com/CocoaPods/Specs/blob/master/Specs/1/2/7/SQLCipher/4.10.0/SQLCipher.podspec.json . Changes: version/immutable source, module name N42SQLCipher (avoids case-insensitive collision with sqlite3 native-assets sqlcipher.framework), configure tempstore flag, and SQLITE_ENABLE_SESSION/PREUPDATE_HOOK required by sqlite3 v3 bindings. Existing upstream-required SQLITE_EXTRA_INIT/SHUTDOWN, CommonCrypto provider, Security linkage, SQLite extensions and upstream privacy resource are preserved. CocoaPods generates the amalgamation via upstream configure/make; generated sources are not committed. Remove this metadata when upstream resumes a compatible maintained Apple package distribution.

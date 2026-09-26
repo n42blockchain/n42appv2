@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072861
+version: 2.4.8+2026072862
 
 environment:
   sdk: ">=3.13.4 <4.0.0"
@@ -37,7 +37,8 @@ dependencies:
 
   # === Database & Storage ===
   sqflite: ^2.4.4
-  sqflite_sqlcipher: ^3.4.1  # 加密数据库支持
+  sqflite_sqlcipher:
+    path: packages/sqflite_sqlcipher # SQLCipher 4.19 Apple source integration
   path: ^1.9.1
   path_provider: ^2.1.6
   shared_preferences: ^2.5.5

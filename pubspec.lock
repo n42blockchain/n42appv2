@@ -2922,10 +2922,9 @@ packages:
   sqflite_sqlcipher:
     dependency: "direct main"
     description:
-      name: sqflite_sqlcipher
-      sha256: "50d05fe0495ed96a85503d9850a49c0936502f44fdba96f403c97e4c9c7043e7"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/sqflite_sqlcipher"
+      relative: true
+    source: path
     version: "3.4.1"
   sqlite3:
     dependency: "direct dev"
