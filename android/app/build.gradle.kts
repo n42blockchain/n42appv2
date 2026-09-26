@@ -152,6 +152,12 @@ kotlin {
     }
 }
 
+// Web3Auth's older web3j dependency requests discontinued bcprov-jdk15on 1.68.
+// Use one maintained Java 8-compatible Bouncy Castle provider family.
+configurations.configureEach {
+    exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
+}
+
 dependencies {
     // n42_chat image OCR: the Flutter package includes Latin by default;
     // bundle the additional scripts used by chat image extraction.
@@ -165,6 +171,16 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("com.google.android.material:material:1.14.0")
     implementation("com.squareup.okhttp3:okhttp:5.5.0")
+    // Align CallKit and Web3Auth's older Jackson 2.x transitive modules.
+    implementation(platform("com.fasterxml.jackson:jackson-bom:2.22.3"))
+    // MediaPipe and WalletCore-generated protobuf classes use the Java lite runtime.
+    implementation("com.google.protobuf:protobuf-javalite:4.36.2")
+    // Web3Auth/Torus runtime dependencies.
+    implementation("org.java-websocket:Java-WebSocket:1.6.0")
+    implementation("org.bouncycastle:bcprov-jdk15to18:1.86")
+    // in_app_purchase_android 0.5.3 requests Billing 8.0; its API compiles
+    // against the current stable 9.1 runtime for later sandbox acceptance.
+    implementation("com.android.billingclient:billing:9.1.0")
     // Passkey / Credential Manager API
     implementation("androidx.credentials:credentials:1.6.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
