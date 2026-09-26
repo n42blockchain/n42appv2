@@ -18,7 +18,12 @@ module N42AppleNative
     config = JSON.parse(File.read(config_path))
     sqlite = config.fetch('packages').find { |package| package.fetch('name') == 'sqlite3' }
     raise 'sqlite3 must be resolved before pod install' unless sqlite
-    root = URI.join("file://#{config_path}", sqlite.fetch('rootUri')).path
+    root_uri = URI.parse(sqlite.fetch('rootUri'))
+    unless root_uri.scheme.nil? || root_uri.scheme == 'file'
+      raise "sqlite3 package root must use a local file URI: #{root_uri.scheme}"
+    end
+    decoded_path = URI::DEFAULT_PARSER.unescape(root_uri.path)
+    root = File.expand_path(decoded_path, File.dirname(config_path))
     symbols_path = File.join(root, 'lib/src/hook/compile/used_symbols.dart')
     symbols = File.read(symbols_path).scan(/'(sqlite3\w+)'/).flatten
     raise 'sqlite3 binding symbol inventory is empty' if symbols.empty?

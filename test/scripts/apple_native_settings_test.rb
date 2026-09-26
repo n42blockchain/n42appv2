@@ -1,4 +1,6 @@
 require 'minitest/autorun'
+require 'tmpdir'
+require 'fileutils'
 require_relative '../../scripts/apple_native_settings'
 
 class AppleNativeSettingsTest < Minitest::Test
@@ -25,6 +27,24 @@ class AppleNativeSettingsTest < Minitest::Test
     assert_equal 2, merged.count('-framework')
     assert_equal merged, N42AppleNative.append_link_flags(merged, additions)
     assert_equal 5, original.length
+  end
+
+  def test_package_uri_paths_with_spaces
+    Dir.mktmpdir('apple native ') do |parent|
+      app = File.join(parent, 'checkout with spaces')
+      package = File.join(app, 'packages', 'sqlite source')
+      FileUtils.mkdir_p(File.join(app, '.dart_tool'))
+      symbols_dir = File.join(package, 'lib', 'src', 'hook', 'compile')
+      FileUtils.mkdir_p(symbols_dir)
+      File.write(File.join(symbols_dir, 'used_symbols.dart'), "const symbols = ['sqlite3_open'];")
+      escaped = URI::DEFAULT_PARSER.escape(package)
+      ['../packages/sqlite%20source', "file://#{escaped}"].each do |root_uri|
+        config = { 'packages' => [{ 'name' => 'sqlite3', 'rootUri' => root_uri }] }
+        File.write(File.join(app, '.dart_tool', 'package_config.json'), JSON.generate(config))
+        assert_equal ['-Wl,-export_dynamic', '-Wl,-u,_sqlite3_key', '-Wl,-u,_sqlite3_open'],
+                     N42AppleNative.sqlite_link_flags(app)
+      end
+    end
   end
 
 end
