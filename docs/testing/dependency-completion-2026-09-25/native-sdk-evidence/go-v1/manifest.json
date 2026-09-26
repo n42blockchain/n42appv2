@@ -1,0 +1,1079 @@
+{
+  "app_aar_sha256": {
+    "android/app/libs/evm.aar": "a7f1e0122ca76fe6a4b5c3a29816a07bb95cacb3cc6c21d73573d90a168d258c",
+    "plugins/flutter_mining/android/libs/evm.aar": "a7f1e0122ca76fe6a4b5c3a29816a07bb95cacb3cc6c21d73573d90a168d258c"
+  },
+  "app_binary_commit": "1243d11b3cce62b2664fdd55415e34104a6c8153",
+  "archive": {
+    "bytes": 2331114,
+    "path": "task-16c-evidence.tar.gz",
+    "sha256": "456ec05de2b7dccdaf15c862d32fcdf6513b4d44cb03420ec8bb1d9f95741682"
+  },
+  "canonical_go_source_commit": "5083c29735acfc7023ab1fbbd6d6527b7b97cbae",
+  "historical_commit_boundaries": {
+    "go_app_aar_integration": "1243d11b3cce62b2664fdd55415e34104a6c8153",
+    "go_fixture_and_oracle": "d905de7572cace3b58bd458f2fd5a02e5a05e587",
+    "go_fixture_comparator_text_fix": "afdfad230d654955a68e12811f75c74e9993cfe0",
+    "task16b_release_baseline": "391910e2a14960aa64f0680268e514ab968a01a5"
+  },
+  "members": {
+    "build-v4/generated-amd64.go.mod.normalized": {
+      "bytes": 8831,
+      "sha256": "73f3d67e6bb00113eb59353d376ac90d7194b9c930453ddba1a1d4459068a57e"
+    },
+    "build-v4/generated-amd64.go.sum": {
+      "bytes": 47117,
+      "sha256": "2ae35fbba78a593eda6ef02a49b02e4eb1b39841a9150a81d8a0de07b33ac424"
+    },
+    "build-v4/generated-arm.go.mod.normalized": {
+      "bytes": 8831,
+      "sha256": "73f3d67e6bb00113eb59353d376ac90d7194b9c930453ddba1a1d4459068a57e"
+    },
+    "build-v4/generated-arm.go.sum": {
+      "bytes": 47117,
+      "sha256": "2ae35fbba78a593eda6ef02a49b02e4eb1b39841a9150a81d8a0de07b33ac424"
+    },
+    "build-v4/generated-arm64.go.mod.normalized": {
+      "bytes": 8831,
+      "sha256": "73f3d67e6bb00113eb59353d376ac90d7194b9c930453ddba1a1d4459068a57e"
+    },
+    "build-v4/generated-arm64.go.sum": {
+      "bytes": 47117,
+      "sha256": "2ae35fbba78a593eda6ef02a49b02e4eb1b39841a9150a81d8a0de07b33ac424"
+    },
+    "build-v4/generated-modules.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build-v4/generated-modules.json": {
+      "bytes": 127835,
+      "sha256": "b2b6106718a7c97f1904e3999386c18c0ac946e132ffebc6d9c0e8709ce1305e"
+    },
+    "build-v4/go-env.json": {
+      "bytes": 165,
+      "sha256": "db88599ca5ee7c402f3be66ca6e73e9dbf46a5b8c0830d245836fa364988cc99"
+    },
+    "build-v4/go-mod-verify.log": {
+      "bytes": 21,
+      "sha256": "b4537ed75f533f993f371954de47e42a793b8e5b0587577de7e27fb3e50696bd"
+    },
+    "build-v4/gomobile.log": {
+      "bytes": 152728,
+      "sha256": "c76e4fb6710c772769689c62a45701db6b3819aed42af8bbe6f82ebf9b7eced6"
+    },
+    "build-v4/inputs.txt": {
+      "bytes": 1185,
+      "sha256": "233ce758e5cd19a41a29719457287c19f53fe1af8a1f0bbad52b971164d99b23"
+    },
+    "build-v4/ndk-clang-version.txt": {
+      "bytes": 360,
+      "sha256": "5db5e0739ad62cb8ed3165e4e779d2f27626fc0dc8064ec597b37c183b859e5e"
+    },
+    "build-v4/source-modules.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build-v4/source-modules.json": {
+      "bytes": 296326,
+      "sha256": "865536a16f35fd9a9a94cc46b7e4e73b55778a8ca326cd65852828fe38a11772"
+    },
+    "compare-size.py": {
+      "bytes": 3571,
+      "sha256": "e75d12ef2316c666e0b258d4ec403899f037f5f4b3cec4bc447c2a6c56fc9414"
+    },
+    "controlled-size-build.sh": {
+      "bytes": 4812,
+      "sha256": "35f8a8260dc5e89ff04bd908f837f01cc03dc77719fba41b2575fd92fa6527cb"
+    },
+    "logs/anet-numeric-zone-green.log": {
+      "bytes": 35,
+      "sha256": "7e4b5712fbd0d3728ae2f3b22436a03456b7d0100bbd256f5c820478610c71b5"
+    },
+    "logs/anet-v3-zone-green.log": {
+      "bytes": 35,
+      "sha256": "73fcab7bf5aaa43a56266b5b5900e9d26cc940dc640178f08212333e9c288025"
+    },
+    "logs/armv7-array-green.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/armv7-array-red.log": {
+      "bytes": 1078,
+      "sha256": "3d798920d89b580c45d8e98735affb9c71919e0d0f409e616bd42c75f0de6f26"
+    },
+    "logs/bls-oracle-first.log": {
+      "bytes": 1682,
+      "sha256": "eb8fa9b3164fa79ea477e9cecc87b87ba0ab8a347eacb3057b06de4885830c4f"
+    },
+    "logs/bls-oracle-green.log": {
+      "bytes": 739,
+      "sha256": "ea3b571482c790d963c4b7c99c8da86329c919d7934593a1ce0d1002d3cd46a7"
+    },
+    "logs/bls-oracle-lock.log": {
+      "bytes": 205,
+      "sha256": "a97e05e9e1cb47bc4a47a49c728f8fd9350d84817b2af007cb61f1efe033f697"
+    },
+    "logs/blst-amd64-green.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/blst-amd64-red.log": {
+      "bytes": 369,
+      "sha256": "b4f258d61de58de156d5f2e1630b579e146614ecdb171b35288288ce87cc15f2"
+    },
+    "logs/blst-arm-isolated.log": {
+      "bytes": 141583,
+      "sha256": "95e74a60d976c2e2cbb77a9a51738d41b44114f6b4aa5e354b084ae6444052c8"
+    },
+    "logs/blst-generate.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/build-bad-clang.log": {
+      "bytes": 50,
+      "sha256": "437736ac3e15c2d61c30c13c0c3c984a8740ecdca4fd73f9de3732357e1c3b51"
+    },
+    "logs/build-hostile-env-final.log": {
+      "bytes": 80,
+      "sha256": "d051588dadd5bf72c94e7fc85034bdfe7e7744acdb07b8660e36bc08c6b783cf"
+    },
+    "logs/build-hostile-env.log": {
+      "bytes": 74,
+      "sha256": "d673e85208b01be3ad50a68f5a79cf68952a6ec510b7970790333316423cec0a"
+    },
+    "logs/build-missing-ndk.log": {
+      "bytes": 34,
+      "sha256": "f8d0508842e7dad234a3456839c9fd169bf551e8d7d05559b56069addc504b31"
+    },
+    "logs/build-recipe-existing-output.log": {
+      "bytes": 83,
+      "sha256": "44d9b1425e6611cd7fc6a00c7cf42cc7926bc6a4daa6ea8df20a8c16e2ec661b"
+    },
+    "logs/build-recipe-v2.log": {
+      "bytes": 35,
+      "sha256": "7041b076bb87c15b721d2893e5632803966b41fb4b971945ab1b673252df55fa"
+    },
+    "logs/build-recipe-v3.log": {
+      "bytes": 90,
+      "sha256": "e72e9c516343200fd2fe7339c14c84b669434e43adf3b0c9dee31b3a76c03830"
+    },
+    "logs/build-wrong-ndk-final.log": {
+      "bytes": 47,
+      "sha256": "dfc96276dca1e7a719456b02d9e0f01b4638f332aa5de2ad0aa3153d9801fe18"
+    },
+    "logs/build-wrong-ndk.log": {
+      "bytes": 47,
+      "sha256": "dfc96276dca1e7a719456b02d9e0f01b4638f332aa5de2ad0aa3153d9801fe18"
+    },
+    "logs/deposit-abi-dart-analyze.log": {
+      "bytes": 65,
+      "sha256": "068a639a52f9f13ee1750ceb685a9f600da22bdb6c484325c09d0e5d0c0e3be2"
+    },
+    "logs/deposit-abi-flutter-test.log": {
+      "bytes": 3385,
+      "sha256": "8ad56cc9bfb8fd37dee9ff47566b4869ea2772371c4e4237a40d197cf3bb9568"
+    },
+    "logs/deps-android-amd64.txt": {
+      "bytes": 33073,
+      "sha256": "7a05c7fb9d4825f9684a532cfabee10c98d31ca2318ab163481b7e4ca2c4662b"
+    },
+    "logs/deps-android-arm-fetch.log": {
+      "bytes": 364,
+      "sha256": "29b19317b1677e3ac61a343351e83a64786aeb482ae38dc7c0a5cb9a84a541bd"
+    },
+    "logs/deps-android-arm-online.txt": {
+      "bytes": 32884,
+      "sha256": "1760dc08ace8bec083b6ed445bc85a01da5dbd8372ef0ed869d72b87d0af7a82"
+    },
+    "logs/deps-android-arm.txt": {
+      "bytes": 32884,
+      "sha256": "1760dc08ace8bec083b6ed445bc85a01da5dbd8372ef0ed869d72b87d0af7a82"
+    },
+    "logs/deps-android-arm64.txt": {
+      "bytes": 32996,
+      "sha256": "120024426949686df6e5e24163f196f3b50c404b6ba36df330bff0f360d9076b"
+    },
+    "logs/elias-serialization-baseline.log": {
+      "bytes": 505,
+      "sha256": "b3851265e5c66f1b60ad2bee5800c1299c29c7fc573b6036672a653671f87b60"
+    },
+    "logs/emit-and-framing-green.log": {
+      "bytes": 622,
+      "sha256": "0ba6c5a903fa1b7ccedadef3a8e17d964344d00efbb0a6977fe77e2c84368572"
+    },
+    "logs/emit-contract-characterization.log": {
+      "bytes": 1483,
+      "sha256": "7dff889e17d1e8d9b66ff39523c35b29e83f9c6a1a8a00c9451f336927dd8063"
+    },
+    "logs/emit-contract-prepared-green.log": {
+      "bytes": 2048,
+      "sha256": "3b0194c5c89b0c8cdd9a5ed436764161d7166be8b82ef1935acf791e9f55e70e"
+    },
+    "logs/emit-contract-wrapper-green.log": {
+      "bytes": 2048,
+      "sha256": "9d9b4630b2883b8ecd3b62efbcafd0ab2e7c2a3339d3ffb8d4d49dff6eb1c0de"
+    },
+    "logs/emit-secret-green.log": {
+      "bytes": 289,
+      "sha256": "3831b1ebcd79f324bf3801184ddf657e0ba9e322f599378dde8369f69e5d436f"
+    },
+    "logs/emit-secret-red.log": {
+      "bytes": 8529,
+      "sha256": "70f114e933d89095da7d458bb7c382f96434beb5337dd35715daadaf0c067d19"
+    },
+    "logs/emulator-5560-network-isolation.log": {
+      "bytes": 100,
+      "sha256": "8234fa038fd8032a724fe43ad9ab8455c86760eaac296eea0fd5c5fb3116f7e5"
+    },
+    "logs/evm-candidate-elf-audit.json": {
+      "bytes": 253,
+      "sha256": "cc415e63131bdabf44adf8b68a0f74858eaf44433868962650ae1737e506af26"
+    },
+    "logs/fastkeccak-baseline-test.log": {
+      "bytes": 56,
+      "sha256": "f45f7efb8c7b70318f2aeffb4f90bb6977da7bf2f40d28a606730866dbc31845"
+    },
+    "logs/fastkeccak-baseline-vectors.log": {
+      "bytes": 2564,
+      "sha256": "e95b98b57a3deac511ef9da04e74e458f469d98b234f887a79bb07431c4ebe1b"
+    },
+    "logs/fastkeccak-build-v4.log": {
+      "bytes": 90,
+      "sha256": "11c89c195e620e2700189cbff95753c8e3148eda6ebb1e0467d7107e2738d5cc"
+    },
+    "logs/fastkeccak-fresh-source-green.log": {
+      "bytes": 57,
+      "sha256": "9099154e961721a4edfacf4c0903dc24219a68aba2b8eea6698f7eba5db2a395"
+    },
+    "logs/fastkeccak-package-green.log": {
+      "bytes": 57,
+      "sha256": "ce7337188174aca18bed197eb923b6c013ad43d4755aed844531d86323af0023"
+    },
+    "logs/fastkeccak-preflight-v4.log": {
+      "bytes": 77,
+      "sha256": "4c7ff580c7a2ae497ee128148f40189d9efd80ccdfc039719a039f6b3e28f80e"
+    },
+    "logs/fastkeccak-prepare-v4.log": {
+      "bytes": 1747,
+      "sha256": "163466053fcd6ab2bc642b697784a9a220855c70fd4be9124de511e36f175ea2"
+    },
+    "logs/fastkeccak-removal-green.log": {
+      "bytes": 56,
+      "sha256": "693a55e3613dc79780213e7d6c2a10fc6ab250cf4953b67e95d154798a96833b"
+    },
+    "logs/fetch-android-deps.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/generated-mod-download-v2.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/generated-modules-v2.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/generated-modules-v2.json": {
+      "bytes": 214395,
+      "sha256": "e817537f9ac6a7f484f7d881c1873ba55352382fcd09c8aa89182eb78da239cb"
+    },
+    "logs/go-evm-candidate-runtime.log": {
+      "bytes": 5330,
+      "sha256": "4007bd58d7f782b4ef538f5642948c6254ecb2e64157622b78ccda98f404bdc6"
+    },
+    "logs/go-evm-final-runtime.log": {
+      "bytes": 5330,
+      "sha256": "2585145acc63ca7041d34c5b6ce538a85c11e3f6b7a5fb2be9e691e2035cfcf6"
+    },
+    "logs/go-evm-final-vector-compare.log": {
+      "bytes": 207,
+      "sha256": "3c34443e25d7b0c69bc3ace32a6e5afb3a7d1ec1d4f44a5f2babb60c210f5e6b"
+    },
+    "logs/go-evm-keccak-v4-runtime.log": {
+      "bytes": 5330,
+      "sha256": "a4dd483ca62fdfd7c3fd6c9216234412d71eb5c882ca86a9745e5111fde536fe"
+    },
+    "logs/go-evm-mutated-candidate-runtime.log": {
+      "bytes": 5242,
+      "sha256": "e10f235f7bacabce9dc5f9b175be98aab6debaed3b263bf504b9076edc9a6f41"
+    },
+    "logs/go-evm-old-runtime-2.log": {
+      "bytes": 5364,
+      "sha256": "bf8b3dba92fdc84ab132cf2d5da4584fd25b479f50e51f9a364e84574208028d"
+    },
+    "logs/go-evm-old-runtime.log": {
+      "bytes": 4924,
+      "sha256": "7fd11b0879b71b16b0406b316c1e4daba35ff49f300302628e3e17889fbfd4c5"
+    },
+    "logs/go-evm-v4-vector-compare-fixed.log": {
+      "bytes": 226,
+      "sha256": "122b23a5ccc8a3853e7f7c67a30b88aa3156ee8ea059cbab8701c710c577c31e"
+    },
+    "logs/go-evm-v4-vector-compare.log": {
+      "bytes": 207,
+      "sha256": "3c34443e25d7b0c69bc3ace32a6e5afb3a7d1ec1d4f44a5f2babb60c210f5e6b"
+    },
+    "logs/go-evm-v4-vector-controls.txt": {
+      "bytes": 813,
+      "sha256": "41f7dd7fb72b0c8d8571bf47d64a242835d75355f472dfd5dd6226ff9604c6f3"
+    },
+    "logs/go-evm-v4-vector-negative-fixed.log": {
+      "bytes": 39,
+      "sha256": "14b98386f4582dc9e43634db8d7cdbad9e90ade42856fc8508146a7d86d17207"
+    },
+    "logs/go-evm-valid-vector-compare.log": {
+      "bytes": 207,
+      "sha256": "3c34443e25d7b0c69bc3ace32a6e5afb3a7d1ec1d4f44a5f2babb60c210f5e6b"
+    },
+    "logs/go-evm-valid-vector-negative.log": {
+      "bytes": 39,
+      "sha256": "14b98386f4582dc9e43634db8d7cdbad9e90ade42856fc8508146a7d86d17207"
+    },
+    "logs/go-get-cilium-0.22.log": {
+      "bytes": 194,
+      "sha256": "5d5b53e81c21aebb93ad4669663da5fc807c1aa7bbbded5eee09afaae07016dc"
+    },
+    "logs/go-list-modules-arm64-green.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/go-list-modules-arm64.err": {
+      "bytes": 20202,
+      "sha256": "799d6035aab15b4cbc74a0ca75aed7289c09703d976baf6fa797074ec90fe21c"
+    },
+    "logs/go-mod-download-all.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/go-mod-download-generated.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/go-mod-tidy-generated-offline.log": {
+      "bytes": 17811,
+      "sha256": "cb2fea0d649fa329ac8b25376d588765fcbbe66f00f4ccbfaf5c5daf39149296"
+    },
+    "logs/go-size-bundletool-all.csv": {
+      "bytes": 289161,
+      "sha256": "457ce240c278ae0582678f62b4beb165f60d902a6baf86e935a576f34b95b4e0"
+    },
+    "logs/go-size-bundletool-all.err": {
+      "bytes": 16,
+      "sha256": "7d98e2998dfb7b3d091ced8f0c6f5814e4998e4f38b4ff98aa4594d7776fb5aa"
+    },
+    "logs/go-size-bundletool-arm64.csv": {
+      "bytes": 30,
+      "sha256": "3c4a52c31f11607081084a25fa95799f799f9082985d68bc670adf337cbd3546"
+    },
+    "logs/go-size-bundletool-arm64.err": {
+      "bytes": 16,
+      "sha256": "7d98e2998dfb7b3d091ced8f0c6f5814e4998e4f38b4ff98aa4594d7776fb5aa"
+    },
+    "logs/go-size-bundletool-armv7.csv": {
+      "bytes": 30,
+      "sha256": "7b103480d3489ef383122949cb9e44cf28296309e075761b21b9e7c27bcd4871"
+    },
+    "logs/go-size-bundletool-armv7.err": {
+      "bytes": 16,
+      "sha256": "7d98e2998dfb7b3d091ced8f0c6f5814e4998e4f38b4ff98aa4594d7776fb5aa"
+    },
+    "logs/go-size-bundletool-build-apks.log": {
+      "bytes": 122,
+      "sha256": "998e37a7271e62e719438deb680bb20b81b32a22a8339b2fd3566dcf408d5b12"
+    },
+    "logs/go-size-bundletool-inputs.txt": {
+      "bytes": 1450,
+      "sha256": "c4de8fa0c603978c16051c14d304ae4c92916da3f07f769ed49e1573aa22c7aa"
+    },
+    "logs/go-size-bundletool-summary.json": {
+      "bytes": 545,
+      "sha256": "5373086362c1aa39e4b6935e546a812cb10e458889848db5f4b287829f08635c"
+    },
+    "logs/go-size-bundletool-validate.log": {
+      "bytes": 80479,
+      "sha256": "ac6527dadbcdde75efb99aebb65eb8f9bc1d9911b214d2310bd3b35e85592294"
+    },
+    "logs/go-size-bundletool-x86_64.csv": {
+      "bytes": 30,
+      "sha256": "aa8d0609317eeaa3c7bdf7ee78415e0e411b3a09dd789c78edfe59da3c9439b0"
+    },
+    "logs/go-size-bundletool-x86_64.err": {
+      "bytes": 16,
+      "sha256": "7d98e2998dfb7b3d091ced8f0c6f5814e4998e4f38b4ff98aa4594d7776fb5aa"
+    },
+    "logs/go-size-controlled-inputs.txt": {
+      "bytes": 764,
+      "sha256": "0c7c90e2e230fd848be9b7ff5550180dfb98dca240e6fe05a378e0729d4e4df2"
+    },
+    "logs/go-size-controlled-new-aab.log": {
+      "bytes": 5085,
+      "sha256": "e556b00be0c1a52dcb170555612aac5eb587f9d67134f4d1b104602bc97f83db"
+    },
+    "logs/go-size-controlled-new-apk.log": {
+      "bytes": 5082,
+      "sha256": "f3bc3a0748134573a52b478b93952baeb79ab34fb1eb1ef9732c24ce503a44ed"
+    },
+    "logs/go-size-controlled-old-aab.log": {
+      "bytes": 5085,
+      "sha256": "04d1308e2f1d5000ceb6ba1034943b2bc6b3558791f664ec8f37a5874688d9fe"
+    },
+    "logs/go-size-controlled-old-apk.log": {
+      "bytes": 5702,
+      "sha256": "fcb99414aeef8ab1f992921d3956fe30f089ee47d7ca30f72a80bdb8847de4fb"
+    },
+    "logs/go-size-controlled-wrapper.log": {
+      "bytes": 292,
+      "sha256": "eb0a6abe6ff5388d37c40ee726ef65ddcc056237070333d4687810cdc7d88211"
+    },
+    "logs/go-size-controlled-zip-diff.json": {
+      "bytes": 17010,
+      "sha256": "5d8082296ca5c4a7f5b0a00a6f1abc116e7786845926c1921071d8c253eabc1c"
+    },
+    "logs/go-size-device-arm64.json": {
+      "bytes": 149,
+      "sha256": "c55bb7ce327a88bd1d0ac58a1538def1a93650a676886ede87376d65dff4aeb8"
+    },
+    "logs/go-size-device-armv7.json": {
+      "bytes": 132,
+      "sha256": "e832d5d19082e86231469f8c410b8e90fa73a1617fcfa9c3838fd04fef58c9ba"
+    },
+    "logs/go-size-device-x86_64.json": {
+      "bytes": 127,
+      "sha256": "819e299785caa134545a950fa4e5f2e75900ee948e4cb3ed4193177e44569674"
+    },
+    "logs/go-size-inventory-current.json": {
+      "bytes": 3774,
+      "sha256": "2b8fd93c5a9e3127b362785841bc8b0aa82f1c7d2f0b9bacc4fce5628440fb8f"
+    },
+    "logs/go-source-v2-focused.log": {
+      "bytes": 285,
+      "sha256": "63f2ebea38afefe78ef9ea40ad7dfc9ed4f6384cd45c5bcb6445c07465c59d2e"
+    },
+    "logs/go-v4-android-amd64-packages.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/go-v4-android-amd64-packages.json": {
+      "bytes": 4708000,
+      "sha256": "8c27b12386aa1dc4575bc1749a90f3de49eb12a0c6621c3f092e17e5014954ac"
+    },
+    "logs/go-v4-android-arm-packages.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/go-v4-android-arm-packages.json": {
+      "bytes": 4675453,
+      "sha256": "f2185bad979506f8c7cc7db85b5f502a8d085ec039ca124f8965601b898b9912"
+    },
+    "logs/go-v4-android-arm64-packages.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/go-v4-android-arm64-packages.json": {
+      "bytes": 4703428,
+      "sha256": "802a58004fa77dcd853aec558a72d20600b8a465a6a181ecbcdf97416e143642"
+    },
+    "logs/go-v4-android-package-summary.txt": {
+      "bytes": 238,
+      "sha256": "749ac27520c2a512ad75bf6a9130a3d63f8ae0b0b652cc58189a2f04eab1f370"
+    },
+    "logs/go-v4-app-release-aab.log": {
+      "bytes": 5085,
+      "sha256": "17851e9f67abd09900bf57e2163a097d6349378577820045663b06c5f24cfa1c"
+    },
+    "logs/go-v4-app-release-apk.log": {
+      "bytes": 5702,
+      "sha256": "11048669e5e8b2153a88f489d7e98f563ba6856c22ce42941f212e6440d3e5a0"
+    },
+    "logs/go-v4-bundletool-validate.log": {
+      "bytes": 80463,
+      "sha256": "38f909412b0be310c63dc17818af7ea03120d34fb2dce70cd1921129a7087aac"
+    },
+    "logs/go-v4-release-aab-go-members.txt": {
+      "bytes": 583,
+      "sha256": "8873903a133a3171d5b42b99b665ef71c7c0922c0dcd5665b84b64d4e299c364"
+    },
+    "logs/go-v4-release-aab-native-audit.json": {
+      "bytes": 2008,
+      "sha256": "c6238789aed591636eafccf7f597ce45688b1e627044bb70b00dce1dbb63b3b6"
+    },
+    "logs/go-v4-release-apk-apksigner.log": {
+      "bytes": 863,
+      "sha256": "e27c4823d1a093e2a75356dde3006cf68fda3022bcb9775699d8b6308c5044d8"
+    },
+    "logs/go-v4-release-apk-go-members.txt": {
+      "bytes": 583,
+      "sha256": "9a09e2b172bd2cf72ae2471889f5788def923a9b453bd35d594e766bbeac886c"
+    },
+    "logs/go-v4-release-apk-native-audit.json": {
+      "bytes": 1830,
+      "sha256": "ed7ac202efb1f3bcea87cf2cd63daf77c3c57ed00e795ad2afd35c25c6ca67dd"
+    },
+    "logs/go-v4-release-apk-zipalign.log": {
+      "bytes": 78909,
+      "sha256": "1e4d02c8c1e17403cefa74e75496f14ad4724aa61673b5943a1f0edb85b82932"
+    },
+    "logs/go-v4-release-dex-evmsdk.txt": {
+      "bytes": 667,
+      "sha256": "89cbf0b8122a3edf5d3a50e10bb74a6cef3876a355701b23630ed7e232f6b441"
+    },
+    "logs/go-version-arm64-v8a.txt": {
+      "bytes": 14356,
+      "sha256": "c98edba52ddb4c993df67b78aa2b182d228810095aa7d931d3d0e8a5168079b8"
+    },
+    "logs/go-version-armeabi-v7a.txt": {
+      "bytes": 14351,
+      "sha256": "be63a2017af7db98f95f16ae83c102456fce5ee87dfb1fb7a866ee430df08c8e"
+    },
+    "logs/go-version-x86_64.txt": {
+      "bytes": 14351,
+      "sha256": "8a979192ef5a53754b526988ceb010dcfcd4224700ee61ee8d6277f495980850"
+    },
+    "logs/gobind-protocol-prepared.log": {
+      "bytes": 120,
+      "sha256": "f5674b098bfc5b765118dfbf686c2b3a75f194b5b84a235d0355fc51b0496cab"
+    },
+    "logs/golomb-serialization-baseline.log": {
+      "bytes": 269,
+      "sha256": "c9f2183b0bf63accca34df15043953b274e8422ab1d77dde890d19802132dc1a"
+    },
+    "logs/golomb-serialization-patched-green.log": {
+      "bytes": 157,
+      "sha256": "59a323c243cd9b6ee2e00931a834445c8d494c4bc0f163d37871fa5be8905dd1"
+    },
+    "logs/gomobile-build-1.log": {
+      "bytes": 10004,
+      "sha256": "0ee56ec72a31ad817a07910c3a7347bb3dbf3d767bc7d2abcff223ad0d4b6cd3"
+    },
+    "logs/gomobile-build-2.log": {
+      "bytes": 750,
+      "sha256": "8de830e81cf5c48214902d6eaab8ea90cdab4c16458efa4247c142373d795a34"
+    },
+    "logs/gomobile-build-3.log": {
+      "bytes": 688,
+      "sha256": "89950cff142d371c115e17ace8499ec4a1f4e1b9673e1bd8d545f26818bedb28"
+    },
+    "logs/gomobile-build-4.log": {
+      "bytes": 151971,
+      "sha256": "de43f77a5fa9e01cbdc0171f6da995a324b31ec306d8282e89215a4186546b48"
+    },
+    "logs/gomobile-build-5.log": {
+      "bytes": 58549,
+      "sha256": "c2eb059f0e288e72776f624675d93916b438257fe2df85ff8169e4599c79c9f8"
+    },
+    "logs/gomobile-build-6.log": {
+      "bytes": 58968,
+      "sha256": "aa10f179b83f11179d7d835b4449b9d36f97f4f82489383c4c862f04cbaa46a7"
+    },
+    "logs/gomobile-build-7.log": {
+      "bytes": 57169,
+      "sha256": "20b13935a8e32cee2ee1155c6371cef1891aebf82755278639956f46f568014d"
+    },
+    "logs/gomobile-build-8.log": {
+      "bytes": 61911,
+      "sha256": "e7333ebcd842574e9e65a832a437e0a8b49e001c4a9d15648bf4f172396199fe"
+    },
+    "logs/gomobile-dryrun-pinned.log": {
+      "bytes": 2746,
+      "sha256": "1fa0d342437b8bc0b12e9e52d45cc85e9e5c5f52e0ede940306d4af388f76398"
+    },
+    "logs/gomobile-graph-red.log": {
+      "bytes": 432,
+      "sha256": "980c8d53c272cdba43ffc6a0c4c0e890a8bb1c0ff594aefa3b1e7af985f4bdb0"
+    },
+    "logs/gomobile-wrapper-dryrun.log": {
+      "bytes": 2757,
+      "sha256": "2609a0b9ec18be7b490dfc369838f6a560a2ed2f7625a83faa164f6c82cc12c2"
+    },
+    "logs/hostile-env-assertions.log": {
+      "bytes": 234,
+      "sha256": "bfeb29f89340fbfb8b7fe879dac80f54c7ec4a1a903ee276f183c6299f49d99d"
+    },
+    "logs/hostile-env-final-assertions.log": {
+      "bytes": 230,
+      "sha256": "317e0b02372f54d8761be42a1fde82614f3102018aec65f9542b2a761a1bcdbe"
+    },
+    "logs/install-goimports.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/install-gomobile.log": {
+      "bytes": 197,
+      "sha256": "07c56125a5613127f8f26b3da606ded1209dd7c8572ea8b4a118fe8dceb37d54"
+    },
+    "logs/old-evm-elf-audit.json": {
+      "bytes": 317,
+      "sha256": "435e27feb1e26cb2229abba156be76174ac6586d9850cc719db3383664e87477"
+    },
+    "logs/ordinary-sha3-mutant-red.log": {
+      "bytes": 2414,
+      "sha256": "22b6137c3dcd99e7280e903a3a24dfaba2e2b8160b11e8ac4d4fc8c1b95e2bea"
+    },
+    "logs/pin-mobile-tools.log": {
+      "bytes": 891,
+      "sha256": "77bf8c7c175e65152418ab26d1bfae6fc1bfdc015fffd11676340a10f8e1891c"
+    },
+    "logs/portable-arrays-host-green.log": {
+      "bytes": 414,
+      "sha256": "c97475404ee2536da77c2ad2c819d858ee75e51366ed79ccdff592f529d97858"
+    },
+    "logs/prefetch-hostile-env-final.log": {
+      "bytes": 90,
+      "sha256": "9ce7def9f68f360e7f5f8c82fbca55d4afe05fca3fa842afbd2faa1bdc57d78f"
+    },
+    "logs/prefetch-hostile-env.log": {
+      "bytes": 84,
+      "sha256": "d59a39e8a8ef375eb677376d0ebca3bacf97d5a75afd611e9cbed9e1d2715058"
+    },
+    "logs/prefetch-no-opt.log": {
+      "bytes": 67,
+      "sha256": "cc27b18b56b79d6611af425e086e36f8c671e9bebc156f7ab901fcc9db333923"
+    },
+    "logs/prefetch-v3.log": {
+      "bytes": 32,
+      "sha256": "8f4dcc2c516a9ad63b145aa458bf8eea704c14e4f2f151221b29de222e87c9b2"
+    },
+    "logs/prefetch-v3b.log": {
+      "bytes": 46,
+      "sha256": "1c431a37cec0ec59ae76239d0ae873ca891e706a08b4b06fbac6c8ad3075d0d9"
+    },
+    "logs/prepare-android-existing-output.log": {
+      "bytes": 89,
+      "sha256": "acec6c6e17cd9f2565af8e76e84393a7e25f3aca2467cf180c7c1557e67bd512"
+    },
+    "logs/prepare-android-go-test.log": {
+      "bytes": 285,
+      "sha256": "0518fd83117de22283eeb95fab85c3216b6b117c7a3b4a6b27075ee7692d83ed"
+    },
+    "logs/prepare-android-positive.log": {
+      "bytes": 1653,
+      "sha256": "870cf2940975c7ba3ca4d2ac6504ed297124c5f0d0a7a82f584e7a0410dc453b"
+    },
+    "logs/prepare-android-tampered-module.log": {
+      "bytes": 118,
+      "sha256": "30c51a6f40349497798ac0b9f078e0de97e27c160749297e3bc75a6b0a3b9ec1"
+    },
+    "logs/prepare-android-v2.log": {
+      "bytes": 1653,
+      "sha256": "f78591c44195ab59e2f59df80928ec3c9c57b3e5fbd9904f0a9a20b04630eaba"
+    },
+    "logs/prepare-android-v3-existing.log": {
+      "bytes": 83,
+      "sha256": "87a3631a930b0295f05ef1821b0a51e0489b576a2b089a299530fde44a4a1823"
+    },
+    "logs/prepare-android-v3-tamper.log": {
+      "bytes": 118,
+      "sha256": "30c51a6f40349497798ac0b9f078e0de97e27c160749297e3bc75a6b0a3b9ec1"
+    },
+    "logs/prepare-android-v3.log": {
+      "bytes": 1653,
+      "sha256": "2796ff1558a4d292feb07047457be51f8245a8abb4f6bffc30beab8085527b57"
+    },
+    "logs/prepare-compat-base.log": {
+      "bytes": 721,
+      "sha256": "e264f83a5d6d72a5488c069b95cb7dc5631849a53b81706778ae279ae0e5e29b"
+    },
+    "logs/prepare-existing-output.log": {
+      "bytes": 72,
+      "sha256": "96ead525677e847fe6762c74131ecbafeeccbf721b1ed47b2a779262f258c483"
+    },
+    "logs/prepare-missing-repo.log": {
+      "bytes": 46,
+      "sha256": "37542beb7e88bbbc3e0cb7fc6a6c39187efd5056f041bab832bf533be15debcb"
+    },
+    "logs/prepare-positive.log": {
+      "bytes": 467,
+      "sha256": "c5eb203f5601069a9bcc5b221f4bd4e6b44bd796112491d789c271bdd748223b"
+    },
+    "logs/prepare-protocol-positive.log": {
+      "bytes": 721,
+      "sha256": "e264f83a5d6d72a5488c069b95cb7dc5631849a53b81706778ae279ae0e5e29b"
+    },
+    "logs/prepare-protocol-tamper.log": {
+      "bytes": 45,
+      "sha256": "4d7be3955fd88204962007fdf43816bf9b0c72aff7890bf953d251e984426d65"
+    },
+    "logs/prepare-v3-byte-compare.log": {
+      "bytes": 1121,
+      "sha256": "40c28727b67e68d0d0dd6e53f5f7ae0f31c0e5a9251c2afeb4f01b1d07efbf6a"
+    },
+    "logs/prepare-v3-focused-go-test.log": {
+      "bytes": 285,
+      "sha256": "b9455dd92376440053a670263632cf6913e32ad13404e201f8165201f23e2f6e"
+    },
+    "logs/rebuild-v3-elf-audit.json": {
+      "bytes": 254,
+      "sha256": "5de9a19c067267fe430d625bb6c5e35d9142823a81ad63df9bc868fe840ce5f2"
+    },
+    "logs/rebuild-v3-go-version-arm64-v8a.txt": {
+      "bytes": 14391,
+      "sha256": "ce8ec3cec82c0bad19615b6006b563bda3b2dc03b255e740af7674da39e681d4"
+    },
+    "logs/rebuild-v3-go-version-armeabi-v7a.txt": {
+      "bytes": 14386,
+      "sha256": "4f121cdd1d57113b2b3b2d6d33d948ea11c7fc885b33baacdde1dd28c9d5484d"
+    },
+    "logs/rebuild-v3-go-version-x86_64.txt": {
+      "bytes": 14386,
+      "sha256": "16307ae7f4cd2de48c77fc56b8fda676ed7931b6ba3bca193a52da9901c27cc4"
+    },
+    "logs/rebuild-v3-javap.txt": {
+      "bytes": 272,
+      "sha256": "e6b01a53322543baf557231bd24517acbf6e14537dc72a7f77b168c773a2ac1a"
+    },
+    "logs/rebuild-v4-all-elf-program-headers.txt": {
+      "bytes": 1364,
+      "sha256": "9df8c18c80200ac11a2e6f2308ff1caddb837be0fbec3c4f4562ba53a7811e91"
+    },
+    "logs/rebuild-v4-elf-audit.json": {
+      "bytes": 254,
+      "sha256": "13cecb1c9c6b7ba2dbb0443624ec16d3603c383f600907a5389923bbc251ce0e"
+    },
+    "logs/rebuild-v4-javap.txt": {
+      "bytes": 272,
+      "sha256": "e6b01a53322543baf557231bd24517acbf6e14537dc72a7f77b168c773a2ac1a"
+    },
+    "logs/recsplit-arm-green-cgo.log": {
+      "bytes": 412,
+      "sha256": "d42b2b506ab25607ee8ccc881cd713f5c6459245951645fba95fef123a9deea8"
+    },
+    "logs/recsplit-arm-green.log": {
+      "bytes": 158,
+      "sha256": "2d5eddfd0ee297581df68ac5765d129c2362d2b006bb56fe1d24a52f044cf0be"
+    },
+    "logs/source-mod-download-v2.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/source-modules-v2.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "logs/source-modules-v2.json": {
+      "bytes": 296666,
+      "sha256": "ee9f52920825877db09c4d417cd614be3ef8f311947c5e90ea1783d944c0954b"
+    },
+    "pack-evidence.py": {
+      "bytes": 5263,
+      "sha256": "3e152314db50fc20cf62e120365924a49d2b8c76fcbb766bcbbcd9f383914c0f"
+    },
+    "reports/task-16c-anet-review-inputs.md": {
+      "bytes": 9710,
+      "sha256": "da355bacfdb645e9bb0ffacb8984e8a2eb4672dbdb9c40c51520c3803ff042c0"
+    },
+    "reports/task-16c-build-recipe-fix1-report.md": {
+      "bytes": 4363,
+      "sha256": "dee1b503a526885ccd3ee93139889bd291951f6b285bcf253a6ac1a8e421e06a"
+    },
+    "reports/task-16c-build-recipe-fix1-review.md": {
+      "bytes": 4570,
+      "sha256": "110e7a339b86f35cb39930a0acf247d6dfbdfb7f5c56e23a4ce7e764390e6b26"
+    },
+    "reports/task-16c-build-recipe-report.md": {
+      "bytes": 4753,
+      "sha256": "137c32803d343892976574e7a05c5d90e4eb2c1c2de6e746f8d1fc070e9c4b21"
+    },
+    "reports/task-16c-build-recipe-review.md": {
+      "bytes": 6700,
+      "sha256": "b74ef2c592074a3b8fe1c11f580de7cef888794c5c9b04a55aeba655b9fa3672"
+    },
+    "reports/task-16c-cross-compile-inputs.md": {
+      "bytes": 8275,
+      "sha256": "ca73aa6c7897addffd3751b13e3e47d19a6bc336093379391a206dcdd792edab"
+    },
+    "reports/task-16c-fastkeccak-source-report.md": {
+      "bytes": 5619,
+      "sha256": "5b37a8ca258ea46c0d2ee2413c686fedd51e5adadba27b63dc6ae69def1581e0"
+    },
+    "reports/task-16c-fastkeccak-source-review.md": {
+      "bytes": 6183,
+      "sha256": "248116e3d4da24e84e726137adbae45ca55077ffb9918d101fc2129e216e815f"
+    },
+    "reports/task-16c-fixture-fix-review.md": {
+      "bytes": 1085,
+      "sha256": "20ee8aac02cbdab86a252cd18d6cdc9113863cd6b15c3319c6fdda8e899ed437"
+    },
+    "reports/task-16c-fixture-report.md": {
+      "bytes": 5637,
+      "sha256": "f6e24706c9cf01177baaa2796eda0f029dd62455c0680bae0d4783e4803abb44"
+    },
+    "reports/task-16c-fixture-review.md": {
+      "bytes": 5977,
+      "sha256": "6661138a3cb99d025b63e9d8ecf3c0903da170e137c5c8a8b9dcdcdad43a5991"
+    },
+    "reports/task-16c-go-sdk-brief.md": {
+      "bytes": 8476,
+      "sha256": "8ede40d0f73e3d9d046588218417bfff0ec138d25f8a8896244894d0f2a1f28b"
+    },
+    "reports/task-16c-go-sdk-report.md": {
+      "bytes": 8957,
+      "sha256": "50f90873d67ef7195da844272009c86d8d587d5c1a81b7c6396bd7db454ba19f"
+    },
+    "reports/task-16c-integration-report.md": {
+      "bytes": 4130,
+      "sha256": "d358f7f037f785427789fd84f709f92c085aba973d0573633b6a067de5fff755"
+    },
+    "reports/task-16c-integration-review.md": {
+      "bytes": 5089,
+      "sha256": "f50586e27a8655871af5089a8a135e88a5ce959d4cfbc72dc1b62a4ba3bea1b7"
+    },
+    "reports/task-16c-platform-source-report.md": {
+      "bytes": 5450,
+      "sha256": "ad544a5897303f74782172c1465c8305a6c367bbdd0b9d5c3a9815a01870f099"
+    },
+    "reports/task-16c-platform-source-review.md": {
+      "bytes": 7774,
+      "sha256": "d97257df8b36fa077655268e17f3030a7bf6136ca2ffd27440697b8669b6be93"
+    },
+    "reports/task-16c-protocol-report.md": {
+      "bytes": 3597,
+      "sha256": "6e8ea71c2916d925ff55c3a0aa3a9409605d2800c45e48e071e75bb4137dbe5f"
+    },
+    "reports/task-16c-protocol-review.md": {
+      "bytes": 5722,
+      "sha256": "26a61f9947041e99c9db3d0a84247fa102ea2a303d15408d6ba06a048504191a"
+    },
+    "reports/task-16c-security-review-inputs.md": {
+      "bytes": 25315,
+      "sha256": "46e1317ea2f6b6fa7ed2db351362d705ee77aab60c9a7fb8696c390c43dd8d3c"
+    },
+    "reports/task-16c-source-report.md": {
+      "bytes": 4981,
+      "sha256": "0694f3882df4ff974f6afd36baa1dfe05c9dd1008bcb6f7c5dea0ea10e270069"
+    },
+    "reports/task-16c-source-review.md": {
+      "bytes": 5949,
+      "sha256": "fda93e710400c012b78332e40942147df96de61398ee8d86f60a9f9df031c25e"
+    },
+    "security/final-go-version-arm64-v8a.txt": {
+      "bytes": 14420,
+      "sha256": "68a5ba3456c2af6c50eb59ebf453e7997ad11fee3b1c6e32084f65ab211c7e53"
+    },
+    "security/final-go-version-armeabi-v7a.txt": {
+      "bytes": 14415,
+      "sha256": "474a964c5c3a1cb85c792f4b9fcec3a1a7763fd36337c4ccf22928179a5f3bed"
+    },
+    "security/final-go-version-x86_64.txt": {
+      "bytes": 14415,
+      "sha256": "566b75283b16c45e9384320b4fb347ba0e006286db9c98e6f87a2a9fb6f4872d"
+    },
+    "security/final-nm-arm64-v8a.err": {
+      "bytes": 243,
+      "sha256": "e3479f63717924d5fef91fd7705062749da8608d9b0543f142f5bb2a47378c69"
+    },
+    "security/final-nm-arm64-v8a.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/final-nm-armeabi-v7a.err": {
+      "bytes": 247,
+      "sha256": "5656841b915b5ab15822f0edbeb52299f2006adf5c6a2d258094e190655e983a"
+    },
+    "security/final-nm-armeabi-v7a.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/final-nm-x86_64.err": {
+      "bytes": 237,
+      "sha256": "606e742c05f201a46384f124cb048436f2d10ab59f6af35c64274d918351baf1"
+    },
+    "security/final-nm-x86_64.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/final-scan-summary.json": {
+      "bytes": 2628,
+      "sha256": "4f906cd304b565b2fb9ef1abaf25818f365fe2257d6b23f1279d7a4f0dca38b2"
+    },
+    "security/govulncheck-arm64-v8a.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-arm64-v8a.jsonl": {
+      "bytes": 721757,
+      "sha256": "606318630b9add09b330cf8e7dc6b9bd5f6d2fd9d25b10ee9d8670f424d8807f"
+    },
+    "security/govulncheck-armeabi-v7a.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-armeabi-v7a.jsonl": {
+      "bytes": 721757,
+      "sha256": "a8219223d810c6b4b34fe32a7673a29a992e89ded24fc11bc60fafc315c31eff"
+    },
+    "security/govulncheck-final-arm64-v8a.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-final-arm64-v8a.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "security/govulncheck-final-arm64-v8a.jsonl": {
+      "bytes": 718178,
+      "sha256": "4bbc5f120ecfda1e18722c373c4e56ac23dee81412d6f4721fc73af0eb0b1eeb"
+    },
+    "security/govulncheck-final-armeabi-v7a.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-final-armeabi-v7a.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "security/govulncheck-final-armeabi-v7a.jsonl": {
+      "bytes": 718178,
+      "sha256": "840ed75a8ea368efb82662a1076b87019e54aeae8daa6b6635ff2c14f20923ae"
+    },
+    "security/govulncheck-final-x86_64.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-final-x86_64.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "security/govulncheck-final-x86_64.jsonl": {
+      "bytes": 718178,
+      "sha256": "73e979e9d36aed306a05074116ebda62e16ceaacf11b321dd808fd9f9bd134b7"
+    },
+    "security/govulncheck-v4-arm64-v8a.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-v4-arm64-v8a.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "security/govulncheck-v4-arm64-v8a.jsonl": {
+      "bytes": 718081,
+      "sha256": "948d059eb8b38eb8f1d3db49aea73f53240a8e33823ceef43d618b209b3f7030"
+    },
+    "security/govulncheck-v4-armeabi-v7a.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-v4-armeabi-v7a.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "security/govulncheck-v4-armeabi-v7a.jsonl": {
+      "bytes": 718081,
+      "sha256": "9b3d4add6de264979a915f79f2a95d8e8038e60bf34704ad4b1b25396b9cab01"
+    },
+    "security/govulncheck-v4-x86_64.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-v4-x86_64.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "security/govulncheck-v4-x86_64.jsonl": {
+      "bytes": 718081,
+      "sha256": "7250c9f980fdefe822eef6543ae9950d1b58a16780ebceb07831cd223015f254"
+    },
+    "security/govulncheck-x86_64.err": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/govulncheck-x86_64.jsonl": {
+      "bytes": 721757,
+      "sha256": "5fedc1128c8fbdbc5166058bfd858aac1de97e4204dd77ec8d0b57a09af6ac5e"
+    },
+    "security/license-module-observations.json": {
+      "bytes": 66166,
+      "sha256": "0de4b6d1023728a2e8abfc278e03d7ad38dd4f3ba523bd16953508133d3f394b"
+    },
+    "security/license-n42-package-observations.json": {
+      "bytes": 72360,
+      "sha256": "8dd6fa21eee9b9b32422599523de012cc3b98003a6d315775c771628d78df5fd"
+    },
+    "security/scan-summary.json": {
+      "bytes": 3845,
+      "sha256": "5545a84cd040b82b2f58bf7f08b025f0ebe54357d2bde95a435accefa4883463"
+    },
+    "security/stripped-symbol-check.log": {
+      "bytes": 1360,
+      "sha256": "66d322768593b9c4cbbf6b145fce54ecf1005c95b2f60311997b4bd2cee68f68"
+    },
+    "security/v4-file-arm64-v8a.txt": {
+      "bytes": 282,
+      "sha256": "4ceeff5163cd74bceabd043bfe4c4c7674515887b164d499ea9f5b56412d2b46"
+    },
+    "security/v4-file-armeabi-v7a.txt": {
+      "bytes": 282,
+      "sha256": "8a855eda7600b9f4c0749ae26ea61ba63098055db10b8f3fc5021d9b55b3238b"
+    },
+    "security/v4-file-x86_64.txt": {
+      "bytes": 274,
+      "sha256": "6547b71efc491816b53d703deec712cb0c03e3e78041e2e2a2b45a1c4def9352"
+    },
+    "security/v4-go-version-arm64-v8a.txt": {
+      "bytes": 14324,
+      "sha256": "34d596b64e4e9cdc9c3e61d17b11c274a2d6f6bd23326d2d5cfbe479e3e46199"
+    },
+    "security/v4-go-version-armeabi-v7a.txt": {
+      "bytes": 14319,
+      "sha256": "b06a761f4d3aaf857bd459f9649c364908393c463dc1e960be6748fc9a03cee5"
+    },
+    "security/v4-go-version-x86_64.txt": {
+      "bytes": 14319,
+      "sha256": "42a08c5c4f1bb57fccb40dfc94606b47e0e36da66a5e92e8ad3858117dc5b7af"
+    },
+    "security/v4-nm-arm64-v8a.err": {
+      "bytes": 237,
+      "sha256": "9a93bd99699f5b8e69ac1ff93965c435203943fb694c3e8e451616565232e26f"
+    },
+    "security/v4-nm-arm64-v8a.exit": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "security/v4-nm-arm64-v8a.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/v4-nm-armeabi-v7a.err": {
+      "bytes": 241,
+      "sha256": "474335faf6330af3dcce2974655e576051f38092b04950c5629761facf17d828"
+    },
+    "security/v4-nm-armeabi-v7a.exit": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "security/v4-nm-armeabi-v7a.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/v4-nm-x86_64.err": {
+      "bytes": 231,
+      "sha256": "f9a36717fc4b011ac4e1ecd3349ef080b4af617d7bc55aa9f127006130954931"
+    },
+    "security/v4-nm-x86_64.exit": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "security/v4-nm-x86_64.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "security/v4-scan-summary.json": {
+      "bytes": 4024,
+      "sha256": "3fce5850d0377056d89c0bc5ee1650f50f6dca96b0ffa8bd9c1e8df4f2de987a"
+    }
+  },
+  "preserved_task16b_manifest_sha256": "17d3c41dd582a1cbdd3d68370aceb58479eaa04273478d2e1c3745ae4f3ee91c",
+  "published_source_commits": [
+    "410a62b4f825a961c918b10445135aa717f0de61",
+    "b5939303b8da5e71c78028ae055b4f3f5bb3a76b",
+    "54185d01a4c64d894f35ea6883ca5948d76885d6",
+    "dd19b79d4f83c3f1860f8fef51398633edddc0ae",
+    "617a4fef8661b16870bd02a2a1de1b4205c60a09",
+    "7b8e223c29857ee647e14e58ad0e10db62b41d5f",
+    "d905de7572cace3b58bd458f2fd5a02e5a05e587",
+    "afdfad230d654955a68e12811f75c74e9993cfe0",
+    "1243d11b3cce62b2664fdd55415e34104a6c8153"
+  ],
+  "schema": 1,
+  "task": "16C Go V1 Android SDK; text evidence only"
+}
