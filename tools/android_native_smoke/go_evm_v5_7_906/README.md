@@ -42,3 +42,55 @@ GOTOOLCHAIN=local GOFLAGS=-buildvcs=false \
 Run the Go command from the prepared source directory. This is **candidate
 source only**. No AAR replacement, mobile ABI build, license conclusion or
 release acceptance follows from this patch.
+
+## Android compatibility layer
+
+`prepare_android_source.sh` adds only the reviewed Android source and module
+changes to a fresh output of `prepare_source.sh`. It pins Go 1.26's mobile tool
+directive and its related `x/*` versions, `cilium/ebpf` 0.22.0, and exact
+`go.mod`/`go.sum` hashes. It patches only artificial unsafe array bounds for
+32-bit ARM, the Android x86_64 BLST `sigaction` initializer, and anet's private
+Go zone-cache linknames. The exact upstream anet 0.0.5 and BLST 0.3.17 module
+ZIP hashes are checked before extraction; the reviewed anet copy contains only
+the root Go source and legal/module files, excluding its unrelated bundled AAR.
+BLST's `blst.tgo` template and generated `blst.go` have the same one-line fix.
+The three small serialization/mmap tests freeze unpatched wire bytes and test
+small-file behavior. The anet fixture proves that a known interface index can
+be carried as a numeric IPv6 zone through public Go APIs.
+
+The anet change is limited to this mobile `Emit` build. Generic named link-local
+zones are **not** equivalent when Android prevents Go's interface lookup:
+`%wlan0` can resolve to scope zero while `%7` retains index 7. The current
+mobile libp2p configuration uses TCP and QUIC; its imported WebRTC/ICE package
+is not shown to be instantiated by this SDK path. The inspected geth STUN
+path uses direct `net.Dial`. If a future reachable consumer needs named scoped
+addresses, it needs a bounded public-interface-index conversion at that socket
+boundary. The fixture does not prove actual scoped network traffic or broad
+anet compatibility.
+
+For a prepared Android source, prefetch the **source** and **generated gobind**
+module graphs separately from the public Go proxy and checksum database, then
+build with the network disabled. Both scripts refuse an existing output
+directory; use task-owned paths and the pinned Go 1.26.8, gomobile/gobind, NDK
+28.2 and JDK 21 inputs. The prefetch requires an explicit public-fetch flag.
+
+```sh
+/bin/bash tools/android_native_smoke/go_evm_v5_7_906/prepare_android_source.sh \
+  /path/to/N42-gov5 /path/to/verified-go-modcache /path/to/new-android-source
+N42_ALLOW_PUBLIC_MODULE_FETCH=yes /bin/bash \
+  tools/android_native_smoke/go_evm_v5_7_906/prefetch_android_modules.sh \
+  /path/to/new-android-source /path/to/verified-go-modcache /path/to/new-prefetch
+/bin/bash tools/android_native_smoke/go_evm_v5_7_906/build_android_aar.sh \
+  /path/to/new-android-source /path/to/verified-go-modcache \
+  /path/to/pinned-gomobile-and-gobind /path/to/android-sdk-37 \
+  /path/to/jdk-21 /path/to/new-build-run
+```
+
+`build_android_aar.sh` checks both offline module graphs before binding all
+three shipping ABIs. It compares the retained generated Go module graph and
+checksums for **each** ABI against the normalized, reviewed graph in
+`android/generated/`. The only normalization is the prepared source directory
+in the three local `replace` paths; selected versions and checksums must match.
+The candidate AAR still needs its own Java descriptor, ELF alignment, binary
+security scan, offline device protocol, app integration, and release packaging
+checks. A prior AAR's passing device run does not carry over to a rebuilt hash.
