@@ -1,5 +1,6 @@
 package mining.ai.n42.www.flutter_mining
 
+import android.content.Context
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -14,6 +15,7 @@ class FlutterMiningPlugin :
     FlutterPlugin,
     MethodCallHandler {
     internal var mobileSdkRuntime: MobileSdkRuntime = MobileSdkRuntime.default
+    private var applicationContext: Context? = null
     // The MethodChannel that will the communication between Flutter and native Android
     //
     // This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -21,6 +23,7 @@ class FlutterMiningPlugin :
     private lateinit var channel: MethodChannel
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        applicationContext = flutterPluginBinding.applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_mining")
         channel.setMethodCallHandler(this)
     }
@@ -114,7 +117,7 @@ class FlutterMiningPlugin :
                 val validatorPrivateKey = args["validatorPrivateKey"] as String
 
                 try {
-                    mobileSdkRuntime.call { Api.runClient(wsUrl, validatorPrivateKey) }
+                    mobileSdkRuntime.callWithTls(applicationContext) { Api.runClient(wsUrl, validatorPrivateKey) }
                         .thenRun {
                             channel.invokeMethod("onClientDone", null) // 通知 Flutter
                         }
@@ -135,5 +138,6 @@ class FlutterMiningPlugin :
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        applicationContext = null
     }
 }

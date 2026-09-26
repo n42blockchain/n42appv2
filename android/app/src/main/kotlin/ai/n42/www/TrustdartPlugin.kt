@@ -58,7 +58,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
         }
         context = flutterPluginBinding.applicationContext
 
-        miningHandler = MiningHandler { channel }
+        miningHandler = MiningHandler(context) { channel }
 
         eventChannel = EventChannel(
             flutterPluginBinding.binaryMessenger,

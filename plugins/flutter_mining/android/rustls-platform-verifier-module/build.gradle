@@ -1,0 +1,3 @@
+// Bridge the pinned Android certificate-verifier companion AAR into the plugin.
+configurations.maybeCreate("default")
+artifacts.add("default", file('../libs/rustls-platform-verifier-0.1.1.aar'))

@@ -30,6 +30,9 @@ include(":app")
 include(":mobile-sdk-module")
 project(":mobile-sdk-module").projectDir =
     file("../plugins/flutter_mining/android/mobile-sdk-module")
+include(":rustls-platform-verifier-module")
+project(":rustls-platform-verifier-module").projectDir =
+    file("../plugins/flutter_mining/android/rustls-platform-verifier-module")
 include(":evm-module")
 project(":evm-module").projectDir =
     file("../plugins/flutter_mining/android/evm-module")

@@ -1,0 +1,170 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 951fe4c52..eaee07e66 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,7 +1,7 @@
+ [workspace.package]
+ version = "1.4.3"
+ edition = "2021"
+-rust-version = "1.86"
++rust-version = "1.90"
+ license = "MIT OR Apache-2.0"
+ homepage = "https://github.com/n42blockchain/N42-rs"
+ repository = "https://github.com/n42blockchain/N42-rs"
+@@ -629,10 +629,14 @@ reth-consensus = { path="crates/consensus/consensus"}
+ reth-network = { path = "crates/net/network" }
+ reth-network-api = { path = "crates/net/network-api" }
+ reth-network-peers = { path = "crates/net/peers"}
++reth-dns-discovery = { path = "crates/net/dns" }
+ #reth-testing-utils={path="testing/testing-utils"}
+ #reth-chain-state = { path = "crates/chain-state"}
+ 
+ [patch.crates-io]
++vergen-git2 = { path = "third_party/vergen-git2-1.0.7" }
++discv5 = { path = "third_party/discv5-0.9.1" }
++alloy-consensus = { path = "third_party/alloy-consensus-1.0.12" }
+ #alloy-genesis = { path = "./crates/n42/alloy-genesis" }
+ alloy-rpc-types-engine = { path = "./crates/n42/alloy-rpc-types-engine" }
+ alloy-rpc-types-beacon = { path = "./crates/n42/alloy-rpc-types-beacon" }
+diff --git a/crates/n42/mobile-sdk/Cargo.toml b/crates/n42/mobile-sdk/Cargo.toml
+index 9bc662cf9..098ad37c8 100644
+--- a/crates/n42/mobile-sdk/Cargo.toml
++++ b/crates/n42/mobile-sdk/Cargo.toml
+@@ -9,7 +9,7 @@ repository.workspace = true
+ exclude.workspace = true
+ 
+ [lib]
+-crate-type = ["rlib"]
++crate-type = ["rlib", "cdylib"]
+ 
+ [dependencies]
+ jni = "0.21"
+@@ -46,6 +46,12 @@ tracing-subscriber.workspace = true
+ blst = { version = "0.3.3" }
+ hex = "0.4"
+ clap = { version = "4.5.23", features = ["derive"] }
++ethers-core = "2.0"
++
++[target.'cfg(target_os = "android")'.dependencies]
++rustls-platform-verifier = "=0.5.3"
++
++[dev-dependencies]
+ ethers = { version = "2.0", default-features = false, features = [
+     "abigen",
+ ] }
+diff --git a/crates/n42/mobile-sdk/src/c_ffi.rs b/crates/n42/mobile-sdk/src/c_ffi.rs
+index bd71e2802..d549be4bf 100644
+--- a/crates/n42/mobile-sdk/src/c_ffi.rs
++++ b/crates/n42/mobile-sdk/src/c_ffi.rs
+@@ -2,7 +2,7 @@ use std::ffi::{CStr, CString};
+ use std::os::raw::c_char;
+ use std::ptr;
+ 
+-use ethers::types::{TransactionRequest, U256};
++use ethers_core::types::{TransactionRequest, U256};
+ use eyre::Result;
+ use n42_clique::UnverifiedBlock;
+ use serde_json;
+diff --git a/crates/n42/mobile-sdk/src/deposit_exit.rs b/crates/n42/mobile-sdk/src/deposit_exit.rs
+index b0ceab8eb..ab74481c0 100644
+--- a/crates/n42/mobile-sdk/src/deposit_exit.rs
++++ b/crates/n42/mobile-sdk/src/deposit_exit.rs
+@@ -1,6 +1,4 @@
+-use ethers::{
+-    prelude::*,
+-};
++use ethers_core::types::Bytes;
+ use alloy_primitives::Address;
+ use hex::FromHex;
+ use n42_primitives::{DepositData};
+@@ -12,11 +10,10 @@ use alloy_primitives::{B256, FixedBytes};
+ use serde::{Deserialize, Serialize};
+ //use n42_withdrawals::chain_spec::ChainSpec;
+ use blst::min_pk::SecretKey;
+-use ethers::abi::Token;
++use ethers_core::abi::Token;
+ //use ethers::types::{Address, TransactionRequest, U256, NameOrAddress};
+-use ethers::types::{TransactionRequest, U256, NameOrAddress};
+-use ethers::utils::keccak256;
+-use ethers::utils::WEI_IN_ETHER;
++use ethers_core::types::{TransactionRequest, U256, NameOrAddress};
++use ethers_core::utils::keccak256;
+ use tracing::debug;
+ 
+ pub use reth_chainspec::{
+@@ -73,7 +70,7 @@ pub fn create_deposit_unsigned_tx(
+     // 1. Compute function selector
+     let selector = &keccak256("deposit(bytes,bytes,bytes,bytes32)".as_bytes())[0..4];
+     // 2. Encode the function parameters
+-    let encoded_args = ethers::abi::encode(&[
++    let encoded_args = ethers_core::abi::encode(&[
+         Token::Bytes(pubkey.to_bytes().to_vec()),
+         Token::Bytes(deposit_data.withdrawal_credentials.to_vec()),
+         Token::Bytes(deposit_data.signature.to_vec()),
+@@ -85,7 +82,7 @@ pub fn create_deposit_unsigned_tx(
+     calldata.extend(encoded_args);
+ 
+     // 4. Build an unsigned transaction with ETH value transfer
+-    let contract_address: ethers::types::Address =
++    let contract_address: ethers_core::types::Address =
+ deposit_contract_address
+         .parse()?;
+ 
+@@ -113,7 +110,7 @@ fn withdrawal_credentials(withdrawal_address: &alloy_primitives::Address) -> B25
+ }
+ 
+ pub fn create_get_exit_fee_unsigned_tx() -> eyre::Result<TransactionRequest> {
+-    let contract_address: ethers::types::Address = EIP7002_CONTRACT_ADDRESS
++    let contract_address: ethers_core::types::Address = EIP7002_CONTRACT_ADDRESS
+         .parse()?;
+     let tx = TransactionRequest {
+         to: Some(NameOrAddress::Address(contract_address)),
+@@ -130,7 +127,7 @@ pub fn create_exit_unsigned_tx(
+         validator_public_key: &str,
+         fee: &Option<U256>,
+     ) -> eyre::Result<TransactionRequest> {
+-    let contract_address: ethers::types::Address = EIP7002_CONTRACT_ADDRESS
++    let contract_address: ethers_core::types::Address = EIP7002_CONTRACT_ADDRESS
+         .parse()?;
+ 
+     let pubkey_hex = validator_public_key
+diff --git a/crates/n42/mobile-sdk/src/jni.rs b/crates/n42/mobile-sdk/src/jni.rs
+index 369616edf..8e9f794f4 100644
+--- a/crates/n42/mobile-sdk/src/jni.rs
++++ b/crates/n42/mobile-sdk/src/jni.rs
+@@ -1,4 +1,4 @@
+-use ethers::types::U256;
++use ethers_core::types::U256;
+ use jni::JNIEnv;
+ use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
+ use jni::sys::jstring;
+@@ -15,6 +15,24 @@ static RUNTIME: Lazy<Runtime> = Lazy::new(|| {
+     Runtime::new().expect("Failed to create Tokio runtime")
+ });
+ 
++#[cfg(target_os = "android")]
++#[unsafe(no_mangle)]
++pub extern "C" fn Java_ai_n42_tls_MobileSdkTlsVerifier_initializeNative(
++    mut env: JNIEnv<'_>,
++    _receiver: JObject<'_>,
++    context: JObject<'_>,
++) -> jni::sys::jboolean {
++    match rustls_platform_verifier::android::init_with_env(&mut env, context) {
++        Ok(()) => 1,
++        Err(_) => {
++            if matches!(env.exception_check(), Ok(true)) {
++                let _ = env.exception_clear();
++            }
++            0
++        }
++    }
++}
++
+ #[unsafe(no_mangle)]
+ pub extern "C" fn Java_com_mobileSdk_NativeBindings_createDepositUnsignedTx(
+     mut env: jni::JNIEnv<'_>,
+@@ -368,4 +386,3 @@ pub extern "C" fn Java_com_mobileSdk_NativeBindings_genBlockVerifyResult(
+ 
+     cf_obj.into_raw() // return CompletableFuture immediately
+ }
+-

@@ -49,6 +49,7 @@ android {
 dependencies {
     // 通过子项目模块引用 AAR，避免 "Direct local .aar file dependencies are not supported" 构建错误
     implementation project(':mobile-sdk-module')
+    implementation project(':rustls-platform-verifier-module')
     implementation project(':evm-module')
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:2.4.20'
     testImplementation 'org.mockito:mockito-core:5.24.0'

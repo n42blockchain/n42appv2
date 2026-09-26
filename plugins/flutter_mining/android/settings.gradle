@@ -1,3 +1,4 @@
 rootProject.name = 'flutter_mining'
 include ':mobile-sdk-module'
+include ':rustls-platform-verifier-module'
 include ':evm-module'

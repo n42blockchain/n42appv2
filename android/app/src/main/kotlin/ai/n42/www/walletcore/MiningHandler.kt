@@ -1,4 +1,5 @@
 package ai.n42.www.walletcore
+import android.content.Context
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -16,6 +17,7 @@ class MiningHandler(
      * Callback channel used to notify Flutter when the mining client
      * finishes or encounters an error.
      */
+    private val applicationContext: Context,
     private val mobileSdkRuntime: MobileSdkRuntime = MobileSdkRuntime.default,
     private val channelProvider: () -> MethodChannel
 ) {
@@ -93,7 +95,7 @@ class MiningHandler(
 
         try {
             runClientFuture?.cancel(true)
-            val future = mobileSdkRuntime.call { Api.runClient(wsUrl, validatorPrivateKey) }
+            val future = mobileSdkRuntime.callWithTls(applicationContext) { Api.runClient(wsUrl, validatorPrivateKey) }
             runClientFuture = future
             val channel = channelProvider()
             future

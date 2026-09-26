@@ -1,0 +1,58 @@
+--- a/third_party/vergen-git2-1.0.7/Cargo.toml
++++ b/third_party/vergen-git2-1.0.7/Cargo.toml
+@@ -90,7 +90,7 @@
+ version = "0.20.2"
+ 
+ [dependencies.git2-rs]
+-version = "0.20.1"
++version = "0.21"
+ default-features = false
+ package = "git2"
+ 
+--- a/third_party/vergen-git2-1.0.7/src/git2/mod.rs
++++ b/third_party/vergen-git2-1.0.7/src/git2/mod.rs
+@@ -383,7 +383,7 @@
+                 );
+             } else {
+                 Self::add_opt_value(
+-                    commit.author().email(),
++                    commit.author().email().ok(),
+                     VergenKey::GitCommitAuthorEmail,
+                     cargo_rustc_env,
+                     cargo_warning,
+@@ -400,7 +400,7 @@
+                 );
+             } else {
+                 Self::add_opt_value(
+-                    commit.author().name(),
++                    commit.author().name().ok(),
+                     VergenKey::GitCommitAuthorName,
+                     cargo_rustc_env,
+                     cargo_warning,
+@@ -423,7 +423,7 @@
+                 add_default_map_entry(VergenKey::GitCommitMessage, cargo_rustc_env, cargo_warning);
+             } else {
+                 Self::add_opt_value(
+-                    commit.message(),
++                    commit.message().ok(),
+                     VergenKey::GitCommitMessage,
+                     cargo_rustc_env,
+                     cargo_warning,
+@@ -437,7 +437,7 @@
+             } else if self.sha_short {
+                 let obj = repo.revparse_single("HEAD")?;
+                 Self::add_opt_value(
+-                    obj.short_id()?.as_str(),
++                    obj.short_id()?.as_str().ok(),
+                     VergenKey::GitSha,
+                     cargo_rustc_env,
+                     cargo_warning,
+@@ -515,7 +515,7 @@
+         }
+ 
+         if let Ok(resolved) = ref_head.resolve() {
+-            if let Some(name) = resolved.name() {
++            if let Ok(name) = resolved.name() {
+                 let ref_path = git_path.to_path_buf();
+                 let path = ref_path.join(name);
+                 // Check whether the path exists in the filesystem before emitting it

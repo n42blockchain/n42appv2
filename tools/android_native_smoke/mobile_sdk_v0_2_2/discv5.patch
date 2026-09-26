@@ -1,0 +1,11 @@
+--- a/third_party/discv5-0.9.1/Cargo.toml
++++ b/third_party/discv5-0.9.1/Cargo.toml
+@@ -113,7 +113,7 @@
+ optional = true
+ 
+ [dependencies.lru]
+-version = "0.12"
++version = "0.18.2"
+ 
+ [dependencies.more-asserts]
+ version = "0.3"

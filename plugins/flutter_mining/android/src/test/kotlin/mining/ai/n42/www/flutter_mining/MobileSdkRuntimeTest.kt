@@ -1,8 +1,10 @@
 package mining.ai.n42.www.flutter_mining
 
+import android.content.Context
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import org.mockito.Mockito
 
 internal class MobileSdkRuntimeTest {
     @Test
@@ -75,5 +77,54 @@ internal class MobileSdkRuntimeTest {
 
         val failure = assertFailsWith<IllegalStateException> { runtime.call { throw original } }
         kotlin.test.assertSame(original, failure)
+    }
+
+    @Test
+    fun unsupportedProcessDoesNotInitializeTlsOrRunClient() {
+        var loads = 0
+        var tlsInitializations = 0
+        var calls = 0
+        val runtime = MobileSdkRuntime(
+            is64BitProcess = { false },
+            loadNative = { loads++ },
+            initializeTls = { tlsInitializations++; true },
+        )
+
+        assertFailsWith<MobileSdkUnavailableException> {
+            runtime.callWithTls(null) { calls++ }
+        }
+        assertEquals(0, loads)
+        assertEquals(0, tlsInitializations)
+        assertEquals(0, calls)
+    }
+
+    @Test
+    fun supportedRunClientInitializesTlsBeforeNativeAction() {
+        val context = Mockito.mock(Context::class.java)
+        val order = mutableListOf<String>()
+        val runtime = MobileSdkRuntime(
+            is64BitProcess = { true },
+            loadNative = { order += "load" },
+            initializeTls = { order += "tls"; true },
+        )
+
+        assertEquals("started", runtime.callWithTls(context) { order += "client"; "started" })
+        assertEquals(listOf("load", "tls", "client"), order)
+    }
+
+    @Test
+    fun failedTlsInitializationPreventsNativeAction() {
+        val context = Mockito.mock(Context::class.java)
+        var calls = 0
+        val runtime = MobileSdkRuntime(
+            is64BitProcess = { true },
+            loadNative = {},
+            initializeTls = { false },
+        )
+
+        assertFailsWith<MobileSdkUnavailableException> {
+            runtime.callWithTls(context) { calls++ }
+        }
+        assertEquals(0, calls)
     }
 }

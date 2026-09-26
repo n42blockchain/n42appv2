@@ -1,0 +1,32 @@
+--- a/third_party/alloy-consensus-1.0.12/Cargo.toml
++++ b/third_party/alloy-consensus-1.0.12/Cargo.toml
+@@ -66,6 +66,7 @@
+ secp256k1 = ["dep:secp256k1"]
+ serde = [
+     "dep:serde",
++    "dep:serde_json",
+     "alloy-primitives/serde",
+     "dep:alloy-serde",
+     "alloy-eips/serde",
+@@ -190,6 +191,12 @@
+ optional = true
+ default-features = false
+ 
++[dependencies.serde_json]
++version = "1.0"
++features = ["alloc"]
++optional = true
++default-features = false
++
+ [dependencies.serde]
+ version = "1.0"
+ features = [
+--- a/third_party/alloy-consensus-1.0.12/src/lib.rs
++++ b/third_party/alloy-consensus-1.0.12/src/lib.rs
+@@ -92,4 +92,6 @@
+     pub use arbitrary;
+     #[cfg(feature = "serde")]
+     pub use serde;
++    #[cfg(feature = "serde")]
++    pub use serde_json;
+ }
