@@ -1,0 +1,2 @@
+Preparing worktree (detached HEAD 2099ec735)
+HEAD is now at 2099ec735 perf: remove MockEthProvider::default() call(which performs heavy cryptographic hashing (Keccak256) in .build())

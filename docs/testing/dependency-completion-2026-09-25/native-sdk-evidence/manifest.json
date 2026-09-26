@@ -1,0 +1,460 @@
+{
+  "description": "Task16B bounded evidence; debug fixture APKs are not release artifacts",
+  "files": {
+    "android/app/libs/mobile-sdk-android.aar": {
+      "bytes": 8460169,
+      "sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/README.md": {
+      "bytes": 8145,
+      "sha256": "f6db93e68f7a74e7ac104d171a3df49e6148943ccad495bc3fdece6052137d6a"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/bls-runtime.log": {
+      "bytes": 3800,
+      "sha256": "deeb366743234795788a2026388c8feefb2d764995edc247e57803829214a15a"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/legacy-runtime.log": {
+      "bytes": 5068,
+      "sha256": "2e949419fc163cf87c3aa5086153fa6c7fcf864abdd79ff49c2801c1595c9ed5"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/maintained-runtime-mutated-gas.log": {
+      "bytes": 5096,
+      "sha256": "f6ade821591aae5f91ce08ac7c1930ff9d736d9cbf6666338d93ce4b5bbdbdd5"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/maintained-runtime.log": {
+      "bytes": 5096,
+      "sha256": "297ab6bd93fd354bcf77f1de0335ba33d001f62fbe1874773025445297b09dff"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/manifest-negative-test.log": {
+      "bytes": 1199,
+      "sha256": "4862aecea36ed8df91fc9b7458bdf3fab46556d7178d3dcbc9b25d05506aa017"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/native-runtime-invalid-prestrip.log": {
+      "bytes": 3217,
+      "sha256": "9db0788717f72c9ef0f35caf62c443b7cca7988dae149fd18d7257696ad462af"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/native-runtime-relative-input-red.log": {
+      "bytes": 5456,
+      "sha256": "713d8752041ea60a6bd7285c00ed430610569ddc109a0b014ec319af7e077aa7"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/native-runtime.log": {
+      "bytes": 3625,
+      "sha256": "c88388820af16101b1b283823c1b4ff4a6ce2a5ff29540f2996fcbe87d796440"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/release-apksigner.log": {
+      "bytes": 863,
+      "sha256": "e27c4823d1a093e2a75356dde3006cf68fda3022bcb9775699d8b6308c5044d8"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/android-arm64-tree-tls-production.txt": {
+      "bytes": 100482,
+      "sha256": "8cb3202960e1281b22956d0a4fef6981c7225fe55cd526d5c2125e7ecb79e27c"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/bls-oracle-build-final.log": {
+      "bytes": 422,
+      "sha256": "496d2053bbcefce4085ee24205111b66d48031997d2b9cb009b28622db8768ac"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/bls-oracle-elf-audit.json": {
+      "bytes": 291,
+      "sha256": "3cda1f2560c4289b157c49db2bff65dc4312566292936fae063c38dc80eae377"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/bls-oracle-host-test.log": {
+      "bytes": 494,
+      "sha256": "bc683eaddff2509d955f418bc54cc0d6fc6f24add6c8e2438f3c923ebfb2de45"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/bls-oracle-recipe-proof.log": {
+      "bytes": 1423,
+      "sha256": "08c9b91dbbeecc3b3c78538b4f700d613f197e7dafe24edd19c1809ba362ec1d"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/build-tls-fixture-fresh.log": {
+      "bytes": 112533,
+      "sha256": "708f423da21456d866933ba3f108fa847b7285f6ac819567bbc23c425627fa4b"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/build-tls-production.log": {
+      "bytes": 221243,
+      "sha256": "f806ab947b26174497ada8201b470c83c6071aee5af7f02196c6dc4da6014c5a"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/cargo-audit-tls-production.json": {
+      "bytes": 44592,
+      "sha256": "2fbd18675344137045bbb2d2cae88fb44f222344e23cb629544e589b61ffda54"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/fetch.log": {
+      "bytes": 508,
+      "sha256": "8f984b0909541c989a666a8e724fd188cda1242dfbc90773e4e53f035211aa78"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/ios-arm64-tree-tls-production.txt": {
+      "bytes": 100350,
+      "sha256": "23841962ff412be00931fee9e13629520a78cf4cb4a2b333f2fe07cbc1266052"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/legacy-maintained-vector-compare.log": {
+      "bytes": 73,
+      "sha256": "14794c26b320bcbda120bba60ee0a442174c00f8b4369bdef0dd713495d52c59"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/legacy-maintained-vector-negative.log": {
+      "bytes": 432,
+      "sha256": "3138cf5255f1cf46546de7c398f16850572f88c2ab1e4f46fb4bbbb175ab3c8b"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/legacy-packaged-elf-audit.json": {
+      "bytes": 445,
+      "sha256": "ae91482e02371c1e9a6cb4fad3b5d197d9263a7ba6deea8530fe09484d210575"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/legacy-packaged-vectors-probe.log": {
+      "bytes": 3512,
+      "sha256": "7548cc97cf169c53aba945febf88ac4286570666f7d81f9c08092792dbc4c42d"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/legacy-packaged-vectors-runtime.log": {
+      "bytes": 4130,
+      "sha256": "103efcbf27d10feeba23afc90b80734ab57ea081dc616715fd216e729160768f"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/legacy-v0.2.2-transaction-diff.json": {
+      "bytes": 2939,
+      "sha256": "68c2471ab61b5b54b3dafa6d169e397540832f9bcdead6a31082028cddcd6f27"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/maintained-vectors-probe.log": {
+      "bytes": 3532,
+      "sha256": "ccb338f7f89334f2d04b0b342e89ee5e22c8de0925b034100ab3e4dd53963a4b"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/normalize.log": {
+      "bytes": 3014,
+      "sha256": "496e3e46fc529084158e6cd452abee1e3036f9a505a79e80e79ea4b6c9edda2d"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/official-v0.2.2-native-audit.json": {
+      "bytes": 399,
+      "sha256": "906d157202ae7e0cb164d8037f802039b332e14ee78ef43a8f16ad62b795d01c"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/recipe-explicit-guards-test.log": {
+      "bytes": 125,
+      "sha256": "6c64173b06b38d25c5c68fb7946726e402a2d36e0bc2f5d892e7b1270917f74c"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/recipe-hardening-test.log": {
+      "bytes": 61,
+      "sha256": "34d7c4658059610a472b241cbc670589fc92ab9414e203333d9b3e34883a9e08"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/recipe-proof.log": {
+      "bytes": 183,
+      "sha256": "8e8fdfae929651020109ef6d0f0b0088c4bddf87f4646e81d6e3de7940d19f60"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-cert-fixture-runtime-final-pinned.log": {
+      "bytes": 1992,
+      "sha256": "e040877e34e22618c1fcfbb55c7c337fee75b464eb2af99fd48d0d9c34f07533"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-cert-fixture-runtime-final.log": {
+      "bytes": 185,
+      "sha256": "dd3e0db4aaedf82af7eb8f72198981d7d3066c25463a6aaa026dc1083db2b71b"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-cert-fixture-runtime-testcompanion.log": {
+      "bytes": 4107,
+      "sha256": "60e0d12e9995593f4c4e49fe071b741a463436a97f60caf93551a4e93959b69c"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-cert-fixture-runtime.log": {
+      "bytes": 2564,
+      "sha256": "7055d3e67f9942586ae8f6e5a6a910add3041472a8606839c2c5e9ec15b764c2"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-fixture-evidence-lock-update.log": {
+      "bytes": 455,
+      "sha256": "849c5c6a2f13753a62b7fef24cc826ea904a51033033d29fbcf0f9bcffff69ad"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-fixture-recipe-prepare.log": {
+      "bytes": 117,
+      "sha256": "b2751788244b41fa3c0e17f14f0689168359ee7a5562409a06de2a6cfdf23c21"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-fixture-source-verify.log": {
+      "bytes": 88,
+      "sha256": "0df053ca6274883de7a1d0d35c163f4725799fada55d971daa3906acc5911669"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/rust/tls-production-elf-audit.log": {
+      "bytes": 291,
+      "sha256": "6fdddfbdd927b54934bdcde1e4c31176e2f86e285521692624ab0dab9135760a"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-audit-green.log": {
+      "bytes": 980,
+      "sha256": "5d9efbd64e87215e40f303ae1906f1a12d6ecc760a57b4726e33e9fa0f60beaf"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-bls-oracle-evidence.md": {
+      "bytes": 2941,
+      "sha256": "065c8c38b88eeaf92052c37f0faa99a0660c519feec23dfbd3262500cfe3f4fb"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-guard-green.log": {
+      "bytes": 98217,
+      "sha256": "34595a01564d51653268565cf88b80361b320baef63058e4dba9166fed0cbac6"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-guard-race-behavior-red.log": {
+      "bytes": 127454,
+      "sha256": "b2c8897bd296882816eaff8dcaad9c679045e3feac87f794264f3cc85ad23dd2"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-guard-race-restored-green.log": {
+      "bytes": 126814,
+      "sha256": "d6bf53e2422e41014a48eef51165cf42a8d00650b4cf1c0d6c68269f842ab399"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-mobile-sdk-report.md": {
+      "bytes": 15355,
+      "sha256": "ba6d041733d3cc7f1e2d052cfce84c85e8118db9ecbc3b7da210765a638ce65b"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-aab-final.log": {
+      "bytes": 2305,
+      "sha256": "cdd29c53a0caab844c9471eeed19dc372c33029be81e5184cc5fb0e21a9e77e4"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-aab-mobile-sdk-audit.json": {
+      "bytes": 296,
+      "sha256": "3b3edbfd5c43dabfc0c6ff6717a983f781cc08dc53e402ee744447770988dbf7"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-aab-native-audit.json": {
+      "bytes": 2081,
+      "sha256": "be31b65e5ae8166c4881c44cf2054b3d51158e9061135cc3752331f626588804"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-apk-final.log": {
+      "bytes": 6167,
+      "sha256": "4422391ac26015ab024873ebb34b0415fb1d1aaa18f0f6ed184111457a5b74cf"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-apk-mobile-sdk-audit.json": {
+      "bytes": 296,
+      "sha256": "114749f4bdfef29a39b4f5d1c29410324b5d8eaed4a9324cbd28cc67fdac6733"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-apk-native-audit.json": {
+      "bytes": 1893,
+      "sha256": "a8277526d1c172d1779ea1b63611afdf999ce8f96d0b7eb156bdeb3bddf65f98"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-apk-zipalign.log": {
+      "bytes": 78909,
+      "sha256": "fe8785e1c987a387f4a16b032b889dfda6cbf94c4e892680a19c848fef82d945"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-apk.log": {
+      "bytes": 2172,
+      "sha256": "30e08741f51ad267bdd7a4ae0001e11195dbaa4d525b4706c03565ee93756c29"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-release-packaging.log": {
+      "bytes": 142740,
+      "sha256": "5341f596d51788f9e514774341eb4e160b434c7bd3c92c5aba80c80ac18bf0ff"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-tls-fixture-evidence.md": {
+      "bytes": 6433,
+      "sha256": "dbe2bcd6d12404f1500bd301e398b6ee8b877f2d211cd390e761697360e55b22"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-tls-init-green.log": {
+      "bytes": 150920,
+      "sha256": "4d278721af682f345b72a57496b0ff488543ed6cb2e476ab1799d7ba70d2b4c6"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/task/task-16b-tls-init-red.log": {
+      "bytes": 49130,
+      "sha256": "468d672873bcf5e8bd1bd70d1f48e8f67e6c6a3a1ad5fdd8575e39821b5ce95f"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/tls-runtime.log": {
+      "bytes": 15773,
+      "sha256": "5ba25190a20708c72cab0ee217a6e5a87ad84fcdc55d50e631c531de281b6b8a"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/vector-comparison-negative.log": {
+      "bytes": 432,
+      "sha256": "3138cf5255f1cf46546de7c398f16850572f88c2ab1e4f46fb4bbbb175ab3c8b"
+    },
+    "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/vector-comparison.log": {
+      "bytes": 73,
+      "sha256": "14794c26b320bcbda120bba60ee0a442174c00f8b4369bdef0dd713495d52c59"
+    },
+    "plugins/flutter_mining/android/libs/mobile-sdk-release.aar": {
+      "bytes": 8460169,
+      "sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5"
+    },
+    "plugins/flutter_mining/android/libs/rustls-platform-verifier-0.1.1.aar": {
+      "bytes": 9287,
+      "sha256": "667292cadd8fa589229dd0f716541236a761f29b774930868d218175633830fd"
+    },
+    "tools/android_native_smoke/bls_oracle/Cargo.lock": {
+      "bytes": 9357,
+      "sha256": "59a80fbfe33fe036a464c0fe8478d7cf84789a5bd058b40069c9905cb100ddcb"
+    },
+    "tools/android_native_smoke/bls_oracle/Cargo.toml": {
+      "bytes": 173,
+      "sha256": "89e733deaf6772090a463925d32e378da4076800633420963d50b8ec9f33aae7"
+    },
+    "tools/android_native_smoke/bls_oracle/README.md": {
+      "bytes": 1475,
+      "sha256": "dc5c04cb7d9fb38ebe1c8dcab097afd3908353136360317e6e6040625d357846"
+    },
+    "tools/android_native_smoke/bls_oracle/rebuild_android.sh": {
+      "bytes": 1837,
+      "sha256": "1d7894d47ff29a4e3757947b179180e65ed84a4260755368dd69836ba567c842"
+    },
+    "tools/android_native_smoke/bls_oracle/src/lib.rs": {
+      "bytes": 2821,
+      "sha256": "2e3f1ef434907b54a339d0f356ee1ab082174de3107635c3749839817289ad38"
+    },
+    "tools/android_native_smoke/compare_mobile_sdk_vectors.py": {
+      "bytes": 1402,
+      "sha256": "c63d66997c6b91c670c3a91e8b975d9497cb564d1f02c8d0032654f253f92a9e"
+    },
+    "tools/android_native_smoke/harness/android/app/build.gradle.kts": {
+      "bytes": 3992,
+      "sha256": "71765b87e569c92ccee4e959d4f85096c4f05688afb4ab10cf8119507cf80177"
+    },
+    "tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt": {
+      "bytes": 12077,
+      "sha256": "14617b7ab6d6cb163877623cb3a8ceec88836cdda945c42a7d6b110b0c6ad618"
+    },
+    "tools/android_native_smoke/harness/integration_test/native_mobile_sdk_bls_oracle_test.dart": {
+      "bytes": 469,
+      "sha256": "6310e4eba243660dc5a2479aa1809b69720d7b3a91b9977d6f7657a69b465ffc"
+    },
+    "tools/android_native_smoke/harness/integration_test/native_mobile_sdk_legacy_probe_test.dart": {
+      "bytes": 685,
+      "sha256": "d883f5e5e2604def3a495af001ef7c1d4949ae83d2f550e327c1861062f7e1e0"
+    },
+    "tools/android_native_smoke/harness/integration_test/native_mobile_sdk_test.dart": {
+      "bytes": 2766,
+      "sha256": "8d37547fa3097f1535ad2edccb14b8e1d5e0b6a2b4fb5c1c09f4d1d60d317836"
+    },
+    "tools/android_native_smoke/harness/integration_test/native_mobile_sdk_tls_fixture_test.dart": {
+      "bytes": 622,
+      "sha256": "d11cf008cd82372adc6a9f63ed8299b7874b9929f258b7cc6371746ca1486c0f"
+    },
+    "tools/android_native_smoke/run_mobile_sdk_fixture.sh": {
+      "bytes": 7509,
+      "sha256": "e3a757bc6de135d6f7b222195994707744990f640d82228ed938d81d8fac4b81"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/Cargo.lock": {
+      "bytes": 317182,
+      "sha256": "1770eaa733bb4a624069624b51c83bd62723fcdab3feae118c3980b01c6cbf49"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/README.md": {
+      "bytes": 5254,
+      "sha256": "a873dd0742d756e3f3ba64090cc2004ccffa90be5c71b7ad80f28a542e0e5ea5"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/build.sh": {
+      "bytes": 2830,
+      "sha256": "4fe4b473465b27cc7185476754cf64e005e8469e398678ccc74ccc2f7733df1b"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs.sha256": {
+      "bytes": 1753,
+      "sha256": "61eca84d2e76d2292d95909d0d2760c503708602acbb081b5a35592e92ba2f70"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_1-good.crt": {
+      "bytes": 413,
+      "sha256": "5574db5f3c8a603f476a7cc4cf9306fdf1102e21057049637633c3be34ded5c4"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_1-good.ocsp": {
+      "bytes": 300,
+      "sha256": "0d9e6c5278d1c7167acb1e567a04120fee997f048729c52302b429788eb1ab07"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_1-revoked.crt": {
+      "bytes": 412,
+      "sha256": "41230be19b32b44dcb9df59d8036a836c0e6ac04479b7b41bccfcdf7cf724485"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_1-revoked.ocsp": {
+      "bytes": 317,
+      "sha256": "f51cbbd5c361c69394593b9fd0091a3ddefc929a54d3da92389d5277fdc927c4"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_1-wrong_eku.crt": {
+      "bytes": 413,
+      "sha256": "f50acb5b15c5b29da9490f17d562a25e3b234be1ea29ad45a6a09861376a2a2d"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_127.0.0.1-good.crt": {
+      "bytes": 400,
+      "sha256": "66affc3e0deb1f0944524fd5749a887c5876bdeb542f5b54f07926935f6c06aa"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_127.0.0.1-good.ocsp": {
+      "bytes": 298,
+      "sha256": "a02db8e351a773d642ed7867f3cf4f1015e14c4c0e1cf856ed83ae98b6cc494d"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_127.0.0.1-revoked.crt": {
+      "bytes": 401,
+      "sha256": "aaed08255e146ce407a1efbf2f2df845cb51e5b241254efac699d84e2b5d8b26"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_127.0.0.1-revoked.ocsp": {
+      "bytes": 316,
+      "sha256": "505143178c41ceeee7da982779cc3027b0172bcad1eb375ced233395f6cd1a75"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_127.0.0.1-wrong_eku.crt": {
+      "bytes": 401,
+      "sha256": "e816539ba15bcca0d2bb79e79f90a1a64c924df2a5db0ccf0459c8ce8aba8260"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_example.com-good.crt": {
+      "bytes": 408,
+      "sha256": "e14a5ca95d63b8240e7002cecb7cf18d4ed6dd77dda1f40135b096211d240159"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_example.com-good.ocsp": {
+      "bytes": 298,
+      "sha256": "a14b13c79dbe9976a66e1f3810b6e67122e53817b900c181127a7e440534076f"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_example.com-revoked.crt": {
+      "bytes": 409,
+      "sha256": "1dd6940b15e34895b83d01eb79cd549af9a8ad3c4dd5fa6b67803afc676725e3"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_example.com-revoked.ocsp": {
+      "bytes": 315,
+      "sha256": "a3bc9e27c63d4ca6774fe371a092b5133a9478669f9ca506ca1dc110ff3990c0"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1-ee_example.com-wrong_eku.crt": {
+      "bytes": 408,
+      "sha256": "1d5f75f9017d689102756701b3c82e23a7f1fd143a4007d55b3a1cf9d91ec103"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1-int1.crt": {
+      "bytes": 440,
+      "sha256": "beea3ecdd143e8b99c65c6e91f2f16fb6e0b7a1198dd61947a1c74c29e03fed3"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/certs/root1.crt": {
+      "bytes": 403,
+      "sha256": "e50cca1d3a9f553981809842b9b3956e65643ede7a13f9d5b7b676a70aa70642"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/prepare.sh": {
+      "bytes": 2550,
+      "sha256": "776193775902e020a83a4bbff4251338745b07199acd7f3a41a9a4874a2d159c"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/repack_fixture_aar.py": {
+      "bytes": 1476,
+      "sha256": "a92e16111fbf6cfcee7cfd728ef48c2c9f37cfa991c93b0bbf16f47912f5b7de"
+    },
+    "tools/android_native_smoke/tls_fixture_v0_5_3/verification-time.patch": {
+      "bytes": 557,
+      "sha256": "d56aa7d97c79bbaf8170374ca00b2d84708606a9111f787ef64d03ae69f83296"
+    },
+    "tools/android_native_smoke/verify_mobile_sdk_evidence.py": {
+      "bytes": 8884,
+      "sha256": "5619d6fa162f3f6d68acffc9db4a32985b8e5d0ed408e57228404b26150b5c3e"
+    }
+  },
+  "release_aab_sha256": "0fe3da0660c5b35011516bcb49a5e041855304f5e2f4293de238fd23c540b9c4",
+  "release_apk_sha256": "9da4974f11427749786996d1f40e26c99e402db8a4640c9e5c5499848171ecc0",
+  "runs": {
+    "bls": {
+      "apk_arm64_libmobile_sdk_sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "debug_apk_sha256": "cd5ae1f9ef1435b49b08bd6555996e133ee1ef7e0bb26fb9874d61d811be9812",
+      "exit_code": 0,
+      "input_aar_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "log": "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/bls-runtime.log",
+      "log_sha256": "deeb366743234795788a2026388c8feefb2d764995edc247e57803829214a15a"
+    },
+    "legacy": {
+      "apk_arm64_libmobile_sdk_sha256": "f5b2df1a42d41152de69cbe5c49c7dfae6efcc753a7ba3ce09b9501f332de944",
+      "debug_apk_sha256": "65ac786abcf6eab53c6e76a4d24212fa66c15a04b361a68e0404206212758dda",
+      "exit_code": 0,
+      "input_aar_sha256": "784783d758533826a768bc0697525d9b28caa857a3f4819707877fb790d6b254",
+      "log": "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/legacy-runtime.log",
+      "log_sha256": "2e949419fc163cf87c3aa5086153fa6c7fcf864abdd79ff49c2801c1595c9ed5"
+    },
+    "maintained": {
+      "apk_arm64_libmobile_sdk_sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "debug_apk_sha256": "18596e515c42af9dfdfa6437103ec716550a9de0f049bde71bb436c8d10a8c2c",
+      "exit_code": 0,
+      "input_aar_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "log": "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/maintained-runtime.log",
+      "log_sha256": "297ab6bd93fd354bcf77f1de0335ba33d001f62fbe1874773025445297b09dff"
+    },
+    "native": {
+      "apk_arm64_libmobile_sdk_sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "debug_apk_sha256": "e37dbbbb7aad9f6bd5819fa1ac0522572bef4aa1790d0c2d365dbed409740037",
+      "exit_code": 0,
+      "input_aar_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "log": "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/native-runtime.log",
+      "log_sha256": "c88388820af16101b1b283823c1b4ff4a6ce2a5ff29540f2996fcbe87d796440"
+    },
+    "tls": {
+      "apk_arm64_libmobile_sdk_sha256": "06b93367af4a5a4aed93fb8fdc1790581cdabbd6e050e02db0bcca8bd3e88771",
+      "debug_apk_sha256": "e373f089d9f71d186ccbfdd8b146e337f3aed0d15fdcd324533e80fbf614bf11",
+      "exit_code": 0,
+      "input_aar_sha256": "bc8b8962df31a35fe67c37104de1202dd2451f7b5b31a77908252b929f8e7ac4",
+      "log": "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/tls-runtime.log",
+      "log_sha256": "5ba25190a20708c72cab0ee217a6e5a87ad84fcdc55d50e631c531de281b6b8a"
+    }
+  },
+  "schema": 1,
+  "selected_maintained_aar_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+  "source_commit_at_run": "f2f8920230b6f1dda3816c98d617a42fa59fdd76"
+}

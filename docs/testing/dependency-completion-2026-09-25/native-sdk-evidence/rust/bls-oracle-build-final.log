@@ -1,0 +1,4 @@
+    Building arm64-v8a (aarch64-linux-android)
+   Compiling n42-bls-fixture-oracle v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/bls_oracle)
+    Finished `release` profile [optimized] target(s) in 0.57s
+     Copying libraries to /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/bls-oracle-jni

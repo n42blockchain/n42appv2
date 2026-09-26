@@ -1,0 +1,6 @@
+      Adding android_log-sys v0.3.2
+      Adding android_logger v0.15.1
+      Adding env_filter v0.1.3
+      Adding rustls-platform-verifier v0.5.3 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/source-git/third_party/rustls-platform-verifier-0.5.3-fixture)
+    Removing rustls-platform-verifier v0.5.3
+note: pass `--verbose` to see 348 unchanged dependencies behind latest

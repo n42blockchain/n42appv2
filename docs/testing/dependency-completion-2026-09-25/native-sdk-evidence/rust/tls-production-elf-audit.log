@@ -1,0 +1,7 @@
+{
+  "artifact": ".superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/tls-production.aar",
+  "libraries_checked": 4,
+  "unaligned_libraries": [],
+  "passed": true,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}

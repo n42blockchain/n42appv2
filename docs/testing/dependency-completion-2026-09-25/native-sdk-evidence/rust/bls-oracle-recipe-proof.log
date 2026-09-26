@@ -1,0 +1,30 @@
+    Building arm64-v8a (aarch64-linux-android)
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.26
+   Compiling libc v0.2.189
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.14
+   Compiling jni-sys v0.3.1
+   Compiling thiserror v1.0.69
+   Compiling bytes v1.12.1
+   Compiling memchr v2.8.3
+   Compiling cc v1.5.1
+   Compiling log v0.4.34
+   Compiling cesu8 v1.1.0
+   Compiling combine v4.6.8
+   Compiling cfg-if v1.0.5
+   Compiling blst v0.3.15
+   Compiling syn v2.0.119
+   Compiling num_cpus v1.17.0
+   Compiling threadpool v1.8.1
+   Compiling jni-sys-macros v0.4.1
+   Compiling thiserror-impl v1.0.69
+   Compiling zeroize_derive v1.5.0
+   Compiling jni-sys v0.4.1
+   Compiling zeroize v1.9.0
+   Compiling jni v0.21.1
+   Compiling n42-bls-fixture-oracle v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/bls_oracle)
+    Finished `release` profile [optimized] target(s) in 6.62s
+     Copying libraries to /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/bls-oracle-recipe-proof/jni
+1fb890c469294e71be965684cddc9168ffd2f19d7946607cd26d95c9d2c08a6d  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/bls-oracle-recipe-proof/jni/arm64-v8a/libn42_bls_fixture_oracle.so

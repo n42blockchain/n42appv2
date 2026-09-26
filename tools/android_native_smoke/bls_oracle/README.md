@@ -6,10 +6,9 @@ With Rust 1.97.1, cargo-ndk 4.1.2 and Android NDK 28.2.13676358, from this direc
 
 ```sh
 cargo +1.97.1 test --locked --offline
-ANDROID_NDK_HOME=/absolute/ndk/28.2.13676358 \
-  CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS='-C link-arg=-Wl,-z,max-page-size=16384 -C link-arg=-Wl,-z,common-page-size=16384' \
-  cargo +1.97.1 ndk -t arm64-v8a -P 23 -o /absolute/task/jni \
-    build --release --locked --offline
+./rebuild_android.sh /absolute/ndk/28.2.13676358 /absolute/new/task/output
 ```
 
-Set `N42_SMOKE_BLS_ORACLE_JNILIBS=/absolute/task/jni` when running the isolated Flutter harness `integration_test/native_mobile_sdk_bls_oracle_test.dart` on the disposable 16 KB emulator. The harness resolves the selected SDK AAR from `N42_SMOKE_MOBILE_AAR` or the app's tracked SDK location. `N42_SMOKE_BLS_ORACLE_JNILIBS` is never set for release app builds. The pinned lock SHA-256 for this test tool is `59a80fbfe33fe036a464c0fe8478d7cf84789a5bd058b40069c9905cb100ddcb`.
+The build script clears inherited `RUSTFLAGS` and `CARGO_ENCODED_RUSTFLAGS` inside its process before setting the pinned target flags, then audits the output ELF. It does not modify the caller's environment.
+
+Set `N42_SMOKE_BLS_ORACLE_JNILIBS=/absolute/new/task/output/jni` when running the isolated Flutter harness `integration_test/native_mobile_sdk_bls_oracle_test.dart` on the disposable 16 KB emulator. The harness resolves the selected SDK AAR from `N42_SMOKE_MOBILE_AAR` or the app's tracked SDK location. `N42_SMOKE_BLS_ORACLE_JNILIBS` is never set for release app builds. The pinned lock SHA-256 for this test tool is `59a80fbfe33fe036a464c0fe8478d7cf84789a5bd058b40069c9905cb100ddcb`.

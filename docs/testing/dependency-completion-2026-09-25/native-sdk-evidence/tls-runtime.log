@@ -1,0 +1,128 @@
+mode=tls started_utc=2026-09-26T21:31:33Z
+input_aar_sha256=bc8b8962df31a35fe67c37104de1202dd2451f7b5b31a77908252b929f8e7ac4
+app_commit=f2f8920230b6f1dda3816c98d617a42fa59fdd76
+runner_sha256=e3a757bc6de135d6f7b222195994707744990f640d82228ed938d81d8fac4b81
+flutter=3.47.5 3.13.4
+strip_tool_path=/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-strip
+strip_tool_sha256=438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f
+strip_tool_version=llvm-strip, compatible with GNU strip LLVM (http://llvm.org/): 
+device=emulator-5560 PAGE_SIZE=16384 linker_compat=fatal package_compat_disabled=true
+verifier_source_commit=670de1a872b68c2a0a31a6c491e04bc95d5de5e8
+test_source_sha256=d11cf008cd82372adc6a9f63ed8299b7874b9929f258b7cc6371746ca1486c0f
+harness_kotlin_sha256=14617b7ab6d6cb163877623cb3a8ceec88836cdda945c42a7d6b110b0c6ad618
+harness_gradle_sha256=71765b87e569c92ccee4e959d4f85096c4f05688afb4ab10cf8119507cf80177
+tls_logcat_cleared_before_test=true
+command=flutter test integration_test/native_mobile_sdk_tls_fixture_test.dart -d emulator-5560
+00:00 +0: loading /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/harness/integration_test/native_mobile_sdk_tls_fixture_test.dart
+Running Gradle task 'assembleDebug'...                          
+WARNING: Your Android app project: app located at: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/harness/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): flutter_callkit_incoming
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+INFO: Precompiled binaries are disabled
+INFO: Building vodozemac_bindings_dart for aarch64-linux-android
+INFO: Building vodozemac_bindings_dart for i686-linux-android
+INFO: Building vodozemac_bindings_dart for x86_64-linux-android
+Running Gradle task 'assembleDebug'...                             13.8s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+Installing build/app/outputs/flutter-apk/app-debug.apk...          606ms
+00:00 +0: Android TLS verifier accepts and rejects fixture chains
+00:00 +1: (tearDownAll)
+00:01 +1: All tests passed!
+tls_certificate_logcat_begin
+09-26 17:31:54.112  9203  9249 W rustls_platform_verifier::verification::android: certificate was not trusted: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
+09-26 17:31:54.112  9203  9249 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: UnknownIssuer
+09-26 17:31:54.113  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock root verification: test passed
+09-26 17:31:54.113  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.114  9203  9203 I rustls_platform_verifier::tests::ffi::android: running mock test suite...
+09-26 17:31:54.114  9203  9254 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.125  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.125  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.125  9203  9258 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.133  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.133  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.133  9203  9262 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.142  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.142  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.142  9203  9266 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.157  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.157  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.157  9203  9270 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.172  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.172  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.172  9203  9274 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.182  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.182  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.183  9203  9278 I rustls_platform_verifier::tests::verification_mock: verifying Ok(())
+09-26 17:31:54.186  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.186  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.186  9203  9282 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(Revoked))
+09-26 17:31:54.196  9203  9282 W rustls_platform_verifier::verification::android: certificate was revoked: java.security.cert.CertPathValidatorException: Certificate has been revoked, reason: UNSPECIFIED, revocation date: Fri Sep 25 16:22:00 EDT 2026, authority: O=root1-int1, extension OIDs: []
+09-26 17:31:54.196  9203  9282 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: Revoked
+09-26 17:31:54.196  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.196  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.197  9203  9286 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(Revoked))
+09-26 17:31:54.212  9203  9286 W rustls_platform_verifier::verification::android: certificate was revoked: java.security.cert.CertPathValidatorException: Certificate has been revoked, reason: UNSPECIFIED, revocation date: Fri Sep 25 16:22:00 EDT 2026, authority: O=root1-int1, extension OIDs: []
+09-26 17:31:54.212  9203  9286 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: Revoked
+09-26 17:31:54.212  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.212  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.213  9203  9290 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(Revoked))
+09-26 17:31:54.228  9203  9290 W rustls_platform_verifier::verification::android: certificate was revoked: java.security.cert.CertPathValidatorException: Certificate has been revoked, reason: UNSPECIFIED, revocation date: Fri Sep 25 16:22:00 EDT 2026, authority: O=root1-int1, extension OIDs: []
+09-26 17:31:54.228  9203  9290 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: Revoked
+09-26 17:31:54.229  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.229  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.229  9203  9294 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(UnknownIssuer))
+09-26 17:31:54.231  9203  9294 W rustls_platform_verifier::verification::android: certificate was not trusted: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
+09-26 17:31:54.231  9203  9294 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: UnknownIssuer
+09-26 17:31:54.231  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.231  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.232  9203  9299 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(UnknownIssuer))
+09-26 17:31:54.233  9203  9299 W rustls_platform_verifier::verification::android: certificate was not trusted: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
+09-26 17:31:54.233  9203  9299 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: UnknownIssuer
+09-26 17:31:54.233  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.233  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.234  9203  9304 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(UnknownIssuer))
+09-26 17:31:54.234  9203  9304 W rustls_platform_verifier::verification::android: certificate was not trusted: java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
+09-26 17:31:54.234  9203  9304 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: UnknownIssuer
+09-26 17:31:54.235  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.235  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.235  9203  9309 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(NotValidForNameContext { expected: DnsName("example.org"), presented: ["DnsName(\"example.com\")"] }))
+09-26 17:31:54.238  9203  9309 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: certificate not valid for name "example.org"; certificate is only valid for DnsName("example.com")
+09-26 17:31:54.238  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.238  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.238  9203  9313 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(NotValidForNameContext { expected: IpAddress(V4(Ipv4Addr([198, 168, 0, 1]))), presented: ["IpAddress(127.0.0.1)"] }))
+09-26 17:31:54.241  9203  9313 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: certificate not valid for name "198.168.0.1"; certificate is only valid for IpAddress(127.0.0.1)
+09-26 17:31:54.241  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.241  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.242  9203  9317 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(NotValidForNameContext { expected: IpAddress(V6(Ipv6Addr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 198, 168, 0, 1]))), presented: ["IpAddress(0::1)"] }))
+09-26 17:31:54.244  9203  9317 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: certificate not valid for name "::ffff:198.168.0.1"; certificate is only valid for IpAddress(0::1)
+09-26 17:31:54.244  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.244  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.245  9203  9321 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(Other(OtherError(EkuError))))
+09-26 17:31:54.245  9203  9321 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: Other(OtherError(EkuError))
+09-26 17:31:54.245  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.245  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.245  9203  9322 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(Other(OtherError(EkuError))))
+09-26 17:31:54.246  9203  9322 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: Other(OtherError(EkuError))
+09-26 17:31:54.246  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.246  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+09-26 17:31:54.246  9203  9323 I rustls_platform_verifier::tests::verification_mock: verifying Err(InvalidCertificate(Other(OtherError(EkuError))))
+09-26 17:31:54.246  9203  9323 E rustls_platform_verifier::verification::android: failed to verify TLS certificate: invalid peer certificate: Other(OtherError(EkuError))
+09-26 17:31:54.246  9203  9203 I rustls_platform_verifier::tests::ffi::android: mock tests: test passed
+09-26 17:31:54.246  9203  9203 I rustls_platform_verifier::tests::ffi::android: -----------------------------------------------------------------------------
+tls_certificate_logcat_end
+tls_certificate_decisions=20/20
+fixture_debug_apk_sha256=e373f089d9f71d186ccbfdd8b146e337f3aed0d15fdcd324533e80fbf614bf11
+arm64_libmobile_sdk_input_sha256=ca1370e3c32f0d8e26de49bb13be49d89df17dc025da600b41ab4c7ff9f83ac8
+arm64_libmobile_sdk_apk_sha256=06b93367af4a5a4aed93fb8fdc1790581cdabbd6e050e02db0bcca8bd3e88771
+arm64_libmobile_sdk_stripped_input_sha256=06b93367af4a5a4aed93fb8fdc1790581cdabbd6e050e02db0bcca8bd3e88771
+device=emulator-5560 PAGE_SIZE=16384 linker_compat=fatal package_compat_disabled=true
+mode=tls result=PASS finished_utc=2026-09-26T21:31:56Z

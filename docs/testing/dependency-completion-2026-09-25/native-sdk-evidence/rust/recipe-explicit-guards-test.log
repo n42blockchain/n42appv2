@@ -1,0 +1,1 @@
+build flags isolated; missing args, existing path, wrong AAR/tool/NDK versions rejected; ELF audit rejects unaligned control

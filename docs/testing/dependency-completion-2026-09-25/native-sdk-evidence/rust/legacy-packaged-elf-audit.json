@@ -1,0 +1,11 @@
+{
+  "artifact": ".superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/legacy-packaged-mobile-sdk.aar",
+  "libraries_checked": 4,
+  "unaligned_libraries": [
+    "jni/arm64-v8a/libmobile_sdk.so",
+    "jni/x86_64/libmobile_sdk.so",
+    "jni/x86_64/librustls_platform_verifier-52106655d92192e7.so"
+  ],
+  "passed": false,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}

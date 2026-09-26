@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/compare_mobile_sdk_vectors.py", line 39, in <module>
+    main()
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/compare_mobile_sdk_vectors.py", line 32, in main
+    raise ValueError("Unexpected new deposit gas")
+ValueError: Unexpected new deposit gas

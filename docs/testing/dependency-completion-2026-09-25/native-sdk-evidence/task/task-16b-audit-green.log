@@ -1,0 +1,13 @@
+test_4kb_load_segment_is_rejected (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_aab_reports_the_bad_library_and_does_not_ignore_it (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_aligned_gnu_relro_end_passes (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_empty_artifact_cannot_pass (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_incongruent_virtual_address_is_rejected (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_larger_aligned_segments_pass (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_misaligned_gnu_relro_end_is_rejected (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+test_truncated_and_non_elf_data_fail (test.scripts.test_android_native_audit.AndroidNativeAuditTest) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+OK

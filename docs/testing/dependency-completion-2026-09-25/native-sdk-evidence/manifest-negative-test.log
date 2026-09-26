@@ -1,0 +1,15 @@
+mutated_page_size_exit_code= 1
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_mobile_sdk_evidence.py", line 159, in <module>
+    main()
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_mobile_sdk_evidence.py", line 150, in main
+    generated = make_manifest()
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_mobile_sdk_evidence.py", line 133, in make_manifest
+    runs = {mode: run_record(mode) for mode in EXPECTED_AARS}
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_mobile_sdk_evidence.py", line 133, in <dictcomp>
+    runs = {mode: run_record(mode) for mode in EXPECTED_AARS}
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_mobile_sdk_evidence.py", line 43, in run_record
+    raise ValueError(f"{mode}: missing pre/post strict16KB device properties")
+ValueError: native: missing pre/post strict16KB device properties
+restored_exit_code= 0
+verified 98 files and 5 strict16KB runs
