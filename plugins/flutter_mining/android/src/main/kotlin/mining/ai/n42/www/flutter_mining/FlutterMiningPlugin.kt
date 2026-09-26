@@ -13,6 +13,7 @@ import com.mobileSdk.Api
 class FlutterMiningPlugin :
     FlutterPlugin,
     MethodCallHandler {
+    internal var mobileSdkRuntime: MobileSdkRuntime = MobileSdkRuntime.default
     // The MethodChannel that will the communication between Flutter and native Android
     //
     // This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -45,8 +46,10 @@ class FlutterMiningPlugin :
             //获取公私钥对
             "generateBls12381Keypair" -> {
                 try {
-                    val keyPair = Api.generateBls12381Keypair()
+                    val keyPair = mobileSdkRuntime.call { Api.generateBls12381Keypair() }
                     result.success(keyPair)
+                } catch (e: MobileSdkUnavailableException) {
+                    result.error(e.code, e.message, null)
                 }catch (e: Exception) {
                     result.error("DepositError", e.message, null)
                 }
@@ -60,13 +63,15 @@ class FlutterMiningPlugin :
                 val depositValueWeiInHex = args["depositValueWeiInHex"] as String
 
                 try {
-                    val tx = Api.createDepositUnsignedTx(
+                    val tx = mobileSdkRuntime.call { Api.createDepositUnsignedTx(
                         depositContractAddress,
                         validatorPrivateKey,
                         withdrawalAddress,
                         depositValueWeiInHex
-                    )
+                    ) }
                     result.success(tx)
+                } catch (e: MobileSdkUnavailableException) {
+                    result.error(e.code, e.message, null)
                 } catch (e: Exception) {
                     result.error("DepositError", e.message, null)
                 }
@@ -79,11 +84,13 @@ class FlutterMiningPlugin :
                 val feeWeiInHex = args["feeWeiInHex"] as String
 
                 try {
-                    val exitTx = Api.createExitUnsignedTx(
+                    val exitTx = mobileSdkRuntime.call { Api.createExitUnsignedTx(
                         validatorPublicKey,
                         feeWeiInHex
-                    )
+                    ) }
                     result.success(exitTx)
+                } catch (e: MobileSdkUnavailableException) {
+                    result.error(e.code, e.message, null)
                 } catch (e: Exception) {
                     result.error("ExitError", e.message, null)
                 }
@@ -91,8 +98,10 @@ class FlutterMiningPlugin :
             //生成退款交易费用
             "createGetExitFeeUnsignedTx" -> {
                 try {
-                    val tx = Api.createGetExitFeeUnsignedTx()
+                    val tx = mobileSdkRuntime.call { Api.createGetExitFeeUnsignedTx() }
                     result.success(tx)
+                } catch (e: MobileSdkUnavailableException) {
+                    result.error(e.code, e.message, null)
                 }catch (e: Exception) {
                     result.error("DepositError", e.message, null)
                 }
@@ -105,7 +114,7 @@ class FlutterMiningPlugin :
                 val validatorPrivateKey = args["validatorPrivateKey"] as String
 
                 try {
-                    Api.runClient(wsUrl, validatorPrivateKey)
+                    mobileSdkRuntime.call { Api.runClient(wsUrl, validatorPrivateKey) }
                         .thenRun {
                             channel.invokeMethod("onClientDone", null) // 通知 Flutter
                         }
@@ -114,6 +123,8 @@ class FlutterMiningPlugin :
                             null
                         }
                     result.success("Client started")
+                } catch (e: MobileSdkUnavailableException) {
+                    result.error(e.code, e.message, null)
                 } catch (e: Exception) {
                     result.error("ClientError", e.message, null)
                 }

@@ -3,6 +3,8 @@ package ai.n42.www.walletcore
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import com.mobileSdk.Api
+import mining.ai.n42.www.flutter_mining.MobileSdkRuntime
+import mining.ai.n42.www.flutter_mining.MobileSdkUnavailableException
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -14,6 +16,7 @@ class MiningHandler(
      * Callback channel used to notify Flutter when the mining client
      * finishes or encounters an error.
      */
+    private val mobileSdkRuntime: MobileSdkRuntime = MobileSdkRuntime.default,
     private val channelProvider: () -> MethodChannel
 ) {
 
@@ -23,8 +26,10 @@ class MiningHandler(
 
     fun handleGenerateBls12381Keypair(call: MethodCall, result: MethodChannel.Result) {
         try {
-            val keyPair = Api.generateBls12381Keypair()
+            val keyPair = mobileSdkRuntime.call { Api.generateBls12381Keypair() }
             result.success(keyPair)
+        } catch (e: MobileSdkUnavailableException) {
+            result.error(e.code, e.message, null)
         } catch (e: Exception) {
             result.error("DepositError", e.message, null)
         }
@@ -38,13 +43,15 @@ class MiningHandler(
         val depositValueWeiInHex = args["depositValueWeiInHex"] as String
 
         try {
-            val tx = Api.createDepositUnsignedTx(
+            val tx = mobileSdkRuntime.call { Api.createDepositUnsignedTx(
                 depositContractAddress,
                 validatorPrivateKey,
                 withdrawalAddress,
                 depositValueWeiInHex
-            )
+            ) }
             result.success(tx)
+        } catch (e: MobileSdkUnavailableException) {
+            result.error(e.code, e.message, null)
         } catch (e: Exception) {
             result.error("DepositError", e.message, null)
         }
@@ -56,11 +63,13 @@ class MiningHandler(
         val feeWeiInHex = args["feeWeiInHex"] as String
 
         try {
-            val exitTx = Api.createExitUnsignedTx(
+            val exitTx = mobileSdkRuntime.call { Api.createExitUnsignedTx(
                 validatorPublicKey,
                 feeWeiInHex
-            )
+            ) }
             result.success(exitTx)
+        } catch (e: MobileSdkUnavailableException) {
+            result.error(e.code, e.message, null)
         } catch (e: Exception) {
             result.error("ExitError", e.message, null)
         }
@@ -68,8 +77,10 @@ class MiningHandler(
 
     fun handleCreateGetExitFeeUnsignedTx(call: MethodCall, result: MethodChannel.Result) {
         try {
-            val tx = Api.createGetExitFeeUnsignedTx()
+            val tx = mobileSdkRuntime.call { Api.createGetExitFeeUnsignedTx() }
             result.success(tx)
+        } catch (e: MobileSdkUnavailableException) {
+            result.error(e.code, e.message, null)
         } catch (e: Exception) {
             result.error("DepositError", e.message, null)
         }
@@ -82,7 +93,7 @@ class MiningHandler(
 
         try {
             runClientFuture?.cancel(true)
-            val future = Api.runClient(wsUrl, validatorPrivateKey)
+            val future = mobileSdkRuntime.call { Api.runClient(wsUrl, validatorPrivateKey) }
             runClientFuture = future
             val channel = channelProvider()
             future
@@ -96,6 +107,8 @@ class MiningHandler(
                     null
                 }
             result.success("Client started")
+        } catch (e: MobileSdkUnavailableException) {
+            result.error(e.code, e.message, null)
         } catch (e: Exception) {
             result.error("ClientError", e.message, null)
         }

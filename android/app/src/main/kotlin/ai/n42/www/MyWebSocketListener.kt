@@ -10,6 +10,8 @@ import okhttp3.WebSocketListener
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.atomic.AtomicBoolean
+import mining.ai.n42.www.flutter_mining.MobileSdkRuntime
+import mining.ai.n42.www.flutter_mining.MobileSdkUnavailableException
 
 class MyWebSocketListener(
     private val validatorPubkey: String,
@@ -17,6 +19,7 @@ class MyWebSocketListener(
 
     // ⭐ 关键：由 Manager 传入，用于区分主动/被动断开
     private val manuallyClosed: AtomicBoolean,
+    private val mobileSdkRuntime: MobileSdkRuntime,
 
     private val onDisconnected: () -> Unit
 ) : WebSocketListener() {
@@ -62,7 +65,9 @@ class MyWebSocketListener(
         Thread {
             try {
                 val verifyResultStr =
-                    Api.genBlockVerifyResult(result.toString(), validatorPrivateKey).join()
+                    mobileSdkRuntime.call {
+                        Api.genBlockVerifyResult(result.toString(), validatorPrivateKey).join()
+                    }
 
                 val verifyResult = JSONObject(verifyResultStr)
 
@@ -84,6 +89,11 @@ class MyWebSocketListener(
                 val ok = webSocket.send(submit.toString())
                 Log.i("WebSocket", "submitVerification sent: $ok")
 
+            } catch (e: MobileSdkUnavailableException) {
+                manuallyClosed.set(true)
+                Log.e("WebSocket", "Mobile SDK unavailable", e)
+                sendToFlutter(e.message ?: "Mobile verification unavailable")
+                notifyDisconnectedOnce()
             } catch (e: Exception) {
                 Log.e("WebSocket", "verify failed", e)
             }

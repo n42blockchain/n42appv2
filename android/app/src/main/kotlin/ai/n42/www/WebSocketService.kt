@@ -16,6 +16,8 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import mining.ai.n42.www.flutter_mining.MobileSdkRuntime
+import mining.ai.n42.www.flutter_mining.MobileSdkUnavailableException
 
 class WebSocketService : Service() {
 
@@ -24,6 +26,7 @@ class WebSocketService : Service() {
         private const val NOTIFICATION_ID = 1001
     }
     private var ws: WebSocket? = null
+    private val mobileSdkRuntime = MobileSdkRuntime.default
 
     private var wsUrl: String? = null
     private var validatorPubkey: String? = null
@@ -87,6 +90,11 @@ class WebSocketService : Service() {
             return START_NOT_STICKY
         }
 
+        if (!checkMobileSdk()) {
+            stopSelf(startId)
+            return START_NOT_STICKY
+        }
+
         val walletChanged =
             newUrl != wsUrl ||
                     newPubkey != validatorPubkey ||
@@ -108,6 +116,10 @@ class WebSocketService : Service() {
     @Synchronized
     private fun startWebSocket(url: String, pubkey: String, privateKey: String) {
         if (ws != null) return
+        if (!checkMobileSdk()) {
+            stopSelf()
+            return
+        }
 
         manualClose = false
         manuallyClosed.set(false)
@@ -120,16 +132,35 @@ class WebSocketService : Service() {
             MyWebSocketListener(
                 pubkey,
                 privateKey,
-                manuallyClosed
+                manuallyClosed,
+                mobileSdkRuntime
             ) {
                 if (currentId != connectionId) return@MyWebSocketListener
 
+                if (manuallyClosed.get()) {
+                    stopWebSocket(manual = true)
+                    return@MyWebSocketListener
+                }
+
                 ws = null
-                if (!manualClose) {
+                if (!manualClose && !manuallyClosed.get()) {
                     handler.postDelayed(reconnectRunnable, reconnectDelay)
                 }
             }
         )
+    }
+
+    private fun checkMobileSdk(): Boolean {
+        return try {
+            mobileSdkRuntime.ensureAvailable()
+            true
+        } catch (error: MobileSdkUnavailableException) {
+            manualClose = true
+            manuallyClosed.set(true)
+            Log.w("WebSocketService", error.message ?: "Mobile verification unavailable")
+            WebSocketEventChannelHandler.send(error.message ?: "Mobile verification unavailable")
+            false
+        }
     }
 
     private fun stopWebSocket(manual: Boolean) {

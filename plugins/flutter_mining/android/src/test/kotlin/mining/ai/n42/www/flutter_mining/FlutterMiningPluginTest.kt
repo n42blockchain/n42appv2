@@ -24,4 +24,22 @@ internal class FlutterMiningPluginTest {
 
         Mockito.verify(mockResult).success("Android " + android.os.Build.VERSION.RELEASE)
     }
+
+    @Test
+    fun onMethodCall_unsupportedMobileSdkReturnsStableError() {
+        val plugin = FlutterMiningPlugin()
+        plugin.mobileSdkRuntime = MobileSdkRuntime(
+            is64BitProcess = { false },
+            loadNative = { error("native loader must not run") },
+        )
+        val result: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
+
+        plugin.onMethodCall(MethodCall("generateBls12381Keypair", null), result)
+
+        Mockito.verify(result).error(
+            Mockito.eq(MobileSdkRuntime.UNAVAILABLE_CODE),
+            Mockito.anyString(),
+            Mockito.isNull(),
+        )
+    }
 }
