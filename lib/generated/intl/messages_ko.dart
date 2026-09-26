@@ -2729,6 +2729,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "잔액을 새로 고칠 수 없습니다",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage("총 가치"),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("가격"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage("HD 지갑 · 니모닉"),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "단일 체인 · 가져오기",
@@ -2744,6 +2746,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "가격 정보 없음",
     ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage("받는 주소"),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage("보내는 주소"),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage("토큰 고정 해제"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "연결이 끊어졌습니다. 다시 연결해 주세요.",

@@ -1,0 +1,15 @@
+{
+  "label": "015-root-coverage-gate",
+  "command": [
+    "python3",
+    "scripts/quality_gate.py",
+    "coverage",
+    "coverage/lcov.info",
+    "--threshold",
+    "70"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 1,
+  "seconds": 0.16
+}

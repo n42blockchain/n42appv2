@@ -1,0 +1,17 @@
+{
+  "label": "510-localization-baseline-diff",
+  "command": [
+    "git",
+    "diff",
+    "--exit-code",
+    "dee63931f",
+    "--",
+    "scripts/audit_localizations.py",
+    "scripts/localization_audit_baseline.json",
+    "lib/l10n"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.02
+}

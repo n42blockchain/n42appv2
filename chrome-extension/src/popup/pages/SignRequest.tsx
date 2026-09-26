@@ -13,7 +13,7 @@ export default function SignRequest({ approval, onDone }: Props) {
   const security = checkDAppSecurity(approval.origin);
 
   const riskAnalysis = approval.type === 'sign_transaction'
-    ? analyzeTxRisk((approval.params as any[])?.[0] || {})
+    ? analyzeTxRisk((Array.isArray(approval.params) ? approval.params[0] : undefined) || {})
     : null;
 
   const handleApprove = () => {

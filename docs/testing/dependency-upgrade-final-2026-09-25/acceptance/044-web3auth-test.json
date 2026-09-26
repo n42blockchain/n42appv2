@@ -1,0 +1,14 @@
+{
+  "label": "044-web3auth-test",
+  "command": [
+    "flutter",
+    "test",
+    "test/features/wallet/mpc/web3auth_mpc_provider_test.dart",
+    "--reporter",
+    "expanded"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 3.45
+}

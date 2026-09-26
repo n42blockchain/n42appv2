@@ -3509,6 +3509,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Zůstatek se nepodařilo aktualizovat",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Celková hodnota",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Cena"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Peněženka HD · Mnemonika",
     ),
@@ -3531,6 +3535,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Ceny nejsou k dispozici",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Adresa příjemce",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Adresa odesílatele",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Odepnout token",

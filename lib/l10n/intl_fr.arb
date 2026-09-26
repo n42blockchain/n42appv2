@@ -1728,5 +1728,9 @@
   "g_ui_coins_load_failed": "Échec du chargement des pièces. Veuillez réessayer.",
   "g_ui_mpc_no_phrase": "Aucune phrase de récupération nécessaire",
   "g_ui_mpc_intro": "Connectez-vous avec votre compte social pour créer un portefeuille MPC sécurisé. Votre clé privée est divisée en parts chiffrées — aucune phrase de récupération à perdre.",
-  "g_ui_mpc_security": "Fonctionne avec MPC-TSS. Votre clé est divisée en 3 parts chiffrées réparties sur votre appareil, nos serveurs et une sauvegarde de récupération."
+  "g_ui_mpc_security": "Fonctionne avec MPC-TSS. Votre clé est divisée en 3 parts chiffrées réparties sur votre appareil, nos serveurs et une sauvegarde de récupération.",
+  "g_wallet_coin_total_value": "Valeur totale",
+  "g_wallet_coin_unit_price": "Prix",
+  "g_wallet_receiver_address": "Adresse du destinataire",
+  "g_wallet_sender_address": "Adresse de l’expéditeur"
 }

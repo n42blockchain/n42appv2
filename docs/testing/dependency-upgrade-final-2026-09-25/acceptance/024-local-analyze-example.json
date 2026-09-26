@@ -1,0 +1,12 @@
+{
+  "label": "024-local-analyze-example",
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-fatal-infos"
+  ],
+  "cwd": "plugins/flutter_mining/example",
+  "environment": {},
+  "exit": 0,
+  "seconds": 1.82
+}

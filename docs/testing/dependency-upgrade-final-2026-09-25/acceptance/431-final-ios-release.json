@@ -1,0 +1,14 @@
+{
+  "label": "431-final-ios-release",
+  "command": [
+    "flutter",
+    "build",
+    "ios",
+    "--no-codesign",
+    "--release"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 120.87
+}

@@ -1,0 +1,73 @@
+{
+  "starting_commit": "26840b378",
+  "baseline_commit": "dee63931f",
+  "commands": 112,
+  "root_tests": {
+    "passed": 4803,
+    "failed": 0,
+    "exit": 0
+  },
+  "root_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 35,
+    "exit": 0
+  },
+  "coverage": {
+    "status": "DEFERRED",
+    "exit": 1,
+    "found": 132937,
+    "hit": 65368,
+    "percent": 49.17216425825767,
+    "threshold": 70
+  },
+  "chat_tests": {
+    "status": "FAILED",
+    "passed": 6736,
+    "skipped": 3,
+    "failed": 1,
+    "exit": 1
+  },
+  "local_tests": {
+    "mining": 3,
+    "mining_example": 1,
+    "jmt": 13,
+    "webview": 154,
+    "web3auth": 10
+  },
+  "go": {
+    "modules": 4,
+    "test_vet_tidy_diff": "PASS"
+  },
+  "rust": {
+    "tests": 6,
+    "host_android_checks": "PASS"
+  },
+  "chrome": {
+    "tests": 5,
+    "production_vulnerabilities": 0,
+    "full_vulnerabilities": 0,
+    "status": "PASS"
+  },
+  "wallet_localization": {
+    "added_entries": 96,
+    "locales": 24,
+    "focused_tests": 56,
+    "status": "PASS"
+  },
+  "chat_localization": {
+    "unaccepted_english_identical_entries": 667,
+    "locales": 23,
+    "status": "FAILED",
+    "baseline_exact_entries_equal": true
+  },
+  "android_apk": "PASS",
+  "ios_no_sign_release": "PASS",
+  "macos": {
+    "status": "BLOCKED",
+    "flutter_build_exit": 1,
+    "xcode_project_exit": 65
+  },
+  "native_artifact_audit": "PASS",
+  "full_acceptance": "PARTIAL"
+}

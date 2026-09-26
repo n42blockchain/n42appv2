@@ -1,0 +1,14 @@
+{
+  "label": "112-go-livekit-jwt-tidy",
+  "command": [
+    "go",
+    "mod",
+    "tidy"
+  ],
+  "cwd": "backend/livekit-jwt",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.08
+}

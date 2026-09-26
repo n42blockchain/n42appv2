@@ -1,0 +1,18 @@
+{
+  "label": "422-macos-project",
+  "command": [
+    "xcodebuild",
+    "-project",
+    "macos/Runner.xcodeproj",
+    "-scheme",
+    "Runner",
+    "-configuration",
+    "Release",
+    "CODE_SIGNING_ALLOWED=NO",
+    "build"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 65,
+  "seconds": 1.33
+}

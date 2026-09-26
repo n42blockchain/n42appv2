@@ -1728,5 +1728,9 @@
   "g_ui_coins_load_failed": "Impossibile caricare le monete. Riprova.",
   "g_ui_mpc_no_phrase": "Nessuna frase seed necessaria",
   "g_ui_mpc_intro": "Accedi con il tuo account sociale per creare un portafoglio MPC sicuro. La tua chiave privata viene suddivisa in parti crittografate — nessuna frase seed da perdere.",
-  "g_ui_mpc_security": "Funziona con MPC-TSS. La tua chiave viene suddivisa in 3 parti crittografate distribuite sul tuo dispositivo, sui nostri server e su un backup di recupero."
+  "g_ui_mpc_security": "Funziona con MPC-TSS. La tua chiave viene suddivisa in 3 parti crittografate distribuite sul tuo dispositivo, sui nostri server e su un backup di recupero.",
+  "g_wallet_coin_total_value": "Valore totale",
+  "g_wallet_coin_unit_price": "Prezzo",
+  "g_wallet_receiver_address": "Indirizzo del destinatario",
+  "g_wallet_sender_address": "Indirizzo del mittente"
 }

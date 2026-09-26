@@ -1,0 +1,13 @@
+{
+  "label": "026-local-pub-audioplayers_darwin",
+  "command": [
+    "flutter",
+    "pub",
+    "get",
+    "--enforce-lockfile"
+  ],
+  "cwd": "packages/audioplayers_darwin",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.26
+}

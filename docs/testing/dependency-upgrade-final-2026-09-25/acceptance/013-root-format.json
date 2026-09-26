@@ -1,0 +1,15 @@
+{
+  "label": "013-root-format",
+  "command": [
+    "dart",
+    "format",
+    "--output=none",
+    "--set-exit-if-changed",
+    "lib/",
+    "test/"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 5.4
+}

@@ -36,7 +36,22 @@ To update the wrapper, follow the steps below:
 
 ##### 2. Run the code generator from the terminal
 
-Run: `dart run pigeon --input pigeons/web_kit.dart`
+This vendored package pins Pigeon 29.0.4. Its generated Swift `isNullish`
+check preserves the authentication-challenge safety fix: an `NSNull` reply
+must return a `PigeonError` instead of being force-cast to
+`AuthenticationChallengeResponse`.
+
+Run from this package directory:
+
+```sh
+flutter pub get
+dart run pigeon --input pigeons/web_kit.dart
+dart format lib/src/common/web_kit.g.dart
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+Commit the generated Dart/Swift APIs and test mocks together. Do not reapply
+manual changes to generated files.
 
 ##### 3. Update the generated APIs in native code
 

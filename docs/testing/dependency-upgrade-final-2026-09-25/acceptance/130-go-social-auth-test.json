@@ -1,0 +1,15 @@
+{
+  "label": "130-go-social-auth-test",
+  "command": [
+    "go",
+    "test",
+    "-count=1",
+    "./..."
+  ],
+  "cwd": "backend/social-auth",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.62
+}

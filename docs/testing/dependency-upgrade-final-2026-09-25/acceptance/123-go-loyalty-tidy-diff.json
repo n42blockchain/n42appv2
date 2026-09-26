@@ -1,0 +1,17 @@
+{
+  "label": "123-go-loyalty-tidy-diff",
+  "command": [
+    "git",
+    "diff",
+    "--exit-code",
+    "--",
+    "go.mod",
+    "go.sum"
+  ],
+  "cwd": "backend/loyalty",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.02
+}

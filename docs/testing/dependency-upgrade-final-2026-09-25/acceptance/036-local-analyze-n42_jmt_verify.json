@@ -1,0 +1,11 @@
+{
+  "label": "036-local-analyze-n42_jmt_verify",
+  "command": [
+    "dart",
+    "analyze"
+  ],
+  "cwd": "packages/n42_jmt_verify",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.67
+}

@@ -1,0 +1,163 @@
+[
+  {
+    "file": "packages/n42_jmt_verify/lib/src/blake3_hash.dart",
+    "line": 3,
+    "column": 8,
+    "code": "uri_does_not_exist",
+    "message": "Target of URI doesn't exist: 'package:blake3_dart/blake3_dart.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist"
+  },
+  {
+    "file": "packages/n42_jmt_verify/lib/src/blake3_hash.dart",
+    "line": 13,
+    "column": 12,
+    "code": "undefined_method",
+    "message": "The method 'blake3' isn't defined for the type 'Blake3Hash'. Try correcting the name to the name of an existing method, or defining a method named 'blake3'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/lib/src/blake3_hash.dart",
+    "line": 22,
+    "column": 12,
+    "code": "undefined_method",
+    "message": "The method 'blake3' isn't defined for the type 'Blake3Hash'. Try correcting the name to the name of an existing method, or defining a method named 'blake3'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 3,
+    "column": 8,
+    "code": "uri_does_not_exist",
+    "message": "Target of URI doesn't exist: 'package:n42_jmt_verify/n42_jmt_verify.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 13,
+    "column": 14,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 18,
+    "column": 21,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 19,
+    "column": 21,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 25,
+    "column": 17,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 26,
+    "column": 17,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 36,
+    "column": 14,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 36,
+    "column": 48,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 42,
+    "column": 19,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 50,
+    "column": 19,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 57,
+    "column": 14,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 58,
+    "column": 24,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 73,
+    "column": 28,
+    "code": "undefined_identifier",
+    "message": "Undefined name 'Blake3Hash'. Try correcting the name to one that is defined, or defining the name"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 75,
+    "column": 21,
+    "code": "undefined_function",
+    "message": "The function 'JmtProof' isn't defined. Try importing the library that defines 'JmtProof', correcting the name to the name of an existing function, or defining a function named 'JmtProof'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 90,
+    "column": 21,
+    "code": "undefined_function",
+    "message": "The function 'JmtProof' isn't defined. Try importing the library that defines 'JmtProof', correcting the name to the name of an existing function, or defining a function named 'JmtProof'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 107,
+    "column": 21,
+    "code": "undefined_function",
+    "message": "The function 'JmtProof' isn't defined. Try importing the library that defines 'JmtProof', correcting the name to the name of an existing function, or defining a function named 'JmtProof'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 121,
+    "column": 21,
+    "code": "undefined_function",
+    "message": "The function 'JmtProof' isn't defined. Try importing the library that defines 'JmtProof', correcting the name to the name of an existing function, or defining a function named 'JmtProof'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 133,
+    "column": 15,
+    "code": "undefined_function",
+    "message": "The function 'JmtProof' isn't defined. Try importing the library that defines 'JmtProof', correcting the name to the name of an existing function, or defining a function named 'JmtProof'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 146,
+    "column": 21,
+    "code": "undefined_function",
+    "message": "The function 'SparseMerkleProof' isn't defined. Try importing the library that defines 'SparseMerkleProof', correcting the name to the name of an existing function, or defining a function named 'SparseMerkleProof'"
+  },
+  {
+    "file": "packages/n42_jmt_verify/test/jmt_verify_test.dart",
+    "line": 148,
+    "column": 15,
+    "code": "undefined_function",
+    "message": "The function 'SparseMerkleLeaf' isn't defined. Try importing the library that defines 'SparseMerkleLeaf', correcting the name to the name of an existing function, or defining a function named 'SparseMerkleLeaf'"
+  }
+]

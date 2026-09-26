@@ -13,14 +13,18 @@
  * - Legacy web3 API support (send/sendAsync/enable)
  */
 (function () {
-  if ((window as any).ethereum && (window as any).ethereum._isN42) return;
+  const pageWindow = window as Window & {
+    ethereum?: { _isN42?: boolean };
+    web3?: unknown;
+  };
+  if (pageWindow.ethereum?._isN42) return;
 
   let _chainId = '0x1';
   let _accounts: string[] = [];
   let _nextId = 1;
   const _cbs: Record<number, { resolve: (v: unknown) => void; reject: (e: unknown) => void }> = {};
   const _evts: Record<string, Array<(...args: unknown[]) => void>> = {};
-  let _connected = true;
+  const _connected = true;
 
   function _emit(event: string, data: unknown) {
     const fns = (_evts[event] || []).slice();
@@ -59,7 +63,7 @@
           type: 'N42_RPC_REQUEST',
           payload: { id, method, params },
         }, '*');
-      } catch (e) {
+      } catch {
         delete _cbs[id];
         reject(ProviderRpcError(-32603, 'Extension bridge unavailable'));
       }
@@ -174,8 +178,8 @@
       const payload = methodOrPayload;
       if (typeof paramsOrCallback === 'function') {
         ethereum.request({ method: payload.method, params: payload.params || [] })
-          .then((r) => (paramsOrCallback as Function)(null, { id: payload.id, jsonrpc: '2.0', result: r }))
-          .catch((e) => (paramsOrCallback as Function)(e, null));
+          .then((r) => paramsOrCallback(null, { id: payload.id, jsonrpc: '2.0', result: r }))
+          .catch((e) => paramsOrCallback(e, null));
         return;
       }
       return ethereum.request({ method: payload.method, params: payload.params || [] });
@@ -227,7 +231,7 @@
     emit(event: string, ...args: unknown[]) {
       const fns = (_evts[event] || []).slice();
       for (const fn of fns) {
-        try { fn(...args); } catch (_) { /* noop */ }
+        try { fn(...args); } catch { /* noop */ }
       }
       return fns.length > 0;
     },
@@ -254,10 +258,10 @@
   }
 
   // Install
-  (window as any).ethereum = ethereum;
+  pageWindow.ethereum = ethereum;
 
-  if (!(window as any).web3) {
-    (window as any).web3 = { currentProvider: ethereum };
+  if (!pageWindow.web3) {
+    pageWindow.web3 = { currentProvider: ethereum };
   }
 
   // EIP-6963: Announce provider for multi-wallet discovery
@@ -273,7 +277,7 @@
     window.addEventListener('eip6963:requestProvider', () => {
       window.dispatchEvent(new CustomEvent('eip6963:announceProvider', { detail }));
     });
-  } catch (_) { /* noop */ }
+  } catch { /* noop */ }
 
   window.dispatchEvent(new Event('ethereum#initialized'));
 

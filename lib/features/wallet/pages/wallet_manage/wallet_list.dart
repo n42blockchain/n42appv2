@@ -51,11 +51,7 @@ class _WalletListState extends ConsumerState<WalletList>
   }
 
   void _openAddWalletSheet() {
-    sheetBottom(
-      context,
-      "",
-      CreateWalletButton(onTapBack: initData),
-    );
+    sheetBottom(context, "", CreateWalletButton(onTapBack: initData));
   }
 
   Future<void> initData() async {

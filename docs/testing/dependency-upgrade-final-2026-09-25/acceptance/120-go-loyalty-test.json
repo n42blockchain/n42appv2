@@ -1,0 +1,15 @@
+{
+  "label": "120-go-loyalty-test",
+  "command": [
+    "go",
+    "test",
+    "-count=1",
+    "./..."
+  ],
+  "cwd": "backend/loyalty",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 2.13
+}

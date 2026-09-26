@@ -1,0 +1,242 @@
+[
+  {
+    "path": "android/app/build.gradle.kts",
+    "sha256": "9c567bdb407e9a4379d07195f427e4c5c23e85a3a2e54fad36b4213bcef0c8fc",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "android/build.gradle.kts",
+    "sha256": "60576679838c8c9d420421f1214344de70692221fa349cb413135b7c8d60b649",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "android/gradle.properties",
+    "sha256": "fb5e1fa22e08176f6162cebfae8fad4185e0be8180f5c580d46f84cf63eac045",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "android/gradle/wrapper/gradle-wrapper.properties",
+    "sha256": "9a9962b4f7ef905eb1f723e6d0a1bcda6328e37a1cbfb63a01babd257149be01",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "android/settings.gradle.kts",
+    "sha256": "9537a373a5d3b2e038cd18a5b8cb24249b82c8365182160abab582f298bd6d76",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "backend/livekit-jwt/go.mod",
+    "sha256": "46f535566c68565a1ea40df5ef0e7382d2749b214d9559899665e28d0fcd5bae",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "backend/livekit-jwt/go.sum",
+    "sha256": "32e54a2fced69f921bb051d37297878245a1ac243831e5857733890d1a7a4bc2",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "backend/loyalty/go.mod",
+    "sha256": "36671b6c74a3cc070a8dc39e88b8408a85e87c1a4aaa5542c74a98f86a6352c8",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "backend/loyalty/go.sum",
+    "sha256": "a0d30ddae95a0790521ff2a207677cb949a43e2846909f78cdde0f87effc2819",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "backend/social-auth/go.mod",
+    "sha256": "9632006ec1d73ca3f75da6c2e29b3212751397a7a2b48b8dca81192246bfce97",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "backend/swap/go.mod",
+    "sha256": "a5827a3157ad448862262385832399efd2efbe0a9cd911d264e3dd22946fca73",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "backend/swap/go.sum",
+    "sha256": "d95e84eeb42911eeb6990209ac108ea63a9981e4164fcbeac762527fa219d854",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "chrome-extension/package-lock.json",
+    "sha256": "bb456ee0eb789b1da336258580d224b98acbb343e59d3c7c46124171944c81ab",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "chrome-extension/package.json",
+    "sha256": "a20f7cba0affd032ab170ef0031e523572e7a48b2c3ddcd64ea47ea4f87dbe36",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "ios/Podfile",
+    "sha256": "45d24a6ae91a5806f33183a5f7798d27f5de40818af5a9626779055839ea0190",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "ios/Podfile.lock",
+    "sha256": "803cb6edde27dab4a636f435229198ffe23db33b4bec0f64fbd215e074520314",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "macos/Podfile",
+    "sha256": "e85521f1c80ceaca2c2af8578c97857fc84f4c467514025c0b89bb55c0e8543a",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "macos/Podfile.lock",
+    "sha256": "75e8c651a4dc36220b6674228f4aebf7aec3c453bbe8b6f2da510af7bc03fe69",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/audioplayers_darwin/pubspec.lock",
+    "sha256": "cdef17f1842527379afbe76929ad7491250b6b6aec5c6bb510548f593273bb26",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/audioplayers_darwin/pubspec.yaml",
+    "sha256": "a8cc877b51eca242980a47be033463d7cc25d62cdd1db4390a8ead54bc5994c6",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/n42_jmt_verify/pubspec.lock",
+    "sha256": "0c9a58780365aa9a61429f0a1610ab5dd6cf5bbd749d54216fff62da1a6e5e8e",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/n42_jmt_verify/pubspec.yaml",
+    "sha256": "7bd572d830e2e9d82f52e33a897b4e2e6906be312ad7d1910ca0ae968e3fa3fa",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/webview_flutter_wkwebview/example/ios/Podfile",
+    "sha256": "0e6db98d5ef1c301cbbe71b5eed146ee835e903447907e27fb2d729130e293ef",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "packages/webview_flutter_wkwebview/example/macos/Podfile",
+    "sha256": "e85521f1c80ceaca2c2af8578c97857fc84f4c467514025c0b89bb55c0e8543a",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "packages/webview_flutter_wkwebview/example/pubspec.lock",
+    "sha256": "5bd5daec28035fbdc5d3ffe8978ceccb95f41710b95afaf81aba56b8ffda385f",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/webview_flutter_wkwebview/example/pubspec.yaml",
+    "sha256": "d6a2b47dfc85e88acd3b08256f21a2ac7669cd58ff60da1d52b622807be53140",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/webview_flutter_wkwebview/pubspec.lock",
+    "sha256": "23f4707917a14a592c64ee9d60a72a7eb516f0e762fc5e45d806df1d74d49d7a",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "packages/webview_flutter_wkwebview/pubspec.yaml",
+    "sha256": "976b5322877ca921361b045d416352d9021b5feed982402355cb5c3aebdb4277",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/android/build.gradle",
+    "sha256": "e168c01d2a808ae804a91e0a154e52b2d0ca8b08d06c18894ddc5bccbbba426d",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/android/evm-module/build.gradle",
+    "sha256": "720acf5b07818176b810309ec3e68c4b41083ed9832ad1d98736239649faa0fc",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "plugins/flutter_mining/android/gradle/wrapper/gradle-wrapper.properties",
+    "sha256": "aef287d114ce3153c3d535697a61928f5034990d570cbb2e93df549e9671483d",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/android/mobile-sdk-module/build.gradle",
+    "sha256": "6d6dcbfd65eeb52a6a5f7aa0764e405cfdae9acb32b6a6948a56b22660a12f16",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "plugins/flutter_mining/android/settings.gradle",
+    "sha256": "737e79d409da16eca94f3b9b4118df5649053c85e8f8a6b6913924aa593346c7",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "plugins/flutter_mining/example/android/app/build.gradle.kts",
+    "sha256": "6dffeb20b5d7582d6461ee0d564b12049c9f65f7e9b9bfcbe2a2c097e405c48a",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/example/android/build.gradle.kts",
+    "sha256": "6a26dba2cb8dfba1e74f540b0d17a89d96c1301d3c3bfda14348bed257fddcba",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "plugins/flutter_mining/example/android/gradle.properties",
+    "sha256": "20c411ebbe5162992d16d170656ee19a9ffe0571e6c4d4c5a5314bb06da0a672",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "plugins/flutter_mining/example/android/gradle/wrapper/gradle-wrapper.properties",
+    "sha256": "9a9962b4f7ef905eb1f723e6d0a1bcda6328e37a1cbfb63a01babd257149be01",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/example/android/settings.gradle.kts",
+    "sha256": "ce4c315e96044abda1457132a9d209147a2024333bdff4d43f45804e57278edd",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/example/ios/Podfile",
+    "sha256": "db2da28b10a5ac3ed5d42dbf7208ece60fc886bd1f86f14335dde4037ba32350",
+    "changed_since_baseline": false
+  },
+  {
+    "path": "plugins/flutter_mining/example/pubspec.lock",
+    "sha256": "29156e81feb8dd14dddaab90612ee1eb5626e4f3e8a62effd0659385ed2b4ad0",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/example/pubspec.yaml",
+    "sha256": "494cca8470cce02ce19c6bb6f3e390217911a1d33ac3b565c7853cbd0ffb105d",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/pubspec.lock",
+    "sha256": "76b9ac4e7dc40426025504d0b47a4579fd1fc559784e33b6d50699ecedafb82e",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "plugins/flutter_mining/pubspec.yaml",
+    "sha256": "352a4600aca8b2df3f1b17b023c0d5da4a66d68195fff610f87d8a836fc0c495",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "pubspec.lock",
+    "sha256": "f119fd3412d6ac0c3e8c3b7c04769c71cbbb9859a98d17a8107fc32964382cd4",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "pubspec.yaml",
+    "sha256": "d2b19207f319476e69f8295c47fa9b8dc4940a98467ef1111178f88c416b27f5",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "pubspec_overrides.yaml",
+    "sha256": "e67d070fabd0eb3fb326046fe831951f82843362b97d66aadd4200a87f912504",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "rust/n42_mls/Cargo.lock",
+    "sha256": "26c0554738bfc2a2aff20a29eed70a1455979606805c1eac207b625310b4b86e",
+    "changed_since_baseline": true
+  },
+  {
+    "path": "rust/n42_mls/Cargo.toml",
+    "sha256": "fcd205bd1ded1426ac325847cab7e680cea4dbf68b05a5a5f702d9ca7abd9e8a",
+    "changed_since_baseline": true
+  }
+]

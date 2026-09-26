@@ -38,7 +38,11 @@ export async function initPhishingDetector(): Promise<void> {
   try {
     const stored = await chrome.storage.local.get(STORAGE_KEY);
     if (stored[STORAGE_KEY]) {
-      const { domains, whitelistDomains, timestamp } = stored[STORAGE_KEY];
+      const { domains, whitelistDomains, timestamp } = stored[STORAGE_KEY] as {
+        domains?: string[];
+        whitelistDomains?: string[];
+        timestamp?: number;
+      };
       if (Array.isArray(domains)) {
         blocklist = new Set([...SEED_BLOCKLIST, ...domains]);
       }
@@ -47,7 +51,7 @@ export async function initPhishingDetector(): Promise<void> {
       }
       lastFetch = timestamp || 0;
     }
-  } catch (_) { /* use seed list */ }
+  } catch { /* use seed list */ }
 
   if (Date.now() - lastFetch > CACHE_TTL_MS) {
     refreshFromRemote().catch(() => {});
@@ -91,5 +95,5 @@ async function refreshFromRemote(): Promise<void> {
         timestamp: lastFetch,
       },
     });
-  } catch (_) { /* silent fail */ }
+  } catch { /* silent fail */ }
 }

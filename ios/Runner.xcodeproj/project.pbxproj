@@ -27,9 +27,9 @@
 		691MLS012F90000100000002 /* N42Mls.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 691MLS012F90000100000001 /* N42Mls.xcframework */; };
 		691MLS022F90000100000002 /* N42MlsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691MLS022F90000100000001 /* N42MlsHandler.swift */; };
 		691SPH010000000000000002 /* ScreenProtectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691SPH010000000000000001 /* ScreenProtectionHandler.swift */; };
-		6980C3142F74E2520072AF1D /* Runner/WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* Runner/WalletCorePlugin.swift */; };
-		6980C3152F74E2520072AF1D /* Runner/WalletCorePlugin+KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3122F74E2520072AF1D /* Runner/WalletCorePlugin+KeyManagement.swift */; };
-		6980C3162F74E2520072AF1D /* Runner/WalletCorePlugin+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3132F74E2520072AF1D /* Runner/WalletCorePlugin+Signing.swift */; };
+		6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */; };
+		6980C3152F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */; };
+		6980C3162F74E2520072AF1D /* WalletCorePlugin+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */; };
 		69AC47A92F9B4A1D00DE4DA7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */; };
 		69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */; };
 		69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */; };
@@ -107,9 +107,9 @@
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
 		69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MobileSdk.xcframework; sourceTree = "<group>"; };
 		69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdk.swift; sourceTree = "<group>"; };
-		6980C3112F74E2520072AF1D /* Runner/WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner/WalletCorePlugin.swift; sourceTree = "<group>"; };
-		6980C3122F74E2520072AF1D /* Runner/WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runner/WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
-		6980C3132F74E2520072AF1D /* Runner/WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runner/WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
+		6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner/WalletCorePlugin.swift; sourceTree = "<group>"; };
+		6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runner/WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
+		6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runner/WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
 		69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-x86_64-simulator/libmobile_sdk.a"; sourceTree = "<group>"; };
@@ -249,9 +249,9 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				6980C3112F74E2520072AF1D /* Runner/WalletCorePlugin.swift */,
-				6980C3122F74E2520072AF1D /* Runner/WalletCorePlugin+KeyManagement.swift */,
-				6980C3132F74E2520072AF1D /* Runner/WalletCorePlugin+Signing.swift */,
+				6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */,
+				6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */,
+				6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */,
 				69240F812EE6C4CD00C6CEE7 /* include */,
 				69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */,
 				69240F852EE6C4CD00C6CEE7 /* Swift */,
@@ -412,9 +412,6 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
-			packageReferences = (
-				52D8711F2C20309C00A5ACA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -515,13 +512,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -595,13 +588,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -651,9 +640,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6980C3142F74E2520072AF1D /* Runner/WalletCorePlugin.swift in Sources */,
-				6980C3152F74E2520072AF1D /* Runner/WalletCorePlugin+KeyManagement.swift in Sources */,
-				6980C3162F74E2520072AF1D /* Runner/WalletCorePlugin+Signing.swift in Sources */,
+				6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */,
+				6980C3152F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift in Sources */,
+				6980C3162F74E2520072AF1D /* WalletCorePlugin+Signing.swift in Sources */,
 				690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */,
 				69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */,
 				526F3A0E2C10466E00FF9273 /* avPlay.swift in Sources */,
@@ -1865,17 +1854,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		52D8711F2C20309C00A5ACA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.27.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }

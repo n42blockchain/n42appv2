@@ -1,0 +1,12 @@
+{
+  "label": "048-chat-tests",
+  "command": [
+    "sh",
+    "-c",
+    "ulimit -n 4096; flutter test test/ --concurrency=4 --reporter expanded"
+  ],
+  "cwd": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task10-unqjgf7d",
+  "environment": {},
+  "exit": 1,
+  "seconds": 163.72
+}

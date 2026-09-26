@@ -1728,5 +1728,9 @@
   "g_ui_coins_load_failed": "Falha ao carregar as moedas. Tente novamente.",
   "g_ui_mpc_no_phrase": "Nenhuma Frase de Recuperação Necessária",
   "g_ui_mpc_intro": "Faça login com sua conta social para criar uma carteira segura com MPC. Sua chave privada é dividida em partes criptografadas — sem frase de recuperação para perder.",
-  "g_ui_mpc_security": "Funciona com MPC-TSS. Sua chave é dividida em 3 partes criptografadas, distribuídas entre seu dispositivo, nossos servidores e um backup de recuperação."
+  "g_ui_mpc_security": "Funciona com MPC-TSS. Sua chave é dividida em 3 partes criptografadas, distribuídas entre seu dispositivo, nossos servidores e um backup de recuperação.",
+  "g_wallet_coin_total_value": "Valor total",
+  "g_wallet_coin_unit_price": "Preço",
+  "g_wallet_receiver_address": "Endereço do destinatário",
+  "g_wallet_sender_address": "Endereço do remetente"
 }

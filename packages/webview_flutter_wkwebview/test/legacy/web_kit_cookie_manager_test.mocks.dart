@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
@@ -68,6 +69,16 @@ class MockWKHTTPCookieStore extends _i1.Mock implements _i2.WKHTTPCookieStore {
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
+
+  @override
+  _i3.Future<List<_i2.HTTPCookie>> getAllCookies() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllCookies, []),
+            returnValue: _i3.Future<List<_i2.HTTPCookie>>.value(
+              <_i2.HTTPCookie>[],
+            ),
+          )
+          as _i3.Future<List<_i2.HTTPCookie>>);
 
   @override
   _i2.WKHTTPCookieStore pigeon_copy() =>

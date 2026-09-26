@@ -1721,5 +1721,9 @@
   "g_ui_coins_load_failed": "Imeshindwa kupakia sarafu. Tafadhali jaribu tena.",
   "g_ui_mpc_no_phrase": "Hakuna maneno ya kurejesha yanayohitajika",
   "g_ui_mpc_intro": "Ingia kwa akaunti yako ya kijamii ili kuunda pochi salama ya MPC. Ufunguo wako wa siri unagawanywa katika sehemu zilizosimbwa kwa njia fiche; hakuna maneno ya kurejesha ya kupoteza.",
-  "g_ui_mpc_security": "Inatumia MPC-TSS. Ufunguo wako unagawanywa katika sehemu 3 zilizosimbwa kwa njia fiche kwenye kifaa chako, seva zetu na nakala rudufu ya kurejesha."
+  "g_ui_mpc_security": "Inatumia MPC-TSS. Ufunguo wako unagawanywa katika sehemu 3 zilizosimbwa kwa njia fiche kwenye kifaa chako, seva zetu na nakala rudufu ya kurejesha.",
+  "g_wallet_coin_total_value": "Jumla ya Thamani",
+  "g_wallet_coin_unit_price": "Bei",
+  "g_wallet_receiver_address": "Anwani ya mpokeaji",
+  "g_wallet_sender_address": "Anwani ya mtumaji"
 }

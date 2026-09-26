@@ -4203,6 +4203,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "[# Ɓàĺàñçé çöüĺð ñöť ƀé ŗéƒŗéšĥéð ~~~~~~~~~~~~~~~#]",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "[# Ťöťàĺ Ṽàĺüé ~~~~~#]",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥŗìçé ~~#]",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "[# ĤÐ Ŵàĺĺéť · Ṁñéṁöñìç ~~~~~~~~~~#]",
     ),
@@ -4225,6 +4231,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "[# Ƥŗìçéš üñàṽàìĺàƀĺé ~~~~~~~~~#]",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "[# Ťö àððŗéšš ~~~~~#]",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "[# Ƒŗöṁ àððŗéšš ~~~~~~#]",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "[# Üñƥìñ ťöķéñ ~~~~~#]",

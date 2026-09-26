@@ -1,0 +1,13 @@
+{
+  "label": "035-local-pub-n42_jmt_verify",
+  "command": [
+    "dart",
+    "pub",
+    "get",
+    "--enforce-lockfile"
+  ],
+  "cwd": "packages/n42_jmt_verify",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.27
+}

@@ -1,0 +1,12 @@
+{
+  "label": "516-post-localization-analyze",
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-fatal-infos"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 17.27
+}

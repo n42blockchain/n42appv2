@@ -1,0 +1,12 @@
+{
+  "label": "517-localization-wallet-tests",
+  "command": [
+    "sh",
+    "-c",
+    "ulimit -n 4096; flutter test test/l10n/ test/features/wallet/pages/localization/localized_wallet_flows_test.dart test/features/wallet/pages/wallet_aggregate_detail_page_test.dart --concurrency=4 --reporter expanded"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 20.91
+}

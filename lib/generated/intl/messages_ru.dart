@@ -3628,6 +3628,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Баланс не удалось обновить",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Общая стоимость",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Цена"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD-кошелёк · Мнемоника",
     ),
@@ -3650,6 +3654,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Цены недоступны",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Адрес получателя",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Адрес отправителя",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Открепить токен",

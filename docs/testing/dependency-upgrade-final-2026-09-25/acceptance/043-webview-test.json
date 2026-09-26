@@ -1,0 +1,15 @@
+{
+  "label": "043-webview-test",
+  "command": [
+    "flutter",
+    "test",
+    "packages/webview_flutter_wkwebview/test/",
+    "--concurrency=4",
+    "--reporter",
+    "expanded"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 4.1
+}

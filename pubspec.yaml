@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072824
+version: 2.4.8+2026072841
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -13,15 +13,15 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  mobile_scanner: ^7.2.0
+  mobile_scanner: ^7.4.2
   # === UI Components ===
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.9
   flutter_screenutil: ^5.9.3
-  easy_refresh: ^3.4.0
+  easy_refresh: ^3.5.1
   flutter_slidable: ^4.0.3
   qr_flutter: ^4.1.0
-  fl_chart: ^1.1.1
-  extended_image: ^10.0.1
+  fl_chart: ^1.2.0
+  extended_image: ^10.1.0
   custom_pop_up_menu: ^1.2.4
   gesture_password_widget: ^2.0.1
   roundcheckbox: ^2.0.5
@@ -32,86 +32,86 @@ dependencies:
   intl: ^0.20.2
 
   # === State Management ===
-  flutter_riverpod: ^3.2.1
-  riverpod_annotation: ^4.0.2
+  flutter_riverpod: ^3.4.3
+  riverpod_annotation: ^4.0.7
 
   # === Database & Storage ===
-  sqflite: ^2.4.3
-  sqflite_sqlcipher: ^3.1.0+1  # 加密数据库支持
-  path: ^1.9.0
-  path_provider: ^2.1.5
-  shared_preferences: ^2.5.4
-  flutter_secure_storage: ^10.0.0
+  sqflite: ^2.4.4
+  sqflite_sqlcipher: ^3.4.1  # 加密数据库支持
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  shared_preferences: ^2.5.5
+  flutter_secure_storage: ^10.3.4
 
   # === Network ===
-  dio: ^5.9.2
+  dio: ^5.11.1
   # NewsApi 解析 RSS feed（已在 transitive 树里，这里显式声明以避免依赖飘移）
-  xml: ^6.6.0
-  connectivity_plus: ^7.0.0
+  xml: ^6.6.1
+  connectivity_plus: ^7.3.1
   cached_network_image: ^3.4.1
-  webview_flutter: ^4.13.1
-  webview_flutter_android: ^4.13.0
-  webview_flutter_wkwebview: ^3.24.0
-  web_socket_channel: ^3.0.2
-  http: ^1.3.0
+  webview_flutter: ^4.14.1
+  webview_flutter_android: ^4.14.1
+  webview_flutter_wkwebview: ^3.26.1
+  web_socket_channel: ^3.0.3
+  http: ^1.6.0
   url_launcher: ^6.3.2
-  flutter_cache_manager: ^3.4.1
+  flutter_cache_manager: ^3.4.5
 
   # === Blockchain & Crypto ===
   eip712: ^1.0.1  # 替换 eth_sig_util，支持 EIP-712 typed data signing
-  web3dart: ^3.0.1
-  web3auth_flutter: ^6.3.0
-  fast_base58: ^0.2.1
+  web3dart: ^3.0.3
+  web3auth_flutter: ^7.0.0
+  fast_base58: ^0.2.2
   bech32: ^0.2.2
   crypto: ^3.0.7
-  decimal: ^3.2.4
+  decimal: ^3.2.6
   pointycastle: ^4.0.0
   blockchain_utils: ^7.1.0
-  reown_walletkit: ^1.4.0
-  reown_sign: ^1.3.9
-  reown_core: ^1.3.8
+  reown_walletkit: ^1.5.1
+  reown_sign: ^1.4.1
+  reown_core: ^1.5.1
 
   # === Protocol Buffers ===
-  protobuf: ^6.0.0
-  fixnum: ^1.1.0
+  protobuf: ^6.1.0
+  fixnum: ^1.1.1
 
   # === Utilities ===
   validators: ^3.0.0
   event_bus: ^2.0.1
-  fluttertoast: ^9.0.0
+  fluttertoast: ^10.0.0
   flustars_flutter3: ^3.0.0
   date_format: ^2.0.9
   convert: ^3.1.2
-  cryptography: ^2.7.0
+  cryptography: ^2.9.0
 
   # === Media & Files ===
-  image_picker: ^1.2.1
+  image_picker: ^1.2.3
   photo_manager: ^3.12.0
-  file_picker: ^11.0.2
+  file_picker: ^11.0.3
   video_compress: ^3.1.4
-  video_player: ^2.13.0
-  pro_image_editor: ^13.2.3
-  open_filex: ^4.6.0
-  share_plus: ^12.0.1
+  video_player: ^2.14.0
+  pro_image_editor: ^13.5.0
+  open_filex: ^4.7.0
+  share_plus: ^12.0.2
 
   # === Security & Auth ===
-  local_auth: ^3.0.1
-  local_auth_android: ^2.0.9
-  local_auth_darwin: ^2.0.3
-  permission_handler: ^12.0.1
+  local_auth: ^3.0.2
+  local_auth_android: ^2.2.0
+  local_auth_darwin: ^2.0.4
+  permission_handler: ^12.0.3
   # encrypt 包已被 pointycastle 直接实现替代
-  aes_crypt_null_safe: ^3.0.0
+  aes_crypt_null_safe: ^3.1.1
   google_sign_in: ^7.2.0
-  sign_in_with_apple: ^8.1.0
+  sign_in_with_apple: ^8.2.0
   pinput: ^6.0.2
 
   # === QR Code ===
   # === Device Info ===
-  device_info_plus: ^12.3.0
-  package_info_plus: ^9.0.0
+  device_info_plus: ^12.4.0
+  package_info_plus: ^9.0.1
 
   # === Notifications ===
-  flutter_local_notifications: ^22.2.0
+  flutter_local_notifications: ^22.3.1
   flutter_new_badger: ^2.0.0
 
   # === Deep Links ===
@@ -119,18 +119,21 @@ dependencies:
 
   # === External Store ===
   rate_us_on_store: ^0.0.4
-  in_app_purchase: ^3.2.0
+  in_app_purchase: ^3.3.1
 
   # === Firebase ===
-  firebase_core: ^4.5.0
-  firebase_messaging: ^16.1.2
-  firebase_crashlytics: ^5.0.8
-  firebase_analytics: ^12.1.3
+  firebase_core: ^4.15.0
+  # Chat 3cc19c12 handles the pre-4.10 AuthorizationStatus enum. Messaging
+  # 16.6+ requires 4.10's deniedPermanently case, absent from that Git source.
+  firebase_messaging: '>=16.5.0 <16.6.0'
+  firebase_messaging_platform_interface: '>=4.9.3 <4.10.0'
+  firebase_crashlytics: ^5.4.0
+  firebase_analytics: ^12.6.0
 
   # === Enterprise Architecture ===
-  go_router: ^17.0.0
+  go_router: ^17.5.0
   dartz: ^0.10.1
-  equatable: ^2.0.7
+  equatable: ^2.1.0
   freezed_annotation: ^3.1.0
 
   # === V1 Mining Plugin ===
@@ -148,14 +151,14 @@ dependencies:
   # livekit_client / flutter_webrtc 原为 n42_chat 间接依赖，提升为直接依赖以显式使用
   livekit_client: ^2.13.0
   # get_it 用于从 n42_chat 注册的全局 GetIt.instance 取 Matrix 仓库（接口未导出）
-  get_it: ^9.2.1
+  get_it: ^9.3.0
   # n42_chat 的原生插件传递依赖提升为直接依赖：git 依赖的传递解析会静默丢弃它们，
   # 显式声明以保证 host 端（含 flutter test）能编译 chat 的 voip/加密/人脸模糊代码。
   # flutter_callkit_incoming 钉 3.0.0：3.1.x（2026-05 末发布）移除了 n42_chat
   # voip 代码使用的 CallKitParams.textAccept/textDecline，全新解析会漂到 3.1.x 而编译失败。
   # 2026-07-26 对 3.1.3 复验：钉死理由仍成立——textAccept/textDecline 依旧不存在，
   # 且 callkit 的 Event 枚举被重命名，call_notification_service.dart 报 19 处错误。
-  # 解钉前须先改 packages/n42_chat/lib/src/services/voip/call_notification_service.dart。
+  # Upgrade requires a compatible call_notification_service.dart in the pinned Git source.
   flutter_callkit_incoming: 3.0.0
   flutter_vodozemac: ^0.6.0
   google_mlkit_face_detection: ^0.14.0
@@ -165,36 +168,36 @@ dependencies:
   google_mlkit_translation: ^0.14.0
   flutter_background: ^1.3.1
 
-# Override: flutter_secure_storage 10.x needed for compatibility with
-# matrix_dart_sdk which pins an older version via vodozemac dependency chain
+# Keep v10 migration support for legacy encrypted wallet storage. v11 removes
+# legacy cipher/EncryptedSharedPreferences migration and requires compileSdk 37.
 dependency_overrides:
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^10.3.4
 
 dev_dependencies:
   image_picker_platform_interface: ^2.11.1
-  path_provider_platform_interface: ^2.1.2
-  sqlcipher_flutter_libs: ^0.6.4
-  sqlite3: ^2.4.0
+  path_provider_platform_interface: ^2.1.3
+  sqlcipher_flutter_libs: ^0.6.8
+  sqlite3: ^2.9.4
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-  
+
   # === Linting ===
   flutter_lints: ^6.0.0
 
   # === Code Generation ===
-  build_runner: ^2.11.1
-  json_serializable: ^6.9.5  # blocked by vodozemac→analyzer chain
-  freezed: ">=3.2.0 <3.2.6"  # 3.2.5 bugfix allowed; still within vodozemac compat range
-  intl_utils: ^2.8.13
+  build_runner: ^2.15.1
+  json_serializable: ^6.14.1
+  freezed: ">=3.2.0 <3.2.6"  # Newer stable generators require Dart 3.13 or analyzer incompatible with this graph
+  intl_utils: ^2.8.14
 
   # === Testing ===
-  mockito: ^5.6.3
-  mocktail: ^1.0.3
+  mockito: ^5.6.4
+  mocktail: ^1.0.5
   vodozemac: ^0.5.0
   bloc_test: ^10.0.0
-  sqflite_common_ffi: ^2.3.4
+  sqflite_common_ffi: ^2.3.7+1
   webview_flutter_platform_interface: ^2.15.1
 
 flutter:

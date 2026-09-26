@@ -1721,5 +1721,9 @@
   "g_ui_coins_load_failed": "코인 로딩에 실패했습니다. 다시 시도해 주세요.",
   "g_ui_mpc_no_phrase": "시드 페이즈가 필요 없습니다",
   "g_ui_mpc_intro": "소셜 계정으로 로그인하여 보안 MPC 지갑을 생성하세요. 개인 키는 암호화된 조각으로 분할되며, 시드 페이즈를 잃을 염려가 없습니다.",
-  "g_ui_mpc_security": "MPC-TSS 기반. 개인 키는 디바이스, 서버, 복구 백업에 분할되어 암호화된 3개의 조각으로 저장됩니다."
+  "g_ui_mpc_security": "MPC-TSS 기반. 개인 키는 디바이스, 서버, 복구 백업에 분할되어 암호화된 3개의 조각으로 저장됩니다.",
+  "g_wallet_coin_total_value": "총 가치",
+  "g_wallet_coin_unit_price": "가격",
+  "g_wallet_receiver_address": "받는 주소",
+  "g_wallet_sender_address": "보내는 주소"
 }

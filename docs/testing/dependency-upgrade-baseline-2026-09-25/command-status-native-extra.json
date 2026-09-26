@@ -1,0 +1,28 @@
+{
+  "flutter-build-macos-release-supported": {
+    "command": [
+      "flutter",
+      "build",
+      "macos",
+      "--release"
+    ],
+    "cwd": ".",
+    "duration_seconds": 7.62,
+    "exit_code": 1,
+    "log": "logs/flutter-build-macos-release-supported.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "ios-pod-outdated-after-install": {
+    "command": [
+      "pod",
+      "outdated"
+    ],
+    "cwd": "ios",
+    "duration_seconds": 41.74,
+    "exit_code": 0,
+    "log": "logs/ios-pod-outdated-after-install.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  }
+}

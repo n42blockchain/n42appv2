@@ -1,0 +1,13 @@
+{
+  "label": "508-baseline-localization-audit",
+  "command": [
+    "python3",
+    "scripts/audit_localizations.py",
+    "--mode",
+    "all"
+  ],
+  "cwd": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-localization-baseline-ortsy347",
+  "environment": {},
+  "exit": 1,
+  "seconds": 0.33
+}

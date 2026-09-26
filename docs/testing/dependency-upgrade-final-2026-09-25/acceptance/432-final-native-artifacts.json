@@ -1,0 +1,70 @@
+{
+  "android_apk": {
+    "bytes": 863878173,
+    "sha256": "a867745810b91590150c4ca908c1341aa96cd104993b6f7d60d3b24608d4b45b",
+    "mls": [
+      {
+        "abi": "arm64-v8a",
+        "source_sha256": "8ec181165f191dbf0ec911bfde633e611517df18a8e0d59fc77c0857cb4e3be2",
+        "merged_matches_source": true,
+        "jni_symbols": 11,
+        "c_symbols": 13,
+        "packaged": true,
+        "git_blob": "c5ff6694ddf75daf16c3602dffeb798f546abed3",
+        "task8_blob_unchanged": true,
+        "different_from_pre_task8": true,
+        "apk_sha256": "61a65ea4afe83f76062c2856e7cd3e2a380e542dbcc7b2735ed3f2e2e6743f85",
+        "apk_matches_gradle_stripped": true
+      },
+      {
+        "abi": "armeabi-v7a",
+        "source_sha256": "ee9efe7d97e00d3b51942cdf73240e1f1081f2a1bd8fa5c795b61abf19cd1cd5",
+        "merged_matches_source": true,
+        "jni_symbols": 11,
+        "c_symbols": 13,
+        "packaged": true,
+        "git_blob": "a8c90e05cf9395fc7676f42fb9032be689242437",
+        "task8_blob_unchanged": true,
+        "different_from_pre_task8": true,
+        "apk_sha256": "1bdea725523a66cd884e58a2a75809838e45f5dd330cbede6dfa5f6e0f6de37d",
+        "apk_matches_gradle_stripped": true
+      },
+      {
+        "abi": "x86",
+        "source_sha256": "b80d6904795932e863ac2a55d9df63a9639af8a1315978e0f444b8d676107edb",
+        "merged_matches_source": true,
+        "jni_symbols": 11,
+        "c_symbols": 13,
+        "packaged": false,
+        "git_blob": "6ec678cefc5dd5ad9d696c3b3b8aec97dde474ee",
+        "task8_blob_unchanged": true,
+        "different_from_pre_task8": true
+      },
+      {
+        "abi": "x86_64",
+        "source_sha256": "fcbd2b48da20b77bbc0fb979084012dcc117e040c23115b62d08207cd15fbc79",
+        "merged_matches_source": true,
+        "jni_symbols": 11,
+        "c_symbols": 13,
+        "packaged": true,
+        "git_blob": "bb9eac6427dce6ce10a2c39a9e557ba307f6010a",
+        "task8_blob_unchanged": true,
+        "different_from_pre_task8": true,
+        "apk_sha256": "6da6517f4415caa2d2fe32e3cdb34ebbcce4f24137368a69a91bd3cade311129",
+        "apk_matches_gradle_stripped": true
+      }
+    ],
+    "note": "Flutter default APK runtime ABIs are arm64-v8a, armeabi-v7a, x86_64. The fourth x86 input remains rebuilt/tracked/merged but is not packaged by this default Flutter APK command. Gradle strips symbols, so APK library hashes match stripped outputs, not unstripped tracked inputs."
+  },
+  "ios": {
+    "runner_bytes": 241499688,
+    "runner_sha256": "c2b336b1944adf4307d885d7a4788c0b3dc2c1129feacc70c42be663facb855b",
+    "device_archive_sha256": "4d9d2f3f9e310f745bc82e61ea0d2bbf28b475c3b369804df5d0fb12649f9a3f",
+    "xcode_copied_archive_matches_task8_source": true,
+    "linked_mls_entry_points": 12,
+    "note": "12 operational C entry points are retained by the app linker; the unused version helper is absent from the linked export table. All 13 C entries remain in the input archive per Task8 audit. SQLCipher key and local export functions are present. No device runtime claim.",
+    "git_blob": "1753ed46b9af61a863673b2d758f9ac5e7a979b0",
+    "task8_blob_unchanged": true,
+    "different_from_pre_task8": true
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "root_packages": 426,
+  "baseline_root_packages": 424,
+  "root_downgrades": [],
+  "prereleases_flutter_npm_cargo": [
+    {
+      "lock": "chrome-extension/package-lock.json",
+      "name": "node_modules/gensync",
+      "version": "1.0.0-beta.2",
+      "version_present_in_baseline": true
+    }
+  ],
+  "inherited_native_prereleases": [
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteC (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSelectTfOps (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSwift (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLKitSegmentationSelfie (~> 1.0.0-beta14)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLImage (1.0.0-beta8)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLKitSegmentationCommon (1.0.0-beta14):",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLKitXenoCommon (= 1.0.0-beta16)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLKitSegmentationSelfie (1.0.0-beta14):",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLKitSegmentationCommon (= 1.0.0-beta14)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLImage (= 1.0.0-beta8)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- MLKitXenoCommon (1.0.0-beta16):",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteC (0.0.1-nightly.20250619):",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteC/Core (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteC/Core (0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSelectTfOps (0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSwift (0.0.1-nightly.20250619):",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSwift/Core (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSwift/Core (0.0.1-nightly.20250619):",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteC (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSwift/Privacy (= 0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "ios/Podfile.lock",
+      "line": "- TensorFlowLiteSwift/Privacy (0.0.1-nightly.20250619)",
+      "in_baseline": true
+    },
+    {
+      "file": "android/app/build.gradle.kts",
+      "line": "implementation(\"com.google.mlkit:segmentation-selfie:16.0.0-beta6\")",
+      "in_baseline": true
+    }
+  ],
+  "removed_overrides": [
+    "n42_chat"
+  ],
+  "chat_mirror_unchanged": true,
+  "blake3_dart": "1.0.0"
+}

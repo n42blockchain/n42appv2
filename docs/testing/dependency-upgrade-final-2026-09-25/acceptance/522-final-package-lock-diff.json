@@ -1,0 +1,24 @@
+{
+  "label": "522-final-package-lock-diff",
+  "command": [
+    "git",
+    "diff",
+    "--exit-code",
+    "26840b378",
+    "--",
+    "pubspec.lock",
+    "packages/audioplayers_darwin/pubspec.lock",
+    "packages/webview_flutter_wkwebview/pubspec.lock",
+    "packages/webview_flutter_wkwebview/example/pubspec.lock",
+    "packages/n42_jmt_verify/pubspec.lock",
+    "plugins/flutter_mining/pubspec.lock",
+    "plugins/flutter_mining/example/pubspec.lock",
+    "ios/Podfile.lock",
+    "macos/Podfile.lock",
+    "rust/n42_mls/Cargo.lock"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.02
+}

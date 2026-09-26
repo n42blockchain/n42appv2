@@ -1728,5 +1728,9 @@
   "g_ui_coins_load_failed": "Không thể tải danh sách tiền tệ. Vui lòng thử lại.",
   "g_ui_mpc_no_phrase": "Không cần Phrases Khôi phục",
   "g_ui_mpc_intro": "Đăng nhập bằng tài khoản mạng xã hội để tạo ví MPC an toàn. Khóa riêng tư của bạn sẽ được chia thành các phần mã hóa — không cần lưu trữ Phrases Khôi phục.",
-  "g_ui_mpc_security": "Được hỗ trợ bởi MPC-TSS. Khóa của bạn được chia thành 3 phần mã hóa, phân bố trên thiết bị của bạn, máy chủ của chúng tôi và bản sao lưu khôi phục."
+  "g_ui_mpc_security": "Được hỗ trợ bởi MPC-TSS. Khóa của bạn được chia thành 3 phần mã hóa, phân bố trên thiết bị của bạn, máy chủ của chúng tôi và bản sao lưu khôi phục.",
+  "g_wallet_coin_total_value": "Tổng giá trị",
+  "g_wallet_coin_unit_price": "Giá",
+  "g_wallet_receiver_address": "Địa chỉ người nhận",
+  "g_wallet_sender_address": "Địa chỉ người gửi"
 }

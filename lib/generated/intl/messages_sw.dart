@@ -3644,6 +3644,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Salio halikuweza kuonyeshwa upya",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Jumla ya Thamani",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Bei"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Wallet ya HD · Mnemonic",
     ),
@@ -3666,6 +3670,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Bei hazipatikani",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Anwani ya mpokeaji",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Anwani ya mtumaji",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Ondoa tokeni iliyobandikwa juu",

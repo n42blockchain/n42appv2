@@ -1,0 +1,12 @@
+{
+  "label": "011-root-pub-get",
+  "command": [
+    "flutter",
+    "pub",
+    "get"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 2.81
+}

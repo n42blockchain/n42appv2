@@ -1,0 +1,14 @@
+{
+  "label": "111-go-livekit-jwt-vet",
+  "command": [
+    "go",
+    "vet",
+    "./..."
+  ],
+  "cwd": "backend/livekit-jwt",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.41
+}

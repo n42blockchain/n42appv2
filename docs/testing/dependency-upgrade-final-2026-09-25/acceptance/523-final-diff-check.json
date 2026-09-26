@@ -1,0 +1,13 @@
+{
+  "label": "523-final-diff-check",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "dee63931f"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.25
+}

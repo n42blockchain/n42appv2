@@ -1,0 +1,15 @@
+{
+  "label": "140-go-swap-test",
+  "command": [
+    "go",
+    "test",
+    "-count=1",
+    "./..."
+  ],
+  "cwd": "backend/swap",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 6.52
+}

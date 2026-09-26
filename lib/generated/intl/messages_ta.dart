@@ -3758,6 +3758,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "இருப்பு புதுப்பிக்கப்பட முடியவில்லை",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "மொத்த மதிப்பு",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("விலை"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD வாலட் · நினைவூட்டு",
     ),
@@ -3780,6 +3784,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "விலைகள் கிடைக்கவில்லை",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "பெறுநரின் முகவரி",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "அனுப்புநரின் முகவரி",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "டோக்கனை மேலே பொருத்தியதை நீக்கு",

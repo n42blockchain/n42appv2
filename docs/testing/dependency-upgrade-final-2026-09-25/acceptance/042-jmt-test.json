@@ -1,0 +1,11 @@
+{
+  "label": "042-jmt-test",
+  "command": [
+    "dart",
+    "test"
+  ],
+  "cwd": "packages/n42_jmt_verify",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.76
+}

@@ -1,0 +1,12 @@
+{
+  "label": "021-local-analyze-flutter_mining",
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-fatal-infos"
+  ],
+  "cwd": "plugins/flutter_mining",
+  "environment": {},
+  "exit": 0,
+  "seconds": 2.4
+}

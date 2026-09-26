@@ -1,0 +1,585 @@
+{
+  "n42_jmt_verify": {
+    "manifest_path": "../../../packages/n42_jmt_verify/pubspec.yaml",
+    "declared": {
+      "dependencies": {
+        "blake3_dart": "1.0.0"
+      },
+      "dev_dependencies": {
+        "test": "^1.24.0"
+      }
+    },
+    "tracked_lock_exists": false,
+    "original_package_config_exists": false,
+    "resolution_method": "Copied only pubspec.yaml to temporary directory; dart pub get and dart pub deps --json succeeded; temporary directory deleted after capture. This is a fresh resolution snapshot, not a project lock.",
+    "temporary_resolved_lock": "jmt-temp-resolved-pubspec.lock",
+    "resolved_package_count": 49,
+    "resolved_by_kind": {
+      "root": 1,
+      "dev": 1,
+      "transitive": 46,
+      "direct": 1
+    },
+    "resolved_by_source": {
+      "root": 1,
+      "hosted": 48
+    },
+    "resolved_packages": [
+      {
+        "name": "n42_jmt_verify",
+        "version": "0.1.0",
+        "kind": "root",
+        "source": "root"
+      },
+      {
+        "name": "test",
+        "version": "1.32.0",
+        "kind": "dev",
+        "source": "hosted"
+      },
+      {
+        "name": "yaml",
+        "version": "3.1.4",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "string_scanner",
+        "version": "1.4.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "source_span",
+        "version": "1.10.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "term_glyph",
+        "version": "1.2.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "path",
+        "version": "1.9.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "collection",
+        "version": "1.19.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "webkit_inspection_protocol",
+        "version": "1.2.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "logging",
+        "version": "1.3.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "web_socket_channel",
+        "version": "3.0.3",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "web_socket",
+        "version": "1.0.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "web",
+        "version": "1.1.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "stream_channel",
+        "version": "2.1.4",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "async",
+        "version": "2.13.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "meta",
+        "version": "1.19.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "crypto",
+        "version": "3.0.7",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "typed_data",
+        "version": "1.4.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "test_core",
+        "version": "0.6.20",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "vm_service",
+        "version": "15.3.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "test_api",
+        "version": "0.7.14",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "stack_trace",
+        "version": "1.12.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "boolean_selector",
+        "version": "2.1.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "source_maps",
+        "version": "0.10.14",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "source_map_stack_trace",
+        "version": "2.1.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "pool",
+        "version": "1.5.3",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "package_config",
+        "version": "3.0.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "io",
+        "version": "1.1.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "glob",
+        "version": "2.2.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "file",
+        "version": "7.0.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "frontend_server_client",
+        "version": "4.0.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "coverage",
+        "version": "1.15.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "cli_config",
+        "version": "0.2.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "args",
+        "version": "2.7.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "analyzer",
+        "version": "14.4.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "watcher",
+        "version": "1.2.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "pub_semver",
+        "version": "2.2.1",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "convert",
+        "version": "3.1.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "_fe_analyzer_shared",
+        "version": "108.0.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "shelf_web_socket",
+        "version": "3.0.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "shelf",
+        "version": "1.4.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "http_parser",
+        "version": "4.1.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "shelf_static",
+        "version": "1.1.3",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "mime",
+        "version": "2.1.0",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "shelf_packages_handler",
+        "version": "3.0.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "node_preamble",
+        "version": "2.0.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "matcher",
+        "version": "0.12.20",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "http_multi_server",
+        "version": "3.2.2",
+        "kind": "transitive",
+        "source": "hosted"
+      },
+      {
+        "name": "blake3_dart",
+        "version": "1.0.0",
+        "kind": "direct",
+        "source": "hosted"
+      }
+    ]
+  },
+  "flutter_mining_example": {
+    "manifest_path": "../../../plugins/flutter_mining/example/pubspec.yaml",
+    "declared": {
+      "dependencies": {
+        "flutter": {
+          "sdk": "flutter"
+        },
+        "flutter_mining": {
+          "path": "../"
+        },
+        "cupertino_icons": "^1.0.8"
+      },
+      "dev_dependencies": {
+        "integration_test": {
+          "sdk": "flutter"
+        },
+        "flutter_test": {
+          "sdk": "flutter"
+        },
+        "flutter_lints": "^5.0.0"
+      }
+    },
+    "tracked_lock_exists": true,
+    "tracked_lock_path": "../../../plugins/flutter_mining/example/pubspec.lock",
+    "resolution_method": "Parsed committed pubspec.lock at baseline; no pub get was run in the example, so no ignored .dart_tool state was created.",
+    "locked_package_count": 37,
+    "locked_by_kind": {
+      "transitive": 31,
+      "direct main": 3,
+      "direct dev": 3
+    },
+    "locked_by_source": {
+      "hosted": 30,
+      "sdk": 6,
+      "path": 1
+    },
+    "locked_packages": [
+      {
+        "name": "async",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "2.13.0"
+      },
+      {
+        "name": "boolean_selector",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "2.1.2"
+      },
+      {
+        "name": "characters",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.4.1"
+      },
+      {
+        "name": "clock",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.1.2"
+      },
+      {
+        "name": "collection",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.19.1"
+      },
+      {
+        "name": "cupertino_icons",
+        "dependency": "direct main",
+        "source": "hosted",
+        "version": "1.0.8"
+      },
+      {
+        "name": "fake_async",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.3.3"
+      },
+      {
+        "name": "file",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "7.0.1"
+      },
+      {
+        "name": "flutter",
+        "dependency": "direct main",
+        "source": "sdk",
+        "version": "0.0.0"
+      },
+      {
+        "name": "flutter_driver",
+        "dependency": "transitive",
+        "source": "sdk",
+        "version": "0.0.0"
+      },
+      {
+        "name": "flutter_lints",
+        "dependency": "direct dev",
+        "source": "hosted",
+        "version": "5.0.0"
+      },
+      {
+        "name": "flutter_mining",
+        "dependency": "direct main",
+        "source": "path",
+        "version": "0.0.1"
+      },
+      {
+        "name": "flutter_test",
+        "dependency": "direct dev",
+        "source": "sdk",
+        "version": "0.0.0"
+      },
+      {
+        "name": "fuchsia_remote_debug_protocol",
+        "dependency": "transitive",
+        "source": "sdk",
+        "version": "0.0.0"
+      },
+      {
+        "name": "integration_test",
+        "dependency": "direct dev",
+        "source": "sdk",
+        "version": "0.0.0"
+      },
+      {
+        "name": "leak_tracker",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "11.0.2"
+      },
+      {
+        "name": "leak_tracker_flutter_testing",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "3.0.10"
+      },
+      {
+        "name": "leak_tracker_testing",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "3.0.2"
+      },
+      {
+        "name": "lints",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "5.1.1"
+      },
+      {
+        "name": "matcher",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "0.12.19"
+      },
+      {
+        "name": "material_color_utilities",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "0.13.0"
+      },
+      {
+        "name": "meta",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.17.0"
+      },
+      {
+        "name": "path",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.9.1"
+      },
+      {
+        "name": "platform",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "3.1.6"
+      },
+      {
+        "name": "plugin_platform_interface",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "2.1.8"
+      },
+      {
+        "name": "process",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "5.0.5"
+      },
+      {
+        "name": "sky_engine",
+        "dependency": "transitive",
+        "source": "sdk",
+        "version": "0.0.0"
+      },
+      {
+        "name": "source_span",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.10.1"
+      },
+      {
+        "name": "stack_trace",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.12.1"
+      },
+      {
+        "name": "stream_channel",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "2.1.4"
+      },
+      {
+        "name": "string_scanner",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.4.1"
+      },
+      {
+        "name": "sync_http",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "0.3.1"
+      },
+      {
+        "name": "term_glyph",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "1.2.2"
+      },
+      {
+        "name": "test_api",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "0.7.10"
+      },
+      {
+        "name": "vector_math",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "2.2.0"
+      },
+      {
+        "name": "vm_service",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "15.0.2"
+      },
+      {
+        "name": "webdriver",
+        "dependency": "transitive",
+        "source": "hosted",
+        "version": "3.1.0"
+      }
+    ]
+  }
+}

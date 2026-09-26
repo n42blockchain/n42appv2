@@ -267,12 +267,18 @@ void main() {
       snapshot.coinModels.add(chain);
 
       final tokens = await bridge.getSupportedTokens();
-      final usdc = tokens.singleWhere((token) => token.symbol == 'USDC');
+      final usdc =
+          tokens.singleWhere((token) => token.symbol == 'USDC')
+              as WalletBridgeTokenInfo;
 
       expect(usdc.chain, 'ethereum');
       expect(usdc.network, 'mainnet');
       expect(usdc.assetType, 'token');
       expect(usdc.assetId, '0xabcdef0123456789abcdef0123456789abcdef01');
+      expect(
+        usdc.contractAddress,
+        '0xabcdef0123456789abcdef0123456789abcdef01',
+      );
       expect(usdc.decimals, 6);
       expect(usdc.isNative, isFalse);
     },
@@ -305,11 +311,17 @@ void main() {
       snapshot.coinModels.add(chain);
 
       final tokens = await bridge.getSupportedTokens();
-      final usdc = tokens.singleWhere((token) => token.symbol == 'USDC');
+      final usdc =
+          tokens.singleWhere((token) => token.symbol == 'USDC')
+              as WalletBridgeTokenInfo;
 
       expect(usdc.chain, 'ethereum');
       expect(usdc.network, 'testnet');
       expect(usdc.assetId, '0x1234567890abcdef1234567890abcdef12345678');
+      expect(
+        usdc.contractAddress,
+        '0x1234567890abcdef1234567890abcdef12345678',
+      );
     },
   );
 

@@ -1,5 +1,8 @@
 PODS:
-  - app_badge_plus (1.3.2):
+  - AnalyticsSwiftCocoapod (1.8.0):
+    - JSONSafeEncoding (= 2.0.0)
+    - Sovran (= 1.1.1)
+  - app_badge_plus (1.3.5):
     - Flutter
   - app_links (7.0.0):
     - Flutter
@@ -9,7 +12,7 @@ PODS:
   - AppAuth/Core (2.1.0)
   - AppAuth/ExternalUserAgent (2.1.0):
     - AppAuth/Core
-  - AppCheckCore (11.3.0):
+  - AppCheckCore (11.3.2):
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
@@ -69,83 +72,83 @@ PODS:
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
-  - Firebase/CoreOnly (12.15.0):
-    - FirebaseCore (~> 12.15.0)
-  - Firebase/Crashlytics (12.15.0):
+  - Firebase/CoreOnly (12.19.0):
+    - FirebaseCore (~> 12.19.0)
+  - Firebase/Crashlytics (12.19.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 12.15.0)
-  - Firebase/Messaging (12.15.0):
+    - FirebaseCrashlytics (~> 12.19.0)
+  - Firebase/Messaging (12.19.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 12.15.0)
-  - firebase_analytics (12.4.5):
+    - FirebaseMessaging (~> 12.19.0)
+  - firebase_analytics (12.6.0):
     - firebase_core
-    - FirebaseAnalytics (= 12.15.0)
+    - FirebaseAnalytics (= 12.19.0)
     - Flutter
-  - firebase_core (4.12.1):
-    - Firebase/CoreOnly (= 12.15.0)
+  - firebase_core (4.15.0):
+    - Firebase/CoreOnly (= 12.19.0)
     - Flutter
-  - firebase_crashlytics (5.2.6):
-    - Firebase/Crashlytics (= 12.15.0)
-    - firebase_core
-    - Flutter
-  - firebase_messaging (16.4.3):
-    - Firebase/Messaging (= 12.15.0)
+  - firebase_crashlytics (5.4.0):
+    - Firebase/Crashlytics (= 12.19.0)
     - firebase_core
     - Flutter
-  - FirebaseAnalytics (12.15.0):
-    - FirebaseAnalytics/Default (= 12.15.0)
-    - FirebaseCore (~> 12.15.0)
-    - FirebaseInstallations (~> 12.15.0)
+  - firebase_messaging (16.5.0):
+    - Firebase/Messaging (= 12.19.0)
+    - firebase_core
+    - Flutter
+  - FirebaseAnalytics (12.19.0):
+    - FirebaseAnalytics/Default (= 12.19.0)
+    - FirebaseCore (~> 12.19.0)
+    - FirebaseInstallations (~> 12.19.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/MethodSwizzler (~> 8.1)
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - FirebaseAnalytics/Default (12.15.0):
-    - FirebaseCore (~> 12.15.0)
-    - FirebaseInstallations (~> 12.15.0)
-    - GoogleAppMeasurement/Default (= 12.15.0)
+  - FirebaseAnalytics/Default (12.19.0):
+    - FirebaseCore (~> 12.19.0)
+    - FirebaseInstallations (~> 12.19.0)
+    - GoogleAppMeasurement/Default (= 12.19.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/MethodSwizzler (~> 8.1)
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - FirebaseCore (12.15.0):
-    - FirebaseCoreInternal (~> 12.15.0)
+  - FirebaseCore (12.19.0):
+    - FirebaseCoreInternal (~> 12.19.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
-  - FirebaseCoreExtension (12.15.0):
-    - FirebaseCore (~> 12.15.0)
-  - FirebaseCoreInternal (12.15.0):
+  - FirebaseCoreExtension (12.19.0):
+    - FirebaseCore (~> 12.19.0)
+  - FirebaseCoreInternal (12.19.0):
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
-  - FirebaseCrashlytics (12.15.0):
-    - FirebaseCore (~> 12.15.0)
-    - FirebaseInstallations (~> 12.15.0)
-    - FirebaseRemoteConfigInterop (~> 12.15.0)
-    - FirebaseSessions (~> 12.15.0)
+  - FirebaseCrashlytics (12.19.0):
+    - FirebaseCore (~> 12.19.0)
+    - FirebaseInstallations (~> 12.19.0)
+    - FirebaseRemoteConfigInterop (~> 12.19.0)
+    - FirebaseSessions (~> 12.19.0)
     - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/Environment (~> 8.1)
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - FirebaseInstallations (12.15.0):
-    - FirebaseCore (~> 12.15.0)
+  - FirebaseInstallations (12.19.0):
+    - FirebaseCore (~> 12.19.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - PromisesObjC (~> 2.4)
-  - FirebaseMessaging (12.15.0):
-    - FirebaseCore (~> 12.15.0)
-    - FirebaseInstallations (~> 12.15.0)
+  - FirebaseMessaging (12.19.0):
+    - FirebaseCore (~> 12.19.0)
+    - FirebaseInstallations (~> 12.19.0)
     - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Reachability (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (12.15.0)
-  - FirebaseSessions (12.15.0):
-    - FirebaseCore (~> 12.15.0)
-    - FirebaseCoreExtension (~> 12.15.0)
-    - FirebaseInstallations (~> 12.15.0)
+  - FirebaseRemoteConfigInterop (12.19.0)
+  - FirebaseSessions (12.19.0):
+    - FirebaseCore (~> 12.19.0)
+    - FirebaseCoreExtension (~> 12.19.0)
+    - FirebaseInstallations (~> 12.19.0)
     - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
@@ -224,34 +227,34 @@ PODS:
     - FlutterMacOS
     - GoogleSignIn (~> 9.0)
     - GTMSessionFetcher (>= 3.4.0)
-  - GoogleAdsOnDeviceConversion (3.6.1):
+  - GoogleAdsOnDeviceConversion (3.7.0):
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
     - GoogleUtilities/Network (~> 8.1)
     - nanopb (~> 3.30910.0)
-  - GoogleAppMeasurement/Core (12.15.0):
+  - GoogleAppMeasurement/Core (12.19.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/MethodSwizzler (~> 8.1)
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - GoogleAppMeasurement/Default (12.15.0):
-    - GoogleAdsOnDeviceConversion (~> 3.6.0)
-    - GoogleAppMeasurement/Core (= 12.15.0)
-    - GoogleAppMeasurement/IdentitySupport (= 12.15.0)
+  - GoogleAppMeasurement/Default (12.19.0):
+    - GoogleAdsOnDeviceConversion (~> 3.7.0)
+    - GoogleAppMeasurement/Core (= 12.19.0)
+    - GoogleAppMeasurement/IdentitySupport (= 12.19.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/MethodSwizzler (~> 8.1)
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - GoogleAppMeasurement/IdentitySupport (12.15.0):
-    - GoogleAppMeasurement/Core (= 12.15.0)
+  - GoogleAppMeasurement/IdentitySupport (12.19.0):
+    - GoogleAppMeasurement/Core (= 12.19.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/MethodSwizzler (~> 8.1)
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - GoogleDataTransport (10.1.0):
+  - GoogleDataTransport (10.1.1):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
   - GoogleMLKit/FaceDetection (9.0.0):
@@ -292,31 +295,31 @@ PODS:
     - GoogleToolboxForMac/Defines (= 4.2.1)
   - GoogleToolboxForMac/StringEncoding (4.2.1):
     - GoogleToolboxForMac/Defines (= 4.2.1)
-  - GoogleUtilities/AppDelegateSwizzler (8.1.2):
+  - GoogleUtilities/AppDelegateSwizzler (8.1.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (8.1.2):
+  - GoogleUtilities/Environment (8.1.3):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.2):
+  - GoogleUtilities/Logger (8.1.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (8.1.2):
+  - GoogleUtilities/MethodSwizzler (8.1.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.1.2):
+  - GoogleUtilities/Network (8.1.3):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (8.1.2)":
+  - "GoogleUtilities/NSData+zlib (8.1.3)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.2)
-  - GoogleUtilities/Reachability (8.1.2):
+  - GoogleUtilities/Privacy (8.1.3)
+  - GoogleUtilities/Reachability (8.1.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (8.1.2):
+  - GoogleUtilities/UserDefaults (8.1.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMAppAuth (5.0.0):
@@ -334,20 +337,22 @@ PODS:
     - FlutterMacOS
   - integration_test (0.0.1):
     - Flutter
+  - JSONSafeEncoding (2.0.0)
+  - JWTDecode (3.3.0)
   - KeychainSwift (20.0.0)
   - large_file_handler (0.0.1):
     - Flutter
-  - libwebp (1.5.0):
-    - libwebp/demux (= 1.5.0)
-    - libwebp/mux (= 1.5.0)
-    - libwebp/sharpyuv (= 1.5.0)
-    - libwebp/webp (= 1.5.0)
-  - libwebp/demux (1.5.0):
+  - libwebp (1.6.0):
+    - libwebp/demux (= 1.6.0)
+    - libwebp/mux (= 1.6.0)
+    - libwebp/sharpyuv (= 1.6.0)
+    - libwebp/webp (= 1.6.0)
+  - libwebp/demux (1.6.0):
     - libwebp/webp
-  - libwebp/mux (1.5.0):
+  - libwebp/mux (1.6.0):
     - libwebp/demux
-  - libwebp/sharpyuv (1.5.0)
-  - libwebp/webp (1.5.0):
+  - libwebp/sharpyuv (1.6.0)
+  - libwebp/webp (1.6.0):
     - libwebp/sharpyuv
   - livekit_client (2.13.0):
     - Flutter
@@ -430,6 +435,7 @@ PODS:
     - Flutter
   - pdfx (1.0.0):
     - Flutter
+    - FlutterMacOS
   - permission_handler_apple (9.4.8):
     - Flutter
   - photo_manager (3.12.0):
@@ -459,6 +465,7 @@ PODS:
   - sign_in_with_apple (0.0.1):
     - Flutter
     - FlutterMacOS
+  - Sovran (1.1.1)
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
@@ -486,14 +493,19 @@ PODS:
     - TensorFlowLiteC (= 0.0.1-nightly.20250619)
     - TensorFlowLiteSwift/Privacy (= 0.0.1-nightly.20250619)
   - TensorFlowLiteSwift/Privacy (0.0.1-nightly.20250619)
-  - TorusSessionManager (6.0.2):
+  - Torus-fetchNodeDetails (8.0.1):
+    - BigInt (~> 5.2.0)
+  - Torus-utils (10.0.1):
+    - curvelib.swift (~> 2.0.0)
+    - Torus-fetchNodeDetails (~> 8.0.1)
+  - TorusSessionManager (6.1.0):
     - curvelib.swift (~> 2.0.0)
     - KeychainSwift (~> 20.0.0)
-  - TrustWalletCore (4.7.0):
-    - TrustWalletCore/Core (= 4.7.0)
-  - TrustWalletCore/Core (4.7.0):
+  - TrustWalletCore (4.8.4):
+    - TrustWalletCore/Core (= 4.8.4)
+  - TrustWalletCore/Core (4.8.4):
     - TrustWalletCore/Types
-  - TrustWalletCore/Types (4.7.0):
+  - TrustWalletCore/Types (4.8.4):
     - WalletCoreSwiftProtobuf
   - twitter_login (0.0.1):
     - Flutter
@@ -511,22 +523,25 @@ PODS:
     - Flutter
   - walletconnect_pay (0.0.1):
     - Flutter
-    - YttriumWrapper (= 0.10.15)
+    - YttriumWrapper (= 0.10.59)
   - WalletCoreSwiftProtobuf (1.29.0)
-  - Web3Auth (11.1.0):
+  - Web3Auth (12.0.1):
+    - AnalyticsSwiftCocoapod (~> 1.8.0)
     - BigInt (~> 5.2.0)
     - curvelib.swift (~> 2.0.0)
+    - JWTDecode (~> 3.3.0)
     - KeychainSwift (~> 20.0.0)
-    - TorusSessionManager (~> 6.0.2)
+    - Torus-utils (~> 10.0.1)
+    - TorusSessionManager (~> 6.1.0)
   - web3auth_flutter (2.0.1):
     - Flutter
-    - Web3Auth (~> 11.1.0)
+    - Web3Auth (~> 12.0.1)
   - WebRTC-SDK (150.7871.01)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
-  - WechatOpenSDK-XCFramework (2.0.5)
-  - YttriumWrapper (0.10.15)
+  - WechatOpenSDK-XCFramework (2.0.8)
+  - YttriumWrapper (0.10.59)
 
 DEPENDENCIES:
   - app_badge_plus (from `.symlinks/plugins/app_badge_plus/ios`)
@@ -575,7 +590,7 @@ DEPENDENCIES:
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/darwin`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - pdfx (from `.symlinks/plugins/pdfx/ios`)
+  - pdfx (from `.symlinks/plugins/pdfx/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/darwin`)
   - pro_image_editor (from `.symlinks/plugins/pro_image_editor/darwin`)
@@ -588,7 +603,7 @@ DEPENDENCIES:
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
   - sqlcipher_flutter_libs (from `.symlinks/plugins/sqlcipher_flutter_libs/ios`)
-  - TrustWalletCore (= 4.7.0)
+  - TrustWalletCore (= 4.8.4)
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_compress (from `.symlinks/plugins/video_compress/ios`)
@@ -601,6 +616,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AnalyticsSwiftCocoapod
     - AppAuth
     - AppCheckCore
     - BigInt
@@ -632,6 +648,8 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - JSONSafeEncoding
+    - JWTDecode
     - KeychainSwift
     - libwebp
     - MediaPipeTasksGenAI
@@ -656,12 +674,15 @@ SPEC REPOS:
     - PromisesSwift
     - RecaptchaInterop
     - SDWebImage
+    - Sovran
     - SQLCipher
     - SSZipArchive
     - SwiftyGif
     - TensorFlowLiteC
     - TensorFlowLiteSelectTfOps
     - TensorFlowLiteSwift
+    - Torus-fetchNodeDetails
+    - Torus-utils
     - TorusSessionManager
     - TrustWalletCore
     - WalletCoreSwiftProtobuf
@@ -756,7 +777,7 @@ EXTERNAL SOURCES:
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   pdfx:
-    :path: ".symlinks/plugins/pdfx/ios"
+    :path: ".symlinks/plugins/pdfx/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   photo_manager:
@@ -801,10 +822,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  app_badge_plus: 92470881496ccd73898ca13735c9a018f3d354ac
+  AnalyticsSwiftCocoapod: cc3e4d4e381a080c89a6f5f56845577c298bc627
+  app_badge_plus: 61669f601f51ea6c45fb7e8a6f1e0b12ba50864b
   app_links: a754cbec3c255bd4bbb4d236ecc06f28cd9a7ce8
   AppAuth: ef4da5a3fc2e10b90c09a0a94a9baeaedc0341d5
-  AppCheckCore: 214137f5c378d1dec88a68425c467fe65aaff637
+  AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
   audioplayers_darwin: 835ced6edd4c9fc8ebb0a7cc9e294a91d99917d5
   background_downloader: 50e91d979067b82081aba359d7d916b3ba5fadad
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
@@ -819,20 +841,20 @@ SPEC CHECKSUMS:
   FBSDKCoreKit_Basics: eb530cd6a79030dbb11df460aafb2767bcad9028
   FBSDKLoginKit: 6a70798793e499335a98fab1a758d7da34af196e
   file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
-  Firebase: a8539b633d474fbeb654c7043f9c1649e274045b
-  firebase_analytics: eb8345c126a25cd1914597079faf3e64c2e6835f
-  firebase_core: 1c1e250a77e2df9e80bb8bf0875c8b427044a697
-  firebase_crashlytics: 4d38aa785af57b2687a460778303d3b459707192
-  firebase_messaging: 90cf2b62f5058120ab19f29ceff1503ba0f51ba7
-  FirebaseAnalytics: 9c9fa7915fc52ea03077000d5a7b6a8947b2d76e
-  FirebaseCore: 2e86a4ea1684d4381707069e4a6d89ac808e901e
-  FirebaseCoreExtension: 10d2a627977b39418759ad88ada80fbbd34f1c4f
-  FirebaseCoreInternal: 6ab6a02c94446c026d2cf35cf5383842ebaa4992
-  FirebaseCrashlytics: 87e76cc33259b076dd1f96cd829db76849338e08
-  FirebaseInstallations: eb29ccbf64eaedf86fd5b2ccc7fabde567660b52
-  FirebaseMessaging: 40017d7bc8457ee295b0f41d480a80fdabc9994e
-  FirebaseRemoteConfigInterop: 7e3d57ce4b1e958bb1d15403faa7178f46bbb5b7
-  FirebaseSessions: acfe7eadca47cda94ac86592737204581bb1abf6
+  Firebase: 7ca191e43724142f79fae653547b3382c45413cc
+  firebase_analytics: 99133ddb6f6cf89c0b49cafae131070607abbfa5
+  firebase_core: 55de508663ceda7d1dc369a32b327a5655019ae2
+  firebase_crashlytics: 289a6a01605d663873a978d9daaa3648edc3f3b5
+  firebase_messaging: 0d1ad5591e2cd7090e5f77970f2a736a99debce2
+  FirebaseAnalytics: e9f8c369447e453da23f0455a06e4910bad10de0
+  FirebaseCore: c990214798d7c568ad436a15ba7da25c7a278c9a
+  FirebaseCoreExtension: 201c78d7491a273d61d8afbf491214276a951e6d
+  FirebaseCoreInternal: 656b1c2fd5a1c5976183dc54b73deda78fb26ee3
+  FirebaseCrashlytics: 5c8e09beebcd41913b35250cd0e533b58e4961a0
+  FirebaseInstallations: f70a49eed611f5602f373e40974b3b01556ac217
+  FirebaseMessaging: c15f48126adbe8b4d3238a5e1fa24bab3ad3e472
+  FirebaseRemoteConfigInterop: 90659b3cac8f6de884f2d930fbdbeb711533e142
+  FirebaseSessions: 39bcaa7c16b5d8b91d58f495f29ce2988d2f915c
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
   flutter_contacts: 2ec1d6b62ca2869c3bbb3871bd74d4e3ef157135
@@ -855,22 +877,24 @@ SPEC CHECKSUMS:
   google_mlkit_selfie_segmentation: 7fc41b3ef8ba238abf8dc76724da50e44de8aaf0
   google_mlkit_text_recognition: 9b164471713e3afdb4c129cabe6d1d64fef7e817
   google_mlkit_translation: 32f759ac50c38fc2eada2cf15fefc86b38faf0f7
-  google_sign_in_ios: 000870aa06da9b28d1d0bf7ef70ff0213059dd28
-  GoogleAdsOnDeviceConversion: e3b71da24ff4cf01cf520756ac1c2b93c07b86ff
-  GoogleAppMeasurement: a6d37949071d456e9147dac6789c4342e0e7a8c5
-  GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
+  google_sign_in_ios: d66ab4c862f03eb4b3cac147ba2d9d7e56ef03f7
+  GoogleAdsOnDeviceConversion: 41f168313b305040f4af27093d3c0af5ba46a9a3
+  GoogleAppMeasurement: f2f676480e4c97936df934aa181bc29caea46975
+  GoogleDataTransport: a24e58982ab3ba2f64d79613e027fe7f57e88539
   GoogleMLKit: b1eee21a41c57704fe72483b15c85cb2c0cd7444
   GoogleSignIn: e449a40a92e9f2eea56e98b5214d13725dc5a00a
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
-  GoogleUtilities: 766ace00c6b10d8148408f329d10c4f051931850
+  GoogleUtilities: 4e0c2ad9fa0d0d18b5c4df8bf57b461cba35b0bb
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   in_app_purchase_storekit: 22cca7d08eebca9babdf4d07d0baccb73325d3c8
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
+  JSONSafeEncoding: 54722ebc4fe1482e3e60a8450e1287481e32dd8b
+  JWTDecode: 1ca6f765844457d0dd8690436860fecee788f631
   KeychainSwift: 0ce6a4d13f7228054d1a71bb1b500448fb2ab837
   large_file_handler: b37481e9b4972562ffcdc8f75700f47cd592bcec
-  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  libwebp: af5937a13536ef73f3784d69cc342b98961acf33
   livekit_client: 55f2f6afa597719985fa4913f6e889eb2b7eacd8
   local_auth_darwin: c3ee6cce0a8d56be34c8ccb66ba31f7f180aaebb
   MediaPipeTasksGenAI: 076ba7032a6e9da16db9c7cf0c3b67c751c18bc1
@@ -894,7 +918,7 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  pdfx: 77f4dddc48361fbb01486fa2bdee4532cbb97ef3
+  pdfx: 824a9108791a81e400da7d1a903ab73668365072
   permission_handler_apple: 92d754bbaa7361d436db2d6c3c1c2a0fdcec462e
   photo_manager: c303e4476f6c220274119f0212a7753e45edd4a2
   pro_image_editor: e57a76b305fd8c2e06d57f92aec82b9c6a6e8d9f
@@ -908,6 +932,7 @@ SPEC CHECKSUMS:
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sign_in_with_apple: 5e34677a4e74c5f42760f41b3bbe05343e84d171
+  Sovran: f8212bb3855042a24689a73ea0219ca5295235da
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   sqflite_sqlcipher: 8e5bdaae6b2c254f8a277a564f07bc4e2a8642a3
   SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
@@ -917,23 +942,25 @@ SPEC CHECKSUMS:
   TensorFlowLiteC: 215ef57653dd0fa09a474e7d94d79ae64a870b28
   TensorFlowLiteSelectTfOps: c71d7dcd063f5d66ae1b9a85cc5aa993f824eff9
   TensorFlowLiteSwift: 6de8da348de331778167a0f751ad74c41d8b0554
-  TorusSessionManager: 3c47c2a4c4d6173a10006eb0af4b86317ee45ff8
-  TrustWalletCore: 2585d49bc854da68a61bd1576dc7cdd928ac1e1c
+  Torus-fetchNodeDetails: 0ae97719263ee98f5bf5549a86464eea38a828f3
+  Torus-utils: 7c53a9c71663c2f458bfdcf1a380d7a5b88f9632
+  TorusSessionManager: cd2de693425cefb976c7bca42a45964297d8c2cc
+  TrustWalletCore: 27e5a2297f6e3f94eb3a20dfc21c1ad2b018aead
   twitter_login: ea7069c8a3f4d3d786fae20495352c5e99926f03
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
   video_compress: f2133a07762889d67f0711ac831faa26f956980e
   video_player_avfoundation: 3453f792138786248960ca029747fcd9f318ef52
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
-  walletconnect_pay: 95df6f3533532d72e2ce2a64354f4326177c6fc1
+  walletconnect_pay: f32ca9b9f5c9e29583072b082a6ef7b5d4e12288
   WalletCoreSwiftProtobuf: a4798576a2d309511fc45f81843d348732ec571d
-  Web3Auth: fa82260fa6dacdcf647b333d85a923530d045051
-  web3auth_flutter: ecf03bfbcb9ebf1ed8edb24642b5dac6d6b6a980
+  Web3Auth: 5459b2d5bcdb150c5e84c7229639422cba684814
+  web3auth_flutter: 9c145c6b87ac77f1cbd2a016188ac9ec6162b243
   WebRTC-SDK: 7dc931c64c00c735a614382f1a59cf65019c3c17
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
-  WechatOpenSDK-XCFramework: ff342ae616bb86df3d236aca38059dfd4bc4a949
-  YttriumWrapper: cbddb60c835ebc4232d9f57064084ab30686a18e
+  WechatOpenSDK-XCFramework: 5e86024eb6276280a679402e471bd77606114f3c
+  YttriumWrapper: 64983f0edbf609b800ac3074010224fc5341aaeb
 
-PODFILE CHECKSUM: f337f232536bcc7c198f4125bd89f4eb1c30090e
+PODFILE CHECKSUM: 9d83ec867938ddb1a630f43659406b01db639a2b
 
 COCOAPODS: 1.17.0

@@ -1,9 +1,7 @@
 dependency_overrides:
-  n42_chat:
-    path: packages/n42_chat
   audioplayers_darwin:
     path: packages/audioplayers_darwin
   webview_flutter_wkwebview:
     path: packages/webview_flutter_wkwebview
-  flutter_secure_storage: ^10.0.0
-  flutter_facebook_auth: 7.1.7
+  flutter_secure_storage: ^10.3.4
+  flutter_facebook_auth: 7.2.0

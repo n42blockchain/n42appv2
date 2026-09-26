@@ -3486,6 +3486,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "बैलेंस को ताजा करने में असमर्थ",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "कुल मूल्य",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("कीमत"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD वॉलेट · निमॉनिक",
     ),
@@ -3506,6 +3510,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "कीमतें उपलब्ध नहीं",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "प्राप्तकर्ता का पता",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "प्रेषक का पता",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "टोकन पिन हटाएं",

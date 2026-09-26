@@ -26,6 +26,7 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
 import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+import 'package:n42_wallet/features/wallet/utils/wallet_payment_asset.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/providers/service_providers.dart';
@@ -98,6 +99,34 @@ String? decodeAbiString(String raw) {
 typedef WalletBridgeSenderResolver =
     ChainSender Function(String coinType, {Map<String, dynamic>? chainConfig});
 
+/// App-owned token metadata that is richer than the current Chat Git API.
+///
+/// The current [TokenInfo] contract carries the contract address but does not
+/// expose chain, network, or payment asset identity. Keeping these fields on
+/// the app-owned subtype preserves them for wallet code while remaining
+/// compatible with older Chat releases.
+class WalletBridgeTokenInfo extends TokenInfo {
+  const WalletBridgeTokenInfo({
+    required super.symbol,
+    required super.name,
+    required super.decimals,
+    required super.contractAddress,
+    required super.iconUrl,
+    required super.isNative,
+    required this.chain,
+    required this.network,
+    required this.assetType,
+    required this.assetId,
+    required this.receiverAddress,
+  });
+
+  final String chain;
+  final String network;
+  final String assetType;
+  final String? assetId;
+  final String? receiverAddress;
+}
+
 class N42WalletBridge implements IWalletBridge {
   N42WalletBridge({WalletBridgeSenderResolver? senderResolver})
     : _senderResolver = senderResolver ?? _defaultSenderResolver;
@@ -161,10 +190,11 @@ class N42WalletBridge implements IWalletBridge {
 
       if (coinType != null && (!isContract || assetId?.isNotEmpty == true)) {
         tokens.add(
-          TokenInfo(
+          WalletBridgeTokenInfo(
             symbol: miniName ?? coinType,
             name: coinModel.coin['name'] as String? ?? coinType,
             decimals: decimals,
+            contractAddress: assetId,
             iconUrl: icon,
             isNative: !isContract,
             chain: coinModel.parentChainMKey ?? coinModel.config.mKey,
@@ -212,7 +242,6 @@ class N42WalletBridge implements IWalletBridge {
     memo: memo,
   );
 
-  @override
   Future<TransferResult> requestTransferExact({
     required String toAddress,
     required String amount,
@@ -294,10 +323,7 @@ class N42WalletBridge implements IWalletBridge {
               'native' => !cm.config.isContract,
               'token' =>
                 cm.config.isContract &&
-                    PaymentRequestUri.sameAssetId(
-                      _paymentContractFor(cm),
-                      assetId,
-                    ),
+                    sameWalletPaymentAssetId(_paymentContractFor(cm), assetId),
               _ => false,
             };
         final matchesChain =
@@ -326,7 +352,7 @@ class N42WalletBridge implements IWalletBridge {
       final coinModel = matchingCoins.single;
       final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
       if (hasPaymentIdentity &&
-          !PaymentRequestUri.isPositiveAmountForDecimals(amount, decimals)) {
+          !isPositiveWalletPaymentAmountForDecimals(amount, decimals)) {
         return TransferResult.failure(
           'Transfer amount exceeds the selected asset precision',
         );

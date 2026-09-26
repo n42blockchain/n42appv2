@@ -1,0 +1,15 @@
+{
+  "label": "412-ios-spm-resolve",
+  "command": [
+    "xcodebuild",
+    "-resolvePackageDependencies",
+    "-workspace",
+    "ios/Runner.xcworkspace",
+    "-scheme",
+    "Runner"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 1.46
+}

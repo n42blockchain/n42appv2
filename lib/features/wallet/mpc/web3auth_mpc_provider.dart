@@ -28,12 +28,12 @@ class Web3AuthMpcProvider implements MpcProvider {
   final Uri redirectUrl;
 
   /// 网络环境
-  final Network network;
+  final Web3AuthNetwork network;
 
   Web3AuthMpcProvider({
     required this.clientId,
     required this.redirectUrl,
-    this.network = Network.sapphire_mainnet,
+    this.network = Web3AuthNetwork.sapphire_mainnet,
   });
 
   @override
@@ -58,9 +58,9 @@ class Web3AuthMpcProvider implements MpcProvider {
     await Web3AuthFlutter.init(
       Web3AuthOptions(
         clientId: clientId,
-        network: network,
-        redirectUrl: redirectUrl,
-        buildEnv: BuildEnv.production,
+        web3AuthNetwork: network,
+        redirectUrl: redirectUrl.toString(),
+        authBuildEnv: BuildEnv.production,
         mfaSettings: MfaSettings(
           deviceShareFactor: MfaSetting(enable: true, priority: 1),
           backUpShareFactor: MfaSetting(enable: true, priority: 2),
@@ -71,7 +71,8 @@ class Web3AuthMpcProvider implements MpcProvider {
 
     // Check for existing session
     try {
-      _privateKey = await Web3AuthFlutter.getPrivKey();
+      await Web3AuthFlutter.initialize();
+      _privateKey = await Web3AuthFlutter.getPrivateKey();
       if (_privateKey != null && _privateKey!.isEmpty) {
         _privateKey = null;
       }
@@ -89,9 +90,9 @@ class Web3AuthMpcProvider implements MpcProvider {
 
     final loginProvider = _mapLoginType(type);
 
-    final response = await Web3AuthFlutter.login(
+    final response = await Web3AuthFlutter.connectTo(
       LoginParams(
-        loginProvider: loginProvider,
+        authConnection: loginProvider,
         extraLoginOptions: hint != null
             ? ExtraLoginOptions(login_hint: hint)
             : null,
@@ -100,9 +101,10 @@ class Web3AuthMpcProvider implements MpcProvider {
     );
 
     _state = response;
-    _privateKey = response.privKey;
+    _privateKey = response.privateKey;
 
     if (_privateKey == null || _privateKey!.isEmpty) {
+      _privateKey = null;
       throw MpcLoginException('Login succeeded but no key was returned');
     }
 
@@ -112,7 +114,7 @@ class Web3AuthMpcProvider implements MpcProvider {
     return MpcLoginResult(
       address: address,
       publicKey: _derivePublicKey(_privateKey!),
-      userId: userInfo?.verifierId ?? '',
+      userId: userInfo?.userId ?? '',
       loginHint: _buildLoginHint(type, userInfo),
       provider: providerId,
     );
@@ -155,7 +157,7 @@ class Web3AuthMpcProvider implements MpcProvider {
         factors.add('Email: ${info.email}');
       }
       if (info.name?.isNotEmpty == true) {
-        factors.add('${info.typeOfLogin ?? "Social"}: ${info.name}');
+        factors.add('${info.authConnection ?? "Social"}: ${info.name}');
       }
     }
     factors.add('Device share (this device)');
@@ -176,20 +178,19 @@ class Web3AuthMpcProvider implements MpcProvider {
     }
   }
 
-  Provider _mapLoginType(MpcLoginType type) => switch (type) {
-    MpcLoginType.google => Provider.google,
-    MpcLoginType.apple => Provider.apple,
-    MpcLoginType.email => Provider.email_passwordless,
-    MpcLoginType.phone => Provider.sms_passwordless,
-    MpcLoginType.twitter => Provider.twitter,
-    MpcLoginType.discord => Provider.discord,
-    MpcLoginType.github => Provider.github,
+  AuthConnection _mapLoginType(MpcLoginType type) => switch (type) {
+    MpcLoginType.google => AuthConnection.google,
+    MpcLoginType.apple => AuthConnection.apple,
+    MpcLoginType.email => AuthConnection.email_passwordless,
+    MpcLoginType.phone => AuthConnection.sms_passwordless,
+    MpcLoginType.twitter => AuthConnection.twitter,
+    MpcLoginType.discord => AuthConnection.discord,
+    MpcLoginType.github => AuthConnection.github,
   };
 
-  String _buildLoginHint(MpcLoginType type, TorusUserInfo? userInfo) {
+  String _buildLoginHint(MpcLoginType type, UserInfo? userInfo) {
     final label = type.name[0].toUpperCase() + type.name.substring(1);
-    final detail =
-        userInfo?.email ?? userInfo?.name ?? userInfo?.verifierId ?? '';
+    final detail = userInfo?.email ?? userInfo?.name ?? userInfo?.userId ?? '';
     return detail.isNotEmpty ? '$label: $detail' : label;
   }
 

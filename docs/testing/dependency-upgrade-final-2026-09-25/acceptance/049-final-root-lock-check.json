@@ -1,0 +1,13 @@
+{
+  "label": "049-final-root-lock-check",
+  "command": [
+    "flutter",
+    "pub",
+    "get",
+    "--enforce-lockfile"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 1.82
+}

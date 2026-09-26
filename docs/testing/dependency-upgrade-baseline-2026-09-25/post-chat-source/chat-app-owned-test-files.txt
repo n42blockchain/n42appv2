@@ -1,0 +1,8 @@
+test/features/chat/bundled_sticker_assets_test.dart
+test/features/live/gift_tally_test.dart
+test/features/live/live_beauty_settings_test.dart
+test/features/live/live_chat_service_test.dart
+test/features/live/live_navigation_lifecycle_test.dart
+test/features/live/prediction/matrix_prediction_repository_test.dart
+test/features/live/prediction/mock_prediction_repository_test.dart
+test/features/live/prediction/prediction_replay_test.dart

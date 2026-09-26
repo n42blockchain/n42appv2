@@ -3550,6 +3550,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "ব্যালেন্স আপডেট করা যায়নি",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "মোট মান",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("মূল্য"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD ওয়ালেট · নেমোনিক",
     ),
@@ -3572,6 +3576,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "মূল্য পাওয়া যাচ্ছে না",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "প্রাপকের ঠিকানা",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "প্রেরকের ঠিকানা",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "টোকেন আনপিন করুন",

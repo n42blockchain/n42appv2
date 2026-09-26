@@ -1,0 +1,12 @@
+{
+  "label": "200-rust-version",
+  "command": [
+    "sh",
+    "-c",
+    "rustc --version; cargo --version"
+  ],
+  "cwd": "rust/n42_mls",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.07
+}

@@ -1,0 +1,14 @@
+{
+  "label": "132-go-social-auth-tidy",
+  "command": [
+    "go",
+    "mod",
+    "tidy"
+  ],
+  "cwd": "backend/social-auth",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.03
+}

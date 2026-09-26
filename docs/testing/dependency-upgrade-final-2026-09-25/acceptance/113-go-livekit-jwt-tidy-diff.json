@@ -1,0 +1,17 @@
+{
+  "label": "113-go-livekit-jwt-tidy-diff",
+  "command": [
+    "git",
+    "diff",
+    "--exit-code",
+    "--",
+    "go.mod",
+    "go.sum"
+  ],
+  "cwd": "backend/livekit-jwt",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.02
+}

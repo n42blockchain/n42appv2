@@ -12,8 +12,6 @@
 
 import type { RpcRequest, ApprovalRequest, NetworkConfig } from '../shared/types/rpc';
 import { isPhishing } from '../shared/security/phishing';
-import { checkDAppSecurity } from '../shared/security/dapp-security';
-import { analyzeTxRisk } from '../shared/security/tx-risk';
 import * as keyring from './keyring';
 
 /** Default networks */
@@ -115,7 +113,7 @@ export async function handleRequest(
 
     // ── Chain switching ──
     case 'wallet_switchEthereumChain': {
-      const chainIdHex = (params as any[])?.[0]?.chainId;
+      const chainIdHex = (params?.[0] as { chainId?: string } | undefined)?.chainId;
       if (!chainIdHex) return { error: { code: -32602, message: 'Missing chainId' } };
       const chainId = parseInt(chainIdHex, 16);
       if (!NETWORKS[chainId]) {
