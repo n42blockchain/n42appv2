@@ -11,7 +11,7 @@ on:
       - 'v*'
 
 env:
-  FLUTTER_VERSION: '3.44.8'
+  FLUTTER_VERSION: '3.47.5'
   JAVA_VERSION: '21'
 
 permissions:

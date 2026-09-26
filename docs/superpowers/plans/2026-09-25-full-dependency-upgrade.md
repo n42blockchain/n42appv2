@@ -318,3 +318,50 @@ The Chat notification implementation is inspected from the Git-resolved package 
 - The existing 70% coverage gate remains unchanged; its 49.13% baseline failure is explicitly deferred per the user's instruction and is reported separately from dependency-upgrade acceptance.
 - High-risk review items map to concrete checks: source resolution (Task 2), crypto vectors (Task 9), analyzer zero (Tasks 3 and 10), platform linking/builds (Tasks 5–6), and lockfile/audit review (Tasks 1 and 10).
 - No implementation or dependency file is changed by this plan-writing step.
+
+
+## Continuation approved after merge — 2026-09-25
+
+The user explicitly approved necessary toolchain and Android SDK upgrades, raising the macOS deployment floor to dependency requirements, and fixing the official n42_chat repository before consuming a new immutable Git SHA. This supersedes the original frozen-toolchain/floor/Chat-revision constraints for the continuation. Coverage expansion remains deferred; the 70% gate stays unchanged. Existing production behavior, wallet data, SQLCipher encryption, native ABI, and patched plugin safeguards must be preserved. No prerelease or silent fallback to an unencrypted database is allowed.
+
+Execution remains the previously approved subagent workflow, with small English commits, focused tests, independent review, and final whole-branch verification. Workspaces live under ~/.codex/worktrees and are cleaned after integration. Other sessions' uncommitted changes are never reused. App continuation starts at e54045fe9; Chat starts at the previously shipped 3cc19c12 SHA to preserve its features. Publish reviewed Chat commits on an explicit branch before pinning them; do not force-push or silently merge unrelated Chat main history.
+
+### Task 11: Isolated stable toolchains and continuation baseline
+
+Files: toolchain pins and CI declarations in app, docs/testing/dependency-completion-2026-09-25/toolchains.md.
+- [ ] Query official Flutter stable release JSON, Node supported LTS releases and Android SDK stable packages; record exact versions and hashes. Install needed stable tools in versioned user paths without replacing system/global executables.
+- [ ] Resolve an unmodified app using the selected SDK; capture actual solver/analyzer failures as the next tasks' baseline. Do not override incompatible package constraints merely to obtain a green resolve.
+- [ ] Record invocation paths and update existing CI/toolchain pins consistently. Keep Go/Rust unchanged unless a production dependency requires a newer stable toolchain.
+- [ ] Commit toolchain declarations and evidence; review before downstream migrations.
+
+### Task 12: Official Chat dependency and API migration
+
+Files: Chat pubspec.yaml/lock, lib/src/core/notifications/firebase_push_service.dart, lib/src/services/voip/call_notification_service.dart and affected media/navigation/model files, matching test files, OPEN_ISSUES.md.
+- [ ] Use Task 11 SDK to upgrade direct dependencies to stable releases, including source-bound file_picker/share_plus/permission_handler/go_router/equatable/MLKit/CallKit where published and compatible. Record every actual remaining upstream conflict.
+- [ ] Add/adjust tests for permanently denied notification permission and current CallKit event/parameter mapping. Repair the existing timed-status test mock by stubbing accountData with its real type; retain status expiry/privacy semantics.
+- [ ] Run Chat analysis and full standalone suite; generate model/localization code through normal generators. Commit API migration groups independently and review.
+
+### Task 13: Encryption/storage dependency migration
+
+Files: Chat archive database/Matrix setup, host secure storage factory/providers and tests, manifests for matrix/drift/sqlite3/vodozemac/secure_storage.
+- [ ] Inspect upstream major migration contracts and installed native APIs before bumping. Test old encrypted archive import, password/wallet storage namespace compatibility, missing-key failure, and MLS/Matrix buffer ownership.
+- [ ] Upgrade complete compatible native/Dart dependency families together. Never mix generated FRB ABI versions or lose previously stored credentials. Preserve a justified cap if no stable upstream migration exists and document exact solver/API evidence.
+- [ ] Execute targeted database/crypto/storage regression suites, analysis and native link checks. Commit each migration separately; review.
+
+### Task 14: Host graph and native platform completion
+
+Files: root/local package pubspec and locks, Android Gradle/SDK configuration, Apple deployment configurations/Podfiles/locks, Chrome package/lock and CI.
+- [ ] Publish reviewed Chat branch and pin its exact SHA in the host with no Chat path override. Upgrade remaining root/local stable dependencies with required source migrations and normal generation.
+- [ ] Raise Android compile/target SDK as required by latest stable dependencies, migrate build plugins only with verified Flutter/plugin compatibility, and remove jcenter blockers through reviewed maintained-source solutions.
+- [ ] Raise macOS deployment floor consistently to the minimum required by Xcode and selected dependencies, including pods; preserve iOS safeguards and SQLCipher linkage. Resolve Apple locks.
+- [ ] Upgrade Chrome with chosen supported Node LTS; run npm ci, crypto vectors, lint/types/build and full/prod audits.
+- [ ] Build Android and unsigned iOS/macOS; preserve actual failures and commit each ecosystem independently; review.
+
+### Task 15: Chat baseline/API acceptance closure and final audit
+
+Files: Chat wallet bridge/token/payment URI integration and tests, Chat ARBs/generated localization, host bridge and localization audit evidence, final report.
+- [ ] Close exact-asset QR API mismatch using additive chain/network/asset identity and requestTransferExact semantics; test wrong-chain/token precision cases and preserve old bridge compatibility.
+- [ ] Fix real Chat localization gaps in source without blanket allowlisting or marking untranslated English as passing; regenerate and run audits.
+- [ ] Re-pin any final reviewed Chat SHA, rerun root/local/Chat suites, four Go checks, Rust checks, Chrome audits and final native builds on final source.
+- [ ] Re-query outdated graphs, classify each remaining non-latest dependency with concrete upstream constraints, preserve unchanged deferred coverage gate, and write current results linked to evidence.
+- [ ] Independent whole-branch review, small commits/pushes, then integrate the reviewed continuation and clean managed worktrees when authorized integration remains applicable.

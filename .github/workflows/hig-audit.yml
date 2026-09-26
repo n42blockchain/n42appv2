@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24.21.0'
       # Fails on anything critical or serious that is newly introduced.
       # The moderate backlog is held in .hig-baseline.json and does not gate.
       - run: npx -y hig-doctor@2.0.1 . --fail-on serious

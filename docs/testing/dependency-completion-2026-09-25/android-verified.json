@@ -1,0 +1,52 @@
+[
+  {
+    "package": "platforms;android-37.2",
+    "channel": {
+      "ref": "channel-0"
+    },
+    "revision": "1",
+    "url": "platform-37.2_r01.zip",
+    "sha1": "4bec12a02162ff6852df50b5fcf8ee762b050966",
+    "verified_sha256": "916410633df92a98da56aa7c87a1955f865f4d3b888373660794ef8173f72972"
+  },
+  {
+    "package": "platforms;android-37.0",
+    "channel": {
+      "ref": "channel-0"
+    },
+    "revision": "2",
+    "url": "platform-37.0_r02.zip",
+    "sha1": "ed8ebf7f8822a4de5686d427f237d2fa30ff7410",
+    "verified_sha256": "840b23e827f96e64aea4c89a1194aac3dc5f6bad37edb231c5c795d890330e8d"
+  },
+  {
+    "package": "build-tools;37.0.0",
+    "channel": {
+      "ref": "channel-0"
+    },
+    "revision": "37.0.0",
+    "url": "build-tools_r37_macosx.zip",
+    "sha1": "eb080751b2b2028eb3604f571027d6f7b3c46321",
+    "verified_sha256": "b5b1ac529028a49f11b596b89d9b34252e0f39388ee7dbd16ae3110f1c9c5722"
+  },
+  {
+    "package": "cmdline-tools;23.0",
+    "channel": {
+      "ref": "channel-0"
+    },
+    "revision": "23.0",
+    "url": "commandlinetools-mac_arm64-16111833_latest.zip",
+    "sha1": "ad03dc49bfacfd52c110b14104ea548b8a07e830",
+    "verified_sha256": "58da8f215781cc0208743e88b65ae259780c55e7eb40e50373d377cf369232d6"
+  },
+  {
+    "package": "platform-tools",
+    "channel": {
+      "ref": "channel-0"
+    },
+    "revision": "37.0.1",
+    "url": "platform-tools_r37.0.1-darwin.zip",
+    "sha1": "6ae73f4de6452dc57e62ec02b68eed92a4c21661",
+    "verified_sha256": "ee39ad5967e95c2a07f04dbcbde96b1a0c916ba376096db5d2f498b7727a5d1d"
+  }
+]
