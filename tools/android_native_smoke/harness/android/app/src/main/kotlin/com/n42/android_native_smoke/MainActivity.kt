@@ -38,7 +38,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.n42.android_native_smoke/vectors")
             .setMethodCallHandler { call, result ->
-                if (call.method !in listOf("verify", "compatibility", "mobileSdkLoad", "mobileSdkVectors", "mobileSdkTlsInit", "mobileSdkTlsCerts", "mobileSdkBlsPair")) {
+                if (call.method !in listOf("verify", "compatibility", "mobileSdkLoad", "mobileSdkVectors", "mobileSdkTlsInit", "mobileSdkTlsCerts", "mobileSdkBlsPair", "goEvmVectors")) {
                     result.notImplemented()
                     return@setMethodCallHandler
                 }
@@ -68,6 +68,7 @@ class MainActivity : FlutterActivity() {
                             ))
                         }
                         "mobileSdkVectors" -> result.success(mobileSdkVectors())
+                        "goEvmVectors" -> result.success(goEvmVectors())
                         "mobileSdkBlsPair" -> {
                             Class.forName("com.mobileSdk.NativeBindings", true, classLoader)
                             val pair = JSONArray(Api.generateBls12381Keypair())
@@ -78,6 +79,48 @@ class MainActivity : FlutterActivity() {
                     result.error("NATIVE_VECTOR", error.toString(), null)
                 }
             }
+    }
+
+    private fun goEvmVectors(): Map<String, String> {
+        // Reflection defers loading the unknown old Go AAR until the fixture
+        // runner has verified the disposable emulator is offline.
+        val emit = Class.forName("evmsdk.Evmsdk", true, classLoader)
+            .getMethod("emit", String::class.java)
+        fun request(type: String, value: JSONObject? = null): String {
+            val json = JSONObject().put("type", type)
+            if (value != null) json.put("val", value)
+            return json.toString()
+        }
+        fun call(json: String): String {
+            val response = emit.invoke(null, json) as String
+            JSONObject(response)
+            return response
+        }
+
+        val low = "00".repeat(31) + "01"
+        val high = "ff".repeat(32)
+        val message = "8ac7230489e80000" // 10 * 10^18 wei, even hex
+        val results = linkedMapOf<String, String>()
+        val setting = JSONObject()
+            .put("app_base_path", filesDir.absolutePath)
+            .put("account", "N42-fixture")
+            .put("priv_key", "01".repeat(32))
+            .put("server_uri", "ws://127.0.0.1:9")
+            .put("log_level", "")
+        results["setting"] = call(request("setting", setting))
+        results["state"] = call(request("state"))
+        results["stop"] = call(request("stop"))
+        results["repeatStop"] = call(request("stop"))
+        results["partialSetting"] = call(request("setting", JSONObject().put("server_uri", "ws://127.0.0.1:10")))
+        for ((label, key) in listOf("low" to low, "high" to high)) {
+            results["${label}Pubkey"] = call(request("blspubk", JSONObject().put("priv_key", key)))
+            results["${label}Signature"] = call(request("blssign", JSONObject().put("priv_key", key).put("msg", message)))
+        }
+        results["invalidJson"] = call("{\"type\":")
+        results["invalidKeyLength"] = call(request("blspubk", JSONObject().put("priv_key", "00")))
+        results["invalidKeyHex"] = call(request("blspubk", JSONObject().put("priv_key", "zz")))
+        results["invalidMessageHex"] = call(request("blssign", JSONObject().put("priv_key", low).put("msg", "zz")))
+        return results
     }
 
     private fun mobileSdkVectors(): Map<String, String> {

@@ -1,0 +1,9 @@
+[package]
+name = "n42-go-evm-bls-oracle"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+blst = "=0.3.15"
+sha3 = "=0.10.9"

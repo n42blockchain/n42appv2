@@ -71,6 +71,10 @@ if (!legacyBouncy) {
 }
 
 dependencies {
+    // Optional Go V1 SDK for isolated old/new Emit fixtures.
+    System.getenv("N42_SMOKE_GO_AAR")?.let { goAar ->
+        implementation(files(goAar))
+    }
     // Official mobile-sdk-v0.2.2 AAR from the host app, used only by this isolated fixture.
     implementation(files(System.getenv("N42_SMOKE_MOBILE_AAR")
         ?: projectDir.resolve("../../../../../android/app/libs/mobile-sdk-android.aar")))
