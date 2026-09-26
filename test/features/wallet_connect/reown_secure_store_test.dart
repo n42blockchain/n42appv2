@@ -15,10 +15,16 @@ import 'package:reown_core/core_impl.dart';
 import 'package:reown_core/models/basic_models.dart';
 import 'package:reown_core/relay_client/i_relay_client.dart';
 import 'package:reown_core/utils/utils.dart';
-import 'package:reown_walletkit/reown_walletkit.dart' show Event;
+import 'package:reown_walletkit/reown_walletkit.dart'
+    show Event, PairingMetadata, ReownWalletKit;
 import 'package:package_info_plus/package_info_plus.dart';
 
 class _Relay extends Mock implements IRelayClient {}
+
+class _FailureBindingProvider extends WalletConnectProvider {
+  void bindFailureCallback(ReownWalletKit client) =>
+      bindReownKeyFailureCallback(client);
+}
 
 class _Platform extends TestFlutterSecureStoragePlatform {
   _Platform(super.data);
@@ -235,6 +241,158 @@ void main() {
     expect(provider.walletConnectState, WalletConnectState.error);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getKeys(), isEmpty);
+  });
+
+  testWidgets(
+    'active key failure stops old heartbeat and permits fresh recovery',
+    (tester) async {
+      final provider = _FailureBindingProvider();
+      addTearDown(provider.dispose);
+      Future<(ReownWalletKit, _Relay)> client() async {
+        final core = createN42ReownCore(projectId: 'test-project');
+        final relay = _Relay();
+        when(() => relay.disconnect()).thenAnswer((_) async {});
+        core.relayClient = relay;
+        final kit = ReownWalletKit(
+          core: core,
+          metadata: PairingMetadata(
+            name: 'N42',
+            description: 'N42',
+            url: 'https://n42.ai',
+            icons: const ['https://n42.ai/icon.png'],
+          ),
+        );
+        provider.bindFailureCallback(kit);
+        await (core.crypto.keyChain as N42ReownKeychain).init();
+        return (kit, relay);
+      }
+
+      final (oldClient, oldRelay) = await client();
+      provider.signClient = oldClient;
+      provider.dAppTopic = 'old-session';
+      provider.eventsRegistered = true;
+      var oldPulses = 0;
+      oldClient.core.heartbeat.interval = 1;
+      oldClient.core.heartbeat.onPulse.subscribe((_) => oldPulses++);
+      oldClient.core.heartbeat.init();
+
+      platform.failWrite = true;
+      await expectLater(
+        oldClient.core.crypto.keyChain.set('failed-topic', 'sym-key'),
+        throwsA(
+          isA<StateError>().having(
+            (error) => error.message,
+            'message',
+            'secure storage write failed',
+          ),
+        ),
+      );
+      expect(provider.signClient, isNull);
+      expect(provider.dAppTopic, isNull);
+      expect(provider.eventsRegistered, isFalse);
+      verify(() => oldRelay.disconnect()).called(1);
+      await tester.pump(const Duration(seconds: 2));
+      expect(oldPulses, 0);
+
+      platform.failWrite = false;
+      final (freshClient, _) = await client();
+      provider.signClient = freshClient;
+      await freshClient.core.crypto.keyChain.set('recovered-topic', 'new-key');
+      expect(
+        freshClient.core.crypto.keyChain.get('recovered-topic'),
+        'new-key',
+      );
+      expect(provider.signClient, same(freshClient));
+      oldClient.core.heartbeat.stop();
+      freshClient.core.heartbeat.stop();
+    },
+  );
+
+  testWidgets('stale key failure retires only its owning heartbeat', (
+    tester,
+  ) async {
+    final provider = _FailureBindingProvider();
+    addTearDown(provider.dispose);
+    final oldCore = createN42ReownCore(projectId: 'test-project');
+    final newCore = createN42ReownCore(projectId: 'test-project');
+    final oldRelay = _Relay();
+    final newRelay = _Relay();
+    when(() => oldRelay.disconnect()).thenAnswer((_) async {});
+    when(() => newRelay.disconnect()).thenAnswer((_) async {});
+    oldCore.relayClient = oldRelay;
+    newCore.relayClient = newRelay;
+    ReownWalletKit kit(ReownCore core) => ReownWalletKit(
+      core: core,
+      metadata: PairingMetadata(
+        name: 'N42',
+        description: 'N42',
+        url: 'https://n42.ai',
+        icons: const ['https://n42.ai/icon.png'],
+      ),
+    );
+    final oldClient = kit(oldCore);
+    final newClient = kit(newCore);
+    provider.bindFailureCallback(oldClient);
+    provider.bindFailureCallback(newClient);
+    await (oldCore.crypto.keyChain as N42ReownKeychain).init();
+    await (newCore.crypto.keyChain as N42ReownKeychain).init();
+    provider.signClient = newClient;
+    provider.dAppTopic = 'new-session';
+    provider.eventsRegistered = true;
+    var oldPulses = 0;
+    var newPulses = 0;
+    oldCore.heartbeat.interval = 1;
+    newCore.heartbeat.interval = 1;
+    oldCore.heartbeat.onPulse.subscribe((_) => oldPulses++);
+    newCore.heartbeat.onPulse.subscribe((_) => newPulses++);
+    oldCore.heartbeat.init();
+    newCore.heartbeat.init();
+
+    platform.failWrite = true;
+    await expectLater(
+      oldCore.crypto.keyChain.set('failed-topic', 'sym-key'),
+      throwsStateError,
+    );
+    expect(provider.signClient, same(newClient));
+    expect(provider.dAppTopic, 'new-session');
+    expect(provider.eventsRegistered, isTrue);
+    verify(() => oldRelay.disconnect()).called(1);
+    verifyNever(() => newRelay.disconnect());
+    await tester.pump(const Duration(seconds: 2));
+    expect(oldPulses, 0);
+    expect(newPulses, greaterThan(0));
+    oldCore.heartbeat.stop();
+    newCore.heartbeat.stop();
+  });
+
+  testWidgets('provider disposal stops the active Reown heartbeat', (
+    tester,
+  ) async {
+    final provider = WalletConnectProvider();
+    final core = createN42ReownCore(projectId: 'test-project');
+    final relay = _Relay();
+    when(() => relay.disconnect()).thenAnswer((_) async {});
+    core.relayClient = relay;
+    final client = ReownWalletKit(
+      core: core,
+      metadata: PairingMetadata(
+        name: 'N42',
+        description: 'N42',
+        url: 'https://n42.ai',
+        icons: const ['https://n42.ai/icon.png'],
+      ),
+    );
+    provider.signClient = client;
+    var pulses = 0;
+    core.heartbeat.interval = 1;
+    core.heartbeat.onPulse.subscribe((_) => pulses++);
+    core.heartbeat.init();
+
+    provider.dispose();
+    await tester.pump(const Duration(seconds: 2));
+    expect(pulses, 0);
+    verify(() => relay.disconnect()).called(1);
+    core.heartbeat.stop();
   });
 
   test('actual SDK client identity and symkey survive restart', () async {

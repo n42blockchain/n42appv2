@@ -31,3 +31,9 @@ The default full coverage run reached 2,910 tests before the shell's 256 file-de
 Native Android/iOS/macOS integration and device flows remain under Tasks 14B/14C.
 
 The retained `host-dart-logs.tar.gz` contains 21 exact command logs, including both interrupted full runs, the final passing suite, source audit, generated-output checks, SQLCipher and native Vodozemac tests, and the failed coverage gate. Its SHA-256 is `ace5a11f59e1350635daf2aabe6c7dae3f872811b46d91bb720e54e3219be055`. Intentional corrupt-data, failed-upload, and migration-failure fixtures print expected errors in otherwise passing logs.
+
+## Reown lifecycle review follow-up
+
+Official `ReownCore.start` starts a periodic heartbeat, and Pairing subscribes to its pulses. The host now stops the abandoned core's heartbeat on secure key write failure, even when a newer `signClient` is active; it disconnects only the abandoned core's relay and clears provider state only when that client still owns it. Normal provider disposal also stops the active heartbeat. Three provider-level regressions exercised the real core timer and secure keychain: active write failure followed by a fresh-keychain recovery, delayed stale-owner failure preserving the newer client, and ordinary disposal. Each failed before the lifecycle fix. The focused Reown security and existing pairing tests pass 30 cases; the full WalletConnect feature directory passes 380 cases. Post-fix analysis exits 0 with 47 informational lints and no warnings or errors.
+
+The eight red/green, focused, feature, and analyzer logs are retained in `host-dart-heartbeat-review-logs.tar.gz` (SHA-256 `8cabf0aea319bbbff2b521a357e21aa997f6d722bbfcadb2c91c7e034fe9e8cb`). The earlier 4,831-case full suite and coverage gate precede this narrow lifecycle follow-up; no claim is made that they were rerun afterward.

@@ -169,8 +169,7 @@ mixin WalletConnectConnection on ChangeNotifier {
           icons: ["https://n42.ai/static/n42.png"],
         ),
       );
-      (core.crypto.keyChain as N42ReownKeychain).onPersistenceFailure = (_) =>
-          _discardFailedClient(client);
+      bindReownKeyFailureCallback(client);
       await client.init();
       signClient = client;
       coinModelInit();
@@ -180,14 +179,23 @@ mixin WalletConnectConnection on ChangeNotifier {
     }
   }
 
+  @protected
+  void bindReownKeyFailureCallback(wallet_connect.ReownWalletKit client) {
+    (client.core.crypto.keyChain as N42ReownKeychain).onPersistenceFailure = (
+      _,
+    ) => _discardFailedClient(client);
+  }
+
   Future<void> _discardFailedClient(
     wallet_connect.ReownWalletKit client,
   ) async {
-    if (!identical(signClient, client)) return;
-    signClient = null;
-    dAppTopic = null;
-    eventsRegistered = false;
-    cancelReconnectTimer();
+    client.core.heartbeat.stop();
+    if (identical(signClient, client)) {
+      signClient = null;
+      dAppTopic = null;
+      eventsRegistered = false;
+      cancelReconnectTimer();
+    }
     try {
       await client.core.relayClient.disconnect();
     } catch (_) {

@@ -58,6 +58,7 @@ class WalletConnectProvider
     web3client = null;
     if (signClient != null) {
       try {
+        signClient!.core.heartbeat.stop();
         signClient!.core.relayClient.disconnect();
       } catch (e) {
         AppLogger.w('WalletConnect', 'disconnect error: $e');
