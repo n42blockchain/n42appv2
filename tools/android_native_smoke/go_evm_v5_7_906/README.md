@@ -17,6 +17,17 @@ JSON. Tests capture the real `Emit` stdout path for initial setting and BLS
 public-key requests, using synthetic 32-byte material. No validator `start`
 or production service is called.
 
+The hash-checked `protocol/` overlay characterizes the app's offline JSON
+`setting`, `state`, `stop`, `blspubk`, and `blssign` operations, including
+malformed input. It also adds `cmd/evmsdk/mobilebind`: a Go package named
+`evmsdk` that exports only `Emit` and delegates to the original engine. The
+current app's two Java/Kotlin call sites both use
+`evmsdk.Evmsdk.emit(String)`. Binding the whole upstream `cmd/evmsdk` package
+fails because its Go-only `GenerateMobileBLSKey` and `DecodeWireHeader`
+functions return tuples that gobind cannot represent. The narrow binding
+does not rename or remove those upstream functions. A compiled AAR descriptor
+check remains required before integration.
+
 Recreate from a Git repository that contains the exact public commit:
 
 ```sh
@@ -24,7 +35,8 @@ Recreate from a Git repository that contains the exact public commit:
   /path/to/N42-gov5 /private/tmp/n42-task16c-go/source
 GOTOOLCHAIN=local GOFLAGS=-buildvcs=false \
   /Users/jieliu/.codex/toolchains/go-1.26.8/go/bin/go \
-  test ./cmd/evmsdk -run 'TestEmitDoesNotLog' -count=1
+  test ./cmd/evmsdk ./cmd/evmsdk/mobilebind \
+  -run 'TestEmitDoesNotLog|TestAppEmit|TestEmitDelegatesToEngine' -count=1
 ```
 
 Run the Go command from the prepared source directory. This is **candidate
