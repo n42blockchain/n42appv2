@@ -26,27 +26,88 @@ import org.web3j.crypto.Keys
 import org.web3j.crypto.MnemonicUtils
 import org.web3j.crypto.Sign
 import org.web3j.utils.Numeric
+import com.mobileSdk.Api
+import ai.n42.tls.MobileSdkTlsVerifier
+import org.rustls.platformverifier.CertificateVerifierTests
+import org.json.JSONArray
+import org.json.JSONObject
+import java.security.MessageDigest
 
 class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.n42.android_native_smoke/vectors")
             .setMethodCallHandler { call, result ->
-                if (call.method != "verify" && call.method != "compatibility") {
+                if (call.method !in listOf("verify", "compatibility", "mobileSdkLoad", "mobileSdkVectors", "mobileSdkTlsInit", "mobileSdkTlsCerts", "mobileSdkBlsPair")) {
                     result.notImplemented()
                     return@setMethodCallHandler
                 }
                 try {
-                    if (call.method == "verify") {
-                        verifyNativeVectors()
-                        result.success(true)
-                    } else {
-                        result.success(torusCompatibilityVectors())
+                    when (call.method) {
+                        "verify" -> {
+                            verifyNativeVectors()
+                            result.success(true)
+                        }
+                        "compatibility" -> result.success(torusCompatibilityVectors())
+                        "mobileSdkLoad" -> {
+                            Class.forName("com.mobileSdk.NativeBindings", true, classLoader)
+                            result.success(true)
+                        }
+                        "mobileSdkTlsInit" -> {
+                            Class.forName("com.mobileSdk.NativeBindings", true, classLoader)
+                            val verifier = MobileSdkTlsVerifier()
+                            result.success(verifier.initialize(applicationContext) &&
+                                verifier.initialize(applicationContext))
+                        }
+                        "mobileSdkTlsCerts" -> {
+                            Class.forName("com.mobileSdk.NativeBindings", true, classLoader)
+                            check(MobileSdkTlsVerifier().initialize(applicationContext))
+                            result.success(mapOf(
+                                "untrusted" to CertificateVerifierTests.verifyMockRootUsage(applicationContext),
+                                "mockChain" to CertificateVerifierTests.mockTests(applicationContext),
+                            ))
+                        }
+                        "mobileSdkVectors" -> result.success(mobileSdkVectors())
+                        "mobileSdkBlsPair" -> {
+                            Class.forName("com.mobileSdk.NativeBindings", true, classLoader)
+                            val pair = JSONArray(Api.generateBls12381Keypair())
+                            result.success(BlsOracle.verifyPair(pair.getString(0), pair.getString(1)))
+                        }
                     }
                 } catch (error: Throwable) {
                     result.error("NATIVE_VECTOR", error.toString(), null)
                 }
             }
+    }
+
+    private fun mobileSdkVectors(): Map<String, String> {
+        val deposit = Api.createDepositUnsignedTx(
+            "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            "0x6be6c38a5986be6c7094e92017af0d15da0af6857362e2ba0c2103c3eb893eec",
+            "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",
+            "0x1bc16d674ec800000",
+        )
+        val exit = Api.createExitUnsignedTx(
+            "0x8a2470d8ccb2e43b3b5295cfee71508f8808e166e5f152d5af9fe022d95e300dc7c5814f2c9eb71e2da8412beb61c53a",
+            "0x1",
+        )
+        val feeCall = Api.createGetExitFeeUnsignedTx()
+        val pair = JSONArray(Api.generateBls12381Keypair())
+        check(pair.length() == 2 && pair.getString(0).length == 64 && pair.getString(1).length == 96)
+        JSONObject(deposit)
+        JSONObject(exit)
+        JSONObject(feeCall)
+        fun digest(value: String): String = MessageDigest.getInstance("SHA-256")
+            .digest(value.toByteArray(Charsets.UTF_8))
+            .joinToString("") { "%02x".format(it) }
+        return mapOf(
+            "deposit" to deposit,
+            "exit" to exit,
+            "feeCall" to feeCall,
+            "depositSha256" to digest(deposit),
+            "exitSha256" to digest(exit),
+            "feeCallSha256" to digest(feeCall),
+        )
     }
 
     private fun torusCompatibilityVectors(): Map<String, String> {

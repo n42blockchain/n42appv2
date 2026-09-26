@@ -39,6 +39,20 @@ android {
     }
 }
 
+val tlsCertFixture = System.getenv("N42_SMOKE_TLS_CERT_FIXTURE") == "1"
+System.getenv("N42_SMOKE_BLS_ORACLE_JNILIBS")?.let { oracleLibraries ->
+    android.sourceSets.getByName("main").jniLibs.srcDir(file(oracleLibraries))
+}
+if (tlsCertFixture) {
+    // Test-only supplier Kotlin source: the published companion removes mock-root methods.
+    val verifierSource = requireNotNull(System.getenv("N42_SMOKE_TLS_VERIFIER_SOURCE")) {
+        "N42_SMOKE_TLS_VERIFIER_SOURCE must point to pinned verifier v0.5.3 source"
+    }
+    android.sourceSets.getByName("main").java.srcDir(
+        file("$verifierSource/android/rustls-platform-verifier/src/main/java")
+    )
+}
+
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
@@ -57,6 +71,13 @@ if (!legacyBouncy) {
 }
 
 dependencies {
+    // Official mobile-sdk-v0.2.2 AAR from the host app, used only by this isolated fixture.
+    implementation(files(System.getenv("N42_SMOKE_MOBILE_AAR")
+        ?: projectDir.resolve("../../../../../android/app/libs/mobile-sdk-android.aar")))
+    if (!tlsCertFixture) {
+        implementation(files(projectDir.resolve(
+            "../../../../../plugins/flutter_mining/android/libs/rustls-platform-verifier-0.1.1.aar")))
+    }
     // The seed run reproduces sqflite_sqlcipher's published 4.10.0 AAR.
     // The verification run uses the host's 4.19.0 AAR and the same app data.
     implementation("net.zetetic:sqlcipher-android:${System.getenv("N42_SMOKE_SQLCIPHER_AAR") ?: "4.19.0"}@aar")
