@@ -1,0 +1,91 @@
+--- a/cmd/evmsdk/common.go
++++ b/cmd/evmsdk/common.go
+@@ -57,11 +57,8 @@
+ 		return emitJSON(er)
+ 	}
+ 
+-	if eq.Val != nil {
+-		simpleLog("emit:", eq.Typ, eq.Val)
+-	} else {
+-		simpleLog("emit:", eq.Typ)
+-	}
++	// Requests may contain a wallet private key; log only the operation name.
++	simpleLog("emit:", eq.Typ)
+ 
+ 	switch eq.Typ {
+ 	case "start":
+--- a/cmd/evmsdk/emit_secret_log_test.go
++++ b/cmd/evmsdk/emit_secret_log_test.go
+@@ -0,0 +1,72 @@
++package evmsdk
++
++import (
++	"encoding/json"
++	"io"
++	"os"
++	"strings"
++	"testing"
++)
++
++func captureEmitStdout(t *testing.T, request string) (string, string) {
++	t.Helper()
++	reader, writer, err := os.Pipe()
++	if err != nil {
++		t.Fatal(err)
++	}
++	previous := os.Stdout
++	os.Stdout = writer
++	defer func() {
++		os.Stdout = previous
++		reader.Close()
++	}()
++	response := Emit(request)
++	writer.Close()
++	output, err := io.ReadAll(reader)
++	if err != nil {
++		t.Fatal(err)
++	}
++	return response, string(output)
++}
++
++func TestEmitDoesNotLogPrivateKeyBeforeInitialSetting(t *testing.T) {
++	secret := strings.Repeat("ab", 32)
++	oldEngine, oldDebug := EE, isDebug
++	EE, isDebug = &EvmEngine{}, true
++	defer func() { EE, isDebug = oldEngine, oldDebug }()
++	request, err := json.Marshal(map[string]interface{}{
++		"type": "setting",
++		"val": map[string]string{"priv_key": secret, "log_level": ""},
++	})
++	if err != nil {
++		t.Fatal(err)
++	}
++	response, output := captureEmitStdout(t, string(request))
++	if !strings.Contains(response, `"code":0`) {
++		t.Fatalf("setting failed: %s", response)
++	}
++	if strings.Contains(output, secret) {
++		t.Fatal("Emit printed initial private key before applying log level")
++	}
++}
++
++func TestEmitDoesNotLogBlsRequestPrivateKey(t *testing.T) {
++	secret := strings.Repeat("cd", 32)
++	oldEngine, oldDebug := EE, isDebug
++	EE, isDebug = &EvmEngine{}, true
++	defer func() { EE, isDebug = oldEngine, oldDebug }()
++	request, err := json.Marshal(map[string]interface{}{
++		"type": "blspubk",
++		"val": map[string]string{"priv_key": secret},
++	})
++	if err != nil {
++		t.Fatal(err)
++	}
++	response, output := captureEmitStdout(t, string(request))
++	if !strings.Contains(response, `"code":0`) {
++		t.Fatalf("blspubk failed: %s", response)
++	}
++	if strings.Contains(output, secret) {
++		t.Fatal("Emit printed BLS request private key")
++	}
++}
