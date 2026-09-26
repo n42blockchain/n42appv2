@@ -27,6 +27,39 @@ Do not upload old artifacts left under `build/`. Check their embedded versions.
 Do not rebuild an already uploaded build number. The pre-commit hook advances
 the development build number, including documentation-only commits.
 
+## Dependency-completion toolchain and native graph
+
+Task14C used Flutter3.47.5/Dart3.13.4, Xcode27.0 (27A266a), iPhoneOS27.0,
+macOS27.0 SDK and CocoaPods1.17.0. Select the isolated Flutter SDK explicitly;
+do not silently resolve the Homebrew Flutter installation. Native resolution
+currently uses CocoaPods (the app-local SPM flag is false), Firebase12.19.0,
+and the immutable SQLCipher4.19 source under `packages/sqlcipher_apple`.
+See [Apple native acceptance](testing/dependency-completion-2026-09-25/apple-native.md)
+for the tested Firebase12.19.2 mixed-manager blocker and artifact identities.
+
+```sh
+export PATH="$HOME/.codex/toolchains/flutter-3.47.5/flutter/bin:$PATH"
+flutter --version
+flutter pub get
+(cd ios && pod install)
+```
+
+If the local SQLCipher podspec changes without a version change, refresh that
+specific spec with `(cd ios && pod update SQLCipher --no-repo-update)` (and the
+same command under `macos` for macOS builds). Preserve the full SQLite export
+flags, existing Vodozemac wrapper, audio/WebView patches and target-specific
+iOS16/17 floors. macOS now requires12.0; signed macOS acceptance must validate
+the data-protection Keychain entitlement and existing account access.
+
+After experimenting with another package manager, use a fresh isolated build
+output or remove only the experiment's generated app/staging outputs before
+acceptance. A successful incremental link can retain unused resource bundles.
+Inventory the actual app with `tools/apple_native_smoke/inventory_artifacts.py`.
+Unsigned Task14C artifacts are evidence only; they do not establish signing,
+App Store privacy acceptance, physical-device behavior or production-service
+receipt. Commit hooks may advance the source version after those artifacts
+were built. FinalTask15/16 must build and inspect the intended release version.
+
 ## Desktop keychain access: test before compiling
 
 A visible certificate from `security find-identity` does not prove private-key
@@ -64,7 +97,7 @@ run = Path(tempfile.mkdtemp(prefix='n42-testflight-'))
 q = shlex.quote
 script = '''#!/bin/zsh
 umask 077
-export PATH="/opt/homebrew/bin:/opt/homebrew/share/flutter/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+export PATH="${N42_FLUTTER_BIN:-$HOME/.codex/toolchains/flutter-3.47.5/flutter/bin}:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 '''
 script += f'cd {q(str(root))} || exit 1\n'
 script += f'bash scripts/prepare_ios_release.sh > {q(str(run / "build.log"))} 2>&1\n'
