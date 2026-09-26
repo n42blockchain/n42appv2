@@ -71,9 +71,9 @@ internal class MobileSdkRuntimeTest {
             is64BitProcess = { true },
             loadNative = {},
         )
+        val original = IllegalStateException("caller failure")
 
-        assertFailsWith<IllegalStateException> {
-            runtime.call { throw IllegalStateException("caller failure") }
-        }
+        val failure = assertFailsWith<IllegalStateException> { runtime.call { throw original } }
+        kotlin.test.assertSame(original, failure)
     }
 }

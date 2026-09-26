@@ -20,6 +20,7 @@ class MyWebSocketListener(
     // ⭐ 关键：由 Manager 传入，用于区分主动/被动断开
     private val manuallyClosed: AtomicBoolean,
     private val mobileSdkRuntime: MobileSdkRuntime,
+    private val onMobileSdkUnavailable: () -> Unit,
 
     private val onDisconnected: () -> Unit
 ) : WebSocketListener() {
@@ -93,7 +94,7 @@ class MyWebSocketListener(
                 manuallyClosed.set(true)
                 Log.e("WebSocket", "Mobile SDK unavailable", e)
                 sendToFlutter(e.message ?: "Mobile verification unavailable")
-                notifyDisconnectedOnce()
+                notifyUnavailableOnce()
             } catch (e: Exception) {
                 Log.e("WebSocket", "verify failed", e)
             }
@@ -135,6 +136,12 @@ class MyWebSocketListener(
     private fun notifyDisconnectedOnce() {
         if (disconnectedOnce.compareAndSet(false, true)) {
             mainHandler.post { onDisconnected() }
+        }
+    }
+
+    private fun notifyUnavailableOnce() {
+        if (disconnectedOnce.compareAndSet(false, true)) {
+            mainHandler.post { onMobileSdkUnavailable() }
         }
     }
 }

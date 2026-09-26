@@ -133,20 +133,22 @@ class WebSocketService : Service() {
                 pubkey,
                 privateKey,
                 manuallyClosed,
-                mobileSdkRuntime
-            ) {
-                if (currentId != connectionId) return@MyWebSocketListener
-
-                if (manuallyClosed.get()) {
-                    stopWebSocket(manual = true)
-                    return@MyWebSocketListener
+                mobileSdkRuntime,
+                onMobileSdkUnavailable = {
+                    if (currentId == connectionId) {
+                        stopWebSocket(manual = true)
+                        stopSelf()
+                    }
+                },
+                onDisconnected = {
+                    if (currentId == connectionId) {
+                        ws = null
+                        if (!manualClose && !manuallyClosed.get()) {
+                            handler.postDelayed(reconnectRunnable, reconnectDelay)
+                        }
+                    }
                 }
-
-                ws = null
-                if (!manualClose && !manuallyClosed.get()) {
-                    handler.postDelayed(reconnectRunnable, reconnectDelay)
-                }
-            }
+            )
         )
     }
 
