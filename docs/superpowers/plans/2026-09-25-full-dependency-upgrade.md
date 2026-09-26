@@ -399,3 +399,22 @@ User selected on 2026-09-26: complete purchase, fulfillment, consumption and ref
 - [ ] Connect app lifecycle purchase handling, pending/retry/restart/restoration, balance/consumption UI and truthful subscription/entitlement state. Complete/consume store transactions only after durable fulfillment, according to each platform contract.
 - [ ] Cover duplicate callbacks/notifications, chain-success/index-failure, process death, cancellation/pending, invalid receipts, partial/full refunds and cross-account attempts. Run real platform sandbox checks with configured services; never equate mock tests with store verification.
 - [ ] Independently review small implementation groups, retain deployment/console evidence requirements, and include all changes in final repository and release acceptance. Deployment, contract upgrades or store submission requiring an irreversible external action remain separate final authorization steps; prepare concrete reviewed artifacts first.
+
+
+## Active execution queue — 2026-09-26
+
+User reconfirmed this queue and requested separate commits and pushes for each independently verifiable item. This indexes Tasks 14–17 above; it does not duplicate or replace their acceptance requirements.
+
+| Order | Item | Acceptance / completion condition | Current state |
+| --- | --- | --- | --- |
+| 0 | Host Dart graph and Reown persistence integration (14A) | Independent review of commits `134d0c9ab` and `1be87c4e8`, fix findings, push each reviewed commit separately | Implemented and tested; review pending |
+| 1 | Android native dependencies and build acceptance (14B) | Resolve final Gradle/Maven graph, build artifacts, verify SQLCipher/native ABI and applicable device regressions; record unresolved vendor evidence | Queued |
+| 2 | iOS/macOS native dependencies and build acceptance (14C) | Resolve Apple locks and deployment floors, unsigned builds, SQLCipher/native linkage and regression evidence | Queued |
+| 3 | Chrome extension upgrade (14D) | Clean install, crypto vectors, tests, lint, types, build, full and production dependency audits | Queued |
+| 4 | Remaining compatibility repairs (15) | Background-call account provenance, exact-asset QR bridge, localization repairs and focused regression acceptance | Queued |
+| 5 | Whole-repository final dependency and security audit (15–16) | Final-source app/Chat/local/Go/Rust/Chrome/native verification, current dependency/vulnerability inventory, evidence for every version cap or unresolved risk | Queued |
+| 6 | Points payment lifecycle (17) | Approved SKU quantities and consumption/refund rules; server verification, idempotent credit, consumption, refund reconciliation and real store sandbox acceptance | Queued; product mapping and service evidence pending |
+| 7 | Store release acceptance for US/Canada (16) | Final artifacts, privacy/permissions, deletion and UGC flows, payment lifecycle, console and organizational evidence; recheck current official policies | Queued; depends on payment and release evidence |
+| 8 | Final integration and merge (15–17) | Independently reviewed small commits pushed, final branch checks and conflict resolution; preserve release/payment gates and report external blockers explicitly | Queued; dependent on preceding acceptance |
+
+Commit subjects must be English. Push only reviewed, verified items to the existing continuation branch; do not force-push or include unrelated workspace changes. Keep tightly coupled dependency migrations atomic. Coverage improvement remains deferred by the user: the unchanged 70% gate is failing at 49.25%, not passed. Store release and points-payment acceptance remain open under Tasks 16–17 and must not be inferred from successful builds.
