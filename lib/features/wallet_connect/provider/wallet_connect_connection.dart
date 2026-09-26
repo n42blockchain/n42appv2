@@ -19,6 +19,9 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
+import 'package:n42_wallet/features/wallet_connect/security/reown_keychain.dart';
+import 'package:n42_wallet/features/wallet_connect/security/reown_core_factory.dart';
+import 'package:n42_wallet/features/wallet_connect/security/reown_pairing_recovery.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
 import 'package:web3dart/web3dart.dart' as web3;
 
@@ -150,11 +153,15 @@ mixin WalletConnectConnection on ChangeNotifier {
         coinModelInit();
         return;
       }
-      signClient = await wallet_connect.ReownWalletKit.createInstance(
+      final core = createN42ReownCore(
         projectId: const String.fromEnvironment(
           'WC_PROJECT_ID',
           defaultValue: '18a60a7cb862aad161fecd764ecc736a',
         ),
+      );
+
+      final client = wallet_connect.ReownWalletKit(
+        core: core,
         metadata: wallet_connect.PairingMetadata(
           name: AppConfig.apiUrl['walletName'],
           description: AppConfig.apiUrl['walletName'],
@@ -162,14 +169,36 @@ mixin WalletConnectConnection on ChangeNotifier {
           icons: ["https://n42.ai/static/n42.png"],
         ),
       );
+      (core.crypto.keyChain as N42ReownKeychain).onPersistenceFailure = (_) =>
+          _discardFailedClient(client);
+      await client.init();
+      signClient = client;
       coinModelInit();
       setChainInfo();
     } catch (e) {
-      viewStateDeal(WalletConnectState.error, params: e.toString());
+      await viewStateDeal(WalletConnectState.error, params: e.toString());
+    }
+  }
+
+  Future<void> _discardFailedClient(
+    wallet_connect.ReownWalletKit client,
+  ) async {
+    if (!identical(signClient, client)) return;
+    signClient = null;
+    dAppTopic = null;
+    eventsRegistered = false;
+    cancelReconnectTimer();
+    try {
+      await client.core.relayClient.disconnect();
+    } catch (_) {
+      AppLogger.w('WalletConnect', 'relay disconnect failed after key write');
     }
   }
 
   Future<bool> pair(String relayUrl) async {
+    wallet_connect.ReownWalletKit? pairingClient;
+    String? incomingTopic;
+    var pairingExisted = false;
     try {
       final uri = parseWalletConnectUri(relayUrl);
       if (uri == null) {
@@ -179,10 +208,40 @@ mixin WalletConnectConnection on ChangeNotifier {
         );
         return false;
       }
-      await signClient!.pair(uri: uri);
+      final topicPath = uri.path;
+      incomingTopic = topicPath.contains('@')
+          ? topicPath.split('@').first
+          : topicPath;
+      pairingClient = signClient!;
+      pairingExisted = pairingClient.core.pairing.getPairings().any(
+        (pairing) => pairing.topic == incomingTopic,
+      );
+      await pairingClient.pair(uri: uri);
       notifyListeners();
       return true;
     } catch (e) {
+      final client = pairingClient ?? signClient;
+      final clientCore = client?.core;
+      final keychain = clientCore is wallet_connect.ReownCore
+          ? clientCore.crypto.keyChain
+          : null;
+      if (keychain is N42ReownKeychain && keychain.isUnusable) {
+        if (incomingTopic != null && incomingTopic.isNotEmpty) {
+          try {
+            await reconcileFailedNewPairing(
+              topic: incomingTopic,
+              existedBefore: pairingExisted,
+              deletePairing: client!.core.pairing.getStore().delete,
+            );
+          } catch (_) {
+            // A failed secure re-read leaves the pairing untouched.
+            AppLogger.w('WalletConnect', 'failed pairing reconciliation');
+          }
+        }
+        await _discardFailedClient(client!);
+        await viewStateDeal(WalletConnectState.error, params: e.toString());
+        return false;
+      }
       final msg = e.toString().toLowerCase();
       if (msg.contains('pairing already exists') ||
           msg.contains('already exists') ||
