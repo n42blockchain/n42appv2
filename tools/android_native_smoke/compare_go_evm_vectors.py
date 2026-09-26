@@ -57,7 +57,7 @@ def main() -> int:
         print("mismatched valid operations: " + ", ".join(mismatches), file=sys.stderr)
         return 1
     print(f"MATCH valid Emit responses: {', '.join(VALID_OPERATIONS)}")
-    print("Old log is a compatibility-mode protocol baseline; candidate ran strict 16KB.")
+    print("This comparison checks response JSON only; inspect runner logs for device mode and input hashes.")
     return 0
 
 
