@@ -3,8 +3,13 @@ set -euo pipefail
 
 recipe_dir=$(cd "$(dirname "$0")" && pwd)
 go_bin=/Users/jieliu/.codex/toolchains/go-1.26.8/go/bin/go
-if [ "$#" -ne 6 ]; then
-  echo "usage: $0 PREPARED_SOURCE VERIFIED_GO_MODCACHE PINNED_TOOL_BIN ANDROID_SDK JDK21 NEW_RUN_DIRECTORY" >&2
+if [ "$#" -ne 6 ] && [ "$#" -ne 7 ]; then
+  echo "usage: $0 PREPARED_SOURCE VERIFIED_GO_MODCACHE PINNED_TOOL_BIN ANDROID_SDK JDK21 NEW_RUN_DIRECTORY [--preflight-only]" >&2
+  exit 2
+fi
+preflight_mode=${7:-}
+if [ -n "$preflight_mode" ] && [ "$preflight_mode" != --preflight-only ]; then
+  echo "unsupported build mode: $preflight_mode" >&2
   exit 2
 fi
 source_dir=$(cd "$1" && pwd)
@@ -17,6 +22,9 @@ if [ -e "$run_dir" ]; then
   echo "refusing to replace existing run directory: $run_dir" >&2
   exit 3
 fi
+export GOENV=off GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOWORK=off
+export GOPRIVATE= GONOPROXY= GONOSUMDB= GOINSECURE= GOVCS='*:off'
+export GOPROXY=off GOSUMDB=off
 
 check_hash() {
   local file=$1 expected=$2 actual
@@ -33,9 +41,24 @@ check_hash "$source_dir/go.mod" 4639b00890c7a3a4f74760f7d94241cb093eb3e9bc06df71
 check_hash "$source_dir/go.sum" 0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599
 check_hash "$recipe_dir/android/generated/go.mod.template" 9ad07b22d3153642defe0f1fc4b8be25854f07931832e48876d686eaf6a00cf4
 check_hash "$recipe_dir/android/generated/go.sum" f3d9b4bb3a72b0e241e8f90700e72fe6368e44df1a4b6ca4b2ab92cd825311ec
-if [ ! -x "$android_sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang" ] ||
+ndk="$android_sdk/ndk/28.2.13676358"
+clang="$ndk/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang"
+if [ ! -f "$ndk/source.properties" ] ||
+   [ ! -x "$clang" ] ||
    [ ! -x "$jdk/bin/javac" ]; then
   echo "Android NDK28.2 or JDK is missing" >&2
+  exit 5
+fi
+ndk_revision=$(sed -n 's/^Pkg.Revision = //p' "$ndk/source.properties")
+if [ "$ndk_revision" != 28.2.13676358 ]; then
+  echo "Android NDK source.properties revision differs" >&2
+  exit 5
+fi
+ndk_properties_sha=$(shasum -a 256 "$ndk/source.properties" | awk '{print $1}')
+clang_sha=$(shasum -a 256 "$clang" | awk '{print $1}')
+if [ "$ndk_properties_sha" != c00aa236fdb205e9be9edd9e2169763e48aca52735efff4e16f34205d49783b5 ] ||
+   [ "$clang_sha" != df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718 ]; then
+  echo "pinned Android NDK metadata or clang hash differs" >&2
   exit 5
 fi
 if [ "$("$go_bin" version)" != 'go version go1.26.8 darwin/arm64' ]; then
@@ -49,8 +72,7 @@ fi
 
 mkdir -p "$run_dir"
 run_dir=$(cd "$run_dir" && pwd)
-export JAVA_HOME=$jdk ANDROID_HOME=$android_sdk ANDROID_SDK_ROOT=$android_sdk
-export GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOPROXY=off GOSUMDB=off
+export JAVA_HOME=$jdk ANDROID_HOME=$android_sdk ANDROID_SDK_ROOT=$android_sdk ANDROID_NDK_HOME=$ndk
 export GOMODCACHE=$modcache GOCACHE="$run_dir/gocache" GOPATH="$run_dir/gopath" GOBIN=$tool_bin
 export CGO_CFLAGS=-D__BLST_PORTABLE__
 export CGO_LDFLAGS='-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384'
@@ -64,6 +86,13 @@ echo "gomobile_sha256=fbc873fa18751c39c7bdef9eb73abffbcfe321527129fbb980f71bb77d
 echo "gobind_sha256=7f4343e4acc6767ab73d8f580d24125533b432fd8494868f5649dc01761bae30" >> "$run_dir/inputs.txt"
 echo "offline=GOPROXY=off GOSUMDB=off" >> "$run_dir/inputs.txt"
 echo "target=android/arm,android/arm64,android/amd64 api=26 tags=nosqlite,noboltdb" >> "$run_dir/inputs.txt"
+echo "android_ndk_home=$ANDROID_NDK_HOME" >> "$run_dir/inputs.txt"
+echo "ndk_revision=$ndk_revision" >> "$run_dir/inputs.txt"
+echo "ndk_source_properties_sha256=$ndk_properties_sha" >> "$run_dir/inputs.txt"
+echo "ndk_clang_sha256=$clang_sha" >> "$run_dir/inputs.txt"
+echo "goenv_export=$GOENV" >> "$run_dir/inputs.txt"
+"$clang" --version > "$run_dir/ndk-clang-version.txt"
+"$go_bin" env -json GOENV GOWORK GOPROXY GOSUMDB GOPRIVATE GONOPROXY GONOSUMDB GOINSECURE GOVCS > "$run_dir/go-env.json"
 
 python3 - "$recipe_dir/android/generated/go.mod.template" "$recipe_dir/android/generated/go.sum" "$source_dir" "$run_dir" <<'PY'
 from pathlib import Path
@@ -83,6 +112,11 @@ if ! (cd "$source_dir" && "$go_bin" list -m -json all > "$run_dir/source-modules
    ! (cd "$source_dir" && "$go_bin" mod verify > "$run_dir/go-mod-verify.log" 2>&1); then
   echo "offline source/generated module graph preflight failed; see run logs" >&2
   exit 6
+fi
+if [ "$preflight_mode" = --preflight-only ]; then
+  echo 'preflight_only=true' >> "$run_dir/inputs.txt"
+  echo "preflight_only=PASS run_dir=$run_dir"
+  exit 0
 fi
 
 echo 'gomobile bind -v -work -target=android/arm,android/arm64,android/amd64 -androidapi=26 -tags=nosqlite,noboltdb -trimpath -ldflags=-s,-w ./cmd/evmsdk/mobilebind' >> "$run_dir/inputs.txt"

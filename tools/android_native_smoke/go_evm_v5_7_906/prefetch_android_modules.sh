@@ -3,8 +3,13 @@ set -euo pipefail
 
 recipe_dir=$(cd "$(dirname "$0")" && pwd)
 go_bin=/Users/jieliu/.codex/toolchains/go-1.26.8/go/bin/go
-if [ "$#" -ne 3 ]; then
-  echo "usage: $0 PREPARED_SOURCE TASK_GO_MODCACHE NEW_PREFETCH_DIRECTORY" >&2
+if [ "$#" -ne 3 ] && [ "$#" -ne 4 ]; then
+  echo "usage: $0 PREPARED_SOURCE TASK_GO_MODCACHE NEW_PREFETCH_DIRECTORY [--check-environment]" >&2
+  exit 2
+fi
+check_mode=${4:-}
+if [ -n "$check_mode" ] && [ "$check_mode" != --check-environment ]; then
+  echo "unsupported prefetch mode: $check_mode" >&2
   exit 2
 fi
 source_dir=$(cd "$1" && pwd)
@@ -44,9 +49,16 @@ if raw.count('@SOURCE@') != 3:
 (graph / 'go.mod').write_text(raw.replace('@SOURCE@', str(source)))
 (graph / 'go.sum').write_bytes(sum_path.read_bytes())
 PY
-export GOTOOLCHAIN=local GOFLAGS=-buildvcs=false
+export GOENV=off GOTOOLCHAIN=local GOFLAGS=-buildvcs=false GOWORK=off
+export GOPRIVATE= GONOPROXY= GONOSUMDB= GOINSECURE= GOVCS='*:off'
 export GOPROXY=https://proxy.golang.org GOSUMDB=sum.golang.org GOMODCACHE=$modcache
 export GOCACHE="$prefetch_dir/gocache" GOPATH="$prefetch_dir/gopath"
+"$go_bin" env -json GOENV GOWORK GOPROXY GOSUMDB GOPRIVATE GONOPROXY GONOSUMDB GOINSECURE GOVCS > "$prefetch_dir/go-env.json"
+echo "goenv_export=$GOENV" > "$prefetch_dir/inputs.txt"
+if [ "$check_mode" = --check-environment ]; then
+  echo "environment_only=PASS prefetch_dir=$prefetch_dir"
+  exit 0
+fi
 if ! (cd "$source_dir" && "$go_bin" mod download all > "$prefetch_dir/source-download.log" 2>&1) ||
    ! (cd "$prefetch_dir/generated-graph" && "$go_bin" mod download all > "$prefetch_dir/generated-download.log" 2>&1); then
   echo "public module fetch failed; see separate graph logs" >&2

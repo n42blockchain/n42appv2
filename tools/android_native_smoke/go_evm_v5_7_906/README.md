@@ -70,7 +70,8 @@ anet compatibility.
 
 For a prepared Android source, prefetch the **source** and **generated gobind**
 module graphs separately from the public Go proxy and checksum database, then
-build with the network disabled. Both scripts refuse an existing output
+build with Go module-fetch routes disabled. These scripts do not create an OS
+network sandbox. Both scripts refuse an existing output
 directory; use task-owned paths and the pinned Go 1.26.8, gomobile/gobind, NDK
 28.2 and JDK 21 inputs. The prefetch requires an explicit public-fetch flag.
 
@@ -91,6 +92,11 @@ three shipping ABIs. It compares the retained generated Go module graph and
 checksums for **each** ABI against the normalized, reviewed graph in
 `android/generated/`. The only normalization is the prepared source directory
 in the three local `replace` paths; selected versions and checksums must match.
+It pins `ANDROID_NDK_HOME` to the checked 28.2 installation and verifies its
+revision, metadata and clang hashes. Both scripts disable persistent Go
+settings and clear inherited private-module routes. Their `go-env.json` files
+record effective module routing; `--check-environment` and `--preflight-only`
+allow bounded inspection without a public fetch or native bind.
 The candidate AAR still needs its own Java descriptor, ELF alignment, binary
 security scan, offline device protocol, app integration, and release packaging
 checks. A prior AAR's passing device run does not carry over to a rebuilt hash.
