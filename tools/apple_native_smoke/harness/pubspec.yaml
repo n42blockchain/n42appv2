@@ -1,0 +1,43 @@
+name: apple_native_smoke
+description: Isolated Apple SQLCipher, Matrix, Vodozemac and Keychain acceptance.
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: '>=3.13.4 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_vodozemac:
+    path: ../../../packages/flutter_vodozemac
+  flutter_secure_storage:
+    path: ../../../packages/flutter_secure_storage
+  flutter_rust_bridge: 2.13.0
+  firebase_core: 4.15.0
+  firebase_analytics: 12.6.0
+  firebase_crashlytics: 5.4.0
+  firebase_messaging: 16.7.0
+  matrix: 13.0.0
+  path: 1.9.1
+  sqflite: 2.4.4
+  sqflite_sqlcipher:
+    path: ../../../packages/sqflite_sqlcipher
+  sqlite3: 3.6.0
+  vodozemac: 0.8.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+flutter:
+  config:
+    enable-swift-package-manager: false
+  uses-material-design: true
+  assets:
+    - fixtures/sqlcipher-4.10-archive.db
+    - fixtures/vodozemac-0.5-pickles.json
+hooks:
+  user_defines:
+    sqlite3:
+      source:
+        ios: executable
+        default: sqlcipher

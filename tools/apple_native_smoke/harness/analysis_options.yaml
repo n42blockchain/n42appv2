@@ -1,0 +1,7 @@
+analyzer:
+  errors:
+    avoid_print: ignore
+  exclude:
+    - build/**
+    - ios/**
+    - macos/**
