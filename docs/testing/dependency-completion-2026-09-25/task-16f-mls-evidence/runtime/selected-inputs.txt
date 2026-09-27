@@ -1,0 +1,12 @@
+library=/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-mls-stage-final/arm64-v8a/libn42_mls.so
+library_sha256=050db6c3c57ea9608b9279c22219a555c3c9e759ab0650331ad6bacda73d9f3e
+dex_sha256=78844b051a8a482fce3562761c0b0117f9a115c0aec28b10857e5d2a9174918f
+device=emulator-5560
+page_size=16384
+linker_mode=fatal
+compat_disabled=true
+device_library_sha256=050db6c3c57ea9608b9279c22219a555c3c9e759ab0650331ad6bacda73d9f3e
+post_page_size=16384
+post_linker_mode=fatal
+post_compat_disabled=true
+result=PASS

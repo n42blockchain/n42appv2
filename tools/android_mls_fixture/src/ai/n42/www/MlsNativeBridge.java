@@ -3,10 +3,13 @@ package ai.n42.www;
 final class MlsNativeBridge {
     static {
         String library = System.getenv("N42_MLS_FIXTURE_LIBRARY");
-        if (library == null || !library.startsWith("/data/local/tmp/n42-mls-fixture/")) {
-            throw new IllegalStateException("Fixture library path is required");
+        if (library == null) {
+            System.loadLibrary("n42_mls");
+        } else if (library.startsWith("/data/local/tmp/n42-mls-fixture/")) {
+            System.load(library);
+        } else {
+            throw new IllegalStateException("Fixture library path is invalid");
         }
-        System.load(library);
     }
 
     native long nativeCreateEngine(byte[] identity);

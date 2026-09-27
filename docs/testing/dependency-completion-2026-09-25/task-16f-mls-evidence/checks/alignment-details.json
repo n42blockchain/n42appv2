@@ -1,0 +1,158 @@
+{
+  "arm64-v8a": {
+    "baseline": {
+      "GNU_RELRO": [
+        {
+          "end_mod_16384": 12288,
+          "memsz": 48096,
+          "vaddr": 3077152,
+          "valid": false
+        }
+      ],
+      "LOAD": [
+        {
+          "align": 16384,
+          "offset": 0,
+          "vaddr": 0,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 688256,
+          "vaddr": 704640,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3044384,
+          "vaddr": 3077152,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3091992,
+          "vaddr": 3141144,
+          "valid": true
+        }
+      ],
+      "load_pass": true,
+      "relro_pass": false
+    },
+    "selected": {
+      "GNU_RELRO": [
+        {
+          "end_mod_16384": 0,
+          "memsz": 53872,
+          "vaddr": 3075472,
+          "valid": true
+        }
+      ],
+      "LOAD": [
+        {
+          "align": 16384,
+          "offset": 0,
+          "vaddr": 0,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 686864,
+          "vaddr": 703248,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3042704,
+          "vaddr": 3075472,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3090304,
+          "vaddr": 3139456,
+          "valid": true
+        }
+      ],
+      "load_pass": true,
+      "relro_pass": true
+    }
+  },
+  "x86_64": {
+    "baseline": {
+      "GNU_RELRO": [
+        {
+          "end_mod_16384": 4096,
+          "memsz": 58960,
+          "vaddr": 3566000,
+          "valid": false
+        }
+      ],
+      "LOAD": [
+        {
+          "align": 16384,
+          "offset": 0,
+          "vaddr": 0,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 726384,
+          "vaddr": 742768,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3533232,
+          "vaddr": 3566000,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3588416,
+          "vaddr": 3637568,
+          "valid": true
+        }
+      ],
+      "load_pass": true,
+      "relro_pass": false
+    },
+    "selected": {
+      "GNU_RELRO": [
+        {
+          "end_mod_16384": 0,
+          "memsz": 56144,
+          "vaddr": 3564720,
+          "valid": true
+        }
+      ],
+      "LOAD": [
+        {
+          "align": 16384,
+          "offset": 0,
+          "vaddr": 0,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 725104,
+          "vaddr": 741488,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3531952,
+          "vaddr": 3564720,
+          "valid": true
+        },
+        {
+          "align": 16384,
+          "offset": 3587136,
+          "vaddr": 3636288,
+          "valid": true
+        }
+      ],
+      "load_pass": true,
+      "relro_pass": true
+    }
+  }
+}

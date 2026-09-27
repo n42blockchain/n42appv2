@@ -1,0 +1,13 @@
+selected_library_sha256=050db6c3c57ea9608b9279c22219a555c3c9e759ab0650331ad6bacda73d9f3e
+page_size=16384
+linker_mode=fatal
+compat_disabled=true
+signed_apk_sha256=92700b00722cf34d99318dfec426c1852954b3b92f2a1d56afd57d65494a7b22
+dex_sha256=79fca4a19502f6157c1a639b09c0b1d7fc43029c258868dbf265d573b6585940
+pid=13399
+installed_path=/data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+installed_apk_sha256=92700b00722cf34d99318dfec426c1852954b3b92f2a1d56afd57d65494a7b22
+post_page_size=16384
+post_linker_mode=fatal
+post_compat_disabled=true
+result=PASS

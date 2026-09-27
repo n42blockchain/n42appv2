@@ -24,13 +24,13 @@ public final class MlsFixture {
         System.out.println("PROCESS_ARCH " + architecture);
         check("aarch64".equals(architecture), "arm64-process");
         String library = System.getenv("N42_MLS_FIXTURE_LIBRARY");
+        if (library == null) library = "base.apk";
         try {
             boolean mapped = false;
             for (String line : Files.readAllLines(Paths.get("/proc/self/maps"))) {
                 if (line.contains(library)) {
                     System.out.println("LOADED_MAP " + line);
                     mapped = true;
-                    break;
                 }
             }
             check(mapped, "mapped-selected-library");

@@ -1,0 +1,3 @@
+Performing Streamed Install
+adb: failed to install /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-mls-logs/apk-final/signed.apk: Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE: Existing package ai.n42.fixture.mls signatures do not match newer version; ignoring!]
+

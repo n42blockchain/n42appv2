@@ -1,0 +1,9 @@
+{
+  "apk_sha256": "92700b00722cf34d99318dfec426c1852954b3b92f2a1d56afd57d65494a7b22",
+  "expected_executable_map_offset": 688128,
+  "jni_assertions_passed": 17,
+  "library_sha256": "050db6c3c57ea9608b9279c22219a555c3c9e759ab0650331ad6bacda73d9f3e",
+  "observed_apk_path": "/data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk",
+  "result": "PASS",
+  "zip_member_data_offset": 16384
+}

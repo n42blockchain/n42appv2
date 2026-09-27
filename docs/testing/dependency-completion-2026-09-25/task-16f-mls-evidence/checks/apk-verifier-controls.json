@@ -1,0 +1,16 @@
+{
+  "missing_success_marker": {
+    "error": "MLS APK verification failed: fixture success markers are missing",
+    "rc": 1
+  },
+  "optimized_python": true,
+  "positive_rc": 0,
+  "wrong_executable_map": {
+    "error": "MLS APK verification failed: native executable map offset is missing",
+    "rc": 1
+  },
+  "wrong_selected_library": {
+    "error": "MLS APK verification failed: APK member differs from selected library",
+    "rc": 1
+  }
+}

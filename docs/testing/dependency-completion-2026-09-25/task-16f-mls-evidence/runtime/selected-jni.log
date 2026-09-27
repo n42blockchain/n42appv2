@@ -1,0 +1,20 @@
+PROCESS_ARCH aarch64
+PASS arm64-process
+LOADED_MAP 731d07678000-731d07720000 r--p 00000000 fe:05 65550                      /data/local/tmp/n42-mls-fixture/libn42_mls-selected.so
+PASS mapped-selected-library
+PASS engine
+PASS key-package
+PASS create-group
+PASS add-member
+PASS pair-format
+PASS welcome
+PASS encrypt
+PASS decrypt
+PASS reverse-roundtrip
+PASS self-update
+PASS process-commit
+PASS post-update-roundtrip
+PASS unknown-group-rejected
+PASS negative-leaf-rejected
+PASS invalid-commit-rejected
+MLS_FIXTURE_PASS

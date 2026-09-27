@@ -1,0 +1,64 @@
+--------- beginning of main
+09-26 22:04:30.209 13399 13399 I libprocessgroup: Created cgroup /sys/fs/cgroup/apps/uid_10265
+09-26 22:04:30.209 13399 13399 I libprocessgroup: Created cgroup /sys/fs/cgroup/apps/uid_10265/pid_13399
+09-26 22:04:30.213 13399 13399 I Zygote  : Process 13399 created for ai.n42.fixture.mls
+09-26 22:04:30.213 13399 13399 I n42.fixture.mls: Using generational CollectorTypeCMC GC.
+09-26 22:04:30.217 13399 13399 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+09-26 22:04:30.274 13399 13399 D nativeloader: Configuring clns-9 for other apk /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/lib/arm64:/data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/ai.n42.fixture.mls
+09-26 22:04:30.274 13399 13399 D CompatChangeReporter: Compat change id reported: 202956589; UID 10265; state: ENABLED
+09-26 22:04:30.289 13399 13399 V GraphicsEnvironment: Currently set values for:
+09-26 22:04:30.289 13399 13399 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-26 22:04:30.289 13399 13399 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-26 22:04:30.289 13399 13399 V GraphicsEnvironment: ai.n42.fixture.mls is not listed in per-application setting
+09-26 22:04:30.289 13399 13399 V GraphicsEnvironment: No special selections for ANGLE, returning default driver choice
+09-26 22:04:30.290 13399 13399 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+--------- beginning of system
+09-26 22:04:30.360 13399 13415 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+09-26 22:04:30.456 13399 13399 D CompatChangeReporter: Compat change id reported: 309578419; UID 10265; state: ENABLED
+09-26 22:04:30.485 13399 13415 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+09-26 22:04:30.485 13399 13415 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv2_emulation.so
+09-26 22:04:30.521 13399 13415 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-26 22:04:30.522 13399 13399 D CompatChangeReporter: Compat change id reported: 349153669; UID 10265; state: ENABLED
+09-26 22:04:30.522 13399 13399 W HWUI    : Unknown dataspace 0
+09-26 22:04:30.535 13399 13422 D nativeloader: Load /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk!/lib/arm64-v8a/libn42_mls.so using class loader ns clns-9 (caller=/data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk): ok
+09-26 22:04:30.536 13399 13422 I System.out: PROCESS_ARCH aarch64
+09-26 22:04:30.536 13399 13422 I System.out: PASS arm64-process
+09-26 22:04:30.540 13399 13422 I System.out: LOADED_MAP 7541a1ca0000-7541a1d48000 r--p 00004000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.540 13399 13422 I System.out: LOADED_MAP 7541a1d48000-7541a1f8c000 r-xp 000a8000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.540 13399 13422 I System.out: LOADED_MAP 7541a1f8c000-7541a1f9c000 r--p 002e8000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.540 13399 13422 I System.out: LOADED_MAP 7541a1f9c000-7541a1fa0000 rw-p 002f4000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.543 13399 13422 I System.out: LOADED_MAP 754584a20000-754584a24000 r--s 0047c000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.551 13399 13422 I System.out: LOADED_MAP 75458beec000-75458bef0000 r--s 00000000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.551 13399 13422 I System.out: LOADED_MAP 75458d918000-75458d91c000 r--p 00000000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.552 13399 13422 I System.out: LOADED_MAP 75458d91c000-75458d920000 r--s 0047c000 fe:05 164007                     /data/app/~~1dJsasPZ--ObL69H1tvT6g==/ai.n42.fixture.mls--IzMxp5igSIzihqgARRWzA==/base.apk
+09-26 22:04:30.552 13399 13422 I System.out: PASS mapped-selected-library
+09-26 22:04:30.552 13399 13422 I System.out: PASS engine
+09-26 22:04:30.552 13399 13422 I System.out: PASS key-package
+09-26 22:04:30.553 13399 13422 I System.out: PASS create-group
+09-26 22:04:30.548 13399 13399 W synthetic-mls-f: type=1400 audit(0.0:359): avc:  denied  { search } for  name="/" dev="cgroup2" ino=1 scontext=u:r:untrusted_app_34:s0:c9,c257,c512,c768 tcontext=u:object_r:cgroup_v2:s0 tclass=dir permissive=0 app=ai.n42.fixture.mls
+09-26 22:04:30.548 13399 13399 W synthetic-mls-f: type=1400 audit(0.0:360): avc:  denied  { search } for  name="/" dev="cgroup2" ino=1 scontext=u:r:untrusted_app_34:s0:c9,c257,c512,c768 tcontext=u:object_r:cgroup_v2:s0 tclass=dir permissive=0 app=ai.n42.fixture.mls
+09-26 22:04:30.548 13399 13399 W synthetic-mls-f: type=1400 audit(0.0:361): avc:  denied  { search } for  name="/" dev="cgroup" ino=1 scontext=u:r:untrusted_app_34:s0:c9,c257,c512,c768 tcontext=u:object_r:cgroup:s0 tclass=dir permissive=0 app=ai.n42.fixture.mls
+09-26 22:04:30.554 13399 13422 I System.out: PASS add-member
+09-26 22:04:30.554 13399 13422 I System.out: PASS pair-format
+09-26 22:04:30.554 13399 13422 I System.out: PASS welcome
+09-26 22:04:30.555 13399 13422 I System.out: PASS encrypt
+09-26 22:04:30.555 13399 13422 I System.out: PASS decrypt
+09-26 22:04:30.555 13399 13422 I System.out: PASS reverse-roundtrip
+09-26 22:04:30.555 13399 13422 I System.out: PASS self-update
+09-26 22:04:30.556 13399 13424 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-26 22:04:30.557 13399 13422 I System.out: PASS process-commit
+09-26 22:04:30.557 13399 13422 I System.out: PASS post-update-roundtrip
+09-26 22:04:30.557 13399 13422 I System.out: PASS unknown-group-rejected
+09-26 22:04:30.557 13399 13422 I System.out: PASS negative-leaf-rejected
+09-26 22:04:30.557 13399 13422 I System.out: PASS invalid-commit-rejected
+09-26 22:04:30.557 13399 13422 I System.out: MLS_FIXTURE_PASS
+09-26 22:04:30.558 13399 13415 W HWUI    : Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+09-26 22:04:30.558 13399 13415 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+09-26 22:04:30.560 13399 13422 I N42_MLS_FIXTURE: MLS_APK_FIXTURE_PASS
+09-26 22:04:30.635 13399 13399 D VRI[MlsFixtureActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,164,0,84] 
+09-26 22:04:30.636 13399 13399 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda14@84ab93e
+09-26 22:04:30.636 13399 13399 I HWUI    : Using FreeType backend (prop=Auto)
+09-26 22:04:30.646 13399 13399 I Surface : Creating surface for consumer unnamed-13399-0 with slotExpansion=1 for 64 slots
+09-26 22:04:30.647 13399 13399 I Surface : Creating surface for consumer VRI[MlsFixtureActivity]#0(BLAST Consumer)0 with slotExpansion=1 for 64 slots
+09-26 22:04:30.744 13399 13399 D InsetsController: hide(ime())
+09-26 22:04:30.744 13399 13399 I ImeTracker: ai.n42.fixture.mls:2f597be2: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN

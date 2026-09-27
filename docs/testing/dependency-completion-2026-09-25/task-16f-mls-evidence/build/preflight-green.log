@@ -1,0 +1,14 @@
+source_tree=b7f4a3a8e3ba32fdea06a0086ed4526977fd924d
+lock_sha256=26c0554738bfc2a2aff20a29eed70a1455979606805c1eac207b625310b4b86e
+manifest_sha256=fcd205bd1ded1426ac325847cab7e680cea4dbf68b05a5a5f702d9ca7abd9e8a
+rustc=rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo=cargo 1.97.1 (c980f4866 2026-06-30)
+cargo_ndk=cargo-ndk 4.1.2
+cargo_ndk_path=/Users/jieliu/.cargo/bin/cargo-ndk
+ndk=/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358
+clang_path=/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
+clang=Android (13624864, +pgo, -bolt, +lto, -mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+aarch64_flags=-C link-arg=-Wl,-z,max-page-size=16384 -C link-arg=-Wl,-z,common-page-size=16384
+x86_64_flags=-C link-arg=-Wl,-z,max-page-size=16384 -C link-arg=-Wl,-z,common-page-size=16384
+stage=/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-mls-stage-2
+mode=--preflight

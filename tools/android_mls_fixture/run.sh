@@ -16,7 +16,10 @@ SDK="${ANDROID_SDK_ROOT:-}"
 mkdir "$OUTPUT"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 mkdir "$OUTPUT/classes" "$OUTPUT/dex"
-javac --release 8 -d "$OUTPUT/classes" "$ROOT"/tools/android_mls_fixture/src/ai/n42/www/*.java > "$OUTPUT/javac.log" 2>&1
+javac --release 8 -d "$OUTPUT/classes" \
+  "$ROOT/tools/android_mls_fixture/src/ai/n42/www/MlsNativeBridge.java" \
+  "$ROOT/tools/android_mls_fixture/src/ai/n42/www/MlsFixture.java" \
+  > "$OUTPUT/javac.log" 2>&1
 "$SDK/build-tools/37.0.0/d8" --min-api 26 --output "$OUTPUT/dex" "$OUTPUT"/classes/ai/n42/www/*.class > "$OUTPUT/d8.log" 2>&1
 HOST_SHA="$(shasum -a 256 "$LIB" | cut -d ' ' -f 1)"
 DEX_SHA="$(shasum -a 256 "$OUTPUT/dex/classes.dex" | cut -d ' ' -f 1)"

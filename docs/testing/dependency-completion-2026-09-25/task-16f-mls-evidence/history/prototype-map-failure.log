@@ -1,0 +1,42 @@
+--------- beginning of main
+09-26 21:59:10.450 13000 13000 I libprocessgroup: Created cgroup /sys/fs/cgroup/apps/uid_10263
+09-26 21:59:10.451 13000 13000 I libprocessgroup: Created cgroup /sys/fs/cgroup/apps/uid_10263/pid_13000
+09-26 21:59:10.484 13000 13000 I Zygote  : Process 13000 created for ai.n42.fixture.mls
+09-26 21:59:10.484 13000 13000 I n42.fixture.mls: Using generational CollectorTypeCMC GC.
+09-26 21:59:10.499 13000 13000 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+09-26 21:59:10.558 13000 13000 D nativeloader: Configuring clns-9 for other apk /data/app/~~-Vg4BzZ0PApSxHzHxxcXIw==/ai.n42.fixture.mls-qF6_uGqcYcwQIA3hd-uTuQ==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~-Vg4BzZ0PApSxHzHxxcXIw==/ai.n42.fixture.mls-qF6_uGqcYcwQIA3hd-uTuQ==/lib/arm64:/data/app/~~-Vg4BzZ0PApSxHzHxxcXIw==/ai.n42.fixture.mls-qF6_uGqcYcwQIA3hd-uTuQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/ai.n42.fixture.mls
+09-26 21:59:10.558 13000 13000 D CompatChangeReporter: Compat change id reported: 202956589; UID 10263; state: ENABLED
+09-26 21:59:10.613 13000 13000 V GraphicsEnvironment: Currently set values for:
+09-26 21:59:10.613 13000 13000 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-26 21:59:10.613 13000 13000 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-26 21:59:10.613 13000 13000 V GraphicsEnvironment: ai.n42.fixture.mls is not listed in per-application setting
+09-26 21:59:10.613 13000 13000 V GraphicsEnvironment: No special selections for ANGLE, returning default driver choice
+09-26 21:59:10.618 13000 13000 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+--------- beginning of system
+09-26 21:59:10.758 13000 13023 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+09-26 21:59:10.792 13000 13026 D nativeloader: Load /data/app/~~-Vg4BzZ0PApSxHzHxxcXIw==/ai.n42.fixture.mls-qF6_uGqcYcwQIA3hd-uTuQ==/base.apk!/lib/arm64-v8a/libn42_mls.so using class loader ns clns-9 (caller=/data/app/~~-Vg4BzZ0PApSxHzHxxcXIw==/ai.n42.fixture.mls-qF6_uGqcYcwQIA3hd-uTuQ==/base.apk): ok
+09-26 21:59:10.792 13000 13026 I System.out: PROCESS_ARCH aarch64
+09-26 21:59:10.792 13000 13026 I System.out: PASS arm64-process
+09-26 21:59:10.794 13000 13000 D CompatChangeReporter: Compat change id reported: 309578419; UID 10263; state: ENABLED
+09-26 21:59:10.854 13000 13023 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+09-26 21:59:10.854 13000 13023 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv2_emulation.so
+09-26 21:59:10.854 13000 13023 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: MLS_APK_FIXTURE_FAIL
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: java.lang.AssertionError: mapped-selected-library
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: 	at ai.n42.www.MlsFixture.check(MlsFixture.java:17)
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: 	at ai.n42.www.MlsFixture.main(MlsFixture.java:37)
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: 	at ai.n42.www.MlsFixtureActivity.lambda$onCreate$0(MlsFixtureActivity.java:12)
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: 	at ai.n42.www.MlsFixtureActivity$0.run(D8$$SyntheticClass:0)
+09-26 21:59:10.855 13000 13026 E N42_MLS_FIXTURE: 	at java.lang.Thread.run(Thread.java:1572)
+09-26 21:59:10.856 13000 13000 D CompatChangeReporter: Compat change id reported: 349153669; UID 10263; state: ENABLED
+09-26 21:59:10.857 13000 13000 W HWUI    : Unknown dataspace 0
+09-26 21:59:10.861 13000 13023 W HWUI    : Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+09-26 21:59:10.861 13000 13023 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+09-26 21:59:10.865 13000 13032 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-26 21:59:11.049 13000 13000 D VRI[MlsFixtureActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,164,0,84] 
+09-26 21:59:11.049 13000 13000 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda14@35f39f
+09-26 21:59:11.050 13000 13000 I HWUI    : Using FreeType backend (prop=Auto)
+09-26 21:59:11.058 13000 13000 I Surface : Creating surface for consumer unnamed-13000-0 with slotExpansion=1 for 64 slots
+09-26 21:59:11.059 13000 13000 I Surface : Creating surface for consumer VRI[MlsFixtureActivity]#0(BLAST Consumer)0 with slotExpansion=1 for 64 slots
+09-26 21:59:11.198 13000 13000 D InsetsController: hide(ime())
+09-26 21:59:11.198 13000 13000 I ImeTracker: ai.n42.fixture.mls:1ca92d25: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN

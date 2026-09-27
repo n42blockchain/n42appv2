@@ -1,0 +1,19 @@
+PROCESS_ARCH aarch64
+PASS arm64-process
+PASS mapped-selected-library
+PASS engine
+PASS key-package
+PASS create-group
+PASS add-member
+PASS pair-format
+PASS welcome
+PASS encrypt
+PASS decrypt
+PASS reverse-roundtrip
+PASS self-update
+PASS process-commit
+PASS post-update-roundtrip
+PASS unknown-group-rejected
+PASS negative-leaf-rejected
+PASS invalid-commit-rejected
+MLS_FIXTURE_PASS

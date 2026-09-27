@@ -1,0 +1,12 @@
+library=/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/jniLibs/arm64-v8a/libn42_mls.so
+library_sha256=8ec181165f191dbf0ec911bfde633e611517df18a8e0d59fc77c0857cb4e3be2
+dex_sha256=78844b051a8a482fce3562761c0b0117f9a115c0aec28b10857e5d2a9174918f
+device=emulator-5560
+page_size=16384
+linker_mode=fatal
+compat_disabled=true
+device_library_sha256=8ec181165f191dbf0ec911bfde633e611517df18a8e0d59fc77c0857cb4e3be2
+post_page_size=16384
+post_linker_mode=fatal
+post_compat_disabled=true
+result=PASS
