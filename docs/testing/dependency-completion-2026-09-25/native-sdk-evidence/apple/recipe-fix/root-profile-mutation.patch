@@ -1,0 +1,5 @@
+--- clean/Cargo.toml
++++ mutated/Cargo.toml
+@@ -177 +177 @@
+-opt-level = 3
++opt-level = 0

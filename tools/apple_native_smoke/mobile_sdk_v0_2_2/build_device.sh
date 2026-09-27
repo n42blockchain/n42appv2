@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+N42_PREFLIGHT=false
+if [[ "${1:-}" == --preflight ]]; then
+  N42_PREFLIGHT=true
+  shift
+fi
 if [[ $# -ne 3 ]]; then
-  echo "usage: $0 PREPARED_SOURCE CBINDGEN_0_29_2 NEW_OUTPUT_DIRECTORY" >&2
+  echo "usage: $0 [--preflight] PREPARED_SOURCE CBINDGEN_0_29_2 NEW_OUTPUT_DIRECTORY" >&2
   exit 2
 fi
 N42_SOURCE="$(cd "$1" && pwd)"
@@ -22,6 +27,8 @@ require_equal() {
 }
 require_equal "$(git -C "$N42_SOURCE" rev-parse HEAD)" \
   2099ec735a658ba1db97c49b77a6c58c1fc82920 "N42 source commit"
+require_equal "$(shasum -a 256 "$N42_SOURCE/Cargo.toml" | cut -d ' ' -f1)" \
+  9c2ce43e9a4e230e83fcdaa78d063ef1e51eeb9c8621c73c20f712ede92f4bbd "Workspace manifest"
 require_equal "$(shasum -a 256 "$N42_SOURCE/Cargo.lock" | cut -d ' ' -f1)" \
   7e255879661c166546a70e21c0fa7d2e8cb76705a0d4a5fd214d48630db630ca "Cargo lock"
 require_equal "$(shasum -a 256 "$N42_SOURCE/crates/n42/mobile-sdk/Cargo.toml" | cut -d ' ' -f1)" \
@@ -46,6 +53,29 @@ if [[ ! -f "$N42_LIBCLANG/libclang.dylib" ]]; then
   exit 1
 fi
 
+# cc-rs prefers CC_aarch64-apple-ios over CC_aarch64_apple_ios and accumulates
+# CFLAGS/CXXFLAGS from target, build-kind and global variables. Bindgen has
+# separate BINDGEN_EXTRA_CLANG_ARGS target variants. Reject inherited native
+# inputs before assigning the reviewed Xcode tools or creating build output.
+while IFS= read -r N42_ENV_NAME; do
+  case "$N42_ENV_NAME" in
+    CC|CC_*|CXX|CXX_*|AR|AR_*|RANLIB|RANLIB_*|\
+    CFLAGS|CFLAGS_*|CXXFLAGS|CXXFLAGS_*|CPPFLAGS|CPPFLAGS_*|\
+    ARFLAGS|ARFLAGS_*|RANLIBFLAGS|RANLIBFLAGS_*|\
+    HOST_CC|TARGET_CC|HOST_CXX|TARGET_CXX|HOST_AR|TARGET_AR|\
+    HOST_RANLIB|TARGET_RANLIB|HOST_CFLAGS|TARGET_CFLAGS|\
+    HOST_CXXFLAGS|TARGET_CXXFLAGS|HOST_CPPFLAGS|TARGET_CPPFLAGS|\
+    HOST_ARFLAGS|TARGET_ARFLAGS|HOST_RANLIBFLAGS|TARGET_RANLIBFLAGS|\
+    CRATE_CC_NO_DEFAULTS|BINDGEN_EXTRA_CLANG_ARGS|BINDGEN_EXTRA_CLANG_ARGS_*|\
+    CLANG|CLANG_PATH|CMAKE_*|CARGO_TARGET_*|MACOSX_DEPLOYMENT_TARGET|\
+    CPATH|C_INCLUDE_PATH|CPLUS_INCLUDE_PATH|OBJC_INCLUDE_PATH|LIBRARY_PATH|\
+    LDFLAGS|LDFLAGS_*|HOST_LDFLAGS|TARGET_LDFLAGS)
+      echo "Unexpected inherited native build input: $N42_ENV_NAME" >&2
+      exit 1
+      ;;
+  esac
+done < <(env | cut -d= -f1)
+
 # Cargo otherwise accepts inherited flags and profile settings that can change
 # the selected compiler, deployment target, optimization or source metadata.
 unset RUSTFLAGS CARGO_ENCODED_RUSTFLAGS CARGO_BUILD_RUSTFLAGS RUSTC RUSTC_WRAPPER RUSTC_WORKSPACE_WRAPPER
@@ -64,6 +94,15 @@ export AR_aarch64_apple_ios="$N42_AR"
 export CARGO_TARGET_AARCH64_APPLE_IOS_LINKER="$N42_CLANG"
 export CARGO_PROFILE_RELEASE_LTO=false
 export CARGO_TARGET_AARCH64_APPLE_IOS_RUSTFLAGS='-C link-arg=-miphoneos-version-min=16.0'
+if [[ "$N42_PREFLIGHT" == true ]]; then
+  echo "Workspace Cargo.toml SHA256=$(shasum -a 256 "$N42_SOURCE/Cargo.toml" | cut -d ' ' -f1)"
+  echo "CC_aarch64_apple_ios=$CC_aarch64_apple_ios"
+  echo "CXX_aarch64_apple_ios=$CXX_aarch64_apple_ios"
+  echo "AR_aarch64_apple_ios=$AR_aarch64_apple_ios"
+  echo "LIBCLANG_PATH=$LIBCLANG_PATH"
+  echo 'Inherited native compiler selectors, C/C++ flags, and bindgen extra flags: rejected'
+  exit 0
+fi
 export CARGO_TARGET_DIR="$N42_OUTPUT/target"
 mkdir -p "$N42_OUTPUT/header"
 {
@@ -75,9 +114,15 @@ mkdir -p "$N42_OUTPUT/header"
   "$N42_CBINDGEN" --version
   echo 'IPHONEOS_DEPLOYMENT_TARGET=16.0'
   echo 'CARGO_PROFILE_RELEASE_LTO=false (other release settings from frozen Cargo.toml)'
+  echo "CC_aarch64_apple_ios=$CC_aarch64_apple_ios"
+  echo "CXX_aarch64_apple_ios=$CXX_aarch64_apple_ios"
+  echo "AR_aarch64_apple_ios=$AR_aarch64_apple_ios"
+  echo "LIBCLANG_PATH=$LIBCLANG_PATH"
+  echo 'Inherited native compiler selectors, C/C++ flags, and bindgen extra flags: rejected'
   echo "CARGO_TARGET_AARCH64_APPLE_IOS_RUSTFLAGS=$CARGO_TARGET_AARCH64_APPLE_IOS_RUSTFLAGS"
   shasum -a 256 "$N42_CLANG" "$N42_LIBCLANG/libclang.dylib" "$N42_CBINDGEN" \
-    "$N42_SOURCE/Cargo.lock" "$N42_SOURCE/crates/n42/mobile-sdk/Cargo.toml" \
+    "$N42_SOURCE/Cargo.toml" "$N42_SOURCE/Cargo.lock" \
+    "$N42_SOURCE/crates/n42/mobile-sdk/Cargo.toml" \
     "$N42_SOURCE/crates/n42/mobile-sdk/src/c_ffi.rs"
 } > "$N42_OUTPUT/inputs.txt"
 (

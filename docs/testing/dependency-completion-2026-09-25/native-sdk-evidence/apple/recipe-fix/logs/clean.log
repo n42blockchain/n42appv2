@@ -1,0 +1,6 @@
+Workspace Cargo.toml SHA256=9c2ce43e9a4e230e83fcdaa78d063ef1e51eeb9c8621c73c20f712ede92f4bbd
+CC_aarch64_apple_ios=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+CXX_aarch64_apple_ios=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+AR_aarch64_apple_ios=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar
+LIBCLANG_PATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib
+Inherited native compiler selectors, C/C++ flags, and bindgen extra flags: rejected

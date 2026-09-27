@@ -11,6 +11,13 @@ the app revision. Build from this prepared source with Rust 1.97.1 and Cargo
 libclang and Rust release inputs. It turns release LTO off because the tagged
 LTO archive embeds LLVM bitcode and exceeds 100 MiB; it retains the tagged
 release optimization level, panic mode, codegen units and symbol stripping.
+The recipe verifies the prepared workspace `Cargo.toml` hash, which owns those
+release settings. It rejects inherited C/C++/archiver selectors and flags,
+bindgen extra arguments, and target linker overrides before creating output.
+Use `build_device.sh --preflight PREPARED_SOURCE PINNED_CBINDGEN NEW_OUTPUT`
+to check the exact source, tools and native environment without building.
+`test_device_preflight.sh PREPARED_SOURCE PINNED_CBINDGEN NEW_TEST_OUTPUT`
+runs the clean and hostile-environment controls without a native build.
 Apple's post-build `strip -S` and `strip -S -x` produced duplicate Rust symbols
 in a device link, so neither output is selected. The build recipe links all
 seven C exports in an unexecuted iOS device probe and checks every archive
@@ -44,3 +51,5 @@ The exact tested input hashes, RED/GREEN transcripts and host run are in
 `docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/apple/source-group`.
 The host fixture is a source-level ABI check; iOS device execution requires
 separate device runtime evidence. Do not use simulator stubs as device evidence.
+The device archive/link evidence is in `native-sdk-evidence/apple/device-group`;
+the later recipe preflight correction is in `native-sdk-evidence/apple/recipe-fix`.
