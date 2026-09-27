@@ -182,6 +182,7 @@ class RustBuilder {
         (target.android == null && environment.glibcVersion != null)
             ? 'zigbuild'
             : 'build',
+        if (target.android != null) ...['--locked', '--offline'],
         ...extraArgs,
         '--manifest-path',
         manifestPath,
