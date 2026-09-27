@@ -40,9 +40,11 @@ class LoyaltyWalletPage extends ConsumerWidget {
     final currentUuid = ref.watch(currentUserProvider)?.uuid;
     final wallet = ref.watch(wapBridgeProvider);
     return LoyaltyHomePage(
-      walletAddress: routeOwnerUuid != null &&
+      walletAddress:
+          routeOwnerUuid != null &&
               routeOwnerUuid.isNotEmpty &&
-              currentUuid == routeOwnerUuid
+              currentUuid == routeOwnerUuid &&
+              wallet.coinListOwnerUuid == routeOwnerUuid
           ? selectLoyaltyWalletAddress(wallet.coinList)
           : '',
       service: service,

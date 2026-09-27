@@ -55,23 +55,36 @@ extension WalletActionProviderWallet on WalletActionProvider {
   Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
     if (buildwallet == true) return;
     buildwallet = true;
+    final startingOwner = userUUID;
     // 入口先清空是为了让骨架屏接管；但构建中途抛错的话不能让用户的资产列表
     // 停在空白——失败时整体回滚到进入前的数据。
     final prevCoinList = coinList;
+    final prevCoinListOwner = coinListOwnerUuid;
     final prevCoinModels = _coinModels;
     final prevAggregatedCoins = _aggregatedCoins;
-    coinList = [];
     _coinModels = [];
     _aggregatedCoins = [];
-    refresh();
+    publishCoinListForOwner(startingOwner, []);
     try {
       await getWalletInfo();
+      if (userUUID != startingOwner) {
+        publishCoinListForOwner(startingOwner, []);
+        return;
+      }
       await _syncNewChains();
+      if (userUUID != startingOwner) {
+        publishCoinListForOwner(startingOwner, []);
+        return;
+      }
       await buildCoinModel();
+      if (userUUID != startingOwner) {
+        publishCoinListForOwner(startingOwner, []);
+        return;
+      }
     } catch (_) {
-      coinList = prevCoinList;
       _coinModels = prevCoinModels;
       _aggregatedCoins = prevAggregatedCoins;
+      publishCoinListForOwner(prevCoinListOwner, prevCoinList);
       rethrow;
     } finally {
       buildwallet = false;

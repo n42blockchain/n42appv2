@@ -273,6 +273,17 @@ class WalletActionProvider extends ChangeNotifier
   List<CoinModel> get coinModels => _coinModels;
   //首页 显示的币列表（包含 CoinModel 和 AggregatedCoinModel）
   List<CoinModel> coinList = [];
+  String? _coinListOwnerUuid;
+  String? get coinListOwnerUuid => _coinListOwnerUuid;
+
+  /// Publish a list together with the account that produced it. Rollback must
+  /// restore both values so old coins cannot become the new user's selection.
+  void publishCoinListForOwner(String? ownerUuid, List<CoinModel> coins) {
+    coinList = coins;
+    _coinListOwnerUuid = ownerUuid;
+    refresh();
+  }
+
   //钱包所有币种余额
   //可用余额，美刀
   double _balanceTotal = 0.0;

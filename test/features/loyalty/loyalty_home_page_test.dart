@@ -3,15 +3,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_secure_storage_platform_interface/flutter_secure_storage_platform_interface.dart';
+import 'package:flutter_secure_storage/test/test_flutter_secure_storage_platform.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/loyalty/models/loyalty_models.dart';
 import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42_wallet/features/loyalty/services/loyalty_service.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 
 import '../../helpers/test_current_user.dart';
 import '../../helpers/widget_test_helpers.dart';
@@ -285,7 +290,8 @@ void main() {
   testWidgets('route follows wallet selection and blocks a new auth owner', (
     tester,
   ) async {
-    final wallet = WalletActionProvider()..coinList = [_coin(walletA)];
+    final wallet = WalletActionProvider()
+      ..publishCoinListForOwner('user-A', [_coin(walletA)]);
     final user = TestCurrentUser('user-A');
     final service = _ScriptedLoyaltyService(
       onLoad: (address) =>
@@ -305,8 +311,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('11'), findsWidgets);
 
-    wallet.coinList = [_coin(walletB)];
-    wallet.refresh();
+    wallet.publishCoinListForOwner('user-A', [_coin(walletB)]);
     await tester.pumpAndSettle();
     expect(service.loadedWallets, [walletA, walletB]);
     expect(find.text('42'), findsWidgets);
@@ -323,7 +328,8 @@ void main() {
   testWidgets('route builder retains tap-time owner after auth switch', (
     tester,
   ) async {
-    final wallet = WalletActionProvider()..coinList = [_coin(walletA)];
+    final wallet = WalletActionProvider()
+      ..publishCoinListForOwner('user-A', [_coin(walletA)]);
     final user = TestCurrentUser('user-A');
     final service = _ScriptedLoyaltyService(
       onLoad: (_) => Future.value(_snapshot(11)),
@@ -380,6 +386,142 @@ void main() {
     expect(find.text('11'), findsNothing);
     service.dispose();
   });
+
+  testWidgets('new B route rejects A list restored by failed B init', (
+    tester,
+  ) async {
+    final previousUser = AppGlobals.userInfo;
+    final previousStorage = FlutterSecureStoragePlatform.instance;
+    addTearDown(() {
+      AppGlobals.userInfo = previousUser;
+      FlutterSecureStoragePlatform.instance = previousStorage;
+    });
+    AppGlobals.userInfo = UserInfo(uuid: 'user-A');
+    final wallet = WalletActionProvider()
+      ..publishCoinListForOwner('user-A', [_coin(walletA)]);
+    FlutterSecureStoragePlatform.instance = _FailingWalletStoragePlatform({});
+    AppGlobals.userInfo = UserInfo(uuid: 'user-B');
+    await expectLater(wallet.initWallet(), throwsStateError);
+    expect(wallet.coinList.single.address, walletA);
+    expect(wallet.coinListOwnerUuid, 'user-A');
+
+    final user = TestCurrentUser('user-B');
+    final service = _ScriptedLoyaltyService(
+      onLoad: (address) =>
+          Future.value(_snapshot(address == walletB ? 42 : 11)),
+    );
+    await tester.pumpWidget(
+      wrapForTest(
+        LoyaltyWalletPage(ownerUuid: 'user-B', service: service),
+        overrides: [
+          wapBridgeProvider.overrideWith((ref) => wallet),
+          currentUserProvider.overrideWith((ref) => user),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(service.loadedWallets, isEmpty);
+    expect(find.byType(FilledButton), findsNothing);
+    expect(service.checkedInWallets, isEmpty);
+
+    wallet.publishCoinListForOwner('user-B', [_coin(walletB)]);
+    await tester.pumpAndSettle();
+    expect(service.loadedWallets, [walletB]);
+    expect(find.text('42'), findsWidgets);
+    await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
+    expect(service.checkedInWallets, [walletB]);
+    service.dispose();
+  });
+
+  testWidgets('same-owner failed init restores usable selection', (
+    tester,
+  ) async {
+    final previousUser = AppGlobals.userInfo;
+    final previousStorage = FlutterSecureStoragePlatform.instance;
+    addTearDown(() {
+      AppGlobals.userInfo = previousUser;
+      FlutterSecureStoragePlatform.instance = previousStorage;
+    });
+    AppGlobals.userInfo = UserInfo(uuid: 'user-A');
+    final wallet = WalletActionProvider()
+      ..publishCoinListForOwner('user-A', [_coin(walletA)]);
+    FlutterSecureStoragePlatform.instance = _FailingWalletStoragePlatform({});
+    await expectLater(wallet.initWallet(), throwsStateError);
+    expect(wallet.coinListOwnerUuid, 'user-A');
+    expect(wallet.coinList.single.address, walletA);
+
+    final service = _ScriptedLoyaltyService(
+      onLoad: (_) => Future.value(_snapshot(11)),
+    );
+    await tester.pumpWidget(
+      wrapForTest(
+        LoyaltyWalletPage(ownerUuid: 'user-A', service: service),
+        overrides: [
+          wapBridgeProvider.overrideWith((ref) => wallet),
+          currentUserProvider.overrideWith((ref) => TestCurrentUser('user-A')),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(service.loadedWallets, [walletA]);
+    expect(find.text('11'), findsWidgets);
+    service.dispose();
+  });
+
+  test('auth change during wallet storage await cancels publication', () async {
+    final previousUser = AppGlobals.userInfo;
+    final previousStorage = FlutterSecureStoragePlatform.instance;
+    addTearDown(() {
+      AppGlobals.userInfo = previousUser;
+      FlutterSecureStoragePlatform.instance = previousStorage;
+    });
+    AppGlobals.userInfo = UserInfo(uuid: 'user-A');
+    final wallet = WalletActionProvider()
+      ..publishCoinListForOwner('user-A', [_coin(walletA)]);
+    final storage = _DelayedWalletStoragePlatform({});
+    FlutterSecureStoragePlatform.instance = storage;
+
+    final initializing = wallet.initWallet();
+    expect(wallet.buildwallet, isTrue);
+    AppGlobals.userInfo = UserInfo(uuid: 'user-B');
+    storage.completeWalletRead(
+      jsonEncode({
+        'user-B': {'index': -1, 'wallet': <Object>[]},
+      }),
+    );
+    await initializing;
+
+    expect(wallet.buildwallet, isFalse);
+    expect(wallet.coinList, isEmpty);
+    expect(wallet.coinListOwnerUuid, 'user-A');
+  });
+}
+
+class _FailingWalletStoragePlatform extends TestFlutterSecureStoragePlatform {
+  _FailingWalletStoragePlatform(super.data);
+
+  @override
+  Future<String?> read({
+    required String key,
+    required Map<String, String> options,
+  }) async => throw StateError('synthetic wallet storage failure');
+}
+
+class _DelayedWalletStoragePlatform extends TestFlutterSecureStoragePlatform {
+  _DelayedWalletStoragePlatform(super.data);
+
+  final _walletRead = Completer<String?>();
+
+  void completeWalletRead(String value) => _walletRead.complete(value);
+
+  @override
+  Future<String?> read({
+    required String key,
+    required Map<String, String> options,
+  }) => key == 'walletInfo'
+      ? _walletRead.future
+      : super.read(key: key, options: options);
 }
 
 class _ScriptedLoyaltyService extends LoyaltyService {
