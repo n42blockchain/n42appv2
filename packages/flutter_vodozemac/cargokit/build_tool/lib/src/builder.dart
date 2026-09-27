@@ -128,6 +128,25 @@ class RustBuilder {
     Rustup rustup,
   ) {
     final toolchain = _toolchain;
+    if (environment.isAndroid) {
+      if (environment.androidNdkVersion != '28.2.13676358') {
+        throw BuildException('NDK revision mismatch: expected 28.2.13676358');
+      }
+      final installedTargets = rustup.installedTargets(toolchain);
+      if (installedTargets == null || !installedTargets.contains(target.rust)) {
+        throw BuildException(
+          'Pinned Rust toolchain and target must already be installed: '
+          '$toolchain ${target.rust}',
+        );
+      }
+      final rustcVersion = runCommand(
+        'rustup',
+        ['run', toolchain, 'rustc', '--version'],
+      ).stdout.toString().trim();
+      if (rustcVersion != 'rustc 1.97.1 (8bab26f4f 2026-07-14)') {
+        throw BuildException('Rust compiler mismatch: $rustcVersion');
+      }
+    }
     if (rustup.installedTargets(toolchain) == null) {
       rustup.installToolchain(toolchain);
     }

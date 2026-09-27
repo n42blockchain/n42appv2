@@ -1,0 +1,7 @@
+cargo:
+  debug:
+    extra_flags: [--locked, --offline]
+  profile:
+    extra_flags: [--locked, --offline]
+  release:
+    extra_flags: [--locked, --offline]
