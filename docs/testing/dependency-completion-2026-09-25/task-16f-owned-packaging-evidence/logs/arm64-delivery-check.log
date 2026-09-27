@@ -1,0 +1,4 @@
+base-arm64_v8a_3.apk zipalign=0 signature=0
+base-en_3.apk zipalign=0 signature=0
+base-master_3.apk zipalign=0 signature=0
+base-xxhdpi_3.apk zipalign=0 signature=0

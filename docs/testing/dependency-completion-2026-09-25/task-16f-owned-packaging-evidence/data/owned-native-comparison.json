@@ -1,0 +1,182 @@
+{
+  "members": [
+    {
+      "abi": "arm64-v8a",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libdatastore_shared_counter.so",
+      "ndk_strip_unneeded_sha256": "178f89a2c6c9234ddf980dd4cd1f3616186a46b2b932aafa6707abd04c5fd76a",
+      "packaged_sha256": "178f89a2c6c9234ddf980dd4cd1f3616186a46b2b932aafa6707abd04c5fd76a",
+      "source": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.datastore/datastore-core-android/1.2.1/32af822bae994f6308e987ac8c9d4e507de72fc5/datastore-core.aar!jni/arm64-v8a/libdatastore_shared_counter.so",
+      "source_container_sha256": "435edad7bcb1fbb1a2a46de7be4d6daf299479b3328ebf757ebdfe02810cbdd8",
+      "source_raw_sha256": "deed4546c8dafad0e68ea2c25e4c0a62ca97343614ae386b7ed2af6abb7fa999"
+    },
+    {
+      "abi": "arm64-v8a",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libgojni.so",
+      "ndk_strip_unneeded_sha256": "7f0c14b8ed06c52b8fa758668b071e678520e471a6fb584dc4224aa3451161c6",
+      "packaged_sha256": "7f0c14b8ed06c52b8fa758668b071e678520e471a6fb584dc4224aa3451161c6",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/evm.aar!jni/arm64-v8a/libgojni.so",
+      "source_container_sha256": "a7f1e0122ca76fe6a4b5c3a29816a07bb95cacb3cc6c21d73573d90a168d258c",
+      "source_raw_sha256": "c81ca645563c5f9663448cc1fc02f6adf1b387815e5b698fab80dec971614762"
+    },
+    {
+      "abi": "arm64-v8a",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libmobile_sdk.so",
+      "ndk_strip_unneeded_sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "packaged_sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/mobile-sdk-android.aar!jni/arm64-v8a/libmobile_sdk.so",
+      "source_container_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "source_raw_sha256": "c54e0618a805f165cd2f18c93aca575b509e198cf199fe2e01005341b4a7139f"
+    },
+    {
+      "abi": "arm64-v8a",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libn42_mls.so",
+      "ndk_strip_unneeded_sha256": "b0873a90e5f84fb27816deea9fb9ac23cb5ae4ea99fe8456fee1d2ec15fbe256",
+      "packaged_sha256": "b0873a90e5f84fb27816deea9fb9ac23cb5ae4ea99fe8456fee1d2ec15fbe256",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/jniLibs/arm64-v8a/libn42_mls.so",
+      "source_container_sha256": null,
+      "source_raw_sha256": "050db6c3c57ea9608b9279c22219a555c3c9e759ab0650331ad6bacda73d9f3e"
+    },
+    {
+      "abi": "arm64-v8a",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "librustls_platform_verifier-7fae6d6549895374.so",
+      "ndk_strip_unneeded_sha256": "5839b795079e471355cac4340ab79a2a9c3850b450267498a744a3c7b827e1f0",
+      "packaged_sha256": "5839b795079e471355cac4340ab79a2a9c3850b450267498a744a3c7b827e1f0",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/mobile-sdk-android.aar!jni/arm64-v8a/librustls_platform_verifier-7fae6d6549895374.so",
+      "source_container_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "source_raw_sha256": "bae78cd4545678f6fe8c01e62ebee7dfd451155216f5fb162e46bab3c8f50118"
+    },
+    {
+      "abi": "arm64-v8a",
+      "load_relro_16k": true,
+      "match": "raw",
+      "name": "libvodozemac_bindings_dart.so",
+      "ndk_strip_unneeded_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+      "packaged_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/flutter_vodozemac/outputs/aar/flutter_vodozemac-release.aar!jni/arm64-v8a/libvodozemac_bindings_dart.so",
+      "source_container_sha256": "7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a",
+      "source_raw_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "load_relro_16k": null,
+      "match": "strip-unneeded",
+      "name": "libdatastore_shared_counter.so",
+      "ndk_strip_unneeded_sha256": "b4a465c02ee3ab581128ce8fedf83b40f6868c73c74b88e98908803229947e6a",
+      "packaged_sha256": "b4a465c02ee3ab581128ce8fedf83b40f6868c73c74b88e98908803229947e6a",
+      "source": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.datastore/datastore-core-android/1.2.1/32af822bae994f6308e987ac8c9d4e507de72fc5/datastore-core.aar!jni/armeabi-v7a/libdatastore_shared_counter.so",
+      "source_container_sha256": "435edad7bcb1fbb1a2a46de7be4d6daf299479b3328ebf757ebdfe02810cbdd8",
+      "source_raw_sha256": "f51d0b6801896a20be66bd389a024f30be3284b757ac02377833d20e70b9c628"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "load_relro_16k": null,
+      "match": "strip-unneeded",
+      "name": "libgojni.so",
+      "ndk_strip_unneeded_sha256": "682c95d70937cafe1a9d27f73cabbb15401ae71f98e9008eba7c74d07e1a5267",
+      "packaged_sha256": "682c95d70937cafe1a9d27f73cabbb15401ae71f98e9008eba7c74d07e1a5267",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/evm.aar!jni/armeabi-v7a/libgojni.so",
+      "source_container_sha256": "a7f1e0122ca76fe6a4b5c3a29816a07bb95cacb3cc6c21d73573d90a168d258c",
+      "source_raw_sha256": "588cc9efc7b2efcf57861cf21ab476e16df9ac263dd858dcc9892a66c7209293"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "load_relro_16k": null,
+      "match": "strip-unneeded",
+      "name": "libn42_mls.so",
+      "ndk_strip_unneeded_sha256": "87c65c85e99dcffdf77cb4cf79f995cdfab9dfffa284341b40e6c3295dfad5c5",
+      "packaged_sha256": "87c65c85e99dcffdf77cb4cf79f995cdfab9dfffa284341b40e6c3295dfad5c5",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/jniLibs/armeabi-v7a/libn42_mls.so",
+      "source_container_sha256": null,
+      "source_raw_sha256": "11621a8e15f05d07cd245c95aac7e3a3f18d2f5e8333c8d24ba123ee05444f25"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "load_relro_16k": null,
+      "match": "raw",
+      "name": "libvodozemac_bindings_dart.so",
+      "ndk_strip_unneeded_sha256": "645354218dc0f8a7ff4965043c470c050ef70575be0e283420b3941a803bdd2d",
+      "packaged_sha256": "645354218dc0f8a7ff4965043c470c050ef70575be0e283420b3941a803bdd2d",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/flutter_vodozemac/outputs/aar/flutter_vodozemac-release.aar!jni/armeabi-v7a/libvodozemac_bindings_dart.so",
+      "source_container_sha256": "7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a",
+      "source_raw_sha256": "645354218dc0f8a7ff4965043c470c050ef70575be0e283420b3941a803bdd2d"
+    },
+    {
+      "abi": "x86_64",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libdatastore_shared_counter.so",
+      "ndk_strip_unneeded_sha256": "ccd1862ef8f854d2322f3ee07adebd107890ded3b7c96b8f3528ac99aab4a4f6",
+      "packaged_sha256": "ccd1862ef8f854d2322f3ee07adebd107890ded3b7c96b8f3528ac99aab4a4f6",
+      "source": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.datastore/datastore-core-android/1.2.1/32af822bae994f6308e987ac8c9d4e507de72fc5/datastore-core.aar!jni/x86_64/libdatastore_shared_counter.so",
+      "source_container_sha256": "435edad7bcb1fbb1a2a46de7be4d6daf299479b3328ebf757ebdfe02810cbdd8",
+      "source_raw_sha256": "c3973140a0e6144a83e7dd7ee3c4e161f42181591feda254e12c8395d3bbacd0"
+    },
+    {
+      "abi": "x86_64",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libgojni.so",
+      "ndk_strip_unneeded_sha256": "fae0e1f59f95965a3cbfcf2b78e841607ab0be20c90f8fcc97a933392b457168",
+      "packaged_sha256": "fae0e1f59f95965a3cbfcf2b78e841607ab0be20c90f8fcc97a933392b457168",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/evm.aar!jni/x86_64/libgojni.so",
+      "source_container_sha256": "a7f1e0122ca76fe6a4b5c3a29816a07bb95cacb3cc6c21d73573d90a168d258c",
+      "source_raw_sha256": "9fbb582f44f34e36229824131e2ed58cd7cbec982be8c01c977ea63641060954"
+    },
+    {
+      "abi": "x86_64",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libmobile_sdk.so",
+      "ndk_strip_unneeded_sha256": "8600d600034fcc9ad3e5bedc80277e64cbf0b3c2b8dc0b314ac0d1d84573bc67",
+      "packaged_sha256": "8600d600034fcc9ad3e5bedc80277e64cbf0b3c2b8dc0b314ac0d1d84573bc67",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/mobile-sdk-android.aar!jni/x86_64/libmobile_sdk.so",
+      "source_container_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "source_raw_sha256": "6f23fbb66fad7f359ac647108ad64385ec702419220b31e76c2c6df5259d74b7"
+    },
+    {
+      "abi": "x86_64",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "libn42_mls.so",
+      "ndk_strip_unneeded_sha256": "0faaafb66971d0f0214f151e82e14e0bec957c70afc43376643579dfbd6cb7bd",
+      "packaged_sha256": "0faaafb66971d0f0214f151e82e14e0bec957c70afc43376643579dfbd6cb7bd",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/jniLibs/x86_64/libn42_mls.so",
+      "source_container_sha256": null,
+      "source_raw_sha256": "324fa4d8b300bcb3a5af10fa270baba4a5b4c7ad38eaab8ad913edca57e34ffd"
+    },
+    {
+      "abi": "x86_64",
+      "load_relro_16k": true,
+      "match": "strip-unneeded",
+      "name": "librustls_platform_verifier-672ddd532c0f437d.so",
+      "ndk_strip_unneeded_sha256": "ce4a67e0922f2b427a36eab4c5b8ad240526af8b569fe59b79ca1af493ebfd9a",
+      "packaged_sha256": "ce4a67e0922f2b427a36eab4c5b8ad240526af8b569fe59b79ca1af493ebfd9a",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/libs/mobile-sdk-android.aar!jni/x86_64/librustls_platform_verifier-672ddd532c0f437d.so",
+      "source_container_sha256": "ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5",
+      "source_raw_sha256": "0548fc14a2098660ed266e6595f0fe1fea0ff2e24ee61f0c976df5f53e7e1c9d"
+    },
+    {
+      "abi": "x86_64",
+      "load_relro_16k": true,
+      "match": "raw",
+      "name": "libvodozemac_bindings_dart.so",
+      "ndk_strip_unneeded_sha256": "06e2ffe3031c5036ee61d45a44a4cadf7334cd176bf7884c69eb84b483b68b21",
+      "packaged_sha256": "06e2ffe3031c5036ee61d45a44a4cadf7334cd176bf7884c69eb84b483b68b21",
+      "source": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/flutter_vodozemac/outputs/aar/flutter_vodozemac-release.aar!jni/x86_64/libvodozemac_bindings_dart.so",
+      "source_container_sha256": "7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a",
+      "source_raw_sha256": "06e2ffe3031c5036ee61d45a44a4cadf7334cd176bf7884c69eb84b483b68b21"
+    }
+  ],
+  "strip": "/opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-strip",
+  "strip_sha256": "438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f"
+}

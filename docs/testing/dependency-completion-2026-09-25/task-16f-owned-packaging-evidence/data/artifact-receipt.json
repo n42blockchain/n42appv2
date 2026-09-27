@@ -1,0 +1,68 @@
+{
+  "artifacts": {
+    "aab": {
+      "bytes": 496358272,
+      "sha256": "e357b115c10b9c51ee6c9e7498429c4930b7c9165b53d8056e15befd8133fb9d"
+    },
+    "apk": {
+      "bytes": 800243823,
+      "sha256": "b902a9cfbcbb748996e71c9de3d090335a7d176e11613d4fa67a59800a7ab492"
+    },
+    "bundletool_apks": {
+      "bytes": 2460626015,
+      "sha256": "d3b449af7569ca2540bb30a4fe8f38de7030793af956e90258fcc2a4f80b4c8c"
+    }
+  },
+  "build_utc": {
+    "aab_start": "2026-09-27 03:26:53 UTC",
+    "apk_start": "2026-09-27 03:21:52 UTC",
+    "finish": "2026-09-27 03:28:07 UTC"
+  },
+  "command_exits": {
+    "all_four_arm64_splits_zipalign_and_apksigner": 0,
+    "apk_apksigner_verify": 0,
+    "apk_zipalign_16k": 0,
+    "bundletool_arm64_size": 0,
+    "bundletool_armv7_size": 0,
+    "bundletool_build_apks": 0,
+    "bundletool_extract_arm64": 0,
+    "bundletool_validate": 0,
+    "bundletool_x86_64_size": 0,
+    "final_aab_build": 0,
+    "final_apk_build": 0,
+    "first_apk_no_pub": 1,
+    "flutter_pub_get_offline": 0,
+    "pinned_vodo_preflight": 0,
+    "repository_aab_full_native_audit": 1,
+    "repository_apk_full_native_audit": 1
+  },
+  "gradle_offline": "unverified; GRADLE_OPTS system property does not prove Gradle StartParameter.offline",
+  "pubspec_version": "2.4.8+2026072912",
+  "signing": "temporary Android Debug key; not distribution signed",
+  "source_commit": "2cc56182da97de7c4143fae82fc057b4f545f19e",
+  "synthetic_arm64_delivery": {
+    "base-arm64_v8a_3.apk": {
+      "bytes": 328510069,
+      "sha256": "48f7b15629916169548f1b87ce12df5fb203590b0570c5d2aa09e6ca24f1f60e"
+    },
+    "base-en_3.apk": {
+      "bytes": 37011,
+      "sha256": "0735c43b816c0239a2af68ee659cd68bfbfa2abb66ba11b282c76df4c56fc0b4"
+    },
+    "base-master_3.apk": {
+      "bytes": 62490434,
+      "sha256": "5f82b031a8726b43449a7f632f892cbece18e23c7819aa6af80c877960937944"
+    },
+    "base-xxhdpi_3.apk": {
+      "bytes": 74927,
+      "sha256": "22d96f7207193828e8d28dd2d9f9ed8a29087b3a4c2dca4e76a7a300f15c9d01"
+    }
+  },
+  "tool": {
+    "bundletool_jar": {
+      "bytes": 32520401,
+      "sha256": "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29"
+    },
+    "bundletool_version": "1.18.3"
+  }
+}

@@ -1,0 +1,3185 @@
+{
+  "apk": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/app/outputs/flutter-apk/app-release.apk",
+  "apk_sha256": "9da4974f11427749786996d1f40e26c99e402db8a4640c9e5c5499848171ecc0",
+  "audit_json": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16b-release-apk-native-audit.json",
+  "audit_json_sha256": "a8277526d1c172d1779ea1b63611afdf999ce8f96d0b7eb156bdeb3bddf65f98",
+  "checked": 55,
+  "failed": 37,
+  "libraries": [
+    {
+      "apk_member": "lib/arm64-v8a/libTrustWalletCore.so",
+      "sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+      "size": 17688888,
+      "build_id": "a47d6dc28e8e264f95c35b8f38bbb154eddcff58",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x107fc70",
+          "memsz": "0x107fc70",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x107fc70",
+          "vaddr": "0x1083c70",
+          "filesz": "0x51ac8",
+          "memsz": "0x52390",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x10d1740",
+          "vaddr": "0x10d9740",
+          "filesz": "0xc710",
+          "memsz": "0x12040",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1083c70",
+          "memsz": "0x52390",
+          "end": "0x10d6000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.trustwallet/wallet-core/4.8.4/a000a8ab179c6b49155317630f7e8600c66bc886/wallet-core-4.8.4.aar",
+          "member": "jni/arm64-v8a/libTrustWalletCore.so",
+          "sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libTrustWalletCore.so",
+      "aab_sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libapp.so",
+      "sha256": "eff264f91b91d1f717b8ac40005d8ce86155060f4d09886d75e53366ce752a12",
+      "size": 47121288,
+      "build_id": "ed52eaf2c893076bb5ed3d344d451bcd",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1224c7d",
+          "memsz": "0x1224c7d",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0x1230000",
+          "vaddr": "0x1230000",
+          "filesz": "0x1ab33f0",
+          "memsz": "0x1ab33f0",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0x2cf0000",
+          "vaddr": "0x2cf0000",
+          "filesz": "0x68",
+          "memsz": "0x68",
+          "align": "0x10000",
+          "pass": true
+        }
+      ],
+      "relro": [],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/arm64-v8a/libapp.so",
+      "aab_sha256": "eff264f91b91d1f717b8ac40005d8ce86155060f4d09886d75e53366ce752a12",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libbarhopper_v3.so",
+      "sha256": "ec09597e9eb3aee0eb55ae3366da0d4ba416f5aa35a1af0b3811f50ff46743a1",
+      "size": 4946720,
+      "build_id": "31faf13054616563bd553d8d71a935bb",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x4a2520",
+          "memsz": "0x4a2520",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x4a4000",
+          "vaddr": "0x4a4000",
+          "filesz": "0xb178",
+          "memsz": "0xc000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x4af180",
+          "vaddr": "0x4b3180",
+          "filesz": "0x80e8",
+          "memsz": "0x47d30",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x4a4000",
+          "memsz": "0xc000",
+          "end": "0x4b0000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/barcode-scanning/17.3.0/b65c206f33542482530605592cc2513a876b44c4/barcode-scanning-17.3.0.aar",
+          "member": "jni/arm64-v8a/libbarhopper_v3.so",
+          "sha256": "ec09597e9eb3aee0eb55ae3366da0d4ba416f5aa35a1af0b3811f50ff46743a1",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libbarhopper_v3.so",
+      "aab_sha256": "ec09597e9eb3aee0eb55ae3366da0d4ba416f5aa35a1af0b3811f50ff46743a1",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libdartjni.so",
+      "sha256": "c47481ceb08fd173851594eb21e24a22a532529ccd216ce3fe51a0b4f9585630",
+      "size": 131432,
+      "build_id": "67ea08189c8f83cda9d815ef30f1f3228500a787",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1ec10",
+          "memsz": "0x1ec10",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1ec10",
+          "vaddr": "0x22c10",
+          "filesz": "0x560",
+          "memsz": "0x13f0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1f170",
+          "vaddr": "0x27170",
+          "filesz": "0x6f8",
+          "memsz": "0x978",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x22c10",
+          "memsz": "0x13f0",
+          "end": "0x24000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/arm64-v8a/libdartjni.so",
+      "aab_sha256": "c47481ceb08fd173851594eb21e24a22a532529ccd216ce3fe51a0b4f9585630",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libdatastore_shared_counter.so",
+      "sha256": "d3e48717c9aa147e0ab21063ba0e8e0211cabf8bf40b222640829519edbf58e1",
+      "size": 7112,
+      "build_id": "17db37bd6770ac00dd2d1d2828839fd23a7959a3",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x11c0",
+          "memsz": "0x11c0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x11c0",
+          "vaddr": "0x51c0",
+          "filesz": "0x268",
+          "memsz": "0x268",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1428",
+          "vaddr": "0x9428",
+          "filesz": "0x0",
+          "memsz": "0x1",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x51c0",
+          "memsz": "0xe40",
+          "end": "0x6000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.datastore/datastore-core-android/1.1.7/a9f2c979b8890eece47fadf583fe9647107c624a/datastore-core-release.aar",
+          "member": "jni/arm64-v8a/libdatastore_shared_counter.so",
+          "sha256": "d3e48717c9aa147e0ab21063ba0e8e0211cabf8bf40b222640829519edbf58e1",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libdatastore_shared_counter.so",
+      "aab_sha256": "d3e48717c9aa147e0ab21063ba0e8e0211cabf8bf40b222640829519edbf58e1",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libface_detector_v2_jni.so",
+      "sha256": "d2d105239f5c723838a6bea81ee9cf828b8a56b4de4bc1f4a2556b320d758851",
+      "size": 8520960,
+      "build_id": "e390627463de9c2a2c11a89e722a6f51",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x7c39d0",
+          "memsz": "0x7c39d0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x7c4000",
+          "vaddr": "0x7c4000",
+          "filesz": "0x52430",
+          "memsz": "0x53000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x816430",
+          "vaddr": "0x81a430",
+          "filesz": "0x9818",
+          "memsz": "0x4f550",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x7c4000",
+          "memsz": "0x53000",
+          "end": "0x817000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/face-detection/16.1.7/aab1bfb4e1be866b82efa1bb7c47210d8ebc836c/face-detection-16.1.7.aar",
+          "member": "jni/arm64-v8a/libface_detector_v2_jni.so",
+          "sha256": "d2d105239f5c723838a6bea81ee9cf828b8a56b4de4bc1f4a2556b320d758851",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libface_detector_v2_jni.so",
+      "aab_sha256": "d2d105239f5c723838a6bea81ee9cf828b8a56b4de4bc1f4a2556b320d758851",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libflutter.so",
+      "sha256": "1617e3b3bf10f4569c30db20b37fccfcc0b9a179b827543c01e5f18e91966b6c",
+      "size": 11747864,
+      "build_id": "a379262188fde30cd427b404020a4621e931233d",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xad7ef0",
+          "memsz": "0xad7ef0",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0xad7ef0",
+          "vaddr": "0xae7ef0",
+          "filesz": "0x5a2f8",
+          "memsz": "0x5b110",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0xb321e8",
+          "vaddr": "0xb521e8",
+          "filesz": "0x16e8",
+          "memsz": "0x107f8",
+          "align": "0x10000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xae7ef0",
+          "memsz": "0x5b110",
+          "end": "0xb43000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.codex/toolchains/flutter-3.47.5/flutter/bin/cache/artifacts/engine/android-arm64-release/flutter.jar",
+          "member": "lib/arm64-v8a/libflutter.so",
+          "sha256": "843fb607940a2c1c673acf14f34934cc9965d5325ad1c30fe843f1a2a396a59b",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libflutter.so",
+      "aab_sha256": "1617e3b3bf10f4569c30db20b37fccfcc0b9a179b827543c01e5f18e91966b6c",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libgecko_embedding_model_jni.so",
+      "sha256": "819ec428802b193db3af1a75153b4aa3d959cbf235a3e79327c8e9b7f4282403",
+      "size": 16961920,
+      "build_id": "a21052178bb635201174d787097afedf",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xfb2570",
+          "memsz": "0xfb2570",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xfb4000",
+          "vaddr": "0xfb4000",
+          "filesz": "0x56708",
+          "memsz": "0x57000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x100a710",
+          "vaddr": "0x100e710",
+          "filesz": "0x21ef8",
+          "memsz": "0x682c0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xfb4000",
+          "memsz": "0x57000",
+          "end": "0x100b000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.ai.edge.localagents/localagents-rag/0.3.0/b029093b1338d92556e9f6d8d684f7997c066c97/localagents-rag-0.3.0.aar",
+          "member": "jni/arm64-v8a/libgecko_embedding_model_jni.so",
+          "sha256": "abba30d16902ec82de2aeba9f19b45c03ef8639ddd7441d6a842f61c69e0528a",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libgecko_embedding_model_jni.so",
+      "aab_sha256": "819ec428802b193db3af1a75153b4aa3d959cbf235a3e79327c8e9b7f4282403",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libgemma_embedding_model_jni.so",
+      "sha256": "055afe776972d1526c4b0d34b48c677a8a6042b03e61916648622913d88338ee",
+      "size": 16961920,
+      "build_id": "20388a744de7dcafde7f83b50b03776b",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xfb2570",
+          "memsz": "0xfb2570",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xfb4000",
+          "vaddr": "0xfb4000",
+          "filesz": "0x56708",
+          "memsz": "0x57000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x100a710",
+          "vaddr": "0x100e710",
+          "filesz": "0x21ef8",
+          "memsz": "0x682c0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xfb4000",
+          "memsz": "0x57000",
+          "end": "0x100b000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.ai.edge.localagents/localagents-rag/0.3.0/b029093b1338d92556e9f6d8d684f7997c066c97/localagents-rag-0.3.0.aar",
+          "member": "jni/arm64-v8a/libgemma_embedding_model_jni.so",
+          "sha256": "c3c66e6d5a9b44578cdaadcfdf6ddd7eb1760c821df656e563a6b6c472d8893f",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libgemma_embedding_model_jni.so",
+      "aab_sha256": "055afe776972d1526c4b0d34b48c677a8a6042b03e61916648622913d88338ee",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libgojni.so",
+      "sha256": "153726371acb9500b5e3ba8e9e812fb5bde296dc2226decf2f5a91928285070a",
+      "size": 14683680,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x8ca814",
+          "memsz": "0x8ca814",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x8cc118",
+          "vaddr": "0x8cc118",
+          "filesz": "0x534420",
+          "memsz": "0x5809f8",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x8cc118",
+          "memsz": "0x4ddee8",
+          "end": "0xdaa000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "plugins/flutter_mining/android/libs/evm.aar",
+          "member": "jni/arm64-v8a/libgojni.so",
+          "sha256": "d3aeb11b4e4cb8ac8cad7bb94730a6767919272c735b22d430b56e4a9a3d7c24",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libgojni.so",
+      "aab_sha256": "153726371acb9500b5e3ba8e9e812fb5bde296dc2226decf2f5a91928285070a",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+      "size": 32528,
+      "build_id": "cb419a7ebfbe8c0ac8d81932d5037effe7d657d4",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x7320",
+          "memsz": "0x7320",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x7320",
+          "vaddr": "0xb320",
+          "filesz": "0x3e0",
+          "memsz": "0xce0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x7700",
+          "vaddr": "0xf700",
+          "filesz": "0x0",
+          "memsz": "0x4",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xb320",
+          "memsz": "0xce0",
+          "end": "0xc000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.1/f20141e4742ec17a2a78fd7d53bd2af389bb3c09/camera-core-1.6.1.aar",
+          "member": "jni/arm64-v8a/libimage_processing_util_jni.so",
+          "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+          "match": "sha256"
+        },
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.0/96f2e7ee1a1bf97624cf6e066fe225c0e938bdb7/camera-core-1.6.0.aar",
+          "member": "jni/arm64-v8a/libimage_processing_util_jni.so",
+          "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libimage_processing_util_jni.so",
+      "aab_sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libimagegenerator_gpu.so",
+      "sha256": "8011cad0b876a54b797691c97296a2f083fa9b5303685c85bbf0b08811ee9279",
+      "size": 10397272,
+      "build_id": "2727c82522e4449853d1268e1a6d93c8",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x99de50",
+          "memsz": "0x99de50",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x9a0000",
+          "vaddr": "0x9a0000",
+          "filesz": "0x3e528",
+          "memsz": "0x3e528",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x9de528",
+          "vaddr": "0x9e2528",
+          "filesz": "0xb670",
+          "memsz": "0x42640",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x9a0000",
+          "memsz": "0x3f000",
+          "end": "0x9df000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mediapipe/tasks-vision-image-generator/0.10.26.1/de223f3b5f4efed7304d5504e86428d409ba1bb/tasks-vision-image-generator-0.10.26.1.aar",
+          "member": "jni/arm64-v8a/libimagegenerator_gpu.so",
+          "sha256": "e4407c7c0a2559b168a0f76cda6eb23ce2d167fa757a0d4887ccf57af70c0179",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libimagegenerator_gpu.so",
+      "aab_sha256": "8011cad0b876a54b797691c97296a2f083fa9b5303685c85bbf0b08811ee9279",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libjingle_peerconnection_so.so",
+      "sha256": "7b299113fcd743de7dc5559686b21fc2681b2c8598347d8dc0743d2e004995ca",
+      "size": 12287312,
+      "build_id": "8939406b3b9fa259",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xb8b0b8",
+          "memsz": "0xb8b0b8",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xb8b0c0",
+          "vaddr": "0xb8f0c0",
+          "filesz": "0x2b470",
+          "memsz": "0x2bf40",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xbb6530",
+          "vaddr": "0xbbe530",
+          "filesz": "0xff0",
+          "memsz": "0x97558",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xb8f0c0",
+          "memsz": "0x2bf40",
+          "end": "0xbbb000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/io.github.webrtc-sdk/android/150.7871.01/b9ae2a17fa38f16ce071f029cf8684fb9166a1c7/android-150.7871.01.aar",
+          "member": "jni/arm64-v8a/libjingle_peerconnection_so.so",
+          "sha256": "7b299113fcd743de7dc5559686b21fc2681b2c8598347d8dc0743d2e004995ca",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libjingle_peerconnection_so.so",
+      "aab_sha256": "7b299113fcd743de7dc5559686b21fc2681b2c8598347d8dc0743d2e004995ca",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libjnidispatch.so",
+      "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+      "size": 165992,
+      "build_id": "8549526bbd95df90b51b87eaf518d627a449eb24",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x25338",
+          "memsz": "0x25338",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x27b98",
+          "vaddr": "0x2bb98",
+          "filesz": "0x6ac",
+          "memsz": "0xee8",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x2bb98",
+          "memsz": "0x468",
+          "end": "0x2c000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/4134d63c53cbf9650b11ee950df093add29f14cf/jna-5.17.0.aar",
+          "member": "jni/arm64-v8a/libjnidispatch.so",
+          "sha256": "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libjnidispatch.so",
+      "aab_sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/liblitertlm_jni.so",
+      "sha256": "bb0a53f630277a7c69c806803596d7b39b3783d21c038ba283dd20e09c5d1e16",
+      "size": 20208240,
+      "build_id": "92391012889671e2c19224d84e402259",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x128e5b0",
+          "memsz": "0x128e5b0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1290000",
+          "vaddr": "0x1290000",
+          "filesz": "0xaa5f0",
+          "memsz": "0xab000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x133a5f0",
+          "vaddr": "0x133e5f0",
+          "filesz": "0xa7a8",
+          "memsz": "0x566e0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1290000",
+          "memsz": "0xab000",
+          "end": "0x133b000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.ai.edge.litertlm/litertlm-android/0.9.0-beta/ed54172c7bd6bca8991a00a00dcf95b0b4e11c61/litertlm-android-0.9.0-beta.aar",
+          "member": "jni/arm64-v8a/liblitertlm_jni.so",
+          "sha256": "6506c7f457a6e98939c4b8a4daf00d26b4ccab95769dd3829c2a5842dd5a04a5",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/liblitertlm_jni.so",
+      "aab_sha256": "bb0a53f630277a7c69c806803596d7b39b3783d21c038ba283dd20e09c5d1e16",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libllm_inference_engine_jni.so",
+      "sha256": "3307ac50bb8394e9e661a637202183498b1f7ba0e25690d6c721dfa85a2dc465",
+      "size": 26625656,
+      "build_id": "8ca3ad8833ec3059cd365a2af5d8fc02",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1898910",
+          "memsz": "0x1898910",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x189c000",
+          "vaddr": "0x189c000",
+          "filesz": "0xb8cd8",
+          "memsz": "0xb9000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1954ce0",
+          "vaddr": "0x1958ce0",
+          "filesz": "0xecf8",
+          "memsz": "0x5db80",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x189c000",
+          "memsz": "0xb9000",
+          "end": "0x1955000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mediapipe/tasks-genai/0.10.35/c4496a811bfb5e08e90270dbbd76d941c4a7c10d/tasks-genai-0.10.35.aar",
+          "member": "jni/arm64-v8a/libllm_inference_engine_jni.so",
+          "sha256": "6fdf70c5ac70a8182fbffd000e00f58ab9d5d2362f1f535657327432b684ea0f",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libllm_inference_engine_jni.so",
+      "aab_sha256": "3307ac50bb8394e9e661a637202183498b1f7ba0e25690d6c721dfa85a2dc465",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libmediapipe_tasks_vision_image_generator_jni.so",
+      "sha256": "4ea283434400213def0e8402a17ecddc7bb7e76f05bb69fbbe9898a7e1e55afc",
+      "size": 13991024,
+      "build_id": "dfffd8144b969bdc67b281cd01aa5023",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xce11e0",
+          "memsz": "0xce11e0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xce4000",
+          "vaddr": "0xce4000",
+          "filesz": "0x49b90",
+          "memsz": "0x4a000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xd2db90",
+          "vaddr": "0xd31b90",
+          "filesz": "0x29608",
+          "memsz": "0xf2978",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xce4000",
+          "memsz": "0x4a000",
+          "end": "0xd2e000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mediapipe/tasks-vision-image-generator/0.10.26.1/de223f3b5f4efed7304d5504e86428d409ba1bb/tasks-vision-image-generator-0.10.26.1.aar",
+          "member": "jni/arm64-v8a/libmediapipe_tasks_vision_image_generator_jni.so",
+          "sha256": "498f793685967beb646b6e8ad6a6cfa8cb013634c409dd3611d839ce6475eba4",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libmediapipe_tasks_vision_image_generator_jni.so",
+      "aab_sha256": "4ea283434400213def0e8402a17ecddc7bb7e76f05bb69fbbe9898a7e1e55afc",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libmediapipe_tasks_vision_jni.so",
+      "sha256": "2f51b2ab98ca8decbf5c4a8a5c8fdadb7e8cfa2c02409d6543843e4fd353851b",
+      "size": 14340440,
+      "build_id": "8e0f30df9d2731a7f3d4b3c2f5c53814",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xd2e070",
+          "memsz": "0xd2e070",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xd30000",
+          "vaddr": "0xd30000",
+          "filesz": "0x51950",
+          "memsz": "0x52000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xd81950",
+          "vaddr": "0xd85950",
+          "filesz": "0x2ad30",
+          "memsz": "0xf4978",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xd30000",
+          "memsz": "0x52000",
+          "end": "0xd82000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mediapipe/tasks-vision-image-generator/0.10.26.1/de223f3b5f4efed7304d5504e86428d409ba1bb/tasks-vision-image-generator-0.10.26.1.aar",
+          "member": "jni/arm64-v8a/libmediapipe_tasks_vision_jni.so",
+          "sha256": "1f2ed10b8bb49d9e290715ba2ce7b82a289a705cfcea5298593569c0238668e6",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libmediapipe_tasks_vision_jni.so",
+      "aab_sha256": "2f51b2ab98ca8decbf5c4a8a5c8fdadb7e8cfa2c02409d6543843e4fd353851b",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+      "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+      "size": 11064544,
+      "build_id": "dda3fa6fd714a2427bcbb5fa672d4d14",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x9ca070",
+          "memsz": "0x9ca070",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x9cc000",
+          "vaddr": "0x9cc000",
+          "filesz": "0x8aa18",
+          "memsz": "0x8b000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xa56a20",
+          "vaddr": "0xa5aa20",
+          "filesz": "0x36168",
+          "memsz": "0x7f270",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x9cc000",
+          "memsz": "0x8b000",
+          "end": "0xa57000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/text-recognition-bundled-common/17.0.0/ad2396ea7b02feb026c821cb6aded1216509b0fd/text-recognition-bundled-common-17.0.0.aar",
+          "member": "jni/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+          "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+      "aab_sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libmobile_sdk.so",
+      "sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "size": 7276176,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x2d2fe8",
+          "memsz": "0x2d2fe8",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x2d3000",
+          "vaddr": "0x2d7000",
+          "filesz": "0x3f63c0",
+          "memsz": "0x3f63c0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x6c93c0",
+          "vaddr": "0x6d13c0",
+          "filesz": "0x24f20",
+          "memsz": "0x26c40",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x6ee2e0",
+          "vaddr": "0x6fa2e0",
+          "filesz": "0x19c8",
+          "memsz": "0x26f0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x6d13c0",
+          "memsz": "0x26c40",
+          "end": "0x6f8000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/arm64-v8a/libmobile_sdk.so",
+      "aab_sha256": "99b477087da8b3cbdc2ac3cdc68e377140a5feb4fb2e71d335924b5e23add713",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libn42_mls.so",
+      "sha256": "61a65ea4afe83f76062c2856e7cd3e2a380e542dbcc7b2735ed3f2e2e6743f85",
+      "size": 3097800,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xa8080",
+          "memsz": "0xa8080",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xa8080",
+          "vaddr": "0xac080",
+          "filesz": "0x23f3a0",
+          "memsz": "0x23f3a0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x2e7420",
+          "vaddr": "0x2ef420",
+          "filesz": "0xb9f8",
+          "memsz": "0xbbe0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x2f2e18",
+          "vaddr": "0x2fee18",
+          "filesz": "0xdc8",
+          "memsz": "0x1728",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x2ef420",
+          "memsz": "0xbbe0",
+          "end": "0x2fb000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "file": "android/app/src/main/jniLibs/arm64-v8a/libn42_mls.so",
+          "sha256": "8ec181165f191dbf0ec911bfde633e611517df18a8e0d59fc77c0857cb4e3be2",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libn42_mls.so",
+      "aab_sha256": "61a65ea4afe83f76062c2856e7cd3e2a380e542dbcc7b2735ed3f2e2e6743f85",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libnoise.so",
+      "sha256": "51176ebdacb2f58075a66564525de60b0e870f0c81974a9eceacb032a584f153",
+      "size": 16896,
+      "build_id": "7810452b5056d712a6d8540e27e0bb1072d29360",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x37f0",
+          "memsz": "0x37f0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x37f0",
+          "vaddr": "0x77f0",
+          "filesz": "0x258",
+          "memsz": "0x810",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x77f0",
+          "memsz": "0x810",
+          "end": "0x8000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/io.livekit/noise/2.0.0/fb0d13ff8a84a0768bc18357521626981a5da8bb/noise-2.0.0.aar",
+          "member": "jni/arm64-v8a/libnoise.so",
+          "sha256": "51176ebdacb2f58075a66564525de60b0e870f0c81974a9eceacb032a584f153",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libnoise.so",
+      "aab_sha256": "51176ebdacb2f58075a66564525de60b0e870f0c81974a9eceacb032a584f153",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/librustls_platform_verifier-7fae6d6549895374.so",
+      "sha256": "5839b795079e471355cac4340ab79a2a9c3850b450267498a744a3c7b827e1f0",
+      "size": 349800,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1c960",
+          "memsz": "0x1c960",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1c960",
+          "vaddr": "0x20960",
+          "filesz": "0x36090",
+          "memsz": "0x36090",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x529f0",
+          "vaddr": "0x5a9f0",
+          "filesz": "0x19f8",
+          "memsz": "0x5610",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x543e8",
+          "vaddr": "0x603e8",
+          "filesz": "0x998",
+          "memsz": "0x1270",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x5a9f0",
+          "memsz": "0x5610",
+          "end": "0x60000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/arm64-v8a/librustls_platform_verifier-7fae6d6549895374.so",
+      "aab_sha256": "5839b795079e471355cac4340ab79a2a9c3850b450267498a744a3c7b827e1f0",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libsqlcipher.so",
+      "sha256": "da51355b6c455150dae59e902c484292d33d752b7fec36f723558625d88048fa",
+      "size": 2100672,
+      "build_id": "439a660ede76fc497630753b2ab22f128675508b",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1f6ab0",
+          "memsz": "0x1f6ab0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1f6ab0",
+          "vaddr": "0x1faab0",
+          "filesz": "0x6328",
+          "memsz": "0x6328",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1fcdd8",
+          "vaddr": "0x204dd8",
+          "filesz": "0x37b0",
+          "memsz": "0xccb9",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1faab0",
+          "memsz": "0x6550",
+          "end": "0x201000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.zetetic/sqlcipher-android/4.19.0/dc3ebe22f1dce99037a03b14127d711c59a99d44/sqlcipher-android-4.19.0.aar",
+          "member": "jni/arm64-v8a/libsqlcipher.so",
+          "sha256": "da51355b6c455150dae59e902c484292d33d752b7fec36f723558625d88048fa",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libsqlcipher.so",
+      "aab_sha256": "da51355b6c455150dae59e902c484292d33d752b7fec36f723558625d88048fa",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libsqlite_vector_store_jni.so",
+      "sha256": "dee38bed5a333e0c3047ef5d99b4ef1d19ac2b75a127cd39de91df6de18f8c9d",
+      "size": 7468008,
+      "build_id": "68c62f11edfaa3d12a70bb6d3db748e3",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x6de7e0",
+          "memsz": "0x6de7e0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x6e0000",
+          "vaddr": "0x6e0000",
+          "filesz": "0x32bf0",
+          "memsz": "0x33000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x712bf0",
+          "vaddr": "0x716bf0",
+          "filesz": "0xbc80",
+          "memsz": "0x2c890",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x6e0000",
+          "memsz": "0x33000",
+          "end": "0x713000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.ai.edge.localagents/localagents-rag/0.3.0/b029093b1338d92556e9f6d8d684f7997c066c97/localagents-rag-0.3.0.aar",
+          "member": "jni/arm64-v8a/libsqlite_vector_store_jni.so",
+          "sha256": "070620211674b9118a3ff3af147104a969672234521897a8a2d8cd590840fdd2",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libsqlite_vector_store_jni.so",
+      "aab_sha256": "dee38bed5a333e0c3047ef5d99b4ef1d19ac2b75a127cd39de91df6de18f8c9d",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libsurface_util_jni.so",
+      "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+      "size": 4896,
+      "build_id": "341a0425aaef60e916c389fe26d31f28fd182631",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x9b0",
+          "memsz": "0x9b0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x9b0",
+          "vaddr": "0x49b0",
+          "filesz": "0x238",
+          "memsz": "0x650",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x49b0",
+          "memsz": "0x650",
+          "end": "0x5000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.1/f20141e4742ec17a2a78fd7d53bd2af389bb3c09/camera-core-1.6.1.aar",
+          "member": "jni/arm64-v8a/libsurface_util_jni.so",
+          "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+          "match": "sha256"
+        },
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.0/96f2e7ee1a1bf97624cf6e066fe225c0e938bdb7/camera-core-1.6.0.aar",
+          "member": "jni/arm64-v8a/libsurface_util_jni.so",
+          "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libsurface_util_jni.so",
+      "aab_sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libtext_chunker_jni.so",
+      "sha256": "448e04fec61ea1f2a8953ce07ffd01db1b93d02fa062c1a6110593f94ddd2927",
+      "size": 9438744,
+      "build_id": "902c554a70d0285e3c374da71c384670",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x8753b0",
+          "memsz": "0x8753b0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x878000",
+          "vaddr": "0x878000",
+          "filesz": "0x7ec48",
+          "memsz": "0x7f000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x8f6c48",
+          "vaddr": "0x8fac48",
+          "filesz": "0x8e58",
+          "memsz": "0x2afb8",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x878000",
+          "memsz": "0x7f000",
+          "end": "0x8f7000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.ai.edge.localagents/localagents-rag/0.3.0/b029093b1338d92556e9f6d8d684f7997c066c97/localagents-rag-0.3.0.aar",
+          "member": "jni/arm64-v8a/libtext_chunker_jni.so",
+          "sha256": "f44a43eaf97e88abc2706ae3a28ad26a6a72c8385d10c14283dfedb72a6d47ac",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libtext_chunker_jni.so",
+      "aab_sha256": "448e04fec61ea1f2a8953ce07ffd01db1b93d02fa062c1a6110593f94ddd2927",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libtranslate_jni.so",
+      "sha256": "45040ff0cdd194d6e601589d759e6f1ba733de5f95790f76cc3e2046919046be",
+      "size": 16361032,
+      "build_id": "665b3612c70b5b9ec25a9e4e8065bbd9",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xdc6cb0",
+          "memsz": "0xdc6cb0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xdc8000",
+          "vaddr": "0xdc8000",
+          "filesz": "0xac9f0",
+          "memsz": "0xad000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xe749f0",
+          "vaddr": "0xe789f0",
+          "filesz": "0x125140",
+          "memsz": "0x1681b0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xdc8000",
+          "memsz": "0xad000",
+          "end": "0xe75000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/translate/17.0.3/7188883b661bc7a2c95f174fe2d47b04ff20f2e2/translate-17.0.3.aar",
+          "member": "jni/arm64-v8a/libtranslate_jni.so",
+          "sha256": "35b3d0366291347e3f25e80e809ee398d716aea49cd03278007fedd526a1496f",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libtranslate_jni.so",
+      "aab_sha256": "45040ff0cdd194d6e601589d759e6f1ba733de5f95790f76cc3e2046919046be",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libuniffi_yttrium_wcpay.so",
+      "sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+      "size": 2272176,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xecfa0",
+          "memsz": "0xecfa0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xecfc0",
+          "vaddr": "0xf0fc0",
+          "filesz": "0x127590",
+          "memsz": "0x127590",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x214550",
+          "vaddr": "0x21c550",
+          "filesz": "0x14ef8",
+          "memsz": "0x15ab0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x229448",
+          "vaddr": "0x235448",
+          "filesz": "0x1038",
+          "memsz": "0x19c8",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x21c550",
+          "memsz": "0x15ab0",
+          "end": "0x232000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.github.reown-com.yttrium/yttrium-wcpay/0.10.60/341f3dbb0dd590e13a86bab782cba62a707e193f/yttrium-wcpay-0.10.60.aar",
+          "member": "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+          "sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libuniffi_yttrium_wcpay.so",
+      "aab_sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libvodozemac_bindings_dart.so",
+      "sha256": "a7569789f88009297c159d3ada66cdd9e1e559d1c5d7a9c0f5248f12dc0d9950",
+      "size": 1640528,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x81318",
+          "memsz": "0x81318",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x81318",
+          "vaddr": "0x85318",
+          "filesz": "0x1047e8",
+          "memsz": "0x1047e8",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x185b00",
+          "vaddr": "0x18db00",
+          "filesz": "0x98c8",
+          "memsz": "0xa500",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x18f3c8",
+          "vaddr": "0x19b3c8",
+          "filesz": "0xb60",
+          "memsz": "0x15c8",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x18db00",
+          "memsz": "0xa500",
+          "end": "0x198000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "file": "build/flutter_vodozemac/jniLibs/release/arm64-v8a/libvodozemac_bindings_dart.so",
+          "sha256": "58efb4082acf1d627fa6a02fff2781bad2e04ab2d2fb01ba49db06b89d75207b",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libvodozemac_bindings_dart.so",
+      "aab_sha256": "a7569789f88009297c159d3ada66cdd9e1e559d1c5d7a9c0f5248f12dc0d9950",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/arm64-v8a/libxeno_native.so",
+      "sha256": "c0b36a1083803fcc7f7ade803120eb76e34eb2df07cf6af91ddbe25db400e2e2",
+      "size": 10260032,
+      "build_id": "e590b0c1b5e3048265ef15587a5ffe75",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x971820",
+          "memsz": "0x971820",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x974000",
+          "vaddr": "0x974000",
+          "filesz": "0x43830",
+          "memsz": "0x44000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x9b7830",
+          "vaddr": "0x9bb830",
+          "filesz": "0x10b00",
+          "memsz": "0xe30a0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x974000",
+          "memsz": "0x44000",
+          "end": "0x9b8000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/mediapipe-internal/17.0.0-beta10/2aabcfbae1a47be89f537ab42c8367869f3d321e/mediapipe-internal-17.0.0-beta10.aar",
+          "member": "jni/arm64-v8a/libxeno_native.so",
+          "sha256": "a711a0294befbb258110ca03713a0c8b2f8d4b57910796c35489478f5df8b663",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/arm64-v8a/libxeno_native.so",
+      "aab_sha256": "c0b36a1083803fcc7f7ade803120eb76e34eb2df07cf6af91ddbe25db400e2e2",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libTrustWalletCore.so",
+      "sha256": "213a17051219547795fd4b4a51de9fde760c84f5f19258027367e2d8e2eeb3f0",
+      "size": 19163440,
+      "build_id": "8d915ed681a345a1f167aa049d4fe4a183364545",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x11e7ea0",
+          "memsz": "0x11e7ea0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x11e7ea0",
+          "vaddr": "0x11ebea0",
+          "filesz": "0x517f8",
+          "memsz": "0x52160",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x12396a0",
+          "vaddr": "0x12416a0",
+          "filesz": "0xc7a8",
+          "memsz": "0x12160",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x11ebea0",
+          "memsz": "0x52160",
+          "end": "0x123e000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.trustwallet/wallet-core/4.8.4/a000a8ab179c6b49155317630f7e8600c66bc886/wallet-core-4.8.4.aar",
+          "member": "jni/x86_64/libTrustWalletCore.so",
+          "sha256": "213a17051219547795fd4b4a51de9fde760c84f5f19258027367e2d8e2eeb3f0",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libTrustWalletCore.so",
+      "aab_sha256": "213a17051219547795fd4b4a51de9fde760c84f5f19258027367e2d8e2eeb3f0",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libapp.so",
+      "sha256": "adbc3a1d3300f086fe6939352039069a851295302c16bf9b10676418946400ac",
+      "size": 48104328,
+      "build_id": "e382796814340334678f3a30f8a306c8",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x122a26d",
+          "memsz": "0x122a26d",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0x1230000",
+          "vaddr": "0x1230000",
+          "filesz": "0x1ba7140",
+          "memsz": "0x1ba7140",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0x2de0000",
+          "vaddr": "0x2de0000",
+          "filesz": "0x68",
+          "memsz": "0x68",
+          "align": "0x10000",
+          "pass": true
+        }
+      ],
+      "relro": [],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/x86_64/libapp.so",
+      "aab_sha256": "adbc3a1d3300f086fe6939352039069a851295302c16bf9b10676418946400ac",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libbarhopper_v3.so",
+      "sha256": "6c5deea87d962af008fd48c3229db13ab68eef2e9feeccb2df5b33a920c0579a",
+      "size": 5909280,
+      "build_id": "c22ff1b14ccfc0b5d36592dee09da2a7",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x58e4a0",
+          "memsz": "0x58e4a0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x590000",
+          "vaddr": "0x590000",
+          "filesz": "0xa0b8",
+          "memsz": "0xb000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x59a0c0",
+          "vaddr": "0x59e0c0",
+          "filesz": "0x81a8",
+          "memsz": "0x2e7a0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x590000",
+          "memsz": "0xb000",
+          "end": "0x59b000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/barcode-scanning/17.3.0/b65c206f33542482530605592cc2513a876b44c4/barcode-scanning-17.3.0.aar",
+          "member": "jni/x86_64/libbarhopper_v3.so",
+          "sha256": "6c5deea87d962af008fd48c3229db13ab68eef2e9feeccb2df5b33a920c0579a",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libbarhopper_v3.so",
+      "aab_sha256": "6c5deea87d962af008fd48c3229db13ab68eef2e9feeccb2df5b33a920c0579a",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libdartjni.so",
+      "sha256": "36cefad807ca2e964d9644981d7aa3ecd4b9039672aff0f7efc95f5ddc4f4b74",
+      "size": 116824,
+      "build_id": "f9e1df56ec79a53bed48e9516d3d8b35a60ee6af",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1b300",
+          "memsz": "0x1b300",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1b300",
+          "vaddr": "0x1f300",
+          "filesz": "0x560",
+          "memsz": "0xd00",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1b860",
+          "vaddr": "0x23860",
+          "filesz": "0x6f8",
+          "memsz": "0x974",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1f300",
+          "memsz": "0xd00",
+          "end": "0x20000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/x86_64/libdartjni.so",
+      "aab_sha256": "36cefad807ca2e964d9644981d7aa3ecd4b9039672aff0f7efc95f5ddc4f4b74",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libdatastore_shared_counter.so",
+      "sha256": "fb6c9208988c49ae94943bc3236fa763ba584722e044fa4ea9a12d2941027105",
+      "size": 6224,
+      "build_id": "c6ef0802be059f5f59b23f1205d040dbc5b1ccad",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xf20",
+          "memsz": "0xf20",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xf20",
+          "vaddr": "0x4f20",
+          "filesz": "0x228",
+          "memsz": "0x228",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x4f20",
+          "memsz": "0x10e0",
+          "end": "0x6000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.datastore/datastore-core-android/1.1.7/a9f2c979b8890eece47fadf583fe9647107c624a/datastore-core-release.aar",
+          "member": "jni/x86_64/libdatastore_shared_counter.so",
+          "sha256": "fb6c9208988c49ae94943bc3236fa763ba584722e044fa4ea9a12d2941027105",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libdatastore_shared_counter.so",
+      "aab_sha256": "fb6c9208988c49ae94943bc3236fa763ba584722e044fa4ea9a12d2941027105",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libface_detector_v2_jni.so",
+      "sha256": "bd2a0761c113a5285aff5591cc9a516fce8b351175151ba2e0390b2bfe64d8fe",
+      "size": 9685400,
+      "build_id": "fa71688254117a49de1967e4f04fd21a",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x8e0d30",
+          "memsz": "0x8e0d30",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x8e4000",
+          "vaddr": "0x8e4000",
+          "filesz": "0x4e7d0",
+          "memsz": "0x4f000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x932800",
+          "vaddr": "0x936800",
+          "filesz": "0x98e0",
+          "memsz": "0x36130",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x8e4000",
+          "memsz": "0x4f000",
+          "end": "0x933000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/face-detection/16.1.7/aab1bfb4e1be866b82efa1bb7c47210d8ebc836c/face-detection-16.1.7.aar",
+          "member": "jni/x86_64/libface_detector_v2_jni.so",
+          "sha256": "bd2a0761c113a5285aff5591cc9a516fce8b351175151ba2e0390b2bfe64d8fe",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libface_detector_v2_jni.so",
+      "aab_sha256": "bd2a0761c113a5285aff5591cc9a516fce8b351175151ba2e0390b2bfe64d8fe",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libflutter.so",
+      "sha256": "b1ec05dba7ee856f093c189ee46fb5893ba1096fcd4ac955f3662a9d4c5e1ea2",
+      "size": 13051424,
+      "build_id": "10a8136cc494e2277553c036a8c0dff521645590",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xc16e70",
+          "memsz": "0xc16e70",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0xc16e70",
+          "vaddr": "0xc26e70",
+          "filesz": "0x58650",
+          "memsz": "0x59190",
+          "align": "0x10000",
+          "pass": true
+        },
+        {
+          "offset": "0xc6f4c0",
+          "vaddr": "0xc8f4c0",
+          "filesz": "0x2818",
+          "memsz": "0x11ef0",
+          "align": "0x10000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xc26e70",
+          "memsz": "0x59190",
+          "end": "0xc80000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.codex/toolchains/flutter-3.47.5/flutter/bin/cache/artifacts/engine/android-x64-release/flutter.jar",
+          "member": "lib/x86_64/libflutter.so",
+          "sha256": "3d669250d624d53e417e8933910cffb7f365f7f7a6144357c98018298012f159",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libflutter.so",
+      "aab_sha256": "b1ec05dba7ee856f093c189ee46fb5893ba1096fcd4ac955f3662a9d4c5e1ea2",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libgojni.so",
+      "sha256": "30b7cc53979c985ab8b829f25d4c93b32f66e653b032ec3384b2cd8fd31db601",
+      "size": 15634296,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x99bb10",
+          "memsz": "0x99bb10",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x99d2a0",
+          "vaddr": "0x99d2a0",
+          "filesz": "0x54b290",
+          "memsz": "0x5977f0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x99d2a0",
+          "memsz": "0x4f4d60",
+          "end": "0xe92000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "plugins/flutter_mining/android/libs/evm.aar",
+          "member": "jni/x86_64/libgojni.so",
+          "sha256": "a4cf87ae304824a6e731614008196455203d06c60381e528f4248aec631d1aae",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libgojni.so",
+      "aab_sha256": "30b7cc53979c985ab8b829f25d4c93b32f66e653b032ec3384b2cd8fd31db601",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libimage_processing_util_jni.so",
+      "sha256": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+      "size": 49416,
+      "build_id": "23d5fe1f94160f1476d859a0b95f8028f1c4cf9f",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xb650",
+          "memsz": "0xb650",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xb650",
+          "vaddr": "0xf650",
+          "filesz": "0x2a8",
+          "memsz": "0x9b0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xb8f8",
+          "vaddr": "0x138f8",
+          "filesz": "0x0",
+          "memsz": "0x4",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xf650",
+          "memsz": "0x9b0",
+          "end": "0x10000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.1/f20141e4742ec17a2a78fd7d53bd2af389bb3c09/camera-core-1.6.1.aar",
+          "member": "jni/x86_64/libimage_processing_util_jni.so",
+          "sha256": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+          "match": "sha256"
+        },
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.0/96f2e7ee1a1bf97624cf6e066fe225c0e938bdb7/camera-core-1.6.0.aar",
+          "member": "jni/x86_64/libimage_processing_util_jni.so",
+          "sha256": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libimage_processing_util_jni.so",
+      "aab_sha256": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libjingle_peerconnection_so.so",
+      "sha256": "0717afcc43da0c1aabd904f9ef0653efc8f3d37b5750f39a123697e7910b623a",
+      "size": 16166352,
+      "build_id": "fe7e764942db06b7",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xf2a170",
+          "memsz": "0xf2a170",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xf2a170",
+          "vaddr": "0xf2e170",
+          "filesz": "0x3f440",
+          "memsz": "0x3fe90",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xf695b0",
+          "vaddr": "0xf715b0",
+          "filesz": "0x1040",
+          "memsz": "0x9c1c4",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xf2e170",
+          "memsz": "0x3fe90",
+          "end": "0xf6e000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/io.github.webrtc-sdk/android/150.7871.01/b9ae2a17fa38f16ce071f029cf8684fb9166a1c7/android-150.7871.01.aar",
+          "member": "jni/x86_64/libjingle_peerconnection_so.so",
+          "sha256": "0717afcc43da0c1aabd904f9ef0653efc8f3d37b5750f39a123697e7910b623a",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libjingle_peerconnection_so.so",
+      "aab_sha256": "0717afcc43da0c1aabd904f9ef0653efc8f3d37b5750f39a123697e7910b623a",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libjnidispatch.so",
+      "sha256": "288eafff19a70e833498201071c3d724f03f32ee8ff64a14fca50b57d975db70",
+      "size": 116904,
+      "build_id": "cf15c6448c337eff804ff5722778301585b184c9",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1943c",
+          "memsz": "0x1943c",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1bb00",
+          "vaddr": "0x1fb00",
+          "filesz": "0x674",
+          "memsz": "0xf48",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1fb00",
+          "memsz": "0x500",
+          "end": "0x20000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/4134d63c53cbf9650b11ee950df093add29f14cf/jna-5.17.0.aar",
+          "member": "jni/x86_64/libjnidispatch.so",
+          "sha256": "3809247e9b804a05ed8377b87d545cf5b5e97f960f75e725bc8497b40260e417",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libjnidispatch.so",
+      "aab_sha256": "288eafff19a70e833498201071c3d724f03f32ee8ff64a14fca50b57d975db70",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/liblitertlm_jni.so",
+      "sha256": "749879c93ad4e424c711f6e00a9091116303e9815aed89e4718e2c752005d799",
+      "size": 23839568,
+      "build_id": "8de6f9af6b377218102aea2d1d715d36",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x15f8750",
+          "memsz": "0x15f8750",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x15fc000",
+          "vaddr": "0x15fc000",
+          "filesz": "0xb4e28",
+          "memsz": "0xb5000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x16b0e40",
+          "vaddr": "0x16b4e40",
+          "filesz": "0xa838",
+          "memsz": "0x35a20",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x15fc000",
+          "memsz": "0xb5000",
+          "end": "0x16b1000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.ai.edge.litertlm/litertlm-android/0.9.0-beta/ed54172c7bd6bca8991a00a00dcf95b0b4e11c61/litertlm-android-0.9.0-beta.aar",
+          "member": "jni/x86_64/liblitertlm_jni.so",
+          "sha256": "ea02281260729864089bd178fd6f0abe8acb920d5732bcb612610a66c147158d",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/liblitertlm_jni.so",
+      "aab_sha256": "749879c93ad4e424c711f6e00a9091116303e9815aed89e4718e2c752005d799",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libllm_inference_engine_jni.so",
+      "sha256": "1a6f6d0975e48f6a666b7e6c41da32a37986132a3b24664a3b7ee7391903cddc",
+      "size": 30248376,
+      "build_id": "9d13a0d25cf7859ac77e9f8794f13bf1",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1c13860",
+          "memsz": "0x1c13860",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1c14000",
+          "vaddr": "0x1c14000",
+          "filesz": "0xb5390",
+          "memsz": "0xb6000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1cc93c0",
+          "vaddr": "0x1ccd3c0",
+          "filesz": "0xed58",
+          "memsz": "0x3cf00",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1c14000",
+          "memsz": "0xb6000",
+          "end": "0x1cca000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mediapipe/tasks-genai/0.10.35/c4496a811bfb5e08e90270dbbd76d941c4a7c10d/tasks-genai-0.10.35.aar",
+          "member": "jni/x86_64/libllm_inference_engine_jni.so",
+          "sha256": "ad3901c8ae660fa5e0f460fd6a0fe582bd493ed77e196ef9b4031e232ade6924",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libllm_inference_engine_jni.so",
+      "aab_sha256": "1a6f6d0975e48f6a666b7e6c41da32a37986132a3b24664a3b7ee7391903cddc",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libmlkit_google_ocr_pipeline.so",
+      "sha256": "3ddffb498b60f7f9512e341d4ee3abe4e1580c4fd65ef9b2c8ce9e490de467d8",
+      "size": 11626128,
+      "build_id": "405e5982a3054cb058add19451a5efa3",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xa5e240",
+          "memsz": "0xa5e240",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xa60000",
+          "vaddr": "0xa60000",
+          "filesz": "0x81408",
+          "memsz": "0x82000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xae1440",
+          "vaddr": "0xae5440",
+          "filesz": "0x348f8",
+          "memsz": "0x63450",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xa60000",
+          "memsz": "0x82000",
+          "end": "0xae2000",
+          "end_mod_16k": "0x2000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/text-recognition-bundled-common/17.0.0/ad2396ea7b02feb026c821cb6aded1216509b0fd/text-recognition-bundled-common-17.0.0.aar",
+          "member": "jni/x86_64/libmlkit_google_ocr_pipeline.so",
+          "sha256": "3ddffb498b60f7f9512e341d4ee3abe4e1580c4fd65ef9b2c8ce9e490de467d8",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libmlkit_google_ocr_pipeline.so",
+      "aab_sha256": "3ddffb498b60f7f9512e341d4ee3abe4e1580c4fd65ef9b2c8ce9e490de467d8",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libmobile_sdk.so",
+      "sha256": "8600d600034fcc9ad3e5bedc80277e64cbf0b3c2b8dc0b314ac0d1d84573bc67",
+      "size": 8313560,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x2f1450",
+          "memsz": "0x2f1450",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x2f1480",
+          "vaddr": "0x2f5480",
+          "filesz": "0x4d1cf0",
+          "memsz": "0x4d1cf0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x7c3170",
+          "vaddr": "0x7cb170",
+          "filesz": "0x28628",
+          "memsz": "0x28e90",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x7eb798",
+          "vaddr": "0x7f7798",
+          "filesz": "0x1958",
+          "memsz": "0x2618",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x7cb170",
+          "memsz": "0x28e90",
+          "end": "0x7f4000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/x86_64/libmobile_sdk.so",
+      "aab_sha256": "8600d600034fcc9ad3e5bedc80277e64cbf0b3c2b8dc0b314ac0d1d84573bc67",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libn42_mls.so",
+      "sha256": "6da6517f4415caa2d2fe32e3cdb34ebbcce4f24137368a69a91bd3cade311129",
+      "size": 3594256,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xb1564",
+          "memsz": "0xb1564",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xb1570",
+          "vaddr": "0xb5570",
+          "filesz": "0x2ad440",
+          "memsz": "0x2ad440",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x35e9b0",
+          "vaddr": "0x3669b0",
+          "filesz": "0xd790",
+          "memsz": "0xe650",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x36c140",
+          "vaddr": "0x378140",
+          "filesz": "0xde8",
+          "memsz": "0x1760",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x3669b0",
+          "memsz": "0xe650",
+          "end": "0x375000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "file": "android/app/src/main/jniLibs/x86_64/libn42_mls.so",
+          "sha256": "fcbd2b48da20b77bbc0fb979084012dcc117e040c23115b62d08207cd15fbc79",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libn42_mls.so",
+      "aab_sha256": "6da6517f4415caa2d2fe32e3cdb34ebbcce4f24137368a69a91bd3cade311129",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libnoise.so",
+      "sha256": "b1d027e9f8725e1a2e903697d7c8d62f5158d04b026e59799cb99441827f0241",
+      "size": 20528,
+      "build_id": "f69046af55c1891ec938f7a6887205c242411b76",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x4620",
+          "memsz": "0x4620",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x4620",
+          "vaddr": "0x8620",
+          "filesz": "0x258",
+          "memsz": "0x9e0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x8620",
+          "memsz": "0x9e0",
+          "end": "0x9000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/io.livekit/noise/2.0.0/fb0d13ff8a84a0768bc18357521626981a5da8bb/noise-2.0.0.aar",
+          "member": "jni/x86_64/libnoise.so",
+          "sha256": "b1d027e9f8725e1a2e903697d7c8d62f5158d04b026e59799cb99441827f0241",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libnoise.so",
+      "aab_sha256": "b1d027e9f8725e1a2e903697d7c8d62f5158d04b026e59799cb99441827f0241",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/librustls_platform_verifier-672ddd532c0f437d.so",
+      "sha256": "ce4a67e0922f2b427a36eab4c5b8ad240526af8b569fe59b79ca1af493ebfd9a",
+      "size": 377752,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x1d4f8",
+          "memsz": "0x1d4f8",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1d500",
+          "vaddr": "0x21500",
+          "filesz": "0x3bba0",
+          "memsz": "0x3bba0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x590a0",
+          "vaddr": "0x610a0",
+          "filesz": "0x2070",
+          "memsz": "0x2f60",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x5b110",
+          "vaddr": "0x67110",
+          "filesz": "0x9a0",
+          "memsz": "0x1260",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x610a0",
+          "memsz": "0x2f60",
+          "end": "0x64000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [],
+      "aab_member": "base/lib/x86_64/librustls_platform_verifier-672ddd532c0f437d.so",
+      "aab_sha256": "ce4a67e0922f2b427a36eab4c5b8ad240526af8b569fe59b79ca1af493ebfd9a",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libsqlcipher.so",
+      "sha256": "5f41c2f2cf349c7108f222267e8f42abd0f18da2fe75bb3c0e764b6a0f1641e0",
+      "size": 2231848,
+      "build_id": "3783c4b038d34ffbdec62663f1e569d71a27b32d",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x216b20",
+          "memsz": "0x216b20",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x216b20",
+          "vaddr": "0x21ab20",
+          "filesz": "0x6338",
+          "memsz": "0x6338",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x21ce60",
+          "vaddr": "0x224e60",
+          "filesz": "0x37d8",
+          "memsz": "0xccec",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x21ab20",
+          "memsz": "0x64e0",
+          "end": "0x221000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.zetetic/sqlcipher-android/4.19.0/dc3ebe22f1dce99037a03b14127d711c59a99d44/sqlcipher-android-4.19.0.aar",
+          "member": "jni/x86_64/libsqlcipher.so",
+          "sha256": "5f41c2f2cf349c7108f222267e8f42abd0f18da2fe75bb3c0e764b6a0f1641e0",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libsqlcipher.so",
+      "aab_sha256": "5f41c2f2cf349c7108f222267e8f42abd0f18da2fe75bb3c0e764b6a0f1641e0",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libsurface_util_jni.so",
+      "sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+      "size": 4912,
+      "build_id": "367c72cc2de9475d5b67616ec7af63286fc182f6",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x9c0",
+          "memsz": "0x9c0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x9c0",
+          "vaddr": "0x49c0",
+          "filesz": "0x238",
+          "memsz": "0x640",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x49c0",
+          "memsz": "0x640",
+          "end": "0x5000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.1/f20141e4742ec17a2a78fd7d53bd2af389bb3c09/camera-core-1.6.1.aar",
+          "member": "jni/x86_64/libsurface_util_jni.so",
+          "sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+          "match": "sha256"
+        },
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.0/96f2e7ee1a1bf97624cf6e066fe225c0e938bdb7/camera-core-1.6.0.aar",
+          "member": "jni/x86_64/libsurface_util_jni.so",
+          "sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libsurface_util_jni.so",
+      "aab_sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libtranslate_jni.so",
+      "sha256": "a757f9544d2731838e5e775f4fa06782aea7944d9039d24d9f2c57d81efa4265",
+      "size": 17371616,
+      "build_id": "7e8866d4380a7a84937931d049a2df5c",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xec5230",
+          "memsz": "0xec5230",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xec8000",
+          "vaddr": "0xec8000",
+          "filesz": "0xa3620",
+          "memsz": "0xa4000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xf6b640",
+          "vaddr": "0xf6f640",
+          "filesz": "0x125088",
+          "memsz": "0x14dde0",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xec8000",
+          "memsz": "0xa4000",
+          "end": "0xf6c000",
+          "end_mod_16k": "0x0",
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/translate/17.0.3/7188883b661bc7a2c95f174fe2d47b04ff20f2e2/translate-17.0.3.aar",
+          "member": "jni/x86_64/libtranslate_jni.so",
+          "sha256": "d7e1b7be14a5cd2c20331c9a511efb3e98b777347abf7eb9bce9166fcb246975",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libtranslate_jni.so",
+      "aab_sha256": "a757f9544d2731838e5e775f4fa06782aea7944d9039d24d9f2c57d81efa4265",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libuniffi_yttrium_wcpay.so",
+      "sha256": "86058de377fd55904caf9db06e6ef185b69121888e1a598928e3cdb09cbf3885",
+      "size": 2596648,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xf525c",
+          "memsz": "0xf525c",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xf5280",
+          "vaddr": "0xf9280",
+          "filesz": "0x16e180",
+          "memsz": "0x16e180",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x263400",
+          "vaddr": "0x26b400",
+          "filesz": "0x153a0",
+          "memsz": "0x15c00",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x2787a0",
+          "vaddr": "0x2847a0",
+          "filesz": "0x1058",
+          "memsz": "0x1a00",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x26b400",
+          "memsz": "0x15c00",
+          "end": "0x281000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.github.reown-com.yttrium/yttrium-wcpay/0.10.60/341f3dbb0dd590e13a86bab782cba62a707e193f/yttrium-wcpay-0.10.60.aar",
+          "member": "jni/x86_64/libuniffi_yttrium_wcpay.so",
+          "sha256": "86058de377fd55904caf9db06e6ef185b69121888e1a598928e3cdb09cbf3885",
+          "match": "sha256"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libuniffi_yttrium_wcpay.so",
+      "aab_sha256": "86058de377fd55904caf9db06e6ef185b69121888e1a598928e3cdb09cbf3885",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libvodozemac_bindings_dart.so",
+      "sha256": "23ccb297678fe8d4f0cc57b1480fd4263c8989354d9433bc7c28b4a1f98ea56f",
+      "size": 1793008,
+      "build_id": null,
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0x853c8",
+          "memsz": "0x853c8",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x853d0",
+          "vaddr": "0x893d0",
+          "filesz": "0x1247b0",
+          "memsz": "0x1247b0",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1a9b80",
+          "vaddr": "0x1b1b80",
+          "filesz": "0xabc8",
+          "memsz": "0xb480",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0x1b4748",
+          "vaddr": "0x1c0748",
+          "filesz": "0xb80",
+          "memsz": "0x15f8",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0x1b1b80",
+          "memsz": "0xb480",
+          "end": "0x1bd000",
+          "end_mod_16k": "0x1000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "file": "build/flutter_vodozemac/jniLibs/release/x86_64/libvodozemac_bindings_dart.so",
+          "sha256": "fa20a87befec6f6b2d8e4bf84cc2114995e545e2a23453ba992121fb07719444",
+          "match": ".text SHA256 only"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libvodozemac_bindings_dart.so",
+      "aab_sha256": "23ccb297678fe8d4f0cc57b1480fd4263c8989354d9433bc7c28b4a1f98ea56f",
+      "aab_equals_apk": true
+    },
+    {
+      "apk_member": "lib/x86_64/libxeno_native.so",
+      "sha256": "f79a763263be1892f46a8f449331ee982f3652081d0babf2aa66dbca9691326d",
+      "size": 11436600,
+      "build_id": "64bafc7769fa68c26dd8a260de265c9c",
+      "loads": [
+        {
+          "offset": "0x0",
+          "vaddr": "0x0",
+          "filesz": "0xa9b630",
+          "memsz": "0xa9b630",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xa9c000",
+          "vaddr": "0xa9c000",
+          "filesz": "0x3abb8",
+          "memsz": "0x3b000",
+          "align": "0x4000",
+          "pass": true
+        },
+        {
+          "offset": "0xad6bc0",
+          "vaddr": "0xadabc0",
+          "filesz": "0x10b68",
+          "memsz": "0xca250",
+          "align": "0x4000",
+          "pass": true
+        }
+      ],
+      "relro": [
+        {
+          "vaddr": "0xa9c000",
+          "memsz": "0x3b000",
+          "end": "0xad7000",
+          "end_mod_16k": "0x3000",
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "sources": [
+        {
+          "archive": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.google.mlkit/mediapipe-internal/17.0.0-beta10/2aabcfbae1a47be89f537ab42c8367869f3d321e/mediapipe-internal-17.0.0-beta10.aar",
+          "member": "jni/x86_64/libxeno_native.so",
+          "sha256": "2aeb8dcecf65cb7ab7baad776db00b174ab62e61dd47a2a76b9e394a148c2747",
+          "match": "GNU build-id (stripping may differ)"
+        }
+      ],
+      "aab_member": "base/lib/x86_64/libxeno_native.so",
+      "aab_sha256": "f79a763263be1892f46a8f449331ee982f3652081d0babf2aa66dbca9691326d",
+      "aab_equals_apk": true
+    }
+  ],
+  "official_metadata": {
+    "androidx.datastore:datastore-core-android": {
+      "url": "https://dl.google.com/dl/android/maven2/androidx/datastore/datastore-core-android/maven-metadata.xml",
+      "latest": "1.3.0-alpha11",
+      "release": "1.3.0-alpha11",
+      "last_stable_in_metadata": "1.2.1",
+      "last_versions": [
+        "1.3.0-alpha07",
+        "1.3.0-alpha08",
+        "1.3.0-alpha09",
+        "1.3.0-alpha10",
+        "1.3.0-alpha11"
+      ]
+    },
+    "com.google.mlkit:face-detection": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mlkit/face-detection/maven-metadata.xml",
+      "latest": "16.1.7",
+      "release": "16.1.7",
+      "last_stable_in_metadata": "16.1.7",
+      "last_versions": [
+        "16.1.3",
+        "16.1.4",
+        "16.1.5",
+        "16.1.6",
+        "16.1.7"
+      ]
+    },
+    "com.google.ai.edge.localagents:localagents-rag": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/ai/edge/localagents/localagents-rag/maven-metadata.xml",
+      "latest": "0.3.0",
+      "release": "0.3.0",
+      "last_stable_in_metadata": "0.3.0",
+      "last_versions": [
+        "0.0.1-alpha-2",
+        "0.1.0",
+        "0.1.1",
+        "0.2.0",
+        "0.3.0"
+      ]
+    },
+    "com.google.mediapipe:tasks-vision-image-generator": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mediapipe/tasks-vision-image-generator/maven-metadata.xml",
+      "latest": "0.10.26.1",
+      "release": "0.10.26.1",
+      "last_stable_in_metadata": "0.10.26.1",
+      "last_versions": [
+        "0.10.18",
+        "0.10.20",
+        "0.10.21",
+        "0.10.26",
+        "0.10.26.1"
+      ]
+    },
+    "io.github.webrtc-sdk:android": {
+      "url": "https://repo.maven.apache.org/maven2/io/github/webrtc-sdk/android/maven-metadata.xml",
+      "latest": "150.7871.01",
+      "release": "150.7871.01",
+      "last_stable_in_metadata": "150.7871.01",
+      "last_versions": [
+        "144.7559.09",
+        "144.7559.12",
+        "144.7559.14",
+        "144.7559.15",
+        "150.7871.01"
+      ]
+    },
+    "com.google.ai.edge.litertlm:litertlm-android": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/ai/edge/litertlm/litertlm-android/maven-metadata.xml",
+      "latest": "0.17.1",
+      "release": "0.17.1",
+      "last_stable_in_metadata": "0.17.1",
+      "last_versions": [
+        "0.16.0",
+        "0.16.1",
+        "0.17.0-alpha1",
+        "0.17.0",
+        "0.17.1"
+      ]
+    },
+    "com.google.mediapipe:tasks-genai": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mediapipe/tasks-genai/maven-metadata.xml",
+      "latest": "0.10.35",
+      "release": "0.10.35",
+      "last_stable_in_metadata": "0.10.35",
+      "last_versions": [
+        "0.10.28",
+        "0.10.29",
+        "0.10.32",
+        "0.10.33",
+        "0.10.35"
+      ]
+    },
+    "com.google.mlkit:text-recognition-bundled-common": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mlkit/text-recognition-bundled-common/maven-metadata.xml",
+      "latest": "17.0.0",
+      "release": "17.0.0",
+      "last_stable_in_metadata": "17.0.0",
+      "last_versions": [
+        "16.0.0-beta4",
+        "16.0.0-beta5",
+        "16.0.0-beta6",
+        "16.0.0",
+        "17.0.0"
+      ]
+    },
+    "net.zetetic:sqlcipher-android": {
+      "url": "https://repo.maven.apache.org/maven2/net/zetetic/sqlcipher-android/maven-metadata.xml",
+      "latest": "4.19.0",
+      "release": "4.19.0",
+      "last_stable_in_metadata": "4.19.0",
+      "last_versions": [
+        "4.15.0",
+        "4.16.0",
+        "4.17.0",
+        "4.18.0",
+        "4.19.0"
+      ]
+    },
+    "androidx.camera:camera-core": {
+      "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/maven-metadata.xml",
+      "latest": "1.7.0-alpha03",
+      "release": "1.7.0-alpha03",
+      "last_stable_in_metadata": "1.6.2",
+      "last_versions": [
+        "1.6.1",
+        "1.6.2",
+        "1.7.0-alpha01",
+        "1.7.0-alpha02",
+        "1.7.0-alpha03"
+      ]
+    },
+    "com.google.mlkit:translate": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mlkit/translate/maven-metadata.xml",
+      "latest": "17.0.3",
+      "release": "17.0.3",
+      "last_stable_in_metadata": "17.0.3",
+      "last_versions": [
+        "16.1.2",
+        "17.0.0",
+        "17.0.1",
+        "17.0.2",
+        "17.0.3"
+      ]
+    },
+    "com.google.mlkit:barcode-scanning": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mlkit/barcode-scanning/maven-metadata.xml",
+      "latest": "17.3.0",
+      "release": "17.3.0",
+      "last_stable_in_metadata": "17.3.0",
+      "last_versions": [
+        "17.0.2",
+        "17.0.3",
+        "17.1.0",
+        "17.2.0",
+        "17.3.0"
+      ]
+    },
+    "io.livekit:noise": {
+      "url": "https://repo.maven.apache.org/maven2/io/livekit/noise/maven-metadata.xml",
+      "latest": "2.0.0",
+      "release": "2.0.0",
+      "last_stable_in_metadata": "2.0.0",
+      "last_versions": [
+        "2.0.0"
+      ]
+    },
+    "com.google.mlkit:mediapipe-internal": {
+      "url": "https://dl.google.com/dl/android/maven2/com/google/mlkit/mediapipe-internal/maven-metadata.xml",
+      "latest": "17.0.0-beta10",
+      "release": "17.0.0-beta10",
+      "last_stable_in_metadata": "16.0.0",
+      "last_versions": [
+        "17.0.0-beta6",
+        "17.0.0-beta7",
+        "17.0.0-beta8",
+        "17.0.0-beta9",
+        "17.0.0-beta10"
+      ]
+    }
+  },
+  "all_loads_pass": true,
+  "new_stable_candidates_inspected": [
+    {
+      "coordinate": "androidx.datastore:datastore-core-android:1.2.1",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/datastore/datastore-core-android/1.2.1/datastore-core-android-1.2.1.aar",
+      "aar_sha256": "435edad7bcb1fbb1a2a46de7be4d6daf299479b3328ebf757ebdfe02810cbdd8",
+      "libraries": [
+        {
+          "member": "jni/arm64-v8a/libdatastore_shared_counter.so",
+          "sha256": "deed4546c8dafad0e68ea2c25e4c0a62ca97343614ae386b7ed2af6abb7fa999",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x0"
+          ],
+          "pass": true
+        },
+        {
+          "member": "jni/x86_64/libdatastore_shared_counter.so",
+          "sha256": "c3973140a0e6144a83e7dd7ee3c4e161f42181591feda254e12c8395d3bbacd0",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x0"
+          ],
+          "pass": true
+        }
+      ]
+    },
+    {
+      "coordinate": "androidx.camera:camera-core:1.6.2",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2.aar",
+      "aar_sha256": "ebd66f090414f4c12f23a55b5023aeee1b096da8a06c02a0b6fb3520c4ddadf6",
+      "libraries": [
+        {
+          "member": "jni/arm64-v8a/libimage_processing_util_jni.so",
+          "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x0"
+          ],
+          "pass": true
+        },
+        {
+          "member": "jni/arm64-v8a/libsurface_util_jni.so",
+          "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x1000"
+          ],
+          "pass": false
+        },
+        {
+          "member": "jni/x86_64/libimage_processing_util_jni.so",
+          "sha256": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x0"
+          ],
+          "pass": true
+        },
+        {
+          "member": "jni/x86_64/libsurface_util_jni.so",
+          "sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x1000"
+          ],
+          "pass": false
+        }
+      ]
+    },
+    {
+      "coordinate": "com.google.ai.edge.litertlm:litertlm-android:0.17.1",
+      "url": "https://dl.google.com/dl/android/maven2/com/google/ai/edge/litertlm/litertlm-android/0.17.1/litertlm-android-0.17.1.aar",
+      "aar_sha256": "a8aeaa6b128e9b0f1c7fe5e620932a7030cfff1ac9c0dc133d8c79711de5cf4d",
+      "libraries": [
+        {
+          "member": "jni/arm64-v8a/liblitertlm_jni.so",
+          "sha256": "44f900f3ea6c5224f3395c1548dfa7e825f4412ba3833f994c5c306831a57086",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x0"
+          ],
+          "pass": true
+        },
+        {
+          "member": "jni/x86_64/liblitertlm_jni.so",
+          "sha256": "9b0a908ba8ef5e54b3191de963acd4272e1f10aee1df61d9912bb586a35a5d4a",
+          "loads_pass": true,
+          "relro_end_remainders": [
+            "0x1000"
+          ],
+          "pass": false
+        }
+      ]
+    }
+  ],
+  "runtime_evidence": [
+    {
+      "current_fixture_apk": "tools/android_native_smoke/harness/build/app/outputs/flutter-apk/app-debug.apk",
+      "member": "lib/arm64-v8a/libflutter.so",
+      "sha256": "047acc6348bb5094466b42c3b060d9c9ae18c5a55c7191567f5ed6d4599ef0c5",
+      "equals_release_apk_member": false,
+      "identity_limit": "Current retained fixture artifact; no claim earlier run log pins this exact current file unless logged separately."
+    },
+    {
+      "current_fixture_apk": "tools/android_native_smoke/harness/build/app/outputs/flutter-apk/app-debug.apk",
+      "member": "lib/arm64-v8a/libmobile_sdk.so",
+      "sha256": "06b93367af4a5a4aed93fb8fdc1790581cdabbd6e050e02db0bcca8bd3e88771",
+      "equals_release_apk_member": false,
+      "identity_limit": "Current retained fixture artifact; no claim earlier run log pins this exact current file unless logged separately."
+    }
+  ],
+  "evidence_hashes": {
+    ".superpowers/sdd/dependency-completion-20260925/rust-sdk-rebuild/tls-production-selected-runtime.log": "a7a5d1fdd8c0dbe7bbad65a818c276c0d3128ac52f4bd397b9bebc90f27735bf",
+    "build/app/outputs/bundle/release/app-release.aab": "0fe3da0660c5b35011516bcb49a5e041855304f5e2f4293de238fd23c540b9c4"
+  },
+  "aab_payload_comparison": {
+    "artifact": "build/app/outputs/bundle/release/app-release.aab",
+    "sha256": "0fe3da0660c5b35011516bcb49a5e041855304f5e2f4293de238fd23c540b9c4",
+    "checked": 55,
+    "same_as_apk": 55
+  },
+  "prepared_at": "2026-09-26",
+  "scope": "Read-only static preparation. Candidate artifacts inspected without installation/build/execution; no runtime compliance inferred."
+}

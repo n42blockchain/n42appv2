@@ -1,0 +1,19 @@
+git_head=2cc56182da97de7c4143fae82fc057b4f545f19e
+pubspec_version=2.4.8+2026072912
+flutter=3.47.5 3.13.4
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment Homebrew (build 21.0.10)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.10, mixed mode, sharing)
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo 1.97.1 (c980f4866 2026-06-30)
+sdk=/opt/homebrew/share/android-commandlinetools
+ndk=/opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358
+df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718  /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
+a7f1e0122ca76fe6a4b5c3a29816a07bb95cacb3cc6c21d73573d90a168d258c  android/app/libs/evm.aar
+ec2dce904f925ca044089164e6b7e7821ded77788c214676a18ed357f27e87a5  android/app/libs/mobile-sdk-android.aar
+7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a  build/flutter_vodozemac/outputs/aar/flutter_vodozemac-release.aar
+original_gradle_sha256=7f9d38b48354a9010dd23b45aa2812cb9ff88b95a993c73eeb6d9d3d862a4939
+signing=temporary local Android debug signing, not distribution signed
+gradle_offline=unverified cargo_offline=true cargokit_pub_offline=true
+apk_exit=0
+aab_exit=0

@@ -1,0 +1,10 @@
+{
+  "supportedAbis": [
+    "x86_64"
+  ],
+  "supportedLocales": [
+    "en-US"
+  ],
+  "screenDensity": 420,
+  "sdkVersion": 37
+}

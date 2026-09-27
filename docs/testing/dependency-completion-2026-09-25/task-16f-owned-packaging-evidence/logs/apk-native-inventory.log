@@ -1,0 +1,2 @@
+{"abi_counts": {"arm64-v8a": 31, "armeabi-v7a": 21, "x86_64": 24}, "bytes": 800243823, "checked_64bit": 55, "sha256": "b902a9cfbcbb748996e71c9de3d090335a7d176e11613d4fa67a59800a7ab492"}
+failed_64bit=30

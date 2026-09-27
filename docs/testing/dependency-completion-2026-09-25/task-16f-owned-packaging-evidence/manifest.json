@@ -1,0 +1,226 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 2823,
+      "sha256": "f4e0d2babf2320cc868d573439699904cb6df75fa452252c548a01b4d009c2d9"
+    },
+    "data/aab-native-inventory.json": {
+      "bytes": 35690,
+      "sha256": "c975125846257ccd89b7a998cbe11f9bc371614e230680e29e7f8cc175855c49"
+    },
+    "data/apk-native-inventory.json": {
+      "bytes": 35210,
+      "sha256": "42770c5898c1521ff68534a216a946c4cd8237d076f919c4f242ee2e85cca122"
+    },
+    "data/artifact-receipt.json": {
+      "bytes": 2207,
+      "sha256": "c73361ffe2977b575e9803ce1c3d6dd30bb3a749fa831c642a9d59aed9030969"
+    },
+    "data/owned-native-comparison.json": {
+      "bytes": 11255,
+      "sha256": "a0d950352a6f333b6800cc7d7c324151d3fc42e0271df2cd4d08dedb22898c49"
+    },
+    "data/prior-35-audit.json": {
+      "bytes": 1830,
+      "sha256": "ed7ac202efb1f3bcea87cf2cd63daf77c3c57ed00e795ad2afd35c25c6ca67dd"
+    },
+    "data/prior-origin-inventory.json": {
+      "bytes": 98843,
+      "sha256": "9ea6ec24d67f6ac87fd1fb5d15a58d82309fbd4f03d1c0aed0894855aedf4ec2"
+    },
+    "data/remaining-failures.json": {
+      "bytes": 40264,
+      "sha256": "67909f3c2779c9e397c0735cc1db5fb6e6831df1b73bcac96f5dcc9966c289a6"
+    },
+    "data/spec-arm64.json": {
+      "bytes": 149,
+      "sha256": "c55bb7ce327a88bd1d0ac58a1538def1a93650a676886ede87376d65dff4aeb8"
+    },
+    "data/spec-armv7.json": {
+      "bytes": 132,
+      "sha256": "e832d5d19082e86231469f8c410b8e90fa73a1617fcfa9c3838fd04fef58c9ba"
+    },
+    "data/spec-x86_64.json": {
+      "bytes": 127,
+      "sha256": "819e299785caa134545a950fa4e5f2e75900ee948e4cb3ed4193177e44569674"
+    },
+    "history/first-apk-build.log.gz": {
+      "bytes": 1573,
+      "sha256": "2a60f106e222dd5e5376383664f3af01727b1fc2a68863a943259af35782e1ba"
+    },
+    "history/first-inputs.txt": {
+      "bytes": 1196,
+      "sha256": "ec262165328f59b3288265626330dead020e97377697c11bba131587224039ee"
+    },
+    "history/preflight.log": {
+      "bytes": 1172,
+      "sha256": "274babd7c1b9ad5775fce5dbc1b5da0f4fd5f4d4f97a12199e01ad855f688eb0"
+    },
+    "logs/aab-build.log.gz": {
+      "bytes": 1813,
+      "sha256": "80606008632ca9e9904ae8137f9ebf2168ebf5c7e0c3077f41d1100f2d4af9c1"
+    },
+    "logs/aab-command.txt": {
+      "bytes": 90,
+      "sha256": "f4d9851813d3b78e189df055b7186ad02114d28ecddf331232ecdb995eb2c5b0"
+    },
+    "logs/aab-full-audit.json": {
+      "bytes": 1804,
+      "sha256": "16aeb4f737ab2f9a3a1783d880d60f9a0332f1ba9eef734340e518d795b26ccb"
+    },
+    "logs/aab-native-inventory.log": {
+      "bytes": 202,
+      "sha256": "6b785a46f987fa61d242ce7a903b6ff3696aa242952112b36a5d8a3ede1fa986"
+    },
+    "logs/apk-badging.log": {
+      "bytes": 10151,
+      "sha256": "f12b2da7a64de0ed60b17504c0a1afea088f77ed9b28363f5e89f991ac379d9c"
+    },
+    "logs/apk-build.log.gz": {
+      "bytes": 1814,
+      "sha256": "d6c3fe0045ad5438dfedf22108a8c17130008d736498d750b114a30c426fdcf3"
+    },
+    "logs/apk-command.txt": {
+      "bytes": 84,
+      "sha256": "fd3669f743a15204d0d69d8704b735eb949bdcdcbef9583cf784e3b8f7b8045b"
+    },
+    "logs/apk-full-audit.json": {
+      "bytes": 1654,
+      "sha256": "503178c41a55287ab8803ec5808a45658d99a9cea74966a6665835910e2be8eb"
+    },
+    "logs/apk-native-inventory.log": {
+      "bytes": 202,
+      "sha256": "b28745654aee1c9ce3773b2918fb3f97fdbf26eba206fd2bd43349d5c129adfe"
+    },
+    "logs/apk-signature.log": {
+      "bytes": 1484,
+      "sha256": "51d0ac16d82442684d596f2c24174751976d84ce6fba2e186823870ababb6b1d"
+    },
+    "logs/apk-zipalign.log": {
+      "bytes": 79209,
+      "sha256": "b249a9a8ed50187a4fe7e4f09d0f98d13c2e54a5d601f672978a51a5c20eda84"
+    },
+    "logs/arm64-delivery-check.log": {
+      "bytes": 163,
+      "sha256": "4d7a201d51d9d7e38c45df55bda031a74a0dfbbda243d086cbe40304cf39fbaa"
+    },
+    "logs/arm64-delivery/base-arm64_v8a_3.apk.signature.log": {
+      "bytes": 863,
+      "sha256": "1d08d1dfc76f7364bc545c58d05236f030818a82d635cccf502061f646d61704"
+    },
+    "logs/arm64-delivery/base-arm64_v8a_3.apk.zipalign.log": {
+      "bytes": 1859,
+      "sha256": "cd01356a36dc31c073f1568104b62a7c71793c34f649305b6ee6f54a10d35889"
+    },
+    "logs/arm64-delivery/base-en_3.apk.signature.log": {
+      "bytes": 863,
+      "sha256": "1d08d1dfc76f7364bc545c58d05236f030818a82d635cccf502061f646d61704"
+    },
+    "logs/arm64-delivery/base-en_3.apk.zipalign.log": {
+      "bytes": 229,
+      "sha256": "66454fe3679527ae90a0635ce30196654c0ce6c49ef69bd0bca2760f9f845818"
+    },
+    "logs/arm64-delivery/base-master_3.apk.signature.log": {
+      "bytes": 863,
+      "sha256": "1d08d1dfc76f7364bc545c58d05236f030818a82d635cccf502061f646d61704"
+    },
+    "logs/arm64-delivery/base-master_3.apk.zipalign.log": {
+      "bytes": 77669,
+      "sha256": "ba63e627e3e6ae70a41cb4d174cf63f188569357925504094cbe0fc27043632c"
+    },
+    "logs/arm64-delivery/base-xxhdpi_3.apk.signature.log": {
+      "bytes": 863,
+      "sha256": "1d08d1dfc76f7364bc545c58d05236f030818a82d635cccf502061f646d61704"
+    },
+    "logs/arm64-delivery/base-xxhdpi_3.apk.zipalign.log": {
+      "bytes": 3844,
+      "sha256": "79852b004af941f019b98ec49f45a882e48d23f470440c142bc7e6ae5e3587bc"
+    },
+    "logs/bundletool-build-apks.log": {
+      "bytes": 589,
+      "sha256": "26b07b33560a4c6b4d3b62e57b360d06ecb0761f965e10a39e672b3e7f32a408"
+    },
+    "logs/bundletool-validate.log": {
+      "bytes": 81115,
+      "sha256": "1fa04719713939e6a9f10b21a78e369096686f565106faec1892e547352cece5"
+    },
+    "logs/extract-arm64.log": {
+      "bytes": 846,
+      "sha256": "ff44bc9b7735bd98d02cdcbe3fe46202b5da7513345e93452928f2c55551f7da"
+    },
+    "logs/inputs.txt": {
+      "bytes": 1213,
+      "sha256": "f4405096620428edca3980c83c43c223ab3424820dae078a86139d757877f9d2"
+    },
+    "logs/owned-native-comparison.log": {
+      "bytes": 828,
+      "sha256": "971fb71561fb536eba0d558948c0700be1554d0e8ef5fa76f6f7562568b5312b"
+    },
+    "logs/preflight-final.log": {
+      "bytes": 1189,
+      "sha256": "fb5dd2b747b62378cdbb6f8af68414c02c22db6cc9351c1805d6ed60303d6a63"
+    },
+    "logs/pub-get-offline.log": {
+      "bytes": 1892,
+      "sha256": "f6207ee7629befcc03cd6b92180bd37ebeaeda9e8d17cbf157904a9f5f06a5ef"
+    },
+    "logs/remaining-summary.log": {
+      "bytes": 248,
+      "sha256": "ca735afd45dbb890417a7e3c26464618a7bdac2058c1afee02e084d1e2b81cd3"
+    },
+    "logs/size-arm64.csv": {
+      "bytes": 28,
+      "sha256": "dee625f8ad924778cd323c26828ddb9c44bc0f232b032b64cfe9dd111900298d"
+    },
+    "logs/size-arm64.err": {
+      "bytes": 437,
+      "sha256": "c943f4d8b223b5482cf560bb11788fd8f92c28a81ebecb075ce03b17bb74c603"
+    },
+    "logs/size-armv7.csv": {
+      "bytes": 28,
+      "sha256": "d4e8429faa636672b9695e7cf13655c139ae0a4251f33baf2a05558a5f8ddfda"
+    },
+    "logs/size-armv7.err": {
+      "bytes": 437,
+      "sha256": "c943f4d8b223b5482cf560bb11788fd8f92c28a81ebecb075ce03b17bb74c603"
+    },
+    "logs/size-x86_64.csv": {
+      "bytes": 28,
+      "sha256": "1fe279829ee88acc22328a68262ab8a6280d818aae0bcb23806ad2aabb4e6d1f"
+    },
+    "logs/size-x86_64.err": {
+      "bytes": 437,
+      "sha256": "c943f4d8b223b5482cf560bb11788fd8f92c28a81ebecb075ce03b17bb74c603"
+    },
+    "recipe/audit_owned_package.py": {
+      "bytes": 2780,
+      "sha256": "91ec2f8092a68d61e99bf6dfd8ba8389981b7592744a68d9b4df670b9147d482"
+    },
+    "recipe/build-failed-no-pub.sh": {
+      "bytes": 4023,
+      "sha256": "2120168a61c444e5be8c6a8c2b8bffc00bf3c1ad184472ed8b5499a36dc459ea"
+    },
+    "recipe/build-final.sh": {
+      "bytes": 3939,
+      "sha256": "6b335bb93db83d3ced04219193e873caee9aef265ed25b1e31660daea6ee9f92"
+    },
+    "recipe/compare_owned_native.py": {
+      "bytes": 4096,
+      "sha256": "aa5040263478aeb06aa4584ea6e58d311d6b340cc95af2d083eec10b704b2603"
+    },
+    "recipe/summarize_owned_native.py": {
+      "bytes": 5034,
+      "sha256": "9d4e2cf363ec6ca162e95bdeb415c1d3456bd9cd17c9428f233d6cf3f9946a0f"
+    },
+    "report.md": {
+      "bytes": 8007,
+      "sha256": "ba5132f5b8f01f17f889f11947d655d5010caf39fcfdd749ac803c5c739ebefe"
+    },
+    "verify_evidence.py": {
+      "bytes": 6602,
+      "sha256": "486f0d06b29dc8734fc9d770b69ae10318c5e622d7e2638fe78036136e8acc33"
+    }
+  },
+  "schema": 1,
+  "source_commit": "2cc56182da97de7c4143fae82fc057b4f545f19e"
+}

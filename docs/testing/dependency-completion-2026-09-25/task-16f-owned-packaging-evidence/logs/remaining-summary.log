@@ -1,0 +1,9 @@
+same-native-members 76
+prior/current 35 30
+removed
+  lib/arm64-v8a/libdatastore_shared_counter.so
+  lib/arm64-v8a/libn42_mls.so
+  lib/x86_64/libdatastore_shared_counter.so
+  lib/x86_64/libn42_mls.so
+  lib/x86_64/libvodozemac_bindings_dart.so
+new 0

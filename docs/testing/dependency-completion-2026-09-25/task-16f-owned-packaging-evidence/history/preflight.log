@@ -1,0 +1,12 @@
+7f71f83cfd7df4c783ce061382fde11dbe5a9c013e44c50ca5555dbfb6e817c0 packages/flutter_vodozemac/rust/Cargo.toml
+6ebe0a5c46e39aa243ba06754bfbaef22c56ba110e7868c44b3abfde2f875d61 packages/flutter_vodozemac/rust/Cargo.lock
+225c8196b05bd033af023077f75f842e282fedaa01e323f0c6dfa7e4d0d7ec97 packages/flutter_vodozemac/cargokit/build_tool/pubspec.lock
+68b65520057588eb17893bc5016b72fafb73222c5c38ec31252dfbe063c62ee0 packages/flutter_vodozemac/cargokit/build_tool/lib/src/android_environment.dart
+c951ddf2066e60eec87f2c5201c7869d2e26d1457c5195877b2a9bf451b4af4a packages/flutter_vodozemac/cargokit/build_tool/lib/src/builder.dart
+53cb317d773a67dcedff1f971f88621799ed96ad883a465bbfc2a26555aae503 packages/flutter_vodozemac/cargokit/run_build_tool.sh
+2873f42d6b40604ebf0d2a666bea1834ef0421bffb12cbf9b17cfe02a09712a6 android/cargokit_options.yaml
+Pinned Vodo Rust source tree verified: 7 files.
+df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo 1.97.1 (c980f4866 2026-06-30)
+Pinned Vodo Cargo graph resolved offline.
