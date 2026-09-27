@@ -38,7 +38,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.n42.android_native_smoke/vectors")
             .setMethodCallHandler { call, result ->
-                if (call.method !in listOf("verify", "compatibility", "mobileSdkLoad", "mobileSdkVectors", "mobileSdkTlsInit", "mobileSdkTlsCerts", "mobileSdkBlsPair", "goEvmVectors")) {
+                if (call.method !in listOf("verify", "compatibility", "mobileSdkLoad", "mobileSdkVectors", "mobileSdkTlsInit", "mobileSdkTlsCerts", "mobileSdkBlsPair", "goEvmVectors", "sqlcipherApkPath")) {
                     result.notImplemented()
                     return@setMethodCallHandler
                 }
@@ -49,6 +49,7 @@ class MainActivity : FlutterActivity() {
                             result.success(true)
                         }
                         "compatibility" -> result.success(torusCompatibilityVectors())
+                        "sqlcipherApkPath" -> result.success(applicationInfo.sourceDir)
                         "mobileSdkLoad" -> {
                             Class.forName("com.mobileSdk.NativeBindings", true, classLoader)
                             result.success(true)
