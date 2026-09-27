@@ -1,0 +1,21 @@
+{
+  "aar_arm64_member_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+  "aar_sha256": "7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a",
+  "apk_debug_member_sha256": "9109b83baef909b1f6356fe4aa3315a827beba2bfedb188376ffa5d070f033bd",
+  "apk_release_member_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+  "apk_sha256": "f1abe0b14e095896dd7428b54972cdd85693771778e214f9bf35b63447cfe285",
+  "installed_apk_path": "/data/app/~~fvgvhuGCxN33lNswm0c72Q==/com.n42.android_native_smoke-jhyCCr2YXd2-3cJ33tLlIg==/base.apk",
+  "installed_apk_sha256": "f1abe0b14e095896dd7428b54972cdd85693771778e214f9bf35b63447cfe285",
+  "log_sha256": "62069a67b89c655544197cdecd46fefa3dc7f64e42d7af9eddbfeee3699b720e",
+  "receipt_sha256": "77af1139f6185f3008250497afeb4cf418f5c500722f84ab6fb82f39a49fb66a",
+  "release_executable_map_file_range": [
+    17170432,
+    18268160
+  ],
+  "release_member_data_range": [
+    16646144,
+    18296928
+  ],
+  "runtime_crypto_pass": true,
+  "runtime_pid": 13968
+}

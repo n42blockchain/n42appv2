@@ -1,0 +1,13 @@
+{
+  "artifact": "tools/android_native_smoke/harness/build/app/outputs/flutter-apk/app-debug.apk",
+  "libraries_checked": 13,
+  "unaligned_libraries": [
+    "lib/arm64-v8a/libflutter.so",
+    "lib/arm64-v8a/libllm_inference_engine_jni.so",
+    "lib/arm64-v8a/libsqlcipher.so",
+    "lib/x86_64/libllm_inference_engine_jni.so",
+    "lib/x86_64/libsqlcipher.so"
+  ],
+  "passed": false,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}

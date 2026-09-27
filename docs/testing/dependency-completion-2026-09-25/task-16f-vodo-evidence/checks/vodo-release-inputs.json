@@ -1,0 +1,182 @@
+{
+  "aar_arm64_member_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+  "aar_sha256": "7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a",
+  "apk_sha256": "f1abe0b14e095896dd7428b54972cdd85693771778e214f9bf35b63447cfe285",
+  "device": "emulator-5560",
+  "fixture_command": [
+    "/Users/jieliu/.codex/toolchains/flutter-3.47.5/flutter/bin/flutter",
+    "test",
+    "integration_test/vodo_android_16k_test.dart",
+    "-d",
+    "emulator-5560",
+    "--no-pub",
+    "--dart-define=N42_VODO_RELEASE_PROBE=true"
+  ],
+  "fixture_environment": {
+    "ANDROID_HOME": "/Users/jieliu/.codex/toolchains/android-sdk-37",
+    "CARGOKIT_PUB_OFFLINE": "1",
+    "CARGO_HOME": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-vodo-cargo-home",
+    "CARGO_NET_OFFLINE": "true",
+    "JAVA_HOME": "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home",
+    "N42_SMOKE_VODO_RELEASE_JNILIBS": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-vodo-release-probe-jni",
+    "PUB_CACHE": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-vodo-pub-cache"
+  },
+  "fixture_exit": 0,
+  "fixture_log_sha256": "62069a67b89c655544197cdecd46fefa3dc7f64e42d7af9eddbfeee3699b720e",
+  "flutter_version": "Flutter 3.47.5 \u2022 channel stable \u2022 https://github.com/flutter/flutter.git\nFramework \u2022 revision 6a19cca564 (9 days ago) \u2022 2026-09-17 14:13:22 -0400\nEngine \u2022 hash ab598368592da0064197e2bc15c7f5b0a2c6bb1f (revision af7e796e16) (10 days ago) \u2022 2026-09-16 18:35:09.000Z\nTools \u2022 Dart 3.13.4 \u2022 DevTools 2.60.0",
+  "git_head": "c9b7d676755588903edff227b7d6ba3b0172cd1d",
+  "installed": {
+    "path": "/data/app/~~fvgvhuGCxN33lNswm0c72Q==/com.n42.android_native_smoke-jhyCCr2YXd2-3cJ33tLlIg==/base.apk",
+    "pid": 13968,
+    "sha256": "f1abe0b14e095896dd7428b54972cdd85693771778e214f9bf35b63447cfe285"
+  },
+  "post": {
+    "airplane_mode": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "1"
+    },
+    "ip_route": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "fatal"
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "true"
+    },
+    "page_size": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "16384"
+    }
+  },
+  "pre": {
+    "airplane_mode": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "1"
+    },
+    "ip_route": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "fatal"
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "true"
+    },
+    "page_size": {
+      "argv": [
+        "adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stderr": "",
+      "stdout": "16384"
+    }
+  },
+  "probe_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+  "schema_version": 1,
+  "source_sha256": {
+    "tools/android_native_smoke/harness/android/app/build.gradle.kts": "95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0",
+    "tools/android_native_smoke/harness/fixtures/vodozemac-0.5-pickles.json": "fb333c76054d891503537433db553aa25c1210581a6c96540b617e0c536d74da",
+    "tools/android_native_smoke/harness/integration_test/vodo_android_16k_test.dart": "24ee3179ddaaacd335ec2d4e188841efe40f1d7dc187f3734e447ba6e99a0dfe",
+    "tools/android_native_smoke/harness/pubspec.lock": "24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1",
+    "tools/android_native_smoke/harness/pubspec.yaml": "32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f",
+    "tools/android_native_smoke/run_vodo_release_fixture.py": "99b3daf3600c2543def0e7b2748c96eae44b5fa4234c78b7851279e11d315f53",
+    "tools/android_native_smoke/verify_vodo_release_fixture.py": "0afe6a9a8907e96bb63d8f6695300fe0ea31b1587cd0f047b615406d7698065b"
+  }
+}

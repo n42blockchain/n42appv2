@@ -1,0 +1,18 @@
+{
+  "aar_arm64_member_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+  "aar_sha256": "7878472e22facc668152fff6c9e6a8858f9906b7994fd28c8d66b2c22822501a",
+  "apk_debug_member_sha256": "9109b83baef909b1f6356fe4aa3315a827beba2bfedb188376ffa5d070f033bd",
+  "apk_release_member_sha256": "3807e8f54bf9be576ebe55aa41e363e7b23b845efb971f5821f439ab90ca14fa",
+  "apk_sha256": "389c70ee2e4ebdfda2033195426c70aa42322a8861c1e7fa1b64ce5166378951",
+  "log_sha256": "355d148f7b3f118d4d6000ee966460db270b87d94ca9162fdfada298fe159cc6",
+  "release_executable_map_file_range": [
+    17170432,
+    18268160
+  ],
+  "release_member_data_range": [
+    16646144,
+    18296928
+  ],
+  "runtime_crypto_pass": true,
+  "runtime_pid": 13790
+}
