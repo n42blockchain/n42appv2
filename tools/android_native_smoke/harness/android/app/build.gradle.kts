@@ -43,6 +43,9 @@ val tlsCertFixture = System.getenv("N42_SMOKE_TLS_CERT_FIXTURE") == "1"
 System.getenv("N42_SMOKE_BLS_ORACLE_JNILIBS")?.let { oracleLibraries ->
     android.sourceSets.getByName("main").jniLibs.srcDir(file(oracleLibraries))
 }
+System.getenv("N42_SMOKE_VODO_RELEASE_JNILIBS")?.let { releaseLibrary ->
+    android.sourceSets.getByName("main").jniLibs.srcDir(file(releaseLibrary))
+}
 if (tlsCertFixture) {
     // Test-only supplier Kotlin source: the published companion removes mock-root methods.
     val verifierSource = requireNotNull(System.getenv("N42_SMOKE_TLS_VERIFIER_SOURCE")) {

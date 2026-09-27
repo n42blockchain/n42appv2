@@ -27,6 +27,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - fixtures/vodozemac-0.5-pickles.json
 
 hooks:
   user_defines:
