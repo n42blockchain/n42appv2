@@ -1,0 +1,3144 @@
+warning: missing documentation for a module
+  --> crates/primitives-traits/src/header/mod.rs:10:1
+   |
+10 | pub mod clique_utils;
+   | ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a function
+  --> crates/primitives-traits/src/header/clique_utils.rs:69:1
+   |
+69 | / pub fn recover_address_generic<H>(header: &H) -> Result<Address, Box<dyn Error>>
+70 | | where
+71 | |     H: BlockHeaderTrait,
+   | |________________________^
+
+warning: missing documentation for a function
+  --> crates/primitives-traits/src/header/clique_utils.rs:90:1
+   |
+90 | / pub fn seal_hash_generic<H>(header: &H) -> B256
+91 | | where
+92 | |     H: BlockHeaderTrait,
+   | |________________________^
+
+warning: `reth-primitives-traits` (lib) generated 3 warnings
+warning: constant `beijing_fork` should have an upper case name
+  --> crates/ethereum/hardforks/src/hardforks/n42.rs:16:11
+   |
+16 | pub const beijing_fork: BeijingFork = BeijingFork {};
+   |           ^^^^^^^^^^^^ help: convert the identifier to upper case: `BEIJING_FORK`
+   |
+   = note: `#[warn(non_upper_case_globals)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: missing documentation for a constant
+  --> crates/ethereum/hardforks/src/hardforks/n42.rs:16:1
+   |
+16 | pub const beijing_fork: BeijingFork = BeijingFork {};
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a static
+  --> crates/ethereum/hardforks/src/hardforks/n42.rs:55:1
+   |
+55 | pub static N42_HARDFORKS_FOR_CLIQUE_TEST: LazyLock<ChainHardforks> = LazyLock::new(|| {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `reth-ethereum-forks` (lib) generated 3 warnings
+warning: unused import: `constants::MAXIMUM_EXTRA_DATA_SIZE`
+ --> crates/n42/alloy-rpc-types-engine/src/payload.rs:9:5
+  |
+9 |     constants::MAXIMUM_EXTRA_DATA_SIZE, Blob, Block, BlockBody, BlockHeader, Bytes48, Header,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: use of deprecated function `rand::thread_rng`: Renamed to `rng`
+   --> crates/n42/alloy-rpc-types-engine/src/jwt.rs:249:44
+    |
+249 |         let random_bytes: [u8; 32] = rand::thread_rng().gen();
+    |                                            ^^^^^^^^^^
+    |
+    = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated method `rand::Rng::gen`: Renamed to `random` to avoid conflict with the new `gen` keyword in Rust 2024.
+   --> crates/n42/alloy-rpc-types-engine/src/jwt.rs:249:57
+    |
+249 |         let random_bytes: [u8; 32] = rand::thread_rng().gen();
+    |                                                         ^^^
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> crates/n42/merkle_db_rs/src/tree.rs:620:17
+    |
+620 |     pub fn iter(&self) -> VecTreeIter<T, N> {
+    |                 ^^^^^     ^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                 |
+    |                 the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+620 |     pub fn iter(&self) -> VecTreeIter<'_, T, N> {
+    |                                       +++
+
+warning: `alloy-rpc-types-engine` (lib) generated 3 warnings (run `cargo fix --lib -p alloy-rpc-types-engine` to apply 1 suggestion)
+warning: `merkle_db_rs` (lib) generated 1 warning (run `cargo fix --lib -p merkle_db_rs` to apply 1 suggestion)
+warning: struct `BeaconOptimismPayloadAttributes` is never constructed
+   --> crates/n42/alloy-rpc-types-beacon/src/payload.rs:116:8
+    |
+116 | struct BeaconOptimismPayloadAttributes {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `alloy-rpc-types-beacon` (lib) generated 1 warning
+warning: unused import: `Header`
+ --> crates/n42/primitives/src/snapshot.rs:5:34
+  |
+5 | use reth_primitives::{arbitrary, Header};
+  |                                  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Decode`
+ --> crates/n42/primitives/src/validator.rs:3:19
+  |
+3 | use ssz::{Encode, Decode};
+  |                   ^^^^^^
+
+warning: unused imports: `BlockNumber` and `Bytes`
+ --> crates/n42/primitives/src/validator.rs:6:33
+  |
+6 | use alloy_primitives::{Address, BlockNumber, B256, Bytes};
+  |                                 ^^^^^^^^^^^        ^^^^^
+
+warning: unused doc comment
+   --> crates/n42/primitives/src/beacon.rs:143:1
+    |
+143 | /// Solidity-style struct for the DepositEvent
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ rustdoc does not generate documentation for macro invocations
+    |
+    = help: to document an item produced by a macro, the macro must produce the documentation as part of its expansion
+    = note: `#[warn(unused_doc_comments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `hex::FromHex`
+ --> crates/n42/primitives/src/beacon.rs:1:5
+  |
+1 | use hex::FromHex;
+  |     ^^^^^^^^^^^^
+
+warning: unused import: `Decode`
+  --> crates/n42/primitives/src/beacon.rs:10:19
+   |
+10 | use ssz::{Encode, Decode};
+   |                   ^^^^^^
+
+warning: unused imports: `Withdrawals` and `eip7685::Requests`
+  --> crates/n42/primitives/src/beacon.rs:14:27
+   |
+14 |     eip4895::{Withdrawal, Withdrawals}, eip7002::WithdrawalRequest, eip7685::Requests
+   |                           ^^^^^^^^^^^                               ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `SolEnum`
+  --> crates/n42/primitives/src/beacon.rs:19:23
+   |
+19 | use alloy_sol_types::{SolEnum, SolEvent, sol};
+   |                       ^^^^^^^
+
+warning: unused imports: `info`, `trace`, and `warn`
+  --> crates/n42/primitives/src/beacon.rs:20:15
+   |
+20 | use tracing::{trace, debug, error, info, warn};
+   |               ^^^^^                ^^^^  ^^^^
+
+warning: unused imports: `BTreeMap` and `HashMap`
+  --> crates/n42/primitives/src/beacon.rs:22:24
+   |
+22 | use std::collections::{HashMap, BTreeMap};
+   |                        ^^^^^^^  ^^^^^^^^
+
+warning: unused import: `beacon_committee::BeaconCommittee`
+  --> crates/n42/primitives/src/beacon.rs:23:48
+   |
+23 | use crate::{activation_queue::ActivationQueue, beacon_committee::BeaconCommittee, Hash256, Slot, Validator, CommitteeIndex};
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+  --> crates/n42/primitives/src/beacon.rs:26:5
+   |
+26 | use std::sync::Arc;
+   |     ^^^^^^^^^^^^^^
+
+warning: unnecessary parentheses around `for` iterator expression
+   --> crates/n42/primitives/src/beacon.rs:512:22
+    |
+512 |         for index in (0..self.balances_store.len()) {
+    |                      ^                            ^
+    |
+    = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+    |
+512 -         for index in (0..self.balances_store.len()) {
+512 +         for index in 0..self.balances_store.len()  {
+    |
+
+warning: unused import: `std::sync::Arc`
+  --> crates/n42/primitives/src/committee_cache.rs:12:5
+   |
+12 | use std::sync::Arc;
+   |     ^^^^^^^^^^^^^^
+
+warning: unused import: `reth_primitives_traits::AlloyBlockHeader`
+  --> crates/n42/primitives/src/snapshot.rs:10:5
+   |
+10 | use reth_primitives_traits::AlloyBlockHeader;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `alloy_primitives::Sealable`
+  --> crates/n42/primitives/src/snapshot.rs:11:5
+   |
+11 | use alloy_primitives::Sealable;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Encode`
+ --> crates/n42/primitives/src/validator.rs:3:11
+  |
+3 | use ssz::{Encode, Decode};
+  |           ^^^^^^
+
+warning: unused variable: `spec`
+   --> crates/n42/primitives/src/beacon.rs:660:9
+    |
+660 |         spec: &ChainSpec,
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_spec`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `spec`
+    --> crates/n42/primitives/src/beacon.rs:1207:9
+     |
+1207 |         spec: &ChainSpec,
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_spec`
+
+warning: unused variable: `proof`
+    --> crates/n42/primitives/src/beacon.rs:1394:5
+     |
+1394 |     proof: Option<u8>, // for compile
+     |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_proof`
+
+warning: unused variable: `deposit_index`
+    --> crates/n42/primitives/src/beacon.rs:1398:9
+     |
+1398 |     let deposit_index = self.eth1_deposit_index as usize;
+     |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_deposit_index`
+
+warning: unused variable: `proposer_reward`
+    --> crates/n42/primitives/src/beacon.rs:1590:9
+     |
+1590 |         proposer_reward: ProposerRewardCalculation,
+     |         ^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_proposer_reward`
+
+warning: unused variable: `total_balances`
+    --> crates/n42/primitives/src/beacon.rs:2169:5
+     |
+2169 |     total_balances: &TotalBalances,
+     |     ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_total_balances`
+
+warning: unused variable: `finality_delay`
+    --> crates/n42/primitives/src/beacon.rs:2170:5
+     |
+2170 |     finality_delay: u64,
+     |     ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_finality_delay`
+
+warning: associated items `ONE`, `safe_sub_assign`, `safe_rem_assign`, `safe_div_assign`, and `safe_mul_assign` are never used
+  --> crates/n42/primitives/src/safe_aitrh.rs:46:11
+   |
+44 | pub trait SafeArith<Rhs = Self>: Sized + Copy {
+   |           --------- associated items in this trait
+45 |     const ZERO: Self;
+46 |     const ONE: Self;
+   |           ^^^
+...
+64 |     assign_method!(safe_sub_assign, safe_sub, Rhs, "-=");
+   |                    ^^^^^^^^^^^^^^^
+65 |     assign_method!(safe_rem_assign, safe_rem, Rhs, "%=");
+   |                    ^^^^^^^^^^^^^^^
+66 |     assign_method!(safe_div_assign, safe_div, Rhs, "/=");
+   |                    ^^^^^^^^^^^^^^^
+67 |     assign_method!(safe_mul_assign, safe_mul, Rhs, "*=");
+   |                    ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+   = note: this warning originates in the macro `assign_method` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: function `get_active_validator_indices` is never used
+   --> crates/n42/primitives/src/committee_cache.rs:365:8
+    |
+365 | pub fn get_active_validator_indices<'a, V, I>(validators: V, epoch: Epoch) -> Vec<usize>
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a type alias
+  --> crates/n42/primitives/src/lib.rs:24:1
+   |
+24 | pub type Hash256 = alloy_primitives::B256;
+   | ^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a type alias
+  --> crates/n42/primitives/src/lib.rs:25:1
+   |
+25 | pub type Slot = u64;
+   | ^^^^^^^^^^^^^
+
+warning: missing documentation for a type alias
+  --> crates/n42/primitives/src/lib.rs:26:1
+   |
+26 | pub type CommitteeIndex = u64;
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a constant
+  --> crates/n42/primitives/src/beacon.rs:33:1
+   |
+33 | pub const SLOTS_PER_EPOCH: u64 = 32;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a constant
+  --> crates/n42/primitives/src/beacon.rs:35:1
+   |
+35 | pub const DOMAIN_CONSTANT_BEACON_ATTESTER: u32 = 1;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `max_withdrawals_per_payload` should have an upper case name
+  --> crates/n42/primitives/src/beacon.rs:38:11
+   |
+38 | pub const max_withdrawals_per_payload: usize = 16;
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper case: `MAX_WITHDRAWALS_PER_PAYLOAD`
+   |
+   = note: `#[warn(non_upper_case_globals)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: missing documentation for a constant
+  --> crates/n42/primitives/src/beacon.rs:38:1
+   |
+38 | pub const max_withdrawals_per_payload: usize = 16;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `pending_partial_withdrawals_limit` should have an upper case name
+  --> crates/n42/primitives/src/beacon.rs:39:11
+   |
+39 | pub const pending_partial_withdrawals_limit: usize = 16; // ?
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper case: `PENDING_PARTIAL_WITHDRAWALS_LIMIT`
+
+warning: missing documentation for a constant
+  --> crates/n42/primitives/src/beacon.rs:39:1
+   |
+39 | pub const pending_partial_withdrawals_limit: usize = 16; // ?
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `MaxDeposits` should have an upper case name
+  --> crates/n42/primitives/src/beacon.rs:40:11
+   |
+40 | pub const MaxDeposits: u64 = 16;
+   |           ^^^^^^^^^^^ help: convert the identifier to upper case: `MAX_DEPOSITS`
+
+warning: missing documentation for a constant
+  --> crates/n42/primitives/src/beacon.rs:40:1
+   |
+40 | pub const MaxDeposits: u64 = 16;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `genesis_epoch` should have an upper case name
+  --> crates/n42/primitives/src/beacon.rs:41:11
+   |
+41 | pub const genesis_epoch : u64 = 0;
+   |           ^^^^^^^^^^^^^ help: convert the identifier to upper case: `GENESIS_EPOCH`
+
+warning: missing documentation for a constant
+  --> crates/n42/primitives/src/beacon.rs:41:1
+   |
+41 | pub const genesis_epoch : u64 = 0;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+  --> crates/n42/primitives/src/beacon.rs:44:1
+   |
+44 | pub struct ChainSpec {
+   | ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:45:5
+   |
+45 |     pub max_pending_partials_per_withdrawals_sweep: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:46:5
+   |
+46 |     pub min_activation_balance: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:47:5
+   |
+47 |     pub ejection_balance: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:48:5
+   |
+48 |     pub far_future_epoch: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:49:5
+   |
+49 |     pub max_validators_per_withdrawals_sweep: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:50:5
+   |
+50 |     pub max_effective_balance: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:51:5
+   |
+51 |     pub full_exit_request_amount: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:52:5
+   |
+52 |     pub shard_committee_period: u64, //?
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:53:5
+   |
+53 |     pub compounding_withdrawal_prefix_byte: u8,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:54:5
+   |
+54 |     pub eth1_address_withdrawal_prefix_byte: u8,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:55:5
+   |
+55 |     pub max_seed_lookahead: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:56:5
+   |
+56 |     pub max_per_epoch_activation_exit_churn_limit:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:57:5
+   |
+57 |     pub min_per_epoch_churn_limit_electra:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:58:5
+   |
+58 |     pub churn_limit_quotient:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:59:5
+   |
+59 |     pub effective_balance_increment:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:60:5
+   |
+60 |     pub base_rewards_per_epoch:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:61:5
+   |
+61 |     pub base_reward_factor:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:62:5
+   |
+62 |     pub min_epochs_to_inactivity_penalty :u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:63:5
+   |
+63 |     pub inactivity_penalty_quotient:u64, //?
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:64:5
+   |
+64 |     pub proposer_reward_quotient:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:65:5
+   |
+65 |     pub min_per_epoch_churn_limit:u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:66:5
+   |
+66 |     pub max_committees_per_slot: usize,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:67:5
+   |
+67 |     pub target_committee_size: usize,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:68:5
+   |
+68 |     pub min_seed_lookahead: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:69:5
+   |
+69 |     pub shuffle_round_count: u8,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:71:5
+   |
+71 |     pub inactivity_score_bias: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:72:5
+   |
+72 |     pub inactivity_score_recovery_rate: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:73:5
+   |
+73 |     pub max_inactivity_score: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:74:5
+   |
+74 |     pub trigger_punish_inactivity_score: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:75:5
+   |
+75 |     pub multiple_reward_for_inactivity_penalty: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/primitives/src/beacon.rs:77:5
+   |
+77 |     pub min_validator_withdrawability_delay: u64,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+  --> crates/n42/primitives/src/beacon.rs:80:1
+   |
+80 | pub fn beacon_chain_spec() -> ChainSpec {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a constant
+   --> crates/n42/primitives/src/beacon.rs:128:1
+    |
+128 | pub const CACHED_EPOCHS: usize = 3;
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a type alias
+   --> crates/n42/primitives/src/beacon.rs:156:1
+    |
+156 | pub type Epoch = u64;
+    | ^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> crates/n42/primitives/src/beacon.rs:158:1
+    |
+158 | pub fn epoch_to_block_number(epoch: Epoch) -> u64 {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:163:1
+    |
+163 | pub struct VoluntaryExit {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:164:5
+    |
+164 |     pub epoch: Epoch,
+    |     ^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:165:5
+    |
+165 |     pub validator_index: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:169:1
+    |
+169 | pub struct VoluntaryExitWithSig {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:170:5
+    |
+170 |     pub voluntary_exit: VoluntaryExit,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:171:5
+    |
+171 |     pub signature: Bytes,
+    |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+   --> crates/n42/primitives/src/beacon.rs:174:1
+    |
+174 | / pub struct BeaconStateChangeset{
+175 | |     pub beaconstates:Vec<(BlockHash,BeaconState)>,
+176 | | }
+    | |_^
+    |
+    = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:174:1
+    |
+174 | pub struct BeaconStateChangeset{
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:175:5
+    |
+175 |     pub beaconstates:Vec<(BlockHash,BeaconState)>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+   --> crates/n42/primitives/src/beacon.rs:178:1
+    |
+178 | / pub struct BeaconBlockChangeset{
+179 | |     pub beaconblocks:Vec<(BlockHash,BeaconBlock)>,
+180 | | }
+    | |_^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:178:1
+    |
+178 | pub struct BeaconBlockChangeset{
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:179:5
+    |
+179 |     pub beaconblocks:Vec<(BlockHash,BeaconBlock)>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:184:1
+    |
+184 | pub struct BeaconState {
+    | ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:185:5
+    |
+185 |     pub slot: u64,
+    |     ^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:186:5
+    |
+186 |     pub eth1_deposit_index: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:189:5
+    |
+189 |     pub validators: Hash256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:190:5
+    |
+190 |     pub validators_len: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:195:5
+    |
+195 |     pub validators_store: VecTree<Validator, U100000>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:198:5
+    |
+198 |     pub balances: Hash256,
+    |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:199:5
+    |
+199 |     pub balances_len: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:204:5
+    |
+204 |     pub balances_store: VecTree<Gwei, U100000>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:207:5
+    |
+207 |     pub inactivity_scores: Hash256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:208:5
+    |
+208 |     pub inactivity_scores_len: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:213:5
+    |
+213 |     pub inactivity_scores_store: VecTree<u64, U100000>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:215:5
+    |
+215 |     pub randao_mix: B256,
+    |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:217:5
+    |
+217 |     pub next_withdrawal_index: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:218:5
+    |
+218 |     pub next_withdrawal_validator_index: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:219:5
+    |
+219 |     pub pending_partial_withdrawals: Vec<PendingPartialWithdrawal>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:220:5
+    |
+220 |     pub earliest_exit_epoch: Epoch,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:221:5
+    |
+221 |     pub exit_balance_to_consume: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:225:5
+    |
+225 |     pub total_active_balance: Option<TotalActiveBalance>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:229:5
+    |
+229 |     pub epoch_attester_indexes: Hash256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:230:5
+    |
+230 |     pub epoch_attester_indexes_len: u64,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:235:5
+    |
+235 |     pub epoch_attester_indexes_store: VecTree<u64, U100000>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:240:5
+    |
+240 |     pub epoch_attester_indexes_set: BTreeSet<u64>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:244:1
+    |
+244 | pub struct TotalActiveBalance(Epoch, u64);
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a type alias
+   --> crates/n42/primitives/src/beacon.rs:253:1
+    |
+253 | pub type Gwei = u64;
+    | ^^^^^^^^^^^^^
+
+warning: missing documentation for a type alias
+   --> crates/n42/primitives/src/beacon.rs:256:1
+    |
+256 | pub type BLSPubkey = FixedBytes<48>;
+    | ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a type alias
+   --> crates/n42/primitives/src/beacon.rs:257:1
+    |
+257 | pub type BLSSignature = FixedBytes<96>;
+    | ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:260:1
+    |
+260 | pub struct BeaconBlock {
+    | ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:261:5
+    |
+261 |     pub slot: Slot,
+    |     ^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:262:5
+    |
+262 |     pub eth1_block_hash: BlockHash,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:263:5
+    |
+263 |     pub parent_hash: BlockHash,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:264:5
+    |
+264 |     pub state_root: B256,
+    |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:265:5
+    |
+265 |     pub body: BeaconBlockBody,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:276:1
+    |
+276 | pub struct BlockVerifyResultAggregate {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:277:5
+    |
+277 |     pub validator_indexes: BTreeSet<u64>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:278:5
+    |
+278 |     pub block_aggregate_signature: Option<FixedBytes<96>>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> crates/n42/primitives/src/beacon.rs:281:1
+    |
+281 | pub fn agg_sig_to_fixed(sig: &AggregateSignature) -> FixedBytes<96> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> crates/n42/primitives/src/beacon.rs:285:1
+    |
+285 | pub fn fixed_to_agg_sig(bytes: &FixedBytes<96>) -> eyre::Result<AggregateSignature> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:295:1
+    |
+295 | pub struct BeaconBlockBody {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:296:5
+    |
+296 |     pub attestations: Vec<Attestation>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:297:5
+    |
+297 |     pub deposits: Vec<Deposit>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:298:5
+    |
+298 |     pub voluntary_exits: Vec<VoluntaryExitWithSig>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:299:5
+    |
+299 |     pub execution_requests: ExecutionRequestsV4,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:303:1
+    |
+303 | pub struct ExecutionRequests {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:304:5
+    |
+304 |     pub deposits: Vec<DepositRequest>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:305:5
+    |
+305 |     pub withdrawals: Vec<WithdrawalRequest>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:306:5
+    |
+306 |     pub consolidations: Vec<ConsolidationRequest>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:310:1
+    |
+310 | pub struct DepositRequest {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:311:5
+    |
+311 |     pub pubkey: Bytes,
+    |     ^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:312:5
+    |
+312 |     pub withdrawal_credentials: B256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:313:5
+    |
+313 |     pub amount: u64,
+    |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:314:5
+    |
+314 |     pub signature: Bytes,
+    |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:315:5
+    |
+315 |     pub index: u64,
+    |     ^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:328:1
+    |
+328 | pub struct ConsolidationRequest {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:329:5
+    |
+329 |     pub source_address: Address,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:330:5
+    |
+330 |     pub source_pubkey: Bytes,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:331:5
+    |
+331 |     pub target_pubkey: Bytes,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:335:1
+    |
+335 | pub struct Attestation {
+    | ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:336:5
+    |
+336 |     pub validator_indexes: BTreeSet<u64>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:337:5
+    |
+337 |     pub data: AttestationData,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:338:5
+    |
+338 |     pub block_aggregate_signature: Option<FixedBytes<96>>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:342:1
+    |
+342 | pub struct AttestationData {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:343:5
+    |
+343 |     pub slot: Slot,
+    |     ^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:344:5
+    |
+344 |     pub committee_index: CommitteeIndex,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:345:5
+    |
+345 |     pub receipts_root: B256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:349:1
+    |
+349 | pub struct Deposit {
+    | ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:350:5
+    |
+350 |     pub proof: Vec<B256>,
+    |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:351:5
+    |
+351 |     pub data: DepositData,
+    |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:357:5
+    |
+357 |     pub pubkey: FixedBytes<48>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:359:5
+    |
+359 |     pub withdrawal_credentials: B256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:360:5
+    |
+360 |     pub amount: u64,
+    |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:361:5
+    |
+361 |     pub signature: FixedBytes<96>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:365:5
+    |
+365 |     pub fn as_deposit_message(&self) -> DepositMessage {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:389:5
+    |
+389 |     pub fn verify_signature(&self) -> bool {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+   --> crates/n42/primitives/src/beacon.rs:407:1
+    |
+407 | / pub struct DepositMessage {
+408 | |     pub pubkey: FixedBytes<48>,
+409 | |     pub withdrawal_credentials: B256,
+410 | |     #[serde(with = "serde_utils::quoted_u64")]
+411 | |     pub amount: u64,
+412 | | }
+    | |_^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:407:1
+    |
+407 | pub struct DepositMessage {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:408:5
+    |
+408 |     pub pubkey: FixedBytes<48>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:409:5
+    |
+409 |     pub withdrawal_credentials: B256,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:411:5
+    |
+411 |     pub amount: u64,
+    |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> crates/n42/primitives/src/beacon.rs:418:1
+    |
+418 | pub struct SigningData {
+    | ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:419:7
+    |
+419 |       pub object_root: B256,
+    |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/n42/primitives/src/beacon.rs:420:7
+    |
+420 |       pub domain:B256,
+    |       ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a trait
+   --> crates/n42/primitives/src/beacon.rs:423:1
+    |
+423 | pub trait SignedRoot: tree_hash::TreeHash {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:424:5
+    |
+424 |     fn signing_root(&self, domain: Hash256) -> Hash256 {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> crates/n42/primitives/src/beacon.rs:432:1
+    |
+432 | pub fn parse_deposit_log(log: &Log) -> Option<DepositEvent> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+   --> crates/n42/primitives/src/beacon.rs:454:5
+    |
+454 |     pub fn new() -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+   --> crates/n42/primitives/src/beacon.rs:481:5
+    |
+481 |     pub fn state_transition(old_beacon_state: &BeaconState, beacon_block: &BeaconBlock) -> eyre::Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:495:5
+    |
+495 | /     pub fn process_epoch(&mut self,
+496 | |         spec: &ChainSpec,
+497 | |         ) -> eyre::Result<()> {
+    | |_____________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:577:5
+    |
+577 | /     pub fn process_registry_updates(&mut self,
+578 | |         spec: &ChainSpec,
+579 | |         ) -> eyre::Result<()> {
+    | |_____________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:651:5
+    |
+651 | /     pub fn process_block(&mut self, beacon_block: &BeaconBlock,
+652 | |         spec: &ChainSpec,
+653 | |         ) -> eyre::Result<()> {
+    | |_____________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:659:5
+    |
+659 | /     pub fn process_randao(&mut self, beacon_block_body: &BeaconBlockBody,
+660 | |         spec: &ChainSpec,
+661 | |         ) -> eyre::Result<()> {
+    | |_____________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:676:5
+    |
+676 | /     pub fn process_operations(&mut self, beacon_block_body: &BeaconBlockBody,
+677 | |         spec: &ChainSpec,
+678 | |         ) -> eyre::Result<()> {
+    | |_____________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:702:5
+    |
+702 | /     pub fn process_withdrawal_requests(&mut self, requests: &[WithdrawalRequest],
+703 | |         spec: &ChainSpec,
+704 | |         ) -> eyre::Result<()> {
+    | |_____________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:796:5
+    |
+796 |     pub fn process_attestation(&mut self, attestations: &Vec<Attestation>) -> eyre::Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:804:5
+    |
+804 |     pub fn process_one_attestation(&mut self, attestation: &Attestation) -> eyre::Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:816:5
+    |
+816 |     pub fn verify_aggregate_signature(&self, attestation: &Attestation) -> eyre::Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:844:5
+    |
+844 | /     pub fn get_expected_withdrawals(&self,
+845 | |         spec: &ChainSpec,
+846 | |         ) -> eyre::Result<(Vec<Withdrawal>, Option<usize>)> {
+    | |___________________________________________________________^
+
+warning: missing documentation for a method
+   --> crates/n42/primitives/src/beacon.rs:949:5
+    |
+949 | /     pub fn process_withdrawals(&mut self,
+950 | |         ) -> eyre::Result<(Vec<Withdrawal>, Option<usize>)> {
+    | |___________________________________________________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1002:5
+     |
+1002 |     pub fn current_epoch(&self) -> Epoch {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1006:5
+     |
+1006 |     pub fn next_epoch(&self) -> eyre::Result<Epoch> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1038:5
+     |
+1038 |     pub fn get_balance(&self, validator_index: usize) -> eyre::Result<u64> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1054:5
+     |
+1054 |     pub fn get_inactivity_score(&self, validator_index: usize) -> eyre::Result<u64> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1070:5
+     |
+1070 |     pub fn get_pending_balance_to_withdraw(&self, validator_index: usize) -> eyre::Result<u64> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1082:5
+     |
+1082 | /     pub fn compute_activation_exit_epoch(
+1083 | |         &self,
+1084 | |         epoch: Epoch,
+1085 | |         spec: &ChainSpec,
+1086 | |     ) -> eyre::Result<Epoch> {
+     | |____________________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1090:5
+     |
+1090 | /     pub fn compute_exit_epoch_and_update_churn(
+1091 | |         &mut self,
+1092 | |         exit_balance: u64,
+1093 | |         spec: &ChainSpec,
+1094 | |     ) -> eyre::Result<Epoch> {
+     | |____________________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1126:5
+     |
+1126 |     pub fn get_validator_index_from_pubkey(&self, pubkey: &BLSPubkey) -> Option<usize> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1694:5
+     |
+1694 | /     pub fn get_activation_churn_limit(&self,
+1695 | |         spec: &ChainSpec,
+1696 | |         ) -> eyre::Result<u64> {
+     | |______________________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1734:5
+     |
+1734 | /     pub fn get_seed(
+1735 | |         &self,
+1736 | |         epoch: Epoch,
+1737 | |         domain_constant: u32,
+1738 | |     ) -> eyre::Result<Hash256> {
+     | |______________________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1842:5
+     |
+1842 | /     pub fn has_active_validators(
+1843 | |         &self,
+1844 | |         relative_epoch: RelativeEpoch,
+1845 | |     ) -> bool {
+     | |_____________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1852:5
+     |
+1852 |     pub fn get_active_validator_indices(&self, epoch: Epoch) -> Vec<usize> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1899:5
+     |
+1899 | /     pub fn gen_committee_cache(
+1900 | |         &self,
+1901 | |         relative_epoch: RelativeEpoch,
+1902 | |     ) -> eyre::Result<CommitteeCache> {
+     | |_____________________________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:1908:5
+     |
+1908 |     pub fn prune(&mut self) {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+    --> crates/n42/primitives/src/beacon.rs:1918:1
+     |
+1918 | pub struct PendingPartialWithdrawal {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1919:5
+     |
+1919 |     pub validator_index: u64,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1920:5
+     |
+1920 |     pub amount: u64,
+     |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1921:5
+     |
+1921 |     pub withdrawable_epoch: Epoch,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+    --> crates/n42/primitives/src/beacon.rs:1941:1
+     |
+1941 | / pub fn decrease_balance(
+1942 | |     state: &mut BeaconState,
+1943 | |     index: usize,
+1944 | |     delta: u64,
+1945 | | ) -> eyre::Result<()> {
+     | |_____________________^
+
+warning: missing documentation for a function
+    --> crates/n42/primitives/src/beacon.rs:1951:1
+     |
+1951 | pub fn decrease_balance_directly(balance: &mut u64, delta: u64) -> eyre::Result<()> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+    --> crates/n42/primitives/src/beacon.rs:1956:1
+     |
+1956 | / pub fn is_compounding_withdrawal_credential(
+1957 | |     withdrawal_credentials: B256,
+1958 | |         spec: &ChainSpec,
+1959 | | ) -> bool {
+     | |_________^
+
+warning: missing documentation for an enum
+    --> crates/n42/primitives/src/beacon.rs:1968:1
+     |
+1968 | pub enum ExitInvalid {
+     | ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1979:9
+     |
+1979 |         state: Epoch,
+     |         ^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1980:9
+     |
+1980 |         exit: Epoch,
+     |         ^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1984:9
+     |
+1984 |         current_epoch: Epoch,
+     |         ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1985:9
+     |
+1985 |         earliest_exit_epoch: Epoch,
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+    --> crates/n42/primitives/src/beacon.rs:1996:1
+     |
+1996 | pub struct Eth1Data {
+     | ^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1997:5
+     |
+1997 |     pub deposit_root: B256,
+     |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1998:5
+     |
+1998 |     pub deposit_count: u64,
+     |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:1999:5
+     |
+1999 |     pub block_hash: B256,
+     |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+    --> crates/n42/primitives/src/beacon.rs:2003:1
+     |
+2003 | pub struct ValidatorStatuses {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an enum
+    --> crates/n42/primitives/src/beacon.rs:2070:1
+     |
+2070 | pub enum ProposerRewardCalculation {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+    --> crates/n42/primitives/src/beacon.rs:2071:5
+     |
+2071 |     Include,
+     |     ^^^^^^^
+
+warning: missing documentation for a variant
+    --> crates/n42/primitives/src/beacon.rs:2072:5
+     |
+2072 |     Exclude,
+     |     ^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:2084:5
+     |
+2084 |     pub all_delta: Delta,
+     |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:2085:5
+     |
+2085 |     pub inactivity_penalty_delta: Delta,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:2117:5
+     |
+2117 |     pub rewards: u64,
+     |     ^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:2118:5
+     |
+2118 |     pub penalties: u64,
+     |     ^^^^^^^^^^^^^^^^^^
+
+warning: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+    --> crates/n42/primitives/src/beacon.rs:2142:1
+     |
+2142 | pub struct SqrtTotalActiveBalance(u64);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+    --> crates/n42/primitives/src/beacon.rs:2142:1
+     |
+2142 | pub struct SqrtTotalActiveBalance(u64);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+    --> crates/n42/primitives/src/beacon.rs:2145:5
+     |
+2145 |     pub fn new(total_active_balance: u64) -> Self {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:2149:5
+     |
+2149 |     pub fn as_u64(&self) -> u64 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+    --> crates/n42/primitives/src/beacon.rs:2180:1
+     |
+2180 | / pub fn get_attestation_component_delta_n42(
+2181 | |     base_reward: u64,
+2182 | |     is_punishable: bool,
+2183 | |         spec: &ChainSpec,
+2184 | | ) -> eyre::Result<Delta> {
+     | |________________________^
+
+warning: missing documentation for a function
+    --> crates/n42/primitives/src/beacon.rs:2195:1
+     |
+2195 | / pub fn get_inactivity_penalty_delta(
+2196 | |     validator: &ValidatorStatus,
+2197 | |     base_reward: u64,
+2198 | |     finality_delay: u64,
+2199 | |     spec: &ChainSpec,
+2200 | | ) -> eyre::Result<Delta> {
+     | |________________________^
+
+warning: missing documentation for a struct
+    --> crates/n42/primitives/src/beacon.rs:2240:1
+     |
+2240 | pub struct ValidatorStatus {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+    --> crates/n42/primitives/src/beacon.rs:2274:5
+     |
+2274 |     pub is_punishable: bool,
+     |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+    --> crates/n42/primitives/src/beacon.rs:2309:1
+     |
+2309 | pub struct TotalBalances {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+    --> crates/n42/primitives/src/beacon.rs:2341:5
+     |
+2341 | /     pub fn new(
+2342 | |         spec: &ChainSpec,
+2343 | |         ) -> Self {
+     | |_________________^
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:2334:9
+     |
+2334 |         pub fn $field_name(&self) -> u64 {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+2356 |     balance_accessor!(current_epoch);
+     |     -------------------------------- in this macro invocation
+     |
+     = note: this warning originates in the macro `balance_accessor` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:2334:9
+     |
+2334 |         pub fn $field_name(&self) -> u64 {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+2357 |     balance_accessor!(previous_epoch);
+     |     --------------------------------- in this macro invocation
+     |
+     = note: this warning originates in the macro `balance_accessor` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: missing documentation for a method
+    --> crates/n42/primitives/src/beacon.rs:2334:9
+     |
+2334 |         pub fn $field_name(&self) -> u64 {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+2360 |     balance_accessor!(previous_epoch_attesters);
+     |     ------------------------------------------- in this macro invocation
+     |
+     = note: this warning originates in the macro `balance_accessor` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: missing documentation for a function
+    --> crates/n42/primitives/src/beacon.rs:2402:1
+     |
+2402 | pub fn round_down(n: u64, step: u64) -> u64 {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unreachable `pub` item
+ --> crates/n42/primitives/src/safe_aitrh.rs:2:1
+  |
+2 | pub trait SafeArithIter<T> {
+  | ---^^^^^^^^^^^^^^^^^^^^^^^
+  | |
+  | help: consider restricting its visibility: `pub(crate)`
+  |
+  = help: or consider exporting it for use by other crates
+  = note: requested on the command line with `-W unreachable-pub`
+
+warning: unreachable `pub` item
+  --> crates/n42/primitives/src/safe_aitrh.rs:18:1
+   |
+18 | pub enum ArithError {
+   | ---^^^^^^^^^^^^^^^^
+   | |
+   | help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+  --> crates/n42/primitives/src/safe_aitrh.rs:25:1
+   |
+25 | pub type Result<T> = std::result::Result<T, ArithError>;
+   | ---^^^^^^^^^^^^^^^
+   | |
+   | help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+  --> crates/n42/primitives/src/safe_aitrh.rs:44:1
+   |
+44 | pub trait SafeArith<Rhs = Self>: Sized + Copy {
+   | ---^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   | |
+   | help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+ --> crates/n42/primitives/src/activation_queue.rs:7:1
+  |
+7 | pub struct ActivationQueue {
+  | ---^^^^^^^^^^^^^^^^^^^^^^^
+  | |
+  | help: consider restricting its visibility: `pub(crate)`
+  |
+  = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+  --> crates/n42/primitives/src/activation_queue.rs:18:5
+   |
+18 |       pub fn add_if_could_be_eligible_for_activation(
+   |       ^--
+   |       |
+   |  _____help: consider restricting its visibility: `pub(crate)`
+   | |
+19 | |         &mut self,
+20 | |         index: usize,
+21 | |         validator: &Validator,
+22 | |         next_epoch: Epoch,
+23 | |         spec: &ChainSpec,
+24 | |     ) {
+   | |_____^
+
+warning: unreachable `pub` item
+  --> crates/n42/primitives/src/activation_queue.rs:32:5
+   |
+32 |       pub fn get_validators_eligible_for_activation(
+   |       ^--
+   |       |
+   |  _____help: consider restricting its visibility: `pub(crate)`
+   | |
+33 | |         &self,
+34 | |         finalized_epoch: Epoch,
+35 | |         churn_limit: usize,
+36 | |     ) -> BTreeSet<usize> {
+   | |________________________^
+
+warning: unreachable `pub` item
+   --> crates/n42/primitives/src/committee_cache.rs:328:1
+    |
+328 |   pub fn compute_committee_index_in_epoch(
+    |   ^--
+    |   |
+    |  _help: consider restricting its visibility: `pub(crate)`
+    | |
+329 | |     slot: Slot,
+330 | |     slots_per_epoch: usize,
+331 | |     committees_per_slot: usize,
+332 | |     committee_index: usize,
+333 | | ) -> usize {
+    | |__________^
+    |
+    = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+   --> crates/n42/primitives/src/committee_cache.rs:341:1
+    |
+341 |   pub fn compute_committee_range_in_epoch(
+    |   ^--
+    |   |
+    |  _help: consider restricting its visibility: `pub(crate)`
+    | |
+342 | |     epoch_committee_count: usize,
+343 | |     index_in_epoch: usize,
+344 | |     shuffling_len: usize,
+345 | | ) -> Option<Range<usize>> {
+    | |_________________________^
+    |
+    = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+   --> crates/n42/primitives/src/committee_cache.rs:357:1
+    |
+357 | pub fn epoch_committee_count(committees_per_slot: usize, slots_per_epoch: usize) -> usize {
+    | ---^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | |
+    | help: consider restricting its visibility: `pub(crate)`
+    |
+    = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+   --> crates/n42/primitives/src/committee_cache.rs:365:1
+    |
+365 |   pub fn get_active_validator_indices<'a, V, I>(validators: V, epoch: Epoch) -> Vec<usize>
+    |   ^--
+    |   |
+    |  _help: consider restricting its visibility: `pub(crate)`
+    | |
+366 | | where
+367 | |     V: IntoIterator<Item = &'a Validator, IntoIter = I>,
+368 | |     I: ExactSizeIterator + Iterator<Item = &'a Validator>,
+    | |__________________________________________________________^
+    |
+    = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+  --> crates/n42/primitives/src/shuffle_list.rs:79:1
+   |
+79 |   pub fn shuffle_list(
+   |   ^--
+   |   |
+   |  _help: consider restricting its visibility: `pub(crate)`
+   | |
+80 | |     mut input: Vec<usize>,
+81 | |     rounds: u8,
+82 | |     seed: &[u8],
+83 | |     forwards: bool,
+84 | | ) -> Option<Vec<usize>> {
+   | |_______________________^
+   |
+   = help: or consider exporting it for use by other crates
+
+warning: `n42-primitives` (lib) generated 249 warnings (run `cargo fix --lib -p n42-primitives` to apply 32 suggestions)
+warning: unused import: `Hardfork`
+ --> crates/chainspec/src/api.rs:9:60
+  |
+9 | use reth_ethereum_forks::{EthereumHardforks, beijing_fork, Hardfork};
+  |                                                            ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `timestamp`
+  --> crates/chainspec/src/api.rs:70:44
+   |
+70 |     fn is_n42_attestation_mandatory(&self, timestamp: u64) -> bool {
+   |                                            ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_timestamp`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `N42_GENESIS_HASH` is never used
+  --> crates/chainspec/src/spec.rs:93:11
+   |
+93 | pub const N42_GENESIS_HASH: B256 =
+   |           ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: missing documentation for a constant
+  --> crates/chainspec/src/constants.rs:20:1
+   |
+20 | pub const DEVNET_DEPOSIT_CONTRACT_ADDRESS: Address =
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a constant
+  --> crates/chainspec/src/constants.rs:22:1
+   |
+22 | pub const TESTNET_DEPOSIT_CONTRACT_ADDRESS: Address =
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unreachable `pub` item
+  --> crates/chainspec/src/spec.rs:93:1
+   |
+93 | pub const N42_GENESIS_HASH: B256 =
+   | ---^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   | |
+   | help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+   = note: requested on the command line with `-W unreachable-pub`
+
+warning: unreachable `pub` item
+  --> crates/chainspec/src/spec.rs:96:1
+   |
+96 | pub const N42_TESTNET_CHAINID: u64 = 1142;
+   | ---^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   | |
+   | help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+
+warning: unreachable `pub` item
+  --> crates/chainspec/src/spec.rs:97:1
+   |
+97 | pub const N42_DEVNET_CHAINID: u64 = 1143;
+   | ---^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   | |
+   | help: consider restricting its visibility: `pub(crate)`
+   |
+   = help: or consider exporting it for use by other crates
+
+warning: unused import: `n42_primitives::Snapshot`
+  --> crates/storage/db-api/src/models/mod.rs:18:5
+   |
+18 | use n42_primitives::Snapshot;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `BytesMut`
+ --> crates/storage/db-api/src/models/beacon.rs:6:21
+  |
+6 | use bytes::{BufMut, BytesMut};
+  |                     ^^^^^^^^
+
+warning: `reth-chainspec` (lib) generated 8 warnings (run `cargo fix --lib -p reth-chainspec` to apply 5 suggestions)
+warning: `reth-db-api` (lib) generated 2 warnings (run `cargo fix --lib -p reth-db-api` to apply 2 suggestions)
+warning: unused import: `Address`
+ --> crates/storage/storage-api/src/beacon.rs:2:24
+  |
+2 | use alloy_primitives::{Address, BlockHash, BlockNumber, B256};
+  |                        ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: missing documentation for a trait
+  --> crates/storage/storage-api/src/snapshot.rs:15:1
+   |
+15 | pub trait SnapshotProviderWriter{
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/snapshot.rs:22:5
+   |
+22 |     fn save_signer_by_hash(&self, block_hash: &BlockHash,  signer: Address) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:11:5
+   |
+11 |     fn basic_validator(&self, address: Address) -> ProviderResult<Option<Validator>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:12:5
+   |
+12 | /     fn changed_validators_and_blocks_with_range(
+13 | |         &self,
+14 | |         range: RangeInclusive<BlockNumber>,
+15 | |     ) -> ProviderResult<BTreeMap<Address, Vec<BlockNumber>>>;
+   | |_____________________________________________________________^
+
+warning: missing documentation for a trait
+  --> crates/storage/storage-api/src/validator.rs:19:1
+   |
+19 | pub trait ValidatorChangeWriter{
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:20:5
+   |
+20 |     fn write_validator_reverts(&self,first_block:BlockNumber,validator_reverts:ValidatorRevert,)->ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:21:5
+   |
+21 |     fn insert_validator_history_index(&self,validator_transitions:impl IntoIterator<Item=(Address,impl IntoIterator<Item=BlockNumber>)>,) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:22:5
+   |
+22 |     fn unwind_validator(&self, range: RangeInclusive<BlockNumber>) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:23:5
+   |
+23 |     fn write_validator_changes(&self,changes: ValidatorChangeset) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:24:5
+   |
+24 |     fn remove_validator(&self, range: RangeInclusive<BlockNumber>) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:25:5
+   |
+25 |     fn take_validator(&self, range: RangeInclusive<BlockNumber>) -> ProviderResult<ValidatorChangeset>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/validator.rs:26:5
+   |
+26 |     fn unwind_validator_history_indices<'a>(&self, changesets: impl Iterator<Item = &'a (BlockNumber, ValidatorBeforeTx)>,) -> ProviderResult<usize>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a trait
+ --> crates/storage/storage-api/src/beacon.rs:8:1
+  |
+8 | pub trait BeaconReader{
+  | ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+ --> crates/storage/storage-api/src/beacon.rs:9:5
+  |
+9 |     fn get_beaconstate_by_blockhash(&self,blockhash:BlockHash)->ProviderResult<Option<BeaconState>>;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:10:5
+   |
+10 |     fn get_beaconblock_by_blockhash(&self,blockhash:BlockHash)->ProviderResult<Option<BeaconBlock>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a trait
+  --> crates/storage/storage-api/src/beacon.rs:14:1
+   |
+14 | pub trait BeaconWriter{
+   | ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:15:5
+   |
+15 |     fn unwind_beacon(&self,range:RangeInclusive<BlockNumber>)->ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:16:5
+   |
+16 |     fn write_beaconstate(&self,changes:BeaconStateChangeset)->ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:17:5
+   |
+17 |     fn remove_beaconstate(&self,range:Vec<BlockHash>)->ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:19:5
+   |
+19 |     fn write_beaconblock(&self,changes:BeaconBlockChangeset)->ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:20:5
+   |
+20 |     fn remove_beaconblock(&self,range:Vec<BlockHash>)->ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a trait
+  --> crates/storage/storage-api/src/beacon.rs:23:1
+   |
+23 | pub trait BeaconProvider{
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:27:5
+   |
+27 |     fn get_beacon_state_by_hash(&self, block_hash: &BlockHash) -> ProviderResult<Option<BeaconState>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:29:5
+   |
+29 |     fn get_partial_beacon_state_by_hash(&self, block_hash: &BlockHash) -> ProviderResult<Option<BeaconState>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:31:5
+   |
+31 |     fn get_beacon_block_hash_by_eth1_hash(&self, block_hash: &BlockHash) -> ProviderResult<Option<BlockHash>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:33:5
+   |
+33 |     fn get_tree_by_hash_for_validator(&self, tree_hash: &B256) -> ProviderResult<Option<merkle_db_rs::tree::Tree<Validator>>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:35:5
+   |
+35 |     fn get_tree_by_hash_for_u64(&self, tree_hash: &B256) -> ProviderResult<Option<merkle_db_rs::tree::Tree<u64>>>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a trait
+  --> crates/storage/storage-api/src/beacon.rs:38:1
+   |
+38 | pub trait BeaconProviderWriter {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:42:5
+   |
+42 |     fn save_beacon_state_by_hash(&self, block_hash: &BlockHash,  beacon_state: BeaconState) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:44:5
+   |
+44 |     fn save_beacon_block_hash_by_eth1_hash(&self, eth1_block_hash: &BlockHash, beacon_block_hash: BlockHash) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:46:5
+   |
+46 |     fn save_tree_by_hash_for_validator(&self, tree_hash: &B256,  tree: merkle_db_rs::tree::Tree<Validator>) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+  --> crates/storage/storage-api/src/beacon.rs:48:5
+   |
+48 |     fn save_tree_by_hash_for_u64(&self, tree_hash: &B256,  tree: merkle_db_rs::tree::Tree<u64>) -> ProviderResult<()>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `reth-storage-api` (lib) generated 33 warnings (run `cargo fix --lib -p reth-storage-api` to apply 1 suggestion)
+warning: extern crate `revm_database` is unused in crate `reth_revm`
+  |
+  = help: remove the dependency or add `use revm_database as _;` to the crate root
+note: the lint level is defined here
+ --> crates/revm/src/lib.rs:8:29
+  |
+8 | #![cfg_attr(not(test), warn(unused_crate_dependencies))]
+  |                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `reth-revm` (lib) generated 1 warning
+warning: unused import: `std::sync::Arc`
+  --> crates/consensus/consensus/src/lib.rs:14:5
+   |
+14 | use std::sync::Arc;
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `parent_header`
+  --> crates/consensus/consensus/src/lib.rs:82:9
+   |
+82 |         parent_header: &SealedHeader,
+   |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parent_header`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `header`
+  --> crates/consensus/consensus/src/lib.rs:90:9
+   |
+90 |         header: &mut Header,
+   |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_header`
+
+warning: unused variable: `eth_signer_key`
+  --> crates/consensus/consensus/src/lib.rs:97:9
+   |
+97 |         eth_signer_key: Option<String>,
+   |         ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_eth_signer_key`
+
+warning: unused variable: `number`
+   --> crates/consensus/consensus/src/lib.rs:110:9
+    |
+110 |         number: u64,
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_number`
+
+warning: unused variable: `hash`
+   --> crates/consensus/consensus/src/lib.rs:111:9
+    |
+111 |         hash: B256,
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `parents`
+   --> crates/consensus/consensus/src/lib.rs:112:9
+    |
+112 |         parents: Option<Vec<Header>>,
+    |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parents`
+
+warning: unused variable: `address`
+   --> crates/consensus/consensus/src/lib.rs:119:9
+    |
+119 |         address: Address,
+    |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_address`
+
+warning: unused variable: `auth`
+   --> crates/consensus/consensus/src/lib.rs:120:9
+    |
+120 |         auth: bool,
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_auth`
+
+warning: unused variable: `address`
+   --> crates/consensus/consensus/src/lib.rs:127:9
+    |
+127 |         address: Address,
+    |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_address`
+
+warning: unused variable: `hash`
+   --> crates/consensus/consensus/src/lib.rs:140:9
+    |
+140 |         hash: B256,
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `parent_number`
+   --> crates/consensus/consensus/src/lib.rs:147:9
+    |
+147 |         parent_number: u64,
+    |         ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parent_number`
+
+warning: unused variable: `parent_hash`
+   --> crates/consensus/consensus/src/lib.rs:148:9
+    |
+148 |         parent_hash: BlockHash,
+    |         ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_parent_hash`
+
+warning: unused variable: `difficulty`
+   --> crates/consensus/consensus/src/lib.rs:149:9
+    |
+149 |         difficulty: U256,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_difficulty`
+
+warning: unused variable: `block_hash`
+   --> crates/consensus/consensus/src/lib.rs:156:9
+    |
+156 |         block_hash: BlockHash,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_block_hash`
+
+warning: unused variable: `cached_reads`
+   --> crates/consensus/consensus/src/lib.rs:157:9
+    |
+157 |         cached_reads: CachedReads
+    |         ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_cached_reads`
+
+warning: unused variable: `block_hash`
+   --> crates/consensus/consensus/src/lib.rs:164:9
+    |
+164 |         block_hash: BlockHash,
+    |         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_block_hash`
+
+warning: missing documentation for a method
+  --> crates/consensus/consensus/src/lib.rs:95:5
+   |
+95 | /     fn set_eth_signer_by_key(
+96 | |         &self,
+97 | |         eth_signer_key: Option<String>,
+98 | |     ) -> Result<(), ConsensusError> {
+   | |___________________________________^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:102:5
+    |
+102 | /     fn get_eth_signer_address(
+103 | |         &self,
+104 | |     ) -> Result<Option<Address>, ConsensusError> {
+    | |________________________________________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:108:5
+    |
+108 | /     fn snapshot(
+109 | |         &self,
+110 | |         number: u64,
+111 | |         hash: B256,
+112 | |         parents: Option<Vec<Header>>,
+113 | |     ) -> Result<Snapshot, ConsensusError> {
+    | |_________________________________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:117:5
+    |
+117 | /     fn propose(
+118 | |         &self,
+119 | |         address: Address,
+120 | |         auth: bool,
+121 | |     ) -> Result<(), ConsensusError> {
+    | |___________________________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:125:5
+    |
+125 | /     fn discard(
+126 | |         &self,
+127 | |         address: Address,
+128 | |     ) -> Result<(), ConsensusError> {
+    | |___________________________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:132:5
+    |
+132 | /     fn proposals(
+133 | |         &self,
+134 | |     ) -> Result<HashMap<Address, bool>, ConsensusError> {
+    | |_______________________________________________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:138:5
+    |
+138 | /     fn total_difficulty(
+139 | |         &self,
+140 | |         hash: B256,
+141 | |     ) -> U256 {
+    | |_____________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:145:5
+    |
+145 | /     fn wiggle(
+146 | |         &self,
+147 | |         parent_number: u64,
+148 | |         parent_hash: BlockHash,
+149 | |         difficulty: U256,
+150 | |     ) -> Duration {
+    | |_________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:154:5
+    |
+154 | /     fn set_cached_reads(
+155 | |         &self,
+156 | |         block_hash: BlockHash,
+157 | |         cached_reads: CachedReads
+158 | |         ) -> Result<(), ConsensusError> {
+    | |_______________________________________^
+
+warning: missing documentation for a method
+   --> crates/consensus/consensus/src/lib.rs:162:5
+    |
+162 | /     fn get_cached_reads(
+163 | |         &self,
+164 | |         block_hash: BlockHash,
+165 | |     ) -> Result<Option<CachedReads>, ConsensusError> {
+    | |____________________________________________________^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:510:5
+    |
+510 |     UnknownBlock,
+    |     ^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:514:5
+    |
+514 |     InvalidCheckpointBeneficiary,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:518:5
+    |
+518 |     InvalidVote,
+    |     ^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:522:5
+    |
+522 |     InvalidCheckpointVote,
+    |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:526:5
+    |
+526 |     MissingVanity,
+    |     ^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:530:5
+    |
+530 |     MissingSignature,
+    |     ^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:534:5
+    |
+534 |     ErrExtraSigners,
+    |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:538:5
+    |
+538 |     InvalidCheckpointSigners,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:542:5
+    |
+542 |     InvalidDifficulty,
+    |     ^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:546:5
+    |
+546 |     UnauthorizedSigner,
+    |     ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:550:5
+    |
+550 |     RecentlySigned,
+    |     ^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:554:5
+    |
+554 |     SignHeaderError,
+    |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:558:5
+    |
+558 |     SaveSnapshotError,
+    |     ^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:562:5
+    |
+562 |     NoSignerSet,
+    |     ^^^^^^^^^^^
+
+warning: missing documentation for a variant
+   --> crates/consensus/consensus/src/lib.rs:566:5
+    |
+566 |     AposErrorDetail {
+    |     ^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> crates/consensus/consensus/src/lib.rs:567:9
+    |
+567 |         detail: String,
+    |         ^^^^^^^^^^^^^^
+
+warning: `reth-consensus` (lib) generated 43 warnings (run `cargo fix --lib -p reth-consensus` to apply 17 suggestions)
+warning: unused import: `std::collections::HashSet`
+ --> crates/net/network-api/src/block.rs:1:5
+  |
+1 | use std::collections::HashSet;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `TxHash`
+ --> crates/net/network-api/src/block.rs:2:35
+  |
+2 | use alloy_primitives::{BlockHash, TxHash, B256};
+  |                                   ^^^^^^
+
+warning: unused import: `derive_more::Error`
+ --> crates/net/network-api/src/block.rs:3:5
+  |
+3 | use derive_more::Error;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `reth_errors::BlockExecutionError`
+ --> crates/net/network-api/src/block.rs:4:5
+  |
+4 | use reth_errors::BlockExecutionError;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated type
+  --> crates/net/network-api/src/block.rs:35:5
+   |
+35 |     type Block;
+   |     ^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a method
+  --> crates/net/network-api/src/block.rs:42:5
+   |
+42 |     fn validated_block(&self, result: N42BlockImportOutcome<Self::Block>);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `reth-network-api` (lib) generated 6 warnings (run `cargo fix --lib -p reth-network-api` to apply 4 suggestions)
+warning: unexpected `cfg` condition name: `coverage_nightly`
+   --> third_party/vergen-git2-1.0.7/src/lib.rs:443:13
+    |
+443 | #![cfg_attr(coverage_nightly, feature(coverage_attribute))]
+    |             ^^^^^^^^^^^^^^^^
+    |
+    = help: expected names are: `beta`, `docsrs`, `feature`, `nightly`, `stable`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(coverage_nightly)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(coverage_nightly)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition name: `coverage_nightly`
+   --> third_party/vergen-git2-1.0.7/src/git2/mod.rs:623:16
+    |
+623 |     #[cfg_attr(coverage_nightly, coverage(off))]
+    |                ^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(coverage_nightly)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(coverage_nightly)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: `vergen-git2` (lib) generated 2 warnings
+warning: missing documentation for a type alias
+ --> crates/net/dns/src/resolver.rs:5:1
+  |
+5 | pub type ResolveError = hickory_resolver::net::NetError;
+  | ^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `-W missing-docs`
+
+warning: `reth-dns-discovery` (lib) generated 1 warning
+warning: unused import: `N42BlockImportError`
+  --> crates/net/network/src/manager.rs:49:5
+   |
+49 |     N42BlockImportError, N42BlockImportOutcome, 
+   |     ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `TxHash`
+ --> crates/net/network/src/network.rs:9:35
+  |
+9 | use alloy_primitives::{BlockHash, TxHash, B256};
+  |                                   ^^^^^^
+
+warning: unused import: `N42BlockImportError`
+  --> crates/net/network/src/network.rs:28:5
+   |
+28 |     N42BlockImportError, N42BlockImportOutcome, 
+   |     ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `BlockImportOutcome` and `BlockValidation`
+  --> crates/net/network/src/network.rs:53:21
+   |
+53 | use crate::import::{BlockImportOutcome, BlockValidation};
+   |                     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::transactions::PendingPoolImportsInfo`
+  --> crates/net/network/src/network.rs:54:5
+   |
+54 | use crate::transactions::PendingPoolImportsInfo;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::hash::Hash`
+ --> crates/net/network/src/network.rs:7:5
+  |
+7 | use std::hash::Hash;
+  |     ^^^^^^^^^^^^^^^
+
+warning: unused import: `BlockAnnounceProvider`
+  --> crates/net/network/src/manager.rs:48:5
+   |
+48 |     BlockAnnounceProvider,
+   |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: `reth-network` (lib) generated 7 warnings (run `cargo fix --lib -p reth-network` to apply 5 suggestions)
+warning: unused imports: `APosConfig`, `Attestation`, `BeaconBlockBody`, `BeaconBlockChangeset`, `BeaconBlock`, `BeaconStateChangeset`, `BeaconState`, `DepositData`, `Deposit`, `Snapshot`, `ValidatorBeforeTx`, `ValidatorChangeset`, `ValidatorRevert`, `Validator`, and `VoluntaryExit`
+  --> crates/storage/provider/src/providers/database/mod.rs:10:22
+   |
+10 | ...42_primitives::{APosConfig, Snapshot, BeaconState, BeaconBlock,BeaconStateChangeset,BeaconBlockChangeset,BeaconBlockBody,VoluntaryExit,
+   |                    ^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^^^^  ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+11 | ...   Attestation,Deposit,DepositData, Validator, ValidatorBeforeTx, ValidatorChangeset,ValidatorRevert};
+   |       ^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^  ^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `SnapshotProviderWriter` and `SnapshotProvider`
+  --> crates/storage/provider/src/providers/database/mod.rs:12:24
+   |
+12 | use reth_storage_api::{SnapshotProvider, SnapshotProviderWriter};
+   |                        ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Gauge`
+ --> crates/storage/provider/src/providers/metrics.rs:2:24
+  |
+2 |     metrics::{Counter, Gauge, Histogram},
+  |                        ^^^^^
+
+warning: unused import: `SnapshotProviderWriter`
+  --> crates/storage/provider/src/providers/consistent.rs:31:23
+   |
+31 |     SnapshotProvider, SnapshotProviderWriter,
+   |                       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates/storage/provider/src/providers/database/provider.rs:151:32
+    |
+151 |     fn write_beaconstate(&self,mut changes:BeaconStateChangeset) -> ProviderResult<()> {
+    |                                ----^^^^^^^
+    |                                |
+    |                                help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `block_number`
+   --> crates/storage/provider/src/providers/database/provider.rs:296:14
+    |
+296 |         for (block_number, ValidatorBeforeTx { address, info: old_validator }) in validator_changesets {
+    |              ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_block_number`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `range`
+   --> crates/storage/provider/src/providers/database/provider.rs:316:30
+    |
+316 |     fn take_validator(&self, range: RangeInclusive<BlockNumber>) -> ProviderResult<ValidatorChangeset> {
+    |                              ^^^^^ help: if this is intentional, prefix it with an underscore: `_range`
+
+warning: `reth-provider` (lib) generated 7 warnings (run `cargo fix --lib -p reth-provider` to apply 6 suggestions)
+warning: unused import: `rand::prelude::SliceRandom`
+  --> crates/n42/clique/src/apos.rs:14:5
+   |
+14 | use rand::prelude::SliceRandom;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `BlockWithSenders`
+  --> crates/n42/clique/src/apos.rs:16:50
+   |
+16 | use reth_primitives::{SealedBlock, SealedHeader, BlockWithSenders};
+   |                                                  ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FullNodeTypes` and `PrimitivesTy`
+  --> crates/n42/clique/src/apos.rs:28:21
+   |
+28 | use reth_node_api::{FullNodeTypes, PrimitivesTy};
+   |                     ^^^^^^^^^^^^^  ^^^^^^^^^^^^
+
+warning: unused import: `BlockBody`
+ --> crates/n42/clique/src/unverifiedblock.rs:4:23
+  |
+4 | use reth_primitives::{BlockBody, SealedBlock};
+  |                       ^^^^^^^^^
+
+warning: use of deprecated type alias `reth_primitives::BlockWithSenders`: Use `RecoveredBlock` instead
+  --> crates/n42/clique/src/apos.rs:16:50
+   |
+16 | use reth_primitives::{SealedBlock, SealedHeader, BlockWithSenders};
+   |                                                  ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: unused import: `alloy_primitives::Sealable`
+ --> crates/n42/clique/src/apos.rs:4:5
+  |
+4 | use alloy_primitives::Sealable;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `headers`
+   --> crates/n42/clique/src/apos.rs:599:9
+    |
+599 |         headers: &[SealedHeader],
+    |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_headers`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `block`
+   --> crates/n42/clique/src/apos.rs:615:9
+    |
+615 |         block: &RecoveredBlock<N::Block>,
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_block`
+
+warning: unused variable: `result`
+   --> crates/n42/clique/src/apos.rs:616:9
+    |
+616 |         result: &BlockExecutionResult<N::Receipt>,
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_result`
+
+warning: unused variable: `body`
+   --> crates/n42/clique/src/apos.rs:634:9
+    |
+634 |         body: &B::Body,
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_body`
+
+warning: unused variable: `header`
+   --> crates/n42/clique/src/apos.rs:635:9
+    |
+635 |         header: &SealedHeader<B::Header>,
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_header`
+
+warning: unused variable: `block`
+   --> crates/n42/clique/src/apos.rs:640:44
+    |
+640 |     fn validate_block_pre_execution(&self, block: &SealedBlock<B>) -> Result<(), Self::Error> {
+    |                                            ^^^^^ help: if this is intentional, prefix it with an underscore: `_block`
+
+warning: field `chain_spec` is never read
+   --> crates/n42/clique/src/apos.rs:145:5
+    |
+138 | pub struct APos<Provider, ChainSpec>
+    |            ---- field in this struct
+...
+145 |     chain_spec: Arc<ChainSpec>,
+    |     ^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: missing documentation for a struct
+ --> crates/n42/clique/src/unverifiedblock.rs:8:1
+  |
+8 | pub struct BlockVerifyResult {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a struct field
+ --> crates/n42/clique/src/unverifiedblock.rs:9:5
+  |
+9 |     pub pubkey: String,
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:10:5
+   |
+10 |     pub signature: String,
+   |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:11:5
+   |
+11 |     pub attestation_data: AttestationData,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:12:5
+   |
+12 |     pub block_hash: B256,
+   |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+  --> crates/n42/clique/src/unverifiedblock.rs:16:1
+   |
+16 | pub struct UnverifiedBlock{
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:17:5
+   |
+17 |     pub blockbody:SealedBlock,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:18:5
+   |
+18 |     pub db:CachedReads,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:19:5
+   |
+19 |     pub td:U256,
+   |     ^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+  --> crates/n42/clique/src/unverifiedblock.rs:20:5
+   |
+20 |     pub committee_index: CommitteeIndex,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+  --> crates/n42/clique/src/unverifiedblock.rs:23:5
+   |
+23 | /     pub fn new(blockbody:SealedBlock,db:CachedReads,td:U256,
+24 | |         committee_index: CommitteeIndex,
+25 | |         )->Self{
+   | |_______________^
+
+warning: `n42-clique` (lib) generated 24 warnings (run `cargo fix --lib -p n42-clique` to apply 10 suggestions)
+   Compiling mobile-sdk v1.4.3 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/source/crates/n42/mobile-sdk)
+warning: unused import: `ChainSpec`
+  --> crates/n42/mobile-sdk/src/lib.rs:12:81
+   |
+12 | use reth_chainspec::{ChainSpecBuilder,N42_DEVNET,EthereumHardfork,ForkCondition,ChainSpec};
+   |                                                                                 ^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `Deserialize` and `Serialize`
+  --> crates/n42/mobile-sdk/src/lib.rs:21:13
+   |
+21 | use serde::{Deserialize, Serialize};
+   |             ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `Decode` and `Encode`
+ --> crates/n42/mobile-sdk/src/deposit_exit.rs:5:18
+  |
+5 | use ssz_derive::{Decode, Encode};
+  |                  ^^^^^^  ^^^^^^
+
+warning: unused import: `tree_hash::Hash256`
+ --> crates/n42/mobile-sdk/src/deposit_exit.rs:6:5
+  |
+6 | use tree_hash::Hash256;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `tree_hash_derive::TreeHash`
+ --> crates/n42/mobile-sdk/src/deposit_exit.rs:7:5
+  |
+7 | use tree_hash_derive::TreeHash;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `FixedBytes`
+ --> crates/n42/mobile-sdk/src/deposit_exit.rs:9:30
+  |
+9 | use alloy_primitives::{B256, FixedBytes};
+  |                              ^^^^^^^^^^
+
+warning: unused imports: `Deserialize` and `Serialize`
+  --> crates/n42/mobile-sdk/src/deposit_exit.rs:10:13
+   |
+10 | use serde::{Deserialize, Serialize};
+   |             ^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused import: `jni::JNIEnv`
+ --> crates/n42/mobile-sdk/src/jni.rs:2:5
+  |
+2 | use jni::JNIEnv;
+  |     ^^^^^^^^^^^
+
+warning: unused import: `JClass`
+ --> crates/n42/mobile-sdk/src/jni.rs:3:31
+  |
+3 | use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
+  |                               ^^^^^^
+
+warning: unused import: `TransactionRequest`
+ --> crates/n42/mobile-sdk/src/c_ffi.rs:5:26
+  |
+5 | use ethers_core::types::{TransactionRequest, U256};
+  |                          ^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated function `rand::thread_rng`: Renamed to `rng`
+ --> crates/n42/mobile-sdk/src/blst_utils.rs:5:27
+  |
+5 |     let mut rng = ::rand::thread_rng();
+  |                           ^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: unreachable expression
+  --> crates/n42/mobile-sdk/src/lib.rs:83:5
+   |
+46 | /     loop {
+47 | |         let ws_client = WsClientBuilder::default()
+48 | |             .build(ws_url)
+49 | |             .await?;
+...  |
+80 | |         tokio::time::sleep(Duration::from_secs(5)).await;
+81 | |     }
+   | |_____- any code following this expression is unreachable
+82 |
+83 |       Ok(())
+   |       ^^^^^^ unreachable expression
+   |
+   = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `futures_util::StreamExt`
+  --> crates/n42/mobile-sdk/src/lib.rs:17:5
+   |
+17 | use futures_util::StreamExt;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `class`
+  --> crates/n42/mobile-sdk/src/jni.rs:39:5
+   |
+39 |     class: jni::objects::JClass<'_>,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_class`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `class`
+  --> crates/n42/mobile-sdk/src/jni.rs:97:5
+   |
+97 |     class: jni::objects::JClass<'_>,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_class`
+
+warning: unused variable: `class`
+   --> crates/n42/mobile-sdk/src/jni.rs:125:5
+    |
+125 |     class: jni::objects::JClass<'_>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_class`
+
+warning: unused variable: `class`
+   --> crates/n42/mobile-sdk/src/jni.rs:153:5
+    |
+153 |     class: jni::objects::JClass<'_>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_class`
+
+warning: unused variable: `class`
+   --> crates/n42/mobile-sdk/src/jni.rs:208:5
+    |
+208 |     class: jni::objects::JClass<'_>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_class`
+
+warning: unused variable: `class`
+   --> crates/n42/mobile-sdk/src/jni.rs:283:5
+    |
+283 |     class: jni::objects::JClass<'_>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_class`
+
+warning: variable does not need to be mutable
+  --> crates/n42/mobile-sdk/src/c_ffi.rs:68:9
+   |
+68 |     let mut set_error = |msg: String| {
+   |         ----^^^^^^^^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:100:9
+    |
+100 |     let mut set_error = |msg: String| {
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:147:9
+    |
+147 |     let mut set_error = |msg: String| {
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:179:9
+    |
+179 |     let mut set_error = |msg: String| {
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:218:9
+    |
+218 |     let mut set_error = |msg: String| {
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:248:9
+    |
+248 |     let mut set_error = |msg: String| {
+    |         ----^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: missing documentation for the crate
+   --> crates/n42/mobile-sdk/src/lib.rs:1:1
+    |
+  1 | / use tokio::time::Instant;
+  2 | | use hex::FromHex;
+  3 | | use reth_primitives_traits::AlloyBlockHeader;
+  4 | | use blst::min_pk::SecretKey;
+...   |
+206 | |     Ok(receipts_root)
+207 | | }
+    | |_^
+    |
+    = note: requested on the command line with `-W missing-docs`
+
+warning: missing documentation for a module
+  --> crates/n42/mobile-sdk/src/lib.rs:26:1
+   |
+26 | pub mod deposit_exit;
+   | ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a module
+  --> crates/n42/mobile-sdk/src/lib.rs:31:1
+   |
+31 | pub mod c_ffi;
+   | ^^^^^^^^^^^^^
+
+warning: missing documentation for a module
+  --> crates/n42/mobile-sdk/src/lib.rs:33:1
+   |
+33 | pub mod blst_utils;
+   | ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/lib.rs:35:1
+   |
+35 | / pub async fn run_client(
+36 | |     ws_url: &str,
+37 | |     validator_private_key: &str,
+38 | |     ) -> eyre::Result<()> {
+   | |_________________________^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/lib.rs:86:1
+   |
+86 | / pub async fn gen_block_verify_result(
+87 | |     block: UnverifiedBlock,
+88 | |     validator_private_key: &str,
+89 | |     ) -> eyre::Result<BlockVerifyResult> {
+   | |________________________________________^
+
+warning: missing documentation for a constant
+  --> crates/n42/mobile-sdk/src/deposit_exit.rs:24:1
+   |
+24 | pub const EIP7002_CONTRACT_ADDRESS: &str = "0x00000961Ef480Eb55e80D19ad83579A64c007002";
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/deposit_exit.rs:26:1
+   |
+26 | / pub fn create_deposit_unsigned_tx(
+27 | |     deposit_contract_address: &str,
+28 | |     validator_private_key: &str,
+29 | |     withdrawal_address: &str,
+30 | |     deposit_value_in_wei: &U256,
+31 | |     ) -> eyre::Result<TransactionRequest> {
+   | |_________________________________________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/deposit_exit.rs:112:1
+    |
+112 | pub fn create_get_exit_fee_unsigned_tx() -> eyre::Result<TransactionRequest> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/deposit_exit.rs:126:1
+    |
+126 | / pub fn create_exit_unsigned_tx(
+127 | |         validator_public_key: &str,
+128 | |         fee: &Option<U256>,
+129 | |     ) -> eyre::Result<TransactionRequest> {
+    | |_________________________________________^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/jni.rs:37:1
+   |
+37 | / pub extern "C" fn Java_com_mobileSdk_NativeBindings_createDepositUnsignedTx(
+38 | |     mut env: jni::JNIEnv<'_>,
+39 | |     class: jni::objects::JClass<'_>,
+40 | |     deposit_contract_address: JString<'_>,
+...  |
+43 | |     deposit_value_wei_in_hex: JString<'_>,
+44 | | ) -> jstring {
+   | |____________^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/jni.rs:95:1
+   |
+95 | / pub extern "C" fn Java_com_mobileSdk_NativeBindings_generateBls12381Keypair(
+96 | |     mut env: jni::JNIEnv<'_>,
+97 | |     class: jni::objects::JClass<'_>,
+98 | | ) -> jstring {
+   | |____________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/jni.rs:123:1
+    |
+123 | / pub extern "C" fn Java_com_mobileSdk_NativeBindings_createGetExitFeeUnsignedTx(
+124 | |     mut env: jni::JNIEnv<'_>,
+125 | |     class: jni::objects::JClass<'_>,
+126 | | ) -> jstring {
+    | |____________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/jni.rs:151:1
+    |
+151 | / pub extern "C" fn Java_com_mobileSdk_NativeBindings_createExitUnsignedTx(
+152 | |     mut env: jni::JNIEnv<'_>,
+153 | |     class: jni::objects::JClass<'_>,
+154 | |     validator_public_key: JString<'_>,
+155 | |     exit_fee_in_wei_in_hex: JString<'_>,
+156 | | ) -> jstring {
+    | |____________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/jni.rs:206:1
+    |
+206 | / pub extern "C" fn Java_com_mobileSdk_NativeBindings_runClient(
+207 | |     mut env: jni::JNIEnv<'_>,
+208 | |     class: jni::objects::JClass<'_>,
+209 | |     ws_url: JString<'_>,
+210 | |     validator_private_key: JString<'_>,
+211 | | ) -> jobject {
+    | |____________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/jni.rs:281:1
+    |
+281 | / pub extern "C" fn Java_com_mobileSdk_NativeBindings_genBlockVerifyResult(
+282 | |     mut env: jni::JNIEnv<'_>,
+283 | |     class: jni::objects::JClass<'_>,
+284 | |     block: JString<'_>,
+285 | |     validator_private_key: JString<'_>,
+286 | | ) -> jobject {
+    | |____________^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/c_ffi.rs:55:1
+   |
+55 | pub extern "C" fn rust_free_string(s: *mut c_char) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/c_ffi.rs:62:1
+   |
+62 | / pub extern "C" fn run_client_c(
+63 | |     ws_url: *const c_char,
+64 | |     validator_private_key: *const c_char,
+65 | |     out_error: *mut *mut c_char,
+66 | | ) -> i32 {
+   | |________^
+
+warning: missing documentation for a function
+  --> crates/n42/mobile-sdk/src/c_ffi.rs:94:1
+   |
+94 | / pub extern "C" fn gen_block_verify_result_c (
+95 | |     block: *const c_char,
+96 | |     validator_private_key: *const c_char,
+97 | |     out_error: *mut *mut c_char,
+98 | | ) -> *mut c_char {
+   | |________________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:143:1
+    |
+143 | / pub extern "C" fn generate_bls12_381_keypair_c (
+144 | |     out_error: *mut *mut c_char,
+145 | | ) -> *mut c_char {
+    | |________________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:171:1
+    |
+171 | / pub extern "C" fn create_deposit_unsigned_tx_c(
+172 | |     deposit_contract_address: *const c_char,
+173 | |     validator_private_key: *const c_char,
+174 | |     withdrawal_address: *const c_char,
+175 | |     deposit_value_in_wei: *const c_char,
+176 | |     out_error: *mut *mut c_char,
+177 | | ) -> *mut c_char {
+    | |________________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:214:1
+    |
+214 | / pub extern "C" fn create_get_exit_fee_unsigned_tx_c(
+215 | |     out_error: *mut *mut c_char,
+216 | | ) -> *mut c_char {
+    | |________________^
+
+warning: missing documentation for a function
+   --> crates/n42/mobile-sdk/src/c_ffi.rs:242:1
+    |
+242 | / pub extern "C" fn create_exit_unsigned_tx_c(
+243 | |     validator_public_key: *const c_char,
+244 | |     fee_in_wei_or_empty: *const c_char,
+245 | |     out_error: *mut *mut c_char,
+246 | | ) -> *mut c_char {
+    | |________________^
+
+warning: missing documentation for a function
+ --> crates/n42/mobile-sdk/src/blst_utils.rs:4:1
+  |
+4 | pub fn generate_bls12_381_keypair() -> eyre::Result<(String, String)> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `mobile-sdk` (lib test) generated 49 warnings (run `cargo fix --lib -p mobile-sdk --tests` to apply 22 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.83s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/target-host/debug/deps/mobile_sdk-ededb1ff42493761)
+
+running 1 test
+
+thread 'c_ffi::apple_ffi_tests::runtime_constructor_failure_is_returned_as_error' (29712579) panicked at crates/n42/mobile-sdk/src/c_ffi.rs:328:9:
+assertion `left == right` failed
+  left: Some("runtime failure lost")
+ right: Some("runtime initialization failed: synthetic runtime failure")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c_ffi::apple_ffi_tests::runtime_constructor_failure_is_returned_as_error ... FAILED
+
+failures:
+
+failures:
+    c_ffi::apple_ffi_tests::runtime_constructor_failure_is_returned_as_error
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p mobile-sdk --lib`

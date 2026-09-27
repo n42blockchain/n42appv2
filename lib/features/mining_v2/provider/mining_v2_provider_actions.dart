@@ -343,8 +343,14 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
 
     final exitSignDataStr = await _miningCreateExitUnsignedTx(feeMM.data);
+    if (exitSignDataStr == null) {
+      errorMessage = "'miningCreateExitUnsignedTx' method error!";
+      exitDepositLoad = Load.finish;
+      notifyListeners();
+      return;
+    }
     MessageModel sendMM = await web3.sendExitDepositTransaction(
-      jsonDecode(exitSignDataStr ?? '{}'),
+      jsonDecode(exitSignDataStr),
     );
     if (sendMM.error == false) {
       setExitDepositTxHash(sendMM.data);

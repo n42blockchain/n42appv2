@@ -1,0 +1,3 @@
+00:00 +0: loading /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/mining_v2/exit_unsigned_tx_error_test.dart
+00:00 +0: null native exit transaction stops before signing or sending
+00:00 +1: All tests passed!

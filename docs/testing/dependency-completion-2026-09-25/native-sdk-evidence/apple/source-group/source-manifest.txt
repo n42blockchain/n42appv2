@@ -1,0 +1,12 @@
+N42 release: 2099ec735a658ba1db97c49b77a6c58c1fc82920
+Reth release: fe3653ffe602d4e85ad213e8bd9f06e7b710c0c5
+54bf2f05e6316ccf1ea241049eeaf7fbc2ddcb75edbf9056809090dc6b1cc171  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/mobile_sdk_v0_2_2/n42-source.patch
+8f7898c2285c8145c032f66b8b9d409881515acbf8e705bd5f3a4d0d0a89a99a  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/mobile_sdk_v0_2_2/reth-dns.patch
+97a9694fc3a6f6ed597e0252362fc10357c869dc2206a1f5866cc2126ba23b85  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/mobile_sdk_v0_2_2/alloy-consensus.patch
+889accd61ea293877aa95b62e276213f05b91d7bf5fba84924aefd3c861a7c5a  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/mobile_sdk_v0_2_2/discv5.patch
+2e391aa2f9892509e6262f10d90b869c29d3af336a6cb90e95d8350ed1f67f47  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/mobile_sdk_v0_2_2/vergen-git2.patch
+7e255879661c166546a70e21c0fa7d2e8cb76705a0d4a5fd214d48630db630ca  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/mobile_sdk_v0_2_2/Cargo.lock
+28fcd58ec016d5fa5ff0145d7bbc2146d18fcf099606406437c6fabd664f4465  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/apple_native_smoke/mobile_sdk_v0_2_2/apple-source.patch
+7e255879661c166546a70e21c0fa7d2e8cb76705a0d4a5fd214d48630db630ca  .superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/Cargo.lock
+4bfb85e35a84e56cba2019cfe8be15484b533a8f5809dc5f05f08fd3edb06cba  .superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/crates/n42/mobile-sdk/Cargo.toml
+7c109f15d7bb1adb0e4e25279a7a6111f295a79c50ff50b69c8740c1f6c6862f  .superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/crates/n42/mobile-sdk/src/c_ffi.rs

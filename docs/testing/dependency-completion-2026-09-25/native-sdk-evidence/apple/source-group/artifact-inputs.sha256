@@ -1,0 +1,4 @@
+af3e0ed0c1666cdcaa6b1e6982cf817a1c84e2270d700ace56b6d6729634d772  ios/include/mobile_sdk.h
+af3e0ed0c1666cdcaa6b1e6982cf817a1c84e2270d700ace56b6d6729634d772  .superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/mobile_sdk.h
+2c39c2d4870233c6af2c2280514c236f50eec3620ac030e8d1c80b66dbdfc745  ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a
+50b29a083a1f1a4e348892e2d12e61692a6da20f71394381124392540d61819f  ios/MobileSdk.xcframework/ios-arm64_x86_64-simulator/libmobile_sdk.a
