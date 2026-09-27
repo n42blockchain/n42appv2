@@ -20,6 +20,7 @@ dependencies:
   vodozemac: 0.8.0
 
 dev_dependencies:
+  crypto: 3.0.7
   flutter_test:
     sdk: flutter
   integration_test:

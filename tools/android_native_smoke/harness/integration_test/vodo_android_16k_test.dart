@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_vodozemac/flutter_vodozemac.dart' as flutter_vodozemac;
@@ -44,6 +45,14 @@ void main() {
             return start <= entry && entry < end;
           });
       expect(mapped, anyOf(contains('lib$stem.so'), contains('base.apk')));
+      final installedApk = mapped.split(RegExp(r'\s+')).last;
+      final installedHash = await sha256
+          .bind(File(installedApk).openRead())
+          .first;
+      print(
+        'VODO_INSTALLED_APK variant=${releaseProbe ? 'release' : 'debug'} '
+        'pid=$pid sha256=$installedHash path=$installedApk',
+      );
       print(
         'VODO_NATIVE_MAP variant=${releaseProbe ? 'release' : 'debug'} '
         'pid=$pid symbol=account_ed25519_key map=$mapped',
