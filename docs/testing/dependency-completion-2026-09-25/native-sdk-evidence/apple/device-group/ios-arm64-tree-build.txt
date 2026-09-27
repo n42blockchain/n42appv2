@@ -1,0 +1,1 @@
+mobile-sdk v1.4.3 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/crates/n42/mobile-sdk)

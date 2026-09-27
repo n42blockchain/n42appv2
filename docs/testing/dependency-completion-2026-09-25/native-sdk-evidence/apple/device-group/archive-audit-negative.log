@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/apple_native_smoke/mobile_sdk_v0_2_2/audit_ios_archive.py", line 102, in <module>
+    result = audit(Path(sys.argv[1]))
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/apple_native_smoke/mobile_sdk_v0_2_2/audit_ios_archive.py", line 29, in audit
+    raise ValueError("not an ar archive")
+ValueError: not an ar archive

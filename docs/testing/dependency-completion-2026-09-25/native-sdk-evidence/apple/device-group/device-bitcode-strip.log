@@ -1,0 +1,2 @@
+ld: file cannot be open()ed, errno=2 (No such file or directory) path=strip
+fatal error: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip: internal link edit command failed

@@ -1,0 +1,25 @@
+Warning: Building for device with codesigning disabled. You will have to manually codesign before deploying to device.
+Building ai.n42.www for device (ios-release)...
+The following plugins do not support Swift Package Manager for ios:
+  - flutter_gemma
+  - flutter_mining
+  - flutter_tts
+  - fluwx
+  - google_mlkit_commons
+  - google_mlkit_face_detection
+  - google_mlkit_selfie_segmentation
+  - google_mlkit_text_recognition
+  - google_mlkit_translation
+  - large_file_handler
+  - open_filex
+  - saver_gallery
+  - sqflite_sqlcipher
+  - twitter_login
+  - video_compress
+  - video_thumbnail
+  - walletconnect_pay
+  - web3auth_flutter
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Running Xcode build...                                          
+Xcode build done.                                           135.8s
+✓ Built build/ios/iphoneos/Runner.app (401.6MB)

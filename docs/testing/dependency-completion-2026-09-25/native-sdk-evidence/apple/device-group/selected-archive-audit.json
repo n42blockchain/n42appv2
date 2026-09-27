@@ -1,0 +1,19 @@
+{
+  "archive": ".superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/target-ios-no-lto/aarch64-apple-ios/release/libmobile_sdk.a",
+  "sha256": "7c6a01c9ab98651115c4b00c14bbc9fdf4ded656e91106b4b6d24b73318c82c6",
+  "members": 4502,
+  "build_versions": [
+    {
+      "platform": "platform=2",
+      "minos": "10.0.0",
+      "members": 390
+    },
+    {
+      "platform": "platform=2",
+      "minos": "16.0.0",
+      "members": 4112
+    }
+  ],
+  "problem_count": 0,
+  "problems": []
+}

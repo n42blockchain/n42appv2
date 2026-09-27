@@ -1,0 +1,13 @@
+Xcode 27.0
+Build version 27A266a
+27.0
+SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk
+CC_aarch64_apple_ios=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+AR_aarch64_apple_ios=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar
+IPHONEOS_DEPLOYMENT_TARGET=16.0
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo 1.97.1 (c980f4866 2026-06-30)
+1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+b206adf7f1c2b3f466f5ae24acb6fa787e1872981083f28d3e691c8e23830c2a  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib
+7e255879661c166546a70e21c0fa7d2e8cb76705a0d4a5fd214d48630db630ca  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/Cargo.lock
+7c109f15d7bb1adb0e4e25279a7a6111f295a79c50ff50b69c8740c1f6c6862f  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/crates/n42/mobile-sdk/src/c_ffi.rs

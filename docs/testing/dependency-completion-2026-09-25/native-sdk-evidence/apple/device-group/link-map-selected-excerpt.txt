@@ -1,0 +1,10 @@
+6155:[6151] /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/ios/Release-iphoneos/libmobile_sdk.a(mobile_sdk.mobile_sdk.9fed6ce67fd2ddc5-cgu.00.rcgu.o)
+6156:[6152] /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/ios/Release-iphoneos/libmobile_sdk.a(mobile_sdk.mobile_sdk.9fed6ce67fd2ddc5-cgu.01.rcgu.o)
+6157:[6153] /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/ios/Release-iphoneos/libmobile_sdk.a(mobile_sdk.mobile_sdk.9fed6ce67fd2ddc5-cgu.02.rcgu.o)
+600986:0x1079D6AE4	0x00000458	[6166] _create_deposit_unsigned_tx_c
+600987:0x1079D6F3C	0x000004B8	[6166] _create_exit_unsigned_tx_c
+600988:0x1079D73F4	0x000002B4	[6166] _create_get_exit_fee_unsigned_tx_c
+600989:0x1079D76A8	0x0000061C	[6166] _gen_block_verify_result_c
+600990:0x1079D7CC4	0x00000328	[6166] _generate_bls12_381_keypair_c
+600991:0x1079D7FEC	0x000002E0	[6166] _run_client_c
+600992:0x1079D82CC	0x00000030	[6166] _rust_free_string

@@ -1,0 +1,1 @@
+WARN: Skip mobile-sdk::EIP7002_CONTRACT_ADDRESS - (Unsupported literal expression. Lit::Str { token: "0x00000961Ef480Eb55e80D19ad83579A64c007002" })

@@ -1,0 +1,18 @@
+Xcode 27.0
+Build version 27A266a
+iPhoneOS SDK 27.0: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk
+Apple clang version 21.0.0 (clang-2100.3.34.2)
+Target: arm64-apple-darwin25.6.0
+Thread model: posix
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo 1.97.1 (c980f4866 2026-06-30)
+cbindgen 0.29.2
+IPHONEOS_DEPLOYMENT_TARGET=16.0
+CARGO_PROFILE_RELEASE_LTO=false (other release settings from frozen Cargo.toml)
+CARGO_TARGET_AARCH64_APPLE_IOS_RUSTFLAGS=-C link-arg=-miphoneos-version-min=16.0
+1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+b206adf7f1c2b3f466f5ae24acb6fa787e1872981083f28d3e691c8e23830c2a  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib
+2b7a71f3944979313cb54bd87563364ed0b8686ba2dc70410b010e4d4030e31c  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/tools/bin/cbindgen
+7e255879661c166546a70e21c0fa7d2e8cb76705a0d4a5fd214d48630db630ca  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/Cargo.lock
+4bfb85e35a84e56cba2019cfe8be15484b533a8f5809dc5f05f08fd3edb06cba  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/crates/n42/mobile-sdk/Cargo.toml
+7c109f15d7bb1adb0e4e25279a7a6111f295a79c50ff50b69c8740c1f6c6862f  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/recipe-proof-2/source/crates/n42/mobile-sdk/src/c_ffi.rs

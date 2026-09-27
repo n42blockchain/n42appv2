@@ -1,0 +1,21 @@
+84074d3c2a26d6e369953e67b509d29f99ba86c6baa8567367b2dc0ddaccbced  ios/MobileSdk.xcframework/Info.plist
+7c6a01c9ab98651115c4b00c14bbc9fdf4ded656e91106b4b6d24b73318c82c6  ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a
+af3e0ed0c1666cdcaa6b1e6982cf817a1c84e2270d700ace56b6d6729634d772  ios/MobileSdk.xcframework/ios-arm64/Headers/mobile_sdk.h
+50b29a083a1f1a4e348892e2d12e61692a6da20f71394381124392540d61819f  ios/MobileSdk.xcframework/ios-arm64_x86_64-simulator/libmobile_sdk.a
+af3e0ed0c1666cdcaa6b1e6982cf817a1c84e2270d700ace56b6d6729634d772  ios/MobileSdk.xcframework/ios-arm64_x86_64-simulator/Headers/mobile_sdk.h
+af3e0ed0c1666cdcaa6b1e6982cf817a1c84e2270d700ace56b6d6729634d772  ios/include/mobile_sdk.h
+7c6a01c9ab98651115c4b00c14bbc9fdf4ded656e91106b4b6d24b73318c82c6  build/ios/Release-iphoneos/libmobile_sdk.a
+91a7592a8d89a82d96ff66ba0fc661ae546918d534ad8adf0da2e78e5050de28  build/ios/Release-iphoneos/Runner.app/Runner
+100607320 bytes ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a
+284300088 bytes build/ios/Release-iphoneos/Runner.app/Runner
+393936	build/ios/Release-iphoneos/Runner.app
+Non-fat file: ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a is architecture: arm64
+Architectures in the fat file: ios/MobileSdk.xcframework/ios-arm64_x86_64-simulator/libmobile_sdk.a are: x86_64 arm64 
+build/ios/Release-iphoneos/Runner.app/Runner: Mach-O 64-bit executable arm64
+      cmd LC_BUILD_VERSION
+  cmdsize 32
+ platform 2
+    minos 16.0
+      sdk 27.0
+   ntools 1
+     tool 3

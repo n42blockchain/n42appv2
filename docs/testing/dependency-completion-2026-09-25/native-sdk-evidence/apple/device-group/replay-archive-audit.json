@@ -1,0 +1,19 @@
+{
+  "archive": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/apple-sdk-rebuild/build-replay/target/aarch64-apple-ios/release/libmobile_sdk.a",
+  "sha256": "b743de9846c72218427a395de2d2e07c5ace3df92d8bc2cdb94dc37fa180a28e",
+  "members": 4502,
+  "build_versions": [
+    {
+      "platform": "platform=2",
+      "minos": "10.0.0",
+      "members": 390
+    },
+    {
+      "platform": "platform=2",
+      "minos": "16.0.0",
+      "members": 4112
+    }
+  ],
+  "problem_count": 0,
+  "problems": []
+}
