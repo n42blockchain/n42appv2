@@ -160,6 +160,9 @@ configurations.configureEach {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:2.4.20")
+    // Keep the Android shared_preferences plugin's DataStore modules on one release.
+    implementation("androidx.datastore:datastore:1.2.1")
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
     // n42_chat image OCR: the Flutter package includes Latin by default;
     // bundle the additional scripts used by chat image extraction.
     implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
