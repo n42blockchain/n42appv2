@@ -1,0 +1,136 @@
+{
+  "files": [
+    {
+      "file": "androidx/camera/camera-core/1.6.2/camera-core-1.6.2.pom",
+      "sha256": "cddb5bb0653654d8b7c2833484f4684d881dc7509411132e73a5fb4b167fd13c",
+      "bytes": 7109,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2.pom"
+    },
+    {
+      "file": "androidx/camera/camera-core/1.6.2/camera-core-1.6.2.module",
+      "sha256": "bee75b4ef561862030702a51f692057e034ae1f600f3091b2a5e5a89856ab410",
+      "bytes": 17227,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2.module"
+    },
+    {
+      "file": "androidx/camera/camera-core/1.6.2/camera-core-1.6.2-samples-sources.jar",
+      "sha256": "d70c01d96bbe4abbb691312514f6708f9ba866f38003d698db31eda2a529a9c9",
+      "bytes": 7830,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2-samples-sources.jar"
+    },
+    {
+      "file": "androidx/camera/camera-core/1.6.2/camera-core-1.6.2-sources.jar",
+      "sha256": "9803a0c47248a567c99dbc1b95e07afb8ccc5a7e097ce3f76dd126be3a53ee44",
+      "bytes": 808290,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2-sources.jar"
+    },
+    {
+      "file": "androidx/camera/camera-core/1.6.2/camera-core-1.6.2-versionMetadata.json",
+      "sha256": "83f78b93f72ae88a3bb17ad4c2abcc99a85625262fe2f468b3658bc783af808d",
+      "bytes": 46477,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2-versionMetadata.json"
+    },
+    {
+      "file": "androidx/camera/camera-core/1.6.2/camera-core-1.6.2.aar",
+      "sha256": "ebd66f090414f4c12f23a55b5023aeee1b096da8a06c02a0b6fb3520c4ddadf6",
+      "bytes": 1213194,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.6.2/camera-core-1.6.2.aar"
+    },
+    {
+      "file": "androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.pom",
+      "sha256": "23020a27494b69f7b77c3c1598923789bfada5c145d31d0893fae1ee895213df",
+      "bytes": 6448,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.pom"
+    },
+    {
+      "file": "androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.module",
+      "sha256": "4694b995fbb4934e5e1e3cedabef426e799a510cfc179b659c4e9632f6b2fe75",
+      "bytes": 15988,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.module"
+    },
+    {
+      "file": "androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2-sources.jar",
+      "sha256": "9a43968bb27ff7a6960932b5dffc190930567d8bb52fff59541d372f7331b803",
+      "bytes": 341304,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2-sources.jar"
+    },
+    {
+      "file": "androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2-versionMetadata.json",
+      "sha256": "04800cb02a150fc8639472e9755a023750ca8b5de0ece424a18ee8a553ba1667",
+      "bytes": 4081,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2-versionMetadata.json"
+    },
+    {
+      "file": "androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.aar",
+      "sha256": "5a55014ed96feda81a37799faf9f96150025a4434699d55caa1cdebf2ae07e20",
+      "bytes": 1184080,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2/1.6.2/camera-camera2-1.6.2.aar"
+    },
+    {
+      "file": "androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.pom",
+      "sha256": "c3bc970a6a0657ff9b6df2cd8241098746f8e54bc5b74e56899050d76fdb9f66",
+      "bytes": 4482,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.pom"
+    },
+    {
+      "file": "androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.module",
+      "sha256": "5470741b0a6fe88e560e7d929097e2ec60e7406aef09b48ab900b0befa102c0f",
+      "bytes": 14045,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.module"
+    },
+    {
+      "file": "androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2-sources.jar",
+      "sha256": "61f3bcb5d254d069194381f502b11db7af4befc14db6d1fab36baeb745e30470",
+      "bytes": 345672,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2-sources.jar"
+    },
+    {
+      "file": "androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2-versionMetadata.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bytes": 2,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2-versionMetadata.json"
+    },
+    {
+      "file": "androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.aar",
+      "sha256": "b357bd94fd4273ff88f453f7e712a22e100adc932324fc6b51fbe9ef9cf45515",
+      "bytes": 1585622,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-camera2-pipe/1.6.2/camera-camera2-pipe-1.6.2.aar"
+    },
+    {
+      "file": "androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.pom",
+      "sha256": "7562a6960db6bd8f46441c3467a2b51d33b98ece1c118ac30538dd6c54b49ce0",
+      "bytes": 5860,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.pom"
+    },
+    {
+      "file": "androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.module",
+      "sha256": "bd7fd00cb9de0f2ce8c3400b52504cf7691590bb29a1550a71b58255e483ff47",
+      "bytes": 15890,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.module"
+    },
+    {
+      "file": "androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2-samples-sources.jar",
+      "sha256": "9d5a66f7a9d44f86dcca624a1a7284edba6dabe1da2ab3d681797523fa35568c",
+      "bytes": 7808,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2-samples-sources.jar"
+    },
+    {
+      "file": "androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2-sources.jar",
+      "sha256": "573cdf43f2584f154b83788ab9683affd6124a61b78f6f7a17339c5e8d8d845c",
+      "bytes": 37758,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2-sources.jar"
+    },
+    {
+      "file": "androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2-versionMetadata.json",
+      "sha256": "0b5e1331acef5a49726bedfd4a66fe2016328e9ea98bd9c6f450ae6361e05ca2",
+      "bytes": 5013,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2-versionMetadata.json"
+    },
+    {
+      "file": "androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.aar",
+      "sha256": "b7b701a3c6838bc7c4acd1372140e889fdf9681bf833ebfc638fdbe28ed5fa32",
+      "bytes": 54987,
+      "source": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-lifecycle/1.6.2/camera-lifecycle-1.6.2.aar"
+    }
+  ]
+}

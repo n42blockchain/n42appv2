@@ -1,0 +1,435 @@
+{
+  "members": [
+    {
+      "path": "README.md",
+      "sha256": "b00eb28a2534ee0c8879db49edc5a1d1c99e9663a8ccd423fe21710175c22409",
+      "size": 2817
+    },
+    {
+      "path": "artifacts/baseline-fixture.apk",
+      "sha256": "31132b7641236c1a659e140e97380d209a3d1125e28140bf2647104164d9b33b",
+      "size": 1584981
+    },
+    {
+      "path": "artifacts/candidate-fixture.apk",
+      "sha256": "147e8d2e9b293f36affdc9b65f0f4c1ec36122d467671c115eca8a61deebc9ed",
+      "size": 1584960
+    },
+    {
+      "path": "artifacts/maintained-camera-core-1.6.2.aar",
+      "sha256": "a31d23a4774d90e5219c9ac4b43db41f72b61185de7ddcc99a9b0c69df158883",
+      "size": 1213204
+    },
+    {
+      "path": "artifacts/maintained-camera-core-1.6.2.module",
+      "sha256": "2f4f84adb17530643754c4f1c83dc6677ae771b09987112f0cf152f521cda347",
+      "size": 17228
+    },
+    {
+      "path": "artifacts/official-camera-core-1.6.2.aar",
+      "sha256": "ebd66f090414f4c12f23a55b5023aeee1b096da8a06c02a0b6fb3520c4ddadf6",
+      "size": 1213194
+    },
+    {
+      "path": "artifacts/official-camera-core-1.6.2.module",
+      "sha256": "bee75b4ef561862030702a51f692057e034ae1f600f3091b2a5e5a89856ab410",
+      "size": 17227
+    },
+    {
+      "path": "logs/app-release-javac.log",
+      "sha256": "85d2780374eb876af7b1d367c9a8c2bb4d1f741878c2149ab878b3104db83586",
+      "size": 150606
+    },
+    {
+      "path": "logs/baseline-audit.log",
+      "sha256": "1f3673c600fb910690aadc0e75ca52d754a34cd87fc80e0631a3875dac6b1515",
+      "size": 448
+    },
+    {
+      "path": "logs/candidate4-audit.log",
+      "sha256": "047c6a27c3af7d0194de84805235017d5fa7573e83f72793b510ac8d2ac837ff",
+      "size": 325
+    },
+    {
+      "path": "logs/check-aar-metadata.log",
+      "sha256": "16659df670f6a5c93dd4d4865499e2229f2371c82c806f1c9d29f3eba061a39c",
+      "size": 52014
+    },
+    {
+      "path": "logs/dependency-insight-core.log",
+      "sha256": "cd78e43401c57b7b29e9629b7e3c56f8e9e53df797040b674ccc302404b6fd61",
+      "size": 4638
+    },
+    {
+      "path": "logs/fixture-tracked-baseline.log",
+      "sha256": "8468d321877f6138363a140534f31f856e243d80b6b234c13247e6844f2de34f",
+      "size": 3700
+    },
+    {
+      "path": "logs/fixture-tracked-candidate.log",
+      "sha256": "62e121c158a9cbc921d734154b6e41b14a6f707baaad8732bdd0f1b725931834",
+      "size": 3978
+    },
+    {
+      "path": "logs/maintained-aar-audit.log",
+      "sha256": "5ab43568a49019fc402a416eccdd9d3f53ae74619b5df923569dbfae52ede287",
+      "size": 353
+    },
+    {
+      "path": "logs/maven-test-final.log",
+      "sha256": "5066bc95c925b2561fffcea2f31c5cb8f13999f9d8aa1dd9e97d7aae010725a1",
+      "size": 580
+    },
+    {
+      "path": "logs/maven-test-red.log",
+      "sha256": "ed590bf96660a831b79472a69f63ea8fb366a7f90d4eca6b16abc805021cb702",
+      "size": 2397
+    },
+    {
+      "path": "logs/native-build-candidate4-arm64-v8a.log",
+      "sha256": "7e83d9ca957b5dd84ec7244eb5359813f0bfaaa6ca4aef7987041274dc8621a7",
+      "size": 1957
+    },
+    {
+      "path": "logs/native-build-candidate4-armeabi-v7a.log",
+      "sha256": "93eed829048d068af32bc544029115f12a4908f20b720ef09e7f9f46726de1f0",
+      "size": 2007
+    },
+    {
+      "path": "logs/native-build-candidate4-x86.log",
+      "sha256": "4aa19dfa8bafb4c1ad256a7fc467f736d575f2263890cf2074b0e078d2e231a3",
+      "size": 1981
+    },
+    {
+      "path": "logs/native-build-candidate4-x86_64.log",
+      "sha256": "d8aff3821a474fe7bda86fca55a6e82c56020dea835b89d7b3bf28cd87b8c3a9",
+      "size": 1955
+    },
+    {
+      "path": "logs/native-build-candidate4.log",
+      "sha256": "3de1450850f89f81569cc390ef06b8a346990e8186a22bcaa800f7b91ed8a396",
+      "size": 2328
+    },
+    {
+      "path": "logs/native-build-fail-stl-diagnostic.log",
+      "sha256": "da4cc969b4a90c0af95dc4eeab08ac76d35e6832e1ee7bace9d6987ae2f6816d",
+      "size": 2227
+    },
+    {
+      "path": "logs/native-build-fail-stl.log",
+      "sha256": "ffaf32acbc4c1617fd41704b48e4c5e1088c0d629388e5489b851b844824401b",
+      "size": 1163
+    },
+    {
+      "path": "logs/native-build-fail-version-script-diagnostic.log",
+      "sha256": "b6ed9136263f6c3e223db7b0740857cd9ee476cabcb8a89221179686a5477ea2",
+      "size": 3400
+    },
+    {
+      "path": "logs/native-build-fail-version-script.log",
+      "sha256": "cec2ae475d06e18acba1e30a6ffa3c5917e3d26a7ca44ec7b2c7f409c986afd8",
+      "size": 1169
+    },
+    {
+      "path": "logs/native-configure-candidate4-arm64-v8a.log",
+      "sha256": "72503c8fc75db4a33516238f9db043ed8b2dffa3b1f53372294b8956e9be725f",
+      "size": 597
+    },
+    {
+      "path": "logs/native-configure-candidate4-armeabi-v7a.log",
+      "sha256": "80de490fa899dae721e5ea1627272c42e1c5975a77ad63e8093367e3f2cfe07f",
+      "size": 599
+    },
+    {
+      "path": "logs/native-configure-candidate4-x86.log",
+      "sha256": "67b3ab7250b08a67f08c3187e18a136d34a118d79b770a5cead413c914a476f4",
+      "size": 591
+    },
+    {
+      "path": "logs/native-configure-candidate4-x86_64.log",
+      "sha256": "909a7223840caffa480334f4efefd00013bd10e90e34e8b0eb7c266b53bf5d5f",
+      "size": 594
+    },
+    {
+      "path": "logs/reused-output-negative.log",
+      "sha256": "6d2231979a87b19a8dfc8b77554b4658b9ad45ed34efaeba5e1fdc00fb1ec413",
+      "size": 200
+    },
+    {
+      "path": "logs/runtime-run1.log",
+      "sha256": "31cb5a49376ccd7d730588e543e4d0c3958bc7c8a55045df33b6f7839de76ce9",
+      "size": 407
+    },
+    {
+      "path": "logs/runtime-run2.log",
+      "sha256": "5294ba69963b60b713d3009833b982473bc11572106edb7b6d5b0973d554812b",
+      "size": 407
+    },
+    {
+      "path": "logs/selected-artifacts.log",
+      "sha256": "78036f579546d5870af5a97dd85ff8765d9d27616880f1bfa2bb5d29f26e4e1a",
+      "size": 3125
+    },
+    {
+      "path": "logs/source-guard-final.log",
+      "sha256": "bcdf6369c09e500b7b63983126afe37e091ad1fc7f302892252456c3a88a6749",
+      "size": 708
+    },
+    {
+      "path": "logs/source-guard-red.log",
+      "sha256": "40963bdd3a594d78addda2e1a12af73de2a9be7c9767800b32e4e7d3da729d2c",
+      "size": 3693
+    },
+    {
+      "path": "logs/verify-run2-negative-controls.log",
+      "sha256": "05556efe7240cb345d20fcdcae24ea6be4eeccf6cb80abe3bcdf7ef1d160538c",
+      "size": 605
+    },
+    {
+      "path": "logs/verify-run2-normal.log",
+      "sha256": "bb3870858b903cdff3844000924c699d67e809cb88ea98f34aa3b9c1b8ace124",
+      "size": 1006
+    },
+    {
+      "path": "logs/verify-run2-optimized.log",
+      "sha256": "bb3870858b903cdff3844000924c699d67e809cb88ea98f34aa3b9c1b8ace124",
+      "size": 1006
+    },
+    {
+      "path": "members.txt",
+      "sha256": "dce1923fa64cf6f6b0b91d7fec3c7adfe73670850a9df02fe4643d0ec48fb350",
+      "size": 3425
+    },
+    {
+      "path": "raw/compare-stage1-final-optimized.json",
+      "sha256": "cd19bfc72a5cb4b1f11e86283a56c48987a2f69e6b4e5227790ffb8bfcff8fd3",
+      "size": 4444
+    },
+    {
+      "path": "raw/compare-stage1-final.json",
+      "sha256": "cd19bfc72a5cb4b1f11e86283a56c48987a2f69e6b4e5227790ffb8bfcff8fd3",
+      "size": 4444
+    },
+    {
+      "path": "raw/maven-stage.json",
+      "sha256": "c9ddcebe33bb12c7af621df92d7ff1f5749faaaffb354a1c257bc5da748abdc3",
+      "size": 1107
+    },
+    {
+      "path": "raw/maven-stage2.json",
+      "sha256": "c9ddcebe33bb12c7af621df92d7ff1f5749faaaffb354a1c257bc5da748abdc3",
+      "size": 1107
+    },
+    {
+      "path": "raw/negative-false_strict_property.json",
+      "sha256": "67fbd8412974b1b012076d3254713715ce2f3ac8439fb449f50003bcd49828ef",
+      "size": 30239
+    },
+    {
+      "path": "raw/negative-same_pid.json",
+      "sha256": "9c81ff7f3d3373c7af67f19b914e3011b831f047634494eb4b53088cc078655a",
+      "size": 30238
+    },
+    {
+      "path": "raw/negative-wrong_installed_hash.json",
+      "sha256": "0c06edcec8bf9ec7f6c3017919413606d2c9470c1a63e65de54a6b9022110d76",
+      "size": 30238
+    },
+    {
+      "path": "raw/negative-wrong_map_offset.json",
+      "sha256": "00f9563b22e59d2cf3be33104aeb690e41eae6bd8fc9862c3ba522e676aa7821",
+      "size": 30238
+    },
+    {
+      "path": "raw/runtime-run1-receipt.json",
+      "sha256": "79a4075e8a54f2f66be0e5080ebc281027988bb6a4b8f3127fa2e1151af2003e",
+      "size": 30238
+    },
+    {
+      "path": "raw/runtime-run1-verification.json",
+      "sha256": "beac9c339a801f353d654f885b0b7047c748631c6b6c0ae946006bae07f5dd95",
+      "size": 999
+    },
+    {
+      "path": "raw/runtime-run2-receipt.json",
+      "sha256": "22965e65e33a6225cb0188a73e3b971a6cbf465b63b23bf1675f8b10c03e7775",
+      "size": 30238
+    },
+    {
+      "path": "raw/runtime-run2-verification.json",
+      "sha256": "094a0608c6fa926fe6e5cc26abfd9447186d4bbefdf926bd79f56c228e67908a",
+      "size": 999
+    },
+    {
+      "path": "raw/verify-negative-controls.py",
+      "sha256": "7702a94d605e693edad8d57ba6e9f82be4c3e1973884a4998f84edfb3c8a871d",
+      "size": 2083
+    },
+    {
+      "path": "reports/official-162-freshness.md",
+      "sha256": "a93e0a400cb723f97eeac8884dec283ddb0810d6318691327cf933530f2e6911",
+      "size": 7560
+    },
+    {
+      "path": "reports/stage1-source.md",
+      "sha256": "b150d3b777d399b2b618441847b43b738cac2167d619743401e673f208a94df6",
+      "size": 6354
+    },
+    {
+      "path": "reports/stage2-integration.md",
+      "sha256": "7b356d29678e31f280973558edae1863545aa9ed827628e1dfa17039d650b2db",
+      "size": 6307
+    },
+    {
+      "path": "reports/stage3-fixture.md",
+      "sha256": "5873d1f80d720a09ca2b5a14709a6599c764a2ce144acc44800b1efe2d8becc5",
+      "size": 5667
+    },
+    {
+      "path": "reviews/stage1-source.md",
+      "sha256": "edc000cb5686d4d95064c6190920720a16417bd722ba6224f7fe0261909893ae",
+      "size": 4824
+    },
+    {
+      "path": "reviews/stage2-integration.md",
+      "sha256": "b66fd17a242afc3b5bc289635af58c3d54e9d43411b457a43e475142a7cd705a",
+      "size": 4572
+    },
+    {
+      "path": "reviews/stage3-fixture.md",
+      "sha256": "5982879440d4c359672f200363a4bef3a8693a93666320589e4c64a63bf118eb",
+      "size": 5116
+    },
+    {
+      "path": "source-proof/baseline-members.json",
+      "sha256": "db3478b9c07ff2616b1d91599e4cd12dfbf1289ffdbf5be2f4a333633b915949",
+      "size": 1500
+    },
+    {
+      "path": "source-proof/candidate4.json",
+      "sha256": "4cf0d8bb1f39a0e83974246c61a6a2d144dc40b14a8188183d2aae82cd820a50",
+      "size": 328
+    },
+    {
+      "path": "source-proof/gitiles-dir-json.response",
+      "sha256": "6011c07b02e886262ba1cff08f6e834685cb8316ad82f30582e6cab1048f7001",
+      "size": 663
+    },
+    {
+      "path": "source-proof/official-162-download-manifest.json",
+      "sha256": "d61320afdcf6f8b497e484cab396e3dc28f999c8ad6994bfb03daa3e8f5b71f7",
+      "size": 2580
+    },
+    {
+      "path": "source-proof/official-162-manifest.json",
+      "sha256": "185c06d7724b49ed6ff6a8cdc6c73b32404dafe9049195645c23a1c700d6d725",
+      "size": 7377
+    },
+    {
+      "path": "source/android/app/build.gradle.kts",
+      "sha256": "22ccc877d5b6736126a7c56f111337801293a9aea3fe533836ee55b70978404b",
+      "size": 8077
+    },
+    {
+      "path": "source/android/build.gradle.kts",
+      "sha256": "289e1e7f68dfc06be8414d9b8cc8f04ca2b9a87c4e15862b22e754d469b0033b",
+      "size": 1774
+    },
+    {
+      "path": "source/android/native/camera_core_surface/CMakeLists.txt",
+      "sha256": "2536d47221effa300e9b3f522228be355e358c23a82043529a6daff46a08afd3",
+      "size": 980
+    },
+    {
+      "path": "source/android/native/camera_core_surface/README.md",
+      "sha256": "3bd5bf625d0776d9cb460f893b3c3c34376c7b9305e746f2eaf423bed4f6ebc9",
+      "size": 3958
+    },
+    {
+      "path": "source/android/native/camera_core_surface/upstream/CMakeLists.txt",
+      "sha256": "6506d3c4353821f4596648008801a81312e2214725297286e067351f8667b286",
+      "size": 1364
+    },
+    {
+      "path": "source/android/native/camera_core_surface/upstream/LICENSE.txt",
+      "sha256": "809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0",
+      "size": 10175
+    },
+    {
+      "path": "source/android/native/camera_core_surface/upstream/jni.lds",
+      "sha256": "b578ca06967ba7ff8d732eeb99a8e91917335d00f19fe2d44e7cb805946ee45c",
+      "size": 136
+    },
+    {
+      "path": "source/android/native/camera_core_surface/upstream/surface_util_jni.cc",
+      "sha256": "dd3f02712e359fa0b987bfef17661686fa130666674fca2d91405b50ab309779",
+      "size": 1608
+    },
+    {
+      "path": "source/scripts/build_camera_core_maven.py",
+      "sha256": "9fa9507ed1eedded2f502ee2b24d7a861c8d82506dfc3f4a2c554205c21f90e8",
+      "size": 7298
+    },
+    {
+      "path": "source/scripts/build_camera_surface_android.sh",
+      "sha256": "c14d2daa9d4e281efbe729228e7c87a76f8cc9698bdd268cdce3f55cc7a9e30d",
+      "size": 5119
+    },
+    {
+      "path": "source/test/scripts/test_camera_core_maven.py",
+      "sha256": "9dd86ee0f1f80b90e62295c58f04ca677d570944ccd78c9ccb591c6a83169aeb",
+      "size": 5811
+    },
+    {
+      "path": "source/test/scripts/test_camera_surface_build.py",
+      "sha256": "b596d3b0febefe187bb96ea17f947db9a3ec07f4b947386acf79d1e53e7aca5b",
+      "size": 2974
+    },
+    {
+      "path": "source/tools/android_native_smoke/camera_surface_fixture/.gitignore",
+      "sha256": "a8e036dc4164f02b9f4aa982b6f1a80761b250fb6a6729915b6caf010e6b3442",
+      "size": 26
+    },
+    {
+      "path": "source/tools/android_native_smoke/camera_surface_fixture/app/build.gradle.kts",
+      "sha256": "7f98f2c12d6b728de8598e16ee2a18f743bcd1c0c2d3b6c0cdb88e5c21ef6604",
+      "size": 718
+    },
+    {
+      "path": "source/tools/android_native_smoke/camera_surface_fixture/app/src/main/AndroidManifest.xml",
+      "sha256": "433e7358cd6d5a2656b7c68430a58ce0c0e77cd038afd6abaae18389681ea81a",
+      "size": 532
+    },
+    {
+      "path": "source/tools/android_native_smoke/camera_surface_fixture/app/src/main/java/ai/n42/fixture/camera/MainActivity.java",
+      "sha256": "8f5b484fec98eaaec99ae349e4f8895c3d0b14c58d37eef277e984e5a77b0bcf",
+      "size": 4190
+    },
+    {
+      "path": "source/tools/android_native_smoke/camera_surface_fixture/build.gradle.kts",
+      "sha256": "eafc4af9ce6b7190e01563d9243b4bbcead454bc910c33d1e91baeb5284e83dc",
+      "size": 74
+    },
+    {
+      "path": "source/tools/android_native_smoke/camera_surface_fixture/settings.gradle.kts",
+      "sha256": "97c7c2053c6554cf8f7246cc955af8c77106357009f4316fd762b44eb1f69247",
+      "size": 340
+    },
+    {
+      "path": "source/tools/android_native_smoke/run_camera_surface_fixture.py",
+      "sha256": "ddf48f7d219022b5a4b5e4af806bf72876319d082ddecb62df5f0f99ff54e335",
+      "size": 7484
+    },
+    {
+      "path": "source/tools/android_native_smoke/verify_camera_surface_fixture.py",
+      "sha256": "9fae76adabb7fc0c2048a9e1d0fc20def098527f584fa10c0a9acec1cf83e06f",
+      "size": 8009
+    },
+    {
+      "path": "verify_evidence.py",
+      "sha256": "65ff8bd3833a1c31d76ab993714a4e162539aa928e89f530fcaee91cfbe66ef1",
+      "size": 5723
+    }
+  ],
+  "schema_version": 1
+}

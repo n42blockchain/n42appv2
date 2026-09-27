@@ -1,0 +1,8 @@
+{
+  "artifact": ".superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/candidate4/surface-only-static-probe.zip",
+  "libraries_checked": 2,
+  "unaligned_libraries": [],
+  "passed": true,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}
+exit=0

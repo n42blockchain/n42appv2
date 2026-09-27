@@ -1,0 +1,9 @@
+Pinned AndroidX camera-core 1.6.1 source files verified: 4
+697bc31977f46c449bc6f7102c015bae813d65459cc0ee56c90a0e0e29634622 /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/camera_core_surface/CMakeLists.txt
+dbad92d9dcfea0d32b7c5e5f82f5072d878ded5d46a5d3f1f581ea108ca7fe89 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/build/cmake/android.toolchain.cmake
+df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++
+295bc36e1b10be0137f09904b7cc928a11ab3d44a8ec8250e4087ebd71f091c2 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld
+e46c7ffb232c25a43e130509368dd6b88f492f110ab6b44c69c639ac1ed8c8f6 /opt/homebrew/share/android-commandlinetools/cmake/3.22.1/bin/cmake
+5b861a9e1e062ad8e01a1370f5909b36c086774899b4ac2029192744352404d0 /opt/homebrew/share/android-commandlinetools/cmake/3.22.1/bin/ninja
+Android API=23 STL=none SDK=/opt/homebrew/share/android-commandlinetools NDK=28.2.13676358
+Pinned Camera surface source and tools verified.

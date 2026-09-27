@@ -1,0 +1,161 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "abi": "armeabi-v7a",
+      "baseline": {
+        "sha256": "78eb0b10e91b819be97cb7daa8c97fb757fa6d07cb80ccb7e92c113b45bda9be",
+        "bytes": 3460,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": "not applicable"
+      },
+      "candidate": {
+        "sha256": "ec14d0aab102b2f7a3ea53d83ae5f3b79866601e59331562fce8316b9fb7fa67",
+        "bytes": 3528,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": "not applicable"
+      }
+    },
+    {
+      "abi": "arm64-v8a",
+      "baseline": {
+        "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+        "bytes": 4896,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": false
+      },
+      "candidate": {
+        "sha256": "320168d04f1bd40d8200d00e20e982aabc1c3f343958007268fc86437ae27ad7",
+        "bytes": 4912,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": true
+      }
+    },
+    {
+      "abi": "x86",
+      "baseline": {
+        "sha256": "3048a535d701579c87c4ad91283cd1246d2c85399a164ee4720642037ea31727",
+        "bytes": 3812,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": "not applicable"
+      },
+      "candidate": {
+        "sha256": "36d59bd71bd5261955fd54db849f3c7a02d9054e00bfde52af3433ec3da0c969",
+        "bytes": 3748,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": "not applicable"
+      }
+    },
+    {
+      "abi": "x86_64",
+      "baseline": {
+        "sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+        "bytes": 4912,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": false
+      },
+      "candidate": {
+        "sha256": "c68cbb19d6d90aef62251daf6d3eadd81f00044c3ff68500990c7fcd7380a750",
+        "bytes": 4896,
+        "needed": [
+          "libandroid.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libsurface_util_jni.so"
+        ],
+        "exports": [
+          "Java_androidx_camera_core_impl_utils_SurfaceUtil_nativeGetSurfaceInfo@@VERS_1.0"
+        ],
+        "android_min_api_note": 23,
+        "elf64_load_and_relro_16k": true
+      }
+    }
+  ]
+}

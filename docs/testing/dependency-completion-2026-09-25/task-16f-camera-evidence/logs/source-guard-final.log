@@ -1,0 +1,10 @@
+test_changed_cpp_source_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ok
+test_exact_source_and_pinned_tools_pass_preflight (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ok
+test_extra_source_file_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ok
+test_inherited_header_and_library_paths_are_cleared_for_build_child (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ok
+test_wrong_sdk_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.343s
+
+OK

@@ -1,0 +1,21 @@
+{
+  "changed_members": [
+    "jni/arm64-v8a/libsurface_util_jni.so",
+    "jni/armeabi-v7a/libsurface_util_jni.so",
+    "jni/x86/libsurface_util_jni.so",
+    "jni/x86_64/libsurface_util_jni.so"
+  ],
+  "total_members": 28,
+  "official_sha256": "ebd66f090414f4c12f23a55b5023aeee1b096da8a06c02a0b6fb3520c4ddadf6",
+  "maintained_sha256": "a31d23a4774d90e5219c9ac4b43db41f72b61185de7ddcc99a9b0c69df158883",
+  "output_files": {
+    "camera-core-1.6.2-samples-sources.jar": "d70c01d96bbe4abbb691312514f6708f9ba866f38003d698db31eda2a529a9c9",
+    "camera-core-1.6.2-sources.jar": "9803a0c47248a567c99dbc1b95e07afb8ccc5a7e097ce3f76dd126be3a53ee44",
+    "camera-core-1.6.2-versionMetadata.json": "83f78b93f72ae88a3bb17ad4c2abcc99a85625262fe2f468b3658bc783af808d",
+    "camera-core-1.6.2.aar": "a31d23a4774d90e5219c9ac4b43db41f72b61185de7ddcc99a9b0c69df158883",
+    "camera-core-1.6.2.module": "2f4f84adb17530643754c4f1c83dc6677ae771b09987112f0cf152f521cda347",
+    "camera-core-1.6.2.pom": "cddb5bb0653654d8b7c2833484f4684d881dc7509411132e73a5fb4b167fd13c"
+  },
+  "api_dependencies": 9,
+  "runtime_dependencies": 18
+}

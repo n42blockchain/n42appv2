@@ -1,0 +1,14 @@
+Pinned AndroidX camera-core 1.6.1 source files verified: 4
+2536d47221effa300e9b3f522228be355e358c23a82043529a6daff46a08afd3 /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/camera_core_surface/CMakeLists.txt
+dbad92d9dcfea0d32b7c5e5f82f5072d878ded5d46a5d3f1f581ea108ca7fe89 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/build/cmake/android.toolchain.cmake
+df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++
+295bc36e1b10be0137f09904b7cc928a11ab3d44a8ec8250e4087ebd71f091c2 /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld
+438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f /opt/homebrew/share/android-commandlinetools/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-strip
+e46c7ffb232c25a43e130509368dd6b88f492f110ab6b44c69c639ac1ed8c8f6 /opt/homebrew/share/android-commandlinetools/cmake/3.22.1/bin/cmake
+5b861a9e1e062ad8e01a1370f5909b36c086774899b4ac2029192744352404d0 /opt/homebrew/share/android-commandlinetools/cmake/3.22.1/bin/ninja
+Android API=23 STL=c++_static SDK=/opt/homebrew/share/android-commandlinetools NDK=28.2.13676358
+Pinned Camera surface source and tools verified.
+ec14d0aab102b2f7a3ea53d83ae5f3b79866601e59331562fce8316b9fb7fa67  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/candidate4/jni/armeabi-v7a/libsurface_util_jni.so
+320168d04f1bd40d8200d00e20e982aabc1c3f343958007268fc86437ae27ad7  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/candidate4/jni/arm64-v8a/libsurface_util_jni.so
+36d59bd71bd5261955fd54db849f3c7a02d9054e00bfde52af3433ec3da0c969  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/candidate4/jni/x86/libsurface_util_jni.so
+c68cbb19d6d90aef62251daf6d3eadd81f00044c3ff68500990c7fcd7380a750  /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/candidate4/jni/x86_64/libsurface_util_jni.so

@@ -1,0 +1,9 @@
+normal/wrong_installed_hash: rejected exit=1 reason=installed APK hash mismatch
+normal/wrong_map_offset: rejected exit=1 reason=no executable APK map
+normal/same_pid: rejected exit=1 reason=phases share PID
+normal/false_strict_property: rejected exit=1 reason=package_compat_disabled mismatch
+optimized/wrong_installed_hash: rejected exit=1 reason=installed APK hash mismatch
+optimized/wrong_map_offset: rejected exit=1 reason=no executable APK map
+optimized/same_pid: rejected exit=1 reason=phases share PID
+optimized/false_strict_property: rejected exit=1 reason=package_compat_disabled mismatch
+exit=0

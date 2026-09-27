@@ -1,0 +1,835 @@
+{
+  "schema_version": 1,
+  "device": "emulator-5560",
+  "started_utc": "2026-09-27T04:22:52.077807+00:00",
+  "git_head": "e5a58ebcec83b4b8df809404823b8e1ffb592aa8",
+  "source_sha256": {
+    "tools/android_native_smoke/camera_surface_fixture/settings.gradle.kts": "97c7c2053c6554cf8f7246cc955af8c77106357009f4316fd762b44eb1f69247",
+    "tools/android_native_smoke/camera_surface_fixture/build.gradle.kts": "eafc4af9ce6b7190e01563d9243b4bbcead454bc910c33d1e91baeb5284e83dc",
+    "tools/android_native_smoke/camera_surface_fixture/app/build.gradle.kts": "7f98f2c12d6b728de8598e16ee2a18f743bcd1c0c2d3b6c0cdb88e5c21ef6604",
+    "tools/android_native_smoke/camera_surface_fixture/app/src/main/AndroidManifest.xml": "433e7358cd6d5a2656b7c68430a58ce0c0e77cd038afd6abaae18389681ea81a",
+    "tools/android_native_smoke/camera_surface_fixture/app/src/main/java/ai/n42/fixture/camera/MainActivity.java": "8f5b484fec98eaaec99ae349e4f8895c3d0b14c58d37eef277e984e5a77b0bcf",
+    "tools/android_native_smoke/run_camera_surface_fixture.py": "ddf48f7d219022b5a4b5e4af806bf72876319d082ddecb62df5f0f99ff54e335",
+    "tools/android_native_smoke/verify_camera_surface_fixture.py": "9fae76adabb7fc0c2048a9e1d0fc20def098527f584fa10c0a9acec1cf83e06f"
+  },
+  "tool_sha256": {
+    "/opt/homebrew/share/android-commandlinetools/platform-tools/adb": "534893b946847fdf6f9998108af469e646679824d75098247ca438948fa2dffc",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt": "170717682f714712c5b6854af73cfe37aeda342ff422384e98d67fc1b490f49b",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign": "0427144f4a3fd242c5a159e7088637082539ae556bc1d2bbc2032bb775d47cea"
+  },
+  "device_state": {
+    "argv": [
+      "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+      "-s",
+      "emulator-5560",
+      "get-state"
+    ],
+    "exit": 0,
+    "stdout": "device",
+    "stderr": ""
+  },
+  "initial": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "phases": {
+    "baseline": {
+      "package": "ai.n42.fixture.camera.baseline",
+      "apk_sha256": "31132b7641236c1a659e140e97380d209a3d1125e28140bf2647104164d9b33b",
+      "apk_bytes": 1584981,
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-baseline-tracked.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.camera.baseline' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'23'\ntargetSdkVersion:'37'\napplication: label='' icon=''\napplication-debuggable\nlaunchable-activity: name='ai.n42.fixture.camera.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nother-services\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales:\ndensities:\nnative-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-baseline-tracked.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-baseline-tracked.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     179 classes.dex (OK - compressed)\n 1285703 classes2.dex (OK - compressed)\n 1286162 classes3.dex (OK - compressed)\n 1289793 classes4.dex (OK - compressed)\n 1327104 lib/arm64-v8a/libimage_processing_util_jni.so (OK)\n 1359872 lib/arm64-v8a/libsurface_util_jni.so (OK)\n 1376256 lib/armeabi-v7a/libimage_processing_util_jni.so (OK)\n 1409024 lib/armeabi-v7a/libsurface_util_jni.so (OK)\n 1425408 lib/x86/libimage_processing_util_jni.so (OK)\n 1474560 lib/x86/libsurface_util_jni.so (OK)\n 1490944 lib/x86_64/libimage_processing_util_jni.so (OK)\n 1556480 lib/x86_64/libsurface_util_jni.so (OK)\n 1561441 AndroidManifest.xml (OK - compressed)\n 1562260 resources.arsc (OK)\n 1562376 META-INF/androidx.camera_camera-core.version (OK)\n 1562456 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n 1563065 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n 1564978 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n 1566134 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n 1566320 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n 1566736 kotlin/kotlin.kotlin_builtins (OK - compressed)\n 1572144 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n 1573566 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n 1575047 META-INF/CERT.SF (OK - compressed)\n 1576410 META-INF/CERT.RSA (OK - compressed)\n 1577478 META-INF/MANIFEST.MF (OK - compressed)\nVerification successful",
+        "stderr": ""
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-baseline-tracked.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.camera.baseline"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.camera.baseline"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~95h1-ad4VRrWKEqvYM-F4w==/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==/base.apk",
+        "stderr": ""
+      },
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.camera.baseline/ai.n42.fixture.camera.MainActivity",
+          "--es",
+          "phase",
+          "baseline"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.camera.baseline/ai.n42.fixture.camera.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.camera.baseline/ai.n42.fixture.camera.MainActivity\nWaitTime: 507\nComplete",
+        "stderr": ""
+      },
+      "result_fetch": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "run-as",
+          "ai.n42.fixture.camera.baseline",
+          "cat",
+          "files/result.json"
+        ],
+        "exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"phase\":\"baseline\",\"format\":1,\"width\":321,\"height\":247,\"pid\":14562,\"nonce\":\"4db382c3-bbd8-4970-b002-836c36074a38\",\"apkPath\":\"\\/data\\/app\\/~~95h1-ad4VRrWKEqvYM-F4w==\\/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==\\/base.apk\",\"apkSha256\":\"31132b7641236c1a659e140e97380d209a3d1125e28140bf2647104164d9b33b\",\"libraryLookupPath\":\"\\/data\\/app\\/~~95h1-ad4VRrWKEqvYM-F4w==\\/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==\\/base.apk!\\/lib\\/arm64-v8a\\/libsurface_util_jni.so\",\"executableApkMaps\":[\"7542839f8000-7542839fc000 r-xp 0014c000 fe:05 164039                     \\/data\\/app\\/~~95h1-ad4VRrWKEqvYM-F4w==\\/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "result": {
+        "status": "PASS",
+        "phase": "baseline",
+        "format": 1,
+        "width": 321,
+        "height": 247,
+        "pid": 14562,
+        "nonce": "4db382c3-bbd8-4970-b002-836c36074a38",
+        "apkPath": "/data/app/~~95h1-ad4VRrWKEqvYM-F4w==/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==/base.apk",
+        "apkSha256": "31132b7641236c1a659e140e97380d209a3d1125e28140bf2647104164d9b33b",
+        "libraryLookupPath": "/data/app/~~95h1-ad4VRrWKEqvYM-F4w==/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==/base.apk!/lib/arm64-v8a/libsurface_util_jni.so",
+        "executableApkMaps": [
+          "7542839f8000-7542839fc000 r-xp 0014c000 fe:05 164039                     /data/app/~~95h1-ad4VRrWKEqvYM-F4w==/ai.n42.fixture.camera.baseline-HanCqE7LjF8-CGeSyZc4gQ==/base.apk"
+        ]
+      },
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.camera.baseline"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "candidate": {
+      "package": "ai.n42.fixture.camera.candidate",
+      "apk_sha256": "147e8d2e9b293f36affdc9b65f0f4c1ec36122d467671c115eca8a61deebc9ed",
+      "apk_bytes": 1584960,
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-candidate-tracked.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.camera.candidate' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'23'\ntargetSdkVersion:'37'\napplication: label='' icon=''\napplication-debuggable\nlaunchable-activity: name='ai.n42.fixture.camera.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nother-services\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales:\ndensities:\nnative-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-candidate-tracked.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-candidate-tracked.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     179 classes.dex (OK - compressed)\n 1285703 classes2.dex (OK - compressed)\n 1286162 classes3.dex (OK - compressed)\n 1289793 classes4.dex (OK - compressed)\n 1327104 lib/arm64-v8a/libimage_processing_util_jni.so (OK)\n 1359872 lib/arm64-v8a/libsurface_util_jni.so (OK)\n 1376256 lib/armeabi-v7a/libimage_processing_util_jni.so (OK)\n 1409024 lib/armeabi-v7a/libsurface_util_jni.so (OK)\n 1425408 lib/x86/libimage_processing_util_jni.so (OK)\n 1474560 lib/x86/libsurface_util_jni.so (OK)\n 1490944 lib/x86_64/libimage_processing_util_jni.so (OK)\n 1556480 lib/x86_64/libsurface_util_jni.so (OK)\n 1561425 AndroidManifest.xml (OK - compressed)\n 1562244 resources.arsc (OK)\n 1562360 META-INF/androidx.camera_camera-core.version (OK)\n 1562440 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n 1563049 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n 1564962 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n 1566118 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n 1566304 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n 1566720 kotlin/kotlin.kotlin_builtins (OK - compressed)\n 1572128 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n 1573550 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n 1575031 META-INF/CERT.SF (OK - compressed)\n 1576391 META-INF/CERT.RSA (OK - compressed)\n 1577459 META-INF/MANIFEST.MF (OK - compressed)\nVerification successful",
+        "stderr": ""
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-camera-build/fixture-candidate-tracked.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.camera.candidate"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.camera.candidate"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~bj8qIV1RKMxspF2kRl0FIQ==/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==/base.apk",
+        "stderr": ""
+      },
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.camera.candidate/ai.n42.fixture.camera.MainActivity",
+          "--es",
+          "phase",
+          "candidate"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.camera.candidate/ai.n42.fixture.camera.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.camera.candidate/ai.n42.fixture.camera.MainActivity\nWaitTime: 537\nComplete",
+        "stderr": ""
+      },
+      "result_fetch": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "run-as",
+          "ai.n42.fixture.camera.candidate",
+          "cat",
+          "files/result.json"
+        ],
+        "exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"phase\":\"candidate\",\"format\":1,\"width\":321,\"height\":247,\"pid\":14683,\"nonce\":\"cd3344db-5f96-4497-8974-22fa9d9e23fa\",\"apkPath\":\"\\/data\\/app\\/~~bj8qIV1RKMxspF2kRl0FIQ==\\/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==\\/base.apk\",\"apkSha256\":\"147e8d2e9b293f36affdc9b65f0f4c1ec36122d467671c115eca8a61deebc9ed\",\"libraryLookupPath\":\"\\/data\\/app\\/~~bj8qIV1RKMxspF2kRl0FIQ==\\/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==\\/base.apk!\\/lib\\/arm64-v8a\\/libsurface_util_jni.so\",\"executableApkMaps\":[\"754271dc4000-754271dc8000 r-xp 0014c000 fe:05 164018                     \\/data\\/app\\/~~bj8qIV1RKMxspF2kRl0FIQ==\\/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "result": {
+        "status": "PASS",
+        "phase": "candidate",
+        "format": 1,
+        "width": 321,
+        "height": 247,
+        "pid": 14683,
+        "nonce": "cd3344db-5f96-4497-8974-22fa9d9e23fa",
+        "apkPath": "/data/app/~~bj8qIV1RKMxspF2kRl0FIQ==/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==/base.apk",
+        "apkSha256": "147e8d2e9b293f36affdc9b65f0f4c1ec36122d467671c115eca8a61deebc9ed",
+        "libraryLookupPath": "/data/app/~~bj8qIV1RKMxspF2kRl0FIQ==/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==/base.apk!/lib/arm64-v8a/libsurface_util_jni.so",
+        "executableApkMaps": [
+          "754271dc4000-754271dc8000 r-xp 00150000 fe:05 164018                     /data/app/~~bj8qIV1RKMxspF2kRl0FIQ==/ai.n42.fixture.camera.candidate-eXvrzuEDNC_iwYgOgVo1_w==/base.apk"
+        ]
+      },
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.camera.candidate"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  },
+  "strict_setup": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "strict_restore": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "final": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

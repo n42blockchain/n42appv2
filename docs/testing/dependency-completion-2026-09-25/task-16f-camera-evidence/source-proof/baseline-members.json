@@ -1,0 +1,45 @@
+{
+  "aar_sha256": "a36f1c323851b51215ba476640e1eb4153882b0c368c0376e9fb905e689df84a",
+  "members": [
+    {
+      "path": "jni/arm64-v8a/libimage_processing_util_jni.so",
+      "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+      "bytes": 32528
+    },
+    {
+      "path": "jni/arm64-v8a/libsurface_util_jni.so",
+      "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+      "bytes": 4896
+    },
+    {
+      "path": "jni/armeabi-v7a/libimage_processing_util_jni.so",
+      "sha256": "05973c0cf8e8dd281c8ec505c41814b78b740461056925bb41120594d7c35dcd",
+      "bytes": 24448
+    },
+    {
+      "path": "jni/armeabi-v7a/libsurface_util_jni.so",
+      "sha256": "78eb0b10e91b819be97cb7daa8c97fb757fa6d07cb80ccb7e92c113b45bda9be",
+      "bytes": 3460
+    },
+    {
+      "path": "jni/x86/libimage_processing_util_jni.so",
+      "sha256": "b52f93b57d408b2306071f9de1a4b0b5684c1b86563e34a8711d80a1e6c03f94",
+      "bytes": 41276
+    },
+    {
+      "path": "jni/x86/libsurface_util_jni.so",
+      "sha256": "3048a535d701579c87c4ad91283cd1246d2c85399a164ee4720642037ea31727",
+      "bytes": 3812
+    },
+    {
+      "path": "jni/x86_64/libimage_processing_util_jni.so",
+      "sha256": "112703727717651e69e91f3ea2c3c2311737ee5809a909c9d342a811b6c7c069",
+      "bytes": 49416
+    },
+    {
+      "path": "jni/x86_64/libsurface_util_jni.so",
+      "sha256": "e5311942b4fce0f7f2505d41150cf9921e558a6368929cb73127450f74dd4fe4",
+      "bytes": 4912
+    }
+  ]
+}

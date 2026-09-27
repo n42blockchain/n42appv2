@@ -1,0 +1,46 @@
+test_changed_cpp_source_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ERROR
+test_exact_source_and_pinned_tools_pass_preflight (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... FAIL
+test_extra_source_file_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... ERROR
+test_wrong_sdk_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest) ... FAIL
+
+======================================================================
+ERROR: test_changed_cpp_source_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_camera_surface_build.py", line 34, in test_changed_cpp_source_is_rejected_before_build
+    shutil.copytree(SOURCE, copied)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/shutil.py", line 555, in copytree
+    with os.scandir(src) as itr:
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/camera_core_surface/upstream'
+
+======================================================================
+ERROR: test_extra_source_file_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_camera_surface_build.py", line 44, in test_extra_source_file_is_rejected_before_build
+    shutil.copytree(SOURCE, copied)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/shutil.py", line 555, in copytree
+    with os.scandir(src) as itr:
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/camera_core_surface/upstream'
+
+======================================================================
+FAIL: test_exact_source_and_pinned_tools_pass_preflight (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_camera_surface_build.py", line 28, in test_exact_source_and_pinned_tools_pass_preflight
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 127 != 0 : bash: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/scripts/build_camera_surface_android.sh: No such file or directory
+
+
+======================================================================
+FAIL: test_wrong_sdk_is_rejected_before_build (test.scripts.test_camera_surface_build.CameraSurfaceBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_camera_surface_build.py", line 56, in test_wrong_sdk_is_rejected_before_build
+    self.assertIn('SDK', result.stderr)
+AssertionError: 'SDK' not found in 'bash: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/scripts/build_camera_surface_android.sh: No such file or directory\n'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.025s
+
+FAILED (failures=2, errors=2)

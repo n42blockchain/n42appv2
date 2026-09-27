@@ -1,0 +1,11 @@
+{
+  "artifact": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/androidx.camera/camera-core/1.6.1/f20141e4742ec17a2a78fd7d53bd2af389bb3c09/camera-core-1.6.1.aar",
+  "libraries_checked": 4,
+  "unaligned_libraries": [
+    "jni/arm64-v8a/libsurface_util_jni.so",
+    "jni/x86_64/libsurface_util_jni.so"
+  ],
+  "passed": false,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}
+exit=1

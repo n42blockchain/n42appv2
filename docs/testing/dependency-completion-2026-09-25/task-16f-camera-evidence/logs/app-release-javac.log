@@ -1,0 +1,1868 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/Users/jieliu/.gradle/wrapper/dists/gradle-9.8.0-all/619e6l8zt76uzaekhqdol0b60/gradle-9.8.0/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :gradle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle:compileKotlin UP-TO-DATE
+> Task :gradle:compileJava NO-SOURCE
+> Task :gradle:compileGroovy NO-SOURCE
+> Task :gradle:pluginDescriptors UP-TO-DATE
+> Task :gradle:processResources UP-TO-DATE
+> Task :gradle:classes UP-TO-DATE
+> Task :gradle:jar UP-TO-DATE
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.enableJetifier=true' is deprecated.
+The current default is 'false'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: API 'applicationVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling applicationVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'testVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling testVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'unitTestVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling unitTestVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':app' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :android_file_picker
+WARNING: API 'libraryVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling libraryVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':android_file_picker' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :app_badge_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':app_badge_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :app_links
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':app_links' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :audioplayers_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':audioplayers_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :background_downloader
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':background_downloader' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :connectivity_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':connectivity_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :device_info_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':device_info_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_analytics
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_analytics' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_core
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_core' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_crashlytics
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_crashlytics' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_messaging
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_messaging' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_background
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_background' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_callkit_incoming
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_callkit_incoming' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_contacts
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_contacts' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_facebook_auth
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_facebook_auth' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_gemma
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_gemma' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_local_notifications
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_local_notifications' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_mining
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_mining' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_new_badger
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_new_badger' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_plugin_android_lifecycle
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_plugin_android_lifecycle' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_secure_storage
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_secure_storage' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_tts
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_tts' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_vodozemac
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_vodozemac' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_webrtc
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_webrtc' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :fluttertoast
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':fluttertoast' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :fluwx
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':fluwx' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :geocoding_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':geocoding_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :geolocator_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':geolocator_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_commons
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_commons' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_face_detection
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_face_detection' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_selfie_segmentation
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_selfie_segmentation' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_text_recognition
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_text_recognition' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_translation
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_translation' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_sign_in_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_sign_in_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :image_picker_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':image_picker_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :in_app_purchase_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':in_app_purchase_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :integration_test
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':integration_test' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :jni
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':jni' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :jni_flutter
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':jni_flutter' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :large_file_handler
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':large_file_handler' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :livekit_client
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':livekit_client' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :local_auth_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':local_auth_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :mobile_scanner
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':mobile_scanner' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :open_filex
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':open_filex' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :package_info_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':package_info_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :pdfx
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':pdfx' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :permission_handler_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':permission_handler_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :photo_manager
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':photo_manager' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :pro_image_editor
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':pro_image_editor' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :quick_actions_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':quick_actions_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :record_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':record_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :saver_gallery
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':saver_gallery' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :share_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':share_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :shared_preferences_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':shared_preferences_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :sign_in_with_apple
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':sign_in_with_apple' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :sqflite_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':sqflite_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :sqflite_sqlcipher
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':sqflite_sqlcipher' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :twitter_login
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':twitter_login' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :url_launcher_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':url_launcher_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :video_compress
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':video_compress' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :video_player_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':video_player_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :video_thumbnail
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':video_thumbnail' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :wakelock_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':wakelock_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :walletconnect_pay
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':walletconnect_pay' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :web3auth_flutter
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':web3auth_flutter' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :webview_flutter_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':webview_flutter_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+WARNING: Your Android app project: app located at: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): app_badge_plus, firebase_analytics, firebase_core, firebase_crashlytics, flutter_background, flutter_callkit_incoming, flutter_gemma, flutter_mining, flutter_tts, flutter_webrtc, fluwx, large_file_handler, livekit_client, pdfx, photo_manager, record_android, saver_gallery, twitter_login, video_compress, walletconnect_pay, web3auth_flutter
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+
+> Task :android_file_picker:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :android_file_picker:preBuild UP-TO-DATE
+> Task :android_file_picker:preReleaseBuild UP-TO-DATE
+> Task :android_file_picker:generateReleaseResources UP-TO-DATE
+> Task :android_file_picker:packageReleaseResources UP-TO-DATE
+> Task :android_file_picker:processReleaseNavigationResources UP-TO-DATE
+> Task :android_file_picker:parseReleaseLocalResources UP-TO-DATE
+> Task :android_file_picker:generateReleaseRFile UP-TO-DATE
+> Task :android_file_picker:javaPreCompileRelease UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:cleanMergeReleaseAssets
+
+> Task :android_file_picker:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerDelegate.kt:78:89 Elvis operator (?:) always returns the left operand of non-nullable type 'Uri'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerPlugin.kt:151:49 Unnecessary safe call on a non-null receiver of type 'HashMap<*, *>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerPlugin.kt:152:38 Unnecessary safe call on a non-null receiver of type 'HashMap<*, *>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerPlugin.kt:153:60 Unnecessary safe call on a non-null receiver of type 'HashMap<*, *>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerPlugin.kt:164:70 Unchecked cast of 'Any?' to 'ArrayList<String>?'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileUtils.kt:638:45 'enum entry WEBP: Bitmap.CompressFormat' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/android_file_picker-2.0.0/android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileUtils.kt:646:35 'enum entry WEBP: Bitmap.CompressFormat' is deprecated. Deprecated in Java.
+
+> Task :app:compileFlutterBuildRelease
+> Task :android_file_picker:compileReleaseJavaWithJavac NO-SOURCE
+> Task :android_file_picker:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :android_file_picker:generateReleaseAssets UP-TO-DATE
+> Task :android_file_picker:mergeReleaseAssets UP-TO-DATE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:validateCompileSdkVersion
+> Task :app:preBuild
+> Task :app:preReleaseBuild
+> Task :app_badge_plus:generateReleaseAssets UP-TO-DATE
+> Task :app_badge_plus:preBuild UP-TO-DATE
+> Task :app_badge_plus:preReleaseBuild UP-TO-DATE
+> Task :app_badge_plus:mergeReleaseAssets UP-TO-DATE
+> Task :app_links:generateReleaseAssets UP-TO-DATE
+> Task :app_links:preBuild UP-TO-DATE
+> Task :app_links:preReleaseBuild UP-TO-DATE
+> Task :app_links:mergeReleaseAssets UP-TO-DATE
+> Task :audioplayers_android:generateReleaseAssets UP-TO-DATE
+> Task :audioplayers_android:preBuild UP-TO-DATE
+> Task :audioplayers_android:preReleaseBuild UP-TO-DATE
+> Task :audioplayers_android:mergeReleaseAssets UP-TO-DATE
+> Task :background_downloader:generateReleaseAssets UP-TO-DATE
+> Task :background_downloader:preBuild UP-TO-DATE
+> Task :background_downloader:preReleaseBuild UP-TO-DATE
+> Task :background_downloader:mergeReleaseAssets UP-TO-DATE
+> Task :connectivity_plus:generateReleaseAssets UP-TO-DATE
+> Task :connectivity_plus:preBuild UP-TO-DATE
+> Task :connectivity_plus:preReleaseBuild UP-TO-DATE
+> Task :connectivity_plus:mergeReleaseAssets UP-TO-DATE
+> Task :device_info_plus:generateReleaseAssets UP-TO-DATE
+> Task :device_info_plus:preBuild UP-TO-DATE
+> Task :device_info_plus:preReleaseBuild UP-TO-DATE
+> Task :device_info_plus:mergeReleaseAssets UP-TO-DATE
+> Task :firebase_analytics:generateReleaseAssets UP-TO-DATE
+> Task :firebase_analytics:preBuild UP-TO-DATE
+> Task :firebase_analytics:preReleaseBuild UP-TO-DATE
+> Task :firebase_analytics:mergeReleaseAssets UP-TO-DATE
+> Task :firebase_core:generateReleaseAssets UP-TO-DATE
+> Task :firebase_core:preBuild UP-TO-DATE
+> Task :firebase_core:preReleaseBuild UP-TO-DATE
+> Task :firebase_core:mergeReleaseAssets UP-TO-DATE
+> Task :firebase_crashlytics:generateReleaseAssets UP-TO-DATE
+> Task :firebase_crashlytics:preBuild UP-TO-DATE
+> Task :firebase_crashlytics:preReleaseBuild UP-TO-DATE
+> Task :firebase_crashlytics:mergeReleaseAssets UP-TO-DATE
+> Task :firebase_messaging:generateReleaseAssets UP-TO-DATE
+> Task :firebase_messaging:preBuild UP-TO-DATE
+> Task :firebase_messaging:preReleaseBuild UP-TO-DATE
+> Task :firebase_messaging:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_background:generateReleaseAssets UP-TO-DATE
+> Task :flutter_background:preBuild UP-TO-DATE
+> Task :flutter_background:preReleaseBuild UP-TO-DATE
+> Task :flutter_background:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_callkit_incoming:generateReleaseAssets UP-TO-DATE
+> Task :flutter_callkit_incoming:preBuild UP-TO-DATE
+> Task :flutter_callkit_incoming:preReleaseBuild UP-TO-DATE
+> Task :flutter_callkit_incoming:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_contacts:generateReleaseAssets UP-TO-DATE
+> Task :flutter_contacts:preBuild UP-TO-DATE
+> Task :flutter_contacts:preReleaseBuild UP-TO-DATE
+> Task :flutter_contacts:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_facebook_auth:generateReleaseAssets UP-TO-DATE
+> Task :flutter_facebook_auth:preBuild UP-TO-DATE
+> Task :flutter_facebook_auth:preReleaseBuild UP-TO-DATE
+> Task :flutter_facebook_auth:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_gemma:generateReleaseAssets UP-TO-DATE
+> Task :flutter_gemma:preBuild UP-TO-DATE
+> Task :flutter_gemma:preReleaseBuild UP-TO-DATE
+> Task :flutter_gemma:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_local_notifications:generateReleaseAssets UP-TO-DATE
+> Task :flutter_local_notifications:preBuild UP-TO-DATE
+> Task :flutter_local_notifications:preReleaseBuild UP-TO-DATE
+> Task :flutter_local_notifications:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_mining:generateReleaseAssets UP-TO-DATE
+> Task :flutter_mining:preBuild UP-TO-DATE
+> Task :flutter_mining:preReleaseBuild UP-TO-DATE
+> Task :flutter_mining:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_new_badger:generateReleaseAssets UP-TO-DATE
+> Task :flutter_new_badger:preBuild UP-TO-DATE
+> Task :flutter_new_badger:preReleaseBuild UP-TO-DATE
+> Task :flutter_new_badger:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseAssets UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:preBuild UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:preReleaseBuild UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_secure_storage:generateReleaseAssets UP-TO-DATE
+> Task :flutter_secure_storage:preBuild UP-TO-DATE
+> Task :flutter_secure_storage:preReleaseBuild UP-TO-DATE
+> Task :flutter_secure_storage:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_tts:generateReleaseAssets UP-TO-DATE
+> Task :flutter_tts:preBuild UP-TO-DATE
+> Task :flutter_tts:preReleaseBuild UP-TO-DATE
+> Task :flutter_tts:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_vodozemac:generateReleaseAssets UP-TO-DATE
+> Task :flutter_vodozemac:preBuild UP-TO-DATE
+> Task :flutter_vodozemac:preReleaseBuild UP-TO-DATE
+> Task :flutter_vodozemac:mergeReleaseAssets UP-TO-DATE
+> Task :flutter_webrtc:generateReleaseAssets UP-TO-DATE
+> Task :flutter_webrtc:preBuild UP-TO-DATE
+> Task :flutter_webrtc:preReleaseBuild UP-TO-DATE
+> Task :flutter_webrtc:mergeReleaseAssets UP-TO-DATE
+> Task :fluttertoast:generateReleaseAssets UP-TO-DATE
+> Task :fluttertoast:preBuild UP-TO-DATE
+> Task :fluttertoast:preReleaseBuild UP-TO-DATE
+> Task :fluttertoast:mergeReleaseAssets UP-TO-DATE
+> Task :fluwx:generateReleaseAssets UP-TO-DATE
+> Task :fluwx:preBuild UP-TO-DATE
+> Task :fluwx:preReleaseBuild UP-TO-DATE
+> Task :fluwx:mergeReleaseAssets UP-TO-DATE
+> Task :geocoding_android:generateReleaseAssets UP-TO-DATE
+> Task :geocoding_android:preBuild UP-TO-DATE
+> Task :geocoding_android:preReleaseBuild UP-TO-DATE
+> Task :geocoding_android:mergeReleaseAssets UP-TO-DATE
+> Task :geolocator_android:generateReleaseAssets UP-TO-DATE
+> Task :geolocator_android:preBuild UP-TO-DATE
+> Task :geolocator_android:preReleaseBuild UP-TO-DATE
+> Task :geolocator_android:mergeReleaseAssets UP-TO-DATE
+> Task :google_mlkit_commons:generateReleaseAssets UP-TO-DATE
+> Task :google_mlkit_commons:preBuild UP-TO-DATE
+> Task :google_mlkit_commons:preReleaseBuild UP-TO-DATE
+> Task :google_mlkit_commons:mergeReleaseAssets UP-TO-DATE
+> Task :google_mlkit_face_detection:generateReleaseAssets UP-TO-DATE
+> Task :google_mlkit_face_detection:preBuild UP-TO-DATE
+> Task :google_mlkit_face_detection:preReleaseBuild UP-TO-DATE
+> Task :google_mlkit_face_detection:mergeReleaseAssets UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:generateReleaseAssets UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:preBuild UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:preReleaseBuild UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:mergeReleaseAssets UP-TO-DATE
+> Task :google_mlkit_text_recognition:generateReleaseAssets UP-TO-DATE
+> Task :google_mlkit_text_recognition:preBuild UP-TO-DATE
+> Task :google_mlkit_text_recognition:preReleaseBuild UP-TO-DATE
+> Task :google_mlkit_text_recognition:mergeReleaseAssets UP-TO-DATE
+> Task :google_mlkit_translation:generateReleaseAssets UP-TO-DATE
+> Task :google_mlkit_translation:preBuild UP-TO-DATE
+> Task :google_mlkit_translation:preReleaseBuild UP-TO-DATE
+> Task :google_mlkit_translation:mergeReleaseAssets UP-TO-DATE
+> Task :google_sign_in_android:generateReleaseAssets UP-TO-DATE
+> Task :google_sign_in_android:preBuild UP-TO-DATE
+> Task :google_sign_in_android:preReleaseBuild UP-TO-DATE
+> Task :google_sign_in_android:mergeReleaseAssets UP-TO-DATE
+> Task :image_picker_android:generateReleaseAssets UP-TO-DATE
+> Task :image_picker_android:preBuild UP-TO-DATE
+> Task :image_picker_android:preReleaseBuild UP-TO-DATE
+> Task :image_picker_android:mergeReleaseAssets UP-TO-DATE
+> Task :in_app_purchase_android:generateReleaseAssets UP-TO-DATE
+> Task :in_app_purchase_android:preBuild UP-TO-DATE
+> Task :in_app_purchase_android:preReleaseBuild UP-TO-DATE
+> Task :in_app_purchase_android:mergeReleaseAssets UP-TO-DATE
+> Task :jni:generateReleaseAssets UP-TO-DATE
+> Task :jni:preBuild UP-TO-DATE
+> Task :jni:preReleaseBuild UP-TO-DATE
+> Task :jni:mergeReleaseAssets UP-TO-DATE
+> Task :jni_flutter:generateReleaseAssets UP-TO-DATE
+> Task :jni_flutter:preBuild UP-TO-DATE
+> Task :jni_flutter:preReleaseBuild UP-TO-DATE
+> Task :jni_flutter:mergeReleaseAssets UP-TO-DATE
+> Task :large_file_handler:generateReleaseAssets UP-TO-DATE
+> Task :large_file_handler:preBuild UP-TO-DATE
+> Task :large_file_handler:preReleaseBuild UP-TO-DATE
+> Task :large_file_handler:mergeReleaseAssets UP-TO-DATE
+> Task :livekit_client:generateReleaseAssets UP-TO-DATE
+> Task :livekit_client:preBuild UP-TO-DATE
+> Task :livekit_client:preReleaseBuild UP-TO-DATE
+> Task :livekit_client:mergeReleaseAssets UP-TO-DATE
+> Task :local_auth_android:generateReleaseAssets UP-TO-DATE
+> Task :local_auth_android:preBuild UP-TO-DATE
+> Task :local_auth_android:preReleaseBuild UP-TO-DATE
+> Task :local_auth_android:mergeReleaseAssets UP-TO-DATE
+> Task :mobile_scanner:generateReleaseAssets UP-TO-DATE
+> Task :mobile_scanner:preBuild UP-TO-DATE
+> Task :mobile_scanner:preReleaseBuild UP-TO-DATE
+> Task :mobile_scanner:mergeReleaseAssets UP-TO-DATE
+> Task :open_filex:generateReleaseAssets UP-TO-DATE
+> Task :open_filex:preBuild UP-TO-DATE
+> Task :open_filex:preReleaseBuild UP-TO-DATE
+> Task :open_filex:mergeReleaseAssets UP-TO-DATE
+> Task :package_info_plus:generateReleaseAssets UP-TO-DATE
+> Task :package_info_plus:preBuild UP-TO-DATE
+> Task :package_info_plus:preReleaseBuild UP-TO-DATE
+> Task :package_info_plus:mergeReleaseAssets UP-TO-DATE
+> Task :pdfx:generateReleaseAssets UP-TO-DATE
+> Task :pdfx:preBuild UP-TO-DATE
+> Task :pdfx:preReleaseBuild UP-TO-DATE
+> Task :pdfx:mergeReleaseAssets UP-TO-DATE
+> Task :permission_handler_android:generateReleaseAssets UP-TO-DATE
+> Task :permission_handler_android:preBuild UP-TO-DATE
+> Task :permission_handler_android:preReleaseBuild UP-TO-DATE
+> Task :permission_handler_android:mergeReleaseAssets UP-TO-DATE
+> Task :photo_manager:generateReleaseAssets UP-TO-DATE
+> Task :photo_manager:preBuild UP-TO-DATE
+> Task :photo_manager:preReleaseBuild UP-TO-DATE
+> Task :photo_manager:mergeReleaseAssets UP-TO-DATE
+> Task :pro_image_editor:generateReleaseAssets UP-TO-DATE
+> Task :pro_image_editor:preBuild UP-TO-DATE
+> Task :pro_image_editor:preReleaseBuild UP-TO-DATE
+> Task :pro_image_editor:mergeReleaseAssets UP-TO-DATE
+> Task :quick_actions_android:generateReleaseAssets UP-TO-DATE
+> Task :quick_actions_android:preBuild UP-TO-DATE
+> Task :quick_actions_android:preReleaseBuild UP-TO-DATE
+> Task :quick_actions_android:mergeReleaseAssets UP-TO-DATE
+> Task :record_android:generateReleaseAssets UP-TO-DATE
+> Task :record_android:preBuild UP-TO-DATE
+> Task :record_android:preReleaseBuild UP-TO-DATE
+> Task :record_android:mergeReleaseAssets UP-TO-DATE
+> Task :saver_gallery:generateReleaseAssets UP-TO-DATE
+> Task :saver_gallery:preBuild UP-TO-DATE
+> Task :saver_gallery:preReleaseBuild UP-TO-DATE
+> Task :saver_gallery:mergeReleaseAssets UP-TO-DATE
+> Task :share_plus:generateReleaseAssets UP-TO-DATE
+> Task :share_plus:preBuild UP-TO-DATE
+> Task :share_plus:preReleaseBuild UP-TO-DATE
+> Task :share_plus:mergeReleaseAssets UP-TO-DATE
+> Task :shared_preferences_android:generateReleaseAssets UP-TO-DATE
+> Task :shared_preferences_android:preBuild UP-TO-DATE
+> Task :shared_preferences_android:preReleaseBuild UP-TO-DATE
+> Task :shared_preferences_android:mergeReleaseAssets UP-TO-DATE
+> Task :sign_in_with_apple:generateReleaseAssets UP-TO-DATE
+> Task :sign_in_with_apple:preBuild UP-TO-DATE
+> Task :sign_in_with_apple:preReleaseBuild UP-TO-DATE
+> Task :sign_in_with_apple:mergeReleaseAssets UP-TO-DATE
+> Task :sqflite_android:generateReleaseAssets UP-TO-DATE
+> Task :sqflite_android:preBuild UP-TO-DATE
+> Task :sqflite_android:preReleaseBuild UP-TO-DATE
+> Task :sqflite_android:mergeReleaseAssets UP-TO-DATE
+> Task :sqflite_sqlcipher:generateReleaseAssets UP-TO-DATE
+> Task :sqflite_sqlcipher:preBuild UP-TO-DATE
+> Task :sqflite_sqlcipher:preReleaseBuild UP-TO-DATE
+> Task :sqflite_sqlcipher:mergeReleaseAssets UP-TO-DATE
+> Task :twitter_login:generateReleaseAssets UP-TO-DATE
+> Task :twitter_login:preBuild UP-TO-DATE
+> Task :twitter_login:preReleaseBuild UP-TO-DATE
+> Task :twitter_login:mergeReleaseAssets UP-TO-DATE
+> Task :url_launcher_android:generateReleaseAssets UP-TO-DATE
+> Task :url_launcher_android:preBuild UP-TO-DATE
+> Task :url_launcher_android:preReleaseBuild UP-TO-DATE
+> Task :url_launcher_android:mergeReleaseAssets UP-TO-DATE
+> Task :video_compress:generateReleaseAssets UP-TO-DATE
+> Task :video_compress:preBuild UP-TO-DATE
+> Task :video_compress:preReleaseBuild UP-TO-DATE
+> Task :video_compress:mergeReleaseAssets UP-TO-DATE
+> Task :video_player_android:generateReleaseAssets UP-TO-DATE
+> Task :video_player_android:preBuild UP-TO-DATE
+> Task :video_player_android:preReleaseBuild UP-TO-DATE
+> Task :video_player_android:mergeReleaseAssets UP-TO-DATE
+> Task :video_thumbnail:generateReleaseAssets UP-TO-DATE
+> Task :video_thumbnail:preBuild UP-TO-DATE
+> Task :video_thumbnail:preReleaseBuild UP-TO-DATE
+> Task :video_thumbnail:mergeReleaseAssets UP-TO-DATE
+> Task :wakelock_plus:generateReleaseAssets UP-TO-DATE
+> Task :wakelock_plus:preBuild UP-TO-DATE
+> Task :wakelock_plus:preReleaseBuild UP-TO-DATE
+> Task :wakelock_plus:mergeReleaseAssets UP-TO-DATE
+> Task :walletconnect_pay:generateReleaseAssets UP-TO-DATE
+> Task :walletconnect_pay:preBuild UP-TO-DATE
+> Task :walletconnect_pay:preReleaseBuild UP-TO-DATE
+> Task :walletconnect_pay:mergeReleaseAssets UP-TO-DATE
+> Task :web3auth_flutter:generateReleaseAssets UP-TO-DATE
+> Task :web3auth_flutter:preBuild UP-TO-DATE
+> Task :web3auth_flutter:preReleaseBuild UP-TO-DATE
+> Task :web3auth_flutter:mergeReleaseAssets UP-TO-DATE
+> Task :webview_flutter_android:generateReleaseAssets UP-TO-DATE
+> Task :webview_flutter_android:preBuild UP-TO-DATE
+> Task :webview_flutter_android:preReleaseBuild UP-TO-DATE
+> Task :webview_flutter_android:mergeReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets
+> Task :app:copyFlutterAssetsRelease
+> Task :app:generateReleaseResValues UP-TO-DATE
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:processReleaseGoogleServices UP-TO-DATE
+> Task :app:packageReleaseResources UP-TO-DATE
+> Task :app_badge_plus:processReleaseNavigationResources UP-TO-DATE
+> Task :app_links:processReleaseNavigationResources UP-TO-DATE
+> Task :audioplayers_android:processReleaseNavigationResources UP-TO-DATE
+> Task :background_downloader:processReleaseNavigationResources UP-TO-DATE
+> Task :connectivity_plus:processReleaseNavigationResources UP-TO-DATE
+> Task :device_info_plus:processReleaseNavigationResources UP-TO-DATE
+> Task :firebase_analytics:processReleaseNavigationResources UP-TO-DATE
+> Task :firebase_core:processReleaseNavigationResources UP-TO-DATE
+> Task :firebase_crashlytics:processReleaseNavigationResources UP-TO-DATE
+> Task :firebase_messaging:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_background:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_callkit_incoming:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_contacts:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_facebook_auth:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_gemma:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_local_notifications:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_mining:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_new_badger:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_secure_storage:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_tts:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_vodozemac:processReleaseNavigationResources UP-TO-DATE
+> Task :flutter_webrtc:processReleaseNavigationResources UP-TO-DATE
+> Task :fluttertoast:processReleaseNavigationResources UP-TO-DATE
+> Task :fluwx:processReleaseNavigationResources UP-TO-DATE
+> Task :geocoding_android:processReleaseNavigationResources UP-TO-DATE
+> Task :geolocator_android:processReleaseNavigationResources UP-TO-DATE
+> Task :google_mlkit_commons:processReleaseNavigationResources UP-TO-DATE
+> Task :google_mlkit_face_detection:processReleaseNavigationResources UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:processReleaseNavigationResources UP-TO-DATE
+> Task :google_mlkit_text_recognition:processReleaseNavigationResources UP-TO-DATE
+> Task :google_mlkit_translation:processReleaseNavigationResources UP-TO-DATE
+> Task :google_sign_in_android:processReleaseNavigationResources UP-TO-DATE
+> Task :image_picker_android:processReleaseNavigationResources UP-TO-DATE
+> Task :in_app_purchase_android:processReleaseNavigationResources UP-TO-DATE
+> Task :jni:processReleaseNavigationResources UP-TO-DATE
+> Task :jni_flutter:processReleaseNavigationResources UP-TO-DATE
+> Task :large_file_handler:processReleaseNavigationResources UP-TO-DATE
+> Task :livekit_client:processReleaseNavigationResources UP-TO-DATE
+> Task :local_auth_android:processReleaseNavigationResources UP-TO-DATE
+> Task :mobile_scanner:processReleaseNavigationResources UP-TO-DATE
+> Task :open_filex:processReleaseNavigationResources UP-TO-DATE
+> Task :package_info_plus:processReleaseNavigationResources UP-TO-DATE
+> Task :pdfx:processReleaseNavigationResources UP-TO-DATE
+> Task :permission_handler_android:processReleaseNavigationResources UP-TO-DATE
+> Task :photo_manager:processReleaseNavigationResources UP-TO-DATE
+> Task :pro_image_editor:processReleaseNavigationResources UP-TO-DATE
+> Task :quick_actions_android:processReleaseNavigationResources UP-TO-DATE
+> Task :record_android:processReleaseNavigationResources UP-TO-DATE
+> Task :saver_gallery:processReleaseNavigationResources UP-TO-DATE
+> Task :share_plus:processReleaseNavigationResources UP-TO-DATE
+> Task :shared_preferences_android:processReleaseNavigationResources UP-TO-DATE
+> Task :sign_in_with_apple:processReleaseNavigationResources UP-TO-DATE
+> Task :sqflite_android:processReleaseNavigationResources UP-TO-DATE
+> Task :sqflite_sqlcipher:processReleaseNavigationResources UP-TO-DATE
+> Task :twitter_login:processReleaseNavigationResources UP-TO-DATE
+> Task :url_launcher_android:processReleaseNavigationResources UP-TO-DATE
+> Task :video_compress:processReleaseNavigationResources UP-TO-DATE
+> Task :video_player_android:processReleaseNavigationResources UP-TO-DATE
+> Task :video_thumbnail:processReleaseNavigationResources UP-TO-DATE
+> Task :wakelock_plus:processReleaseNavigationResources UP-TO-DATE
+> Task :walletconnect_pay:processReleaseNavigationResources UP-TO-DATE
+> Task :web3auth_flutter:processReleaseNavigationResources UP-TO-DATE
+> Task :webview_flutter_android:processReleaseNavigationResources UP-TO-DATE
+> Task :app:processReleaseNavigationResources UP-TO-DATE
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+> Task :app:generateReleaseRFile UP-TO-DATE
+> Task :app_badge_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app_badge_plus:generateReleaseResources UP-TO-DATE
+> Task :app_badge_plus:packageReleaseResources UP-TO-DATE
+> Task :app_badge_plus:parseReleaseLocalResources UP-TO-DATE
+> Task :app_badge_plus:generateReleaseRFile UP-TO-DATE
+> Task :app_badge_plus:javaPreCompileRelease UP-TO-DATE
+> Task :app_links:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app_links:generateReleaseResources UP-TO-DATE
+> Task :app_links:packageReleaseResources UP-TO-DATE
+> Task :app_links:parseReleaseLocalResources UP-TO-DATE
+> Task :app_links:generateReleaseRFile UP-TO-DATE
+> Task :app_links:compileReleaseKotlin NO-SOURCE
+> Task :app_links:javaPreCompileRelease UP-TO-DATE
+> Task :app_links:compileReleaseJavaWithJavac
+> Task :app_links:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :audioplayers_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :audioplayers_android:generateReleaseResources UP-TO-DATE
+> Task :audioplayers_android:packageReleaseResources UP-TO-DATE
+> Task :audioplayers_android:parseReleaseLocalResources UP-TO-DATE
+> Task :audioplayers_android:generateReleaseRFile UP-TO-DATE
+> Task :audioplayers_android:javaPreCompileRelease UP-TO-DATE
+> Task :background_downloader:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :background_downloader:generateReleaseResources UP-TO-DATE
+> Task :background_downloader:packageReleaseResources UP-TO-DATE
+> Task :background_downloader:parseReleaseLocalResources UP-TO-DATE
+> Task :background_downloader:generateReleaseRFile UP-TO-DATE
+> Task :background_downloader:javaPreCompileRelease UP-TO-DATE
+> Task :connectivity_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :connectivity_plus:generateReleaseResources UP-TO-DATE
+> Task :connectivity_plus:packageReleaseResources UP-TO-DATE
+> Task :connectivity_plus:parseReleaseLocalResources UP-TO-DATE
+> Task :connectivity_plus:generateReleaseRFile UP-TO-DATE
+> Task :connectivity_plus:compileReleaseKotlin NO-SOURCE
+> Task :connectivity_plus:javaPreCompileRelease UP-TO-DATE
+> Task :connectivity_plus:compileReleaseJavaWithJavac
+> Task :device_info_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :device_info_plus:generateReleaseResources UP-TO-DATE
+> Task :device_info_plus:packageReleaseResources UP-TO-DATE
+> Task :device_info_plus:parseReleaseLocalResources UP-TO-DATE
+> Task :device_info_plus:generateReleaseRFile UP-TO-DATE
+> Task :connectivity_plus:bundleLibCompileToJarRelease
+> Task :device_info_plus:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_analytics:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :firebase_analytics:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_analytics:generateReleaseResources UP-TO-DATE
+> Task :firebase_analytics:packageReleaseResources UP-TO-DATE
+> Task :firebase_analytics:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_analytics:generateReleaseRFile UP-TO-DATE
+> Task :firebase_core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :firebase_core:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_core:generateReleaseResources UP-TO-DATE
+> Task :firebase_core:packageReleaseResources UP-TO-DATE
+> Task :firebase_core:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_core:generateReleaseRFile UP-TO-DATE
+> Task :app_badge_plus:compileReleaseKotlin
+> Task :app_badge_plus:compileReleaseJavaWithJavac NO-SOURCE
+> Task :app_badge_plus:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :firebase_core:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_analytics:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_crashlytics:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :firebase_crashlytics:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_crashlytics:generateReleaseResources UP-TO-DATE
+> Task :firebase_crashlytics:packageReleaseResources UP-TO-DATE
+> Task :firebase_crashlytics:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_crashlytics:generateReleaseRFile UP-TO-DATE
+> Task :firebase_crashlytics:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_messaging:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :firebase_messaging:generateReleaseBuildConfig UP-TO-DATE
+> Task :firebase_messaging:generateReleaseResources UP-TO-DATE
+> Task :firebase_messaging:packageReleaseResources UP-TO-DATE
+> Task :firebase_messaging:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_messaging:generateReleaseRFile UP-TO-DATE
+> Task :firebase_messaging:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_background:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_background:generateReleaseResources UP-TO-DATE
+> Task :flutter_background:packageReleaseResources UP-TO-DATE
+> Task :flutter_background:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_background:generateReleaseRFile UP-TO-DATE
+> Task :flutter_background:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_callkit_incoming:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_callkit_incoming:generateReleaseResources UP-TO-DATE
+> Task :flutter_callkit_incoming:packageReleaseResources UP-TO-DATE
+> Task :flutter_callkit_incoming:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_callkit_incoming:generateReleaseRFile UP-TO-DATE
+> Task :flutter_callkit_incoming:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_contacts:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_contacts:generateReleaseResources UP-TO-DATE
+> Task :flutter_contacts:packageReleaseResources UP-TO-DATE
+> Task :flutter_contacts:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_contacts:generateReleaseRFile UP-TO-DATE
+> Task :device_info_plus:compileReleaseKotlin
+> Task :device_info_plus:compileReleaseJavaWithJavac NO-SOURCE
+> Task :device_info_plus:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_contacts:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_facebook_auth:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_facebook_auth:generateReleaseResources UP-TO-DATE
+> Task :flutter_facebook_auth:packageReleaseResources UP-TO-DATE
+> Task :flutter_facebook_auth:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_facebook_auth:generateReleaseRFile UP-TO-DATE
+> Task :flutter_facebook_auth:compileReleaseKotlin NO-SOURCE
+> Task :flutter_facebook_auth:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_facebook_auth:compileReleaseJavaWithJavac
+> Task :flutter_gemma:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_gemma:generateReleaseResources UP-TO-DATE
+> Task :flutter_facebook_auth:bundleLibCompileToJarRelease
+> Task :flutter_gemma:packageReleaseResources UP-TO-DATE
+> Task :flutter_gemma:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_gemma:generateReleaseRFile UP-TO-DATE
+> Task :large_file_handler:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :large_file_handler:generateReleaseResources UP-TO-DATE
+> Task :large_file_handler:packageReleaseResources UP-TO-DATE
+> Task :large_file_handler:parseReleaseLocalResources UP-TO-DATE
+> Task :large_file_handler:generateReleaseRFile UP-TO-DATE
+
+> Task :audioplayers_android:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/audioplayers_android-5.3.0/android/src/main/kotlin/xyz/luan/audioplayers/AudioplayersPlugin.kt:72:30 'var isSpeakerphoneOn: Boolean' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/audioplayers_android-5.3.0/android/src/main/kotlin/xyz/luan/audioplayers/player/WrappedPlayer.kt:172:22 'var isSpeakerphoneOn: Boolean' is deprecated. Deprecated in Java.
+
+> Task :large_file_handler:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_gemma:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_local_notifications:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_local_notifications:generateReleaseResources UP-TO-DATE
+> Task :flutter_local_notifications:packageReleaseResources UP-TO-DATE
+> Task :flutter_local_notifications:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_local_notifications:generateReleaseRFile UP-TO-DATE
+> Task :flutter_local_notifications:compileReleaseKotlin NO-SOURCE
+> Task :flutter_local_notifications:javaPreCompileRelease UP-TO-DATE
+
+> Task :flutter_background:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_background-1.3.1/android/src/main/kotlin/de/julianassmann/flutter_background/IsolateHolderService.kt:74:9 'fun stopForeground(p0: Boolean): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_background-1.3.1/android/src/main/kotlin/de/julianassmann/flutter_background/IsolateHolderService.kt:123:51 'static field WIFI_MODE_FULL: Int' is deprecated. Deprecated in Java.
+
+> Task :flutter_local_notifications:compileReleaseJavaWithJavac
+> Task :audioplayers_android:compileReleaseJavaWithJavac NO-SOURCE
+> Task :audioplayers_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_background:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_background:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_mining:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_mining:generateReleaseResources UP-TO-DATE
+> Task :flutter_mining:packageReleaseResources UP-TO-DATE
+> Task :flutter_local_notifications:bundleLibCompileToJarRelease
+> Task :flutter_mining:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_mining:generateReleaseRFile UP-TO-DATE
+> Task :flutter_mining:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_new_badger:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_new_badger:generateReleaseResources UP-TO-DATE
+> Task :flutter_new_badger:packageReleaseResources UP-TO-DATE
+> Task :flutter_new_badger:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_new_badger:generateReleaseRFile UP-TO-DATE
+
+> Task :firebase_core:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/firebase_core-4.15.0/android/src/main/kotlin/io/flutter/plugins/firebase/core/FlutterFirebaseCorePlugin.kt:40:33 Elvis operator (?:) always returns the left operand of non-nullable type 'String'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/firebase_core-4.15.0/android/src/main/kotlin/io/flutter/plugins/firebase/core/FlutterFirebaseCorePlugin.kt:207:21 'fun setDataCollectionDefaultEnabled(p0: Boolean): Unit' is deprecated. Deprecated in Java.
+
+> Task :large_file_handler:compileReleaseKotlin
+> Task :large_file_handler:compileReleaseJavaWithJavac NO-SOURCE
+> Task :large_file_handler:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_new_badger:javaPreCompileRelease UP-TO-DATE
+> Task :firebase_core:compileReleaseJavaWithJavac
+> Task :flutter_plugin_android_lifecycle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_plugin_android_lifecycle:generateReleaseResources UP-TO-DATE
+> Task :firebase_core:bundleLibCompileToJarRelease
+> Task :flutter_plugin_android_lifecycle:packageReleaseResources UP-TO-DATE
+> Task :flutter_new_badger:compileReleaseKotlin
+
+> Task :flutter_mining:compileReleaseKotlin
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/plugins/flutter_mining/android/src/main/kotlin/mining/ai/n42/www/flutter_mining/FlutterMiningPlugin.kt:62:43 Unchecked cast of 'Any!' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/plugins/flutter_mining/android/src/main/kotlin/mining/ai/n42/www/flutter_mining/FlutterMiningPlugin.kt:85:43 Unchecked cast of 'Any!' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/plugins/flutter_mining/android/src/main/kotlin/mining/ai/n42/www/flutter_mining/FlutterMiningPlugin.kt:115:43 Unchecked cast of 'Any!' to 'Map<String, Any>'.
+
+> Task :firebase_messaging:compileReleaseKotlin NO-SOURCE
+
+> Task :firebase_messaging:compileReleaseJavaWithJavac
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+
+> Task :flutter_mining:compileReleaseJavaWithJavac NO-SOURCE
+> Task :firebase_messaging:bundleLibCompileToJarRelease
+> Task :flutter_mining:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_new_badger:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_new_badger:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:generateReleaseRFile UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:compileReleaseKotlin NO-SOURCE
+> Task :flutter_plugin_android_lifecycle:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_plugin_android_lifecycle:compileReleaseJavaWithJavac
+> Task :flutter_plugin_android_lifecycle:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_secure_storage:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_secure_storage:generateReleaseBuildConfig UP-TO-DATE
+> Task :flutter_secure_storage:generateReleaseResources UP-TO-DATE
+> Task :flutter_secure_storage:packageReleaseResources UP-TO-DATE
+> Task :flutter_secure_storage:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_secure_storage:generateReleaseRFile UP-TO-DATE
+> Task :flutter_secure_storage:compileReleaseKotlin NO-SOURCE
+> Task :flutter_secure_storage:javaPreCompileRelease UP-TO-DATE
+
+> Task :flutter_secure_storage:compileReleaseJavaWithJavac
+注: /Users/jieliu/.pub-cache/git/n42appv2-9733aa21eb7e4fa98c2aa8a287ef9588960023c2/packages/flutter_secure_storage/android/src/main/java/com/it_nomads/fluttersecurestorage/LegacyEncryptedPreferences.java使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+
+> Task :flutter_tts:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_tts:generateReleaseResources UP-TO-DATE
+> Task :flutter_tts:packageReleaseResources UP-TO-DATE
+> Task :flutter_secure_storage:bundleLibCompileToJarRelease
+> Task :flutter_tts:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_tts:generateReleaseRFile UP-TO-DATE
+> Task :flutter_tts:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_vodozemac:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_vodozemac:generateReleaseResources UP-TO-DATE
+> Task :flutter_vodozemac:packageReleaseResources UP-TO-DATE
+> Task :flutter_vodozemac:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_vodozemac:generateReleaseRFile UP-TO-DATE
+> Task :flutter_vodozemac:compileReleaseKotlin NO-SOURCE
+> Task :flutter_vodozemac:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_vodozemac:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_vodozemac:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_webrtc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :flutter_webrtc:generateReleaseResources UP-TO-DATE
+> Task :flutter_webrtc:packageReleaseResources UP-TO-DATE
+> Task :flutter_webrtc:parseReleaseLocalResources UP-TO-DATE
+> Task :flutter_webrtc:generateReleaseRFile UP-TO-DATE
+
+> Task :firebase_analytics:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/firebase_analytics-12.6.0/android/src/main/kotlin/io/flutter/plugins/firebase/analytics/FlutterFirebaseAnalyticsPlugin.kt:105:51 Unchecked cast of 'Any?' to 'Map<String, Any>?'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/firebase_analytics-12.6.0/android/src/main/kotlin/io/flutter/plugins/firebase/analytics/FlutterFirebaseAnalyticsPlugin.kt:289:38 Unchecked cast of 'Map<*, *>' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/firebase_analytics-12.6.0/android/src/main/kotlin/io/flutter/plugins/firebase/analytics/FlutterFirebaseAnalyticsPlugin.kt:303:61 Unchecked cast of 'Map<*, *>' to 'Map<String, Any>'.
+
+> Task :firebase_analytics:compileReleaseJavaWithJavac
+> Task :firebase_analytics:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_webrtc:javaPreCompileRelease UP-TO-DATE
+> Task :fluttertoast:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :fluttertoast:generateReleaseResources UP-TO-DATE
+> Task :fluttertoast:packageReleaseResources UP-TO-DATE
+> Task :fluttertoast:parseReleaseLocalResources UP-TO-DATE
+> Task :fluttertoast:generateReleaseRFile UP-TO-DATE
+> Task :fluttertoast:javaPreCompileRelease UP-TO-DATE
+> Task :fluwx:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :fluwx:generateFluwxHelperFile
+> Task :fluwx:generateReleaseResources UP-TO-DATE
+> Task :fluwx:packageReleaseResources UP-TO-DATE
+> Task :fluwx:parseReleaseLocalResources UP-TO-DATE
+> Task :fluwx:generateReleaseRFile UP-TO-DATE
+> Task :fluwx:javaPreCompileRelease UP-TO-DATE
+> Task :geocoding_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :geocoding_android:generateReleaseResources UP-TO-DATE
+> Task :geocoding_android:packageReleaseResources UP-TO-DATE
+> Task :geocoding_android:parseReleaseLocalResources UP-TO-DATE
+> Task :geocoding_android:generateReleaseRFile UP-TO-DATE
+> Task :geocoding_android:compileReleaseKotlin NO-SOURCE
+> Task :geocoding_android:javaPreCompileRelease UP-TO-DATE
+
+> Task :geocoding_android:compileReleaseJavaWithJavac
+Java compiler version 25 has deprecated support for compiling with source/target version 8.
+Try one of the following options:
+    1. [Recommended] Use Java toolchain with a lower language version
+    2. Set a higher source/target version
+    3. Use a lower version of the JDK running the build (if you're not using Java toolchain)
+For more details on how to configure these settings, see https://developer.android.com/build/jdks.
+To suppress this warning, set android.javaCompile.suppressSourceTargetDeprecationWarning=true in gradle.properties.
+Add android.sync.suppressAgpWarnings=JAVA_COMPILE_DEPRECATED_SOURCE_TARGET to the gradle.properties file to suppress this warning.
+警告: [options] 源值 8 已过时，将在未来发行版中删除
+警告: [options] 目标值 8 已过时，将在未来发行版中删除
+警告: [options] 要隐藏有关已过时选项的警告, 请使用 -Xlint:-options。
+注: /Users/jieliu/.pub-cache/hosted/pub.dev/geocoding_android-4.0.1/android/src/main/java/com/baseflow/geocoding/utils/LocaleConverter.java使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+3 个警告
+
+> Task :geolocator_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :geolocator_android:generateReleaseResources UP-TO-DATE
+> Task :geocoding_android:bundleLibCompileToJarRelease
+> Task :geolocator_android:packageReleaseResources UP-TO-DATE
+> Task :geolocator_android:parseReleaseLocalResources UP-TO-DATE
+> Task :firebase_crashlytics:compileReleaseKotlin
+> Task :geolocator_android:generateReleaseRFile UP-TO-DATE
+> Task :firebase_crashlytics:compileReleaseJavaWithJavac
+> Task :firebase_crashlytics:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :flutter_webrtc:compileReleaseKotlin
+> Task :geolocator_android:compileReleaseKotlin NO-SOURCE
+
+> Task :fluttertoast:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluttertoast-10.0.0/android/src/main/kotlin/io/github/ponnamkarthik/toast/fluttertoast/MethodCallHandlerImpl.kt:59:40 'fun setColorFilter(p0: Int, p1: PorterDuff.Mode): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluttertoast-10.0.0/android/src/main/kotlin/io/github/ponnamkarthik/toast/fluttertoast/MethodCallHandlerImpl.kt:77:29 'var view: View?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluttertoast-10.0.0/android/src/main/kotlin/io/github/ponnamkarthik/toast/fluttertoast/MethodCallHandlerImpl.kt:81:58 'var view: View?' is deprecated. Deprecated in Java.
+
+> Task :flutter_tts:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_tts-4.2.5/android/src/main/kotlin/com/eyedeadevelopment/fluttertts/FlutterTtsPlugin.kt:721:60 Unnecessary non-null assertion (!!) on a non-null receiver of type 'File'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_tts-4.2.5/android/src/main/kotlin/com/eyedeadevelopment/fluttertts/FlutterTtsPlugin.kt:739:60 Unnecessary non-null assertion (!!) on a non-null receiver of type 'File'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_tts-4.2.5/android/src/main/kotlin/com/eyedeadevelopment/fluttertts/FlutterTtsPlugin.kt:804:27 'fun requestAudioFocus(p0: AudioManager.OnAudioFocusChangeListener!, p1: Int, p2: Int): Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_tts-4.2.5/android/src/main/kotlin/com/eyedeadevelopment/fluttertts/FlutterTtsPlugin.kt:812:27 'fun abandonAudioFocus(p0: AudioManager.OnAudioFocusChangeListener!): Int' is deprecated. Deprecated in Java.
+
+> Task :flutter_webrtc:compileReleaseJavaWithJavac
+Java compiler version 25 has deprecated support for compiling with source/target version 8.
+Try one of the following options:
+    1. [Recommended] Use Java toolchain with a lower language version
+    2. Set a higher source/target version
+    3. Use a lower version of the JDK running the build (if you're not using Java toolchain)
+For more details on how to configure these settings, see https://developer.android.com/build/jdks.
+To suppress this warning, set android.javaCompile.suppressSourceTargetDeprecationWarning=true in gradle.properties.
+Add android.sync.suppressAgpWarnings=JAVA_COMPILE_DEPRECATED_SOURCE_TARGET to the gradle.properties file to suppress this warning.
+警告: [options] 源值 8 已过时，将在未来发行版中删除
+警告: [options] 目标值 8 已过时，将在未来发行版中删除
+警告: [options] 要隐藏有关已过时选项的警告, 请使用 -Xlint:-options。
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+注: 某些输入文件使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+3 个警告
+
+> Task :flutter_tts:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_tts:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :fluttertoast:compileReleaseJavaWithJavac NO-SOURCE
+> Task :fluttertoast:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :geolocator_android:javaPreCompileRelease UP-TO-DATE
+> Task :flutter_webrtc:bundleLibCompileToJarRelease
+
+> Task :geolocator_android:compileReleaseJavaWithJavac
+Java compiler version 25 has deprecated support for compiling with source/target version 8.
+Try one of the following options:
+    1. [Recommended] Use Java toolchain with a lower language version
+    2. Set a higher source/target version
+    3. Use a lower version of the JDK running the build (if you're not using Java toolchain)
+For more details on how to configure these settings, see https://developer.android.com/build/jdks.
+To suppress this warning, set android.javaCompile.suppressSourceTargetDeprecationWarning=true in gradle.properties.
+Add android.sync.suppressAgpWarnings=JAVA_COMPILE_DEPRECATED_SOURCE_TARGET to the gradle.properties file to suppress this warning.
+警告: [options] 源值 8 已过时，将在未来发行版中删除
+警告: [options] 目标值 8 已过时，将在未来发行版中删除
+警告: [options] 要隐藏有关已过时选项的警告, 请使用 -Xlint:-options。
+3 个警告
+
+> Task :google_mlkit_commons:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :google_mlkit_commons:generateReleaseResources UP-TO-DATE
+> Task :geolocator_android:bundleLibCompileToJarRelease
+> Task :google_mlkit_commons:packageReleaseResources UP-TO-DATE
+> Task :google_mlkit_commons:parseReleaseLocalResources UP-TO-DATE
+> Task :google_mlkit_commons:generateReleaseRFile UP-TO-DATE
+
+> Task :flutter_callkit_incoming:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/Call.kt:392:24 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/Call.kt:394:24 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:143:26 'static field SCREEN_BRIGHT_WAKE_LOCK: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:143:66 'static field FULL_WAKE_LOCK: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:143:97 'static field ACQUIRE_CAUSES_WAKEUP: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:164:44 'static field FLAG_TRANSLUCENT_STATUS: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:165:55 'static field FLAG_TRANSLUCENT_NAVIGATION: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:169:30 'var systemUiVisibility: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:169:57 'static field SYSTEM_UI_FLAG_LAYOUT_STABLE: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:170:29 'static field SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:171:29 'static field SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:175:45 'static field FLAG_TRANSLUCENT_STATUS: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:176:55 'static field FLAG_TRANSLUCENT_NAVIGATION: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:178:20 'var statusBarColor: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:179:20 'var navigationBarColor: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:205:60 'static field FLAG_SHOW_WHEN_LOCKED: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:229:23 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:229:79 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:240:23 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:240:79 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:297:23 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:297:79 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingActivity.kt:430:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingBroadcastReceiver.kt:339:68 'static field ACTION_CLOSE_SYSTEM_DIALOGS: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitIncomingBroadcastReceiver.kt:406:29 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:121:34 'static field PRIORITY_LOW: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:142:34 'static field PRIORITY_LOW: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:265:30 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:265:86 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:317:26 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:317:82 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:397:22 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:397:78 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:508:26 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:508:82 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:543:26 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:543:82 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:571:26 'static field PRIORITY_HIGH: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:671:30 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:671:86 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:736:30 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:736:86 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:774:26 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:774:82 Unchecked cast of 'Serializable?' to 'HashMap<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:804:26 'static field PRIORITY_HIGH: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitNotificationManager.kt:1100:50 Identity equality for arguments of types 'Int' and 'Int' is deprecated.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitSoundPlayerManager.kt:110:46 'static field VIBRATOR_SERVICE: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitSoundPlayerManager.kt:125:27 'fun vibrate(p0: VibrationEffect!, p1: AudioAttributes!): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/CallkitSoundPlayerManager.kt:159:27 'var streamType: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/FlutterCallkitIncomingPlugin.kt:61:36 'fun getSerializable(p0: String?): Serializable?' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/FlutterCallkitIncomingPlugin.kt:312:41 Unchecked cast of 'Map<*, *>' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/FlutterCallkitIncomingPlugin.kt:324:41 Unchecked cast of 'Map<*, *>' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/FlutterCallkitIncomingPlugin.kt:416:41 Unchecked cast of 'Map<*, *>' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/InAppCallManager.kt:33:47 'static field CAPABILITY_SELF_MANAGED: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/TransparentActivity.kt:53:9 'fun overridePendingTransition(p0: Int, p1: Int): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/widgets/RippleRelativeLayout.kt:56:23 'fun getColor(p0: Int): Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_callkit_incoming-3.1.6/android/src/main/kotlin/com/hiennv/flutter_callkit_incoming/widgets/RippleRelativeLayout.kt:115:60 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Paint'.
+
+> Task :google_mlkit_commons:javaPreCompileRelease UP-TO-DATE
+> Task :google_mlkit_face_detection:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :google_mlkit_face_detection:generateReleaseResources UP-TO-DATE
+> Task :google_mlkit_face_detection:packageReleaseResources UP-TO-DATE
+> Task :google_mlkit_face_detection:parseReleaseLocalResources UP-TO-DATE
+> Task :google_mlkit_face_detection:generateReleaseRFile UP-TO-DATE
+> Task :google_mlkit_face_detection:javaPreCompileRelease UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :google_mlkit_selfie_segmentation:generateReleaseResources UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:packageReleaseResources UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:parseReleaseLocalResources UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:generateReleaseRFile UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:javaPreCompileRelease UP-TO-DATE
+> Task :google_mlkit_text_recognition:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :google_mlkit_text_recognition:generateReleaseResources UP-TO-DATE
+> Task :google_mlkit_text_recognition:packageReleaseResources UP-TO-DATE
+> Task :google_mlkit_text_recognition:parseReleaseLocalResources UP-TO-DATE
+> Task :google_mlkit_text_recognition:generateReleaseRFile UP-TO-DATE
+> Task :google_mlkit_text_recognition:javaPreCompileRelease UP-TO-DATE
+> Task :google_mlkit_translation:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :google_mlkit_translation:generateReleaseResources UP-TO-DATE
+> Task :google_mlkit_translation:packageReleaseResources UP-TO-DATE
+> Task :google_mlkit_translation:parseReleaseLocalResources UP-TO-DATE
+> Task :google_mlkit_translation:generateReleaseRFile UP-TO-DATE
+> Task :google_mlkit_translation:javaPreCompileRelease UP-TO-DATE
+> Task :google_sign_in_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :google_sign_in_android:generateReleaseResources UP-TO-DATE
+> Task :google_sign_in_android:packageReleaseResources UP-TO-DATE
+> Task :google_sign_in_android:parseReleaseLocalResources UP-TO-DATE
+> Task :google_sign_in_android:generateReleaseRFile UP-TO-DATE
+
+> Task :fluwx:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:15:27 'class Fragment : Any, ComponentCallbacks2, View.OnCreateContextMenuListener' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:15:38 'constructor(): Fragment' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:20:30 'fun requestPermissions(p0: Array<(out) String!>, p1: Int): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:24:26 'val fragmentManager: FragmentManager!' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:24:42 'fun beginTransaction(): FragmentTransaction!' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:25:20 'fun add(p0: Fragment!, p1: String!): FragmentTransaction!' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:27:24 'fun commitNow(): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:29:24 'fun commit(): Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:32:30 'fun requestPermissions(p0: Array<(out) String!>, p1: Int): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:38:47 'val fragmentManager: FragmentManager!' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/handlers/PermissionHandler.kt:38:64 'fun findFragmentByTag(p0: String!): Fragment!' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/io/WeChatFiles.kt:91:42 Condition is always 'true'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/fluwx-5.7.7/android/src/main/kotlin/com/jarvan/fluwx/utils/FluwxExtensions.kt:50:9 'fun <T : Parcelable!> getParcelableExtra(p0: String!): T?' is deprecated. Deprecated in Java.
+
+> Task :flutter_callkit_incoming:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_callkit_incoming:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :google_sign_in_android:javaPreCompileRelease UP-TO-DATE
+> Task :image_picker_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :image_picker_android:generateReleaseResources UP-TO-DATE
+> Task :image_picker_android:packageReleaseResources UP-TO-DATE
+> Task :image_picker_android:parseReleaseLocalResources UP-TO-DATE
+> Task :image_picker_android:generateReleaseRFile UP-TO-DATE
+
+> Task :google_mlkit_commons:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/google_mlkit_commons-0.13.0/android/src/main/kotlin/com/google_mlkit_commons/InputImageConverter.kt:52:64 Java type mismatch: inferred type is 'String?', but 'String' was expected.
+
+> Task :fluwx:compileReleaseJavaWithJavac
+> Task :fluwx:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :google_mlkit_commons:compileReleaseJavaWithJavac NO-SOURCE
+> Task :google_mlkit_commons:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :image_picker_android:javaPreCompileRelease UP-TO-DATE
+> Task :in_app_purchase_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :in_app_purchase_android:generateReleaseBuildConfig UP-TO-DATE
+> Task :in_app_purchase_android:generateReleaseResources UP-TO-DATE
+> Task :in_app_purchase_android:packageReleaseResources UP-TO-DATE
+> Task :in_app_purchase_android:parseReleaseLocalResources UP-TO-DATE
+> Task :in_app_purchase_android:generateReleaseRFile UP-TO-DATE
+> Task :in_app_purchase_android:javaPreCompileRelease UP-TO-DATE
+> Task :jni:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :jni:generateReleaseResources UP-TO-DATE
+> Task :jni:packageReleaseResources UP-TO-DATE
+> Task :jni:parseReleaseLocalResources UP-TO-DATE
+> Task :jni:generateReleaseRFile UP-TO-DATE
+> Task :jni:compileReleaseKotlin NO-SOURCE
+> Task :jni:javaPreCompileRelease UP-TO-DATE
+> Task :google_sign_in_android:compileReleaseKotlin
+> Task :jni:compileReleaseJavaWithJavac
+> Task :google_mlkit_face_detection:compileReleaseKotlin
+> Task :google_mlkit_translation:compileReleaseKotlin
+> Task :google_mlkit_selfie_segmentation:compileReleaseKotlin
+> Task :google_mlkit_text_recognition:compileReleaseKotlin
+> Task :image_picker_android:compileReleaseKotlin
+
+> Task :flutter_contacts:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/contact/RawContactInfo.kt:14:49 Unchecked cast of 'Any?' to 'Map<String, Any?>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:11:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:11:16 'static field PROTOCOL_AIM: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:12:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:12:16 'static field PROTOCOL_GOOGLE_TALK: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:13:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:13:16 'static field PROTOCOL_ICQ: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:14:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:14:16 'static field PROTOCOL_JABBER: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:15:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:15:16 'static field PROTOCOL_MSN: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:16:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:16:16 'static field PROTOCOL_NETMEETING: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:17:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:17:16 'static field PROTOCOL_QQ: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:18:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:18:16 'static field PROTOCOL_SKYPE: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:19:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:19:16 'static field PROTOCOL_YAHOO: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:24:22 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:24:25 'static field PROTOCOL_AIM: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:25:29 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:25:32 'static field PROTOCOL_GOOGLE_TALK: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:26:22 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:26:25 'static field PROTOCOL_ICQ: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:27:25 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:27:28 'static field PROTOCOL_JABBER: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:28:22 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:28:25 'static field PROTOCOL_MSN: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:29:29 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:29:32 'static field PROTOCOL_NETMEETING: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:30:21 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:30:24 'static field PROTOCOL_QQ: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:31:24 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:31:27 'static field PROTOCOL_SKYPE: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:32:24 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:32:27 'static field PROTOCOL_YAHOO: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:33:25 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:33:28 'static field PROTOCOL_CUSTOM: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:37:44 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:37:47 'static field PROTOCOL: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:37:60 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:37:63 'static field PROTOCOL_CUSTOM: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:38:53 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:38:56 'static field CUSTOM_PROTOCOL: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:43:13 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:43:16 'static field PROTOCOL_CUSTOM: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:51:96 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/models/labels/SocialMediaLabel.kt:51:99 'static field PROTOCOL_CUSTOM: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/AccountUtils.kt:353:49 Unnecessary safe call on a non-null receiver of type 'ContactsContract.RawContacts.DefaultAccount.DefaultAccountAndState'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactCursorProcessor.kt:86:29 'class Im : Any, ContactsContract.CommonDataKinds.CommonColumns, ContactsContract.DataColumnsWithJoins' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactCursorProcessor.kt:86:32 'static field CONTENT_ITEM_TYPE: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactFetcher.kt:431:50 Elvis operator (?:) always returns the left operand of non-nullable type 'String'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactFetcher.kt:461:55 Unnecessary non-null assertion (!!) on a non-null receiver of type 'String'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactFetcher.kt:463:81 Unnecessary non-null assertion (!!) on a non-null receiver of type 'String'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactFetcher.kt:465:80 Unnecessary non-null assertion (!!) on a non-null receiver of type 'String'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/crud/utils/ContactFilterUtils.kt:125:38 Unchecked cast of 'Any?' to 'List<String>'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/flutter_contacts-2.5.0/android/src/main/kotlin/co/quis/flutter_contacts/groups/models/Group.kt:13:47 Unchecked cast of 'Any?' to 'Map<String, Any?>'.
+
+> Task :google_sign_in_android:compileReleaseJavaWithJavac
+> Task :google_mlkit_face_detection:compileReleaseJavaWithJavac NO-SOURCE
+> Task :google_mlkit_face_detection:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :google_mlkit_selfie_segmentation:compileReleaseJavaWithJavac NO-SOURCE
+> Task :google_mlkit_selfie_segmentation:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :google_mlkit_text_recognition:compileReleaseJavaWithJavac NO-SOURCE
+> Task :google_mlkit_text_recognition:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :google_mlkit_translation:compileReleaseJavaWithJavac NO-SOURCE
+> Task :google_mlkit_translation:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :google_sign_in_android:bundleLibCompileToJarRelease
+> Task :image_picker_android:compileReleaseJavaWithJavac
+> Task :flutter_contacts:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_contacts:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :jni:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :jni_flutter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :jni_flutter:generateReleaseResources UP-TO-DATE
+> Task :image_picker_android:bundleLibCompileToJarRelease
+> Task :jni_flutter:packageReleaseResources UP-TO-DATE
+> Task :jni_flutter:parseReleaseLocalResources UP-TO-DATE
+> Task :jni_flutter:generateReleaseRFile UP-TO-DATE
+> Task :jni_flutter:compileReleaseKotlin NO-SOURCE
+> Task :jni_flutter:javaPreCompileRelease UP-TO-DATE
+
+> Task :background_downloader:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/background_downloader-9.5.9/android/src/main/kotlin/com/bbflight/background_downloader/Models.kt:32:1 Custom serializer 'BaseDirectorySerializer' is private, while the type 'BaseDirectory' is not. This can cause 'serializer not found' errors on use sites. Consider aligning the visibilities.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/background_downloader-9.5.9/android/src/main/kotlin/com/bbflight/background_downloader/Models.kt:48:1 Custom serializer 'UpdatesSerializer' is private, while the type 'Updates' is not. This can cause 'serializer not found' errors on use sites. Consider aligning the visibilities.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/background_downloader-9.5.9/android/src/main/kotlin/com/bbflight/background_downloader/Models.kt:377:1 Custom serializer 'TaskStatusSerializer' is private, while the type 'TaskStatus' is not. This can cause 'serializer not found' errors on use sites. Consider aligning the visibilities.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/background_downloader-9.5.9/android/src/main/kotlin/com/bbflight/background_downloader/UIDTJobService.kt:113:33 Unnecessary safe call on a non-null receiver of type 'PersistableBundle'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/background_downloader-9.5.9/android/src/main/kotlin/com/bbflight/background_downloader/UIDTJobService.kt:117:33 Unnecessary safe call on a non-null receiver of type 'PersistableBundle'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/background_downloader-9.5.9/android/src/main/kotlin/com/bbflight/background_downloader/UriUtils.kt:991:9 'when' is exhaustive so 'else' is redundant here.
+
+> Task :jni_flutter:compileReleaseJavaWithJavac
+> Task :jni_flutter:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :livekit_client:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :livekit_client:generateReleaseResources UP-TO-DATE
+> Task :livekit_client:packageReleaseResources UP-TO-DATE
+> Task :livekit_client:parseReleaseLocalResources UP-TO-DATE
+> Task :livekit_client:generateReleaseRFile UP-TO-DATE
+> Task :background_downloader:compileReleaseJavaWithJavac NO-SOURCE
+> Task :background_downloader:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :livekit_client:javaPreCompileRelease UP-TO-DATE
+> Task :local_auth_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :local_auth_android:generateReleaseResources UP-TO-DATE
+> Task :local_auth_android:packageReleaseResources UP-TO-DATE
+> Task :local_auth_android:parseReleaseLocalResources UP-TO-DATE
+> Task :local_auth_android:generateReleaseRFile UP-TO-DATE
+> Task :local_auth_android:javaPreCompileRelease UP-TO-DATE
+> Task :mobile_scanner:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :mobile_scanner:generateReleaseResources UP-TO-DATE
+> Task :mobile_scanner:packageReleaseResources UP-TO-DATE
+> Task :mobile_scanner:parseReleaseLocalResources UP-TO-DATE
+> Task :mobile_scanner:generateReleaseRFile UP-TO-DATE
+> Task :mobile_scanner:javaPreCompileRelease UP-TO-DATE
+> Task :open_filex:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :open_filex:generateReleaseResources UP-TO-DATE
+> Task :open_filex:packageReleaseResources UP-TO-DATE
+> Task :open_filex:parseReleaseLocalResources UP-TO-DATE
+> Task :open_filex:generateReleaseRFile UP-TO-DATE
+> Task :open_filex:compileReleaseKotlin NO-SOURCE
+> Task :open_filex:javaPreCompileRelease UP-TO-DATE
+> Task :open_filex:compileReleaseJavaWithJavac
+> Task :open_filex:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :package_info_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :package_info_plus:generateReleaseResources UP-TO-DATE
+> Task :package_info_plus:packageReleaseResources UP-TO-DATE
+> Task :package_info_plus:parseReleaseLocalResources UP-TO-DATE
+> Task :package_info_plus:generateReleaseRFile UP-TO-DATE
+> Task :package_info_plus:javaPreCompileRelease UP-TO-DATE
+> Task :pdfx:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pdfx:generateReleaseResources UP-TO-DATE
+> Task :pdfx:packageReleaseResources UP-TO-DATE
+> Task :pdfx:parseReleaseLocalResources UP-TO-DATE
+> Task :pdfx:generateReleaseRFile UP-TO-DATE
+> Task :in_app_purchase_android:compileReleaseKotlin
+> Task :local_auth_android:compileReleaseKotlin
+> Task :in_app_purchase_android:compileReleaseJavaWithJavac
+> Task :local_auth_android:compileReleaseJavaWithJavac NO-SOURCE
+> Task :local_auth_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :pdfx:javaPreCompileRelease UP-TO-DATE
+> Task :permission_handler_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :permission_handler_android:generateReleaseResources UP-TO-DATE
+> Task :in_app_purchase_android:bundleLibCompileToJarRelease
+> Task :permission_handler_android:packageReleaseResources UP-TO-DATE
+> Task :permission_handler_android:parseReleaseLocalResources UP-TO-DATE
+> Task :permission_handler_android:generateReleaseRFile UP-TO-DATE
+> Task :permission_handler_android:compileReleaseKotlin NO-SOURCE
+> Task :package_info_plus:compileReleaseKotlin
+> Task :permission_handler_android:javaPreCompileRelease UP-TO-DATE
+> Task :package_info_plus:compileReleaseJavaWithJavac NO-SOURCE
+> Task :package_info_plus:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :livekit_client:compileReleaseKotlin
+> Task :permission_handler_android:compileReleaseJavaWithJavac
+> Task :livekit_client:compileReleaseJavaWithJavac NO-SOURCE
+> Task :livekit_client:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :permission_handler_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :photo_manager:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :photo_manager:generateReleaseResources UP-TO-DATE
+> Task :photo_manager:packageReleaseResources UP-TO-DATE
+> Task :photo_manager:parseReleaseLocalResources UP-TO-DATE
+> Task :photo_manager:generateReleaseRFile UP-TO-DATE
+> Task :photo_manager:javaPreCompileRelease UP-TO-DATE
+> Task :pro_image_editor:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pro_image_editor:generateReleaseResources UP-TO-DATE
+> Task :pro_image_editor:packageReleaseResources UP-TO-DATE
+> Task :pro_image_editor:parseReleaseLocalResources UP-TO-DATE
+> Task :pro_image_editor:generateReleaseRFile UP-TO-DATE
+> Task :pro_image_editor:javaPreCompileRelease UP-TO-DATE
+> Task :quick_actions_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :quick_actions_android:generateReleaseResources UP-TO-DATE
+> Task :quick_actions_android:packageReleaseResources UP-TO-DATE
+> Task :quick_actions_android:parseReleaseLocalResources UP-TO-DATE
+> Task :quick_actions_android:generateReleaseRFile UP-TO-DATE
+> Task :quick_actions_android:javaPreCompileRelease UP-TO-DATE
+> Task :record_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :record_android:generateReleaseResources UP-TO-DATE
+> Task :record_android:packageReleaseResources UP-TO-DATE
+> Task :record_android:parseReleaseLocalResources UP-TO-DATE
+> Task :record_android:generateReleaseRFile UP-TO-DATE
+> Task :pro_image_editor:compileReleaseKotlin
+
+> Task :pdfx:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/pdfx-2.11.0/android/src/main/kotlin/io/scer/pdfx/utils/CompressFormats.kt:9:36 'enum entry WEBP: Bitmap.CompressFormat' is deprecated. Deprecated in Java.
+
+> Task :flutter_gemma:compileReleaseKotlin
+> Task :flutter_gemma:compileReleaseJavaWithJavac NO-SOURCE
+> Task :flutter_gemma:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :mobile_scanner:compileReleaseKotlin
+> Task :pdfx:compileReleaseJavaWithJavac
+> Task :mobile_scanner:compileReleaseJavaWithJavac NO-SOURCE
+> Task :mobile_scanner:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :pro_image_editor:compileReleaseJavaWithJavac NO-SOURCE
+> Task :pro_image_editor:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :pdfx:bundleLibCompileToJarRelease
+> Task :record_android:javaPreCompileRelease UP-TO-DATE
+> Task :saver_gallery:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :saver_gallery:generateReleaseResources UP-TO-DATE
+> Task :saver_gallery:packageReleaseResources UP-TO-DATE
+> Task :saver_gallery:parseReleaseLocalResources UP-TO-DATE
+> Task :saver_gallery:generateReleaseRFile UP-TO-DATE
+> Task :quick_actions_android:compileReleaseKotlin
+> Task :quick_actions_android:compileReleaseJavaWithJavac
+> Task :quick_actions_android:bundleLibCompileToJarRelease
+> Task :saver_gallery:javaPreCompileRelease UP-TO-DATE
+> Task :share_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :share_plus:generateReleaseResources UP-TO-DATE
+> Task :share_plus:packageReleaseResources UP-TO-DATE
+> Task :share_plus:parseReleaseLocalResources UP-TO-DATE
+> Task :share_plus:generateReleaseRFile UP-TO-DATE
+> Task :share_plus:javaPreCompileRelease UP-TO-DATE
+> Task :shared_preferences_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :shared_preferences_android:generateReleaseResources UP-TO-DATE
+> Task :shared_preferences_android:packageReleaseResources UP-TO-DATE
+> Task :shared_preferences_android:parseReleaseLocalResources UP-TO-DATE
+> Task :shared_preferences_android:generateReleaseRFile UP-TO-DATE
+> Task :shared_preferences_android:javaPreCompileRelease UP-TO-DATE
+> Task :sign_in_with_apple:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :sign_in_with_apple:generateReleaseResources UP-TO-DATE
+> Task :sign_in_with_apple:packageReleaseResources UP-TO-DATE
+> Task :sign_in_with_apple:parseReleaseLocalResources UP-TO-DATE
+> Task :sign_in_with_apple:generateReleaseRFile UP-TO-DATE
+> Task :sign_in_with_apple:javaPreCompileRelease UP-TO-DATE
+> Task :sqflite_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :sqflite_android:generateReleaseResources UP-TO-DATE
+> Task :sqflite_android:packageReleaseResources UP-TO-DATE
+> Task :sqflite_android:parseReleaseLocalResources UP-TO-DATE
+> Task :sqflite_android:generateReleaseRFile UP-TO-DATE
+> Task :sqflite_android:compileReleaseKotlin NO-SOURCE
+> Task :sqflite_android:javaPreCompileRelease UP-TO-DATE
+> Task :sqflite_android:compileReleaseJavaWithJavac
+> Task :sqflite_sqlcipher:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :sqflite_sqlcipher:generateReleaseResources UP-TO-DATE
+> Task :sqflite_sqlcipher:packageReleaseResources UP-TO-DATE
+> Task :sqflite_android:bundleLibCompileToJarRelease
+> Task :sqflite_sqlcipher:parseReleaseLocalResources UP-TO-DATE
+> Task :sqflite_sqlcipher:generateReleaseRFile UP-TO-DATE
+
+> Task :saver_gallery:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/saver_gallery-4.1.2/android/src/main/kotlin/com/mhz/savegallery/saver_gallery/SaverDelegateDefault.kt:45:9 The corresponding parameter in the supertype 'SaverDelegate' is named 'image'. This may cause problems when calling this function with named arguments.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/saver_gallery-4.1.2/android/src/main/kotlin/com/mhz/savegallery/saver_gallery/SaverDelegateDefault.kt:341:45 'static field ACTION_MEDIA_SCANNER_SCAN_FILE: String' is deprecated. Deprecated in Java.
+
+> Task :sqflite_sqlcipher:compileReleaseKotlin NO-SOURCE
+> Task :saver_gallery:compileReleaseJavaWithJavac NO-SOURCE
+> Task :saver_gallery:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :sqflite_sqlcipher:javaPreCompileRelease UP-TO-DATE
+> Task :share_plus:compileReleaseKotlin
+> Task :sign_in_with_apple:compileReleaseKotlin
+> Task :sqflite_sqlcipher:compileReleaseJavaWithJavac
+> Task :share_plus:compileReleaseJavaWithJavac NO-SOURCE
+> Task :share_plus:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :sign_in_with_apple:compileReleaseJavaWithJavac NO-SOURCE
+> Task :sign_in_with_apple:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :twitter_login:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :twitter_login:generateReleaseResources UP-TO-DATE
+> Task :sqflite_sqlcipher:bundleLibCompileToJarRelease
+> Task :twitter_login:packageReleaseResources UP-TO-DATE
+> Task :twitter_login:parseReleaseLocalResources UP-TO-DATE
+> Task :twitter_login:generateReleaseRFile UP-TO-DATE
+> Task :twitter_login:javaPreCompileRelease UP-TO-DATE
+> Task :url_launcher_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :url_launcher_android:generateReleaseBuildConfig UP-TO-DATE
+> Task :url_launcher_android:generateReleaseResources UP-TO-DATE
+> Task :url_launcher_android:packageReleaseResources UP-TO-DATE
+> Task :url_launcher_android:parseReleaseLocalResources UP-TO-DATE
+
+> Task :record_android:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/record_android-1.5.2/android/src/main/kotlin/com/llfbandit/record/record/bluetooth/BluetoothReceiver.kt:29:35 'static field ACTION_SCO_AUDIO_STATE_UPDATED: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/record_android-1.5.2/android/src/main/kotlin/com/llfbandit/record/record/bluetooth/BluetoothReceiver.kt:92:49 'static field EXTRA_SCO_AUDIO_STATE: String' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/record_android-1.5.2/android/src/main/kotlin/com/llfbandit/record/record/bluetooth/BluetoothReceiver.kt:94:20 'static field SCO_AUDIO_STATE_CONNECTED: Int' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/record_android-1.5.2/android/src/main/kotlin/com/llfbandit/record/record/bluetooth/BluetoothReceiver.kt:95:20 'static field SCO_AUDIO_STATE_DISCONNECTED: Int' is deprecated. Deprecated in Java.
+
+> Task :url_launcher_android:generateReleaseRFile UP-TO-DATE
+> Task :record_android:compileReleaseJavaWithJavac NO-SOURCE
+> Task :record_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :url_launcher_android:javaPreCompileRelease UP-TO-DATE
+> Task :video_compress:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :video_compress:generateReleaseResources UP-TO-DATE
+> Task :video_compress:packageReleaseResources UP-TO-DATE
+> Task :video_compress:parseReleaseLocalResources UP-TO-DATE
+> Task :video_compress:generateReleaseRFile UP-TO-DATE
+> Task :video_compress:javaPreCompileRelease UP-TO-DATE
+> Task :video_player_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :video_player_android:generateReleaseResources UP-TO-DATE
+> Task :video_player_android:packageReleaseResources UP-TO-DATE
+> Task :video_player_android:parseReleaseLocalResources UP-TO-DATE
+> Task :video_player_android:generateReleaseRFile UP-TO-DATE
+> Task :twitter_login:compileReleaseKotlin
+> Task :photo_manager:compileReleaseKotlin
+> Task :photo_manager:compileReleaseJavaWithJavac NO-SOURCE
+> Task :photo_manager:bundleLibCompileToJarRelease UP-TO-DATE
+
+> Task :shared_preferences_android:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.28/android/src/main/kotlin/io/flutter/plugins/sharedpreferences/SharedPreferencesPlugin.kt:450:52 Unnecessary non-null assertion (!!) on a non-null receiver of type 'String'.
+
+> Task :url_launcher_android:compileReleaseKotlin
+
+> Task :twitter_login:compileReleaseJavaWithJavac
+Java compiler version 25 has deprecated support for compiling with source/target version 8.
+Try one of the following options:
+    1. [Recommended] Use Java toolchain with a lower language version
+    2. Set a higher source/target version
+    3. Use a lower version of the JDK running the build (if you're not using Java toolchain)
+For more details on how to configure these settings, see https://developer.android.com/build/jdks.
+To suppress this warning, set android.javaCompile.suppressSourceTargetDeprecationWarning=true in gradle.properties.
+Add android.sync.suppressAgpWarnings=JAVA_COMPILE_DEPRECATED_SOURCE_TARGET to the gradle.properties file to suppress this warning.
+警告: [options] 源值 8 已过时，将在未来发行版中删除
+警告: [options] 目标值 8 已过时，将在未来发行版中删除
+警告: [options] 要隐藏有关已过时选项的警告, 请使用 -Xlint:-options。
+3 个警告
+
+> Task :shared_preferences_android:compileReleaseJavaWithJavac NO-SOURCE
+> Task :shared_preferences_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :twitter_login:bundleLibCompileToJarRelease
+
+> Task :video_compress:compileReleaseKotlin
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/video_compress-3.1.4/android/src/main/kotlin/com/example/video_compress/Utility.kt:45:49 Java type mismatch: inferred type is 'String?', but 'String' was expected.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/video_compress-3.1.4/android/src/main/kotlin/com/example/video_compress/Utility.kt:46:46 Java type mismatch: inferred type is 'String?', but 'String' was expected.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/video_compress-3.1.4/android/src/main/kotlin/com/example/video_compress/Utility.kt:47:47 Java type mismatch: inferred type is 'String?', but 'String' was expected.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/video_compress-3.1.4/android/src/main/kotlin/com/example/video_compress/Utility.kt:110:22 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Bitmap'.
+w: file:///Users/jieliu/.pub-cache/hosted/pub.dev/video_compress-3.1.4/android/src/main/kotlin/com/example/video_compress/VideoCompressPlugin.kt:148:59 Unnecessary non-null assertion (!!) on a non-null receiver of type 'String'.
+
+> Task :url_launcher_android:compileReleaseJavaWithJavac
+> Task :url_launcher_android:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :video_compress:compileReleaseJavaWithJavac NO-SOURCE
+> Task :video_compress:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :video_player_android:javaPreCompileRelease UP-TO-DATE
+> Task :video_thumbnail:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :video_thumbnail:generateReleaseResources UP-TO-DATE
+> Task :video_thumbnail:packageReleaseResources UP-TO-DATE
+> Task :video_thumbnail:parseReleaseLocalResources UP-TO-DATE
+> Task :video_thumbnail:generateReleaseRFile UP-TO-DATE
+> Task :video_thumbnail:compileReleaseKotlin NO-SOURCE
+> Task :video_thumbnail:javaPreCompileRelease UP-TO-DATE
+
+> Task :video_thumbnail:compileReleaseJavaWithJavac
+注: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/packages/video_thumbnail/android/src/main/java/xyz/justsoft/video_thumbnail/VideoThumbnailPlugin.java使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+注: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/packages/video_thumbnail/android/src/main/java/xyz/justsoft/video_thumbnail/VideoThumbnailPlugin.java使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+
+> Task :wakelock_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :wakelock_plus:generateReleaseResources UP-TO-DATE
+> Task :video_thumbnail:bundleLibCompileToJarRelease
+> Task :wakelock_plus:packageReleaseResources UP-TO-DATE
+> Task :wakelock_plus:parseReleaseLocalResources UP-TO-DATE
+> Task :wakelock_plus:generateReleaseRFile UP-TO-DATE
+> Task :wakelock_plus:javaPreCompileRelease UP-TO-DATE
+> Task :walletconnect_pay:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :walletconnect_pay:generateReleaseResources UP-TO-DATE
+> Task :walletconnect_pay:packageReleaseResources UP-TO-DATE
+> Task :walletconnect_pay:parseReleaseLocalResources UP-TO-DATE
+> Task :walletconnect_pay:generateReleaseRFile UP-TO-DATE
+> Task :walletconnect_pay:javaPreCompileRelease UP-TO-DATE
+> Task :web3auth_flutter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :web3auth_flutter:generateReleaseResources UP-TO-DATE
+> Task :web3auth_flutter:packageReleaseResources UP-TO-DATE
+> Task :web3auth_flutter:parseReleaseLocalResources UP-TO-DATE
+> Task :web3auth_flutter:generateReleaseRFile UP-TO-DATE
+> Task :web3auth_flutter:javaPreCompileRelease UP-TO-DATE
+> Task :webview_flutter_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :webview_flutter_android:generateReleaseResources UP-TO-DATE
+> Task :webview_flutter_android:packageReleaseResources UP-TO-DATE
+> Task :webview_flutter_android:parseReleaseLocalResources UP-TO-DATE
+> Task :webview_flutter_android:generateReleaseRFile UP-TO-DATE
+> Task :walletconnect_pay:compileReleaseKotlin
+> Task :walletconnect_pay:compileReleaseJavaWithJavac NO-SOURCE
+> Task :walletconnect_pay:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :webview_flutter_android:javaPreCompileRelease UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :wakelock_plus:compileReleaseKotlin
+> Task :wakelock_plus:compileReleaseJavaWithJavac NO-SOURCE
+> Task :wakelock_plus:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :video_player_android:compileReleaseKotlin
+> Task :web3auth_flutter:compileReleaseKotlin
+> Task :video_player_android:compileReleaseJavaWithJavac
+> Task :web3auth_flutter:compileReleaseJavaWithJavac NO-SOURCE
+> Task :web3auth_flutter:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :video_player_android:bundleLibCompileToJarRelease
+> Task :webview_flutter_android:compileReleaseKotlin
+> Task :webview_flutter_android:compileReleaseJavaWithJavac
+> Task :webview_flutter_android:bundleLibCompileToJarRelease
+
+> Task :app:compileReleaseKotlin
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/MainActivity.kt:83:75 Unnecessary safe call on a non-null receiver of type 'Map<*, *>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/MainActivity.kt:84:75 Unnecessary safe call on a non-null receiver of type 'Map<*, *>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/MainActivity.kt:85:72 Unnecessary safe call on a non-null receiver of type 'Map<*, *>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/TrustdartPlugin.kt:212:43 Unchecked cast of 'Any!' to 'Map<String, *>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/TrustdartPlugin.kt:290:9 'static fun startActivity(p0: Context, p1: Intent, p2: Bundle?): Unit' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/KeyManagementHandler.kt:297:13 Condition is always 'false'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/MiningHandler.kt:41:35 Unchecked cast of 'Any!' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/MiningHandler.kt:63:35 Unchecked cast of 'Any!' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/MiningHandler.kt:92:35 Unchecked cast of 'Any!' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:377:56 Unchecked cast of 'Any?' to 'Map<String, Any>?'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:378:54 Unchecked cast of 'Any?' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:379:57 Unchecked cast of 'Any?' to 'Map<String, Any>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:869:88 Unchecked cast of 'Any?' to 'Map<String, String>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:891:95 Unchecked cast of 'Any?' to 'Map<String, String>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:917:95 Unchecked cast of 'Any?' to 'Map<String, String>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:958:90 Unchecked cast of 'Any?' to 'Map<String, String>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:980:60 Unchecked cast of 'Any?' to 'List<Map<String, Any>>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:1020:60 Unchecked cast of 'Any?' to 'List<Map<String, Any>>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:1087:60 Unchecked cast of 'Any?' to 'List<Map<String, Any>>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:1280:60 Unchecked cast of 'Any?' to 'List<Map<String, Any>>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt:1517:61 Unchecked cast of 'Any?' to 'List<Map<String, Any>>'.
+
+> Task :app:compileReleaseJavaWithJavac
+
+[Incubating] Problems report is available at: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2m 28s
+625 actionable tasks: 106 executed, 519 up-to-date
+exit=0

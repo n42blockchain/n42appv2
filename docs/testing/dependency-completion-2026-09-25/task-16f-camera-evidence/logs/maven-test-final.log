@@ -1,0 +1,9 @@
+test_candidate_hash_mismatch_is_rejected_before_official_inputs (test.scripts.test_camera_core_maven.CameraCoreMavenTest) ... ok
+test_missing_api_or_runtime_variant_is_rejected (test.scripts.test_camera_core_maven.CameraCoreMavenTest) ... ok
+test_missing_candidate_member_is_rejected (test.scripts.test_camera_core_maven.CameraCoreMavenTest) ... ok
+test_only_surface_members_change_and_both_aar_variants_are_rehashed (test.scripts.test_camera_core_maven.CameraCoreMavenTest) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.017s
+
+OK

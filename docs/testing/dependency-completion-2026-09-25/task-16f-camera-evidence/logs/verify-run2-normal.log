@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "baseline": {
+    "package": "ai.n42.fixture.camera.baseline",
+    "apk_sha256": "31132b7641236c1a659e140e97380d209a3d1125e28140bf2647104164d9b33b",
+    "member_sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+    "member_data_offset": 1359872,
+    "executable_load_maps": [
+      [
+        1359872,
+        16384
+      ]
+    ],
+    "pid": 14562,
+    "nonce": "4db382c3-bbd8-4970-b002-836c36074a38",
+    "format": 1,
+    "width": 321,
+    "height": 247
+  },
+  "candidate": {
+    "package": "ai.n42.fixture.camera.candidate",
+    "apk_sha256": "147e8d2e9b293f36affdc9b65f0f4c1ec36122d467671c115eca8a61deebc9ed",
+    "member_sha256": "320168d04f1bd40d8200d00e20e982aabc1c3f343958007268fc86437ae27ad7",
+    "member_data_offset": 1359872,
+    "executable_load_maps": [
+      [
+        1359872,
+        16384
+      ]
+    ],
+    "pid": 14683,
+    "nonce": "cd3344db-5f96-4497-8974-22fa9d9e23fa",
+    "format": 1,
+    "width": 321,
+    "height": 247
+  }
+}
+exit=0
