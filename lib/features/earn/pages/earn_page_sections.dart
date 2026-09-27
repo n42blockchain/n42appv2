@@ -130,13 +130,7 @@ mixin EarnPageSectionsMixin
                   subtitle: S.of(context).g_key_earn_daily_bonus,
                   icon: Icons.workspace_premium_rounded,
                   gradientColors: const [Color(0xFF1565C0), Color(0xFFF9A825)],
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          LoyaltyHomePage(walletAddress: walletAddress),
-                    ),
-                  ),
+                  onTap: () => openLoyaltyWalletPage(context, ref),
                 ),
                 SizedBox(width: AppSpacing.space4),
               ],

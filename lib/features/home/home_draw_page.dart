@@ -188,15 +188,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                         "assets/home/tabbar/earn.png",
                         S.of(context).g_key_loyalty_title,
                         automationKey: const ValueKey<String>('drawer_loyalty'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  LoyaltyHomePage(walletAddress: walletAddress),
-                            ),
-                          );
-                        },
+                        onTap: () => openLoyaltyWalletPage(context, ref),
                       ),
                       _menuItem(
                         "assets/home/money.png",

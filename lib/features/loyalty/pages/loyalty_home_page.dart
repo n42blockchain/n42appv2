@@ -2,11 +2,53 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/setting_share.dart';
 import 'package:n42_wallet/features/loyalty/models/loyalty_models.dart';
 import 'package:n42_wallet/features/loyalty/services/loyalty_service.dart';
+import 'package:n42_wallet/features/loyalty/loyalty_wallet_address.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+
+void openLoyaltyWalletPage(
+  BuildContext context,
+  WidgetRef ref, {
+  LoyaltyService? service,
+}) {
+  final ownerUuid = ref.read(currentUserProvider)?.uuid;
+  Navigator.push(
+    context,
+    MaterialPageRoute<void>(
+      builder: (_) => LoyaltyWalletPage(ownerUuid: ownerUuid, service: service),
+    ),
+  );
+}
+
+/// Keeps an open loyalty route bound to the user who opened it while following
+/// that user's selected wallet. A changed auth owner gets an empty address.
+class LoyaltyWalletPage extends ConsumerWidget {
+  const LoyaltyWalletPage({super.key, required this.ownerUuid, this.service});
+
+  final String? ownerUuid;
+  final LoyaltyService? service;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final routeOwnerUuid = ownerUuid;
+    final currentUuid = ref.watch(currentUserProvider)?.uuid;
+    final wallet = ref.watch(wapBridgeProvider);
+    return LoyaltyHomePage(
+      walletAddress: routeOwnerUuid != null &&
+              routeOwnerUuid.isNotEmpty &&
+              currentUuid == routeOwnerUuid
+          ? selectLoyaltyWalletAddress(wallet.coinList)
+          : '',
+      service: service,
+    );
+  }
+}
 
 class LoyaltyHomePage extends StatefulWidget {
   const LoyaltyHomePage({super.key, required this.walletAddress, this.service});
@@ -25,10 +67,23 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
   bool _loading = true;
   bool _checkingIn = false;
   String? _error;
+  int _accountGeneration = 0;
+  int _loadGeneration = 0;
 
   @override
   void initState() {
     super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant LoyaltyHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.walletAddress == widget.walletAddress) return;
+    _accountGeneration++;
+    _snapshot = null;
+    _error = null;
+    _checkingIn = false;
     _load();
   }
 
@@ -39,7 +94,10 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
   }
 
   Future<void> _load() async {
-    if (widget.walletAddress.trim().isEmpty) {
+    final walletAddress = widget.walletAddress.trim();
+    final accountGeneration = _accountGeneration;
+    final loadGeneration = ++_loadGeneration;
+    if (walletAddress.isEmpty) {
       setState(() {
         _loading = false;
         // _load 由 initState 调起，此处不能用 S.of(context)（会触发
@@ -53,21 +111,35 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
       _error = null;
     });
     try {
-      final snapshot = await _service.load(widget.walletAddress);
-      if (mounted) setState(() => _snapshot = snapshot);
+      final snapshot = await _service.load(walletAddress);
+      if (_ownsLoad(accountGeneration, loadGeneration)) {
+        setState(() => _snapshot = snapshot);
+      }
     } catch (error) {
-      if (mounted) setState(() => _error = error.toString());
+      if (_ownsLoad(accountGeneration, loadGeneration)) {
+        setState(() => _error = error.toString());
+      }
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (_ownsLoad(accountGeneration, loadGeneration)) {
+        setState(() => _loading = false);
+      }
     }
   }
 
+  bool _ownsLoad(int accountGeneration, int loadGeneration) =>
+      mounted &&
+      accountGeneration == _accountGeneration &&
+      loadGeneration == _loadGeneration;
+
   Future<void> _checkIn() async {
     if (_checkingIn || _snapshot?.checkedInToday == true) return;
+    final walletAddress = widget.walletAddress.trim();
+    if (walletAddress.isEmpty) return;
+    final accountGeneration = _accountGeneration;
     setState(() => _checkingIn = true);
     try {
-      final result = await _service.checkIn(widget.walletAddress);
-      if (!mounted) return;
+      final result = await _service.checkIn(walletAddress);
+      if (!mounted || accountGeneration != _accountGeneration) return;
       final tx = result.transactionHash;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -85,7 +157,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
       );
       await _load();
     } catch (error) {
-      if (!mounted) return;
+      if (!mounted || accountGeneration != _accountGeneration) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -94,14 +166,16 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
         ),
       );
     } finally {
-      if (mounted) setState(() => _checkingIn = false);
+      if (mounted && accountGeneration == _accountGeneration) {
+        setState(() => _checkingIn = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).g_key_loyalty_title),
@@ -149,7 +223,6 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
             Tab(text: S.of(context).g_key_loyalty_referral),
             Tab(text: S.of(context).g_key_loyalty_history),
             Tab(text: S.of(context).g_key_loyalty_leaderboard),
-            Tab(text: S.of(context).g_key_loyalty_rewards),
           ],
         ),
         Expanded(
@@ -159,7 +232,6 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
               _ReferralsList(referrals: snapshot.referrals),
               _HistoryList(history: snapshot.history),
               _LeaderboardList(entries: snapshot.leaderboard),
-              _RewardsList(rewards: snapshot.rewards),
             ],
           ),
         ),
@@ -386,9 +458,8 @@ class _HistoryList extends StatelessWidget {
           subtitle: item.createdAt == null
               ? null
               : Text(
-                  MaterialLocalizations.of(
-                    context,
-                  ).formatMediumDate(item.createdAt!),
+                  MaterialLocalizations.of(context)
+                      .formatMediumDate(item.createdAt!),
                 ),
           trailing: Text('${positive ? '+' : ''}${item.points}'),
         );
@@ -415,31 +486,6 @@ class _LeaderboardList extends StatelessWidget {
           leading: SizedBox(width: 32, child: Text('#${entry.rank}')),
           title: Text(_shortAddress(entry.address)),
           trailing: Text('${entry.points} pts'),
-        );
-      },
-    );
-  }
-}
-
-class _RewardsList extends StatelessWidget {
-  const _RewardsList({required this.rewards});
-  final List<LoyaltyReward> rewards;
-
-  @override
-  Widget build(BuildContext context) {
-    if (rewards.isEmpty) {
-      return _EmptyText(S.of(context).g_key_loyalty_no_rewards);
-    }
-    return ListView.builder(
-      padding: EdgeInsets.all(AppSpacing.space8),
-      itemCount: rewards.length,
-      itemBuilder: (_, index) {
-        final reward = rewards[index];
-        return ListTile(
-          leading: const Icon(Icons.card_giftcard_rounded),
-          title: Text(reward.name),
-          subtitle: Text(reward.description),
-          trailing: Text('${reward.pointsCost} pts'),
         );
       },
     );
