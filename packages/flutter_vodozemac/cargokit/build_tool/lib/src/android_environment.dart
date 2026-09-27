@@ -196,7 +196,9 @@ class AndroidEnvironment {
         "-C",
         "link-arg=-Wl,--hash-style=both",
         "-C",
-        "link-arg=-Wl,-z,max-page-size=16384"
+        "link-arg=-Wl,-z,max-page-size=16384",
+        "-C",
+        "link-arg=-Wl,-z,common-page-size=16384"
       ];
       final pageSizeArgsString = pageSizeArgs.join("\x1f");
 
