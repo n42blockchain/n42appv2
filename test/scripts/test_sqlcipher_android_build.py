@@ -95,6 +95,7 @@ class SQLCipherAndroidBuildTest(unittest.TestCase):
             'CC': '/tmp/foreign-clang', 'CXX': '/tmp/foreign-clang++',
             'CFLAGS': '-fno-stack-protector', 'CPPFLAGS': '-DOTHER',
             'LDFLAGS': '-Wl,-z,norelro', 'MAKEFLAGS': '-j99',
+            'MAKEFILES': '/tmp/foreign.mk',
             'NDK_PROJECT_PATH': '/tmp/foreign-project',
             'ANDROID_NDK_HOME': '/tmp/foreign-ndk',
             'LC_ALL': 'fr_CA.UTF-8',
