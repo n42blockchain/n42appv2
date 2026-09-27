@@ -1,0 +1,43 @@
+diff --git a/sqlcipher/src/main/jni/sqlcipher/Android.mk b/sqlcipher/src/main/jni/sqlcipher/Android.mk
+index ced979f..c010910 100644
+--- a/sqlcipher/src/main/jni/sqlcipher/Android.mk
++++ b/sqlcipher/src/main/jni/sqlcipher/Android.mk
+@@ -66,6 +66,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH) 						  \
+ LOCAL_MODULE:= libsqlcipher
+ LOCAL_LDLIBS += -ldl -llog
+ LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384
++LOCAL_LDFLAGS += -Wl,-z,common-page-size=16384
+ ifeq ($(findstring SSL,$(LOCAL_CFLAGS)),SSL)
+ LOCAL_STATIC_LIBRARIES += static-libcrypto
+ else
+diff --git a/sqlcipher/src/main/jni/sqlcipher/JNIHelp.cpp b/sqlcipher/src/main/jni/sqlcipher/JNIHelp.cpp
+index 1e7088f..875ca2a 100644
+--- a/sqlcipher/src/main/jni/sqlcipher/JNIHelp.cpp
++++ b/sqlcipher/src/main/jni/sqlcipher/JNIHelp.cpp
+@@ -289,18 +289,19 @@ void jniLogException(C_JNIEnv* env, int priority, const char* tag, jthrowable ex
+ }
+ 
+ const char* jniStrError(int errnum, char* buf, size_t buflen) {
+-#if __GLIBC__
+-    // Note: glibc has a nonstandard strerror_r that returns char* rather than POSIX's int.
+-    // char *strerror_r(int errnum, char *buf, size_t n);
+-    return strerror_r(errnum, buf, buflen);
+-#else
++#if defined(__GLIBC__) || (defined(__ANDROID__) && defined(__USE_GNU) && __ANDROID_API__ >= 23)
+     char* msg = strerror_r(errnum, buf, buflen);
+-    if (msg != nullptr){
++    if (msg != nullptr) {
+         return msg;
+     }
++#else
++    int status = strerror_r(errnum, buf, buflen);
++    if (status == 0) {
++        return buf;
++    }
++#endif
+     snprintf(buf, buflen, "errno %d", errnum);
+     return buf;
+-#endif
+ }
+ 
+ jobject jniCreateFileDescriptor(C_JNIEnv* env, int fd) {

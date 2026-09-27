@@ -1,0 +1,8 @@
+test_candidate_manifest_hash_mismatch_fails_before_packaging (test.scripts.test_sqlcipher_android_maven.SQLCipherAndroidMavenTest) ... ok
+test_exact_four_native_members_change_and_metadata_preserves_variants (test.scripts.test_sqlcipher_android_maven.SQLCipherAndroidMavenTest) ... ok
+test_missing_native_member_or_metadata_variant_fails_closed (test.scripts.test_sqlcipher_android_maven.SQLCipherAndroidMavenTest) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.014s
+
+OK

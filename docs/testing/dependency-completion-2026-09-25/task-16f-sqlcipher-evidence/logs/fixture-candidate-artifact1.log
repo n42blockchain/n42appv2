@@ -1,0 +1,19 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/Users/jieliu/.gradle/wrapper/dists/gradle-9.8.0-all/619e6l8zt76uzaekhqdol0b60/gradle-9.8.0/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: Your Android app project: app located at: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/harness/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): flutter_callkit_incoming
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+SQLCIPHER_ARTIFACT :app net.zetetic:sqlcipher-android:4.19.0 /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/sqlcipher_android/maven/net/zetetic/sqlcipher-android/4.19.0/sqlcipher-android-4.19.0.aar 4c3a1ab35258f98c13f34775621c730fbe1e2d39c0207be110f98bf07d99c25c
+SQLCIPHER_ARTIFACT :sqflite_sqlcipher net.zetetic:sqlcipher-android:4.10.0 /Users/jieliu/.gradle/caches/modules-2/files-2.1/net.zetetic/sqlcipher-android/4.10.0/89aa713ab3ec9b72e85a783cad4cfabf49910c63/sqlcipher-android-4.10.0.aar cc60b1a40d023bec06a1e56740db7172d2516668570140cd9de00ca90f84cd9f

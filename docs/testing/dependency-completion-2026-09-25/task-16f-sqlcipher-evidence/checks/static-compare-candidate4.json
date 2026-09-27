@@ -1,0 +1,150 @@
+{
+  "arm64-v8a": {
+    "added_exports": [],
+    "critical_added_exports": [],
+    "critical_exports_new_count": 320,
+    "critical_exports_old_count": 320,
+    "critical_missing_exports": [],
+    "jni_onload_old_new": [
+      true,
+      true
+    ],
+    "missing_exports": [],
+    "new_api": 23,
+    "new_export_count": 486,
+    "new_has_jni": false,
+    "new_has_relro": true,
+    "new_has_sqlite3_open": true,
+    "new_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "new_soname": "libsqlcipher.so",
+    "old_api": 23,
+    "old_export_count": 486,
+    "old_has_jni": false,
+    "old_has_relro": true,
+    "old_has_sqlite3_open": true,
+    "old_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "old_soname": "libsqlcipher.so"
+  },
+  "armeabi-v7a": {
+    "added_exports": [
+      "_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2B8nn190000ILi0EEEPKc"
+    ],
+    "critical_added_exports": [],
+    "critical_exports_new_count": 320,
+    "critical_exports_old_count": 320,
+    "critical_missing_exports": [],
+    "jni_onload_old_new": [
+      true,
+      true
+    ],
+    "missing_exports": [
+      "_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2IDnEEPKc"
+    ],
+    "new_api": 23,
+    "new_export_count": 499,
+    "new_has_jni": false,
+    "new_has_relro": true,
+    "new_has_sqlite3_open": true,
+    "new_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "new_soname": "libsqlcipher.so",
+    "old_api": 23,
+    "old_export_count": 499,
+    "old_has_jni": false,
+    "old_has_relro": true,
+    "old_has_sqlite3_open": true,
+    "old_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "old_soname": "libsqlcipher.so"
+  },
+  "x86": {
+    "added_exports": [],
+    "critical_added_exports": [],
+    "critical_exports_new_count": 320,
+    "critical_exports_old_count": 320,
+    "critical_missing_exports": [],
+    "jni_onload_old_new": [
+      true,
+      true
+    ],
+    "missing_exports": [],
+    "new_api": 23,
+    "new_export_count": 486,
+    "new_has_jni": false,
+    "new_has_relro": true,
+    "new_has_sqlite3_open": true,
+    "new_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "new_soname": "libsqlcipher.so",
+    "old_api": null,
+    "old_export_count": 486,
+    "old_has_jni": false,
+    "old_has_relro": true,
+    "old_has_sqlite3_open": true,
+    "old_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "old_soname": "libsqlcipher.so"
+  },
+  "x86_64": {
+    "added_exports": [],
+    "critical_added_exports": [],
+    "critical_exports_new_count": 320,
+    "critical_exports_old_count": 320,
+    "critical_missing_exports": [],
+    "jni_onload_old_new": [
+      true,
+      true
+    ],
+    "missing_exports": [],
+    "new_api": 23,
+    "new_export_count": 486,
+    "new_has_jni": false,
+    "new_has_relro": true,
+    "new_has_sqlite3_open": true,
+    "new_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "new_soname": "libsqlcipher.so",
+    "old_api": null,
+    "old_export_count": 486,
+    "old_has_jni": false,
+    "old_has_relro": true,
+    "old_has_sqlite3_open": true,
+    "old_needed": [
+      "libdl.so",
+      "liblog.so",
+      "libc.so",
+      "libm.so"
+    ],
+    "old_soname": "libsqlcipher.so"
+  }
+}

@@ -1,0 +1,3 @@
+wrong_manifest: rejected: SQLCipher evidence rejected: archive member hash mismatch
+same_wrong_source_hash: rejected: SQLCipher evidence rejected: historical source differs: tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart
+2/2 archive negative controls rejected

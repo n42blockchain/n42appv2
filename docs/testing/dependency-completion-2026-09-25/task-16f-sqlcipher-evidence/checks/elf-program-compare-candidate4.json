@@ -1,0 +1,274 @@
+{
+  "arm64-v8a": {
+    "baseline": {
+      "elf_class": 2,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2058928,
+          "vaddr": 2075312
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2084312,
+          "vaddr": 2117080
+        }
+      ],
+      "machine": 183,
+      "relro": [
+        {
+          "end_mod16k": 4096,
+          "memsz": 25936,
+          "vaddr": 2075312
+        }
+      ],
+      "relro_16k_pass": false
+    },
+    "candidate": {
+      "elf_class": 2,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2133088,
+          "vaddr": 2149472
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2160984,
+          "vaddr": 2193752
+        }
+      ],
+      "machine": 183,
+      "relro": [
+        {
+          "end_mod16k": 0,
+          "memsz": 29600,
+          "vaddr": 2149472
+        }
+      ],
+      "relro_16k_pass": true
+    }
+  },
+  "armeabi-v7a": {
+    "baseline": {
+      "elf_class": 1,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 1023568,
+          "vaddr": 1039952
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 1037776,
+          "vaddr": 1070544
+        }
+      ],
+      "machine": 40,
+      "relro": [
+        {
+          "end_mod16k": 8192,
+          "memsz": 16816,
+          "vaddr": 1039952
+        }
+      ],
+      "relro_16k_pass": false
+    },
+    "candidate": {
+      "elf_class": 1,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 1062064,
+          "vaddr": 1078448
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 1077440,
+          "vaddr": 1110208
+        }
+      ],
+      "machine": 40,
+      "relro": [
+        {
+          "end_mod16k": 0,
+          "memsz": 19280,
+          "vaddr": 1078448
+        }
+      ],
+      "relro_16k_pass": true
+    }
+  },
+  "x86": {
+    "baseline": {
+      "elf_class": 1,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2221840,
+          "vaddr": 2238224
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2235608,
+          "vaddr": 2268376
+        }
+      ],
+      "machine": 3,
+      "relro": [
+        {
+          "end_mod16k": 8192,
+          "memsz": 14576,
+          "vaddr": 2238224
+        }
+      ],
+      "relro_16k_pass": false
+    },
+    "candidate": {
+      "elf_class": 1,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2211840,
+          "vaddr": 2211840
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2226744,
+          "vaddr": 2243128
+        }
+      ],
+      "machine": 3,
+      "relro": [
+        {
+          "end_mod16k": 0,
+          "memsz": 16384,
+          "vaddr": 2211840
+        }
+      ],
+      "relro_16k_pass": true
+    }
+  },
+  "x86_64": {
+    "baseline": {
+      "elf_class": 2,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2190112,
+          "vaddr": 2206496
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2215520,
+          "vaddr": 2248288
+        }
+      ],
+      "machine": 62,
+      "relro": [
+        {
+          "end_mod16k": 4096,
+          "memsz": 25824,
+          "vaddr": 2206496
+        }
+      ],
+      "relro_16k_pass": false
+    },
+    "candidate": {
+      "elf_class": 2,
+      "load_16k_pass": true,
+      "loads": [
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 0,
+          "vaddr": 0
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2193952,
+          "vaddr": 2210336
+        },
+        {
+          "align": 16384,
+          "mod16k": 0,
+          "offset": 2221904,
+          "vaddr": 2254672
+        }
+      ],
+      "machine": 62,
+      "relro": [
+        {
+          "end_mod16k": 0,
+          "memsz": 34272,
+          "vaddr": 2210336
+        }
+      ],
+      "relro_16k_pass": true
+    }
+  }
+}

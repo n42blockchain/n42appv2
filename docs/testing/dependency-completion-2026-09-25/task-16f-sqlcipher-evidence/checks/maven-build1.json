@@ -1,0 +1,19 @@
+{
+  "changed_members": [
+    "jni/arm64-v8a/libsqlcipher.so",
+    "jni/armeabi-v7a/libsqlcipher.so",
+    "jni/x86/libsqlcipher.so",
+    "jni/x86_64/libsqlcipher.so"
+  ],
+  "total_members": 17,
+  "official_sha256": "3f2aeebb584157baf145805dd8e2118a093632fbfa3dcb72a39e43a2c56b41fe",
+  "maintained_sha256": "4c3a1ab35258f98c13f34775621c730fbe1e2d39c0207be110f98bf07d99c25c",
+  "output_files": {
+    "sqlcipher-android-4.19.0-javadoc.jar": "63551a3b4d6cc5970c1971c09b756ed84f62f1d71712ace3131650cb77eb2e89",
+    "sqlcipher-android-4.19.0-sources.jar": "ff22ea959cdc6294d9bae9dd000fe6ada383d1fbea3e8bd54e52a8ec856b3cb3",
+    "sqlcipher-android-4.19.0.aar": "4c3a1ab35258f98c13f34775621c730fbe1e2d39c0207be110f98bf07d99c25c",
+    "sqlcipher-android-4.19.0.module": "7c13b8d82148f207287e9f7fbed1e6b598b5e2f65d6276304959d7ce925ffbde",
+    "sqlcipher-android-4.19.0.pom": "6026401a07a71605fecdb9a09c3f3526a2f4d7c90f744b0181b44f54803e8461"
+  },
+  "candidate_manifest_sha256": "69b7f8103d8bcba6dbd1f705365f500f6228fc72cdb50501e2a678ecc7264b51"
+}

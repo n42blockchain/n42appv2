@@ -1,0 +1,14 @@
+test_ignored_autosetup_bootstrap_is_rejected (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ERROR
+
+======================================================================
+ERROR: test_ignored_autosetup_bootstrap_is_rejected (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_sqlcipher_android_build.py", line 83, in test_ignored_autosetup_bootstrap_is_rejected
+    build.require_clean_repository(repo)
+AttributeError: module 'build_sqlcipher_android' has no attribute 'require_clean_repository'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.257s
+
+FAILED (errors=1)

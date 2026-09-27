@@ -1,0 +1,14 @@
+test_jni_error_patch_uses_posix_bionic_return_value (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... FAIL
+
+======================================================================
+FAIL: test_jni_error_patch_uses_posix_bionic_return_value (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_sqlcipher_android_build.py", line 49, in test_jni_error_patch_uses_posix_bionic_return_value
+    self.assertIn('defined(__USE_GNU) && __ANDROID_API__ >= 23', patched)
+AssertionError: 'defined(__USE_GNU) && __ANDROID_API__ >= 23' not found in '#if __GLIBC__\n    // Note: glibc has a nonstandard strerror_r that returns char* rather than POSIX\'s int.\n    // char *strerror_r(int errnum, char *buf, size_t n);\n    return strerror_r(errnum, buf, buflen);\n#else\n    int result = strerror_r(errnum, buf, buflen);\n    if (result == 0) {\n        return buf;\n    }\n    snprintf(buf, buflen, "errno %d", errnum);\n    return buf;\n#endif\n'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)

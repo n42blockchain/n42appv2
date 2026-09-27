@@ -1,0 +1,14 @@
+test_child_environment_clears_external_compiler_and_crypto_overrides (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_ignored_autosetup_bootstrap_is_rejected (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_jni_error_patch_uses_posix_bionic_return_value (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_link_patch_preserves_max_and_adds_common_page_size (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_link_patch_rejects_changed_or_duplicate_input (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_ndk_command_sets_abi_and_api_as_make_arguments (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_revisions_and_all_four_abis_are_fixed (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_stale_amalgamation_is_rejected (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+test_tool_byte_guard_rejects_changed_input (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.294s
+
+OK

@@ -1,0 +1,599 @@
+{
+  "schema_version": 1,
+  "phase": "candidate",
+  "mode": "strict",
+  "device": "emulator-5560",
+  "started_utc": "2026-09-27T17:03:44.968479+00:00",
+  "git_head": "dcedef8dc2f60bfdc2aacd389d7d6f3e81b3b055",
+  "source_sha256": {
+    "tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart": "0c18049ff28d7af4300058a7260aa303d26172da2c57d01b35609a958fcc1e39",
+    "tools/android_native_smoke/harness/android/build.gradle.kts": "4b54deb22589f862278b652584d31fd82b9b2e12df23a938847b940c19940cee",
+    "tools/android_native_smoke/harness/android/app/build.gradle.kts": "95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0",
+    "tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt": "e4d628a397084e91a2a755989f546551144ec9e48d1f301e5e3162de9243c845",
+    "tools/android_native_smoke/harness/pubspec.yaml": "32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f",
+    "tools/android_native_smoke/harness/pubspec.lock": "24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1",
+    ".superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run_sqlcipher_phase.py": "7983dbf36d2253437875f7775b387fc2b8f8b52b3b9a8b254880047eba7a7123"
+  },
+  "tool_sha256": {
+    "/Users/jieliu/.codex/toolchains/flutter-3.47.5/flutter/bin/flutter": "7d486c33b30a0cf1ea5146231c68bb8f966cdb4e087c5cd8b37e14513f536e7d",
+    "/opt/homebrew/share/android-commandlinetools/platform-tools/adb": "534893b946847fdf6f9998108af469e646679824d75098247ca438948fa2dffc"
+  },
+  "expected_native_sha256": "9d1bb9723058f51d92e89da58b8b49229babbeebc9f89631b41037dad5289789",
+  "initial": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "abi": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abi"
+      ],
+      "exit": 0,
+      "stdout": "arm64-v8a",
+      "stderr": ""
+    },
+    "sdk": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "exit": 0,
+      "stdout": "37",
+      "stderr": ""
+    }
+  },
+  "configure": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "pre": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "abi": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abi"
+      ],
+      "exit": 0,
+      "stdout": "arm64-v8a",
+      "stderr": ""
+    },
+    "sdk": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "exit": 0,
+      "stdout": "37",
+      "stderr": ""
+    }
+  },
+  "fixture_env": {
+    "PUB_CACHE": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-vodo-pub-cache",
+    "ANDROID_HOME": "/Users/jieliu/.codex/toolchains/android-sdk-37",
+    "ANDROID_SDK_ROOT": "/Users/jieliu/.codex/toolchains/android-sdk-37",
+    "N42_SMOKE_SQLCIPHER_AAR": null,
+    "N42_SMOKE_SQLCIPHER_MAINTAINED": "1"
+  },
+  "flutter_test": {
+    "argv": [
+      "/Users/jieliu/.codex/toolchains/flutter-3.47.5/flutter/bin/flutter",
+      "test",
+      "integration_test/sqlcipher_migration_test.dart",
+      "-d",
+      "emulator-5560",
+      "--no-uninstall",
+      "--dart-define=N42_SQLCIPHER_PHASE=candidate"
+    ],
+    "exit": 0,
+    "log": ".superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run-candidate-strict1/flutter-test.log"
+  },
+  "pm_path": {
+    "argv": [
+      "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+      "-s",
+      "emulator-5560",
+      "shell",
+      "pm",
+      "path",
+      "com.n42.android_native_smoke"
+    ],
+    "exit": 0,
+    "stdout": "package:/data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk",
+    "stderr": ""
+  },
+  "installed_path": "/data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk",
+  "installed_sha256": {
+    "argv": [
+      "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+      "-s",
+      "emulator-5560",
+      "shell",
+      "sha256sum",
+      "/data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk"
+    ],
+    "exit": 0,
+    "stdout": "2a82be87b80235c914ffd0e94cd5cf58ff435a2dc464a92634daef3fa409e718  /data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk",
+    "stderr": ""
+  },
+  "pull": {
+    "argv": [
+      "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+      "-s",
+      "emulator-5560",
+      "pull",
+      "/data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk",
+      ".superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run-candidate-strict1/installed.apk"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "/data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk: 1 file pulled, 0 skipped. 95.6 MB/s (220840731 bytes in 2.202s)"
+  },
+  "pulled_apk_sha256": "2a82be87b80235c914ffd0e94cd5cf58ff435a2dc464a92634daef3fa409e718",
+  "native_member_sha256": "9d1bb9723058f51d92e89da58b8b49229babbeebc9f89631b41037dad5289789",
+  "runtime": {
+    "phase": "candidate",
+    "pid": 16621,
+    "nonce": "5ppmM4g3U0Ibazpq",
+    "apkPath": "/data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk",
+    "apkSha256": "2a82be87b80235c914ffd0e94cd5cf58ff435a2dc464a92634daef3fa409e718",
+    "executableApkMaps": [
+      "75417c6ec000-75417c8f8000 r-xp 000d4000 fe:05 164027                     /data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk",
+      "754194a78000-754196eec000 r-xp 012bc000 fe:05 164027                     /data/app/~~hRKrs-VH3zzbypu3cF7-jA==/com.n42.android_native_smoke-77vltjmWaDetJW4xjHZk-A==/base.apk"
+    ],
+    "directLibraryMaps": [],
+    "databaseSha256": {
+      "/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_candidate.db": "e2bc305f1c763f78130500a771585ae73ea2ec9d598beb75453de7293bb38aab"
+    }
+  },
+  "post": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "abi": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abi"
+      ],
+      "exit": 0,
+      "stdout": "arm64-v8a",
+      "stderr": ""
+    },
+    "sdk": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "exit": 0,
+      "stdout": "37",
+      "stderr": ""
+    }
+  },
+  "restore_strict": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "final": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "abi": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abi"
+      ],
+      "exit": 0,
+      "stdout": "arm64-v8a",
+      "stderr": ""
+    },
+    "sdk": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "exit": 0,
+      "stdout": "37",
+      "stderr": ""
+    }
+  },
+  "finished_utc": "2026-09-27T17:04:21.794989+00:00"
+}

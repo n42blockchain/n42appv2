@@ -1,0 +1,25 @@
+{
+  "baseline_aar_sha256": "3f2aeebb584157baf145805dd8e2118a093632fbfa3dcb72a39e43a2c56b41fe",
+  "libraries": {
+    "arm64-v8a": {
+      "baseline_16k_aligned": false,
+      "baseline_sha256": "da51355b6c455150dae59e902c484292d33d752b7fec36f723558625d88048fa",
+      "candidate_16k_aligned": true,
+      "candidate_sha256": "9d1bb9723058f51d92e89da58b8b49229babbeebc9f89631b41037dad5289789"
+    },
+    "armeabi-v7a": {
+      "baseline_sha256": "95411f7303f923a218b55de3a0afe3c3a0fe1c624eae99b3caed76191106242e",
+      "candidate_sha256": "37500a62790118ab388bbc2fc248ab338363b83fc8132a47809584365fd13a72"
+    },
+    "x86": {
+      "baseline_sha256": "7e48f1980e5f6e2aad579119eea418cf8faf9da27861d31d44f38a9c0f345c5c",
+      "candidate_sha256": "a3af830956de4f15fe7a088d77b743488d783d9a519d321d29a91dd0a472240d"
+    },
+    "x86_64": {
+      "baseline_16k_aligned": false,
+      "baseline_sha256": "5f41c2f2cf349c7108f222267e8f42abd0f18da2fe75bb3c0e764b6a0f1641e0",
+      "candidate_16k_aligned": true,
+      "candidate_sha256": "ae0edf387d026526c2e2062c3de99eebb6859eaf45690ff3188f6e76e7adb8a2"
+    }
+  }
+}

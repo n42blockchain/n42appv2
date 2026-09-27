@@ -1,0 +1,33 @@
+Resolving dependencies...
+Downloading packages...
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.14 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+3 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart
+Running Gradle task 'assembleDebug'...                          
+WARNING: Your Android app project: app located at: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/harness/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): flutter_callkit_incoming
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+INFO: Precompiled binaries are disabled
+INFO: Building vodozemac_bindings_dart for aarch64-linux-android
+INFO: Building vodozemac_bindings_dart for i686-linux-android
+INFO: Building vodozemac_bindings_dart for x86_64-linux-android
+Running Gradle task 'assembleDebug'...                             76.7s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+Installing build/app/outputs/flutter-apk/app-debug.apk...          744ms
+00:00 +0: synthetic SQLCipher 4.10 to 4.19 Java and FFI migration
+N42_SQLCIPHER_RECEIPT {"phase":"seed","pid":16198,"nonce":"TR1vWik8uHjvCVNs","apkPath":"/data/app/~~cT876lCPGKwVI0Yk4fySMw==/com.n42.android_native_smoke-8TeQ9KbkU30Xb6ecdKOCTQ==/base.apk","apkSha256":"2ffba104caf77a4a7ebf53710a34e4ee4f307898c1c5f902be22c9ca4b586489","executableApkMaps":["7541858d0000-754185d68000 r-xp 05a3c000 fe:05 164027                     /data/app/~~cT876lCPGKwVI0Yk4fySMw==/com.n42.android_native_smoke-8TeQ9KbkU30Xb6ecdKOCTQ==/base.apk","75419d814000-75419fc88000 r-xp 012bc000 fe:05 164027                     /data/app/~~cT876lCPGKwVI0Yk4fySMw==/com.n42.android_native_smoke-8TeQ9KbkU30Xb6ecdKOCTQ==/base.apk"],"directLibraryMaps":[],"databaseSha256":{"/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_official.db":"a22376a136fbcbad0885386820b27f961e98d9accda65ff690e6f66f3c8554b1","/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_candidate.db":"4fd7a5bcecac3ae22ea4358be6531216c5ea68137bfb6c76c880ae8fdd7b73e4"}}
+00:04 +1: (tearDownAll)
+00:04 +1: All tests passed!

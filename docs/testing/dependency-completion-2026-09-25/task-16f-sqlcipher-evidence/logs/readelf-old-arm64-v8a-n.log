@@ -1,0 +1,9 @@
+Displaying notes found in: .note.android.ident
+  Owner                Data size 	Description
+  Android              0x00000084	NT_ANDROID_TYPE_IDENT
+   description data: 17 00 00 00 72 32 35 63 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 39 35 31 39 36 35 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+Displaying notes found in: .note.gnu.build-id
+  Owner                Data size 	Description
+  GNU                  0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)
+    Build ID: 439a660ede76fc497630753b2ab22f128675508b

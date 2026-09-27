@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "source_revisions": {
+    "wrapper": "9a5d685404489cbff14d4c46da81555de1a38787",
+    "core": "c4b275a47932888216bade83aff2bbc73df0ff85",
+    "libtomcrypt": "476a9579ae94f32b9ea9e2747bfb04b302370259"
+  },
+  "source_trees": {
+    "wrapper": "28f824d97d0f735906d05a7c11d37b1f4882bae4",
+    "core": "4a8588bdd6d0ee5c09509f752aa2ccfd50dce6c0",
+    "libtomcrypt": "599af359d24610c3140dd9c0d9de97262369be71"
+  },
+  "input_sha256": {
+    "sqlcipher/src/main/jni/sqlcipher/Android.mk": "6161bb1a5e76e3e38ff93016aaeb2da0fa4e0f719cb637201636ee5833c13a7b",
+    "sqlcipher/src/main/jni/sqlcipher/JNIHelp.cpp": "e7e046482a0817965ca291e0d9adc01462db52ea357e09003538522affc90d29",
+    "sqlcipher/src/main/jni/Application.mk": "59be7d34c9950e747708fba78e52471e69472dd6f4414caf82f6e83a15391824",
+    "LICENSE": "09e4af560ce2e3c9c2aa6b564e35947b03db7d1ae345f22a32793ed46542cc14",
+    "sqlcipher/src/main/jni/sqlcipher/src/src/sqlcipher.c": "594987c41f5b5d371dbd5a7471c6e8710e39e41dd4ea3889c3528eaf8abd70d9",
+    "sqlcipher/src/main/jni/sqlcipher/src/src/crypto_libtomcrypt.c": "389c700c0d47bb3a2b79c278893a65f9dbdda329d1ad209932f36c81455af899",
+    "sqlcipher/src/main/jni/sqlcipher/src/LICENSE.md": "2a2826f6acf46fa650730cf42cbb22a642be33a7ef119c9c4f4bf6daf3bef48e",
+    "sqlcipher/src/main/jni/libtomcrypt/src/LICENSE": "8f196cb13afd271f5e267fd29543fc454596382ad580e7592709492843996ac8"
+  },
+  "ndk_revision": "28.2.13676358",
+  "ndk_tools": {
+    "ndk_build": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/ndk-build",
+      "sha256": "4dab4ba20f79dc510ce760110d897d07a89d7389c2af162c416d14133a7102c7"
+    },
+    "clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang-19",
+      "sha256": "df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718"
+    },
+    "readelf": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-readobj",
+      "sha256": "37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995"
+    }
+  },
+  "host_tools": {
+    "tclsh": {
+      "path": "/System/Library/Frameworks/Tcl.framework/Versions/8.5/tclsh8.5",
+      "sha256": "086b37d045ce937d286df2b2026cdc7f8b08ea31693dd5c2f15a6ed7271741fa"
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "sha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9"
+    },
+    "clang": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    }
+  },
+  "amalgamation": {
+    "sqlite3.c": {
+      "size": 9755243,
+      "sha256": "8640c653acadf665cce6331646f60b5b74a4690746f2c4a2d8f688a0570a0c0c"
+    },
+    "sqlite3.h": {
+      "size": 692778,
+      "sha256": "8a9d1bff44d75174ca6dea3ea9bac50a6104d86facb566647b8bb839375b7b3a"
+    }
+  },
+  "source_patch_sha256": "adf307a44c063a70bf0860da3e73c68b5109682f1ca8db8e51eb7f0409312585",
+  "abi_binaries": {
+    "armeabi-v7a": {
+      "size": 1087160,
+      "sha256": "37500a62790118ab388bbc2fc248ab338363b83fc8132a47809584365fd13a72"
+    },
+    "arm64-v8a": {
+      "size": 2177712,
+      "sha256": "9d1bb9723058f51d92e89da58b8b49229babbeebc9f89631b41037dad5289789"
+    },
+    "x86": {
+      "size": 2236340,
+      "sha256": "a3af830956de4f15fe7a088d77b743488d783d9a519d321d29a91dd0a472240d"
+    },
+    "x86_64": {
+      "size": 2238600,
+      "sha256": "ae0edf387d026526c2e2062c3de99eebb6859eaf45690ff3188f6e76e7adb8a2"
+    }
+  },
+  "flags": [
+    "-Wl,-z,max-page-size=16384",
+    "-Wl,-z,common-page-size=16384"
+  ]
+}

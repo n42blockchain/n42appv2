@@ -1,0 +1,22 @@
+{
+  "archive": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/sqlcipher-three-apks.tar.zst",
+  "archive_size": 96382614,
+  "archive_sha256": "846916ccc66eeefc2178117e0371508e7db904b7fab4890355850ea03dbd70bc",
+  "entries": [
+    {
+      "path": "seed/installed.apk",
+      "size": 220840729,
+      "sha256": "2ffba104caf77a4a7ebf53710a34e4ee4f307898c1c5f902be22c9ca4b586489"
+    },
+    {
+      "path": "official/installed.apk",
+      "size": 220840732,
+      "sha256": "df5414d77be467a36e552d490e0ffa6555ca4fe4035f4d0113daddc970e46b55"
+    },
+    {
+      "path": "candidate/installed.apk",
+      "size": 220840731,
+      "sha256": "2a82be87b80235c914ffd0e94cd5cf58ff435a2dc464a92634daef3fa409e718"
+    }
+  ]
+}

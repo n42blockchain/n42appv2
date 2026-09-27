@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "tools/android_native_smoke/sqlcipher_fixture_controls.py", line 38, in check_rejected
+    raise RuntimeError(f'{name}: accepted tampered fixture')
+RuntimeError: same_wrong_source_hash: accepted tampered fixture

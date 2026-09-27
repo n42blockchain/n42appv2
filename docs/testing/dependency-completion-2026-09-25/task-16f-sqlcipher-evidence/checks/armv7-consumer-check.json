@@ -1,0 +1,28 @@
+{
+  "armv7_libraries": [
+    "lib/armeabi-v7a/libTrustWalletCore.so",
+    "lib/armeabi-v7a/libapp.so",
+    "lib/armeabi-v7a/libbarhopper_v3.so",
+    "lib/armeabi-v7a/libdartjni.so",
+    "lib/armeabi-v7a/libdatastore_shared_counter.so",
+    "lib/armeabi-v7a/libface_detector_v2_jni.so",
+    "lib/armeabi-v7a/libflutter.so",
+    "lib/armeabi-v7a/libgojni.so",
+    "lib/armeabi-v7a/libimage_processing_util_jni.so",
+    "lib/armeabi-v7a/libjingle_peerconnection_so.so",
+    "lib/armeabi-v7a/libjnidispatch.so",
+    "lib/armeabi-v7a/libllm_inference_engine_jni.so",
+    "lib/armeabi-v7a/libmlkit_google_ocr_pipeline.so",
+    "lib/armeabi-v7a/libn42_mls.so",
+    "lib/armeabi-v7a/libnoise.so",
+    "lib/armeabi-v7a/libsqlcipher.so",
+    "lib/armeabi-v7a/libsurface_util_jni.so",
+    "lib/armeabi-v7a/libtranslate_jni.so",
+    "lib/armeabi-v7a/libuniffi_yttrium_wcpay.so",
+    "lib/armeabi-v7a/libvodozemac_bindings_dart.so",
+    "lib/armeabi-v7a/libxeno_native.so"
+  ],
+  "needed_libsqlcipher": [],
+  "source_apk": "historical task-16f-owned-build2/app-release.apk",
+  "undefined_removed_symbol": []
+}

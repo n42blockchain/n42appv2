@@ -1,0 +1,14 @@
+test_tool_byte_guard_rejects_changed_input (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... ERROR
+
+======================================================================
+ERROR: test_tool_byte_guard_rejects_changed_input (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_sqlcipher_android_build.py", line 107, in test_tool_byte_guard_rejects_changed_input
+    build.require_digest(path, build.digest(path), 'fixture tool')
+AttributeError: module 'build_sqlcipher_android' has no attribute 'require_digest'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (errors=1)

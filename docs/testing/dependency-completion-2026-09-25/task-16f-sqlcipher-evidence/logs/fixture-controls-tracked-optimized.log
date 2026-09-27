@@ -1,0 +1,5 @@
+wrong_member: rejected: candidate: SQLCipher member mismatch
+same_pid: rejected: phases share process PID
+wrong_strict_property: rejected: candidate pre: linker_mode mismatch
+wrong_installed_hash: rejected: candidate: in-process or pulled APK hash mismatch
+4/4 semantic negative controls rejected

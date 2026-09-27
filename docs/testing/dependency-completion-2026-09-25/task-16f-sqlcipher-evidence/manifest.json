@@ -1,0 +1,830 @@
+{
+  "members": [
+    {
+      "path": "README.md",
+      "sha256": "4a92447d419288fbcd1033d2f20f5e77325b2129bf85c5751d2fc87fe920aacf",
+      "size": 3527
+    },
+    {
+      "path": "artifacts/maintained-maven/sqlcipher-android-4.19.0-javadoc.jar",
+      "sha256": "63551a3b4d6cc5970c1971c09b756ed84f62f1d71712ace3131650cb77eb2e89",
+      "size": 699308
+    },
+    {
+      "path": "artifacts/maintained-maven/sqlcipher-android-4.19.0-sources.jar",
+      "sha256": "ff22ea959cdc6294d9bae9dd000fe6ada383d1fbea3e8bd54e52a8ec856b3cb3",
+      "size": 122475
+    },
+    {
+      "path": "artifacts/maintained-maven/sqlcipher-android-4.19.0.aar",
+      "sha256": "4c3a1ab35258f98c13f34775621c730fbe1e2d39c0207be110f98bf07d99c25c",
+      "size": 4075995
+    },
+    {
+      "path": "artifacts/maintained-maven/sqlcipher-android-4.19.0.module",
+      "sha256": "7c13b8d82148f207287e9f7fbed1e6b598b5e2f65d6276304959d7ce925ffbde",
+      "size": 4116
+    },
+    {
+      "path": "artifacts/maintained-maven/sqlcipher-android-4.19.0.pom",
+      "sha256": "6026401a07a71605fecdb9a09c3f3526a2f4d7c90f744b0181b44f54803e8461",
+      "size": 2011
+    },
+    {
+      "path": "artifacts/official-sqlcipher-android-4.19.0.aar",
+      "sha256": "3f2aeebb584157baf145805dd8e2118a093632fbfa3dcb72a39e43a2c56b41fe",
+      "size": 4016125
+    },
+    {
+      "path": "artifacts/three-installed-apks.tar.zst",
+      "sha256": "846916ccc66eeefc2178117e0371508e7db904b7fab4890355850ea03dbd70bc",
+      "size": 96382614
+    },
+    {
+      "path": "checks/armv7-consumer-check.json",
+      "sha256": "1e1cc3c4355bc902524c587181fcc81442a6dfac8b5dc4a3b570f43d74369f90",
+      "size": 1097
+    },
+    {
+      "path": "checks/elf-program-compare-candidate4.json",
+      "sha256": "77256853f75e60ca67e00a50007a4a655df0dc3098a61ece87c5805bd0c60ac6",
+      "size": 5244
+    },
+    {
+      "path": "checks/final-tool-guard-check.json",
+      "sha256": "d8ae951a85e2ba4b104d26aeaa468bb82140c6a0031ef716b150c8698cc9f3cb",
+      "size": 2700
+    },
+    {
+      "path": "checks/fixture-verifier-positive-optimized.json",
+      "sha256": "de12593d9b607c4f98069f6750b322bdcdb6ab117a9440f9f48df0ec5d8c0d7e",
+      "size": 5336
+    },
+    {
+      "path": "checks/fixture-verifier-positive.json",
+      "sha256": "de12593d9b607c4f98069f6750b322bdcdb6ab117a9440f9f48df0ec5d8c0d7e",
+      "size": 5336
+    },
+    {
+      "path": "checks/maven-actual-compare.json",
+      "sha256": "2a5b04570c212b798ab0fc85c6fc2bb4cf4b39dafb74da540314178d226c30cb",
+      "size": 4856
+    },
+    {
+      "path": "checks/maven-build1.json",
+      "sha256": "d6602770d7d4aff1592e861fbd86d789b0b7215eebaf9269ca7a326cd08c40a1",
+      "size": 1036
+    },
+    {
+      "path": "checks/preflight1.json",
+      "sha256": "7700fda8dde147670753591fe2ae38896f9aa9b00d83f204476d5e98d1cbcced",
+      "size": 911
+    },
+    {
+      "path": "checks/preflight2.json",
+      "sha256": "ba36237ee42018429df14fed521b513ca8e9b939b62408715430a6ca8088d25a",
+      "size": 1468
+    },
+    {
+      "path": "checks/preflight3.json",
+      "sha256": "ba36237ee42018429df14fed521b513ca8e9b939b62408715430a6ca8088d25a",
+      "size": 1468
+    },
+    {
+      "path": "checks/static-audit-candidate4.json",
+      "sha256": "4084c0b47adec642eae710407eaf9602824cc9d8c5987ea6841d464313a60aa7",
+      "size": 1106
+    },
+    {
+      "path": "checks/static-compare-candidate4.json",
+      "sha256": "e92f446bcbae9fa5737da53a088b4c9ab0e873ec9ea3c84399e8326b05665f42",
+      "size": 3460
+    },
+    {
+      "path": "logs/archive-controls-normal.log",
+      "sha256": "72130f59e38d6f8dada5dd371ce701f08b07b8feea843cc682ceed0617275335",
+      "size": 295
+    },
+    {
+      "path": "logs/archive-controls-optimized.log",
+      "sha256": "72130f59e38d6f8dada5dd371ce701f08b07b8feea843cc682ceed0617275335",
+      "size": 295
+    },
+    {
+      "path": "logs/archive-replay-normal.log",
+      "sha256": "32b9e3400ab94cc68b7af4d08471fc12966b7ce661da4adead6b50e5e377686c",
+      "size": 413
+    },
+    {
+      "path": "logs/archive-replay-optimized.log",
+      "sha256": "32b9e3400ab94cc68b7af4d08471fc12966b7ce661da4adead6b50e5e377686c",
+      "size": 413
+    },
+    {
+      "path": "logs/candidate1-wrapper.log",
+      "sha256": "b77f9218ab212d4a46e26fcf8cae8e82dbf34bdcba7164171db3bbb38a2b520d",
+      "size": 227
+    },
+    {
+      "path": "logs/candidate1/ndk-build-armeabi-v7a.log",
+      "sha256": "cfd8e3d0ac33953be9a806178226a6fcd0080abd056c03bfbc54302e80ca3cce",
+      "size": 89995
+    },
+    {
+      "path": "logs/candidate2-wrapper.log",
+      "sha256": "e7187292f93a57660d6f05f4957392a1b67d0ed0816ba3ecfa61a5fb1a00a4fc",
+      "size": 227
+    },
+    {
+      "path": "logs/candidate2/ndk-build-armeabi-v7a.log",
+      "sha256": "7739b04317138b421832a31ee7e47778f320601c4b5525a58f8b65c8d2aa82c2",
+      "size": 63744
+    },
+    {
+      "path": "logs/candidate3-wrapper.log",
+      "sha256": "4bfe16d32345a10a2eceb54349f3e14b97095574dff55ac4ff7adbeb424e27e2",
+      "size": 50
+    },
+    {
+      "path": "logs/candidate4-wrapper.log",
+      "sha256": "595106f4193e6825ba63e97b1de7b16578a0a9bfc97abce74e8ce452c4bf010c",
+      "size": 3714
+    },
+    {
+      "path": "logs/candidate4/configure.log",
+      "sha256": "b0174830c3d2af34feb3ca1c0d2c6904f5f67d31c8c0ea582580888a3b1fb126",
+      "size": 4479
+    },
+    {
+      "path": "logs/candidate4/make-clean.log",
+      "sha256": "f44c00e8c3e815ecc4be788a8d8b71a18e6701c4d771ed1d7dea9c1ea35380e0",
+      "size": 1405
+    },
+    {
+      "path": "logs/candidate4/make-sqlite3.log",
+      "sha256": "af7bce944af10d9a63d94d1306e06ef2034a0a2eaad40e1b6f0c2b230f2e0e24",
+      "size": 36216
+    },
+    {
+      "path": "logs/candidate4/ndk-build-arm64-v8a.log",
+      "sha256": "ca3966d50c0be3d3957ff3e6c0f24b1663a412b7574ba3fd20f427f9f3f3ca5a",
+      "size": 1002505
+    },
+    {
+      "path": "logs/candidate4/ndk-build-armeabi-v7a.log",
+      "sha256": "d6c89ff6b3c30cc1699340f72401061b35d5d6256bf2aa44034cdb4a1b79c3b0",
+      "size": 1014575
+    },
+    {
+      "path": "logs/candidate4/ndk-build-x86.log",
+      "sha256": "111092923f1885b2ae8bcdc20af3e6e317ae93432c1fc761d4f6c6ece1cd9b85",
+      "size": 984316
+    },
+    {
+      "path": "logs/candidate4/ndk-build-x86_64.log",
+      "sha256": "ef836fa2fca67a1b86627294bc95f87f70804f890f2498988d245da195b55b46",
+      "size": 990408
+    },
+    {
+      "path": "logs/combined-apk-pack.err",
+      "sha256": "19373c1d4cd8075875a64da92a3d1d433de1c856f5095008c70145a18045acf2",
+      "size": 225
+    },
+    {
+      "path": "logs/dependency-insight-stage2.log",
+      "sha256": "794c1ab614e0ca87c657d93e81614f28975231ee459e8cbe90120abd918da6a5",
+      "size": 3496
+    },
+    {
+      "path": "logs/fixture-candidate-artifact1.log",
+      "sha256": "1fe57f9414aa3f68f4898f6d90f0023430e26b0539449dc6bc5c6335fa669af0",
+      "size": 2321
+    },
+    {
+      "path": "logs/fixture-candidate-graph1.log",
+      "sha256": "51574aefb58dee0f130ea399f4f62a86059cd62f257f78e5dcb5c2067cee8ba8",
+      "size": 3119
+    },
+    {
+      "path": "logs/fixture-controls-final-normal.log",
+      "sha256": "daa8a499d4c1076e5e00440431f1b213758089882b771467bd4b2d2963e72442",
+      "size": 391
+    },
+    {
+      "path": "logs/fixture-controls-final-optimized.log",
+      "sha256": "daa8a499d4c1076e5e00440431f1b213758089882b771467bd4b2d2963e72442",
+      "size": 391
+    },
+    {
+      "path": "logs/fixture-controls-source-green-normal.log",
+      "sha256": "ca47ae5d3a55bf11a3528bafaf52bce5c34e1c9e9937389308077359dbb3f23a",
+      "size": 534
+    },
+    {
+      "path": "logs/fixture-controls-source-green-optimized.log",
+      "sha256": "ca47ae5d3a55bf11a3528bafaf52bce5c34e1c9e9937389308077359dbb3f23a",
+      "size": 534
+    },
+    {
+      "path": "logs/fixture-controls-source-red1.log",
+      "sha256": "028952778a82794ea7f4b0ddaddad6917c47c0d07c2033016b088b611149ae84",
+      "size": 1026
+    },
+    {
+      "path": "logs/fixture-controls-source-red2.log",
+      "sha256": "28229b93b35243e59176028e92da1ca64bd68a2e4930818380921dabc3340bdf",
+      "size": 292
+    },
+    {
+      "path": "logs/fixture-controls-tracked-normal.log",
+      "sha256": "aa0d70ec076203fa5adace0bf2cd0165d4f5a78b10ceca4ef359e401387e1201",
+      "size": 297
+    },
+    {
+      "path": "logs/fixture-controls-tracked-optimized.log",
+      "sha256": "aa0d70ec076203fa5adace0bf2cd0165d4f5a78b10ceca4ef359e401387e1201",
+      "size": 297
+    },
+    {
+      "path": "logs/fixture-dart-analyze1.log",
+      "sha256": "01084c9d33ea61370215113dfe0b838523bb3de2c4a8967749a9868ef9e8e22b",
+      "size": 60
+    },
+    {
+      "path": "logs/fixture-dart-analyze2.log",
+      "sha256": "01084c9d33ea61370215113dfe0b838523bb3de2c4a8967749a9868ef9e8e22b",
+      "size": 60
+    },
+    {
+      "path": "logs/fixture-kotlin-compile1.log",
+      "sha256": "7627fecd9b13ca7cfb6d853c37a301bdd76f55b9100a47d4a52662037bb80185",
+      "size": 34147
+    },
+    {
+      "path": "logs/fixture-pub-get.log",
+      "sha256": "2a319c901d263fbf8d2b5d93f135928fc4700827590f759e1eb6feaa5e5d9f8a",
+      "size": 225
+    },
+    {
+      "path": "logs/fixture-sourcefix-positive-normal.log",
+      "sha256": "de12593d9b607c4f98069f6750b322bdcdb6ab117a9440f9f48df0ec5d8c0d7e",
+      "size": 5336
+    },
+    {
+      "path": "logs/fixture-sourcefix-positive-optimized.log",
+      "sha256": "de12593d9b607c4f98069f6750b322bdcdb6ab117a9440f9f48df0ec5d8c0d7e",
+      "size": 5336
+    },
+    {
+      "path": "logs/fixture-verifier-negatives-normal.log",
+      "sha256": "aa0d70ec076203fa5adace0bf2cd0165d4f5a78b10ceca4ef359e401387e1201",
+      "size": 297
+    },
+    {
+      "path": "logs/fixture-verifier-negatives-optimized.log",
+      "sha256": "aa0d70ec076203fa5adace0bf2cd0165d4f5a78b10ceca4ef359e401387e1201",
+      "size": 297
+    },
+    {
+      "path": "logs/fixture-verifier-positive-optimized.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "logs/fixture-verifier-positive.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "logs/jni-help-api21-syntax.log",
+      "sha256": "5897396981dd3fa4dbd8105750cd0ff2f0f0159ae4acf96d45ab33a2083fce18",
+      "size": 2931
+    },
+    {
+      "path": "logs/jni-help-api23-syntax.log",
+      "sha256": "acebedc9f9cfeef3810781adbdb5cebc6fcec8ba7be5ca9e12de4bf5cf9934ff",
+      "size": 2931
+    },
+    {
+      "path": "logs/maven-build1.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "logs/maven-negative-controls.log",
+      "sha256": "a2b602032495c6f9a7b262567f2bfc5b0f24b905ee31767126a4f3716b9e78fb",
+      "size": 216
+    },
+    {
+      "path": "logs/maven-test-green1.log",
+      "sha256": "e623579add2f4eaff644ddaba3d7b3a9cb39984d43d621009f4a9bc57dbd47bc",
+      "size": 520
+    },
+    {
+      "path": "logs/maven-test-optimized.log",
+      "sha256": "dcd1a99bd8b05bdf888fcd6b5e5398c2c9299db8cb2fab9a8208df83c3e4b2d1",
+      "size": 520
+    },
+    {
+      "path": "logs/maven-test-red1.log",
+      "sha256": "00b96f3787a7f8a929b4c0791dac7755f6ff1c8dc11c496779061746c30c2e2b",
+      "size": 2155
+    },
+    {
+      "path": "logs/maven-test-red2.log",
+      "sha256": "760a421518d7465c33bca09d268c04f4bf59aa9b3ae49dcb581e3987a08ac727",
+      "size": 2974
+    },
+    {
+      "path": "logs/preflight1.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "logs/preflight2.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "logs/preflight3.err",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "logs/readelf-new-arm64-v8a-d.log",
+      "sha256": "ac15ead2b62f9ef33b0bc09e3dc7d1882a484e6aaf5e7d568978bfcddd7e7d26",
+      "size": 1444
+    },
+    {
+      "path": "logs/readelf-new-arm64-v8a-dyn-syms.log",
+      "sha256": "1b4914e19a92f5a4421f41c2811f7072f80db426417c2fc426f8a43760afc8a6",
+      "size": 50976
+    },
+    {
+      "path": "logs/readelf-new-arm64-v8a-l.log",
+      "sha256": "f77929c1f50ad3c1074dd70dd32d2f364621587e5f09c456e9906a30e0d27214",
+      "size": 1633
+    },
+    {
+      "path": "logs/readelf-new-arm64-v8a-n.log",
+      "sha256": "a85aeac16e25e1a039b912d290d25d2915c03fe8e3ea37c1b28f13367eb019f6",
+      "size": 792
+    },
+    {
+      "path": "logs/readelf-new-armeabi-v7a-d.log",
+      "sha256": "b803466b2c5dfad6b1fc270c47da7506dd99845f80d499fa0d56e8f681c529c7",
+      "size": 1134
+    },
+    {
+      "path": "logs/readelf-new-armeabi-v7a-dyn-syms.log",
+      "sha256": "239aab7bfcbb3af1f84e00320615e914143429036d403f2b726cc77f327b7c97",
+      "size": 47506
+    },
+    {
+      "path": "logs/readelf-new-armeabi-v7a-l.log",
+      "sha256": "6466fdcca6bc4e0c1f186c441cdce9cf09fdb16213e219b9ae7a280d424c9ad1",
+      "size": 1448
+    },
+    {
+      "path": "logs/readelf-new-armeabi-v7a-n.log",
+      "sha256": "aa19b7759f626e419bde2fbdae482056b7a052ec2863e11e045d6f4826a9cafa",
+      "size": 792
+    },
+    {
+      "path": "logs/readelf-new-x86-d.log",
+      "sha256": "d510a857c936ffb29cf2a8f35522ef1d98e810558bf59c7622277bccd3bf2b9c",
+      "size": 1133
+    },
+    {
+      "path": "logs/readelf-new-x86-dyn-syms.log",
+      "sha256": "0e72915f1d7876ca938e76d3bf8f6a612db019f66aefca9fd4623c88e4a4f1df",
+      "size": 45926
+    },
+    {
+      "path": "logs/readelf-new-x86-l.log",
+      "sha256": "e7d056bc52f00718d655d7bd4def40d3fe0d7bba5dfe09ddf1ab20b76021a241",
+      "size": 1429
+    },
+    {
+      "path": "logs/readelf-new-x86-n.log",
+      "sha256": "d61de161ff0013671d39278e997b7e59e0fac31be872c62a039a7036853db672",
+      "size": 792
+    },
+    {
+      "path": "logs/readelf-new-x86_64-d.log",
+      "sha256": "0d853bd45f777695006889dcc67b7d462a6a4b2380426d9c3fec746d82cac28f",
+      "size": 1352
+    },
+    {
+      "path": "logs/readelf-new-x86_64-dyn-syms.log",
+      "sha256": "9c088a2b64aa22c09023793411aa537319308a26df56c17f07e2e34f4d7a1e53",
+      "size": 50814
+    },
+    {
+      "path": "logs/readelf-new-x86_64-l.log",
+      "sha256": "e2660928a6f2bc5f9149f4be26956ebd9c87951752cd1acb2167e1674bf90f02",
+      "size": 1609
+    },
+    {
+      "path": "logs/readelf-new-x86_64-n.log",
+      "sha256": "bc64b20f64e2e30bdfe1d4f2eda30f34407348bf39691087a7499bd11ff8415c",
+      "size": 792
+    },
+    {
+      "path": "logs/readelf-old-arm64-v8a-d.log",
+      "sha256": "1cfcc6ab87931e1432fb0658bf0ffcd7bd6e5adc879540e1bdb807019ff6b521",
+      "size": 1443
+    },
+    {
+      "path": "logs/readelf-old-arm64-v8a-dyn-syms.log",
+      "sha256": "dcf81c56ecacaa5a4434c9bbdca5c2a9964eb2b469a13d5c0bbef6ed3bbf22b9",
+      "size": 50902
+    },
+    {
+      "path": "logs/readelf-old-arm64-v8a-l.log",
+      "sha256": "372bfa71f679301bdaab1cab4f6557221b31e1b2465c3c9f0f3ba7ff55a6eea7",
+      "size": 1587
+    },
+    {
+      "path": "logs/readelf-old-arm64-v8a-n.log",
+      "sha256": "87e1b4fc3de29d8d12cf8c5c9ea448c6343dad7dcb648dc7f0041369878f95d1",
+      "size": 792
+    },
+    {
+      "path": "logs/readelf-old-armeabi-v7a-d.log",
+      "sha256": "d705d7589011bb9c00a3d8be8d56ba1a6459e7e5e1ea0ce7088942414084226c",
+      "size": 1133
+    },
+    {
+      "path": "logs/readelf-old-armeabi-v7a-dyn-syms.log",
+      "sha256": "1097cf0dc6e74442fc5730624b6100e67d671df2352ef48bd3ca71b874007a7f",
+      "size": 47216
+    },
+    {
+      "path": "logs/readelf-old-armeabi-v7a-l.log",
+      "sha256": "17ef428b26ed84bbb6ba56e7b5897c2d89a74be29ef1f364d0f8a89070dc5439",
+      "size": 1374
+    },
+    {
+      "path": "logs/readelf-old-armeabi-v7a-n.log",
+      "sha256": "75997c9f4343b9375dd4857b5f0313e3cd75084094754d30cba5f2236b50c703",
+      "size": 792
+    },
+    {
+      "path": "logs/readelf-old-x86-d.log",
+      "sha256": "aea918046bf6bb64c8e0d9431a0426360b8da140b3c3b0bc348e2be2316ef278",
+      "size": 1133
+    },
+    {
+      "path": "logs/readelf-old-x86-dyn-syms.log",
+      "sha256": "2f1eade31b5da2c09cfea22da62efdf482fc2a48e649e0a59ef6053de9db79ac",
+      "size": 45649
+    },
+    {
+      "path": "logs/readelf-old-x86-l.log",
+      "sha256": "47c11cb2f8fce184fe8cef32c74f79d92998f485e1f59e589afec07b514685a6",
+      "size": 1467
+    },
+    {
+      "path": "logs/readelf-old-x86-n.log",
+      "sha256": "787a7dce4c4b4625b4307b78d12d25da25ed71a7d301d148e8df600d39b2dfde",
+      "size": 319
+    },
+    {
+      "path": "logs/readelf-old-x86_64-d.log",
+      "sha256": "eef3ca959ae7000cabb30c0f3281cbc3d14a0582960274c531c6904357e16392",
+      "size": 1352
+    },
+    {
+      "path": "logs/readelf-old-x86_64-dyn-syms.log",
+      "sha256": "bf33c2062b13abba3b3633b15bbac8d5e96b4d615b3514addd5c36e609dbd08a",
+      "size": 50740
+    },
+    {
+      "path": "logs/readelf-old-x86_64-l.log",
+      "sha256": "5940e012e3f63324cc924ef601e13d0639e0ff5e0267cc0e27921f3a702636c4",
+      "size": 1665
+    },
+    {
+      "path": "logs/readelf-old-x86_64-n.log",
+      "sha256": "3e4d53a12c126c29bbac76af4d06cd4f99b7a48c7f28254568fe7851e1367250",
+      "size": 319
+    },
+    {
+      "path": "logs/recipe-test-final.log",
+      "sha256": "27c12db5b22ba010610ac29091e2439e2645b6ac534e9c0588fbe49fdd4f9de0",
+      "size": 1116
+    },
+    {
+      "path": "logs/recipe-test-final2.log",
+      "sha256": "3e2f75f8debcfedfcbcd420cd34c55eb1c109a6a108d58ffe305e24755811d66",
+      "size": 1800
+    },
+    {
+      "path": "logs/recipe-test-final3.log",
+      "sha256": "838494a2a5ed6a956712e37d36e4c3d438a72e8a73b05138b6712f39de05d734",
+      "size": 1238
+    },
+    {
+      "path": "logs/recipe-test-fix1.log",
+      "sha256": "f45cc622ce1f415863164568356e5d731c26fdb5378b3cf063361d56b82257a4",
+      "size": 1238
+    },
+    {
+      "path": "logs/recipe-test-green1.log",
+      "sha256": "f4abc46967d33a8828d5e917462dc97161f9004ce2b37b3aa6a351cb2664a9d6",
+      "size": 738
+    },
+    {
+      "path": "logs/recipe-test-green2.log",
+      "sha256": "b345e471da112ecc60eb5f53bf8ea51b7bef1f0a0e1c3300c39ee7032edadaf0",
+      "size": 996
+    },
+    {
+      "path": "logs/recipe-test-green3.log",
+      "sha256": "b345e471da112ecc60eb5f53bf8ea51b7bef1f0a0e1c3300c39ee7032edadaf0",
+      "size": 996
+    },
+    {
+      "path": "logs/recipe-test-postcommit.log",
+      "sha256": "e29634214bae15b4d6425d1acc581e03188098856cd5c3895c7102db8dea6e25",
+      "size": 1238
+    },
+    {
+      "path": "logs/recipe-test-red.log",
+      "sha256": "e1dec321407c0d45baf29f48b07ed1d39d11eaf39adbc11c68ea5a71d4a33d5d",
+      "size": 2402
+    },
+    {
+      "path": "logs/recipe-test-red2.log",
+      "sha256": "208d9ec24635edcd3b8c260939cf86cc30f935601f27f37433cccd1436d79371",
+      "size": 2272
+    },
+    {
+      "path": "logs/recipe-test-red3.log",
+      "sha256": "00a77d50b85e2d690a902734fe3045d750a8d9cb827337656a4385d518abfd64",
+      "size": 1280
+    },
+    {
+      "path": "logs/recipe-test-red4.log",
+      "sha256": "8290dffbfb02c48a2c4ed83dd2a2e3de22ce0c5bb8f92ca6f6028439ce916e97",
+      "size": 856
+    },
+    {
+      "path": "logs/recipe-test-red5.log",
+      "sha256": "a9e1f382fecc12533614b5164e258c8d6dea5c7d29a3a115219efb6e2df9e82d",
+      "size": 845
+    },
+    {
+      "path": "logs/recipe-test-red6.log",
+      "sha256": "4d6cdd29a68352bec24578ec007326d3c6ac966637be46c6d99566ebb36814d8",
+      "size": 499
+    },
+    {
+      "path": "logs/recipe-test-red7.log",
+      "sha256": "98ba8386a893a4828bdffd519624dc853554e975d7b15274bf3429ddbd36a0d6",
+      "size": 1017
+    },
+    {
+      "path": "logs/run-candidate-strict1-wrapper.log",
+      "sha256": "a093f227a6e6be983e26fc3958e35b3133095986bc9c3c213f276084e501c809",
+      "size": 108
+    },
+    {
+      "path": "logs/run-official-strict1-wrapper.log",
+      "sha256": "1712a34a741c2444df4f7630cffaaee3d5a50add0abf4d2a154228aaf4c1b0a5",
+      "size": 107
+    },
+    {
+      "path": "logs/run-seed-strict1-wrapper.log",
+      "sha256": "538426ae8ce6f4bf9b133837f55ca84902771142dfd09a14964398265cc1a136",
+      "size": 103
+    },
+    {
+      "path": "logs/runner-existing-output-negative.log",
+      "sha256": "9632329a0fec8175775cb7dac9ca87794e08d98037b214eccc24a3c4abe4a4f5",
+      "size": 129
+    },
+    {
+      "path": "logs/selected-artifact-stage2.log",
+      "sha256": "ae52bfa137585e850eea485296b4863e11bddc443748014566b4f91810c8e7ce",
+      "size": 2301
+    },
+    {
+      "path": "logs/selected-artifacts-stage2-fixed.log",
+      "sha256": "ee37410e5560fde1d2080cec90eee3ad25bdb8627d24062d3e16bb08beaa61cf",
+      "size": 2613
+    },
+    {
+      "path": "logs/selected-artifacts-stage2.log",
+      "sha256": "ef0f0255203b03c880d7a87fdc45855d5d04ca89988a3dc582abee92f787d9c3",
+      "size": 1080
+    },
+    {
+      "path": "logs/targeted-compile-stage2.log",
+      "sha256": "74f95f0100057cae94faa34298b94ed9c3189436ffb953e3b0f3ca7765ed5ac7",
+      "size": 102488
+    },
+    {
+      "path": "members.txt",
+      "sha256": "601ef3d012340c0cd3d6357fba76551f0b41398bd745dc890b92f14a14872154",
+      "size": 6303
+    },
+    {
+      "path": "reports/task-16f-sqlcipher-source-report.md",
+      "sha256": "3fb3da3e443ef4aa3327bd606ada6601ff7642584a375579c7793064a7d87cfb",
+      "size": 9465
+    },
+    {
+      "path": "reports/task-16f-sqlcipher-stage2-report.md",
+      "sha256": "0fe8603e3d9aba8f7b6991cd6219623101c815e1993df900ab2a58f91353af45",
+      "size": 5133
+    },
+    {
+      "path": "reports/task-16f-sqlcipher-stage3-fix1-report.md",
+      "sha256": "0175adea08fad6c0a7e0a66be6528865167675db5a269c422d91360c176db0d6",
+      "size": 3624
+    },
+    {
+      "path": "reports/task-16f-sqlcipher-stage3-report.md",
+      "sha256": "1c2de3764b7b4f2e68be2e52632b324e47ba5711c0aa51693bb24c2cccdb48e0",
+      "size": 6925
+    },
+    {
+      "path": "reviews/task-16f-sqlcipher-source-review.md",
+      "sha256": "76800d9f544fa42800106362040fc8fdb06eb1c079761a14a340023d85354d5c",
+      "size": 8090
+    },
+    {
+      "path": "reviews/task-16f-sqlcipher-stage2-review.md",
+      "sha256": "50f26b122b4a0cc46bee46056b7eab01e0a60abb4cd5fca417053357fc208f46",
+      "size": 4805
+    },
+    {
+      "path": "reviews/task-16f-sqlcipher-stage3-fix1-review.md",
+      "sha256": "f1f593a5075fea4321bd91a47a56c140a822e32f476f595d19d5e13013b46c46",
+      "size": 2411
+    },
+    {
+      "path": "reviews/task-16f-sqlcipher-stage3-runtime-review.md",
+      "sha256": "308beae9188b0bf258e625896b2c2e2feb709457dd58feefd465e354cc627ee3",
+      "size": 6329
+    },
+    {
+      "path": "reviews/task-16f-sqlcipher-stage3-source-review.md",
+      "sha256": "e8f7cfbf45a3a98c4ddcd927bffb59e519f1fd764bcb3d862d1d624f790f30aa",
+      "size": 3506
+    },
+    {
+      "path": "runs/candidate/flutter-test.log",
+      "sha256": "5a4753cfe8f0204abdca55bb5858241ecfdd20a0662b69894cb941853035721e",
+      "size": 3140
+    },
+    {
+      "path": "runs/candidate/receipt.json",
+      "sha256": "1a4e9b083b1a5b106b8ae864130709e468e2957a92275183bceb75732f1a444c",
+      "size": 16054
+    },
+    {
+      "path": "runs/official/flutter-test.log",
+      "sha256": "96307613a75737e64cb185d085656d25386d5e5fe58b441771fd68a72455c842",
+      "size": 3513
+    },
+    {
+      "path": "runs/official/receipt.json",
+      "sha256": "8d1fa840518fc65a96658c34eaca7ffb9da346ee5d81f7c2bcd02b3b305f60e0",
+      "size": 16049
+    },
+    {
+      "path": "runs/seed/flutter-test.log",
+      "sha256": "bc5780085cfa77f8c0d1ee093d354c65bb75a69c94cd2e01a6066ff328d0d51b",
+      "size": 3286
+    },
+    {
+      "path": "runs/seed/receipt.json",
+      "sha256": "3019e1396446bd7f985cb6ea85b0307808e19ba3352acd9998be0522ff1f98a7",
+      "size": 16193
+    },
+    {
+      "path": "source-proof/candidate4-manifest.json",
+      "sha256": "69b7f8103d8bcba6dbd1f705365f500f6228fc72cdb50501e2a678ecc7264b51",
+      "size": 3714
+    },
+    {
+      "path": "source-proof/candidate4-source.patch",
+      "sha256": "adf307a44c063a70bf0860da3e73c68b5109682f1ca8db8e51eb7f0409312585",
+      "size": 1652
+    },
+    {
+      "path": "source-proof/combined-apk-pack.json",
+      "sha256": "66088b85dd4f7c2645ce93896b6b663f4c7666c0a4b46beff0f3a77fb2206f5b",
+      "size": 798
+    },
+    {
+      "path": "source-proof/pack_sqlcipher_apks.py",
+      "sha256": "4399a43c32e5c8d7877b3535c3f3a47d28e09a4ee8dd32435585f4361b254914",
+      "size": 1935
+    },
+    {
+      "path": "source-proof/pack_sqlcipher_evidence.py",
+      "sha256": "dcfea806e418e80b8059d70914071fc5b435f27ff54869c0c496db93a871505d",
+      "size": 4513
+    },
+    {
+      "path": "source/final/android/build.gradle.kts",
+      "sha256": "e3b89070eeb97d86417ce966312b9713f16fda7561756d28461a58d63db3f6ec",
+      "size": 2170
+    },
+    {
+      "path": "source/final/android/native/sqlcipher_android/README.md",
+      "sha256": "4684f1454e451e0ea38345d7bdb1ca888ae15b3c529561d7b9594bd8def477b9",
+      "size": 3516
+    },
+    {
+      "path": "source/final/packages/sqflite_sqlcipher/android/build.gradle",
+      "sha256": "7aa0f4992091b3241ff941e8cca2c1de87fc0946098b9e6dca5db6e797bee94d",
+      "size": 1093
+    },
+    {
+      "path": "source/final/scripts/build_sqlcipher_android.py",
+      "sha256": "b30632ac2b5b189295f5b6c4582935bc6fc5bb9895ec9010bde3ee1b36cbbcc4",
+      "size": 14852
+    },
+    {
+      "path": "source/final/scripts/build_sqlcipher_android_maven.py",
+      "sha256": "ccb98ed84ff3c6640e48afdfc195051dd9947eb68c8717b36fe6929de427d264",
+      "size": 7841
+    },
+    {
+      "path": "source/final/test/scripts/test_sqlcipher_android_build.py",
+      "sha256": "bea8fbebb2ccd4fe8db1630d298b8b6fe0decc08e7fa16d480e449128c7d4429",
+      "size": 5995
+    },
+    {
+      "path": "source/final/test/scripts/test_sqlcipher_android_maven.py",
+      "sha256": "8bf967718165b8d7da4fdb993ae0b167cbe6274efb6be71fd99de67b7c40e161",
+      "size": 5449
+    },
+    {
+      "path": "source/final/tools/android_native_smoke/run_sqlcipher_fixture.py",
+      "sha256": "2eed6e123c49b3910762401f6701e36506f036fc8834a40051f8374c22ceb86e",
+      "size": 9774
+    },
+    {
+      "path": "source/final/tools/android_native_smoke/sqlcipher_fixture_controls.py",
+      "sha256": "c2516c935ff3cf6d950a5e0d350b9ecb6433743a48f896d1c20d13fcbbb0844b",
+      "size": 5146
+    },
+    {
+      "path": "source/final/tools/android_native_smoke/verify_sqlcipher_fixture.py",
+      "sha256": "f8dff24045707c2617b20bdc3e995a6af57708610749aab9e5ed4812e3a6cffd",
+      "size": 11596
+    },
+    {
+      "path": "source/historical/.superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run_sqlcipher_phase.py",
+      "sha256": "7983dbf36d2253437875f7775b387fc2b8f8b52b3b9a8b254880047eba7a7123",
+      "size": 9545
+    },
+    {
+      "path": "source/historical/tools/android_native_smoke/harness/android/app/build.gradle.kts",
+      "sha256": "95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0",
+      "size": 4304
+    },
+    {
+      "path": "source/historical/tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt",
+      "sha256": "e4d628a397084e91a2a755989f546551144ec9e48d1f301e5e3162de9243c845",
+      "size": 14478
+    },
+    {
+      "path": "source/historical/tools/android_native_smoke/harness/android/build.gradle.kts",
+      "sha256": "4b54deb22589f862278b652584d31fd82b9b2e12df23a938847b940c19940cee",
+      "size": 1231
+    },
+    {
+      "path": "source/historical/tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart",
+      "sha256": "0c18049ff28d7af4300058a7260aa303d26172da2c57d01b35609a958fcc1e39",
+      "size": 8277
+    },
+    {
+      "path": "source/historical/tools/android_native_smoke/harness/pubspec.lock",
+      "sha256": "24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1",
+      "size": 17692
+    },
+    {
+      "path": "source/historical/tools/android_native_smoke/harness/pubspec.yaml",
+      "sha256": "32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f",
+      "size": 775
+    },
+    {
+      "path": "verify_evidence.py",
+      "sha256": "e1c45f6ac7fd067025edc54beba573c4ab5d285ee5bc41f4dd9824cc5e1fdb81",
+      "size": 8696
+    },
+    {
+      "path": "verify_evidence_controls.py",
+      "sha256": "928ea7d15f7c84b8f3f9238e361184522daf911e0a53c476db7f399a98640552",
+      "size": 2462
+    }
+  ],
+  "schema_version": 1
+}

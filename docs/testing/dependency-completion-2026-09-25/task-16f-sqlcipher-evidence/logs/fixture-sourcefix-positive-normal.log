@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "phases": {
+    "seed": {
+      "apk_sha256": "2ffba104caf77a4a7ebf53710a34e4ee4f307898c1c5f902be22c9ca4b586489",
+      "member_sha256": "bc85746647ce4ea5f390eccd61e5236fbd11786a91802877b9fdbbb66a55192d",
+      "member_data_offset": 94617600,
+      "executable_load_maps": [
+        [
+          94617600,
+          4816896
+        ]
+      ],
+      "relro_end_mod_16k": 4096,
+      "pid": 16198,
+      "nonce": "TR1vWik8uHjvCVNs",
+      "database_sha256": {
+        "/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_official.db": "a22376a136fbcbad0885386820b27f961e98d9accda65ff690e6f66f3c8554b1",
+        "/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_candidate.db": "4fd7a5bcecac3ae22ea4358be6531216c5ea68137bfb6c76c880ae8fdd7b73e4"
+      },
+      "source_sha256": {
+        "tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart": "0c18049ff28d7af4300058a7260aa303d26172da2c57d01b35609a958fcc1e39",
+        "tools/android_native_smoke/harness/android/build.gradle.kts": "4b54deb22589f862278b652584d31fd82b9b2e12df23a938847b940c19940cee",
+        "tools/android_native_smoke/harness/android/app/build.gradle.kts": "95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0",
+        "tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt": "e4d628a397084e91a2a755989f546551144ec9e48d1f301e5e3162de9243c845",
+        "tools/android_native_smoke/harness/pubspec.yaml": "32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f",
+        "tools/android_native_smoke/harness/pubspec.lock": "24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1",
+        ".superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run_sqlcipher_phase.py": "7983dbf36d2253437875f7775b387fc2b8f8b52b3b9a8b254880047eba7a7123"
+      }
+    },
+    "official": {
+      "apk_sha256": "df5414d77be467a36e552d490e0ffa6555ca4fe4035f4d0113daddc970e46b55",
+      "member_sha256": "da51355b6c455150dae59e902c484292d33d752b7fec36f723558625d88048fa",
+      "member_data_offset": 868352,
+      "executable_load_maps": [
+        [
+          868352,
+          2064384
+        ]
+      ],
+      "relro_end_mod_16k": 4096,
+      "pid": 16392,
+      "nonce": "QeijBtmcrod9oEe4",
+      "database_sha256": {
+        "/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_official.db": "3c56884d89a8562c489aebc78e7ac0a35753f621e500d4c4fb49373e7fda56be"
+      },
+      "source_sha256": {
+        "tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart": "0c18049ff28d7af4300058a7260aa303d26172da2c57d01b35609a958fcc1e39",
+        "tools/android_native_smoke/harness/android/build.gradle.kts": "4b54deb22589f862278b652584d31fd82b9b2e12df23a938847b940c19940cee",
+        "tools/android_native_smoke/harness/android/app/build.gradle.kts": "95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0",
+        "tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt": "e4d628a397084e91a2a755989f546551144ec9e48d1f301e5e3162de9243c845",
+        "tools/android_native_smoke/harness/pubspec.yaml": "32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f",
+        "tools/android_native_smoke/harness/pubspec.lock": "24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1",
+        ".superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run_sqlcipher_phase.py": "7983dbf36d2253437875f7775b387fc2b8f8b52b3b9a8b254880047eba7a7123"
+      }
+    },
+    "candidate": {
+      "apk_sha256": "2a82be87b80235c914ffd0e94cd5cf58ff435a2dc464a92634daef3fa409e718",
+      "member_sha256": "9d1bb9723058f51d92e89da58b8b49229babbeebc9f89631b41037dad5289789",
+      "member_data_offset": 868352,
+      "executable_load_maps": [
+        [
+          868352,
+          2146304
+        ]
+      ],
+      "relro_end_mod_16k": 0,
+      "pid": 16621,
+      "nonce": "5ppmM4g3U0Ibazpq",
+      "database_sha256": {
+        "/data/user/0/com.n42.android_native_smoke/databases/sqlcipher_16k_old_candidate.db": "e2bc305f1c763f78130500a771585ae73ea2ec9d598beb75453de7293bb38aab"
+      },
+      "source_sha256": {
+        "tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart": "0c18049ff28d7af4300058a7260aa303d26172da2c57d01b35609a958fcc1e39",
+        "tools/android_native_smoke/harness/android/build.gradle.kts": "4b54deb22589f862278b652584d31fd82b9b2e12df23a938847b940c19940cee",
+        "tools/android_native_smoke/harness/android/app/build.gradle.kts": "95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0",
+        "tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt": "e4d628a397084e91a2a755989f546551144ec9e48d1f301e5e3162de9243c845",
+        "tools/android_native_smoke/harness/pubspec.yaml": "32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f",
+        "tools/android_native_smoke/harness/pubspec.lock": "24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1",
+        ".superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run_sqlcipher_phase.py": "7983dbf36d2253437875f7775b387fc2b8f8b52b3b9a8b254880047eba7a7123"
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source_trees": {
+    "wrapper": "28f824d97d0f735906d05a7c11d37b1f4882bae4",
+    "core": "4a8588bdd6d0ee5c09509f752aa2ccfd50dce6c0",
+    "libtomcrypt": "599af359d24610c3140dd9c0d9de97262369be71"
+  },
+  "ndk_tools": {
+    "ndk_build": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/ndk-build",
+      "sha256": "4dab4ba20f79dc510ce760110d897d07a89d7389c2af162c416d14133a7102c7"
+    },
+    "clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang-19",
+      "sha256": "df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718"
+    },
+    "readelf": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-readobj",
+      "sha256": "37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995"
+    }
+  }
+}

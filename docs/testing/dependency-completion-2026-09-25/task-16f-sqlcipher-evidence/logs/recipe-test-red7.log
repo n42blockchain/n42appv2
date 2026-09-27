@@ -1,0 +1,14 @@
+test_child_environment_clears_external_compiler_and_crypto_overrides (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest) ... FAIL
+
+======================================================================
+FAIL: test_child_environment_clears_external_compiler_and_crypto_overrides (test.scripts.test_sqlcipher_android_build.SQLCipherAndroidBuildTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_sqlcipher_android_build.py", line 106, in test_child_environment_clears_external_compiler_and_crypto_overrides
+    self.assertNotIn(key, child)
+AssertionError: 'MAKEFILES' unexpectedly found in {'MAKEFILES': '/tmp/foreign.mk', 'LC_ALL': 'C', 'LANG': 'C', 'TZ': 'UTC', 'SOURCE_DATE_EPOCH': '1780000000', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)

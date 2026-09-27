@@ -1,0 +1,53 @@
+{
+  "host_tools": {
+    "clang": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "sha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9"
+    },
+    "sdk_settings": {
+      "path": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+      "sha256": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb"
+    },
+    "tclsh": {
+      "path": "/System/Library/Frameworks/Tcl.framework/Versions/8.5/tclsh8.5",
+      "sha256": "086b37d045ce937d286df2b2026cdc7f8b08ea31693dd5c2f15a6ed7271741fa"
+    }
+  },
+  "ndk_source_properties_sha256": "c00aa236fdb205e9be9edd9e2169763e48aca52735efff4e16f34205d49783b5",
+  "ndk_tools": {
+    "clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang-19",
+      "sha256": "df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718"
+    },
+    "clang++": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang-19",
+      "sha256": "df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718"
+    },
+    "ld.lld": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/lld",
+      "sha256": "295bc36e1b10be0137f09904b7cc928a11ab3d44a8ec8250e4087ebd71f091c2"
+    },
+    "llvm-ar": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+      "sha256": "3705c4237aab47a369b999f5b0af572a6ea56488df7174aaab29e5fc4b082ea3"
+    },
+    "llvm-strip": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-objcopy",
+      "sha256": "438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f"
+    },
+    "ndk_build": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/ndk-build",
+      "sha256": "4dab4ba20f79dc510ce760110d897d07a89d7389c2af162c416d14133a7102c7"
+    },
+    "readelf": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-readobj",
+      "sha256": "37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995"
+    }
+  },
+  "scope": "read-only final guard check after candidate4 build; no native rebuild",
+  "xcode_version": "Xcode 27.0 / 27A266a"
+}

@@ -1,0 +1,28 @@
+Dynamic section at offset 0x21f424 contains 26 entries:
+  Tag        Type           Name/Value
+  0x00000001 (NEEDED)       Shared library: [libdl.so]
+  0x00000001 (NEEDED)       Shared library: [liblog.so]
+  0x00000001 (NEEDED)       Shared library: [libc.so]
+  0x00000001 (NEEDED)       Shared library: [libm.so]
+  0x0000000e (SONAME)       Library soname: [libsqlcipher.so]
+  0x0000001e (FLAGS)        BIND_NOW 
+  0x6ffffffb (FLAGS_1)      NOW 
+  0x00000011 (REL)          0x6fb0
+  0x00000012 (RELSZ)        26848 (bytes)
+  0x00000013 (RELENT)       8 (bytes)
+  0x6ffffffa (RELCOUNT)     3001
+  0x00000017 (JMPREL)       0xd890
+  0x00000002 (PLTRELSZ)     2024 (bytes)
+  0x00000003 (PLTGOT)       0x21f638
+  0x00000014 (PLTREL)       REL
+  0x00000006 (SYMTAB)       0x210
+  0x0000000b (SYMENT)       16 (bytes)
+  0x00000005 (STRTAB)       0x3af4
+  0x0000000a (STRSZ)        13497 (bytes)
+  0x6ffffef5 (GNU_HASH)     0x2d68
+  0x0000001a (FINI_ARRAY)   0x21f418
+  0x0000001c (FINI_ARRAYSZ) 12 (bytes)
+  0x6ffffff0 (VERSYM)       0x2840
+  0x6ffffffe (VERNEED)      0x2d08
+  0x6fffffff (VERNEEDNUM)   3
+  0x00000000 (NULL)         0x0

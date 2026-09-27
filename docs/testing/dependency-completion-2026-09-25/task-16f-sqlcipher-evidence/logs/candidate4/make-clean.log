@@ -1,0 +1,35 @@
+command: /usr/bin/make clean
+cwd: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/source-v4/sqlcipher-android/sqlcipher/src/main/jni/sqlcipher/src
+rm -f *.o *.obj *.c *.da *.bb *.bbg gmon.* *.rws sqlite3
+rm -f fts5.h keywordhash.h opcodes.h sqlite3.h sqlite3ext.h sqlite3session.h
+rm -rf .libs .deps tsrc .target_source
+rm -f lemon sqlite*.tar.gz
+rm -f mkkeywordhash mksourceid
+rm -f parse.* fts5parse.*
+rm -f libsqlite3.dylib libsqlite3.a 3.53.4.dylib libsqlite3.dylib.a
+rm -f tclsqlite3 testfixture sqlite3 sqlite3_analyzer sqldiff dbhash sqltclsh
+rm -f LogEst fts3view rollback-test showdb
+rm -f showjournal showstat4 showwal speedtest1
+rm -f fp-speed-1 fp-speed-2
+rm -f wordcount changeset version-info
+rm -f *.exp *.vsix pkgIndex.tcl
+rm -f sqlite3_analyzer sqlite3_rsync sqlite3_expert
+rm -f mptester rbu	srcck1
+rm -f fuzzershell fuzzcheck sqldiff dbhash
+rm -f dbfuzz dbfuzz2
+rm -fr dbfuzz2-dir
+rm -f fuzzcheck-asan fuzzcheck-ubsan ossshell
+rm -f scrub showshm sqlite3_checker loadfts
+rm -f index_usage kvtest startup threadtest3
+rm -f sessionfuzz changesetfuzz
+rm -f dbdump dbtotxt atrc
+rm -f threadtest5
+rm -f src-verify
+rm -f tclsqlite3.c has_tclsh* ./.tclenv.sh
+rm -f sqlite3rc.h sqlite3.def
+rm -f ctime.c pragma.h
+rm -f .main.mk.checks
+rm -f sqlite-tools-*.zip
+rm -rf omittest* testrunner* testdir*
+
+exit: 0

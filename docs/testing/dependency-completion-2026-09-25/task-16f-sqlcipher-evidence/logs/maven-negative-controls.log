@@ -1,0 +1,2 @@
+wrong official POM rejected: official artifact hash mismatch: sqlcipher-android-4.19.0.pom
+existing output rejected: output already exists: android/native/sqlcipher_android/maven/net/zetetic/sqlcipher-android/4.19.0
