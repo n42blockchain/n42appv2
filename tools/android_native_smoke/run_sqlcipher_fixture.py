@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Run one SQLCipher synthetic phase on the dedicated emulator with receipts."""
+"""Run one SQLCipher synthetic phase on the dedicated emulator with receipts.
+
+The frozen verifier accepts only the reviewed dcedef8dc historical source epoch;
+new runs require their own reviewed source manifest before acceptance.
+"""
 
 import argparse
 from datetime import datetime, timezone

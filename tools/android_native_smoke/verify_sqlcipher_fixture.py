@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Verify synthetic SQLCipher migration runs and loaded native APK identity."""
+"""Replay the reviewed dcedef8dc SQLCipher run epoch and loaded APK identity.
+
+New runs need a separately reviewed source epoch and manifest before acceptance.
+"""
 
 import argparse
 from hashlib import sha256
@@ -21,6 +24,22 @@ MEMBER_SHA = {
 }
 PACKAGE = 'com.n42.android_native_smoke'
 RECEIPT_PREFIX = 'N42_SQLCIPHER_RECEIPT '
+SOURCE_SHA256 = {
+    'tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart':
+        '0c18049ff28d7af4300058a7260aa303d26172da2c57d01b35609a958fcc1e39',
+    'tools/android_native_smoke/harness/android/build.gradle.kts':
+        '4b54deb22589f862278b652584d31fd82b9b2e12df23a938847b940c19940cee',
+    'tools/android_native_smoke/harness/android/app/build.gradle.kts':
+        '95fea15043266a0a5d1583ecb47d671abb853d718fcfee335687ecc5e32983b0',
+    'tools/android_native_smoke/harness/android/app/src/main/kotlin/com/n42/android_native_smoke/MainActivity.kt':
+        'e4d628a397084e91a2a755989f546551144ec9e48d1f301e5e3162de9243c845',
+    'tools/android_native_smoke/harness/pubspec.yaml':
+        '32276ce640cc7a30fd28dfdb4a78e0aef1162d4dc8da9f69269f2d50a374d08f',
+    'tools/android_native_smoke/harness/pubspec.lock':
+        '24fd93c2fe28ad4c1a16a3e8cae7ef4f8313dfdebd1308932807299516734bf1',
+    '.superpowers/sdd/dependency-completion-20260925/task-16f-sqlcipher-build/run_sqlcipher_phase.py':
+        '7983dbf36d2253437875f7775b387fc2b8f8b52b3b9a8b254880047eba7a7123',
+}
 
 
 def require(condition, message):
@@ -106,6 +125,8 @@ def verify_phase(phase, run_dir):
             and receipt.get('mode') == 'strict' and receipt.get('device') == 'emulator-5560',
             f'{phase}: receipt identity mismatch')
     require(receipt.get('git_head') == COMMIT, f'{phase}: source commit mismatch')
+    require(receipt.get('source_sha256') == SOURCE_SHA256,
+            f'{phase}: source input identity mismatch')
     require(receipt.get('expected_native_sha256') == MEMBER_SHA[phase],
             f'{phase}: expected member identity changed')
     for label in ('initial', 'pre', 'post', 'final'):

@@ -52,3 +52,15 @@ isolated app when finished with
 Running on a 4 KB emulator establishes native
 runtime behavior only for that page size. The final 16 KB device run remains
 a separate acceptance step.
+
+## Focused SQLCipher migration evidence
+
+`integration_test/sqlcipher_migration_test.dart` exercises synthetic encrypted
+databases and SQLCipher Java/FFI calls in separate seed, official, and
+maintained-candidate processes. `../run_sqlcipher_fixture.py` records a new
+phase on the dedicated emulator. `../verify_sqlcipher_fixture.py` replays only
+the three reviewed historical runs at source commit
+`dcedef8dc2f60bfdc2aacd389d7d6f3e81b3b055`, including the original
+ignored runner's exact source hash. A new run made with the tracked runner has
+a different source epoch and requires a separately reviewed source manifest
+before offline acceptance; the historical verifier will reject it.

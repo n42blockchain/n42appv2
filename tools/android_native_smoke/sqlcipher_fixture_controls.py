@@ -91,6 +91,23 @@ def wrong_installed_hash(copies):
     mutate_receipt(copies, lambda r: r.__setitem__('pulled_apk_sha256', '0' * 64))
 
 
+def missing_all_source_maps(copies):
+    for phase in copies:
+        path = copies[phase] / 'receipt.json'
+        record = json.loads(path.read_text())
+        record.pop('source_sha256', None)
+        path.write_text(json.dumps(record))
+
+
+def same_wrong_source_hash(copies):
+    source = 'tools/android_native_smoke/harness/integration_test/sqlcipher_migration_test.dart'
+    for phase in copies:
+        path = copies[phase] / 'receipt.json'
+        record = json.loads(path.read_text())
+        record['source_sha256'][source] = '0' * 64
+        path.write_text(json.dumps(record))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--seed-run', required=True, type=Path)
@@ -106,9 +123,13 @@ def main():
         ('wrong_executable_map', wrong_executable_map,
          'executable map misses SQLCipher PT_LOAD'),
         ('wrong_installed_hash', wrong_installed_hash, 'APK hash mismatch'),
+        ('missing_all_source_maps', missing_all_source_maps,
+         'source input identity mismatch'),
+        ('same_wrong_source_hash', same_wrong_source_hash,
+         'source input identity mismatch'),
     ):
         check_rejected(name, change, expected, runs)
-    print('5/5 semantic negative controls rejected')
+    print('7/7 semantic negative controls rejected')
 
 
 if __name__ == '__main__':
