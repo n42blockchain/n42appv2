@@ -93,7 +93,8 @@ action_phase() {
       if python3 - "$task_result_file" "$task_phase" <<'PYCHECK'
 import json,sys
 r=json.load(open(sys.argv[1]))
-assert r['phase']==sys.argv[2] and r['status']=='PASS', r
+if r.get('phase') != sys.argv[2] or r.get('status') != 'PASS':
+    raise SystemExit(f'fixture phase/status mismatch: {r}')
 PYCHECK
       then
         echo "phase=$task_phase result=PASS result_sha256=$(hash_file "$task_result_file")"
@@ -126,11 +127,14 @@ fi
 python3 - "$task_logs/fixture-native-audit.json" <<'PYAUDIT' || fail "unexpected DataStore native audit result"
 import json,sys
 report=json.load(open(sys.argv[1]))
-assert report['libraries_checked']==5, report
-assert sorted(report['unaligned_libraries'])==[
+expected=[
     'lib/arm64-v8a/libflutter.so',
     'lib/x86_64/libflutter.so',
-], report
+]
+if (report.get('libraries_checked') != 5
+        or sorted(report.get('unaligned_libraries', [])) != expected
+        or report.get('passed') is not False):
+    raise SystemExit(f'unexpected native audit scope: {report}')
 print('datastore_64bit_members_static_load_relro=2/2 PASS debug_flutter_engine_whole_apk=3/5 FAIL')
 PYAUDIT
 echo "fixture_apk_audit=$(cat "$task_logs/fixture-native-audit.json")"

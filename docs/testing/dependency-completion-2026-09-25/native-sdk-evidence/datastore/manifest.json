@@ -1,6 +1,11 @@
 {
   "files": [
     {
+      "path": "fixround1-report.md",
+      "sha256": "84bb32b40fedf026b09be749aca16d62b6883096a2674566cac5c3669f96be0e",
+      "size": 2353
+    },
+    {
       "path": "fixture-overlay/android/app/build.gradle.kts",
       "sha256": "5bd508e8ede6c57b4a16335ce0d8a0a54382dc5c2381a9ef0fa4488d789eea3c",
       "size": 1932
@@ -206,9 +211,34 @@
       "size": 1616
     },
     {
+      "path": "logs/verifier-controls-fixround1-green.err.gz",
+      "sha256": "0c41fd0ea5bbba3b33f7aaaf624fc02adaa139ddc5bf94f0f122db6c21416a6a",
+      "size": 349
+    },
+    {
+      "path": "logs/verifier-controls-fixround1-green2.json",
+      "sha256": "316a52ebda09edc3e4c34810544f1cd904c683e7c5242b269059ac23cae4d38a",
+      "size": 8344
+    },
+    {
+      "path": "logs/verifier-controls-fixround1.err.gz",
+      "sha256": "a45217310730b2213ef9e9c5353869b4ce1649d66672ef5ce94629371d0c01aa",
+      "size": 276
+    },
+    {
+      "path": "logs/verifier-optimized-red-summary.log.gz",
+      "sha256": "a1d4a679fecccb4b47d1a3521daec44a034250c60268426ba0b7006371197a9c",
+      "size": 91
+    },
+    {
+      "path": "logs/verifier-optimized-red.json",
+      "sha256": "8317f9428d204c01182d077a5fa0e86c8a96f24bfe3f347f96e85b3ed7572afa",
+      "size": 1372
+    },
+    {
       "path": "recipe/run_datastore_fixture.sh",
-      "sha256": "3e3582d9d2f9e35ccf2fe952b15bbdc7d46c697dcfaf7205195b1ac4062cb723",
-      "size": 8071
+      "sha256": "490bf926519116abf9298a8772bd049aaeff15c2d961e8d7a37b2047cc9d90a1",
+      "size": 8267
     },
     {
       "path": "recipe/run_datastore_fixture_run1.sh",
@@ -216,14 +246,19 @@
       "size": 7544
     },
     {
+      "path": "recipe/test_verifier_controls.py",
+      "sha256": "66b545dfc34b92462b1ce3256a79ea93b55c2dc4b06b132aec690bdd4009a2ac",
+      "size": 5671
+    },
+    {
       "path": "recipe/verify_datastore_fixture.py",
-      "sha256": "c874ede1c90f50ee308730724b93932f9e2dc4dd7295ca1f8261e3c55b66f4b6",
-      "size": 4930
+      "sha256": "63038c6669fe2485429dea9e3eea0ebab661c19479f1e12f4b57c1f0c0798065",
+      "size": 5066
     },
     {
       "path": "report.md",
-      "sha256": "b7eca5779740ca202d2009409b4575862378a1cf8d9ebccb941c7c43b8b7532b",
-      "size": 5325
+      "sha256": "5296959079b5e299c831219f3c1870ee95a229b116738fe06dfec0d1ad9319f1",
+      "size": 6010
     }
   ],
   "schema": 1,

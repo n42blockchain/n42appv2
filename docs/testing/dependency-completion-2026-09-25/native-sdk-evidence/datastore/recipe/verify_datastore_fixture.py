@@ -20,15 +20,20 @@ def sha256(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
 def mapped_member(apk: pathlib.Path) -> tuple[bytes, int, int]:
     with zipfile.ZipFile(apk) as archive, apk.open("rb") as stream:
         info = archive.getinfo(MEMBER)
-        assert info.compress_type == zipfile.ZIP_STORED, "native ZIP entry is compressed"
+        require(info.compress_type == zipfile.ZIP_STORED, "native ZIP entry is compressed")
         stream.seek(info.header_offset)
         header = stream.read(30)
-        assert len(header) == 30 and header[:4] == b"PK\x03\x04", "bad local ZIP header"
+        require(len(header) == 30 and header[:4] == b"PK\x03\x04", "bad local ZIP header")
         name_length, extra_length = struct.unpack_from("<HH", header, 26)
-        assert stream.read(name_length).decode() == MEMBER, "local ZIP member differs"
+        require(stream.read(name_length).decode() == MEMBER, "local ZIP member differs")
         data_offset = info.header_offset + 30 + name_length + extra_length
         data_end = data_offset + info.file_size
         return archive.read(info), data_offset, data_end
@@ -39,14 +44,14 @@ def observed_counter(
     offset_delta: int,
 ) -> dict:
     record = json.loads(result.read_text())
-    assert record["status"] == "PASS", f"fixture {phase} failed: {record}"
-    assert record["phase"] == phase, "fixture phase differs"
+    require(record["status"] == "PASS", f"fixture {phase} failed: {record}")
+    require(record["phase"] == phase, "fixture phase differs")
     counter = record["counter"]
-    assert counter["before"] == before and counter["after"] == after, "counter sequence mismatch"
+    require(counter["before"] == before and counter["after"] == after, "counter sequence mismatch")
     lookup = counter["lookupPath"]
     maps = counter["packageMaps"]
     pid = counter["pid"]
-    assert lookup.endswith("base.apk!/" + MEMBER), "class loader resolves another member"
+    require(lookup.endswith("base.apk!/" + MEMBER), "class loader resolves another member")
     package_path = lookup.split("!/", 1)[0]
     member, data_offset, data_end = mapped_member(apk)
     offset = f"{data_offset + offset_delta:08x}"
@@ -54,8 +59,8 @@ def observed_counter(
         re.search(rf"\br-xp\s+{offset}\s+.*{re.escape(package_path)}", line)
         for line in maps
     )
-    assert map_match, f"no executable base.apk mapping at DataStore member offset 0x{offset}"
-    assert data_offset % 16384 == 0, "native ZIP entry data is not 16 KB aligned"
+    require(map_match, f"no executable base.apk mapping at DataStore member offset 0x{offset}")
+    require(data_offset % 16384 == 0, "native ZIP entry data is not 16 KB aligned")
     return {
         "apk_sha256": sha256(apk.read_bytes()),
         "member_sha256": sha256(member),
@@ -82,7 +87,7 @@ def main() -> None:
     args = parser.parse_args()
 
     aar_bytes = args.aar.read_bytes()
-    assert sha256(aar_bytes) == args.expected_aar_sha, "AAR SHA256 mismatch"
+    require(sha256(aar_bytes) == args.expected_aar_sha, "AAR SHA256 mismatch")
     with zipfile.ZipFile(args.aar) as archive:
         original = archive.read(AAR_MEMBER)
     with tempfile.TemporaryDirectory() as directory:
@@ -95,9 +100,9 @@ def main() -> None:
     verify = observed_counter(args.verify_result, args.verify_apk, "verify", 1, 2, args.expected_offset_delta)
     for record, apk in ((seed, args.seed_apk), (verify, args.verify_apk)):
         member, _, _ = mapped_member(apk)
-        assert member in (original, stripped), "packaged member differs from AAR and strip output"
-    assert seed["pid"] != verify["pid"], "seed and verify ran in the same process"
-    assert seed["apk_sha256"] == verify["apk_sha256"], "the two phases used different APKs"
+        require(member in (original, stripped), "packaged member differs from AAR and strip output")
+    require(seed["pid"] != verify["pid"], "seed and verify ran in the same process")
+    require(seed["apk_sha256"] == verify["apk_sha256"], "the two phases used different APKs")
     print(
         json.dumps(
             {

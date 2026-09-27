@@ -1,0 +1,104 @@
+{
+  "aar_sha256": "435edad7bcb1fbb1a2a46de7be4d6daf299479b3328ebf757ebdfe02810cbdd8",
+  "apk_sha256": "0ecb6bf189267a334236d877904bc7ea5e08bf324ede04dd2005b1c289964404",
+  "cases": [
+    {
+      "exit": 0,
+      "name": "ordinary:valid",
+      "reason": "",
+      "result": "accepted"
+    },
+    {
+      "exit": 1,
+      "name": "ordinary:wrong-aar-sha",
+      "reason": "ValueError: AAR SHA256 mismatch",
+      "result": "rejected"
+    },
+    {
+      "exit": 1,
+      "name": "ordinary:wrong-map-offset",
+      "reason": "ValueError: no executable base.apk mapping at DataStore member offset 0x01451000",
+      "result": "rejected"
+    },
+    {
+      "exit": 1,
+      "name": "ordinary:same-pid",
+      "reason": "ValueError: seed and verify ran in the same process",
+      "result": "rejected"
+    },
+    {
+      "exit": 0,
+      "name": "ordinary:inline-valid-phase",
+      "reason": "",
+      "result": "accepted"
+    },
+    {
+      "exit": 1,
+      "name": "ordinary:inline-false-phase",
+      "reason": "fixture phase/status mismatch: {'phase': 'verify', 'counter': {'lookupPath': '/data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk!/lib/arm64-v8a/libdatastore_shared_counter.so', 'before': 0, 'packageMaps': ['75417250c000-754172510000 r--p 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754172510000-754172514000 r-xp 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754172514000-754172518000 r--p 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754172518000-75417251c000 rw-p 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754194e54000-7541972c8000 r-xp 01454000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '7541972d4000-75419736c000 r--p 038c4000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754197378000-75419737c000 rw-p 03958000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754270330000-754270c10000 r--p 00000000 00:00 0                          [anon:dalvik-classes.dex extracte...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]', '754283a68000-754283f98000 r--p 00000000 00:00 0                          [anon:dalvik-classes8.dex extract...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]', '754570600000-754570650000 r--s 04ec0000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '7545707a4000-7545707d8000 r--p 00000000 00:00 0                          [anon:dalvik-classes4.dex extract...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]', '754574404000-754574424000 r--p 00000000 00:00 0                          [anon:dalvik-classes3.dex extract...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]'], 'pid': 12521, 'after': 1}, 'status': 'PASS'}",
+      "result": "rejected"
+    },
+    {
+      "exit": 0,
+      "name": "ordinary:inline-valid-audit",
+      "reason": "",
+      "result": "accepted"
+    },
+    {
+      "exit": 1,
+      "name": "ordinary:inline-bad-audit",
+      "reason": "unexpected native audit scope: {'artifact': '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-datastore-logs/fixture-single.apk', 'libraries_checked': 5, 'unaligned_libraries': ['lib/arm64-v8a/libflutter.so', 'lib/x86_64/libflutter.so', 'lib/arm64-v8a/libdatastore_shared_counter.so'], 'passed': False, 'scope': 'ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification'}",
+      "result": "rejected"
+    },
+    {
+      "exit": 0,
+      "name": "optimized:valid",
+      "reason": "",
+      "result": "accepted"
+    },
+    {
+      "exit": 1,
+      "name": "optimized:wrong-aar-sha",
+      "reason": "ValueError: AAR SHA256 mismatch",
+      "result": "rejected"
+    },
+    {
+      "exit": 1,
+      "name": "optimized:wrong-map-offset",
+      "reason": "ValueError: no executable base.apk mapping at DataStore member offset 0x01451000",
+      "result": "rejected"
+    },
+    {
+      "exit": 1,
+      "name": "optimized:same-pid",
+      "reason": "ValueError: seed and verify ran in the same process",
+      "result": "rejected"
+    },
+    {
+      "exit": 0,
+      "name": "optimized:inline-valid-phase",
+      "reason": "",
+      "result": "accepted"
+    },
+    {
+      "exit": 1,
+      "name": "optimized:inline-false-phase",
+      "reason": "fixture phase/status mismatch: {'phase': 'verify', 'counter': {'lookupPath': '/data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk!/lib/arm64-v8a/libdatastore_shared_counter.so', 'before': 0, 'packageMaps': ['75417250c000-754172510000 r--p 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754172510000-754172514000 r-xp 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754172514000-754172518000 r--p 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754172518000-75417251c000 rw-p 01450000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754194e54000-7541972c8000 r-xp 01454000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '7541972d4000-75419736c000 r--p 038c4000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754197378000-75419737c000 rw-p 03958000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '754270330000-754270c10000 r--p 00000000 00:00 0                          [anon:dalvik-classes.dex extracte...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]', '754283a68000-754283f98000 r--p 00000000 00:00 0                          [anon:dalvik-classes8.dex extract...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]', '754570600000-754570650000 r--s 04ec0000 fe:05 164009                     /data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk', '7545707a4000-7545707d8000 r--p 00000000 00:00 0                          [anon:dalvik-classes4.dex extract...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]', '754574404000-754574424000 r--p 00000000 00:00 0                          [anon:dalvik-classes3.dex extract...tastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk]'], 'pid': 12521, 'after': 1}, 'status': 'PASS'}",
+      "result": "rejected"
+    },
+    {
+      "exit": 0,
+      "name": "optimized:inline-valid-audit",
+      "reason": "",
+      "result": "accepted"
+    },
+    {
+      "exit": 1,
+      "name": "optimized:inline-bad-audit",
+      "reason": "unexpected native audit scope: {'artifact': '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-datastore-logs/fixture-single.apk', 'libraries_checked': 5, 'unaligned_libraries': ['lib/arm64-v8a/libflutter.so', 'lib/x86_64/libflutter.so', 'lib/arm64-v8a/libdatastore_shared_counter.so'], 'passed': False, 'scope': 'ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification'}",
+      "result": "rejected"
+    }
+  ],
+  "runner_sha256": "490bf926519116abf9298a8772bd049aaeff15c2d961e8d7a37b2047cc9d90a1",
+  "verifier_sha256": "63038c6669fe2485429dea9e3eea0ebab661c19479f1e12f4b57c1f0c0798065"
+}
