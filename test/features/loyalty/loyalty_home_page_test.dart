@@ -273,7 +273,7 @@ void main() {
     service.dispose();
   });
 
-  testWidgets('display-only points hide priced catalog but keep used history', (
+  testWidgets('read-only rewards catalog preserves historical used points', (
     tester,
   ) async {
     final service = _ScriptedLoyaltyService(
@@ -284,9 +284,21 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Rewards'), findsNothing);
-    expect(find.text('Priced item'), findsNothing);
+    expect(find.text('Rewards'), findsOneWidget);
     expect(find.text('7'), findsOneWidget);
+    await tester.ensureVisible(find.text('Rewards'));
+    await tester.tap(find.text('Rewards'));
+    await tester.pumpAndSettle();
+    expect(find.text('Priced item'), findsOneWidget);
+    expect(find.text('Unavailable catalog'), findsOneWidget);
+    expect(find.text('100 pts'), findsOneWidget);
+    final rewardTile = tester.widget<ListTile>(
+      find.ancestor(
+        of: find.text('Priced item'),
+        matching: find.byType(ListTile),
+      ),
+    );
+    expect(rewardTile.onTap, isNull);
     await tester.tap(find.text('History'));
     await tester.pumpAndSettle();
     expect(find.text('Historical spend'), findsOneWidget);

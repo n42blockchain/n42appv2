@@ -177,7 +177,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).g_key_loyalty_title),
@@ -225,6 +225,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
             Tab(text: S.of(context).g_key_loyalty_referral),
             Tab(text: S.of(context).g_key_loyalty_history),
             Tab(text: S.of(context).g_key_loyalty_leaderboard),
+            Tab(text: S.of(context).g_key_loyalty_rewards),
           ],
         ),
         Expanded(
@@ -234,6 +235,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
               _ReferralsList(referrals: snapshot.referrals),
               _HistoryList(history: snapshot.history),
               _LeaderboardList(entries: snapshot.leaderboard),
+              _RewardsList(rewards: snapshot.rewards),
             ],
           ),
         ),
@@ -488,6 +490,31 @@ class _LeaderboardList extends StatelessWidget {
           leading: SizedBox(width: 32, child: Text('#${entry.rank}')),
           title: Text(_shortAddress(entry.address)),
           trailing: Text('${entry.points} pts'),
+        );
+      },
+    );
+  }
+}
+
+class _RewardsList extends StatelessWidget {
+  const _RewardsList({required this.rewards});
+  final List<LoyaltyReward> rewards;
+
+  @override
+  Widget build(BuildContext context) {
+    if (rewards.isEmpty) {
+      return _EmptyText(S.of(context).g_key_loyalty_no_rewards);
+    }
+    return ListView.builder(
+      padding: EdgeInsets.all(AppSpacing.space8),
+      itemCount: rewards.length,
+      itemBuilder: (_, index) {
+        final reward = rewards[index];
+        return ListTile(
+          leading: const Icon(Icons.card_giftcard_rounded),
+          title: Text(reward.name),
+          subtitle: Text(reward.description),
+          trailing: Text('${reward.pointsCost} pts'),
         );
       },
     );

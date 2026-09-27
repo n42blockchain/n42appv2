@@ -11,7 +11,7 @@ Requirements checked on 2026-09-26; recheck before final submission.
 | Google Play target API | Mobile new apps/updates target API36+ since 2026-08-31 | Final AAB merged manifest, not only Gradle source |
 | Apple SDK | iOS/iPadOS26 SDK+ since 2026-04-28 | Final archive SDK/build metadata |
 | Android 16 KB | API35+ apps must support16KB; current page states update blocking from2027-02-01 | Every packaged native ELF, APK ZIP alignment and real16KB runtime |
-| Play Billing, if retained | Billing7 normal submission deadline2026-08-31; extension to11-01 only if approved | Audit remaining supported purchase callers; remove unused Billing under Task17 or verify the retained version |
+| Play Billing | Billing7 normal submission deadline2026-08-31; extension to11-01 only if approved | Verify the retained Billing version and classify actual purchase callers independently of free points |
 | Apple age questionnaire | New social-media questions required for submissions fromSeptember2026 | App Store Connect actual answers |
 | Android developer verification | Initial regional enforcement2026-09-30 in Brazil, Indonesia, Singapore and Thailand | Developer and application registration status |
 
@@ -46,7 +46,7 @@ All entries initially pending unless later evidence is recorded explicitly.
 - Permission flows: deny/permanently deny notifications, camera, microphone, media and location; limited-photo access; fullscreen intent unavailable; screen-sharing consent per session, FGS notification and background restrictions. Check iOS Always-location/calendar/AppleMusic descriptions against actual usage.
 - Account deletion: exposed password/Apple/Google/Facebook/wallet/passkey methods; server deletion, retention explanation, retry/cancellation and separate web path. Preserve recoverable wallet ownership and do not destroy assets as a substitute for deleting a service account.
 - Chat/UGC: actual report delivery and block behavior across chat/groups/feed/video, support contact and moderation handling evidence. Existing buttons alone are insufficient.
-- Actual payment routes: remove unplanned points charging under Task17. Classify any remaining wallet, gift, NFT or mini-app checkout by actual behavior; apply purchase rules only where relevant. Free verify points do not require creating products or consumption features.
+- Actual payment routes: preserve existing IAP and subscription business flows while classifying wallet, gift, NFT or mini-app checkout by actual behavior; apply purchase rules where relevant. Free verify points do not require creating products or consumption features.
 - Accessibility/content: VoiceOver/TalkBack, large text, focus and critical payment confirmation; do not submit untested accessibility claims.
 
 ## External evidence still required
@@ -109,16 +109,16 @@ The user explicitly states that points have no goods/SKU plan and no designed co
 
 Apple's purchase rules address paid digital features and Google's billing policy addresses accepting payment; neither requires creating a paid product for free earned display points. See [Apple purchase rules](https://developer.apple.com/app-store/review/guidelines/#in-app-purchase) and [Google payments policy](https://support.google.com/googleplay/android-developer/answer/9858738?hl=en).
 
-Task17 now preserves free points and existing records, removes unplanned paid entrypoints and misleading claims, and removes dependencies only after caller verification. Native validator computation remains a separate behavior-based assessment; the reward name does not establish what the SDK computes.
+Task17 preserves free points, existing records, the read-only Rewards view and existing IAP/subscription flows. Earlier Stage B IAP retirement and Stage C subscription hiding were cancelled by the user's 2026-09-27 correction. Future compliance changes require a specific applicable rule and observed defect. Native validator computation remains a separate behavior-based assessment; the reward name does not establish what the SDK computes.
 
 ## Existing loyalty evidence and limits
 
 - `contracts/loyalty/src/N42LoyaltyPoints.sol` contains operator award/spend methods and processed requests. Method availability does not authorize a new spending product or establish deployment.
 - `backend/loyalty` contains authentication, wallet binding, awards and history. Deployment and actual reward attribution remain unverified; do not create a duplicate ledger.
-- Preserve existing host loyalty display/history/check-in behavior and account isolation. Native reward paths are separate; their connection to loyalty has not been established. Do not erase persisted records during UI cleanup.
+- Preserve existing host loyalty display/history/check-in behavior, the read-only Rewards catalog and account isolation. Native reward paths are separate; their connection to loyalty has not been established. Do not erase persisted records.
 - Ordinary wallet TokenInfo holdings are distinct from points. Preserve legitimate wallet swaps and transfers.
-- Chat's configurable redemption and local subscription paths require an exposure audit; the host currently leaves Chat points disabled. A local subscription record is not evidence of a paid entitlement.
-- The dormant host IAP code requires independent classification and caller review; it is not authority to design points products. No store receipt/refund implementation is required for the clarified free-only points scope.
+- Chat's configurable redemption and local subscription paths require an exposure audit; the host currently leaves Chat points disabled. Preserve the existing subscription entry. A local subscription record is not evidence of a paid entitlement.
+- The dormant host IAP code requires independent classification and caller review; preserve its page, callback and native dependencies. It is not authority to design points products. No new points receipt/refund implementation is required for the clarified free-only points scope.
 
 ## Detailed implementation research
 
