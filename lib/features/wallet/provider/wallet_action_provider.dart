@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
@@ -70,6 +71,14 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
   return null;
 }
 
+class _PendingWalletInit {
+  _PendingWalletInit(this.ownerUuid, this.shouldInitCoinInfo);
+
+  final String ownerUuid;
+  bool shouldInitCoinInfo;
+  final completer = Completer<void>();
+}
+
 class WalletActionProvider extends ChangeNotifier
     with SafeChangeNotifierMixin
     implements ICoinModelWalletAccess {
@@ -120,6 +129,8 @@ class WalletActionProvider extends ChangeNotifier
   Load get load => _load;
   Load loadBalance = Load.finish;
   bool buildwallet = false;
+  String? _initializingWalletOwnerUuid;
+  _PendingWalletInit? _pendingWalletInit;
   //数字格式化实例
   final NumberFormat _oCcy = NumberFormat("#,##0.00", "en_US");
 

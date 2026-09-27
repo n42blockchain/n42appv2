@@ -53,9 +53,22 @@ extension WalletActionProviderWallet on WalletActionProvider {
   }
 
   Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
-    if (buildwallet == true) return;
+    if (buildwallet == true) {
+      final requestedOwner = userUUID;
+      if (requestedOwner == _initializingWalletOwnerUuid) return;
+      final pending = _pendingWalletInit;
+      if (pending?.ownerUuid == requestedOwner) {
+        pending!.shouldInitCoinInfo |= shouldInitCoinInfo;
+        return pending.completer.future;
+      }
+      pending?.completer.complete();
+      final next = _PendingWalletInit(requestedOwner, shouldInitCoinInfo);
+      _pendingWalletInit = next;
+      return next.completer.future;
+    }
     buildwallet = true;
     final startingOwner = userUUID;
+    _initializingWalletOwnerUuid = startingOwner;
     // 入口先清空是为了让骨架屏接管；但构建中途抛错的话不能让用户的资产列表
     // 停在空白——失败时整体回滚到进入前的数据。
     final prevCoinList = coinList;
@@ -88,7 +101,21 @@ extension WalletActionProviderWallet on WalletActionProvider {
       rethrow;
     } finally {
       buildwallet = false;
+      _initializingWalletOwnerUuid = null;
       refresh();
+      final pending = _pendingWalletInit;
+      _pendingWalletInit = null;
+      if (pending != null) {
+        if (pending.ownerUuid != userUUID) {
+          pending.completer.complete();
+        } else {
+          initWallet(shouldInitCoinInfo: pending.shouldInitCoinInfo).then(
+            (_) => pending.completer.complete(),
+            onError: (Object error, StackTrace stackTrace) =>
+                pending.completer.completeError(error, stackTrace),
+          );
+        }
+      }
     }
     if (shouldInitCoinInfo) {
       eventBus.fire(

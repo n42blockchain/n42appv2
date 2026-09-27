@@ -11,17 +11,24 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/loyalty/models/loyalty_models.dart';
 import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42_wallet/features/loyalty/services/loyalty_service.dart';
+import 'package:n42_wallet/features/loyalty/loyalty_wallet_address.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
+import 'package:n42_wallet/main.dart' as app;
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 
 import '../../helpers/test_current_user.dart';
 import '../../helpers/widget_test_helpers.dart';
 
 void main() {
+  globalTripInstance = _NoopTransactionRecordItemProvider();
   const walletA = '0x1111111111111111111111111111111111111111';
   const walletB = '0x2222222222222222222222222222222222222222';
 
@@ -469,33 +476,96 @@ void main() {
     service.dispose();
   });
 
-  test('auth change during wallet storage await cancels publication', () async {
+  test(
+    'overlapping auth init retries and publishes the latest owner',
+    () async {
+      final previousUser = AppGlobals.userInfo;
+      final previousStorage = FlutterSecureStoragePlatform.instance;
+      addTearDown(() {
+        AppGlobals.userInfo = previousUser;
+        FlutterSecureStoragePlatform.instance = previousStorage;
+      });
+      AppGlobals.userInfo = UserInfo(uuid: 'user-A');
+      app.globalProviderContainer = ProviderContainer();
+      addTearDown(() => app.globalProviderContainer.dispose());
+      final wallet = WalletActionProvider()
+        ..publishCoinListForOwner('user-A', [_coin(walletA)]);
+      final storage = _DelayedWalletStoragePlatform({});
+      FlutterSecureStoragePlatform.instance = storage;
+
+      final initializing = wallet.initWallet();
+      expect(wallet.buildwallet, isTrue);
+      AppGlobals.userInfo = UserInfo(uuid: 'user-B');
+      final initializingB = wallet.initWallet();
+      final bWallet =
+          WalletInfo(
+              walletName: 'Synthetic B',
+              walletUuid: 'user-B',
+              coinInfo: <String, dynamic>{},
+            )
+            ..watchOnly = true
+            ..watchAddress = walletB
+            ..mainWallet = true;
+      storage.completeWalletRead(
+        jsonEncode({
+          'user-B': {
+            'index': 0,
+            'miningIndex': 0,
+            'wallet': [bWallet.toJson()],
+          },
+        }),
+      );
+      await initializing;
+      await initializingB;
+
+      expect(wallet.buildwallet, isFalse);
+      expect(wallet.coinListOwnerUuid, 'user-B');
+      expect(selectLoyaltyWalletAddress(wallet.coinList), walletB);
+    },
+  );
+
+  test('coalesced new-owner init preserves coin-info request', () async {
     final previousUser = AppGlobals.userInfo;
     final previousStorage = FlutterSecureStoragePlatform.instance;
     addTearDown(() {
       AppGlobals.userInfo = previousUser;
       FlutterSecureStoragePlatform.instance = previousStorage;
     });
+    app.globalProviderContainer = ProviderContainer();
+    addTearDown(() => app.globalProviderContainer.dispose());
     AppGlobals.userInfo = UserInfo(uuid: 'user-A');
-    final wallet = WalletActionProvider()
-      ..publishCoinListForOwner('user-A', [_coin(walletA)]);
+    final wallet = WalletActionProvider(
+      stablecoinPriceRequest: (_) async => <String, dynamic>{},
+    );
     final storage = _DelayedWalletStoragePlatform({});
     FlutterSecureStoragePlatform.instance = storage;
+    final selectedWalletEvents = <EventPublic>[];
+    final subscription = eventBus.on<EventPublic>().listen((event) {
+      if (event.type == EventPublicType.selectWallet) {
+        selectedWalletEvents.add(event);
+      }
+    });
+    addTearDown(subscription.cancel);
 
-    final initializing = wallet.initWallet();
-    expect(wallet.buildwallet, isTrue);
+    final initializingA = wallet.initWallet();
     AppGlobals.userInfo = UserInfo(uuid: 'user-B');
+    final initializingB = wallet.initWallet();
+    final coalescedB = wallet.initWallet(shouldInitCoinInfo: true);
     storage.completeWalletRead(
       jsonEncode({
         'user-B': {'index': -1, 'wallet': <Object>[]},
       }),
     );
-    await initializing;
-
+    await Future.wait([initializingA, initializingB, coalescedB]);
+    expect(wallet.coinListOwnerUuid, 'user-B');
     expect(wallet.buildwallet, isFalse);
-    expect(wallet.coinList, isEmpty);
-    expect(wallet.coinListOwnerUuid, 'user-A');
+    expect(selectedWalletEvents, hasLength(1));
   });
+}
+
+class _NoopTransactionRecordItemProvider extends TransactionRecordItemProvider {
+  @override
+  Future<void> selectUndoneTr() async {}
 }
 
 class _FailingWalletStoragePlatform extends TestFlutterSecureStoragePlatform {
