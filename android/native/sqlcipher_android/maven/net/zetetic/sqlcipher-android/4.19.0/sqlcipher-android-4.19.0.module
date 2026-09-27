@@ -1,0 +1,123 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.zetetic",
+    "module": "sqlcipher-android",
+    "version": "4.19.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.5.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqlcipher-android-4.19.0.aar",
+          "url": "sqlcipher-android-4.19.0.aar",
+          "size": 4075995,
+          "sha512": "3dc295a6a1a2c48edc9e4e433a99f30cdb5369cd515af11e66faf0ab30c6f5a117f8fc3f871a0f4dce42407889baa5d3815bcd1d7438c014dc1cfaac734464f7",
+          "sha256": "4c3a1ab35258f98c13f34775621c730fbe1e2d39c0207be110f98bf07d99c25c",
+          "sha1": "3d9749f604025ae346ee76d9da5aea1c962de954",
+          "md5": "cabc217c9705f60470a3a9572cc4f5cf"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.sqlite",
+          "module": "sqlite",
+          "version": {
+            "requires": "2.7.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqlcipher-android-4.19.0.aar",
+          "url": "sqlcipher-android-4.19.0.aar",
+          "size": 4075995,
+          "sha512": "3dc295a6a1a2c48edc9e4e433a99f30cdb5369cd515af11e66faf0ab30c6f5a117f8fc3f871a0f4dce42407889baa5d3815bcd1d7438c014dc1cfaac734464f7",
+          "sha256": "4c3a1ab35258f98c13f34775621c730fbe1e2d39c0207be110f98bf07d99c25c",
+          "sha1": "3d9749f604025ae346ee76d9da5aea1c962de954",
+          "md5": "cabc217c9705f60470a3a9572cc4f5cf"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "sqlcipher-android-4.19.0-sources.jar",
+          "url": "sqlcipher-android-4.19.0-sources.jar",
+          "size": 122475,
+          "sha512": "e0da7c63a4304565bbd9ea6ac4bb5c41c0c679eef1b358a5b36f65bf605f093200c767486a72a7b38dc685b1b72bbfdcc543d30a1ccdc0356dcd31c1df33111e",
+          "sha256": "ff22ea959cdc6294d9bae9dd000fe6ada383d1fbea3e8bd54e52a8ec856b3cb3",
+          "sha1": "112ccc91dbc17002a81d1232d8eb871d4e821075",
+          "md5": "35e125fafd4f10c2d0a7121ebc70e888"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseJavaDocPublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "sqlcipher-android-4.19.0-javadoc.jar",
+          "url": "sqlcipher-android-4.19.0-javadoc.jar",
+          "size": 699308,
+          "sha512": "d8e99bf963ab245b466c7e0c6a308480fdc1150b5b1e8d18ef081810fa7da98f855d35b3be7979b87aadab9f22709e5104f3ced9f8ab0636ddffeec32688d770",
+          "sha256": "63551a3b4d6cc5970c1971c09b756ed84f62f1d71712ace3131650cb77eb2e89",
+          "sha1": "074a17b26440bb2b5575830b3c0251d0b8b98f5c",
+          "md5": "53704d8219e7627eb5cb5d945c4456bf"
+        }
+      ]
+    }
+  ]
+}

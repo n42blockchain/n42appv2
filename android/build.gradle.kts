@@ -15,6 +15,17 @@ allprojects {
                 includeVersion("androidx.camera", "camera-core", "1.6.2")
             }
         }
+        // One maintained SQLCipher 4.19 AAR serves the host and sqflite bridge.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri(rootProject.file("native/sqlcipher_android/maven"))
+                }
+            }
+            filter {
+                includeVersion("net.zetetic", "sqlcipher-android", "4.19.0")
+            }
+        }
         google()
         mavenCentral()
         // ✅ TrustWallet 私有仓库 (需要 GitHub 认证)

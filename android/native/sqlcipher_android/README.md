@@ -13,6 +13,16 @@ python3 scripts/build_sqlcipher_android.py \
   --ndk /absolute/path/to/ndk/28.2.13676358
 ```
 
-The recipe verifies the three commits, clean source, selected source/license bytes, NDK/Xcode tool bytes, and an unused output path before editing the isolated checkout. It runs the pinned core's `./configure --with-tempstore=yes --disable-tcl` and `make sqlite3.c`, checks both generated files, patches only the final shared-library link for 16 KB common pages and `JNIHelp.cpp` for the Android API dependent `strerror_r` return type, then invokes `ndk-build` with API23 for all four ABIs. It clears inherited `SQLCIPHER_CFLAGS` so the wrapper's LibTomCrypt and SQLite feature defaults remain selected. Logs, generated-file hashes, exact source patch, tool identities and native member hashes are emitted under `--out`.
+The recipe verifies the three commits, clean source, selected source/license bytes, NDK/Xcode tool bytes, and an unused output path before editing the isolated checkout. It runs the pinned core's `./configure --with-tempstore=yes --disable-tcl` and `make sqlite3.c`, checks both generated files, patches only the final shared-library link for 16 KB common pages and `JNIHelp.cpp` for the Android API dependent `strerror_r` return type, then invokes `ndk-build` with API23 for all four ABIs. It clears inherited `SQLCIPHER_CFLAGS` and `MAKEFILES` so the wrapper's LibTomCrypt and SQLite feature defaults remain selected without an injected makefile. Logs, generated-file hashes, exact source patch, tool identities and native member hashes are emitted under `--out`.
 
-This is a maintained source candidate built with NDK28.2, while the wrapper tag requests NDK25.2 and its published Maven AAR does not attest its full native source or toolchain. A later step must retain the official AAR's Java/resources/notices, select one maintained module for the app and plugin, and verify actual Java and SQLite FFI database behavior on the strict 16 KB emulator before package acceptance. The 4096-byte SQLCipher database page default is unchanged; it is separate from ELF memory page alignment.
+`scripts/build_sqlcipher_android_maven.py` checks the official 4.19.0 AAR, POM, module, sources and javadoc hashes, plus the accepted four native hashes and source-build manifest. It copies all 17 original AAR entries, replacing only the four `jni/<ABI>/libsqlcipher.so` members. The other 13 entries, including the original Java classes and resources, remain bytewise identical. The official POM and auxiliary JARs are copied exactly; only the two AAR file records in Gradle module metadata receive new size and digests. To regenerate the tracked local module from retained inputs:
+
+```sh
+python3 scripts/build_sqlcipher_android_maven.py \
+  --official-dir /absolute/path/to/official-4.19.0-artifacts \
+  --candidate-dir /absolute/path/to/accepted-native-build \
+  --candidate-manifest /absolute/path/to/accepted-native-build/manifest.json \
+  --output-root /absolute/path/to/empty/output-root
+```
+
+The app uses an exclusive local repository for this exact `net.zetetic:sqlcipher-android:4.19.0` module; both the host and vendored `sqflite_sqlcipher` plugin request that version. This is a maintained source candidate built with NDK28.2, while the wrapper tag requests NDK25.2 and its published Maven AAR does not attest its full native source or toolchain. Candidate4 was built before the final expanded tool-byte and `MAKEFILES` recipe guards; those guards do not retroactively describe its build environment. Actual Java and SQLite FFI database behavior on the strict 16 KB emulator remains a separate acceptance gate. The 4096-byte SQLCipher database page default is unchanged; it is separate from ELF memory page alignment.
