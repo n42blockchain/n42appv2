@@ -4,6 +4,17 @@ plugins {
 
 allprojects {
     repositories {
+        // Only this exact Camera Core build comes from the maintained local Maven module.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri(rootProject.file("native/camera_core_surface/maven"))
+                }
+            }
+            filter {
+                includeVersion("androidx.camera", "camera-core", "1.6.2")
+            }
+        }
         google()
         mavenCentral()
         // ✅ TrustWallet 私有仓库 (需要 GitHub 认证)

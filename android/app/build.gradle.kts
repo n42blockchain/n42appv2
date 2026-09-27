@@ -160,6 +160,8 @@ configurations.configureEach {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:2.4.20")
+    // CameraX's atomic family resolves 1.6.2; Core uses the maintained native-link module.
+    implementation("androidx.camera:camera-core:1.6.2")
     // Keep the Android shared_preferences plugin's DataStore modules on one release.
     implementation("androidx.datastore:datastore:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.2.1")
