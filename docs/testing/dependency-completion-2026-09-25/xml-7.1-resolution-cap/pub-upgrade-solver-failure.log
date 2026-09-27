@@ -1,0 +1,11 @@
+Resolving dependencies...
+Because vector_graphics_compiler >=1.1.12 <1.1.19 depends on xml >=6.3.0 <=6.5.0 and vector_graphics_compiler >=1.1.19 <1.2.5 depends on xml >=6.3.0 <=6.6.1, vector_graphics_compiler >=1.1.12 <1.2.5 requires xml >=6.3.0 <=6.6.1.
+And because vector_graphics_compiler >=1.2.5 depends on xml >=6.3.0 <=7.0.1, vector_graphics_compiler >=1.1.12 requires xml >=6.3.0 <=7.0.1.
+Because every version of n42_chat from git depends on flutter_svg ^2.2.4 which depends on vector_graphics_compiler ^1.1.14, every version of n42_chat from git requires vector_graphics_compiler ^1.1.14.
+Thus, every version of n42_chat from git requires xml >=6.3.0 <=7.0.1.
+So, because n42_wallet depends on both xml ^7.1.0 and n42_chat from git, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Consider downgrading your constraint on xml: flutter pub add xml:^7.0.1
+Failed to update packages.

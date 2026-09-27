@@ -1,0 +1,24 @@
+00:00 +0: loading /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/news/news_api_rss_test.dart
+00:00 +0: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/news/news_api_rss_test.dart: NewsApi.parseRss RSS 2.0 with media:content + enclosure 图片
+00:00 +0: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/core/market/news_resilience_test.dart: news and market resilience helpers CryptoNewsService keeps fallback when RSS body is invalid
+CryptoNewsService.parseRssArticles error: XmlParserException: Expected a single root element at 1:8
+00:00 +1: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/news/news_api_rss_test.dart: NewsApi.parseRss RSS 2.0 with media:content + enclosure 图片
+00:00 +2: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +3: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +4: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +5: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +6: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +6: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/news/news_api_rss_test.dart: NewsApi.parseRss 坏 XML 不抛异常，返回空列表
+[NewsApi] WARN: _parseRss error: XmlParserException: ">" expected at 1:15
+00:00 +7: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +8: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +9: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +10: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +11: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +12: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: nested tags retain text and inherited styles
+00:00 +13: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: link entity decodes and callback keeps its URL
+00:00 +14: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: entities, br and self-closing tags keep visible text
+00:00 +15: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: malformed nesting yields no misleading partial text
+Malformed HTML
+00:00 +16: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/features/wallet/simple_html_css_xml7_test.dart: prefixed tags preserve content
+00:00 +17: All tests passed!
