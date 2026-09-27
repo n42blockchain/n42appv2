@@ -1,0 +1,231 @@
+{
+  "files": [
+    {
+      "path": "fixture-overlay/android/app/build.gradle.kts",
+      "sha256": "5bd508e8ede6c57b4a16335ce0d8a0a54382dc5c2381a9ef0fa4488d789eea3c",
+      "size": 1932
+    },
+    {
+      "path": "fixture-overlay/android/app/src/main/AndroidManifest.xml",
+      "sha256": "bf8489902521b768f7fa4f46f08ac06aab622d8df22a5e9c08afc0da004db3d6",
+      "size": 2205
+    },
+    {
+      "path": "fixture-overlay/android/app/src/main/kotlin/ai/n42/fixture/datastore_fixture/MainActivity.kt",
+      "sha256": "21cd9f8c2765269caac286befaaccbbc341e06b4ce7b35e51409ac7c8dab931d",
+      "size": 4581
+    },
+    {
+      "path": "fixture-overlay/integration_test/datastore_fixture_test.dart",
+      "sha256": "3fc99e4c35fec46abd7e1860b910c6174f8c6ec532436c80bdeb26af55476e92",
+      "size": 667
+    },
+    {
+      "path": "fixture-overlay/lib/fixture_workflow.dart",
+      "sha256": "af82ace73062f9b873c6fd5d2e6bd880618941fd58cae561da39257b2533ca4f",
+      "size": 5726
+    },
+    {
+      "path": "fixture-overlay/lib/main.dart",
+      "sha256": "1d859d33c9f0582291ecaf6305f932b787a732318ed1beca392fffd94c385ca2",
+      "size": 960
+    },
+    {
+      "path": "fixture-overlay/pubspec.lock",
+      "sha256": "04987a663362a9f6ea2a03be6324bff8b6fc29e1e481489652bd07a5eef017f1",
+      "size": 11206
+    },
+    {
+      "path": "fixture-overlay/pubspec.yaml",
+      "sha256": "6a58dbadec5b29e6dc8fc33894e279d77823c9b012e6bc2c70349f72f53708f5",
+      "size": 3947
+    },
+    {
+      "path": "logs/candidate-aar-native-audit.log.gz",
+      "sha256": "a08856b034c9d62b8562ee00d8e255a1c96c3d1137d0878e1dc22f9a187f5819",
+      "size": 277
+    },
+    {
+      "path": "logs/datastore-audit-scope-check.log.gz",
+      "sha256": "541efb2ac88b3cf09d9f04e2dd4b52f0bd18e27f3716b5d62910e62c676b4d32",
+      "size": 119
+    },
+    {
+      "path": "logs/fixture-analyze-final.log.gz",
+      "sha256": "02465171dc00d744728f2e5dbad7ceeba2062019ebc97ced10ebf77cb5e62473",
+      "size": 84
+    },
+    {
+      "path": "logs/fixture-apk-badging.log.gz",
+      "sha256": "b3e0601aabc2950b7655f20a560ebb4eea4620500a1af93ebf4c6b2c7fe99611",
+      "size": 1078
+    },
+    {
+      "path": "logs/fixture-apk-build.log.gz",
+      "sha256": "30edfe35c1544f98d7742934020a52f4baf5c4b88c4c09399b8ca8ad9215245f",
+      "size": 399
+    },
+    {
+      "path": "logs/fixture-create.log.gz",
+      "sha256": "a56d910c40867e1cf9b06b5e75ca6f7204092447e19c543776f6caa0959572b2",
+      "size": 299
+    },
+    {
+      "path": "logs/fixture-dependency-insight.log.gz",
+      "sha256": "cd30af539d7aac4f8e9eb31b4f04176305ea2157297c055d5114ab3ff772acb7",
+      "size": 4211
+    },
+    {
+      "path": "logs/fixture-device-preflight.log.gz",
+      "sha256": "13318ebff47a425f3b2a1e24de8d9e1270d8f8ac2e664524c555c75c485936df",
+      "size": 110
+    },
+    {
+      "path": "logs/fixture-graph-assertion.log.gz",
+      "sha256": "e87f2ce159970551c329d38326cf1bc521ddba3c1c78f02cefcfdc1444fc0995",
+      "size": 143
+    },
+    {
+      "path": "logs/fixture-native-audit.json",
+      "sha256": "ac4acba130ba75015362e8a3dd6b5cf52e6521486dc85239536dfcb6b2c05b4d",
+      "size": 430
+    },
+    {
+      "path": "logs/fixture-pub-get-offline.log.gz",
+      "sha256": "4fc4467d78744a18c7226568c5678823b725a508a538ef55a0dca3f3ed559795",
+      "size": 717
+    },
+    {
+      "path": "logs/fixture-runner-failed-map-assert.log.gz",
+      "sha256": "2cb8230ca4f435ffed7c8408672c48ba80bb63befdc20aeaf63612ba0ce5eb03",
+      "size": 1655
+    },
+    {
+      "path": "logs/fixture-runner-final-attempt.log.gz",
+      "sha256": "26023eed0d795ed174872a5db015379942a23a356facc4fa44391cd200c215cd",
+      "size": 1657
+    },
+    {
+      "path": "logs/fixture-seed-failed-map-assert.log.gz",
+      "sha256": "a066e476420ba0d28082f07c0aec5d2caffa2fd13c7da60c64f52dc31e8532a3",
+      "size": 971
+    },
+    {
+      "path": "logs/fixture-seed-green.log.gz",
+      "sha256": "a571f3c0611bd12e0ff1006afb11d3a4a76da26d5790873d1d580213c62dc9bf",
+      "size": 912
+    },
+    {
+      "path": "logs/fixture-seed-red-initial.log.gz",
+      "sha256": "983611609db9c97e9466b4336bd99547f008aada040418c2e9cbd1b6a5502530",
+      "size": 1022
+    },
+    {
+      "path": "logs/fixture-seed-result.json",
+      "sha256": "1d9b6ead86f8e0746316245336f7437b82d7417a52b7b02fbcde8d35fd2a2d88",
+      "size": 2391
+    },
+    {
+      "path": "logs/fixture-single-apk-run1.log.gz",
+      "sha256": "036587634c69475139756f1e40db5586e625d97cec402eb8192ebd1cd824a8f7",
+      "size": 1440
+    },
+    {
+      "path": "logs/fixture-verification.json",
+      "sha256": "8317f9428d204c01182d077a5fa0e86c8a96f24bfe3f347f96e85b3ed7572afa",
+      "size": 1372
+    },
+    {
+      "path": "logs/fixture-verify-green.log.gz",
+      "sha256": "2d5b7575adbaa89bac380bad48586ac14f03cdcb1547088c738dc1e627efafb9",
+      "size": 942
+    },
+    {
+      "path": "logs/fixture-verify-result.json",
+      "sha256": "71d8668d6b9e17f73e371a3797532b477480809d9cb2af74056b61b55a8c601e",
+      "size": 2393
+    },
+    {
+      "path": "logs/host-baseline-dependency-insight.log.gz",
+      "sha256": "59b4348c6ec7968b44361c4021a054bc6170137851e5bd4c494beefb103fc22d",
+      "size": 7719
+    },
+    {
+      "path": "logs/host-compile-legacy-plugin-green.log.gz",
+      "sha256": "dc2831b7c572d2374dcb0b567dde7667ac7f5dba033d358addd48f474c37dc7f",
+      "size": 8848
+    },
+    {
+      "path": "logs/host-compile-plugin-tests-provision.log.gz",
+      "sha256": "8a5fd7bf89a3cd68d9fd5e6098ac71987a27b3e33e42030de1e85a376a2644f2",
+      "size": 15071
+    },
+    {
+      "path": "logs/host-offline-dependency-insight.log.gz",
+      "sha256": "83ab0783d0e682d2c5cee9719323b216e7abb391d4510c530283a85a2f4aa7eb",
+      "size": 7247
+    },
+    {
+      "path": "logs/host-storage-flutter-tests.log.gz",
+      "sha256": "787bdf51a0eb7997688ecb40606ba5c4da6073b68a732fcf7811bdfa76a135ad",
+      "size": 1899
+    },
+    {
+      "path": "logs/negative-aar-hash.log.gz",
+      "sha256": "fa775fbf9d7efb73aef6e5bb0a682d7ec0d2d1ac8825de5bd271d627f4658195",
+      "size": 267
+    },
+    {
+      "path": "logs/negative-map-offset.log.gz",
+      "sha256": "b8352c80e7aacdd1dbe658064a7e314d5ca4ef5594308c106d349c4c3b8597e9",
+      "size": 351
+    },
+    {
+      "path": "logs/plugin-full-repeat-failure.log.gz",
+      "sha256": "a95e658bcea3af6da43c866732b0ff1407209458bb033b04290d964305ddadc2",
+      "size": 4506
+    },
+    {
+      "path": "logs/plugin-robolectric-initialization-failure.xml",
+      "sha256": "6062ec4c45dff445b0a006043dab1c5675ac372d0cfd3443b1e9a651cbdc452c",
+      "size": 4557
+    },
+    {
+      "path": "logs/plugin-unit-dependency-insight.log.gz",
+      "sha256": "057728e4cf19b3d1deec5e6c03e5b16c927165bc432989529a31c43ba6ff38de",
+      "size": 5386
+    },
+    {
+      "path": "logs/resolution-red.log.gz",
+      "sha256": "2b99cd1e1e0db5c6ecda73cbee96435dd29baed1f7247faa89d3c4e68d37e22a",
+      "size": 224
+    },
+    {
+      "path": "logs/sharedcounter-bytecode.log.gz",
+      "sha256": "bae30b7fc5702b60acf9713258105c32f4b20ae4549a0bc37cc393340d9ee7e7",
+      "size": 1616
+    },
+    {
+      "path": "recipe/run_datastore_fixture.sh",
+      "sha256": "3e3582d9d2f9e35ccf2fe952b15bbdc7d46c697dcfaf7205195b1ac4062cb723",
+      "size": 8071
+    },
+    {
+      "path": "recipe/run_datastore_fixture_run1.sh",
+      "sha256": "f87991ebd9e597281ea923f0867ae741fb8dc1f4400559659450ef59a8faf2ba",
+      "size": 7544
+    },
+    {
+      "path": "recipe/verify_datastore_fixture.py",
+      "sha256": "c874ede1c90f50ee308730724b93932f9e2dc4dd7295ca1f8261e3c55b66f4b6",
+      "size": 4930
+    },
+    {
+      "path": "report.md",
+      "sha256": "b7eca5779740ca202d2009409b4575862378a1cf8d9ebccb941c7c43b8b7532b",
+      "size": 5325
+    }
+  ],
+  "schema": 1,
+  "source_commit": "9697ba07f43c96bf7cfd856cb75fcc5abd2eccfd"
+}

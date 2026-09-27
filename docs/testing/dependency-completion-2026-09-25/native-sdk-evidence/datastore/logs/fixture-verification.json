@@ -1,0 +1,28 @@
+{
+  "aar_member_sha256": "deed4546c8dafad0e68ea2c25e4c0a62ca97343614ae386b7ed2af6abb7fa999",
+  "aar_sha256": "435edad7bcb1fbb1a2a46de7be4d6daf299479b3328ebf757ebdfe02810cbdd8",
+  "process_restart_proven": true,
+  "seed": {
+    "apk_sha256": "0ecb6bf189267a334236d877904bc7ea5e08bf324ede04dd2005b1c289964404",
+    "counter_after": 1,
+    "counter_before": 0,
+    "lookup_path": "/data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk!/lib/arm64-v8a/libdatastore_shared_counter.so",
+    "mapping_offset": 21299200,
+    "member_data_end": 21306984,
+    "member_data_offset": 21299200,
+    "member_sha256": "178f89a2c6c9234ddf980dd4cd1f3616186a46b2b932aafa6707abd04c5fd76a",
+    "pid": 12521
+  },
+  "stripped_member_sha256": "178f89a2c6c9234ddf980dd4cd1f3616186a46b2b932aafa6707abd04c5fd76a",
+  "verify": {
+    "apk_sha256": "0ecb6bf189267a334236d877904bc7ea5e08bf324ede04dd2005b1c289964404",
+    "counter_after": 2,
+    "counter_before": 1,
+    "lookup_path": "/data/app/~~CEW4jU0ras2qHdKlDUXaWA==/ai.n42.fixture.datastore_fixture-0RAoxqfCeecntvzRQq7C3g==/base.apk!/lib/arm64-v8a/libdatastore_shared_counter.so",
+    "mapping_offset": 21299200,
+    "member_data_end": 21306984,
+    "member_data_offset": 21299200,
+    "member_sha256": "178f89a2c6c9234ddf980dd4cd1f3616186a46b2b932aafa6707abd04c5fd76a",
+    "pid": 12620
+  }
+}

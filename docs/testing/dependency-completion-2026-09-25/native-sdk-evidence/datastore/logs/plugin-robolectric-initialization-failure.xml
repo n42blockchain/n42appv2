@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.flutter.plugins.sharedpreferences.SharedPreferencesTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-09-27T01:12:14.922Z" hostname="mac.local" time="0.002">
+  <properties/>
+  <testcase name="initializationError" classname="io.flutter.plugins.sharedpreferences.SharedPreferencesTest" time="0.002">
+    <failure message="java.lang.IllegalArgumentException: failed to configure io.flutter.plugins.sharedpreferences.SharedPreferencesTest.testSharedPreferencesWithMultipleFiles: Package targetSdkVersion=37 &gt; maxSdkVersion=36" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: failed to configure io.flutter.plugins.sharedpreferences.SharedPreferencesTest.testSharedPreferencesWithMultipleFiles: Package targetSdkVersion=37 &gt; maxSdkVersion=36
+	at org.robolectric.RobolectricTestRunner.getChildren(RobolectricTestRunner.java:243)
+	at org.junit.runners.ParentRunner.getFilteredChildren(ParentRunner.java:534)
+	at org.junit.runners.ParentRunner.getDescription(ParentRunner.java:400)
+	at androidx.test.ext.junit.runners.AndroidJUnit4.getDescription(AndroidJUnit4.java:157)
+	at org.junit.runners.model.RunnerBuilder.configureRunner(RunnerBuilder.java:81)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:72)
+	at org.junit.internal.builders.AllDefaultPossibilitiesBuilder.runnerForClass(AllDefaultPossibilitiesBuilder.java:37)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:70)
+	at org.junit.internal.requests.ClassRequest.createRunner(ClassRequest.java:28)
+	at org.junit.internal.requests.MemoizingRequest.getRunner(MemoizingRequest.java:19)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestExecutor.buildFilteredRequest(JUnitTestExecutor.java:128)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestExecutor.shouldRunTestClass(JUnitTestExecutor.java:108)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestExecutor.accept(JUnitTestExecutor.java:77)
+	at org.gradle.api.internal.tasks.testing.junit.JUnitTestExecutor.accept(JUnitTestExecutor.java:47)
+	at org.gradle.api.internal.tasks.testing.junit.AbstractJUnitTestDefinitionProcessor.processTestDefinition(AbstractJUnitTestDefinitionProcessor.java:65)
+	at org.gradle.api.internal.tasks.testing.SuiteTestDefinitionProcessor.processTestDefinition(SuiteTestDefinitionProcessor.java:53)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.gradle.internal.dispatch.MethodInvocation.invokeOn(MethodInvocation.java:77)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:28)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:19)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:88)
+	at jdk.proxy1/jdk.proxy1.$Proxy4.processTestDefinition(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$2.run(TestWorker.java:178)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:126)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:122)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:72)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+Caused by: java.lang.IllegalArgumentException: Package targetSdkVersion=37 &gt; maxSdkVersion=36
+	at org.robolectric.plugins.DefaultSdkPicker.configuredSdks(DefaultSdkPicker.java:119)
+	at org.robolectric.plugins.DefaultSdkPicker.selectSdks(DefaultSdkPicker.java:70)
+	at org.robolectric.RobolectricTestRunner.getChildren(RobolectricTestRunner.java:221)
+	... 32 more
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
