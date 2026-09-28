@@ -1,7 +1,9 @@
 import importlib.util
+from hashlib import sha256
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 SCRIPT = Path(__file__).resolve().parents[2] / 'scripts/build_reown_wcpay_android.py'
@@ -34,6 +36,28 @@ class ReownWcpayBuildTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'byte mismatch'):
                 recipe.checked_hash(path, recipe.TOOL_HASHES['rustc'])
 
+    def test_mutated_baseline_binding_rejected_before_build(self):
+        with tempfile.TemporaryDirectory() as directory:
+            baseline = Path(directory) / 'baseline'
+            baseline.mkdir()
+            expected = {}
+            for name in recipe.BASELINE_BINDING_HASHES:
+                data = ('official-' + name).encode()
+                (baseline / ('generated-' + name)).write_bytes(data)
+                expected[name] = sha256(data).hexdigest()
+            with patch.dict(recipe.BASELINE_BINDING_HASHES, expected,
+                            clear=True):
+                self.assertEqual(set(recipe.verify_baseline_bindings(baseline)),
+                                 set(expected))
+                for name in expected:
+                    with self.subTest(name=name):
+                        path = baseline / ('generated-' + name)
+                        original = path.read_bytes()
+                        path.write_bytes(b'altered')
+                        with self.assertRaisesRegex(ValueError, 'byte mismatch'):
+                            recipe.verify_baseline_bindings(baseline)
+                        path.write_bytes(original)
+
     def test_four_release_targets_and_link_flags(self):
         self.assertEqual(set(recipe.TARGETS.values()),
                          {'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'})
@@ -50,13 +74,19 @@ class ReownWcpayBuildTest(unittest.TestCase):
                      'CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS': 'bad',
                      'CARGO_NDK_PLATFORM': '35',
                      'CC_aarch64_linux_android': '/tmp/other-clang',
-                     'OPENSSL_NO_VENDOR': '1', 'OTHER': 'retained'}
+                     'OPENSSL_NO_VENDOR': '1',
+                     'OPENSSL_CONFIG_DIR': '/tmp/other-config',
+                     'OPENSSL_RUST_USE_NASM': '1',
+                     'OPENSSL_SRC_PERL': '/tmp/other-perl',
+                     'PERL': '/tmp/other-perl', 'OTHER': 'retained'}
         env = recipe.child_environment(inherited, Path('/tmp/wcpay-test'),
                                        Path('/tmp/sdk/ndk/28.2.13676358'))
         self.assertNotIn('RUSTFLAGS', env)
         self.assertNotIn('CARGO_ENCODED_RUSTFLAGS', env)
         self.assertNotIn('CC_aarch64_linux_android', env)
         self.assertNotIn('OPENSSL_NO_VENDOR', env)
+        self.assertFalse(any(key.startswith('OPENSSL_') for key in env))
+        self.assertEqual(env['PERL'], '/usr/bin/perl')
         self.assertEqual(env['CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS'],
                          recipe.FLAGS)
         self.assertEqual(env['ANDROID_NDK_HOME'],

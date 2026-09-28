@@ -21,6 +21,10 @@ SOURCE_HASHES = {
     'crates/kotlin-ffi/uniffi.toml': '1bb8245bb686f26011e1b3d8f7c11dbfe7236905543acc5ce7dc068451caf83e',
     'LICENSE': 'cae4d0efa77b9342647e2773f440d5a6a5c1fd61da7a097a30c3c8ca88955800',
 }
+BASELINE_BINDING_HASHES = {
+    'yttrium.kt': '92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad',
+    'uniffi_yttrium.kt': '5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84',
+}
 TOOL_HASHES = {
     'rustc': '210df6794001b73ec3d453878707fa1e0bdcb63c427024a6e6574bbe5615a4da',
     'cargo': '7672ead309d505577c018fff2cafb3433601f073e38cbe87359ac1f7b944bbf5',
@@ -31,6 +35,7 @@ TOOL_HASHES = {
     'llvm-strip': '438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f',
     'llvm-readelf': '37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995',
     'llvm-ar': '3705c4237aab47a369b999f5b0af572a6ea56488df7174aaab29e5fc4b082ea3',
+    'perl': '53bce3db7e095b596fa42626b55edc63e3388d7afecf45a0b1ecc5211721c812',
 }
 TARGETS = {
     'aarch64-linux-android': 'arm64-v8a',
@@ -102,11 +107,10 @@ def child_environment(inherited, out, ndk, toolchain=None, cargo_ndk=None):
                     'RUSTC_WRAPPER', 'RUSTC_WORKSPACE_WRAPPER', 'RUSTDOCFLAGS',
                     'RUSTC', 'RUSTC_BOOTSTRAP', 'CARGO_BUILD_RUSTC',
                     'CARGO_BUILD_TARGET', 'CC', 'CXX', 'AR', 'LD',
-                    'CFLAGS', 'CXXFLAGS', 'CPPFLAGS', 'LDFLAGS',
-                    'OPENSSL_DIR', 'OPENSSL_NO_VENDOR'} or
+                    'CFLAGS', 'CXXFLAGS', 'CPPFLAGS', 'LDFLAGS', 'PERL'} or
                 key.startswith(('CARGO_TARGET_', 'CARGO_PROFILE_',
                                 'CC_', 'CXX_', 'AR_', 'CFLAGS_', 'CXXFLAGS_',
-                                'LDFLAGS_', 'PKG_CONFIG_'))):
+                                'LDFLAGS_', 'PKG_CONFIG_', 'OPENSSL_'))):
             env.pop(key)
     env.update({'CARGO_HOME': str(out / 'cargo-home'),
                 'CARGO_TARGET_DIR': str(out / 'target'),
@@ -114,6 +118,7 @@ def child_environment(inherited, out, ndk, toolchain=None, cargo_ndk=None):
                 'ANDROID_NDK_HOME': str(ndk), 'ANDROID_NDK_ROOT': str(ndk),
                 'ANDROID_HOME': str(ndk.parent.parent),
                 'ANDROID_SDK_ROOT': str(ndk.parent.parent),
+                'PERL': '/usr/bin/perl',
                 'CARGO_BUILD_JOBS': '4', 'LC_ALL': 'C', 'LANG': 'C'})
     for target in TARGETS:
         env['CARGO_TARGET_' + target.upper().replace('-', '_') + '_RUSTFLAGS'] = FLAGS
@@ -132,6 +137,14 @@ def binding_command(cargo, linked, bindings):
             '--bin', 'uniffi-bindgen', '--', 'generate',
             '--library', str(linked), '--language', 'kotlin',
             '--out-dir', str(bindings)]
+
+
+def verify_baseline_bindings(baseline):
+    files = {name: baseline / ('generated-' + name)
+             for name in BASELINE_BINDING_HASHES}
+    for name, path in files.items():
+        checked_hash(path, BASELINE_BINDING_HASHES[name])
+    return files
 
 
 def main():
@@ -173,7 +186,8 @@ def main():
              'clang-19': bin_dir / 'clang-19', 'lld': bin_dir / 'lld',
              'llvm-strip': bin_dir / 'llvm-strip',
              'llvm-readelf': bin_dir / 'llvm-readelf',
-             'llvm-ar': bin_dir / 'llvm-ar'}
+             'llvm-ar': bin_dir / 'llvm-ar',
+             'perl': Path('/usr/bin/perl')}
     for name, path in tools.items():
         checked_hash(path, TOOL_HASHES[name])
     rust_std = {}
@@ -195,13 +209,11 @@ def main():
             'cargo-ndk version mismatch')
 
     baseline = args.baseline_bindings.resolve()
-    baseline_files = {'yttrium.kt': baseline / 'generated-yttrium.kt',
-                      'uniffi_yttrium.kt': baseline / 'generated-uniffi_yttrium.kt'}
-    for path in baseline_files.values():
-        require(path.is_file(), f'missing baseline binding: {path}')
+    baseline_files = verify_baseline_bindings(baseline)
     if args.preflight_only:
         print(json.dumps({'source_commit': SOURCE_REV,
                           'source_sha256': SOURCE_HASHES,
+                          'baseline_binding_sha256': BASELINE_BINDING_HASHES,
                           'tool_sha256': {name: digest(path)
                                           for name, path in tools.items()},
                           'rust_std_sha256': rust_std,
@@ -211,6 +223,7 @@ def main():
     out.mkdir(parents=True)
     (out / 'logs').mkdir()
     manifest = {'source_commit': SOURCE_REV, 'source_sha256': SOURCE_HASHES,
+                'baseline_binding_sha256': BASELINE_BINDING_HASHES,
                 'tool_sha256': {name: {'path': str(path), 'sha256': digest(path)}
                                 for name, path in tools.items()},
                 'rust_std_sha256': rust_std,
