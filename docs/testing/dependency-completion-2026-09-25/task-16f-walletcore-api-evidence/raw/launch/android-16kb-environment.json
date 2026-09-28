@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Users/jieliu/.codex/toolchains/android-sdk-37/platform-tools/adb",
+    "-s",
+    "emulator-5560",
+    "shell",
+    "getprop sys.boot_completed; getconf PAGE_SIZE; getprop ro.build.version.sdk; getprop ro.product.cpu.abi; getprop bionic.linker.16kb.app_compat.enabled; getprop pm.16kb.app_compat.disabled"
+  ],
+  "exit_code": 0,
+  "stdout": "1\n16384\n37\narm64-v8a\nfatal\ntrue\n",
+  "stderr": "",
+  "emulator": "37.1.11.0 build15917651",
+  "system_image": "system-images;android-37.0;google_apis_ps16k;arm64-v8a",
+  "revision": 7,
+  "owned_avd": "N42_Dependency_API37_16KB",
+  "source": "https://developer.android.com/guide/practices/page-sizes",
+  "app_runtime_tests": "not yet run"
+}

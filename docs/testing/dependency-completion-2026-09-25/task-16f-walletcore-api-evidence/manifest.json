@@ -1,0 +1,312 @@
+{
+  "apk_aliases": [
+    {
+      "bytes": 19801272,
+      "logical": "build3/walletcore-api-candidate.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run1/emulator-5560-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run2/emulator-5560-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run2/emulator-5562-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run3/emulator-5560-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run3/emulator-5562-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run4/emulator-5560-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run4/emulator-5562-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run5/emulator-5560-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    },
+    {
+      "bytes": 19801272,
+      "logical": "runtime-run5/emulator-5562-installed.apk",
+      "sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+      "stored_as": "artifacts/build3-apk.gz"
+    }
+  ],
+  "members": [
+    {
+      "bytes": 1154,
+      "path": "ACCEPTANCE.md",
+      "sha256": "627351d2addbcd2bb957262ad1839b304b11c52f29305d3e2b7271a17269ac74"
+    },
+    {
+      "bytes": 1907,
+      "path": "README.md",
+      "sha256": "3b287a444e323c525bd28917cc9f07d29c9b2d979709f7cefab10325d9e159a2"
+    },
+    {
+      "bytes": 9244278,
+      "path": "artifacts/build3-apk.gz",
+      "sha256": "f9b15324ae7b7390e63f41d170e51164ee0beb1c447e99706aa022e706218a0d"
+    },
+    {
+      "bytes": 2377,
+      "path": "members.txt",
+      "sha256": "11db0c94a2f303f13c02fbce575e990514ef418c05844959d976cb6f655a3544"
+    },
+    {
+      "bytes": 3378,
+      "path": "raw/build-gradle.log",
+      "sha256": "8257a9481ee89a2dbe8d63d5b330886257d80efb6b3aaae575a3b3503e263e66"
+    },
+    {
+      "bytes": 4204,
+      "path": "raw/build-preflight.json",
+      "sha256": "bd9879f658ce18254e16485bcc068c46148eaa265b1d2d117d019b9357f932bc"
+    },
+    {
+      "bytes": 4424,
+      "path": "raw/build-result.json",
+      "sha256": "448023c3f8b664d17fcc28a04762e4de0f7a56147dd488e1971f41b3117fa636"
+    },
+    {
+      "bytes": 710,
+      "path": "raw/launch/android-16kb-environment.json",
+      "sha256": "f1104db6e1f5ec4a3f957094090a77a751ee78d6b08d2eef397405efb2faea7f"
+    },
+    {
+      "bytes": 3642,
+      "path": "raw/launch/task-api26-launch.json",
+      "sha256": "a8f3b15e83fd6ec43371205257763dd0f698993dd2f2a12c848b386c5c0ee869"
+    },
+    {
+      "bytes": 6562,
+      "path": "raw/reports/task-16f-walletcore-app-api-report.md",
+      "sha256": "5cdff43a57c28359af454d1c7577938093d33b9af1c06d67b984c9b122f3b2d6"
+    },
+    {
+      "bytes": 2369,
+      "path": "raw/reports/task-16f-walletcore-app-api-run1-fix-review.md",
+      "sha256": "071a883d28ef2c09d337aec6d93daad22ba01ec9ca0b066caf0b15f9eeb07012"
+    },
+    {
+      "bytes": 1753,
+      "path": "raw/reports/task-16f-walletcore-app-api-run2-fix-report.md",
+      "sha256": "867676b02de417f65b179953a45deb5e94116b3189f3ae86894797d5b30cb442"
+    },
+    {
+      "bytes": 1080,
+      "path": "raw/reports/task-16f-walletcore-app-api-run2-fix-review.md",
+      "sha256": "1ffda906d9e0a4b1325bf84be03a638f7d50ed367dec3a15f99261b7767e4777"
+    },
+    {
+      "bytes": 2212,
+      "path": "raw/reports/task-16f-walletcore-app-api-run3-fix-report.md",
+      "sha256": "0c1b867c5a9eb617cbec80bb8088db794acf14cb5fc4b63aa6fcb873869397fd"
+    },
+    {
+      "bytes": 1370,
+      "path": "raw/reports/task-16f-walletcore-app-api-run3-fix-review.md",
+      "sha256": "c2b8d8b9e3481c5edd02853fad56004394d669c52cbdf1f8f24fd0b20b862921"
+    },
+    {
+      "bytes": 2646,
+      "path": "raw/reports/task-16f-walletcore-app-api-run4-fix-report.md",
+      "sha256": "59c304a7083f1db4fe8a21b49ad61f6c438074fb14a71239226bd8e3c2981280"
+    },
+    {
+      "bytes": 1179,
+      "path": "raw/reports/task-16f-walletcore-app-api-run4-fix-review.md",
+      "sha256": "5c4e57f8c80ccb82e0c68233a69f5b90e6d83331d3071f4ac16c0b75c6044191"
+    },
+    {
+      "bytes": 2657,
+      "path": "raw/reports/task-16f-walletcore-app-api-runner-fix1-report.md",
+      "sha256": "b4879f323d81bca449cfec810afab26f3962bfe19e9ed6d893cbeb359bb0f680"
+    },
+    {
+      "bytes": 3195,
+      "path": "raw/reports/task-16f-walletcore-app-api-runner-fix1-review.md",
+      "sha256": "e31681236f7faa51350b0e1ed3b5812c1979486280d7326fd9e8ba0b17a9c957"
+    },
+    {
+      "bytes": 4795,
+      "path": "raw/reports/task-16f-walletcore-app-api-runner-review.md",
+      "sha256": "b43cd47b3c27fa1e69736ade0b3038de557223a45814c1c74007cb8135b46b48"
+    },
+    {
+      "bytes": 4488,
+      "path": "raw/reviews/app-api-review.md",
+      "sha256": "516ee5242a1d96ddb5475f58086e60a32581577174202bf7a61a29c3534f0829"
+    },
+    {
+      "bytes": 3770,
+      "path": "raw/reviews/runtime-review.md",
+      "sha256": "a57691fe3d96876dd07d93535b31b48e6f8512a66d296e6feebdfd858cf5e319"
+    },
+    {
+      "bytes": 51473,
+      "path": "raw/run1-receipt.json",
+      "sha256": "a243c7527e973f214fa73c9c5eeeca6c24ba98f44a19dba9ce42f010175214ee"
+    },
+    {
+      "bytes": 67945,
+      "path": "raw/run2-receipt.json",
+      "sha256": "d255f67cd77cc3277178c1175b2f07948c158953ebacbbed1163951634a0ae10"
+    },
+    {
+      "bytes": 68080,
+      "path": "raw/run3-receipt.json",
+      "sha256": "d648ea5a2c7810b88fe99241d91cb53c4de672f5a7dd8f81bd38bf2ec504eec0"
+    },
+    {
+      "bytes": 2773,
+      "path": "raw/run4-api26-independent-logcat.json",
+      "sha256": "ac099762e6d3fa7cec166ba5264d74b9ebd83d0954c14ff868885edffb2eac9b"
+    },
+    {
+      "bytes": 76244,
+      "path": "raw/run4-receipt.json",
+      "sha256": "11dc9c0dfca04971352f1efda5fe26394a1d6b9001b56811225343530c2ae2ea"
+    },
+    {
+      "bytes": 98714,
+      "path": "raw/run5-receipt.json",
+      "sha256": "a030a4847149be3b197bafbe0b45e32d5b2305b23da8d23deb777f150ed6e2a2"
+    },
+    {
+      "bytes": 3787,
+      "path": "raw/run5-replay-normal.json",
+      "sha256": "ea9e326ffe42268fe38fb479e8b314e09ba3cbb38090e14893920e1eb605e0a0"
+    },
+    {
+      "bytes": 3787,
+      "path": "raw/run5-replay-optimized.json",
+      "sha256": "ea9e326ffe42268fe38fb479e8b314e09ba3cbb38090e14893920e1eb605e0a0"
+    },
+    {
+      "bytes": 3787,
+      "path": "raw/run5-verification.json",
+      "sha256": "ea9e326ffe42268fe38fb479e8b314e09ba3cbb38090e14893920e1eb605e0a0"
+    },
+    {
+      "bytes": 4326,
+      "path": "source/android/app/src/main/java/ai/n42/www/walletcore/BitcoinV2SigningAdapter.java",
+      "sha256": "aaff324d1ab949204c8613c57fae5eed860abc97d04e6b8351d56d39cd2e3ce9"
+    },
+    {
+      "bytes": 77967,
+      "path": "source/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt",
+      "sha256": "a8574b19284549a8c401e6dd9cf14a3e01afb0ab624fee7a90c26fa1aefca927"
+    },
+    {
+      "bytes": 7255,
+      "path": "source/android/app/src/test/java/ai/n42/www/walletcore/BitcoinV2SigningAdapterTest.java",
+      "sha256": "e0d6da5db48fe13ac028c21abff7eb6bf33a9eeb77bda2c2fa16b41266bfbe09"
+    },
+    {
+      "bytes": 6934,
+      "path": "source/scripts/build_walletcore_api_fixture.py",
+      "sha256": "90ed626adee2912c923d612391ef2eda3d7a2d87a75f43f2b68f205b67a78450"
+    },
+    {
+      "bytes": 10042,
+      "path": "source/scripts/build_walletcore_fixture.py",
+      "sha256": "316487b2fca8f783f1ecad0d2bb667c100978799d5b579f1a9aef64a4f2f3d18"
+    },
+    {
+      "bytes": 4385,
+      "path": "source/test/core/wallet_sdk/wallet_signer_test.dart",
+      "sha256": "7249c0784bf6ae76e31736ee9436d817cbb6cbbf4d3761f9c91b2beefaefccac"
+    },
+    {
+      "bytes": 9863,
+      "path": "source/tools/android_native_smoke/run_walletcore_api_fixture.py",
+      "sha256": "9a238a7dc4252c1687ddab5b1311e4d8bb848bb563d8e7f777e761071f401f06"
+    },
+    {
+      "bytes": 2786,
+      "path": "source/tools/android_native_smoke/test_walletcore_api_builder.py",
+      "sha256": "f81bf74b36027eb78edb925b47c2ccc5300d94e88c716e0940a968382103b0b9"
+    },
+    {
+      "bytes": 13794,
+      "path": "source/tools/android_native_smoke/test_walletcore_api_runtime_gate.py",
+      "sha256": "1fdc54f68fc8ca5dc3126036bdc481b535e207c1acbd116eb385a8b8c59b1704"
+    },
+    {
+      "bytes": 23630,
+      "path": "source/tools/android_native_smoke/verify_walletcore_api_fixture.py",
+      "sha256": "5ebecac7a9c72672038dfe1a15dc08f2ff98beda8cb7b09a8d950a33e5ddd4a9"
+    },
+    {
+      "bytes": 1542,
+      "path": "source/tools/android_native_smoke/walletcore_api_fixture/app/build.gradle.kts",
+      "sha256": "8264dc7fe4614f203b1383b045921f7901258c96a14b300b4862d93c19022479"
+    },
+    {
+      "bytes": 492,
+      "path": "source/tools/android_native_smoke/walletcore_api_fixture/app/src/main/AndroidManifest.xml",
+      "sha256": "ce1f1cfe13819cc4e791aef4dd0660c393a9c28f837490e7932d1493c59f61f6"
+    },
+    {
+      "bytes": 11583,
+      "path": "source/tools/android_native_smoke/walletcore_api_fixture/app/src/main/java/ai/n42/fixture/walletcoreapi/MainActivity.java",
+      "sha256": "80527f9fb27a4cc4a846abbaa21811424439726f04acc1755c61536b8c64f94b"
+    },
+    {
+      "bytes": 179,
+      "path": "source/tools/android_native_smoke/walletcore_api_fixture/build.gradle.kts",
+      "sha256": "d427f3d52a7f790915922ae521eae46a1d6d3c194aa9d6a7ef70033016b8a98a"
+    },
+    {
+      "bytes": 1680,
+      "path": "source/tools/android_native_smoke/walletcore_api_fixture/fixture-build-epoch.json",
+      "sha256": "ccc3aaf38b5e82c762fd861c5e3f8781ea2ed5b72571a4843a43e6582dcd1a39"
+    },
+    {
+      "bytes": 340,
+      "path": "source/tools/android_native_smoke/walletcore_api_fixture/settings.gradle.kts",
+      "sha256": "4ac4a871295d0ecc7363a843bc71f316f3175ad77aaa87ae7a0d3f2f9aa51e1a"
+    },
+    {
+      "bytes": 12127,
+      "path": "verify_evidence.py",
+      "sha256": "9bfd8da34a04bad2891890db5032b7018cc35c114986d2a7046b1e95c5248544"
+    },
+    {
+      "bytes": 2380,
+      "path": "verify_evidence_controls.py",
+      "sha256": "8f669aae439a6d75006e128a77af569edc0858156ace9240af6fa42db743a46d"
+    }
+  ],
+  "schema_version": 1
+}
