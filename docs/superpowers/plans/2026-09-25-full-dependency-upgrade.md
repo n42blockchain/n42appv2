@@ -387,15 +387,15 @@ Initial official references checked on 2026-09-26:
 - Apple privacy manifests: https://developer.apple.com/documentation/BundleResources/privacy-manifest-files.
 
 
-### Task 17: Preserve free verify points and remove unplanned paid flows
+### Task 17: Preserve free verify points and existing business flows
 
-The user's latest clarification on 2026-09-26 supersedes the earlier payment selections and review draft: points are free encouragement for participating in verify, with earned totals displayed for satisfaction. There is no points product catalog, planned points purchase or consumption feature. The prior purchase/fulfillment/spend/refund workstream is withdrawn. Missing SKU mappings and payment services are not release blockers; do not ask the user to invent them.
+The user's 2026-09-27 clarification supersedes the earlier payment selections and review draft: points are free encouragement for participating in verify, with earned totals displayed for satisfaction. There is no new points product catalog, planned points purchase or consumption feature. The prior proposed points purchase/fulfillment/spend/refund workstream is withdrawn. Missing points SKU mappings and payment services are not release blockers; do not ask the user to invent them. Existing IAP, Chat subscription and read-only Rewards flows remain in scope for preservation.
 
 - [ ] Trace actual host and official Chat entrypoints; distinguish free points from wallet crypto assets, swaps and transfers.
-- [ ] Permanently remove confirmed unplanned points purchase entrypoints and misleading paid claims. The dormant N-labeled IAP page has no established loyalty-credit link; classify it independently before deleting its source or dependencies. Audit Chat subscription/redemption exposure separately before removing reusable package APIs; preserve unrelated functionality and persisted records.
-- [ ] Remove IAP dependencies and native artifacts only after confirming no supported caller remains; regenerate locks and platform output with the appropriate tools.
+- [ ] Preserve the existing IAP page, route callback, Billing and StoreKit dependencies, Chat subscription entry and APIs, persisted records, and read-only Rewards catalog while assessing their behavior on separate evidence. The N-labeled IAP products have no established points link.
+- [ ] Do not add a new points purchase, entitlement or redemption service. Correct any demonstrated account or catalog defect without deleting existing business routes merely because verify points are free.
 - [ ] Preserve verify participation, earned balances/history and account isolation. Do not invent earning rules, products, prices, spending, expiry, receipt services or another ledger.
-- [ ] Test absence of unplanned charging routes, correct account-specific display, preserved records and unaffected wallet functions. Record actual runtime and build evidence.
+- [ ] Test absence of new points charging routes, correct account-specific display, preserved records, existing IAP/subscription/Rewards availability and unaffected wallet functions. Record actual runtime and build evidence.
 - [ ] Align store descriptions with actual free behavior. Assess native validator computation, privacy, deletion and UGC under Task16 independently of point naming.
 - [ ] Review, commit and push the small verified changes; include this scope in final integration.
 
@@ -413,7 +413,7 @@ User reconfirmed this queue and requested separate commits and pushes for each i
 | 4 | Remaining compatibility repairs (15) | Background-call account provenance, exact-asset QR bridge, localization repairs and focused regression acceptance | Background-call repair in progress in official Chat |
 | 4a | Native SDK provenance and runtime remediation (16) | Align verified MobileSdk runtime and all process capability checks; rebuild/test live Go SDK against immutable source and patched toolchain; preserve V1 and wallet data | Audited; implementation follows current Chat push fix review |
 | 5 | Whole-repository final dependency and security audit (15–16) | Final-source app/Chat/local/Go/Rust/Chrome/native verification, current dependency/vulnerability inventory, evidence for every version cap or unresolved risk | Queued |
-| 6 | Free verify points and unplanned paid-flow cleanup (17) | Preserve earned display/history and account isolation; remove unsupported charging paths and unused dependencies; no invented products or consumption | Source audit complete; implementation queued |
+| 6 | Free verify points and business preservation (17) | Preserve earned display/history, account isolation, existing IAP/subscription routes and read-only Rewards; add no points products or consumption | Source audit complete; implementation queued |
 | 7 | Store release acceptance for US/Canada (16) | Final artifacts, privacy/permissions, deletion and UGC flows, free-points behavior, console and organizational evidence; recheck current official policies | Queued; depends on code and release evidence |
 | 8 | Final integration and merge (15–17) | Independently reviewed small commits pushed, final branch checks and conflict resolution; preserve applicable release gates and report external blockers explicitly | Queued; dependent on preceding acceptance |
 
