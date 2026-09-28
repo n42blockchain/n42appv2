@@ -1,10 +1,13 @@
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
 
 
 SCRIPT = Path(__file__).resolve().parents[2] / 'scripts/walletcore_android_link.py'
+ENVIRONMENT = (SCRIPT.parents[1] / '.superpowers/sdd/dependency-completion-20260925'
+               / 'task-16f-walletcore-build/generation-environment.json')
 SPEC = importlib.util.spec_from_file_location('walletcore_android_link', SCRIPT)
 link = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(link)
@@ -38,6 +41,25 @@ class WalletCoreAndroidLinkTest(unittest.TestCase):
             output.write_bytes(b'changed!')
             with self.assertRaisesRegex(ValueError, 'generated file mismatch'):
                 link.verify_generated_files(root, manifest)
+
+    def test_link_environment_rejects_added_changed_and_missing_values(self):
+        original = ENVIRONMENT.read_bytes()
+        expected = json.loads(original)
+        self.assertEqual(link.load_pinned_environment(ENVIRONMENT), expected)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'generation-environment.json'
+            for change in ('add', 'change', 'remove'):
+                altered = dict(expected)
+                if change == 'add':
+                    altered['CPATH'] = '/tmp/poison'
+                elif change == 'change':
+                    altered['PATH'] = '/tmp/poison:' + altered['PATH']
+                else:
+                    del altered['ANDROID_NDK_HOME']
+                path.write_text(json.dumps(altered, indent=2, sort_keys=True) + '\n')
+                with self.subTest(change=change):
+                    with self.assertRaisesRegex(ValueError, 'generation environment changed'):
+                        link.load_pinned_environment(path)
 
 
 if __name__ == '__main__':

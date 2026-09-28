@@ -12,6 +12,7 @@ import sys
 SOURCE_COMMIT = 'd40d24a63d92619167903369308bf0e2f7eb3a59'
 GENERATED_MANIFEST_SHA256 = 'bf90d3a23eb754fa59df4d869fdd1d04c53eb499d86b91013a3ff8bab36d1821'
 ARCHIVE_MANIFEST_SHA256 = '5206251069cbc844de00d9ee567ffbf3a5ff659ae4798855c8da8a6f42a55c23'
+GENERATION_ENVIRONMENT_SHA256 = '75d6cd7ecb89ff14521cf928186c4021f370b9c2e88d597ac842d750c0a8103c'
 ORIGINAL_CMAKE_SHA256 = '09e0cf9e4cfcd832f5133a30e7dd4a0467e460eb7a76ed5a0065c3d47ab8c792'
 PATCHED_CMAKE_SHA256 = 'c9f5f43c1677e9d6a26c663c20dc5a27568198af3c7ee0e03351f770ecedcb15'
 TOOLCHAIN_SHA256 = 'dbad92d9dcfea0d32b7c5e5f82f5072d878ded5d46a5d3f1f581ea108ca7fe89'
@@ -50,6 +51,16 @@ def digest(path):
 def pinned_json(path, expected):
     require(digest(path) == expected, f'pinned manifest changed: {path}')
     return json.loads(path.read_text())
+
+
+def load_pinned_environment(path):
+    require(digest(path) == GENERATION_ENVIRONMENT_SHA256,
+            'generation environment changed')
+    env = json.loads(path.read_text())
+    require(isinstance(env, dict) and len(env) == 20 and
+            all(isinstance(key, str) and isinstance(value, str)
+                for key, value in env.items()), 'generation environment schema mismatch')
+    return env
 
 
 def patch_cmake_text(original):
@@ -118,6 +129,7 @@ def main():
     ninja = cmake.parent / 'ninja'
     require(digest(toolchain) == TOOLCHAIN_SHA256 and
             digest(ninja) == NINJA_SHA256, 'Android CMake/Ninja tool mismatch')
+    env = load_pinned_environment(build / 'generation-environment.json')
     cmake_source = source / 'CMakeLists.txt'
     original = cmake_source.read_bytes()
     require(sha256_bytes(original) == ORIGINAL_CMAKE_SHA256,
@@ -129,7 +141,6 @@ def main():
     patch = subprocess.run(['git', '-C', str(source), 'diff', '--binary', '--',
                             'CMakeLists.txt'], capture_output=True, check=True)
     (build / 'android-final-link.patch').write_bytes(patch.stdout)
-    env = json.loads((build / 'generation-environment.json').read_text())
     candidates = {}
     for abi in ARCHIVES:
         output = build / 'candidate-cmake' / abi
