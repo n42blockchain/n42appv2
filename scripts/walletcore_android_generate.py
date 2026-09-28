@@ -70,11 +70,12 @@ def require_preflight(command, receipt):
 
 
 def generator_environment(build, source, files):
-    env = {name: value for name, value in os.environ.items()
-           if not name.startswith(('CARGO_', 'RUST', 'OPENSSL_', 'PKG_CONFIG_')) and
-           name not in ('AR', 'CC', 'CXX', 'PREFIX', 'JAVA_HOME', 'ANDROID_NDK_HOME',
-                        'ANDROID_HOME', 'BOOST_ROOT', 'LD_LIBRARY_PATH',
-                        'DYLD_LIBRARY_PATH')}
+    temporary = build / 'tmp'
+    temporary.mkdir(parents=True, exist_ok=True)
+    env = {'TMPDIR': str(temporary), 'LANG': 'en_US.UTF-8',
+           'LC_ALL': 'en_US.UTF-8',
+           'GIT_CONFIG_GLOBAL': '/dev/null', 'GIT_CONFIG_NOSYSTEM': '1',
+           'GIT_TERMINAL_PROMPT': '0'}
     ndk = Path(files['ndk_source_properties']['path']).parent
     ndk_bin = Path(files['ndk_clang']['path']).parent
     java_home = Path(files['jdk17_java']['path']).parent.parent
@@ -130,10 +131,8 @@ def main():
                        shlex.quote(str(Path(__file__).resolve())) + ' --cargo "$@"\n')
     wrapper.chmod(0o755)
     env = generator_environment(build, source, files)
-    selected = {name: env[name] for name in ('PATH', 'PREFIX', 'CARGO_HOME',
-                'RUSTUP_HOME', 'RUSTC', 'RUSTDOC', 'CARGO_BUILD_JOBS',
-                'ANDROID_NDK_HOME', 'ANDROID_HOME', 'JAVA_HOME', 'BOOST_ROOT')}
-    (build / 'generation-environment.json').write_text(json.dumps(selected, indent=2) + '\n')
+    (build / 'generation-environment.json').write_text(
+        json.dumps(env, indent=2, sort_keys=True) + '\n')
     command = ['/bin/bash', 'tools/generate-files', 'android']
     with (build / 'generation.log').open('w') as log:
         log.write(json.dumps({'cwd': str(source), 'command': command}) + '\n')
