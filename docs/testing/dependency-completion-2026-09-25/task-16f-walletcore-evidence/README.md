@@ -20,7 +20,8 @@ python3 -O verify_evidence_controls.py
 the manifest pins each member's byte count and SHA-256, including the verifier
 and control script. Replay compares all 13 AAR ZIP members and proves that only
 the four JNI members changed; checks source/strip/ABI/ELF/package hashes,
-unchanged Java classes and POM, proto/Javalite inputs and app Gradle selection;
+raw compressed symbol/header transcripts, versioned undefined imports,
+unchanged Java/proto descriptors and POM, proto/Javalite inputs and app Gradle selection;
 then calls the exact reviewed fixture verifier's APK ZIP, ELF, logcat framing,
 installed byte, fresh PID/token, direct executable map, tagged golden and
 old/new parity checks. Archive glue replaces the original Git-object and
@@ -28,6 +29,9 @@ locally installed device-tool lookups with archived source bytes and pinned
 hashes. It cannot itself prove Git server authenticity or rerun Android;
 `reports/` and `reviews/` preserve the original stage and independent review
 records, while `raw/runtime-receipt.json` preserves original command outputs.
+The replay entry points disable local Python bytecode writes before importing
+archived modules, so a default Python `__pycache__` location cannot add a
+member after the first run; extra-member rejection remains strict.
 
 The actual 16,384-byte emulator run had fatal linker compatibility, package
 compatibility disabled, airplane mode, Wi-Fi off and an empty route. The

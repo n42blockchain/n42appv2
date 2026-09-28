@@ -1,0 +1,38 @@
+{
+  "java": {
+    "classes": 85,
+    "javap": {
+      "official": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/java-api-compare/java-official-javap.txt",
+        "bytes": 112312,
+        "sha256": "1c453593b4972afcfbf91dcbcb0944dcc25f99cc412e2ec339dde0a2cefad9ee"
+      },
+      "compiled": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/java-api-compare/java-compiled-javap.txt",
+        "bytes": 112312,
+        "sha256": "d4ec89af67a67536b344b1c6a13357966caa9c1e31777dd6d016b72b2375c419"
+      }
+    },
+    "equal": false,
+    "canonical_equal": true,
+    "canonical_sha256": "f7f18ccc7bbab6a301e299ad7c734cfc063b58bcee02061c465e4d96362bf9f7"
+  },
+  "proto": {
+    "classes": 1975,
+    "javap": {
+      "official": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/java-api-compare/proto-official-javap.txt",
+        "bytes": 5732778,
+        "sha256": "aa1067507b43c50d059d98fa160edc48ed7d21113e16438dc651125d232823c1"
+      },
+      "compiled": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/java-api-compare/proto-compiled-javap.txt",
+        "bytes": 5732778,
+        "sha256": "aa1067507b43c50d059d98fa160edc48ed7d21113e16438dc651125d232823c1"
+      }
+    },
+    "equal": true,
+    "canonical_equal": true,
+    "canonical_sha256": "141063eef4648cf3a311097426f06bfe422884433371b288c171d1b24a2be610"
+  }
+}

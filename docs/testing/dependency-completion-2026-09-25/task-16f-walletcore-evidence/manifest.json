@@ -3,13 +3,13 @@
   "members": [
     {
       "path": "ACCEPTANCE.md",
-      "size": 2628,
-      "sha256": "0e1b1dc04352183afa252e59fcdf8b17b0bb29a96b812a27bf96bee3d5491070"
+      "size": 2730,
+      "sha256": "4625b1f4450cd45e22203834b11863a22cbe18e7456d511eb31f0d711681aff8"
     },
     {
       "path": "README.md",
-      "size": 2805,
-      "sha256": "dae96f419e6e9bc4591288d5eeef218012c1617db434e097ee9cf7111b861ec2"
+      "size": 3105,
+      "sha256": "fd9196e323da9098794aa1fbe2fd43a1316e81bf84ec32358c38d6db6ee014cb"
     },
     {
       "path": "artifacts/maintained-wallet-core-4.8.4-sources.jar",
@@ -217,6 +217,16 @@
       "sha256": "18995d5fa8f3769bd1a5e87f62e960fef30b4a7b698e0154b57168bbc7621526"
     },
     {
+      "path": "logs/java-api-compare/app-runtime-javac.log",
+      "size": 861,
+      "sha256": "f31f108f597f4cf147889e1bcef148a3dc51b93f119d8698e10fb44e1e1892e9"
+    },
+    {
+      "path": "logs/java-api-compare/javac.log",
+      "size": 8,
+      "sha256": "3c696c094e2a1323fa00cf0974a861af0cd6824b1672248c1d12791a70a61e4e"
+    },
+    {
       "path": "logs/link-runner.log",
       "size": 1342,
       "sha256": "2fa2db8b62dabb9e0d984b54499ee57a6787c173d89f8ad3e717a6521df61f96"
@@ -333,8 +343,193 @@
     },
     {
       "path": "members.txt",
-      "size": 5071,
-      "sha256": "20aefd904caed42f8ac88cffe5efb9dbb016a25c8edaf24eeb56faf8f08215cc"
+      "size": 7226,
+      "sha256": "08faa5f1458149037c7498d709deb0cb87277b5b4c393e4e008512ed2ecd4922"
+    },
+    {
+      "path": "raw/audit/baseline-native/arm64-v8a/dynamic-symbols.txt.gz",
+      "size": 395774,
+      "sha256": "9c4b4ff07d2aeaa252b9bdf1a07ec9d0d0ed29302ef2ee7968390af230a9d8f2"
+    },
+    {
+      "path": "raw/audit/baseline-native/arm64-v8a/headers.txt.gz",
+      "size": 1290,
+      "sha256": "7905dc8fe5e4ca875660c8b09b0b4931c725f3f93926e04d4aba156b94ea6f0a"
+    },
+    {
+      "path": "raw/audit/baseline-native/armeabi-v7a/dynamic-symbols.txt.gz",
+      "size": 384672,
+      "sha256": "3332091dea2e256ee6292238e246767abf098d0269ea5b836c5d8dd140088b8d"
+    },
+    {
+      "path": "raw/audit/baseline-native/armeabi-v7a/headers.txt.gz",
+      "size": 1256,
+      "sha256": "c1d2effa1e832be20471323b9c4b5283423a1b966360a5ccaa3da64563b46726"
+    },
+    {
+      "path": "raw/audit/baseline-native/summary.json",
+      "size": 1540,
+      "sha256": "45457510568b7f6faee1f632ddc22e33a894f72e67eaeaba46b73719fe3b624e"
+    },
+    {
+      "path": "raw/audit/baseline-native/x86/dynamic-symbols.txt.gz",
+      "size": 385059,
+      "sha256": "01b2e725ee632db6b7c614ac169b2b0c4f7921a2236010106140f0d1731c7bd8"
+    },
+    {
+      "path": "raw/audit/baseline-native/x86/headers.txt.gz",
+      "size": 1261,
+      "sha256": "6418001d7c5fe110dccad2c16b176a372a71cc8d75fc8a922ae1f1a1f91d1cc3"
+    },
+    {
+      "path": "raw/audit/baseline-native/x86_64/dynamic-symbols.txt.gz",
+      "size": 398185,
+      "sha256": "e1bed8aecb5d6bf81e7e7b9d5d69ecd5f67ce1f33cceb225506fe9772ff7a8b2"
+    },
+    {
+      "path": "raw/audit/baseline-native/x86_64/headers.txt.gz",
+      "size": 1297,
+      "sha256": "7ab0da788b1313d4909309728aaa28b1a5b8ea29aa2f4bdbf59378e7adf5af0c"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/arm64-v8a/dynamic-symbols.txt.gz",
+      "size": 395714,
+      "sha256": "22a203a1a739370786de6b4d1eb8967cf19827d5458132989e0a9dd00d6bdae0"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/arm64-v8a/headers.txt.gz",
+      "size": 1330,
+      "sha256": "81540f7f680671c8d57b1ea8c1f531d10021f523ae2b401b977d7b5c78cdb76c"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/armeabi-v7a/dynamic-symbols.txt.gz",
+      "size": 384563,
+      "sha256": "bf82159be903cde009d32c64184907079b723d846d335419f41e0c5a578268c3"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/armeabi-v7a/headers.txt.gz",
+      "size": 1302,
+      "sha256": "e7d497d576389712e38c5b8295620d2b30e2e65deb6f86dec4741f0925a9e22e"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/four-abi-audit.json",
+      "size": 5253,
+      "sha256": "d631ef9018b75dd6dfff4281a7158c13db93ae19a9f6ea7dfad70912d22debb3"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/import-binding-comparison.json",
+      "size": 436,
+      "sha256": "aab1d70ea41a1af3a87db74002adf89dcd329ca9ff20cdce3146f3d8c515617e"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/x86/dynamic-symbols.txt.gz",
+      "size": 385020,
+      "sha256": "866bd21890736d2b46720102821cc3411f51820795803beed5b88ccf45416c88"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/x86/headers.txt.gz",
+      "size": 1300,
+      "sha256": "eb7c8ad403313c1a03e4c6f2bf3c6bd8bc8002241261c5f188daae47ea5c79a4"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/x86_64/dynamic-symbols.txt.gz",
+      "size": 398280,
+      "sha256": "3a6de503b6c2b27d4b04edafe0a45162279786b3470ffd5d44e750090cd63a45"
+    },
+    {
+      "path": "raw/audit/candidate-native-audit/x86_64/headers.txt.gz",
+      "size": 1342,
+      "sha256": "8d6bb532b975ed5816d0522b2d604c5786211d7ddc4093783ddeebbec37e7f06"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/arm64-v8a/dynamic-symbols.txt.gz",
+      "size": 395714,
+      "sha256": "22a203a1a739370786de6b4d1eb8967cf19827d5458132989e0a9dd00d6bdae0"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/arm64-v8a/headers.txt.gz",
+      "size": 1284,
+      "sha256": "208ed092280c972179e9ad95feb3056af0d5d86779728a68e4f4d362403ecbe8"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/armeabi-v7a/dynamic-symbols.txt.gz",
+      "size": 384563,
+      "sha256": "bf82159be903cde009d32c64184907079b723d846d335419f41e0c5a578268c3"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/armeabi-v7a/headers.txt.gz",
+      "size": 1249,
+      "sha256": "064fcccbdbc30de78142bdd99661a93f43a5756396ff6b11a324a2f48ec5d488"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/x86/dynamic-symbols.txt.gz",
+      "size": 385020,
+      "sha256": "866bd21890736d2b46720102821cc3411f51820795803beed5b88ccf45416c88"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/x86/headers.txt.gz",
+      "size": 1255,
+      "sha256": "77c29ebf96df0dc0da99ffbbb55f16eee8362aa981e1c462866beb1252148f23"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/x86_64/dynamic-symbols.txt.gz",
+      "size": 398280,
+      "sha256": "3a6de503b6c2b27d4b04edafe0a45162279786b3470ffd5d44e750090cd63a45"
+    },
+    {
+      "path": "raw/audit/candidate-stripped/audit/x86_64/headers.txt.gz",
+      "size": 1296,
+      "sha256": "c3150e2089294c5691920de3190ac6950eb080852fbc45bef2dc864b905932f4"
+    },
+    {
+      "path": "raw/audit/compressed-inputs.json",
+      "size": 5537,
+      "sha256": "b3ed10fad24755614b9dc36162ce041239ec80a409d145b3251d29a0f9161f9f"
+    },
+    {
+      "path": "raw/audit/java-api-compare/descriptor-comparison.json",
+      "size": 1743,
+      "sha256": "a1fc73136db6a118395920ff9308463fe38e350840b392fd459cf8985d2191b5"
+    },
+    {
+      "path": "raw/audit/java-api-compare/java-class-inventory.json",
+      "size": 71,
+      "sha256": "5ec85e46cc794b84cf7efcb1e21912e6d957970de4f0e477aaf2265561cb8e13"
+    },
+    {
+      "path": "raw/audit/java-api-compare/java-compiled-javap.txt.gz",
+      "size": 9174,
+      "sha256": "f683a9f4ae70298dd061feb30d0f67f2e9e7ef5a4012da92caacc6deeae7b0be"
+    },
+    {
+      "path": "raw/audit/java-api-compare/java-descriptor-diff.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/audit/java-api-compare/java-official-javap.txt.gz",
+      "size": 9175,
+      "sha256": "ebdf424258b8cb6830fd80ce3d242ebc5e111c8d87223c5ba0d2285a7146dff7"
+    },
+    {
+      "path": "raw/audit/java-api-compare/proto-class-inventory.json",
+      "size": 75,
+      "sha256": "e24da4e03279f1b357615bc19f7ba81d4b6b7482b23c9b6cb5b198f9e40a67f7"
+    },
+    {
+      "path": "raw/audit/java-api-compare/proto-compiled-javap.txt.gz",
+      "size": 234196,
+      "sha256": "15e590898adb6b8932d64a169d12e55f1dfdf233b4c91a87f7c72ed72e944fe7"
+    },
+    {
+      "path": "raw/audit/java-api-compare/proto-descriptor-diff.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/audit/java-api-compare/proto-official-javap.txt.gz",
+      "size": 234196,
+      "sha256": "15e590898adb6b8932d64a169d12e55f1dfdf233b4c91a87f7c72ed72e944fe7"
     },
     {
       "path": "raw/build/candidate-native.json",
@@ -608,13 +803,13 @@
     },
     {
       "path": "verify_evidence.py",
-      "size": 13531,
-      "sha256": "865773dc57d96f79e6da40182601f55484127c78ea46ea97f78b9b103439997c"
+      "size": 18754,
+      "sha256": "7a18a165ebe93b3802b48d6324610a978aeac15b25accb0b68c6eae9707c4c9e"
     },
     {
       "path": "verify_evidence_controls.py",
-      "size": 3404,
-      "sha256": "0b76e3a9633e5e1fe46439c582fbcef89804c0c607f0101862dc071df92ba00c"
+      "size": 3447,
+      "sha256": "c9f1f1504171cd0cdee55f9e3d70fd5c8c56575e02fde6f1c1a9c54cd048eab2"
     }
   ]
 }

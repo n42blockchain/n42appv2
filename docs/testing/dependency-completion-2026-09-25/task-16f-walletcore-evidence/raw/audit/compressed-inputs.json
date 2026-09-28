@@ -1,0 +1,114 @@
+{
+  "raw/audit/baseline-native/arm64-v8a/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1891636,
+    "uncompressed_sha256": "a67e7bda3025cd8d6babe12fbd9b868000ff18d450e231f258bca6c8b46e1cb3"
+  },
+  "raw/audit/baseline-native/arm64-v8a/headers.txt.gz": {
+    "uncompressed_bytes": 4058,
+    "uncompressed_sha256": "03810d8f77a4033992858ba11f882896739e8792bb288804a99702e78fc5894a"
+  },
+  "raw/audit/baseline-native/armeabi-v7a/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1785381,
+    "uncompressed_sha256": "a33535b83281a168fdd221e23acb78dc1da9e7130196ae393fcd776525afd0ec"
+  },
+  "raw/audit/baseline-native/armeabi-v7a/headers.txt.gz": {
+    "uncompressed_bytes": 3654,
+    "uncompressed_sha256": "acb24da259577f097b9a83b841d16d25f82231d8bfaeb836f9c682534c325b67"
+  },
+  "raw/audit/baseline-native/x86/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1788946,
+    "uncompressed_sha256": "a1f4a90873086e388ebbc879704f3521ab7eb794638f4b98127bb8ebdb73af57"
+  },
+  "raw/audit/baseline-native/x86/headers.txt.gz": {
+    "uncompressed_bytes": 3647,
+    "uncompressed_sha256": "5440d71fa13ea6969c6366bda3c7f5ca96459caacda4c732bc40cbf59e942e09"
+  },
+  "raw/audit/baseline-native/x86_64/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1903929,
+    "uncompressed_sha256": "872aaf37f870401725fb7b9b28a3cd6e9dca422bc3bab242dec1520040b58dba"
+  },
+  "raw/audit/baseline-native/x86_64/headers.txt.gz": {
+    "uncompressed_bytes": 4080,
+    "uncompressed_sha256": "a5701180f05c985ae7a0a53f0f6b9a571396584d0ad7a412816a5747e128c92b"
+  },
+  "raw/audit/candidate-native-audit/arm64-v8a/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1891636,
+    "uncompressed_sha256": "24631944220570084f434daff824fe57a83f180a74af13da72af862702f94c32"
+  },
+  "raw/audit/candidate-native-audit/arm64-v8a/headers.txt.gz": {
+    "uncompressed_bytes": 4149,
+    "uncompressed_sha256": "a1bcc1838e8d34b23b785f5b7e0454db6582555648728c911de317159cd4c999"
+  },
+  "raw/audit/candidate-native-audit/armeabi-v7a/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1785381,
+    "uncompressed_sha256": "16a4f5f2b1b54ba32df9a036709da347e1ff830b5fc483af5a930d11a643b341"
+  },
+  "raw/audit/candidate-native-audit/armeabi-v7a/headers.txt.gz": {
+    "uncompressed_bytes": 3758,
+    "uncompressed_sha256": "8f7f2f73ba3930bcea9a7f3144df5e0296401b90fc00de24fccbcedd8a98b942"
+  },
+  "raw/audit/candidate-native-audit/x86/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1788946,
+    "uncompressed_sha256": "c1474c12d24e78286df7e82b59736389dc18d8730da03949fc458b20939c3278"
+  },
+  "raw/audit/candidate-native-audit/x86/headers.txt.gz": {
+    "uncompressed_bytes": 3738,
+    "uncompressed_sha256": "bc407e3a08ff8bbcb4c1ba4157440a931bf0c2057ededbe0a3c005a8979aa2de"
+  },
+  "raw/audit/candidate-native-audit/x86_64/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1903929,
+    "uncompressed_sha256": "b88384056b2b08ad0f77805a7c417f54b8b7d5bb506ece7bb6796a5c408643d0"
+  },
+  "raw/audit/candidate-native-audit/x86_64/headers.txt.gz": {
+    "uncompressed_bytes": 4171,
+    "uncompressed_sha256": "e70b354842aa306a0c27724441436349f60e5b86d2aad562b8ddf32b6ee2dff3"
+  },
+  "raw/audit/candidate-stripped/audit/arm64-v8a/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1891636,
+    "uncompressed_sha256": "24631944220570084f434daff824fe57a83f180a74af13da72af862702f94c32"
+  },
+  "raw/audit/candidate-stripped/audit/arm64-v8a/headers.txt.gz": {
+    "uncompressed_bytes": 4049,
+    "uncompressed_sha256": "a67c02066854f3b42a9a402beafeccfc26c41ec1992cf5585f2752719174247d"
+  },
+  "raw/audit/candidate-stripped/audit/armeabi-v7a/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1785381,
+    "uncompressed_sha256": "16a4f5f2b1b54ba32df9a036709da347e1ff830b5fc483af5a930d11a643b341"
+  },
+  "raw/audit/candidate-stripped/audit/armeabi-v7a/headers.txt.gz": {
+    "uncompressed_bytes": 3645,
+    "uncompressed_sha256": "bf98e4ebcbf710c33b79e178646030ccbc354c7aa784abf1d811677a4c92839b"
+  },
+  "raw/audit/candidate-stripped/audit/x86/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1788946,
+    "uncompressed_sha256": "c1474c12d24e78286df7e82b59736389dc18d8730da03949fc458b20939c3278"
+  },
+  "raw/audit/candidate-stripped/audit/x86/headers.txt.gz": {
+    "uncompressed_bytes": 3638,
+    "uncompressed_sha256": "098a036df937f081be5565ab8ec8e2f7ed46274d01941d9a2bae5bd2b4a3118f"
+  },
+  "raw/audit/candidate-stripped/audit/x86_64/dynamic-symbols.txt.gz": {
+    "uncompressed_bytes": 1903929,
+    "uncompressed_sha256": "b88384056b2b08ad0f77805a7c417f54b8b7d5bb506ece7bb6796a5c408643d0"
+  },
+  "raw/audit/candidate-stripped/audit/x86_64/headers.txt.gz": {
+    "uncompressed_bytes": 4071,
+    "uncompressed_sha256": "e566bdcf4d06232fbe9a74b4d8dfbf13e3e84202aa926849edb5d972946d9072"
+  },
+  "raw/audit/java-api-compare/java-compiled-javap.txt.gz": {
+    "uncompressed_bytes": 112312,
+    "uncompressed_sha256": "d4ec89af67a67536b344b1c6a13357966caa9c1e31777dd6d016b72b2375c419"
+  },
+  "raw/audit/java-api-compare/java-official-javap.txt.gz": {
+    "uncompressed_bytes": 112312,
+    "uncompressed_sha256": "1c453593b4972afcfbf91dcbcb0944dcc25f99cc412e2ec339dde0a2cefad9ee"
+  },
+  "raw/audit/java-api-compare/proto-compiled-javap.txt.gz": {
+    "uncompressed_bytes": 5732778,
+    "uncompressed_sha256": "aa1067507b43c50d059d98fa160edc48ed7d21113e16438dc651125d232823c1"
+  },
+  "raw/audit/java-api-compare/proto-official-javap.txt.gz": {
+    "uncompressed_bytes": 5732778,
+    "uncompressed_sha256": "aa1067507b43c50d059d98fa160edc48ed7d21113e16438dc651125d232823c1"
+  }
+}

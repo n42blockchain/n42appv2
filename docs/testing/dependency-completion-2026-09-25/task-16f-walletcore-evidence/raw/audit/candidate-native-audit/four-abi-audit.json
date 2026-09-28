@@ -1,0 +1,200 @@
+{
+  "arm64-v8a": {
+    "candidate": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/arm64-v8a/libTrustWalletCore.so",
+      "bytes": 138543864,
+      "sha256": "008c11cbc6b45e90c1994febc4052203122260ae11c7e15babe5c137d2260fd5"
+    },
+    "checks": {
+      "candidate_hash": true,
+      "configure_exit": true,
+      "build_exit": true,
+      "configure_environment_exact": true,
+      "cmake_abi": true,
+      "cmake_platform23": true,
+      "cmake_static_cpp": true,
+      "final_link_flags": true,
+      "soname": true,
+      "needed": true,
+      "global_exports": true,
+      "jni_exports": true,
+      "load_align_16k": true,
+      "relro_end_16k": true,
+      "repo_elf64_audit": true
+    },
+    "load_segments": [
+      {
+        "alignment": 16384,
+        "offset": 0,
+        "vaddr": 0
+      },
+      {
+        "alignment": 16384,
+        "offset": 17305584,
+        "vaddr": 17321968
+      },
+      {
+        "alignment": 16384,
+        "offset": 17640128,
+        "vaddr": 17672896
+      }
+    ],
+    "relro_segments": [
+      {
+        "vaddr": 17321968,
+        "memsize": 339984
+      }
+    ],
+    "global_export_count": 10936,
+    "jni_export_count": 435,
+    "baseline_export_count": 10936
+  },
+  "armeabi-v7a": {
+    "candidate": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/armeabi-v7a/libTrustWalletCore.so",
+      "bytes": 109651696,
+      "sha256": "d292c42d4ba27c8c0cb349746f02eefae05f431bca545716748985f11c3bc9cb"
+    },
+    "checks": {
+      "candidate_hash": true,
+      "configure_exit": true,
+      "build_exit": true,
+      "configure_environment_exact": true,
+      "cmake_abi": true,
+      "cmake_platform23": true,
+      "cmake_static_cpp": true,
+      "final_link_flags": true,
+      "soname": true,
+      "needed": true,
+      "global_exports": true,
+      "jni_exports": true,
+      "load_align_16k": true,
+      "relro_end_16k": true
+    },
+    "load_segments": [
+      {
+        "alignment": 16384,
+        "offset": 0,
+        "vaddr": 0
+      },
+      {
+        "alignment": 16384,
+        "offset": 12406080,
+        "vaddr": 12422464
+      },
+      {
+        "alignment": 16384,
+        "offset": 12579712,
+        "vaddr": 12612480
+      }
+    ],
+    "relro_segments": [
+      {
+        "vaddr": 12422464,
+        "memsize": 176832
+      }
+    ],
+    "global_export_count": 10932,
+    "jni_export_count": 435,
+    "baseline_export_count": 10932
+  },
+  "x86": {
+    "candidate": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/x86/libTrustWalletCore.so",
+      "bytes": 114634756,
+      "sha256": "a491945d6f0f5ee7a4290f01a4da5ee1bce2b34fec26e77b3b51778f5ef1eaf0"
+    },
+    "checks": {
+      "candidate_hash": true,
+      "configure_exit": true,
+      "build_exit": true,
+      "configure_environment_exact": true,
+      "cmake_abi": true,
+      "cmake_platform23": true,
+      "cmake_static_cpp": true,
+      "final_link_flags": true,
+      "soname": true,
+      "needed": true,
+      "global_exports": true,
+      "jni_exports": true,
+      "load_align_16k": true,
+      "relro_end_16k": true
+    },
+    "load_segments": [
+      {
+        "alignment": 16384,
+        "offset": 0,
+        "vaddr": 0
+      },
+      {
+        "alignment": 16384,
+        "offset": 20210944,
+        "vaddr": 20227328
+      },
+      {
+        "alignment": 16384,
+        "offset": 20384096,
+        "vaddr": 20416864
+      }
+    ],
+    "relro_segments": [
+      {
+        "vaddr": 20227328,
+        "memsize": 187136
+      }
+    ],
+    "global_export_count": 10947,
+    "jni_export_count": 435,
+    "baseline_export_count": 10947
+  },
+  "x86_64": {
+    "candidate": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/x86_64/libTrustWalletCore.so",
+      "bytes": 131656504,
+      "sha256": "e76ccb0991534ac3bd3d4b1d63964144cbdbfaa5cf86c6a655701abdc924db49"
+    },
+    "checks": {
+      "candidate_hash": true,
+      "configure_exit": true,
+      "build_exit": true,
+      "configure_environment_exact": true,
+      "cmake_abi": true,
+      "cmake_platform23": true,
+      "cmake_static_cpp": true,
+      "final_link_flags": true,
+      "soname": true,
+      "needed": true,
+      "global_exports": true,
+      "jni_exports": true,
+      "load_align_16k": true,
+      "relro_end_16k": true,
+      "repo_elf64_audit": true
+    },
+    "load_segments": [
+      {
+        "alignment": 16384,
+        "offset": 0,
+        "vaddr": 0
+      },
+      {
+        "alignment": 16384,
+        "offset": 18779360,
+        "vaddr": 18795744
+      },
+      {
+        "alignment": 16384,
+        "offset": 19113184,
+        "vaddr": 19145952
+      }
+    ],
+    "relro_segments": [
+      {
+        "vaddr": 18795744,
+        "memsize": 340768
+      }
+    ],
+    "global_export_count": 11044,
+    "jni_export_count": 435,
+    "baseline_export_count": 11044
+  }
+}

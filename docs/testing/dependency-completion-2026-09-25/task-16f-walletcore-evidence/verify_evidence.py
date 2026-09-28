@@ -2,12 +2,18 @@
 """Replay the pinned Wallet Core package and synthetic runtime evidence offline."""
 
 import hashlib
+import gzip
 import importlib.util
 import json
 from pathlib import Path
 import re
 import sys
 from zipfile import ZipFile
+
+
+# The archived verifier is imported below. Keep replay itself from creating
+# __pycache__ members that would invalidate the exact archive member set.
+sys.dont_write_bytecode = True
 
 
 ROOT = Path(__file__).resolve().parent
@@ -35,6 +41,46 @@ def read_json(name):
     return json.loads((ROOT / name).read_text())
 
 
+def compressed_proofs():
+    records = read_json("raw/audit/compressed-inputs.json")
+    require(len(records) == 28, "compressed ABI/Java proof set differs")
+    raw = {}
+    for name, item in records.items():
+        require(name.startswith("raw/audit/") and name.endswith(".gz"),
+                "compressed proof path differs")
+        content = gzip.decompress((ROOT / name).read_bytes())
+        require(len(content) == item["uncompressed_bytes"] and
+                hashlib.sha256(content).hexdigest() == item["uncompressed_sha256"],
+                f"compressed proof bytes differ: {name}")
+        raw[name] = content
+    return raw
+
+
+def canonical_javap(data):
+    """Compare class declarations and member descriptors without source order."""
+    classes = {}
+    current = None
+    declaration = None
+    for raw in data.decode().splitlines():
+        line = raw.strip()
+        if line.endswith("{") and not line.startswith("static "):
+            current = line
+            declaration = None
+            require(current not in classes, "duplicate javap class declaration")
+            classes[current] = []
+        elif line == "}":
+            current = None
+        elif line.startswith("descriptor:"):
+            require(current is not None and declaration is not None,
+                    "javap descriptor lacks member declaration")
+            classes[current].append((declaration, line))
+            declaration = None
+        elif current is not None and line.endswith(";"):
+            declaration = line
+    return sorted((name, tuple(sorted(members)))
+                  for name, members in classes.items())
+
+
 def verify_members():
     names = (ROOT / "members.txt").read_text().splitlines()
     require(names == sorted(set(names)), "member list is not sorted and unique")
@@ -56,6 +102,7 @@ def verify_members():
 
 
 def verify_package():
+    raw_proofs = compressed_proofs()
     report = read_json("raw/build/tracked-packaging-report.json")
     baseline = ROOT / "artifacts/official-wallet-core-4.8.4.aar"
     candidate = ROOT / "artifacts/maintained-wallet-core-4.8.4.aar"
@@ -124,6 +171,58 @@ def verify_package():
                 "hash", "global_exports_equal_official", "soname_equal",
                 "needed_equal", "load_16k", "relro_16k")),
                 f"{abi}: retained ABI or ELF audit failed")
+    imports = read_json("raw/audit/candidate-native-audit/import-binding-comparison.json")
+    native_audit = read_json("raw/audit/candidate-native-audit/four-abi-audit.json")
+    require(set(imports) == set(native_audit) == set(ABIS),
+            "native import/ABI comparison set differs")
+    for abi in ABIS:
+        def undefined(group):
+            name = f"raw/audit/{group}/{abi}/dynamic-symbols.txt.gz"
+            rows = set()
+            for line in raw_proofs[name].decode().splitlines():
+                fields = line.split()
+                if (len(fields) >= 8 and fields[0].endswith(":") and
+                        fields[6] == "UND" and fields[4] in ("GLOBAL", "WEAK")):
+                    rows.add((fields[3], fields[4], fields[5], fields[7]))
+            return rows
+        official = undefined("baseline-native")
+        linked = undefined("candidate-native-audit")
+        item = imports[abi]
+        require(official == linked and len(official) == item["official_rows"] ==
+                item["candidate_rows"] and not item["missing"] and
+                not item["added"], f"{abi}: versioned undefined imports differ")
+        require(all(native_audit[abi]["checks"].values()),
+                f"{abi}: unstripped JNI link audit failed")
+        for group in ("baseline-native", "candidate-native-audit",
+                      "candidate-stripped/audit"):
+            header = raw_proofs[f"raw/audit/{group}/{abi}/headers.txt.gz"]
+            require(b"libTrustWalletCore.so" in header and
+                    all(lib in header for lib in (b"liblog.so", b"libm.so",
+                                                   b"libdl.so", b"libc.so")),
+                    f"{abi}: retained SONAME/NEEDED headers differ")
+    descriptors = read_json("raw/audit/java-api-compare/descriptor-comparison.json")
+    for family, prefix, classes in (("java", "java", 85), ("proto", "proto", 1975)):
+        item = descriptors[family]
+        require(item["classes"] == classes and item["canonical_equal"] is True,
+                f"{family}: Java/proto descriptor comparison failed")
+        inventory = read_json(f"raw/audit/java-api-compare/{prefix}-class-inventory.json")
+        require(inventory["official"] == inventory["compiled"] == classes and
+                not inventory["missing"] and not inventory["extra"],
+                f"{family}: Java/proto class set differs")
+        for variant in ("official", "compiled"):
+            name = f"raw/audit/java-api-compare/{prefix}-{variant}-javap.txt.gz"
+            require(hashlib.sha256(raw_proofs[name]).hexdigest() ==
+                    item["javap"][variant]["sha256"],
+                    f"{family}: javap transcript differs")
+        official_name = f"raw/audit/java-api-compare/{prefix}-official-javap.txt.gz"
+        compiled_name = f"raw/audit/java-api-compare/{prefix}-compiled-javap.txt.gz"
+        official_api = canonical_javap(raw_proofs[official_name])
+        compiled_api = canonical_javap(raw_proofs[compiled_name])
+        require(len(official_api) == len(compiled_api) == classes and
+                official_api == compiled_api,
+                f"{family}: independently canonicalized public API differs")
+        require((ROOT / f"raw/audit/java-api-compare/{prefix}-descriptor-diff.txt")
+                .read_text() == "", f"{family}: descriptor diff differs")
     elf = read_json("raw/build/maintained-aar-elf-audit.json")
     require(elf["passed"] is True and not elf["unaligned_libraries"],
             "maintained 64-bit AAR ELF audit failed")

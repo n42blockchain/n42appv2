@@ -1,0 +1,26 @@
+{
+  "arm64-v8a": {
+    "official_rows": 250,
+    "candidate_rows": 250,
+    "missing": [],
+    "added": []
+  },
+  "armeabi-v7a": {
+    "official_rows": 246,
+    "candidate_rows": 246,
+    "missing": [],
+    "added": []
+  },
+  "x86": {
+    "official_rows": 248,
+    "candidate_rows": 248,
+    "missing": [],
+    "added": []
+  },
+  "x86_64": {
+    "official_rows": 248,
+    "candidate_rows": 248,
+    "missing": [],
+    "added": []
+  }
+}
