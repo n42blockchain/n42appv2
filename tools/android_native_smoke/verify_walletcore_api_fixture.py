@@ -345,9 +345,12 @@ def verify_device(serial, item, apk, out):
     require_adb_command(item["pull"], serial, "pull", installed, pulled)
     require(item.get("token") and re.fullmatch(r"[a-f0-9]{32}", item["token"]),
             f"{serial}: launch nonce missing")
-    require_adb_command(item["start"], serial, "shell", "am", "start", "-W", "-n",
+    require_adb_command(item["start"], serial, "shell", "am", "start", "-n",
                         f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
                         "--es", "token", item["token"])
+    require(item["start"].get("timeout_seconds") == 20 and
+            item["start"].get("timed_out") is False,
+            f"{serial}: launch timeout policy changed")
     require_adb_command(item.get("logcat_baseline", {}), serial, "logcat", "-d", "-b",
                         "main", "-v", "threadtime", "-s", f"{TAG}:I")
     require_adb_command(item["result_logcat"], serial, "logcat", "-d", "-b", "main", "-v",

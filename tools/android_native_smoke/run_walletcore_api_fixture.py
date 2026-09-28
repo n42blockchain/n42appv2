@@ -25,11 +25,20 @@ ZIPALIGN = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0
 APKSIGNER = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/apksigner")
 
 
-def call(argv):
-    result = subprocess.run([str(value) for value in argv], cwd=ROOT,
-                            capture_output=True, text=True, check=False)
+def call(argv, timeout=None):
+    try:
+        result = subprocess.run([str(value) for value in argv], cwd=ROOT,
+                                capture_output=True, text=True, check=False, timeout=timeout)
+    except subprocess.TimeoutExpired as error:
+        def decoded(value):
+            return value.decode(errors="replace") if isinstance(value, bytes) else (value or "")
+        return {"argv": [str(value) for value in argv], "exit": 124,
+                "stdout": decoded(error.stdout).strip(),
+                "stderr": decoded(error.stderr).strip(),
+                "timeout_seconds": timeout, "timed_out": True}
     return {"argv": [str(value) for value in argv], "exit": result.returncode,
-            "stdout": result.stdout.strip(), "stderr": result.stderr.strip()}
+            "stdout": result.stdout.strip(), "stderr": result.stderr.strip(),
+            **({"timeout_seconds": timeout, "timed_out": False} if timeout else {})}
 
 
 def adb(serial, *args):
@@ -114,10 +123,11 @@ def run_device(serial, apk, out, item):
         item["token"] = secrets.token_hex(16)
         require(item["token"] not in item["logcat_baseline"]["stdout"],
                 f"{serial}: launch nonce already occurs in tagged baseline")
-        item["start"] = adb(serial, "shell", "am", "start", "-W", "-n",
-                            f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
-                            "--es", "token", item["token"])
-        require(item["start"]["exit"] == 0, f"{serial}: start failed")
+        item["start"] = call([ADB, "-s", serial, "shell", "am", "start", "-n",
+                              f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
+                              "--es", "token", item["token"]], timeout=20)
+        require(item["start"]["exit"] == 0 and not item["start"]["timed_out"],
+                f"{serial}: start failed or timed out")
         for attempt in range(60):
             fetched = adb(serial, "logcat", "-d", "-b", "main", "-v", "threadtime",
                           "-s", f"{TAG}:I")

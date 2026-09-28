@@ -5,14 +5,17 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import shutil
+import subprocess
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
 TASK = ROOT / ".superpowers/sdd/dependency-completion-20260925"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import verify_walletcore_api_fixture as gate  # noqa: E402
+import run_walletcore_api_fixture as runner  # noqa: E402
 
 
 def success(stdout, argv=None):
@@ -59,6 +62,16 @@ def ownership():
 
 
 class RuntimeGateTests(unittest.TestCase):
+    def test_launch_subprocess_timeout_is_bounded_failure(self):
+        command = [gate.ADB, "-s", "emulator-5562", "shell", "am", "start"]
+        failure = subprocess.TimeoutExpired(command, 20, output=b"partial", stderr=b"waiting")
+        with patch.object(runner.subprocess, "run", side_effect=failure):
+            result = runner.call(command, timeout=20)
+        self.assertEqual(result["exit"], 124)
+        self.assertTrue(result["timed_out"])
+        self.assertEqual(result["timeout_seconds"], 20)
+        self.assertEqual(result["stdout"], "partial")
+
     def test_exact_epoch_and_both_mapping_page_sizes(self):
         apk = TASK / "task-16f-walletcore-api-fixture/build3/walletcore-api-candidate.apk"
         self.assertEqual(gate.require_epoch(TASK, apk)["apk_sha256"], gate.APK_SHA256)
@@ -147,7 +160,7 @@ class RuntimeGateTests(unittest.TestCase):
                 "apksigner": success(""),
                 "install": adb_result(serial, "", "install", "-r", str(apk)),
                 "clear": adb_result(serial, "", "shell", "pm", "clear", gate.PACKAGE),
-                "start": adb_result(serial, "", "shell", "am", "start", "-W", "-n",
+                "start": adb_result(serial, "", "shell", "am", "start", "-n",
                                     f"{gate.PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
                                     "--es", "token", token),
                 "force_stop": adb_result(serial, "", "shell", "am", "force-stop", gate.PACKAGE)}
@@ -157,7 +170,16 @@ class RuntimeGateTests(unittest.TestCase):
             shutil.copyfile(apk, pulled)
             item["pull_path"] = str(pulled)
             item["pull"] = adb_result(serial, "", "pull", path, str(pulled))
+            item["start"].update({"timeout_seconds": 20, "timed_out": False})
             self.assertEqual(gate.verify_device(serial, item, apk, out)["pid"], pid)
+            item["start"]["argv"].insert(6, "-W")
+            with self.assertRaisesRegex(ValueError, "command/serial"):
+                gate.verify_device(serial, item, apk, out)
+            item["start"]["argv"].remove("-W")
+            item["start"]["timed_out"] = True
+            with self.assertRaisesRegex(ValueError, "launch timeout"):
+                gate.verify_device(serial, item, apk, out)
+            item["start"]["timed_out"] = False
             old = f'09-28 01:01:03.456 55 55 I {gate.TAG}: {{"kind":"END","token":"{"d" * 32}","pid":55}}'
             item["logcat_baseline"]["stdout"] = old
             item["result_logcat"]["stdout"] = old + "\n" + log
