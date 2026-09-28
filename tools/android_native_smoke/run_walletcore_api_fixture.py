@@ -13,9 +13,9 @@ import sys
 import time
 
 from verify_walletcore_api_fixture import (
-    APK_SHA256, DEVICES, EPOCH_SHA256, PACKAGE, ROOT, SOURCES, TAG, TOOLS,
+    APK_SHA256, DEVICES, EPOCH_SHA256, OWNERS, PACKAGE, ROOT, SOURCES, TAG, TOOLS,
     digest, inspect_apk, parse_events, require, require_epoch, require_git_head,
-    require_snapshot, verify,
+    require_ownership, require_snapshot, snapshot_commands, verify,
 )
 
 
@@ -38,28 +38,30 @@ def adb(serial, *args):
 
 
 def snapshot(serial):
-    commands = {
-        "boot": ("shell", "getprop", "sys.boot_completed"),
-        "sdk": ("shell", "getprop", "ro.build.version.sdk"),
-        "abi": ("shell", "getprop", "ro.product.cpu.abi"),
-        "airplane": ("shell", "settings", "get", "global", "airplane_mode_on"),
-        "wifi": ("shell", "settings", "get", "global", "wifi_on"),
-        "route": ("shell", "ip", "route"),
-        "default_network": ("shell", "sh", "-c",
-                            "dumpsys connectivity | grep 'Active default network'"),
-    }
-    if DEVICES[serial]["strict"]:
-        commands.update({
-            "page": ("shell", "getconf", "PAGE_SIZE"),
-            "linker": ("shell", "getprop", "bionic.linker.16kb.app_compat.enabled"),
-            "compat": ("shell", "getprop", "pm.16kb.app_compat.disabled"),
-        })
-    else:
-        commands["page"] = ("shell", "sh", "-c",
-                            "grep KernelPageSize /proc/1/smaps | head -1")
     state = {"state": adb(serial, "get-state")}
-    state.update({key: adb(serial, *argv) for key, argv in commands.items()})
+    state.update({key: adb(serial, *argv)
+                  for key, argv in snapshot_commands(serial).items()})
     return state
+
+
+def ownership(task):
+    owners = {}
+    for serial, expected in OWNERS.items():
+        item = {"launch_receipt_sha256": digest(task / expected["source"]),
+                "state": adb(serial, "get-state"),
+                "avd": adb(serial, "emu", "avd", "name"),
+                "process": call(["ps", "-p", str(expected["pid"]), "-o", "command="]),
+                "ports": {}}
+        files = call(["lsof", "-nP", "-p", str(expected["pid"]), "-Fn"])
+        item["avd_files"] = {"argv": files["argv"], "exit": files["exit"],
+                             "stdout": "\n".join(row for row in files["stdout"].splitlines()
+                                                 if row.startswith("n" + str(task / expected["avd_dir"])))}
+        for port in (expected["port"], expected["port"] + 1):
+            item["ports"][str(port)] = call(
+                ["lsof", "-nP", f"-iTCP:{port}", "-sTCP:LISTEN", "-Fpcn"])
+        owners[serial] = item
+    require_ownership(task, owners)
+    return owners
 
 
 def prepare_strict(serial):
@@ -98,6 +100,7 @@ def run_device(serial, apk, out, item):
                 re.fullmatch(r"package:/data/app/.+/base\.apk", path),
                 f"{serial}: installed APK path invalid")
         pulled = out / f"{serial}-installed.apk"
+        item["pull_path"] = str(pulled)
         item["pull"] = adb(serial, "pull", path.removeprefix("package:"), pulled)
         require(item["pull"]["exit"] == 0 and pulled.is_file(),
                 f"{serial}: installed APK pull failed")
@@ -147,6 +150,8 @@ def run(task, apk, out):
                "build_epoch": epoch, "build_epoch_sha256": EPOCH_SHA256,
                "device_tools": TOOLS, "apk_sha256": APK_SHA256, "devices": {}}
     path.write_text(json.dumps(receipt, indent=2) + "\n")
+    receipt["ownership"] = ownership(task)
+    path.write_text(json.dumps(receipt, indent=2) + "\n")
     for serial in DEVICES:
         item = receipt["devices"][serial] = {}
         try:
@@ -160,7 +165,7 @@ def run(task, apk, out):
             run_device(serial, apk, out, item)
         finally:
             path.write_text(json.dumps(receipt, indent=2) + "\n")
-    result = verify(receipt, task, apk)
+    result = verify(receipt, task, apk, out)
     verified = out / "walletcore-api-runtime-verification.json"
     verified.write_text(json.dumps(result, indent=2) + "\n")
     return path, verified

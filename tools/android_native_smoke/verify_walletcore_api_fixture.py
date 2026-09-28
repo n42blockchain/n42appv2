@@ -21,6 +21,24 @@ PACKAGE = "ai.n42.fixture.walletcoreapi"
 TAG = "N42_WC_API_FIXTURE"
 DEVICES = {"emulator-5560": {"sdk": None, "page": 16384, "strict": True},
            "emulator-5562": {"sdk": "26", "page": 4096, "strict": False}}
+ADB = "/opt/homebrew/share/android-commandlinetools/platform-tools/adb"
+EMULATOR = "/Users/jieliu/.codex/toolchains/android-sdk-37/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless"
+OWNERS = {
+    "emulator-5560": {
+        "pid": 49781, "port": 5560, "avd": "N42_Dependency_API37_16KB",
+        "source": "android-16kb-environment.json",
+        "avd_dir": "android-16kb-user/avd/N42_Dependency_API37_16KB.avd",
+        "source_sha256": "f1104db6e1f5ec4a3f957094090a77a751ee78d6b08d2eef397405efb2faea7f",
+        "command": f"{EMULATOR} -avd N42_Dependency_API37_16KB -port 5560 -no-window -no-audio -no-snapshot -gpu swiftshader",
+    },
+    "emulator-5562": {
+        "pid": 8313, "port": 5562, "avd": "N42_API26_ARM64_W",
+        "source": "task-api26-avd/launch.json",
+        "avd_dir": "task-api26-avd/avd/N42_API26_ARM64_W.avd",
+        "source_sha256": "a8f3b15e83fd6ec43371205257763dd0f698993dd2f2a12c848b386c5c0ee869",
+        "command": f"{EMULATOR} -avd N42_API26_ARM64_W -port 5562 -no-window -no-audio -no-boot-anim -no-snapstorage -gpu swiftshader -cores 2 -memory 2048 -datadir {ROOT / '.superpowers/sdd/dependency-completion-20260925/task-api26-avd/data'} -cache {ROOT / '.superpowers/sdd/dependency-completion-20260925/task-api26-avd/cache/cache.img'} -no-metrics -crash-report-mode disabled",
+    },
+}
 TOOLS = {
     "/opt/homebrew/share/android-commandlinetools/platform-tools/adb": "534893b946847fdf6f9998108af469e646679824d75098247ca438948fa2dffc",
     "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt": "170717682f714712c5b6854af73cfe37aeda342ff422384e98d67fc1b490f49b",
@@ -51,6 +69,85 @@ def require(value, reason):
 
 def digest(path):
     return sha256(Path(path).read_bytes()).hexdigest()
+
+
+def snapshot_commands(serial):
+    commands = {
+        "boot": ("shell", "getprop", "sys.boot_completed"),
+        "sdk": ("shell", "getprop", "ro.build.version.sdk"),
+        "abi": ("shell", "getprop", "ro.product.cpu.abi"),
+        "airplane": ("shell", "settings", "get", "global", "airplane_mode_on"),
+        "wifi": ("shell", "settings", "get", "global", "wifi_on"),
+        "route": ("shell", "ip", "route"),
+        "default_network": ("shell", "sh", "-c",
+                            "dumpsys connectivity | grep 'Active default network'"),
+    }
+    if DEVICES[serial]["strict"]:
+        commands.update({
+            "page": ("shell", "getconf", "PAGE_SIZE"),
+            "linker": ("shell", "getprop", "bionic.linker.16kb.app_compat.enabled"),
+            "compat": ("shell", "getprop", "pm.16kb.app_compat.disabled"),
+        })
+    else:
+        commands["page"] = ("shell", "sh", "-c",
+                            "grep KernelPageSize /proc/1/smaps | head -1")
+    return commands
+
+
+def require_adb_command(result, serial, *args):
+    require(result.get("argv") == [ADB, "-s", serial, *[str(value) for value in args]],
+            f"{serial}: ADB command/serial/path binding changed")
+
+
+def require_ownership(task, record):
+    require(set(record) == set(OWNERS), "emulator ownership set changed")
+    for serial, expected in OWNERS.items():
+        item = record[serial]
+        source = task / expected["source"]
+        require(source.is_file() and not source.is_symlink() and
+                digest(source) == expected["source_sha256"] and
+                item.get("launch_receipt_sha256") == expected["source_sha256"],
+                f"{serial}: task launch receipt changed")
+        original = json.loads(source.read_bytes())
+        if serial == "emulator-5560":
+            require(original.get("owned_avd") == expected["avd"] and
+                    original.get("command", [None, None, None])[2] == serial,
+                    "strict emulator task receipt changed")
+        else:
+            require(original.get("pid") == expected["pid"] and
+                    original.get("serial") == serial and
+                    original.get("avd") == expected["avd"] and
+                    original.get("args", [])[1:5] ==
+                    ["-avd", expected["avd"], "-port", str(expected["port"])],
+                    "API 26 task launch receipt changed")
+        state, avd = item.get("state", {}), item.get("avd", {})
+        require_adb_command(state, serial, "get-state")
+        require_adb_command(avd, serial, "emu", "avd", "name")
+        require(state.get("exit") == avd.get("exit") == 0 and
+                state.get("stdout") == "device" and
+                avd.get("stdout", "").splitlines()[:1] == [expected["avd"]],
+                f"{serial}: live AVD/serial differs from task owner")
+        process = item.get("process", {})
+        require(process.get("argv") == ["ps", "-p", str(expected["pid"]), "-o", "command="] and
+                process.get("exit") == 0 and process.get("stdout") == expected["command"],
+                f"{serial}: host emulator PID/command changed")
+        files = item.get("avd_files", {})
+        lock = task / expected["avd_dir"] / "multiinstance.lock"
+        require(files.get("argv") == ["lsof", "-nP", "-p", str(expected["pid"]), "-Fn"] and
+                files.get("exit") == 0 and
+                f"n{lock}" in files.get("stdout", "").splitlines(),
+                f"{serial}: host process lacks task-owned AVD lock")
+        ports = item.get("ports", {})
+        require(set(ports) == {str(expected["port"]), str(expected["port"] + 1)},
+                f"{serial}: host port set changed")
+        for port, result in ports.items():
+            require(result.get("argv") == ["lsof", "-nP", f"-iTCP:{port}",
+                                           "-sTCP:LISTEN", "-Fpcn"] and
+                    result.get("exit") == 0 and
+                    set(re.findall(r"(?m)^p(\d+)$", result.get("stdout", ""))) ==
+                    {str(expected["pid"])} and
+                    f":{port}" in result.get("stdout", ""),
+                    f"{serial}: host port {port} owner changed")
 
 
 def inspect_apk(apk, page):
@@ -133,6 +230,11 @@ def require_git_head(head, hashes):
 
 def require_snapshot(snapshot, serial, label):
     policy = DEVICES[serial]
+    require(set(snapshot) == {"state", *snapshot_commands(serial)},
+            f"{label}: {serial} snapshot command set changed")
+    require_adb_command(snapshot.get("state", {}), serial, "get-state")
+    for key, command in snapshot_commands(serial).items():
+        require_adb_command(snapshot.get(key, {}), serial, *command)
     common = {"state": "device", "boot": "1",
               "abi": "arm64-v8a", "airplane": "1", "wifi": "0", "route": ""}
     for key, expected in common.items():
@@ -198,12 +300,17 @@ def require_maps(rows, apk_path, loads):
                 f"executable APK map misses native LOAD at {offset}")
 
 
-def verify_device(serial, item, apk):
+def verify_device(serial, item, apk, out):
     policy = DEVICES[serial]
     require_snapshot(item.get("pre", {}), serial, "pre")
     require_snapshot(item.get("post", {}), serial, "post")
     for key in ("install", "clear", "pm_path", "pull", "logcat_clear", "start", "force_stop"):
         require(item.get(key, {}).get("exit") == 0, f"{serial}: {key} failed")
+    require_adb_command(item["install"], serial, "install", "-r", apk)
+    require_adb_command(item["clear"], serial, "shell", "pm", "clear", PACKAGE)
+    require_adb_command(item["pm_path"], serial, "shell", "pm", "path", PACKAGE)
+    require_adb_command(item["logcat_clear"], serial, "logcat", "-c")
+    require_adb_command(item["force_stop"], serial, "shell", "am", "force-stop", PACKAGE)
     require(item.get("badging", {}).get("exit") == 0 and
             f"package: name='{PACKAGE}'" in item["badging"]["stdout"] and
             item.get("permissions", {}).get("exit") == 0 and
@@ -217,10 +324,21 @@ def verify_device(serial, item, apk):
                 "strict 16 KB setup proof missing")
     else:
         require_snapshot(item.get("initial", {}), serial, "initial")
-    require(item.get("pulled_apk_sha256") == APK_SHA256, f"{serial}: installed APK bytes differ")
+    pulled = out / f"{serial}-installed.apk"
+    require(item.get("pull_path") == str(pulled) and pulled.is_file() and
+            not pulled.is_symlink() and digest(pulled) ==
+            item.get("pulled_apk_sha256") == APK_SHA256,
+            f"{serial}: retained installed APK bytes differ or are missing")
+    installed = item["pm_path"]["stdout"].removeprefix("package:")
+    require_adb_command(item["pull"], serial, "pull", installed, pulled)
     require(item.get("token") and re.fullmatch(r"[a-f0-9]{32}", item["token"]),
             f"{serial}: launch nonce missing")
+    require_adb_command(item["start"], serial, "shell", "am", "start", "-W", "-n",
+                        f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
+                        "--es", "token", item["token"])
     require(item.get("result_logcat", {}).get("exit") == 0, f"{serial}: logcat read failed")
+    require_adb_command(item["result_logcat"], serial, "logcat", "-d", "-v",
+                        "threadtime", "-s", f"{TAG}:I")
     events = parse_events(item["result_logcat"]["stdout"], item["token"])
     require(events == item.get("events"), f"{serial}: parsed events differ from raw logcat")
     begin, loaded, positive, negative, end = events
@@ -250,9 +368,10 @@ def verify_device(serial, item, apk):
             "native_sha256": NATIVE_SHA256, "cases": [positive, negative]}
 
 
-def verify(receipt, task, apk):
+def verify(receipt, task, apk, out):
     require(receipt.get("schema_version") == 1 and set(receipt.get("devices", {})) == set(DEVICES),
             "receipt schema/device set changed")
+    require(out.is_relative_to(task), "runtime evidence outside task root")
     epoch = require_epoch(task, apk)
     require(receipt.get("build_epoch") == epoch and
             receipt.get("build_epoch_sha256") == EPOCH_SHA256 and
@@ -261,7 +380,8 @@ def verify(receipt, task, apk):
             all(Path(path).is_file() and digest(path) == expected for path, expected in TOOLS.items()),
             "device tool identity changed")
     require_git_head(receipt.get("git_head"), receipt.get("source_sha256", {}))
-    devices = {serial: verify_device(serial, receipt["devices"][serial], apk)
+    require_ownership(task, receipt.get("ownership", {}))
+    devices = {serial: verify_device(serial, receipt["devices"][serial], apk, out)
                for serial in DEVICES}
     return {"passed": True, "devices": devices}
 
@@ -273,7 +393,7 @@ def main():
     parser.add_argument("--receipt", required=True, type=Path)
     args = parser.parse_args()
     result = verify(json.loads(args.receipt.read_text()), args.task_root.resolve(),
-                    args.apk.resolve())
+                    args.apk.resolve(), args.receipt.resolve().parent)
     print(json.dumps(result, indent=2))
 
 
