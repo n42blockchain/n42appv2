@@ -1,0 +1,54 @@
+{
+  "aarch64-linux-android": {
+    "checks": {
+      "target": true,
+      "cdylib": true,
+      "gc": true,
+      "max16k": true,
+      "common16k": true,
+      "cargo_ndk_linker": true
+    },
+    "rustc_line_sha256": "a936c8e579df7d609348d19bc109483646e86277168e9a123f71fa7e9dec8178",
+    "build_log_sha256": "cb7cbd81abd1188251298a0f6e952bec83a82a6b0e3e731ca3c3b564106f2c43",
+    "build_exit_zero": true
+  },
+  "armv7-linux-androideabi": {
+    "checks": {
+      "target": true,
+      "cdylib": true,
+      "gc": true,
+      "max16k": true,
+      "common16k": true,
+      "cargo_ndk_linker": true
+    },
+    "rustc_line_sha256": "eb7324524f7e69c8bae234478ac67620cb88fb6599035278cc072ff67b8503f9",
+    "build_log_sha256": "e57ff33e61384489b41a69c942732eb47729447ce0bbd11f4474ed1bce3e46b9",
+    "build_exit_zero": true
+  },
+  "i686-linux-android": {
+    "checks": {
+      "target": true,
+      "cdylib": true,
+      "gc": true,
+      "max16k": true,
+      "common16k": true,
+      "cargo_ndk_linker": true
+    },
+    "rustc_line_sha256": "5fb934716ec1a2e58ff388bad95a0f9b9078ebf3f3f1ece049cf5b6e6b35f1b1",
+    "build_log_sha256": "460171c2273ba9f3241975bce7df15c9bcd250634e418ffe5ec6076e28f3a465",
+    "build_exit_zero": true
+  },
+  "x86_64-linux-android": {
+    "checks": {
+      "target": true,
+      "cdylib": true,
+      "gc": true,
+      "max16k": true,
+      "common16k": true,
+      "cargo_ndk_linker": true
+    },
+    "rustc_line_sha256": "8c233aa5bbb991d42603f75ec883af831be3a093159a280919922d26d6c37308",
+    "build_log_sha256": "ac1c02db872ad453eaceb3c8e91b2c6065682d9dc8f6f78be11605bbba29916d",
+    "build_exit_zero": true
+  }
+}

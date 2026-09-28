@@ -1,0 +1,1694 @@
+[
+  {
+    "name": "aho-corasick",
+    "version": "1.1.4",
+    "license": "Unlicense OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/Cargo.toml"
+  },
+  {
+    "name": "allocator-api2",
+    "version": "0.2.21",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/allocator-api2-0.2.21/Cargo.toml"
+  },
+  {
+    "name": "alloy",
+    "version": "1.8.3",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/alloy-1.8.3/Cargo.toml"
+  },
+  {
+    "name": "alloy-core",
+    "version": "1.5.7",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/alloy-core-1.5.7/Cargo.toml"
+  },
+  {
+    "name": "alloy-primitives",
+    "version": "1.5.7",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/alloy-primitives-1.5.7/Cargo.toml"
+  },
+  {
+    "name": "android_system_properties",
+    "version": "0.1.5",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/android_system_properties-0.1.5/Cargo.toml"
+  },
+  {
+    "name": "anstyle",
+    "version": "1.0.14",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.14/Cargo.toml"
+  },
+  {
+    "name": "anyhow",
+    "version": "1.0.102",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.102/Cargo.toml"
+  },
+  {
+    "name": "askama",
+    "version": "0.14.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/askama-0.14.0/Cargo.toml"
+  },
+  {
+    "name": "askama_derive",
+    "version": "0.14.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/askama_derive-0.14.0/Cargo.toml"
+  },
+  {
+    "name": "askama_parser",
+    "version": "0.14.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/askama_parser-0.14.0/Cargo.toml"
+  },
+  {
+    "name": "async-compat",
+    "version": "0.2.5",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/async-compat-0.2.5/Cargo.toml"
+  },
+  {
+    "name": "async-trait",
+    "version": "0.1.89",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/async-trait-0.1.89/Cargo.toml"
+  },
+  {
+    "name": "atomic-waker",
+    "version": "1.1.2",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/atomic-waker-1.1.2/Cargo.toml"
+  },
+  {
+    "name": "autocfg",
+    "version": "1.5.0",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.0/Cargo.toml"
+  },
+  {
+    "name": "base64",
+    "version": "0.13.1",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/base64-0.13.1/Cargo.toml"
+  },
+  {
+    "name": "base64",
+    "version": "0.21.7",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/base64-0.21.7/Cargo.toml"
+  },
+  {
+    "name": "base64",
+    "version": "0.22.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/base64-0.22.1/Cargo.toml"
+  },
+  {
+    "name": "basic-toml",
+    "version": "0.1.10",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/basic-toml-0.1.10/Cargo.toml"
+  },
+  {
+    "name": "bitflags",
+    "version": "2.11.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/bitflags-2.11.0/Cargo.toml"
+  },
+  {
+    "name": "block-buffer",
+    "version": "0.10.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/Cargo.toml"
+  },
+  {
+    "name": "block-buffer",
+    "version": "0.12.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.12.0/Cargo.toml"
+  },
+  {
+    "name": "bs58",
+    "version": "0.4.0",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/bs58-0.4.0/Cargo.toml"
+  },
+  {
+    "name": "bytes",
+    "version": "1.11.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/bytes-1.11.1/Cargo.toml"
+  },
+  {
+    "name": "camino",
+    "version": "1.2.2",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/camino-1.2.2/Cargo.toml"
+  },
+  {
+    "name": "cc",
+    "version": "1.2.57",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.2.57/Cargo.toml"
+  },
+  {
+    "name": "cesu8",
+    "version": "1.1.0",
+    "license": "Apache-2.0/MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/cesu8-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "cfg-if",
+    "version": "1.0.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/cfg-if-1.0.4/Cargo.toml"
+  },
+  {
+    "name": "chrono",
+    "version": "0.4.44",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/chrono-0.4.44/Cargo.toml"
+  },
+  {
+    "name": "clap",
+    "version": "4.6.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/clap-4.6.0/Cargo.toml"
+  },
+  {
+    "name": "clap_builder",
+    "version": "4.6.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/clap_builder-4.6.0/Cargo.toml"
+  },
+  {
+    "name": "clap_derive",
+    "version": "4.6.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/clap_derive-4.6.0/Cargo.toml"
+  },
+  {
+    "name": "clap_lex",
+    "version": "1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/clap_lex-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "combine",
+    "version": "4.6.7",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/combine-4.6.7/Cargo.toml"
+  },
+  {
+    "name": "const-hex",
+    "version": "1.18.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/const-hex-1.18.1/Cargo.toml"
+  },
+  {
+    "name": "const-oid",
+    "version": "0.10.2",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/const-oid-0.10.2/Cargo.toml"
+  },
+  {
+    "name": "convert_case",
+    "version": "0.10.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.10.0/Cargo.toml"
+  },
+  {
+    "name": "cpufeatures",
+    "version": "0.2.17",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/cpufeatures-0.2.17/Cargo.toml"
+  },
+  {
+    "name": "cpufeatures",
+    "version": "0.3.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/cpufeatures-0.3.0/Cargo.toml"
+  },
+  {
+    "name": "crunchy",
+    "version": "0.2.4",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4/Cargo.toml"
+  },
+  {
+    "name": "crypto-common",
+    "version": "0.1.7",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/crypto-common-0.1.7/Cargo.toml"
+  },
+  {
+    "name": "crypto-common",
+    "version": "0.2.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/crypto-common-0.2.1/Cargo.toml"
+  },
+  {
+    "name": "curve25519-dalek",
+    "version": "4.1.3",
+    "license": "BSD-3-Clause",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-4.1.3/Cargo.toml"
+  },
+  {
+    "name": "curve25519-dalek-derive",
+    "version": "0.1.1",
+    "license": null,
+    "manifest_path": null
+  },
+  {
+    "name": "data-encoding",
+    "version": "2.10.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/data-encoding-2.10.0/Cargo.toml"
+  },
+  {
+    "name": "deranged",
+    "version": "0.5.8",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/deranged-0.5.8/Cargo.toml"
+  },
+  {
+    "name": "derive_more",
+    "version": "0.99.20",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-0.99.20/Cargo.toml"
+  },
+  {
+    "name": "derive_more",
+    "version": "2.1.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "derive_more-impl",
+    "version": "2.1.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "digest",
+    "version": "0.10.7",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/Cargo.toml"
+  },
+  {
+    "name": "digest",
+    "version": "0.11.2",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.11.2/Cargo.toml"
+  },
+  {
+    "name": "displaydoc",
+    "version": "0.2.5",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/displaydoc-0.2.5/Cargo.toml"
+  },
+  {
+    "name": "dotenvy",
+    "version": "0.15.7",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/dotenvy-0.15.7/Cargo.toml"
+  },
+  {
+    "name": "dyn-clone",
+    "version": "1.0.20",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/dyn-clone-1.0.20/Cargo.toml"
+  },
+  {
+    "name": "ed25519",
+    "version": "2.2.3",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ed25519-2.2.3/Cargo.toml"
+  },
+  {
+    "name": "ed25519-dalek",
+    "version": "2.2.0",
+    "license": "BSD-3-Clause",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ed25519-dalek-2.2.0/Cargo.toml"
+  },
+  {
+    "name": "equivalent",
+    "version": "1.0.2",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/equivalent-1.0.2/Cargo.toml"
+  },
+  {
+    "name": "errno",
+    "version": "0.3.14",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/errno-0.3.14/Cargo.toml"
+  },
+  {
+    "name": "eyre",
+    "version": "0.6.12",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/eyre-0.6.12/Cargo.toml"
+  },
+  {
+    "name": "fastrand",
+    "version": "2.3.0",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/fastrand-2.3.0/Cargo.toml"
+  },
+  {
+    "name": "find-msvc-tools",
+    "version": "0.1.9",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/find-msvc-tools-0.1.9/Cargo.toml"
+  },
+  {
+    "name": "foldhash",
+    "version": "0.2.0",
+    "license": "Zlib",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/foldhash-0.2.0/Cargo.toml"
+  },
+  {
+    "name": "foreign-types",
+    "version": "0.3.2",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/foreign-types-0.3.2/Cargo.toml"
+  },
+  {
+    "name": "foreign-types-shared",
+    "version": "0.1.1",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/foreign-types-shared-0.1.1/Cargo.toml"
+  },
+  {
+    "name": "form_urlencoded",
+    "version": "1.2.2",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/form_urlencoded-1.2.2/Cargo.toml"
+  },
+  {
+    "name": "fs-err",
+    "version": "2.11.0",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/fs-err-2.11.0/Cargo.toml"
+  },
+  {
+    "name": "futures",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "futures-channel",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-channel-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "futures-core",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-core-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "futures-io",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-io-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "futures-sink",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-sink-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "futures-task",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-task-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "futures-util",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "generic-array",
+    "version": "0.14.7",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/Cargo.toml"
+  },
+  {
+    "name": "getrandom",
+    "version": "0.2.17",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.2.17/Cargo.toml"
+  },
+  {
+    "name": "getrandom",
+    "version": "0.3.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.3.4/Cargo.toml"
+  },
+  {
+    "name": "getrandom",
+    "version": "0.4.2",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.4.2/Cargo.toml"
+  },
+  {
+    "name": "glob",
+    "version": "0.3.3",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/glob-0.3.3/Cargo.toml"
+  },
+  {
+    "name": "goblin",
+    "version": "0.8.2",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/goblin-0.8.2/Cargo.toml"
+  },
+  {
+    "name": "hashbrown",
+    "version": "0.16.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hashbrown-0.16.1/Cargo.toml"
+  },
+  {
+    "name": "hashbrown",
+    "version": "0.17.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hashbrown-0.17.1/Cargo.toml"
+  },
+  {
+    "name": "heck",
+    "version": "0.5.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/heck-0.5.0/Cargo.toml"
+  },
+  {
+    "name": "hex",
+    "version": "0.4.3",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hex-0.4.3/Cargo.toml"
+  },
+  {
+    "name": "http",
+    "version": "1.4.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/http-1.4.0/Cargo.toml"
+  },
+  {
+    "name": "http-body",
+    "version": "1.0.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/http-body-1.0.1/Cargo.toml"
+  },
+  {
+    "name": "http-body-util",
+    "version": "0.1.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/http-body-util-0.1.3/Cargo.toml"
+  },
+  {
+    "name": "httparse",
+    "version": "1.10.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/httparse-1.10.1/Cargo.toml"
+  },
+  {
+    "name": "hybrid-array",
+    "version": "0.4.8",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hybrid-array-0.4.8/Cargo.toml"
+  },
+  {
+    "name": "hyper",
+    "version": "1.8.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-1.8.1/Cargo.toml"
+  },
+  {
+    "name": "hyper-rustls",
+    "version": "0.27.7",
+    "license": "Apache-2.0 OR ISC OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-rustls-0.27.7/Cargo.toml"
+  },
+  {
+    "name": "hyper-util",
+    "version": "0.1.20",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-util-0.1.20/Cargo.toml"
+  },
+  {
+    "name": "iana-time-zone",
+    "version": "0.1.65",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/iana-time-zone-0.1.65/Cargo.toml"
+  },
+  {
+    "name": "icu_collections",
+    "version": "2.1.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_collections-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "icu_locale_core",
+    "version": "2.1.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_locale_core-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "icu_normalizer",
+    "version": "2.1.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "icu_normalizer_data",
+    "version": "2.1.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_normalizer_data-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "icu_properties",
+    "version": "2.1.2",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_properties-2.1.2/Cargo.toml"
+  },
+  {
+    "name": "icu_properties_data",
+    "version": "2.1.2",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_properties_data-2.1.2/Cargo.toml"
+  },
+  {
+    "name": "icu_provider",
+    "version": "2.1.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/icu_provider-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "idna",
+    "version": "1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/idna-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "idna_adapter",
+    "version": "1.2.1",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/idna_adapter-1.2.1/Cargo.toml"
+  },
+  {
+    "name": "indenter",
+    "version": "0.3.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/indenter-0.3.4/Cargo.toml"
+  },
+  {
+    "name": "indexmap",
+    "version": "2.14.0",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/indexmap-2.14.0/Cargo.toml"
+  },
+  {
+    "name": "ipnet",
+    "version": "2.12.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ipnet-2.12.0/Cargo.toml"
+  },
+  {
+    "name": "iri-string",
+    "version": "0.7.11",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/iri-string-0.7.11/Cargo.toml"
+  },
+  {
+    "name": "itoa",
+    "version": "1.0.18",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/itoa-1.0.18/Cargo.toml"
+  },
+  {
+    "name": "jni",
+    "version": "0.21.1",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/jni-0.21.1/Cargo.toml"
+  },
+  {
+    "name": "jni-sys",
+    "version": "0.3.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/jni-sys-0.3.1/Cargo.toml"
+  },
+  {
+    "name": "jni-sys",
+    "version": "0.4.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/jni-sys-0.4.1/Cargo.toml"
+  },
+  {
+    "name": "jni-sys-macros",
+    "version": "0.4.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/jni-sys-macros-0.4.1/Cargo.toml"
+  },
+  {
+    "name": "jsonwebtoken",
+    "version": "8.3.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/jsonwebtoken-8.3.0/Cargo.toml"
+  },
+  {
+    "name": "keccak",
+    "version": "0.1.6",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/keccak-0.1.6/Cargo.toml"
+  },
+  {
+    "name": "kotlin-ffi",
+    "version": "0.1.0",
+    "license": null,
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/source/crates/kotlin-ffi/Cargo.toml"
+  },
+  {
+    "name": "lazy_static",
+    "version": "1.5.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/lazy_static-1.5.0/Cargo.toml"
+  },
+  {
+    "name": "libc",
+    "version": "0.2.183",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.183/Cargo.toml"
+  },
+  {
+    "name": "linux-raw-sys",
+    "version": "0.12.1",
+    "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/linux-raw-sys-0.12.1/Cargo.toml"
+  },
+  {
+    "name": "litemap",
+    "version": "0.8.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/litemap-0.8.1/Cargo.toml"
+  },
+  {
+    "name": "lock_api",
+    "version": "0.4.14",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/lock_api-0.4.14/Cargo.toml"
+  },
+  {
+    "name": "log",
+    "version": "0.4.29",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.29/Cargo.toml"
+  },
+  {
+    "name": "memchr",
+    "version": "2.8.0",
+    "license": "Unlicense OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/memchr-2.8.0/Cargo.toml"
+  },
+  {
+    "name": "minimal-lexical",
+    "version": "0.2.1",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/minimal-lexical-0.2.1/Cargo.toml"
+  },
+  {
+    "name": "mio",
+    "version": "1.1.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/mio-1.1.1/Cargo.toml"
+  },
+  {
+    "name": "nom",
+    "version": "7.1.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/nom-7.1.3/Cargo.toml"
+  },
+  {
+    "name": "num-bigint",
+    "version": "0.4.6",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.4.6/Cargo.toml"
+  },
+  {
+    "name": "num-conv",
+    "version": "0.2.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/num-conv-0.2.1/Cargo.toml"
+  },
+  {
+    "name": "num-integer",
+    "version": "0.1.46",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/num-integer-0.1.46/Cargo.toml"
+  },
+  {
+    "name": "num-traits",
+    "version": "0.2.19",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/num-traits-0.2.19/Cargo.toml"
+  },
+  {
+    "name": "oas3",
+    "version": "0.21.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/oas3-0.21.0/Cargo.toml"
+  },
+  {
+    "name": "once_cell",
+    "version": "1.21.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/once_cell-1.21.4/Cargo.toml"
+  },
+  {
+    "name": "openssl",
+    "version": "0.10.79",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-0.10.79/Cargo.toml"
+  },
+  {
+    "name": "openssl-macros",
+    "version": "0.1.1",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-macros-0.1.1/Cargo.toml"
+  },
+  {
+    "name": "openssl-src",
+    "version": "300.5.5+3.5.5",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-src-300.5.5+3.5.5/Cargo.toml"
+  },
+  {
+    "name": "openssl-sys",
+    "version": "0.9.116",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-sys-0.9.116/Cargo.toml"
+  },
+  {
+    "name": "ordered-float",
+    "version": "2.10.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ordered-float-2.10.1/Cargo.toml"
+  },
+  {
+    "name": "parking_lot",
+    "version": "0.12.5",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/parking_lot-0.12.5/Cargo.toml"
+  },
+  {
+    "name": "parking_lot_core",
+    "version": "0.9.12",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/parking_lot_core-0.9.12/Cargo.toml"
+  },
+  {
+    "name": "paste",
+    "version": "1.0.15",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/paste-1.0.15/Cargo.toml"
+  },
+  {
+    "name": "pay-api",
+    "version": "0.1.0",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/source/crates/pay-api/Cargo.toml"
+  },
+  {
+    "name": "pem",
+    "version": "1.1.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/pem-1.1.1/Cargo.toml"
+  },
+  {
+    "name": "percent-encoding",
+    "version": "2.3.2",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/percent-encoding-2.3.2/Cargo.toml"
+  },
+  {
+    "name": "pin-project-lite",
+    "version": "0.2.17",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/pin-project-lite-0.2.17/Cargo.toml"
+  },
+  {
+    "name": "pin-utils",
+    "version": "0.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/pin-utils-0.1.0/Cargo.toml"
+  },
+  {
+    "name": "pkg-config",
+    "version": "0.3.32",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/pkg-config-0.3.32/Cargo.toml"
+  },
+  {
+    "name": "plain",
+    "version": "0.2.3",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/plain-0.2.3/Cargo.toml"
+  },
+  {
+    "name": "potential_utf",
+    "version": "0.1.4",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/potential_utf-0.1.4/Cargo.toml"
+  },
+  {
+    "name": "powerfmt",
+    "version": "0.2.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/powerfmt-0.2.0/Cargo.toml"
+  },
+  {
+    "name": "ppv-lite86",
+    "version": "0.2.21",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ppv-lite86-0.2.21/Cargo.toml"
+  },
+  {
+    "name": "proc-macro2",
+    "version": "1.0.106",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro2-1.0.106/Cargo.toml"
+  },
+  {
+    "name": "progenitor",
+    "version": "0.14.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/git/checkouts/progenitor-79d711e362061030/604aacb/progenitor/Cargo.toml"
+  },
+  {
+    "name": "progenitor-client",
+    "version": "0.14.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/git/checkouts/progenitor-79d711e362061030/604aacb/progenitor-client/Cargo.toml"
+  },
+  {
+    "name": "progenitor-impl",
+    "version": "0.14.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/git/checkouts/progenitor-79d711e362061030/604aacb/progenitor-impl/Cargo.toml"
+  },
+  {
+    "name": "progenitor-macro",
+    "version": "0.14.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/git/checkouts/progenitor-79d711e362061030/604aacb/progenitor-macro/Cargo.toml"
+  },
+  {
+    "name": "quote",
+    "version": "1.0.45",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/quote-1.0.45/Cargo.toml"
+  },
+  {
+    "name": "rand",
+    "version": "0.8.5",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rand-0.8.5/Cargo.toml"
+  },
+  {
+    "name": "rand_chacha",
+    "version": "0.3.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.3.1/Cargo.toml"
+  },
+  {
+    "name": "rand_core",
+    "version": "0.6.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rand_core-0.6.4/Cargo.toml"
+  },
+  {
+    "name": "regex",
+    "version": "1.12.3",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/regex-1.12.3/Cargo.toml"
+  },
+  {
+    "name": "regex-automata",
+    "version": "0.4.14",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/regex-automata-0.4.14/Cargo.toml"
+  },
+  {
+    "name": "regex-syntax",
+    "version": "0.8.10",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/regex-syntax-0.8.10/Cargo.toml"
+  },
+  {
+    "name": "regress",
+    "version": "0.11.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/regress-0.11.1/Cargo.toml"
+  },
+  {
+    "name": "relay_rpc",
+    "version": "0.1.0",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/git/checkouts/walletconnectrust-99991d0b88657f17/b2ebad0/relay_rpc/Cargo.toml"
+  },
+  {
+    "name": "reqwest",
+    "version": "0.12.28",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.12.28/Cargo.toml"
+  },
+  {
+    "name": "ring",
+    "version": "0.16.20",
+    "license": null,
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ring-0.16.20/Cargo.toml"
+  },
+  {
+    "name": "ring",
+    "version": "0.17.14",
+    "license": "Apache-2.0 AND ISC",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ring-0.17.14/Cargo.toml"
+  },
+  {
+    "name": "ruint",
+    "version": "1.20.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ruint-1.20.0/Cargo.toml"
+  },
+  {
+    "name": "ruint-macro",
+    "version": "1.2.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ruint-macro-1.2.1/Cargo.toml"
+  },
+  {
+    "name": "rustc-hash",
+    "version": "2.1.1",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustc-hash-2.1.1/Cargo.toml"
+  },
+  {
+    "name": "rustc_version",
+    "version": "0.4.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustc_version-0.4.1/Cargo.toml"
+  },
+  {
+    "name": "rustix",
+    "version": "1.1.4",
+    "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustix-1.1.4/Cargo.toml"
+  },
+  {
+    "name": "rustls",
+    "version": "0.23.37",
+    "license": "Apache-2.0 OR ISC OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustls-0.23.37/Cargo.toml"
+  },
+  {
+    "name": "rustls-pki-types",
+    "version": "1.14.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustls-pki-types-1.14.0/Cargo.toml"
+  },
+  {
+    "name": "rustls-webpki",
+    "version": "0.103.13",
+    "license": "ISC",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustls-webpki-0.103.13/Cargo.toml"
+  },
+  {
+    "name": "rustversion",
+    "version": "1.0.22",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/rustversion-1.0.22/Cargo.toml"
+  },
+  {
+    "name": "ryu",
+    "version": "1.0.23",
+    "license": "Apache-2.0 OR BSL-1.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ryu-1.0.23/Cargo.toml"
+  },
+  {
+    "name": "schemars",
+    "version": "0.8.22",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/schemars-0.8.22/Cargo.toml"
+  },
+  {
+    "name": "schemars_derive",
+    "version": "0.8.22",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/schemars_derive-0.8.22/Cargo.toml"
+  },
+  {
+    "name": "scopeguard",
+    "version": "1.2.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/scopeguard-1.2.0/Cargo.toml"
+  },
+  {
+    "name": "scroll",
+    "version": "0.12.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/scroll-0.12.0/Cargo.toml"
+  },
+  {
+    "name": "scroll_derive",
+    "version": "0.12.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/scroll_derive-0.12.1/Cargo.toml"
+  },
+  {
+    "name": "semver",
+    "version": "1.0.28",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/semver-1.0.28/Cargo.toml"
+  },
+  {
+    "name": "serde",
+    "version": "1.0.228",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/Cargo.toml"
+  },
+  {
+    "name": "serde-aux",
+    "version": "4.7.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde-aux-4.7.0/Cargo.toml"
+  },
+  {
+    "name": "serde-value",
+    "version": "0.7.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde-value-0.7.0/Cargo.toml"
+  },
+  {
+    "name": "serde_core",
+    "version": "1.0.228",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_core-1.0.228/Cargo.toml"
+  },
+  {
+    "name": "serde_derive",
+    "version": "1.0.228",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_derive-1.0.228/Cargo.toml"
+  },
+  {
+    "name": "serde_derive_internals",
+    "version": "0.29.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_derive_internals-0.29.1/Cargo.toml"
+  },
+  {
+    "name": "serde_json",
+    "version": "1.0.149",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.149/Cargo.toml"
+  },
+  {
+    "name": "serde_spanned",
+    "version": "1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_spanned-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "serde_tokenstream",
+    "version": "0.2.3",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_tokenstream-0.2.3/Cargo.toml"
+  },
+  {
+    "name": "serde_urlencoded",
+    "version": "0.7.1",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_urlencoded-0.7.1/Cargo.toml"
+  },
+  {
+    "name": "serde_yaml",
+    "version": "0.9.34+deprecated",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/serde_yaml-0.9.34+deprecated/Cargo.toml"
+  },
+  {
+    "name": "sha2",
+    "version": "0.10.9",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9/Cargo.toml"
+  },
+  {
+    "name": "sha2",
+    "version": "0.11.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/sha2-0.11.0/Cargo.toml"
+  },
+  {
+    "name": "sha3",
+    "version": "0.10.8",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.10.8/Cargo.toml"
+  },
+  {
+    "name": "sharded-slab",
+    "version": "0.1.7",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/sharded-slab-0.1.7/Cargo.toml"
+  },
+  {
+    "name": "shlex",
+    "version": "1.3.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/shlex-1.3.0/Cargo.toml"
+  },
+  {
+    "name": "signature",
+    "version": "2.2.0",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/signature-2.2.0/Cargo.toml"
+  },
+  {
+    "name": "simple_asn1",
+    "version": "0.6.4",
+    "license": "ISC",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/simple_asn1-0.6.4/Cargo.toml"
+  },
+  {
+    "name": "siphasher",
+    "version": "1.0.2",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/siphasher-1.0.2/Cargo.toml"
+  },
+  {
+    "name": "slab",
+    "version": "0.4.12",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/slab-0.4.12/Cargo.toml"
+  },
+  {
+    "name": "smallvec",
+    "version": "1.15.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/smallvec-1.15.1/Cargo.toml"
+  },
+  {
+    "name": "smawk",
+    "version": "0.3.2",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/smawk-0.3.2/Cargo.toml"
+  },
+  {
+    "name": "socket2",
+    "version": "0.5.10",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/socket2-0.5.10/Cargo.toml"
+  },
+  {
+    "name": "socket2",
+    "version": "0.6.3",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/socket2-0.6.3/Cargo.toml"
+  },
+  {
+    "name": "spin",
+    "version": "0.5.2",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/spin-0.5.2/Cargo.toml"
+  },
+  {
+    "name": "stable_deref_trait",
+    "version": "1.2.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/stable_deref_trait-1.2.1/Cargo.toml"
+  },
+  {
+    "name": "static_assertions",
+    "version": "1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/static_assertions-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "strsim",
+    "version": "0.11.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/strsim-0.11.1/Cargo.toml"
+  },
+  {
+    "name": "strum",
+    "version": "0.26.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/strum-0.26.3/Cargo.toml"
+  },
+  {
+    "name": "strum_macros",
+    "version": "0.26.4",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/strum_macros-0.26.4/Cargo.toml"
+  },
+  {
+    "name": "subtle",
+    "version": "2.6.1",
+    "license": "BSD-3-Clause",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/subtle-2.6.1/Cargo.toml"
+  },
+  {
+    "name": "syn",
+    "version": "2.0.117",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/syn-2.0.117/Cargo.toml"
+  },
+  {
+    "name": "sync_wrapper",
+    "version": "1.0.2",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/sync_wrapper-1.0.2/Cargo.toml"
+  },
+  {
+    "name": "synstructure",
+    "version": "0.13.2",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/synstructure-0.13.2/Cargo.toml"
+  },
+  {
+    "name": "tempfile",
+    "version": "3.27.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tempfile-3.27.0/Cargo.toml"
+  },
+  {
+    "name": "textwrap",
+    "version": "0.16.2",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/textwrap-0.16.2/Cargo.toml"
+  },
+  {
+    "name": "thiserror",
+    "version": "1.0.69",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/Cargo.toml"
+  },
+  {
+    "name": "thiserror",
+    "version": "2.0.18",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/Cargo.toml"
+  },
+  {
+    "name": "thiserror-impl",
+    "version": "1.0.69",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-impl-1.0.69/Cargo.toml"
+  },
+  {
+    "name": "thiserror-impl",
+    "version": "2.0.18",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-impl-2.0.18/Cargo.toml"
+  },
+  {
+    "name": "thread_local",
+    "version": "1.1.9",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/thread_local-1.1.9/Cargo.toml"
+  },
+  {
+    "name": "time",
+    "version": "0.3.47",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/time-0.3.47/Cargo.toml"
+  },
+  {
+    "name": "time-core",
+    "version": "0.1.8",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/time-core-0.1.8/Cargo.toml"
+  },
+  {
+    "name": "time-macros",
+    "version": "0.2.27",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/time-macros-0.2.27/Cargo.toml"
+  },
+  {
+    "name": "tiny-keccak",
+    "version": "2.0.2",
+    "license": "CC0-1.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tiny-keccak-2.0.2/Cargo.toml"
+  },
+  {
+    "name": "tinystr",
+    "version": "0.8.2",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tinystr-0.8.2/Cargo.toml"
+  },
+  {
+    "name": "tokio",
+    "version": "1.50.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.50.0/Cargo.toml"
+  },
+  {
+    "name": "tokio-rustls",
+    "version": "0.26.4",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/Cargo.toml"
+  },
+  {
+    "name": "tokio-util",
+    "version": "0.7.18",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-util-0.7.18/Cargo.toml"
+  },
+  {
+    "name": "toml",
+    "version": "0.9.12+spec-1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.9.12+spec-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "toml_datetime",
+    "version": "0.7.5+spec-1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/toml_datetime-0.7.5+spec-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "toml_parser",
+    "version": "1.1.0+spec-1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/toml_parser-1.1.0+spec-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "toml_writer",
+    "version": "1.1.0+spec-1.1.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/toml_writer-1.1.0+spec-1.1.0/Cargo.toml"
+  },
+  {
+    "name": "tower",
+    "version": "0.5.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tower-0.5.3/Cargo.toml"
+  },
+  {
+    "name": "tower-http",
+    "version": "0.6.8",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tower-http-0.6.8/Cargo.toml"
+  },
+  {
+    "name": "tower-layer",
+    "version": "0.3.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tower-layer-0.3.3/Cargo.toml"
+  },
+  {
+    "name": "tower-service",
+    "version": "0.3.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tower-service-0.3.3/Cargo.toml"
+  },
+  {
+    "name": "tracing",
+    "version": "0.1.44",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/Cargo.toml"
+  },
+  {
+    "name": "tracing-core",
+    "version": "0.1.36",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-core-0.1.36/Cargo.toml"
+  },
+  {
+    "name": "tracing-subscriber",
+    "version": "0.3.23",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-subscriber-0.3.23/Cargo.toml"
+  },
+  {
+    "name": "try-lock",
+    "version": "0.2.5",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/try-lock-0.2.5/Cargo.toml"
+  },
+  {
+    "name": "typenum",
+    "version": "1.19.0",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/typenum-1.19.0/Cargo.toml"
+  },
+  {
+    "name": "typify",
+    "version": "0.6.2",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/typify-0.6.2/Cargo.toml"
+  },
+  {
+    "name": "typify-impl",
+    "version": "0.6.2",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/typify-impl-0.6.2/Cargo.toml"
+  },
+  {
+    "name": "typify-macro",
+    "version": "0.6.2",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/typify-macro-0.6.2/Cargo.toml"
+  },
+  {
+    "name": "unicode-ident",
+    "version": "1.0.24",
+    "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/Cargo.toml"
+  },
+  {
+    "name": "unicode-segmentation",
+    "version": "1.13.1",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-segmentation-1.13.1/Cargo.toml"
+  },
+  {
+    "name": "unicode-xid",
+    "version": "0.2.6",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-xid-0.2.6/Cargo.toml"
+  },
+  {
+    "name": "uniffi",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_bindgen",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_bindgen-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_core",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_core-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_internal_macros",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_internal_macros-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_macros",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_macros-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_meta",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_meta-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_pipeline",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_pipeline-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "uniffi_udl",
+    "version": "0.31.0",
+    "license": "MPL-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uniffi_udl-0.31.0/Cargo.toml"
+  },
+  {
+    "name": "unsafe-libyaml",
+    "version": "0.2.11",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/unsafe-libyaml-0.2.11/Cargo.toml"
+  },
+  {
+    "name": "untrusted",
+    "version": "0.7.1",
+    "license": "ISC",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/untrusted-0.7.1/Cargo.toml"
+  },
+  {
+    "name": "untrusted",
+    "version": "0.9.0",
+    "license": "ISC",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/untrusted-0.9.0/Cargo.toml"
+  },
+  {
+    "name": "url",
+    "version": "2.5.8",
+    "license": "MIT OR Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/url-2.5.8/Cargo.toml"
+  },
+  {
+    "name": "urlencoding",
+    "version": "2.1.3",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/urlencoding-2.1.3/Cargo.toml"
+  },
+  {
+    "name": "utf8_iter",
+    "version": "1.0.4",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/utf8_iter-1.0.4/Cargo.toml"
+  },
+  {
+    "name": "uuid",
+    "version": "1.23.0",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/uuid-1.23.0/Cargo.toml"
+  },
+  {
+    "name": "vcpkg",
+    "version": "0.2.15",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/vcpkg-0.2.15/Cargo.toml"
+  },
+  {
+    "name": "version_check",
+    "version": "0.9.5",
+    "license": "MIT/Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/Cargo.toml"
+  },
+  {
+    "name": "want",
+    "version": "0.3.1",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/want-0.3.1/Cargo.toml"
+  },
+  {
+    "name": "webpki-roots",
+    "version": "1.0.6",
+    "license": "CDLA-Permissive-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/webpki-roots-1.0.6/Cargo.toml"
+  },
+  {
+    "name": "weedle2",
+    "version": "5.0.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/weedle2-5.0.0/Cargo.toml"
+  },
+  {
+    "name": "winnow",
+    "version": "0.7.15",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-0.7.15/Cargo.toml"
+  },
+  {
+    "name": "winnow",
+    "version": "1.0.0",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.0/Cargo.toml"
+  },
+  {
+    "name": "writeable",
+    "version": "0.6.2",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/writeable-0.6.2/Cargo.toml"
+  },
+  {
+    "name": "yoke",
+    "version": "0.8.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/yoke-0.8.1/Cargo.toml"
+  },
+  {
+    "name": "yoke-derive",
+    "version": "0.8.1",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/yoke-derive-0.8.1/Cargo.toml"
+  },
+  {
+    "name": "yttrium",
+    "version": "0.1.0",
+    "license": "Apache-2.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/source/crates/yttrium/Cargo.toml"
+  },
+  {
+    "name": "zerocopy",
+    "version": "0.8.47",
+    "license": "BSD-2-Clause OR Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.47/Cargo.toml"
+  },
+  {
+    "name": "zerofrom",
+    "version": "0.1.6",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zerofrom-0.1.6/Cargo.toml"
+  },
+  {
+    "name": "zerofrom-derive",
+    "version": "0.1.6",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zerofrom-derive-0.1.6/Cargo.toml"
+  },
+  {
+    "name": "zeroize",
+    "version": "1.8.2",
+    "license": "Apache-2.0 OR MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.2/Cargo.toml"
+  },
+  {
+    "name": "zerotrie",
+    "version": "0.2.3",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zerotrie-0.2.3/Cargo.toml"
+  },
+  {
+    "name": "zerovec",
+    "version": "0.11.5",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-0.11.5/Cargo.toml"
+  },
+  {
+    "name": "zerovec-derive",
+    "version": "0.11.2",
+    "license": "Unicode-3.0",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zerovec-derive-0.11.2/Cargo.toml"
+  },
+  {
+    "name": "zmij",
+    "version": "1.0.21",
+    "license": "MIT",
+    "manifest_path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/zmij-1.0.21/Cargo.toml"
+  }
+]

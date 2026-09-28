@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "rejected": [
+    {
+      "control": "wrong_strict_state",
+      "rejected": "candidate pre: package_compat_disabled mismatch"
+    },
+    {
+      "control": "missing_typed_error",
+      "rejected": "candidate: confirmJsonParse typed error mismatch"
+    },
+    {
+      "control": "mismatch_checker_accepted",
+      "rejected": "mismatch: mismatchError does not name the UniFFI checksum checker"
+    },
+    {
+      "control": "wrong_executable_map",
+      "rejected": "candidate: lib/arm64-v8a/libuniffi_yttrium_wcpay.so executable map misses LOAD at 0x248000"
+    },
+    {
+      "control": "wrong_installed_hash",
+      "rejected": "candidate: installed APK hash mismatch"
+    },
+    {
+      "control": "wrong_source_hash",
+      "rejected": "source input identity mismatch"
+    },
+    {
+      "control": "stale_log_pid",
+      "rejected": "candidate: log PID mismatch"
+    }
+  ]
+}

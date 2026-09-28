@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "phases": {
+    "baseline": {
+      "package": "ai.n42.fixture.reown.baseline",
+      "apk_sha256": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899",
+      "pid": 18487,
+      "nonce": "b158d815-8973-40b6-b495-cd4d4654516c",
+      "status": "PASS",
+      "members": {
+        "lib/arm64-v8a/libuniffi_yttrium_wcpay.so": {
+          "sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+          "data_offset": 1392640,
+          "executable_loads": [
+            [
+              2359296,
+              1228800
+            ]
+          ]
+        },
+        "lib/arm64-v8a/libjnidispatch.so": {
+          "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+          "data_offset": 1212416,
+          "executable_loads": [
+            [
+              1212416,
+              163840
+            ]
+          ]
+        }
+      }
+    },
+    "candidate": {
+      "package": "ai.n42.fixture.reown.candidate",
+      "apk_sha256": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1",
+      "pid": 18619,
+      "nonce": "e09bd150-4f35-4c44-bf3d-086ea90839d1",
+      "status": "PASS",
+      "members": {
+        "lib/arm64-v8a/libuniffi_yttrium_wcpay.so": {
+          "sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+          "data_offset": 1392640,
+          "executable_loads": [
+            [
+              2392064,
+              1212416
+            ]
+          ]
+        },
+        "lib/arm64-v8a/libjnidispatch.so": {
+          "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+          "data_offset": 1212416,
+          "executable_loads": [
+            [
+              1212416,
+              163840
+            ]
+          ]
+        }
+      }
+    },
+    "mismatch": {
+      "package": "ai.n42.fixture.reown.mismatch",
+      "apk_sha256": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c",
+      "pid": 18717,
+      "nonce": "09d68c7d-3c71-4ad2-9199-264411f99576",
+      "status": "PASS",
+      "members": {
+        "lib/arm64-v8a/libuniffi_yttrium_wcpay.so": {
+          "sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+          "data_offset": 1392640,
+          "executable_loads": [
+            [
+              2392064,
+              1212416
+            ]
+          ]
+        },
+        "lib/arm64-v8a/libjnidispatch.so": {
+          "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+          "data_offset": 1212416,
+          "executable_loads": [
+            [
+              1212416,
+              163840
+            ]
+          ]
+        }
+      }
+    }
+  }
+}

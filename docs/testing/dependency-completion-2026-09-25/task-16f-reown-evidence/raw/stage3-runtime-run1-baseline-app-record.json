@@ -1,0 +1,17 @@
+{
+  "phase": "baseline",
+  "pid": 17994,
+  "nonce": "8873ec49-e3ca-4158-9fd9-56443d4d23fb",
+  "apkPath": "/data/app/~~-0cCQthWarG8mpD3CsZPxg==/ai.n42.fixture.reown.baseline-TgNF60OCZAZNSXlGzJ2p2w==/base.apk",
+  "apkSha256": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
+  "libraryLookupPath": "/data/app/~~-0cCQthWarG8mpD3CsZPxg==/ai.n42.fixture.reown.baseline-TgNF60OCZAZNSXlGzJ2p2w==/base.apk!/lib/arm64-v8a/libuniffi_yttrium_wcpay.so",
+  "attemptedInitialization": true,
+  "constructorJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+  "status": "FAIL",
+  "error": "java.lang.IllegalStateException: missingAuth returned uniffi.yttrium_wcpay.PayJsonException$JsonParse instead of uniffi.yttrium_wcpay.PayJsonException$MissingAuth",
+  "executableApkMaps": [
+    "75419fb28000-75419fc54000 r-xp 00240000 fe:05 164046                     /data/app/~~-0cCQthWarG8mpD3CsZPxg==/ai.n42.fixture.reown.baseline-TgNF60OCZAZNSXlGzJ2p2w==/base.apk",
+    "754283ac8000-754283af0000 r-xp 00128000 fe:05 164046                     /data/app/~~-0cCQthWarG8mpD3CsZPxg==/ai.n42.fixture.reown.baseline-TgNF60OCZAZNSXlGzJ2p2w==/base.apk",
+    "75457f604000-75457f608000 r-xp 00140000 fe:05 164046                     /data/app/~~-0cCQthWarG8mpD3CsZPxg==/ai.n42.fixture.reown.baseline-TgNF60OCZAZNSXlGzJ2p2w==/base.apk"
+  ]
+}

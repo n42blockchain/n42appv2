@@ -1,0 +1,847 @@
+diff --git a/pubspec.yaml b/pubspec.yaml
+index b8fd8a7af..97562144c 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -2,7 +2,7 @@ name: n42_wallet
+ description: "N42 Wallet - Enterprise cryptocurrency wallet application"
+ publish_to: 'none'
+ 
+-version: 2.4.8+2026072933
++version: 2.4.8+2026072934
+ 
+ environment:
+   sdk: ">=3.13.4 <4.0.0"
+diff --git a/scripts/prepare_reown_wcpay_fixture.py b/scripts/prepare_reown_wcpay_fixture.py
+new file mode 100644
+index 000000000..02f6a78a4
+--- /dev/null
++++ b/scripts/prepare_reown_wcpay_fixture.py
+@@ -0,0 +1,73 @@
++#!/usr/bin/env python3
++"""Stage an intentionally mismatched WCPay Kotlin binding with unchanged candidate JNI."""
++
++import argparse
++from hashlib import sha256
++import json
++from pathlib import Path
++from zipfile import ZipFile
++
++
++SOURCE_HASHES = {
++    "generated-yttrium.kt": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad",
++    "generated-uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
++}
++CANDIDATE_AAR_SHA256 = "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303"
++CANDIDATE_ARM64_SHA256 = "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff"
++MEMBER = "jni/arm64-v8a/libuniffi_yttrium_wcpay.so"
++EXPECTED = b"uniffi_yttrium_checksum_func_register_logger() != 32546.toShort()"
++MISMATCH = b"uniffi_yttrium_checksum_func_register_logger() != 32547.toShort()"
++
++
++def digest(data):
++    return sha256(data).hexdigest()
++
++
++def prepare_mismatch(source, aar, output):
++    source, aar, output = Path(source), Path(aar), Path(output)
++    if output.exists():
++        raise ValueError(f"output already exists: {output}")
++    original = {}
++    for name, expected_hash in SOURCE_HASHES.items():
++        data = (source / name).read_bytes()
++        if digest(data) != expected_hash:
++            raise ValueError(f"binding SHA256 mismatch: {name}")
++        original[name] = data
++    if original["generated-yttrium.kt"].count(EXPECTED) != 1:
++        raise ValueError("expected checksum site is not unique")
++    aar_bytes = aar.read_bytes()
++    if digest(aar_bytes) != CANDIDATE_AAR_SHA256:
++        raise ValueError("AAR SHA256 mismatch")
++    with ZipFile(aar) as archive:
++        native = archive.read(MEMBER)
++    if digest(native) != CANDIDATE_ARM64_SHA256:
++        raise ValueError("candidate ARM64 member SHA256 mismatch")
++    altered = original["generated-yttrium.kt"].replace(EXPECTED, MISMATCH, 1)
++    (output / "bindings").mkdir(parents=True)
++    (output / "jni/arm64-v8a").mkdir(parents=True)
++    (output / "bindings/yttrium.kt").write_bytes(altered)
++    (output / "bindings/uniffi_yttrium.kt").write_bytes(original["generated-uniffi_yttrium.kt"])
++    (output / MEMBER).write_bytes(native)
++    receipt = {
++        "original_binding_sha256": SOURCE_HASHES,
++        "altered_binding_sha256": digest(altered),
++        "changed_checksum": "register_logger 32546 -> 32547",
++        "candidate_aar_sha256": digest(aar_bytes),
++        "native_member": MEMBER,
++        "native_sha256": digest(native),
++    }
++    (output / "preparation.json").write_text(json.dumps(receipt, indent=2) + "\n")
++    return receipt
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--binding-source", type=Path, required=True)
++    parser.add_argument("--candidate-aar", type=Path, required=True)
++    parser.add_argument("--out-dir", type=Path, required=True)
++    args = parser.parse_args()
++    print(json.dumps(prepare_mismatch(args.binding_source, args.candidate_aar, args.out_dir), indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/test/scripts/test_reown_wcpay_fixture.py b/test/scripts/test_reown_wcpay_fixture.py
+new file mode 100644
+index 000000000..08b72c45f
+--- /dev/null
++++ b/test/scripts/test_reown_wcpay_fixture.py
+@@ -0,0 +1,105 @@
++"""Focused controls for the synthetic Reown fixture inputs."""
++
++import hashlib
++import tempfile
++import unittest
++from pathlib import Path
++from zipfile import ZipFile, ZIP_STORED
++
++from scripts.prepare_reown_wcpay_fixture import prepare_mismatch
++from tools.android_native_smoke.verify_reown_wcpay_fixture import (
++    member_and_executable_offsets,
++    require_strict,
++    verify_result,
++)
++
++
++ROOT = Path(__file__).resolve().parents[2]
++SOURCE = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-source-inputs"
++AAR = ROOT / "android/native/reown_wcpay/maven/com/github/reown-com/yttrium/yttrium-wcpay/0.10.60/yttrium-wcpay-0.10.60.aar"
++
++
++class ReownFixturePrepTest(unittest.TestCase):
++    def test_mismatch_changes_one_checksum_and_preserves_native_member(self):
++        with tempfile.TemporaryDirectory() as folder:
++            output = Path(folder) / "output"
++            receipt = prepare_mismatch(SOURCE, AAR, output)
++            generated = output / "bindings/yttrium.kt"
++            original = (SOURCE / "generated-yttrium.kt").read_bytes()
++            changed = generated.read_bytes()
++            self.assertEqual(
++                changed,
++                original.replace(
++                    b"uniffi_yttrium_checksum_func_register_logger() != 32546.toShort()",
++                    b"uniffi_yttrium_checksum_func_register_logger() != 32547.toShort()",
++                    1,
++                ),
++            )
++            self.assertEqual(
++                (output / "bindings/uniffi_yttrium.kt").read_bytes(),
++                (SOURCE / "generated-uniffi_yttrium.kt").read_bytes(),
++            )
++            native = output / "jni/arm64-v8a/libuniffi_yttrium_wcpay.so"
++            with ZipFile(AAR) as aar:
++                self.assertEqual(native.read_bytes(), aar.read("jni/arm64-v8a/libuniffi_yttrium_wcpay.so"))
++            self.assertEqual(receipt["native_sha256"], hashlib.sha256(native.read_bytes()).hexdigest())
++
++    def test_bad_aar_is_rejected_before_staging(self):
++        with tempfile.TemporaryDirectory() as folder:
++            aar = Path(folder) / "wrong.aar"
++            with ZipFile(aar, "w", ZIP_STORED) as archive:
++                archive.writestr("jni/arm64-v8a/libuniffi_yttrium_wcpay.so", b"wrong")
++            output = Path(folder) / "output"
++            with self.assertRaisesRegex(ValueError, "AAR SHA256 mismatch"):
++                prepare_mismatch(SOURCE, aar, output)
++            self.assertFalse(output.exists())
++
++
++class ReownFixtureVerifierTest(unittest.TestCase):
++    def test_candidate_apk_members_are_page_aligned_and_exact(self):
++        apk = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/candidate.apk"
++        if not apk.is_file():
++            self.skipTest("Candidate fixture APK has not been built")
++        native, offset, loads = member_and_executable_offsets(
++            apk, "lib/arm64-v8a/libuniffi_yttrium_wcpay.so"
++        )
++        self.assertEqual(hashlib.sha256(native).hexdigest(),
++                         "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff")
++        self.assertEqual(offset % 16384, 0)
++        self.assertTrue(loads)
++
++    def test_wrong_strict_device_state_is_rejected(self):
++        good = {
++            "page_size": "16384", "linker_mode": "fatal",
++            "package_compat_disabled": "true", "airplane_mode": "1", "ip_route": "",
++        }
++        snapshot = {key: {"exit": 0, "stdout": value} for key, value in good.items()}
++        snapshot["package_compat_disabled"]["stdout"] = "false"
++        with self.assertRaisesRegex(ValueError, "package_compat_disabled mismatch"):
++            require_strict(snapshot, "candidate pre")
++
++    def test_candidate_missing_typed_method_error_is_rejected(self):
++        result = {
++            "status": "PASS", "phase": "candidate", "attemptedInitialization": True,
++            "constructorJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
++            "missingAuth": "uniffi.yttrium_wcpay.PayJsonException$MissingAuth",
++            "optionsJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
++            "actionsJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
++            "confirmJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
++        }
++        verify_result("candidate", result)
++        result.pop("confirmJsonParse")
++        with self.assertRaisesRegex(ValueError, "confirmJsonParse"):
++            verify_result("candidate", result)
++
++    def test_mismatch_acceptance_is_rejected(self):
++        result = {"status": "PASS", "phase": "mismatch", "attemptedInitialization": True,
++                  "mismatchError": "UniFFI API checksum mismatch"}
++        verify_result("mismatch", result)
++        result["mismatchError"] = "Mismatched binding was accepted"
++        with self.assertRaisesRegex(ValueError, "mismatchError"):
++            verify_result("mismatch", result)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/.gitignore b/tools/android_native_smoke/reown_wcpay_fixture/.gitignore
+new file mode 100644
+index 000000000..200d66f0e
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/.gitignore
+@@ -0,0 +1,3 @@
++.gradle/
++build/
++app/build/
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts b/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts
+new file mode 100644
+index 000000000..9bbec2a43
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts
+@@ -0,0 +1,44 @@
++import org.jetbrains.kotlin.gradle.dsl.JvmTarget
++
++plugins {
++    id("com.android.application")
++    id("org.jetbrains.kotlin.android")
++}
++
++kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
++
++val fixtureAppId = providers.gradleProperty("reownFixtureAppId").orNull
++    ?: error("-PreownFixtureAppId is required")
++val fixtureAar = providers.gradleProperty("reownFixtureAar").orNull
++val mismatchInput = providers.gradleProperty("reownFixtureMismatchDir").orNull
++require((fixtureAar == null) != (mismatchInput == null)) {
++    "Provide exactly one of -PreownFixtureAar or -PreownFixtureMismatchDir"
++}
++
++android {
++    namespace = "ai.n42.fixture.reown"
++    compileSdk = 37
++    defaultConfig {
++        applicationId = fixtureAppId
++        minSdk = 26
++        targetSdk = 37
++        ndk { abiFilters += "arm64-v8a" }
++    }
++    packaging { jniLibs.useLegacyPackaging = false }
++    buildTypes.getByName("release").signingConfig = signingConfigs.getByName("debug")
++    compileOptions {
++        sourceCompatibility = JavaVersion.VERSION_17
++        targetCompatibility = JavaVersion.VERSION_17
++    }
++    if (mismatchInput != null) {
++        sourceSets.getByName("main").java.srcDir("$mismatchInput/bindings")
++        sourceSets.getByName("main").jniLibs.srcDir("$mismatchInput/jni")
++    }
++}
++
++dependencies {
++    if (fixtureAar != null) implementation(files(fixtureAar))
++    implementation("net.java.dev.jna:jna:5.17.0@aar")
++    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
++    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
++}
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml b/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml
+new file mode 100644
+index 000000000..97097d00f
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml
+@@ -0,0 +1,10 @@
++<manifest xmlns:android="http://schemas.android.com/apk/res/android">
++    <application android:label="Reown WCPay synthetic fixture" android:extractNativeLibs="false">
++        <activity android:name="ai.n42.fixture.reown.MainActivity" android:exported="true">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++                <category android:name="android.intent.category.LAUNCHER" />
++            </intent-filter>
++        </activity>
++    </application>
++</manifest>
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt b/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt
+new file mode 100644
+index 000000000..194039bdf
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt
+@@ -0,0 +1,130 @@
++package ai.n42.fixture.reown
++
++import android.app.Activity
++import android.os.Bundle
++import android.os.Process
++import android.util.Log
++import dalvik.system.BaseDexClassLoader
++import java.io.File
++import java.security.MessageDigest
++import java.util.UUID
++import kotlinx.coroutines.runBlocking
++import kotlinx.coroutines.withTimeout
++import org.json.JSONArray
++import org.json.JSONObject
++import uniffi.yttrium_wcpay.PayJsonException
++import uniffi.yttrium_wcpay.WalletConnectPayJson
++import uniffi.yttrium_wcpay.uniffiEnsureInitialized
++
++class MainActivity : Activity() {
++    private val tag = "N42_REOWN_FIXTURE"
++    private val config = """{"base_url":"http://127.0.0.1:9","sdk_name":"fixture","sdk_version":"0","sdk_platform":"android","bundle_id":"fixture","app_id":"synthetic-only","client_id":"fixed-fixture"}"""
++    private val missingAuth = """{"base_url":"http://127.0.0.1:9","sdk_name":"fixture","sdk_version":"0","sdk_platform":"android","bundle_id":"fixture","client_id":"fixed-fixture"}"""
++
++    override fun onCreate(state: Bundle?) {
++        super.onCreate(state)
++        val record = JSONObject()
++        val phase = intent.getStringExtra("phase")
++        try {
++            require(phase in setOf("baseline", "candidate", "mismatch")) { "Invalid phase" }
++            record.put("phase", phase)
++            record.put("pid", Process.myPid())
++            record.put("nonce", UUID.randomUUID().toString())
++            val apk = File(applicationInfo.sourceDir)
++            record.put("apkPath", apk.path)
++            record.put("apkSha256", sha256(apk))
++            record.put("libraryLookupPath", (classLoader as BaseDexClassLoader).findLibrary("uniffi_yttrium_wcpay"))
++            record.put("attemptedInitialization", true)
++            if (phase == "mismatch") {
++                try {
++                    uniffiEnsureInitialized()
++                    throw IllegalStateException("Mismatched binding was accepted")
++                } catch (error: Throwable) {
++                    val actual = rootCause(error)
++                    record.put("mismatchError", actual.toString())
++                    require(actual.message?.contains("UniFFI API checksum mismatch") == true) {
++                        "Unexpected mismatch failure: $actual"
++                    }
++                }
++            } else {
++                uniffiEnsureInitialized()
++                runBlocking {
++                    withTimeout(5_000) {
++                        expectError<PayJsonException.JsonParse>(record, "constructorJsonParse") {
++                            WalletConnectPayJson("{").close()
++                        }
++                        expectError<PayJsonException.MissingAuth>(record, "missingAuth") {
++                            WalletConnectPayJson(missingAuth).close()
++                        }
++                        WalletConnectPayJson(config).use { client ->
++                            expectError<PayJsonException.JsonParse>(record, "optionsJsonParse") {
++                                client.getPaymentOptions("{")
++                            }
++                            expectError<PayJsonException.JsonParse>(record, "actionsJsonParse") {
++                                client.getRequiredPaymentActions("{")
++                            }
++                            expectError<PayJsonException.JsonParse>(record, "confirmJsonParse") {
++                                client.confirmPayment("{")
++                            }
++                        }
++                    }
++                }
++            }
++            record.put("status", "PASS")
++        } catch (error: Throwable) {
++            record.put("status", "FAIL")
++            record.put("error", rootCause(error).toString())
++        } finally {
++            record.put("executableApkMaps", apkMaps(applicationInfo.sourceDir))
++            val text = record.toString()
++            try {
++                File(filesDir, "result.json").writeText(text)
++            } catch (error: Exception) {
++                Log.e(tag, "Failed to write fixture result", error)
++            }
++            Log.i(tag, text)
++            finish()
++        }
++    }
++
++    private suspend inline fun <reified E : Throwable> expectError(
++        record: JSONObject,
++        name: String,
++        crossinline action: suspend () -> Unit,
++    ) {
++        try {
++            action()
++            throw IllegalStateException("$name unexpectedly succeeded")
++        } catch (error: Throwable) {
++            check(error is E) { "$name returned ${error.javaClass.name} instead of ${E::class.java.name}" }
++            record.put(name, error.javaClass.name)
++        }
++    }
++
++    private fun rootCause(error: Throwable): Throwable {
++        var current = error
++        while (current.cause != null && current.cause !== current) current = current.cause!!
++        return current
++    }
++
++    private fun apkMaps(apk: String): JSONArray {
++        val maps = JSONArray()
++        File("/proc/self/maps").forEachLine { line ->
++            if (line.contains(apk) && line.contains("r-xp")) maps.put(line)
++        }
++        return maps
++    }
++
++    private fun sha256(file: File): String {
++        val digest = MessageDigest.getInstance("SHA-256")
++        file.inputStream().use { input ->
++            val buffer = ByteArray(64 * 1024)
++            while (true) {
++                val count = input.read(buffer)
++                if (count < 0) break
++                digest.update(buffer, 0, count)
++            }
++        }
++        return digest.digest().joinToString("") { "%02x".format(it) }
++    }
++}
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts b/tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts
+new file mode 100644
+index 000000000..0000672db
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts
+@@ -0,0 +1,4 @@
++plugins {
++    id("com.android.application") version "9.4.1" apply false
++    id("org.jetbrains.kotlin.android") version "2.4.20" apply false
++}
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/gradle.properties b/tools/android_native_smoke/reown_wcpay_fixture/gradle.properties
+new file mode 100644
+index 000000000..63ae17473
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/gradle.properties
+@@ -0,0 +1,2 @@
++android.builtInKotlin=false
++android.newDsl=false
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts b/tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts
+new file mode 100644
+index 000000000..64fbdcec7
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts
+@@ -0,0 +1,16 @@
++pluginManagement {
++    repositories {
++        google()
++        mavenCentral()
++        gradlePluginPortal()
++    }
++}
++dependencyResolutionManagement {
++    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
++    repositories {
++        google()
++        mavenCentral()
++    }
++}
++rootProject.name = "reown-wcpay-fixture"
++include(":app")
+diff --git a/tools/android_native_smoke/run_reown_wcpay_fixture.py b/tools/android_native_smoke/run_reown_wcpay_fixture.py
+new file mode 100644
+index 000000000..370def766
+--- /dev/null
++++ b/tools/android_native_smoke/run_reown_wcpay_fixture.py
+@@ -0,0 +1,175 @@
++#!/usr/bin/env python3
++"""Run the official, maintained and checksum-negative WCPay APKs on emulator-5560."""
++
++import argparse
++from datetime import datetime, timezone
++from hashlib import sha256
++import json
++from pathlib import Path
++import re
++import subprocess
++import sys
++import time
++
++from verify_reown_wcpay_fixture import (
++    DEVICE, JNA_AAR_SHA256, PACKAGES, WCPAY, WCPAY_SHA256,
++    digest, member_and_executable_offsets, require, require_strict, verify,
++)
++
++
++ROOT = Path(__file__).resolve().parents[2]
++ADB = Path("/opt/homebrew/share/android-commandlinetools/platform-tools/adb")
++AAPT = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt")
++ZIPALIGN = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign")
++FIXTURE = ROOT / "tools/android_native_smoke/reown_wcpay_fixture"
++SOURCE_FILES = (
++    FIXTURE / "settings.gradle.kts",
++    FIXTURE / "build.gradle.kts",
++    FIXTURE / "gradle.properties",
++    FIXTURE / "app/build.gradle.kts",
++    FIXTURE / "app/src/main/AndroidManifest.xml",
++    FIXTURE / "app/src/main/java/ai/n42/fixture/reown/MainActivity.kt",
++    ROOT / "scripts/prepare_reown_wcpay_fixture.py",
++    ROOT / "tools/android_native_smoke/run_reown_wcpay_fixture.py",
++    ROOT / "tools/android_native_smoke/verify_reown_wcpay_fixture.py",
++)
++
++
++def call(argv):
++    result = subprocess.run([str(value) for value in argv], cwd=ROOT,
++                            capture_output=True, text=True, check=False)
++    return {"argv": [str(value) for value in argv], "exit": result.returncode,
++            "stdout": result.stdout.strip(), "stderr": result.stderr.strip()}
++
++
++def adb(*args):
++    return call([ADB, "-s", DEVICE, *args])
++
++
++def device_snapshot():
++    checks = {
++        "page_size": ("getconf", "PAGE_SIZE"),
++        "linker_mode": ("getprop", "bionic.linker.16kb.app_compat.enabled"),
++        "package_compat_disabled": ("getprop", "pm.16kb.app_compat.disabled"),
++        "airplane_mode": ("settings", "get", "global", "airplane_mode_on"),
++        "ip_route": ("ip", "route"),
++    }
++    return {name: adb("shell", *args) for name, args in checks.items()}
++
++
++def configure_strict_offline():
++    return [
++        adb("shell", "cmd", "connectivity", "airplane-mode", "enable"),
++        adb("shell", "svc", "wifi", "disable"),
++        adb("shell", "setprop", "bionic.linker.16kb.app_compat.enabled", "fatal"),
++        adb("shell", "setprop", "pm.16kb.app_compat.disabled", "true"),
++    ]
++
++
++def run_phase(phase, apk, record):
++    package = PACKAGES[phase]
++    native, offset, loads = member_and_executable_offsets(apk, WCPAY)
++    require(sha256(native).hexdigest() == WCPAY_SHA256[phase],
++            f"{phase}: wrong WCPay APK member before install")
++    record.update({"package": package, "apk_sha256": digest(apk),
++                   "apk_bytes": apk.stat().st_size, "wcpay_member_sha256": sha256(native).hexdigest(),
++                   "wcpay_data_offset": offset, "wcpay_executable_loads": loads,
++                   "pre": device_snapshot()})
++    require_strict(record["pre"], f"{phase} pre")
++    record["badging"] = call([AAPT, "dump", "badging", apk])
++    require(record["badging"]["exit"] == 0, f"{phase}: aapt failed")
++    package_match = re.search(r"^package: name='([^']+)'", record["badging"]["stdout"], re.M)
++    target_match = re.search(r"^targetSdkVersion:'([^']+)'", record["badging"]["stdout"], re.M)
++    require(package_match and package_match.group(1) == package and
++            target_match and target_match.group(1) == "37", f"{phase}: wrong package/target")
++    record["zipalign"] = call([ZIPALIGN, "-c", "-P", "16", "-v", "4", apk])
++    require(record["zipalign"]["exit"] == 0, f"{phase}: APK ZIP alignment failed")
++    record["install"] = adb("install", "-r", apk)
++    require(record["install"]["exit"] == 0, f"{phase}: install failed")
++    record["clear"] = adb("shell", "pm", "clear", package)
++    require(record["clear"]["exit"] == 0, f"{phase}: cannot clear synthetic app")
++    record["pm_path"] = adb("shell", "pm", "path", package)
++    record["start"] = adb("shell", "am", "start", "-W", "-n",
++                          f"{package}/ai.n42.fixture.reown.MainActivity",
++                          "--es", "phase", phase)
++    require(record["start"]["exit"] == 0, f"{phase}: launch failed")
++    for attempt in range(60):
++        fetched = adb("shell", "run-as", package, "cat", "files/result.json")
++        if fetched["exit"] == 0:
++            record["result_fetch"] = fetched
++            record["result_attempt"] = attempt + 1
++            record["result"] = json.loads(fetched["stdout"])
++            break
++        time.sleep(0.2)
++    record["post"] = device_snapshot()
++    record["force_stop"] = adb("shell", "am", "force-stop", package)
++    require("result" in record, f"{phase}: no in-process result; preserve log and inspect crash")
++    require_strict(record["post"], f"{phase} post")
++    require(record["force_stop"]["exit"] == 0, f"{phase}: force-stop failed")
++
++
++def run(apks, jna_aar, out_dir):
++    for tool in (ADB, AAPT, ZIPALIGN):
++        require(tool.is_file(), f"missing tool: {tool}")
++    for phase, apk in apks.items():
++        require(apk.is_file(), f"missing {phase} APK: {apk}")
++    require(jna_aar.is_file() and digest(jna_aar) == JNA_AAR_SHA256,
++            "JNA 5.17.0 input identity mismatch")
++    require(not out_dir.exists(), f"output already exists: {out_dir}")
++    out_dir.mkdir(parents=True)
++    receipt_file = out_dir / "reown-runtime-receipt.json"
++    verification_file = out_dir / "reown-runtime-verification.json"
++    receipt = {
++        "schema_version": 1, "device": DEVICE,
++        "started_utc": datetime.now(timezone.utc).isoformat(),
++        "git_head": call(["git", "rev-parse", "HEAD"])["stdout"],
++        "source_sha256": {str(path): digest(path) for path in SOURCE_FILES},
++        "tool_sha256": {str(path): digest(path) for path in (ADB, AAPT, ZIPALIGN)},
++        "jna_aar_sha256": digest(jna_aar),
++        "device_state": adb("get-state"),
++        "initial": device_snapshot(), "phases": {},
++    }
++    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n")
++    require(receipt["device_state"]["exit"] == 0 and
++            receipt["device_state"]["stdout"] == "device",
++            "dedicated emulator unavailable")
++    try:
++        receipt["strict_setup"] = configure_strict_offline()
++        require(all(item["exit"] == 0 for item in receipt["strict_setup"]),
++                "cannot establish strict offline state")
++        for phase in PACKAGES:
++            receipt["phases"][phase] = {}
++            try:
++                run_phase(phase, apks[phase], receipt["phases"][phase])
++            finally:
++                receipt_file.write_text(json.dumps(receipt, indent=2) + "\n")
++    finally:
++        receipt["strict_restore"] = configure_strict_offline()
++        receipt["final"] = device_snapshot()
++        receipt_file.write_text(json.dumps(receipt, indent=2) + "\n")
++    require(all(item["exit"] == 0 for item in receipt["strict_restore"]),
++            "strict/offline restoration failed")
++    result = verify(receipt, apks, SOURCE_FILES, jna_aar)
++    verification_file.write_text(json.dumps(result, indent=2) + "\n")
++    return receipt_file, verification_file
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    for phase in PACKAGES:
++        parser.add_argument(f"--{phase}-apk", type=Path, required=True)
++    parser.add_argument("--jna-aar", type=Path, required=True)
++    parser.add_argument("--out-dir", type=Path, required=True)
++    args = parser.parse_args()
++    apks = {phase: getattr(args, phase + "_apk").resolve() for phase in PACKAGES}
++    try:
++        receipt, verification = run(apks, args.jna_aar.resolve(), args.out_dir.resolve())
++    except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
++        print(f"Reown fixture rejected: {error}", file=sys.stderr)
++        return 1
++    print(f"REOWN_WCPAY_FIXTURE_PASS receipt={receipt} verification={verification}")
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/tools/android_native_smoke/verify_reown_wcpay_fixture.py b/tools/android_native_smoke/verify_reown_wcpay_fixture.py
+new file mode 100644
+index 000000000..c28b0bb57
+--- /dev/null
++++ b/tools/android_native_smoke/verify_reown_wcpay_fixture.py
+@@ -0,0 +1,206 @@
++#!/usr/bin/env python3
++"""Independently check strict synthetic WCPay APK, JNA and UniFFI receipts."""
++
++import argparse
++from hashlib import sha256
++import json
++from pathlib import Path
++import re
++import struct
++import sys
++from zipfile import ZipFile, ZIP_STORED
++
++
++PAGE = 16384
++DEVICE = "emulator-5560"
++WCPAY = "lib/arm64-v8a/libuniffi_yttrium_wcpay.so"
++JNA = "lib/arm64-v8a/libjnidispatch.so"
++JNA_AAR_SHA256 = "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38"
++PACKAGES = {phase: f"ai.n42.fixture.reown.{phase}" for phase in
++            ("baseline", "candidate", "mismatch")}
++WCPAY_SHA256 = {
++    "baseline": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
++    "candidate": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
++    "mismatch": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
++}
++BINDING_ERROR = "uniffi.yttrium_wcpay.PayJsonException$"
++
++
++def require(condition, message):
++    if not condition:
++        raise ValueError(message)
++
++
++def digest(path):
++    return sha256(Path(path).read_bytes()).hexdigest()
++
++
++def require_strict(snapshot, phase):
++    expected = {
++        "page_size": "16384", "linker_mode": "fatal",
++        "package_compat_disabled": "true", "airplane_mode": "1", "ip_route": "",
++    }
++    for name, value in expected.items():
++        observed = snapshot.get(name)
++        require(isinstance(observed, dict), f"{phase}: missing {name}")
++        require(observed.get("exit") == 0, f"{phase}: {name} command failed")
++        require(observed.get("stdout") == value, f"{phase}: {name} mismatch")
++
++
++def member_and_executable_offsets(apk, member):
++    with ZipFile(apk) as archive, Path(apk).open("rb") as stream:
++        entry = archive.getinfo(member)
++        require(entry.compress_type == ZIP_STORED, f"{member}: compressed")
++        stream.seek(entry.header_offset)
++        header = stream.read(30)
++        require(len(header) == 30 and header[:4] == b"PK\x03\x04", "bad local ZIP header")
++        name_length, extra_length = struct.unpack_from("<HH", header, 26)
++        require(stream.read(name_length).decode() == member, "ZIP member name mismatch")
++        data_offset = entry.header_offset + 30 + name_length + extra_length
++        require(data_offset % PAGE == 0, f"{member}: not 16 KB ZIP aligned")
++        data = archive.read(entry)
++    require(data[:6] == b"\x7fELF\x02\x01", f"{member}: not ELF64 little endian")
++    require(struct.unpack_from("<H", data, 18)[0] == 183, f"{member}: not AArch64")
++    phoff = struct.unpack_from("<Q", data, 32)[0]
++    phentsize, phnum = struct.unpack_from("<HH", data, 54)
++    require(phentsize >= 56 and phnum > 0 and phoff + phentsize * phnum <= len(data),
++            f"{member}: invalid program headers")
++    loads = []
++    for index in range(phnum):
++        start = phoff + index * phentsize
++        kind, flags = struct.unpack_from("<II", data, start)
++        if kind == 1 and flags & 1:
++            file_offset = struct.unpack_from("<Q", data, start + 8)[0]
++            file_size = struct.unpack_from("<Q", data, start + 32)[0]
++            require(file_offset + file_size <= len(data), f"{member}: LOAD outside member")
++            rounded = file_offset // PAGE * PAGE
++            rounded_end = (file_offset + file_size + PAGE - 1) // PAGE * PAGE
++            loads.append((data_offset + rounded, rounded_end - rounded))
++    require(loads, f"{member}: missing executable LOAD")
++    return data, data_offset, loads
++
++
++def verify_result(phase, result):
++    require(result.get("phase") == phase, f"{phase}: result phase mismatch")
++    require(result.get("attemptedInitialization") is True,
++            f"{phase}: binding initialization was not attempted")
++    if phase == "mismatch":
++        require(result.get("status") == "PASS", "mismatch: expected checker rejection not observed")
++        require("UniFFI API checksum mismatch" in result.get("mismatchError", ""),
++                "mismatch: mismatchError does not name the UniFFI checksum checker")
++    elif phase == "candidate" or result.get("status") == "PASS":
++        require(result.get("status") == "PASS", f"{phase}: fixture failed")
++        for name, kind in (
++            ("constructorJsonParse", "JsonParse"), ("missingAuth", "MissingAuth"),
++            ("optionsJsonParse", "JsonParse"), ("actionsJsonParse", "JsonParse"),
++            ("confirmJsonParse", "JsonParse"),
++        ):
++            require(result.get(name) == BINDING_ERROR + kind,
++                    f"{phase}: {name} typed error mismatch")
++    else:
++        require(result.get("status") == "FAIL" and result.get("error"),
++                "baseline: failure was not recorded")
++
++
++def require_maps(result, apk_path, loads, phase, member):
++    maps = result.get("executableApkMaps")
++    require(isinstance(maps, list) and maps, f"{phase}: missing executable APK maps")
++    observed = []
++    for line in maps:
++        match = re.fullmatch(
++            r"([0-9a-f]+)-([0-9a-f]+)\s+r-xp\s+([0-9a-f]+)\s+\S+\s+\d+\s+(.+)",
++            line,
++        )
++        if match and match.group(4) == apk_path:
++            observed.append((int(match.group(3), 16),
++                             int(match.group(2), 16) - int(match.group(1), 16)))
++    for offset, length in loads:
++        require(any(start == offset and size >= length for start, size in observed),
++                f"{phase}: {member} executable map misses LOAD at 0x{offset:x}")
++
++
++def verify_phase(phase, item, apk):
++    require(item.get("package") == PACKAGES[phase], f"{phase}: package mismatch")
++    require(item.get("apk_sha256") == digest(apk), f"{phase}: local APK SHA mismatch")
++    require_strict(item.get("pre", {}), f"{phase} pre")
++    require_strict(item.get("post", {}), f"{phase} post")
++    for command in ("install", "clear", "start", "pm_path", "force_stop"):
++        require(item.get(command, {}).get("exit") == 0, f"{phase}: {command} failed")
++    result = item.get("result")
++    require(isinstance(result, dict), f"{phase}: missing in-process result")
++    fetched = item.get("result_fetch", {})
++    require(fetched.get("exit") == 0 and json.loads(fetched.get("stdout", "null")) == result,
++            f"{phase}: result differs from fetched app file")
++    verify_result(phase, result)
++    require(isinstance(result.get("pid"), int) and result["pid"] > 0,
++            f"{phase}: missing PID")
++    require(isinstance(result.get("nonce"), str) and result["nonce"],
++            f"{phase}: missing process nonce")
++    apk_path = result.get("apkPath")
++    require(isinstance(apk_path, str) and apk_path.startswith("/data/app/")
++            and apk_path.endswith("/base.apk"), f"{phase}: installed APK path invalid")
++    require(result.get("apkSha256") == digest(apk), f"{phase}: installed APK hash mismatch")
++    require(item["pm_path"]["stdout"] == f"package:{apk_path}",
++            f"{phase}: package manager path differs")
++    require(result.get("libraryLookupPath") == f"{apk_path}!/{WCPAY}",
++            f"{phase}: class loader selected another WCPay member")
++    members = {}
++    for member in (WCPAY, JNA):
++        data, offset, loads = member_and_executable_offsets(apk, member)
++        members[member] = {"sha256": sha256(data).hexdigest(), "data_offset": offset,
++                           "executable_loads": loads}
++        if phase != "baseline" or result["status"] == "PASS":
++            require_maps(result, apk_path, loads, phase, member)
++    require(members[WCPAY]["sha256"] == WCPAY_SHA256[phase],
++            f"{phase}: WCPay member SHA mismatch")
++    return {"package": item["package"], "apk_sha256": digest(apk),
++            "pid": result["pid"], "nonce": result["nonce"],
++            "status": result["status"], "members": members}
++
++
++def verify(receipt, apks, source_files, jna_aar):
++    require(receipt.get("schema_version") == 1 and receipt.get("device") == DEVICE,
++            "receipt schema/device mismatch")
++    require_strict(receipt.get("final", {}), "final")
++    require(receipt.get("jna_aar_sha256") == JNA_AAR_SHA256 == digest(jna_aar),
++            "JNA 5.17.0 AAR identity mismatch")
++    expected_sources = {str(path): digest(path) for path in source_files}
++    require(receipt.get("source_sha256") == expected_sources, "source input identity mismatch")
++    phases = receipt.get("phases", {})
++    require(set(phases) == set(PACKAGES), "missing or extra runtime phase")
++    results = {phase: verify_phase(phase, phases[phase], apks[phase]) for phase in PACKAGES}
++    require(len({result["pid"] for result in results.values()}) == 3,
++            "phases share process PID")
++    require(len({result["nonce"] for result in results.values()}) == 3,
++            "phases share process nonce")
++    require(len({result["apk_sha256"] for result in results.values()}) == 3,
++            "phases share APK")
++    require(len({result["members"][JNA]["sha256"] for result in results.values()}) == 1,
++            "JNA native member differs across phases")
++    require(results["candidate"]["members"][WCPAY]["sha256"] ==
++            results["mismatch"]["members"][WCPAY]["sha256"],
++            "mismatch control changed candidate native bytes")
++    return {"passed": True, "phases": results}
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--receipt", type=Path, required=True)
++    parser.add_argument("--baseline-apk", type=Path, required=True)
++    parser.add_argument("--candidate-apk", type=Path, required=True)
++    parser.add_argument("--mismatch-apk", type=Path, required=True)
++    parser.add_argument("--jna-aar", type=Path, required=True)
++    parser.add_argument("--source", type=Path, action="append", required=True)
++    args = parser.parse_args()
++    apks = {name: getattr(args, name + "_apk") for name in PACKAGES}
++    try:
++        result = verify(json.loads(args.receipt.read_text()), apks, args.source, args.jna_aar)
++    except (OSError, ValueError, KeyError, struct.error) as error:
++        print(f"Reown fixture verification rejected: {error}", file=sys.stderr)
++        return 1
++    print(json.dumps(result, indent=2))
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())

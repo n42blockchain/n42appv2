@@ -1,0 +1,103 @@
+{
+  "formatVersion" : "1.1",
+  "component" : {
+    "group" : "com.github.reown-com",
+    "module" : "yttrium",
+    "version" : "0.10.60",
+    "attributes" : {
+      "org.gradle.status" : "release"
+    }
+  },
+  "createdBy" : {
+    "gradle" : {
+      "version" : "8.8"
+    }
+  },
+  "variants" : [ {
+    "name" : "releaseVariantReleaseApiPublication",
+    "attributes" : {
+      "org.gradle.category" : "library",
+      "org.gradle.dependency.bundling" : "external",
+      "org.gradle.libraryelements" : "aar",
+      "org.gradle.usage" : "java-api"
+    },
+    "dependencies" : [ {
+      "group" : "net.java.dev.jna",
+      "module" : "jna",
+      "version" : {
+        "requires" : "5.17.0"
+      },
+      "excludes" : [ {
+        "group" : "*",
+        "module" : "*"
+      } ]
+    }, {
+      "group" : "org.jetbrains.kotlin",
+      "module" : "kotlin-stdlib",
+      "version" : {
+        "requires" : "1.9.22"
+      }
+    } ],
+    "files" : [ {
+      "name" : "yttrium-wcpay-0.10.60.aar",
+      "url" : "yttrium-wcpay-0.10.60.aar",
+      "size" : 5000718,
+      "sha512" : "d16320aa5cdfbc5cd8eae8b64effe6e3b3acb83eb2d2d61c1193156b7f130817805227df8f3a26f3e8470e3c88fbd6a70ffb03faa4fbcce3654bdb92ef07cebb",
+      "sha256" : "07b139f458f9eda49445649cf2496b020b8664e0b0c9c7ca30c89a06259b75e8",
+      "sha1" : "341f3dbb0dd590e13a86bab782cba62a707e193f",
+      "md5" : "685064d4cc8d2f4025fb324458b01158"
+    } ]
+  }, {
+    "name" : "releaseVariantReleaseRuntimePublication",
+    "attributes" : {
+      "org.gradle.category" : "library",
+      "org.gradle.dependency.bundling" : "external",
+      "org.gradle.libraryelements" : "aar",
+      "org.gradle.usage" : "java-runtime"
+    },
+    "dependencies" : [ {
+      "group" : "androidx.core",
+      "module" : "core-ktx",
+      "version" : {
+        "requires" : "1.10.1"
+      }
+    }, {
+      "group" : "org.jetbrains.kotlinx",
+      "module" : "kotlinx-coroutines-core",
+      "version" : {
+        "requires" : "1.7.1"
+      }
+    }, {
+      "group" : "org.jetbrains.kotlinx",
+      "module" : "kotlinx-coroutines-android",
+      "version" : {
+        "requires" : "1.7.1"
+      }
+    }, {
+      "group" : "net.java.dev.jna",
+      "module" : "jna",
+      "version" : {
+        "requires" : "5.17.0"
+      },
+      "excludes" : [ {
+        "group" : "*",
+        "module" : "*"
+      } ]
+    }, {
+      "group" : "org.jetbrains.kotlin",
+      "module" : "kotlin-stdlib",
+      "version" : {
+        "requires" : "1.9.22"
+      }
+    } ],
+    "files" : [ {
+      "name" : "yttrium-wcpay-0.10.60.aar",
+      "url" : "yttrium-wcpay-0.10.60.aar",
+      "size" : 5000718,
+      "sha512" : "d16320aa5cdfbc5cd8eae8b64effe6e3b3acb83eb2d2d61c1193156b7f130817805227df8f3a26f3e8470e3c88fbd6a70ffb03faa4fbcce3654bdb92ef07cebb",
+      "sha256" : "07b139f458f9eda49445649cf2496b020b8664e0b0c9c7ca30c89a06259b75e8",
+      "sha1" : "341f3dbb0dd590e13a86bab782cba62a707e193f",
+      "md5" : "685064d4cc8d2f4025fb324458b01158"
+    } ]
+  } ]
+}

@@ -1,0 +1,1253 @@
+{
+  "schema_version": 1,
+  "device": "emulator-5560",
+  "started_utc": "2026-09-28T02:13:32.289562+00:00",
+  "git_head": "6b8692a375a06b957a30293d5676587f4d2bc6db",
+  "source_sha256": {
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts": "64dc0b52c1b38387c0d82b59d5bc03d2ee1b6db49c372ed88a5d6dc8e8fe618a",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "c2c96d6f707b34c02be63c41bd59d2b9d4a5caa69a4ee3decbc6e8321b266848",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json": "4bf465b3a79f5035c385fd497d308f042e50b88c99432dadc6a8b736c2ab5203",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/run_reown_wcpay_fixture.py": "01cdaf400ff29aae76d682fb8c9f77e08543937ccaca882c94b4edc6903629dc",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_reown_wcpay_fixture.py": "e94213ddd1bc4e2736fdf2fee52826db513b4b041c91e320a66bfc825c285687"
+  },
+  "build_epoch": {
+    "compiled_inputs": {
+      "tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
+      "tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts": "64dc0b52c1b38387c0d82b59d5bc03d2ee1b6db49c372ed88a5d6dc8e8fe618a",
+      "tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
+      "tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
+      "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
+      "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "c2c96d6f707b34c02be63c41bd59d2b9d4a5caa69a4ee3decbc6e8321b266848",
+      "scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802"
+    },
+    "prepared_mismatch_inputs": {
+      "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
+      "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
+      "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8",
+      "jni/arm64-v8a/libuniffi_yttrium_wcpay.so": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff"
+    },
+    "jna_aar_sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38",
+    "jna_aar_arm64_sha256": "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06"
+  },
+  "tool_sha256": {
+    "/opt/homebrew/share/android-commandlinetools/platform-tools/adb": "534893b946847fdf6f9998108af469e646679824d75098247ca438948fa2dffc",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt": "170717682f714712c5b6854af73cfe37aeda342ff422384e98d67fc1b490f49b",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign": "0427144f4a3fd242c5a159e7088637082539ae556bc1d2bbc2032bb775d47cea"
+  },
+  "jna_aar_sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38",
+  "device_state": {
+    "argv": [
+      "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+      "-s",
+      "emulator-5560",
+      "get-state"
+    ],
+    "exit": 0,
+    "stdout": "device",
+    "stderr": ""
+  },
+  "initial": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "phases": {
+    "baseline": {
+      "package": "ai.n42.fixture.reown.baseline",
+      "apk_sha256": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899",
+      "apk_bytes": 3699052,
+      "wcpay_member_sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+      "wcpay_data_offset": 1392640,
+      "wcpay_executable_loads": [
+        [
+          2359296,
+          1228800
+        ]
+      ],
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.reown.baseline' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'26'\ntargetSdkVersion:'37'\napplication-label:'Reown WCPay synthetic fixture'\napplication: label='Reown WCPay synthetic fixture' icon=''\nlaunchable-activity: name='ai.n42.fixture.reown.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales: '--_--'\ndensities: '160'\nnative-code: 'arm64-v8a'",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/baseline.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     207 META-INF/version-control-info.textproto (OK - compressed)\n     296 classes.dex (OK - compressed)\n 1212416 lib/arm64-v8a/libjnidispatch.so (OK)\n 1392640 lib/arm64-v8a/libuniffi_yttrium_wcpay.so (OK)\n 3664863 DebugProbesKt.bin (OK - compressed)\n 3665689 META-INF/AL2.0 (OK - compressed)\n 3669296 META-INF/LGPL2.1 (OK - compressed)\n 3677992 META-INF/kotlinx_coroutines_android.version (OK)\n 3678068 META-INF/kotlinx_coroutines_core.version (OK)\n 3678165 META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler (OK - compressed)\n 3678312 META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory (OK - compressed)\n 3678419 kotlin-tooling-metadata.json (OK - compressed)\n 3678778 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n 3679396 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n 3681365 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n 3682550 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n 3682738 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n 3683156 kotlin/kotlin.kotlin_builtins (OK - compressed)\n 3688800 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n 3690248 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n 3691744 AndroidManifest.xml (OK - compressed)\n 3692476 resources.arsc (OK)\nVerification successful",
+        "stderr": ""
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.reown.baseline"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.reown.baseline"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~RLLCIvu9ndTpHm_2_eUCJg==/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==/base.apk",
+        "stderr": ""
+      },
+      "logcat_clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-c"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.reown.baseline/ai.n42.fixture.reown.MainActivity",
+          "--es",
+          "phase",
+          "baseline"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.reown.baseline/ai.n42.fixture.reown.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.reown.baseline/ai.n42.fixture.reown.MainActivity\nWaitTime: 365\nComplete",
+        "stderr": ""
+      },
+      "last_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_REOWN_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-27 22:13:33.176 18487 18487 I N42_REOWN_FIXTURE: {\"phase\":\"baseline\",\"pid\":18487,\"nonce\":\"b158d815-8973-40b6-b495-cd4d4654516c\",\"apkPath\":\"\\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\",\"apkSha256\":\"0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899\",\"libraryLookupPath\":\"\\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk!\\/lib\\/arm64-v8a\\/libuniffi_yttrium_wcpay.so\",\"attemptedInitialization\":true,\"constructorJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"missingAuth\":\"uniffi.yttrium_wcpay.PayJsonException$MissingAuth\",\"optionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"actionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"confirmJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"status\":\"PASS\",\"executableApkMaps\":[\"7541a52b0000-7541a53dc000 r-xp 00240000 fe:05 164057                     \\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\",\"7542bfc04000-7542bfc2c000 r-xp 00128000 fe:05 164057                     \\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\",\"75457d53c000-75457d540000 r-xp 00140000 fe:05 164057                     \\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_REOWN_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-27 22:13:33.176 18487 18487 I N42_REOWN_FIXTURE: {\"phase\":\"baseline\",\"pid\":18487,\"nonce\":\"b158d815-8973-40b6-b495-cd4d4654516c\",\"apkPath\":\"\\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\",\"apkSha256\":\"0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899\",\"libraryLookupPath\":\"\\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk!\\/lib\\/arm64-v8a\\/libuniffi_yttrium_wcpay.so\",\"attemptedInitialization\":true,\"constructorJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"missingAuth\":\"uniffi.yttrium_wcpay.PayJsonException$MissingAuth\",\"optionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"actionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"confirmJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"status\":\"PASS\",\"executableApkMaps\":[\"7541a52b0000-7541a53dc000 r-xp 00240000 fe:05 164057                     \\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\",\"7542bfc04000-7542bfc2c000 r-xp 00128000 fe:05 164057                     \\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\",\"75457d53c000-75457d540000 r-xp 00140000 fe:05 164057                     \\/data\\/app\\/~~RLLCIvu9ndTpHm_2_eUCJg==\\/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "result": {
+        "phase": "baseline",
+        "pid": 18487,
+        "nonce": "b158d815-8973-40b6-b495-cd4d4654516c",
+        "apkPath": "/data/app/~~RLLCIvu9ndTpHm_2_eUCJg==/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==/base.apk",
+        "apkSha256": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899",
+        "libraryLookupPath": "/data/app/~~RLLCIvu9ndTpHm_2_eUCJg==/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==/base.apk!/lib/arm64-v8a/libuniffi_yttrium_wcpay.so",
+        "attemptedInitialization": true,
+        "constructorJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "missingAuth": "uniffi.yttrium_wcpay.PayJsonException$MissingAuth",
+        "optionsJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "actionsJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "confirmJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "status": "PASS",
+        "executableApkMaps": [
+          "7541a52b0000-7541a53dc000 r-xp 00240000 fe:05 164057                     /data/app/~~RLLCIvu9ndTpHm_2_eUCJg==/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==/base.apk",
+          "7542bfc04000-7542bfc2c000 r-xp 00128000 fe:05 164057                     /data/app/~~RLLCIvu9ndTpHm_2_eUCJg==/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==/base.apk",
+          "75457d53c000-75457d540000 r-xp 00140000 fe:05 164057                     /data/app/~~RLLCIvu9ndTpHm_2_eUCJg==/ai.n42.fixture.reown.baseline-T5tJVhz5vDsHyElC8PqZyg==/base.apk"
+        ]
+      },
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.reown.baseline"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "candidate": {
+      "package": "ai.n42.fixture.reown.candidate",
+      "apk_sha256": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1",
+      "apk_bytes": 3722284,
+      "wcpay_member_sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+      "wcpay_data_offset": 1392640,
+      "wcpay_executable_loads": [
+        [
+          2392064,
+          1212416
+        ]
+      ],
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.reown.candidate' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'26'\ntargetSdkVersion:'37'\napplication-label:'Reown WCPay synthetic fixture'\napplication: label='Reown WCPay synthetic fixture' icon=''\nlaunchable-activity: name='ai.n42.fixture.reown.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales: '--_--'\ndensities: '160'\nnative-code: 'arm64-v8a'",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/candidate.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     207 META-INF/version-control-info.textproto (OK - compressed)\n     296 classes.dex (OK - compressed)\n 1212416 lib/arm64-v8a/libjnidispatch.so (OK)\n 1392640 lib/arm64-v8a/libuniffi_yttrium_wcpay.so (OK)\n 3688095 DebugProbesKt.bin (OK - compressed)\n 3688921 META-INF/AL2.0 (OK - compressed)\n 3692528 META-INF/LGPL2.1 (OK - compressed)\n 3701224 META-INF/kotlinx_coroutines_android.version (OK)\n 3701300 META-INF/kotlinx_coroutines_core.version (OK)\n 3701397 META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler (OK - compressed)\n 3701544 META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory (OK - compressed)\n 3701651 kotlin-tooling-metadata.json (OK - compressed)\n 3702010 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n 3702628 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n 3704597 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n 3705782 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n 3705970 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n 3706388 kotlin/kotlin.kotlin_builtins (OK - compressed)\n 3712032 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n 3713480 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n 3714976 AndroidManifest.xml (OK - compressed)\n 3715708 resources.arsc (OK)\nVerification successful",
+        "stderr": ""
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.reown.candidate"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.reown.candidate"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~OXhEgF9hqSrzKSfXZEbVUg==/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==/base.apk",
+        "stderr": ""
+      },
+      "logcat_clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-c"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.reown.candidate/ai.n42.fixture.reown.MainActivity",
+          "--es",
+          "phase",
+          "candidate"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.reown.candidate/ai.n42.fixture.reown.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.reown.candidate/ai.n42.fixture.reown.MainActivity\nWaitTime: 255\nComplete",
+        "stderr": ""
+      },
+      "last_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_REOWN_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-27 22:13:35.084 18619 18619 I N42_REOWN_FIXTURE: {\"phase\":\"candidate\",\"pid\":18619,\"nonce\":\"e09bd150-4f35-4c44-bf3d-086ea90839d1\",\"apkPath\":\"\\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\",\"apkSha256\":\"f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1\",\"libraryLookupPath\":\"\\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk!\\/lib\\/arm64-v8a\\/libuniffi_yttrium_wcpay.so\",\"attemptedInitialization\":true,\"constructorJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"missingAuth\":\"uniffi.yttrium_wcpay.PayJsonException$MissingAuth\",\"optionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"actionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"confirmJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"status\":\"PASS\",\"executableApkMaps\":[\"7541a6c18000-7541a6d40000 r-xp 00248000 fe:05 164046                     \\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\",\"7542bfd00000-7542bfd28000 r-xp 00128000 fe:05 164046                     \\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\",\"75457f604000-75457f608000 r-xp 00140000 fe:05 164046                     \\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_REOWN_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-27 22:13:35.084 18619 18619 I N42_REOWN_FIXTURE: {\"phase\":\"candidate\",\"pid\":18619,\"nonce\":\"e09bd150-4f35-4c44-bf3d-086ea90839d1\",\"apkPath\":\"\\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\",\"apkSha256\":\"f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1\",\"libraryLookupPath\":\"\\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk!\\/lib\\/arm64-v8a\\/libuniffi_yttrium_wcpay.so\",\"attemptedInitialization\":true,\"constructorJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"missingAuth\":\"uniffi.yttrium_wcpay.PayJsonException$MissingAuth\",\"optionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"actionsJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"confirmJsonParse\":\"uniffi.yttrium_wcpay.PayJsonException$JsonParse\",\"status\":\"PASS\",\"executableApkMaps\":[\"7541a6c18000-7541a6d40000 r-xp 00248000 fe:05 164046                     \\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\",\"7542bfd00000-7542bfd28000 r-xp 00128000 fe:05 164046                     \\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\",\"75457f604000-75457f608000 r-xp 00140000 fe:05 164046                     \\/data\\/app\\/~~OXhEgF9hqSrzKSfXZEbVUg==\\/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "result": {
+        "phase": "candidate",
+        "pid": 18619,
+        "nonce": "e09bd150-4f35-4c44-bf3d-086ea90839d1",
+        "apkPath": "/data/app/~~OXhEgF9hqSrzKSfXZEbVUg==/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==/base.apk",
+        "apkSha256": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1",
+        "libraryLookupPath": "/data/app/~~OXhEgF9hqSrzKSfXZEbVUg==/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==/base.apk!/lib/arm64-v8a/libuniffi_yttrium_wcpay.so",
+        "attemptedInitialization": true,
+        "constructorJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "missingAuth": "uniffi.yttrium_wcpay.PayJsonException$MissingAuth",
+        "optionsJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "actionsJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "confirmJsonParse": "uniffi.yttrium_wcpay.PayJsonException$JsonParse",
+        "status": "PASS",
+        "executableApkMaps": [
+          "7541a6c18000-7541a6d40000 r-xp 00248000 fe:05 164046                     /data/app/~~OXhEgF9hqSrzKSfXZEbVUg==/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==/base.apk",
+          "7542bfd00000-7542bfd28000 r-xp 00128000 fe:05 164046                     /data/app/~~OXhEgF9hqSrzKSfXZEbVUg==/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==/base.apk",
+          "75457f604000-75457f608000 r-xp 00140000 fe:05 164046                     /data/app/~~OXhEgF9hqSrzKSfXZEbVUg==/ai.n42.fixture.reown.candidate-p0gnRPR4cWH5RdsAAWYyhg==/base.apk"
+        ]
+      },
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.reown.candidate"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "mismatch": {
+      "package": "ai.n42.fixture.reown.mismatch",
+      "apk_sha256": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c",
+      "apk_bytes": 3722284,
+      "wcpay_member_sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+      "wcpay_data_offset": 1392640,
+      "wcpay_executable_loads": [
+        [
+          2392064,
+          1212416
+        ]
+      ],
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/mismatch.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.reown.mismatch' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'26'\ntargetSdkVersion:'37'\napplication-label:'Reown WCPay synthetic fixture'\napplication: label='Reown WCPay synthetic fixture' icon=''\nlaunchable-activity: name='ai.n42.fixture.reown.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales: '--_--'\ndensities: '160'\nnative-code: 'arm64-v8a'",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/mismatch.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/mismatch.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     207 META-INF/version-control-info.textproto (OK - compressed)\n     296 classes.dex (OK - compressed)\n 1212416 lib/arm64-v8a/libjnidispatch.so (OK)\n 1392640 lib/arm64-v8a/libuniffi_yttrium_wcpay.so (OK)\n 3688095 DebugProbesKt.bin (OK - compressed)\n 3688921 META-INF/AL2.0 (OK - compressed)\n 3692528 META-INF/LGPL2.1 (OK - compressed)\n 3701224 META-INF/kotlinx_coroutines_android.version (OK)\n 3701300 META-INF/kotlinx_coroutines_core.version (OK)\n 3701397 META-INF/services/kotlinx.coroutines.CoroutineExceptionHandler (OK - compressed)\n 3701544 META-INF/services/kotlinx.coroutines.internal.MainDispatcherFactory (OK - compressed)\n 3701651 kotlin-tooling-metadata.json (OK - compressed)\n 3702010 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n 3702628 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n 3704597 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n 3705782 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n 3705970 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n 3706388 kotlin/kotlin.kotlin_builtins (OK - compressed)\n 3712032 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n 3713480 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n 3714976 AndroidManifest.xml (OK - compressed)\n 3715708 resources.arsc (OK)\nVerification successful",
+        "stderr": ""
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/mismatch.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.reown.mismatch"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.reown.mismatch"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~2M91vBEH2gTdEz6IanuNrQ==/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==/base.apk",
+        "stderr": ""
+      },
+      "logcat_clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-c"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.reown.mismatch/ai.n42.fixture.reown.MainActivity",
+          "--es",
+          "phase",
+          "mismatch"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.reown.mismatch/ai.n42.fixture.reown.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.reown.mismatch/ai.n42.fixture.reown.MainActivity\nWaitTime: 165\nComplete",
+        "stderr": ""
+      },
+      "last_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_REOWN_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-27 22:13:36.876 18717 18717 I N42_REOWN_FIXTURE: {\"phase\":\"mismatch\",\"pid\":18717,\"nonce\":\"09d68c7d-3c71-4ad2-9199-264411f99576\",\"apkPath\":\"\\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\",\"apkSha256\":\"33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c\",\"libraryLookupPath\":\"\\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk!\\/lib\\/arm64-v8a\\/libuniffi_yttrium_wcpay.so\",\"attemptedInitialization\":true,\"mismatchError\":\"java.lang.RuntimeException: UniFFI API checksum mismatch: try cleaning and rebuilding your project\",\"status\":\"PASS\",\"executableApkMaps\":[\"7541a4e68000-7541a4f90000 r-xp 00248000 fe:05 164068                     \\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\",\"754278e48000-754278e70000 r-xp 00128000 fe:05 164068                     \\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\",\"75457d53c000-75457d540000 r-xp 00140000 fe:05 164068                     \\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_REOWN_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-27 22:13:36.876 18717 18717 I N42_REOWN_FIXTURE: {\"phase\":\"mismatch\",\"pid\":18717,\"nonce\":\"09d68c7d-3c71-4ad2-9199-264411f99576\",\"apkPath\":\"\\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\",\"apkSha256\":\"33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c\",\"libraryLookupPath\":\"\\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk!\\/lib\\/arm64-v8a\\/libuniffi_yttrium_wcpay.so\",\"attemptedInitialization\":true,\"mismatchError\":\"java.lang.RuntimeException: UniFFI API checksum mismatch: try cleaning and rebuilding your project\",\"status\":\"PASS\",\"executableApkMaps\":[\"7541a4e68000-7541a4f90000 r-xp 00248000 fe:05 164068                     \\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\",\"754278e48000-754278e70000 r-xp 00128000 fe:05 164068                     \\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\",\"75457d53c000-75457d540000 r-xp 00140000 fe:05 164068                     \\/data\\/app\\/~~2M91vBEH2gTdEz6IanuNrQ==\\/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==\\/base.apk\"]}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "result": {
+        "phase": "mismatch",
+        "pid": 18717,
+        "nonce": "09d68c7d-3c71-4ad2-9199-264411f99576",
+        "apkPath": "/data/app/~~2M91vBEH2gTdEz6IanuNrQ==/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==/base.apk",
+        "apkSha256": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c",
+        "libraryLookupPath": "/data/app/~~2M91vBEH2gTdEz6IanuNrQ==/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==/base.apk!/lib/arm64-v8a/libuniffi_yttrium_wcpay.so",
+        "attemptedInitialization": true,
+        "mismatchError": "java.lang.RuntimeException: UniFFI API checksum mismatch: try cleaning and rebuilding your project",
+        "status": "PASS",
+        "executableApkMaps": [
+          "7541a4e68000-7541a4f90000 r-xp 00248000 fe:05 164068                     /data/app/~~2M91vBEH2gTdEz6IanuNrQ==/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==/base.apk",
+          "754278e48000-754278e70000 r-xp 00128000 fe:05 164068                     /data/app/~~2M91vBEH2gTdEz6IanuNrQ==/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==/base.apk",
+          "75457d53c000-75457d540000 r-xp 00140000 fe:05 164068                     /data/app/~~2M91vBEH2gTdEz6IanuNrQ==/ai.n42.fixture.reown.mismatch-ZMeW1E2xyHlAsVtj9FSEYQ==/base.apk"
+        ]
+      },
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.reown.mismatch"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  },
+  "strict_setup": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "strict_restore": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "final": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

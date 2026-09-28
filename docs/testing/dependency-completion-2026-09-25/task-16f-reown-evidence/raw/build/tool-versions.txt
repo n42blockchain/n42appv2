@@ -1,0 +1,30 @@
+[rustc]
+rustc 1.97.1 (8bab26f4f 2026-07-14)
+binary: rustc
+commit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452
+commit-date: 2026-07-14
+host: aarch64-apple-darwin
+release: 1.97.1
+LLVM version: 22.1.6
+
+[cargo]
+cargo 1.97.1 (c980f4866 2026-06-30)
+
+[cargo-ndk]
+cargo-ndk 4.1.2
+
+[clang]
+Android (13624864, +pgo, -bolt, +lto, -mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+Target: x86_64-apple-darwin25.6.0
+Thread model: posix
+InstalledDir: /Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin
+
+[lld]
+LLD 19.0.1 (compatible with GNU linkers)
+
+[strip]
+llvm-strip, compatible with GNU strip
+LLVM (http://llvm.org/):
+  LLVM version 19.0.1 (/Volumes/Android/buildbot/src/android/llvm-r530567/out/llvm-project/llvm 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+  Optimized build.
+

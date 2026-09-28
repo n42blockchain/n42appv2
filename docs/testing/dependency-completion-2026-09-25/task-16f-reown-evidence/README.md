@@ -1,0 +1,20 @@
+# Reown WCPay 0.10.60 native evidence
+
+This archive records the pinned Reown source build, four-ABI native-only AAR replacement, actual app/plugin Gradle selection, and three-phase synthetic ARM64 runtime on dedicated `emulator-5560`. Replay it offline from this directory with Python 3:
+
+```sh
+python3 verify_evidence.py
+python3 -O verify_evidence.py
+python3 verify_evidence_controls.py
+python3 -O verify_evidence_controls.py
+```
+
+`members.txt` lists every regular member except `manifest.json`; the manifest hashes each listed file, including the verifiers. The replay checks the exact official and maintained AARs, all 13 AAR entries and exactly four changed JNI members, candidate native byte identity, unchanged compiled `classes.jar` and POM, the recorded app/plugin selection of the maintained coordinate, JNA 5.17.0, reviewed fixture source/build epoch, exact three v2 APKs, typed UniFFI results, strict/offline state, installed APK hashes, and executable APK maps. The four controls reject a changed archive member, wrong 16 KB state, missing source map, and an accepted mismatched binding. A current Gradle or device run is not required.
+
+The historical runtime verifier is retained byte-for-byte under `source/tools/android_native_smoke/verify_reown_wcpay_fixture.py`. That verifier normally checks `git show` against reviewed commit `6b8692a375a06b957a30293d5676587f4d2bc6db`; the archive wrapper replaces only that Git object lookup with the exact archived source snapshot and pinned commit ID. The receipt's original absolute source keys are retained and matched to the archived relative paths. All APK, JNA, epoch, strict-state, typed-result and map checks execute in the unmodified reviewed verifier. The archive cannot itself prove Git server authenticity; its member hashes and archived review records make this historical replay reviewable without the original worktree. New runtime outputs need a separately reviewed source/build epoch.
+
+`source-proof/` retains the pinned upstream source inputs, exact candidate manifest and four stripped native members, corrected UniFFI binding comparison, ELF/link records and license inventory. The complete upstream checkout, Cargo objects and caches are intentionally outside this bounded archive; source revision `fc2dc73ae1e1af2b29363c6d239c0e3a19ec8f7c` and pinned tool hashes are in `reports/task-16f-reown-source-report.md`. The first bindgen filename error and guard failures are preserved under `logs/` and `raw/build/`. `artifacts/` includes the official AAR/POM/module, selected maintained AAR/POM/module, original JNA AAR, all three exact v2 fixture APKs, and the old baseline APK needed to bind the run 1 fixture failure. The POM and module dependency evidence, three selected Gradle scopes, and focused Kotlin compile are in `raw/stage2/`, `logs/`, and the Stage 2 report.
+
+`raw/stage3-runtime-run1/` and corresponding logs preserve the first fixture transport/config failure. Run 1 reached baseline only and is not a candidate native failure. `raw/stage3-runtime-run2/` contains the full device receipt and verification: baseline PID `18487`, candidate PID `18619`, mismatch PID `18717`, each with a fresh nonce and installed APK/native/JNA/map proof. Baseline and candidate returned the same typed malformed JSON and missing auth errors. The mismatch used the candidate native bytes with one changed Kotlin checksum and was rejected by the actual UniFFI checksum checker. `reports/task-16f-reown-stage3-runtime-report.md` gives the exact scope and receipt hashes; `reports/` and `reviews/` retain the independent stage findings and closures.
+
+This result covers the synthetic ARM64 fixture under 16,384-byte pages, linker compatibility `fatal`, package compatibility disabled, and airplane mode with an empty route. It does not establish a full app APK/AAB, whole-app native count, real payment/account/network behavior, latest store acceptance, or complete license/notice clearance. The user’s existing IAP, subscription and business routes were preserved; this native replacement did not change those flows.

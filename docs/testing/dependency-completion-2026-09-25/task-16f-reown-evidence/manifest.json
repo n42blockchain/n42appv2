@@ -1,0 +1,845 @@
+{
+  "schema_version": 1,
+  "members": [
+    {
+      "path": "README.md",
+      "size": 4086,
+      "sha256": "f2716a4c8b60a1ed6638fc891a39c60a53d705b4e6e3ef7f3446f61b1c4c7daf"
+    },
+    {
+      "path": "artifacts/jna-5.17.0.aar",
+      "size": 522249,
+      "sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38"
+    },
+    {
+      "path": "artifacts/maintained-yttrium-wcpay-0.10.60.aar",
+      "size": 4994538,
+      "sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303"
+    },
+    {
+      "path": "artifacts/maintained-yttrium-wcpay-0.10.60.module",
+      "size": 3361,
+      "sha256": "199ad7987dfbc037816d914939536955bf1b8b76a0ae19ee3f3f03b6bc83f8f9"
+    },
+    {
+      "path": "artifacts/maintained-yttrium-wcpay-0.10.60.pom",
+      "size": 2435,
+      "sha256": "1092df0f34ecb578abcfef1ab23ec6fe8dee0b99ddbcb2693fadb76c03e126fe"
+    },
+    {
+      "path": "artifacts/official-yttrium-wcpay-0.10.60.aar",
+      "size": 5000718,
+      "sha256": "07b139f458f9eda49445649cf2496b020b8664e0b0c9c7ca30c89a06259b75e8"
+    },
+    {
+      "path": "artifacts/official-yttrium-wcpay-0.10.60.module",
+      "size": 2969,
+      "sha256": "c82d81c852af42d42cc913a1364733882dddec175fb19c8f1369a9856921cfad"
+    },
+    {
+      "path": "artifacts/official-yttrium-wcpay-0.10.60.pom",
+      "size": 2435,
+      "sha256": "1092df0f34ecb578abcfef1ab23ec6fe8dee0b99ddbcb2693fadb76c03e126fe"
+    },
+    {
+      "path": "artifacts/run1-baseline.apk",
+      "size": 3699052,
+      "sha256": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31"
+    },
+    {
+      "path": "artifacts/run2-baseline.apk",
+      "size": 3699052,
+      "sha256": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899"
+    },
+    {
+      "path": "artifacts/run2-candidate.apk",
+      "size": 3722284,
+      "sha256": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1"
+    },
+    {
+      "path": "artifacts/run2-mismatch.apk",
+      "size": 3722284,
+      "sha256": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c"
+    },
+    {
+      "path": "licenses/curve25519-dalek-derive-0.1.1-LICENSE-APACHE",
+      "size": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+    },
+    {
+      "path": "licenses/curve25519-dalek-derive-0.1.1-LICENSE-MIT",
+      "size": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+    },
+    {
+      "path": "licenses/openssl-3.5.5-LICENSE.txt",
+      "size": 10175,
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+    },
+    {
+      "path": "licenses/openssl-src-300.5.5-LICENSE-APACHE",
+      "size": 10847,
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+    },
+    {
+      "path": "licenses/openssl-src-300.5.5-LICENSE-MIT",
+      "size": 1057,
+      "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+    },
+    {
+      "path": "licenses/ring-0.16.20-LICENSE",
+      "size": 10125,
+      "sha256": "76b39f9b371688eac9d8323f96ee80b3aef5ecbc2217f25377bd4e4a615296a9"
+    },
+    {
+      "path": "licenses/ring-0.16.20-fiat-LICENSE",
+      "size": 1161,
+      "sha256": "0c125a4dab5ab869473e6491db22f6c0a7f8a4de58588d03bb2b16c0c8ebd7de"
+    },
+    {
+      "path": "licenses/yttrium-LICENSE",
+      "size": 11340,
+      "sha256": "cae4d0efa77b9342647e2773f440d5a6a5c1fd61da7a097a30c3c8ca88955800"
+    },
+    {
+      "path": "logs/build-aarch64-linux-android.log",
+      "size": 912924,
+      "sha256": "cb7cbd81abd1188251298a0f6e952bec83a82a6b0e3e731ca3c3b564106f2c43"
+    },
+    {
+      "path": "logs/build-armv7-linux-androideabi.log",
+      "size": 598521,
+      "sha256": "e57ff33e61384489b41a69c942732eb47729447ce0bbd11f4474ed1bce3e46b9"
+    },
+    {
+      "path": "logs/build-i686-linux-android.log",
+      "size": 596965,
+      "sha256": "460171c2273ba9f3241975bce7df15c9bcd250634e418ffe5ec6076e28f3a465"
+    },
+    {
+      "path": "logs/build-x86_64-linux-android.log",
+      "size": 601903,
+      "sha256": "ac1c02db872ad453eaceb3c8e91b2c6065682d9dc8f6f78be11605bbba29916d"
+    },
+    {
+      "path": "logs/gradle-selection-app-plugin.log",
+      "size": 42448,
+      "sha256": "ce3e8fdd152f9da40a79f757dc4812d3af9b2ccdce236718623cdba2054b0a73"
+    },
+    {
+      "path": "logs/gradle-selection-initial.log",
+      "size": 1414,
+      "sha256": "74e6d866ad70c4390c942f2ca973dc31b949536734927f35e0a1054176641795"
+    },
+    {
+      "path": "logs/gradle-selection.log",
+      "size": 46252,
+      "sha256": "4b561ac3ed8b5737df5189ad8e975c8a6295951af75649942ef335ff22507c94"
+    },
+    {
+      "path": "logs/gradle-walletconnect-pay-compile-rerun.log",
+      "size": 46947,
+      "sha256": "cb9186f0024cc39d70c787db55c36b840dab3745834103d3afe6a1c1bfd95df4"
+    },
+    {
+      "path": "logs/gradle-walletconnect-pay-compile.log",
+      "size": 42675,
+      "sha256": "95c5c433734fc52e44288f17276d9dbf96310a09b9de069e13cccf1088920c63"
+    },
+    {
+      "path": "logs/packaging-tests-final.log",
+      "size": 518,
+      "sha256": "f93aff93622bfb0d56be5904a360ac44bc0676a6ef06ff209aebf1bf43485a88"
+    },
+    {
+      "path": "logs/strip-aarch64-linux-android.log",
+      "size": 333,
+      "sha256": "21ee7bf6c4bfe6194eb0eb0bf022c6da410c0b8bb45a46e7696f485a4a0292b6"
+    },
+    {
+      "path": "logs/strip-armv7-linux-androideabi.log",
+      "size": 335,
+      "sha256": "e8b882cf93605a3c87c7f3da9a8be7390a1ab01b415a43d62ca2f264f4e99bf0"
+    },
+    {
+      "path": "logs/strip-i686-linux-android.log",
+      "size": 327,
+      "sha256": "6786c64403b8c05a53426652ba02ec080ebda6dc3bdbdc07069c5c0f4876ed04"
+    },
+    {
+      "path": "logs/strip-x86_64-linux-android.log",
+      "size": 330,
+      "sha256": "3015513941b243ebc6ef629d1b733a246f8bd72de9e4d5793c4185d6aedac18a"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-baseline-compile.log",
+      "size": 7520,
+      "sha256": "dd97dc887b976a89d42740d396118fb2d3d1ca3ffafa058fb56359efe7fadc87"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile.log",
+      "size": 2437,
+      "sha256": "b452617a85781f1c88f2b8ed1f1738c3dba3303cf964d0d91f79dc29f8c3db51"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile2.log",
+      "size": 2911,
+      "sha256": "bca7215d07ef540722ab656adfca2c2486b8f25ba0bcca25359fa352f4bed167"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile3.log",
+      "size": 2982,
+      "sha256": "b00c2f2b119c72015d9af33a54c3004444f07bdcf61f9eb70b790768464ea73f"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile4.log",
+      "size": 5049,
+      "sha256": "c517b440b93285a66e7ffe8d3a8102bf65dfd12d1f3fc5fe66b3cc07f8b4b7c6"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile5.log",
+      "size": 6920,
+      "sha256": "e39d2c21045d9a8027e654ad4e0630bb508bcdd7c12d9e3ff430c19bacd3b637"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile6.log",
+      "size": 9121,
+      "sha256": "5e3bfc0534ca839f8ed846aeafb09e98b40160f632870d0b48ff65026cc993a2"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-candidate-compile7.log",
+      "size": 7139,
+      "sha256": "2a0a38dc509a329dd9fd2f262baee487692fd884a1aef5b0b0186b8432667f82"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-mismatch-compile.log",
+      "size": 8380,
+      "sha256": "aabc2ce46debf4133a46e2bb9edaebb7ec26c98ffa0980545880a000425c774d"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-fix1-baseline-build.log",
+      "size": 7520,
+      "sha256": "b2023e313e98abb6f138ab5449d1fabade1d7a25486517a3d7dcc087c4916dc1"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-fix1-candidate-build.log",
+      "size": 7597,
+      "sha256": "8e3a73c978c9930f9f1984c2996f4e6c3de15e61c3bb2f3f5940a2995a742aa3"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-fix1-mismatch-build.log",
+      "size": 8380,
+      "sha256": "299ebb784cdc8ed87a6fe6c976edf84c1c03cc17ff4999abbbdfdef49f0094d6"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-fix1-tests.log",
+      "size": 1467,
+      "sha256": "888cf2b234b6acc490c20068054bef41c80b958f9beefabf34fb724eb0b5df61"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-run1-logcat-tail.log",
+      "size": 230522,
+      "sha256": "9b56513a3825c6d42cc75892b8bc72adae5a5d0ee4cb357673d804d1e3d73a02"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-run1-run-as-followup.log",
+      "size": 62,
+      "sha256": "7575b9a3bf8c6eb65732953205e01c338f9acd331fc35d37bbb862d497e11ad0"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-run1-runner.log",
+      "size": 87,
+      "sha256": "161973684c63f79ea39ddeb291243e310864e35b18d0b124a237c5250afb1d21"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-run2-runner.log",
+      "size": 395,
+      "sha256": "5c12226617417385081abb0a1777f61930badaa7dcd4e1675329163ced77949f"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-run2-verifier-normal.log",
+      "size": 2699,
+      "sha256": "446f12f761c6229f4b9d36c8a2800d07c6c274038559395490a552708b33b60e"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-runtime-run2-verifier-optimized.log",
+      "size": 2699,
+      "sha256": "446f12f761c6229f4b9d36c8a2800d07c6c274038559395490a552708b33b60e"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-source-fix1-tests.log",
+      "size": 1237,
+      "sha256": "d47542da88360e36c8342ce6decd36416d1b69b92e92399a13564ada5ee8a8fc"
+    },
+    {
+      "path": "logs/task-16f-reown-stage3-source-fix2-tests.log",
+      "size": 1346,
+      "sha256": "557a9084783154965526598bf845c207daa79526912507b592c4d852bf807e2a"
+    },
+    {
+      "path": "logs/uniffi-bindgen-corrected.log",
+      "size": 1722,
+      "sha256": "256dfaccf16e06ed2973304cdd5d0b576834aeb52cd29d9fce6cd0002c5ac7ad"
+    },
+    {
+      "path": "logs/uniffi-bindgen.log",
+      "size": 11337,
+      "sha256": "15d8f51a41b7793d6ba8ae84d159dbe6bf06be1b2b1a299c0221829f5a9e1183"
+    },
+    {
+      "path": "members.txt",
+      "size": 7774,
+      "sha256": "372858fb5dac45667c138f71811db8c2f8c679c6c99f8df16bffe8582316b708"
+    },
+    {
+      "path": "raw/build/cargo-ndk-4.1.2-help.txt",
+      "size": 971,
+      "sha256": "3003cb53349e6909d8f105cfb06d269bc0a9c67cea99fbb50637d700c53ac21b"
+    },
+    {
+      "path": "raw/build/final-recipe-preflight.json",
+      "size": 2775,
+      "sha256": "183872397ad14c107a73389e6247fb453517d77739861b2548165ad8a2ef199d"
+    },
+    {
+      "path": "raw/build/fix1-evidence-run2/mutated-uniffi.stderr",
+      "size": 222,
+      "sha256": "a827b6ffd917a8d4bddd422021e5b45879f02a92e02916c55b6f0483528fa900"
+    },
+    {
+      "path": "raw/build/fix1-evidence-run2/mutated-yttrium.stderr",
+      "size": 215,
+      "sha256": "015b0bc9355b8fddc804093c8b5b6a1182e35f36185e2522aa5ea4845f00e6e2"
+    },
+    {
+      "path": "raw/build/fix1-evidence-run2/official.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/build/fix1-evidence-run2/official.stdout",
+      "size": 3069,
+      "sha256": "b3b55c6a806692f07ebe7fb1f501c2af40b851291e57bf451752345a3ddd33dc"
+    },
+    {
+      "path": "raw/build/fix1-evidence-run2/receipt.json",
+      "size": 781,
+      "sha256": "5855e683a1550020dd4f985daae7e941f5d0ad5dcefbf635bf0a0b0da2358330"
+    },
+    {
+      "path": "raw/build/initial-failures.txt",
+      "size": 1446,
+      "sha256": "8429b09e6df829d819c085e1cae44cc32c67eaf55bcc35c1bf980b8a0443c299"
+    },
+    {
+      "path": "raw/build/rust-std-sha256.json",
+      "size": 1031,
+      "sha256": "f29674665063bb219530ad2cf5e8bcb7f6d773c0532215e6f87ceac5f015a768"
+    },
+    {
+      "path": "raw/build/source-status.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/build/tool-versions.txt",
+      "size": 921,
+      "sha256": "f16ea96e6556af964056c1dd830a910762f02a1f596ddcd1707dbf702b7ae20d"
+    },
+    {
+      "path": "raw/mismatch-input/bindings/uniffi_yttrium.kt",
+      "size": 44816,
+      "sha256": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84"
+    },
+    {
+      "path": "raw/mismatch-input/bindings/yttrium.kt",
+      "size": 193374,
+      "sha256": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934"
+    },
+    {
+      "path": "raw/mismatch-input/jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+      "size": 2295408,
+      "sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff"
+    },
+    {
+      "path": "raw/mismatch-input/preparation.json",
+      "size": 633,
+      "sha256": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8"
+    },
+    {
+      "path": "raw/stage2/gradle-selection-receipt.json",
+      "size": 1276,
+      "sha256": "1ff2ad017e691b9f6e54a54ad2dbf47d776d146221ad57aebff840f285aec85e"
+    },
+    {
+      "path": "raw/stage2/independent-package-audit.json",
+      "size": 4136,
+      "sha256": "9252ce6888543133a14f98db38bb5957dd86ff617f24455a668a688ba3599c2f"
+    },
+    {
+      "path": "raw/stage2/license-inputs.json",
+      "size": 2597,
+      "sha256": "37e8d0c75b83addd21894e3b0d24726365b5895726281715fe3a96a5e6b8ffaf"
+    },
+    {
+      "path": "raw/stage2/metadata-receipt.json",
+      "size": 4324,
+      "sha256": "bd45d8759173facbdc6275bb30ec26556853be6ca9a505bd3520ec311dfe0515"
+    },
+    {
+      "path": "raw/stage2/official/cache-inputs.json",
+      "size": 989,
+      "sha256": "62ea7afe14a8a75f761c3ae3db2c7b75dff7fbc2ed22e605ee320d71c8309516"
+    },
+    {
+      "path": "raw/stage2/package-receipt.json",
+      "size": 1025,
+      "sha256": "2a5f3fc46825f34d96ae038a9f7de51058e5f72f52f085f6a9d086162e5db466"
+    },
+    {
+      "path": "raw/stage3-build-v2/static-inputs.json",
+      "size": 1729,
+      "sha256": "8cd11b211d5c59a30bf7baf7a6e2c5d76dbdf46edadaf4f5a687759b081803ce"
+    },
+    {
+      "path": "raw/stage3-build/jna-transform-evidence.json",
+      "size": 2147,
+      "sha256": "77fc81c4c13ea5e4c244df8f251b4d4acec5d64926811b47ffc7dad0e0da90ff"
+    },
+    {
+      "path": "raw/stage3-runtime-run1-baseline-app-record.json",
+      "size": 1343,
+      "sha256": "ee8bd4d67b7321992b548734eee59d4bcb08264974fd11581db74c5550678df7"
+    },
+    {
+      "path": "raw/stage3-runtime-run1/reown-runtime-receipt.json",
+      "size": 19712,
+      "sha256": "e39c121ae3c3cbc2d968331790f7d49fd0dcecc7141ca1340f1e3d82d929e780"
+    },
+    {
+      "path": "raw/stage3-runtime-run2-controls-normal.json",
+      "size": 903,
+      "sha256": "a106ed6ffbd5764640c6d886f1b8012361e26ab43e81fd9bd0687eef2473f3ed"
+    },
+    {
+      "path": "raw/stage3-runtime-run2-controls-optimized.json",
+      "size": 903,
+      "sha256": "a106ed6ffbd5764640c6d886f1b8012361e26ab43e81fd9bd0687eef2473f3ed"
+    },
+    {
+      "path": "raw/stage3-runtime-run2-controls.py",
+      "size": 3706,
+      "sha256": "732867cf6bd9be399228231238c9c974ab27a085c03e29d3bcdf8b97892dd89b"
+    },
+    {
+      "path": "raw/stage3-runtime-run2/reown-runtime-receipt.json",
+      "size": 55386,
+      "sha256": "680aade1f0ea1c0f47b9be7ec04ec29be119ce0976ddc0451931224940c2ea77"
+    },
+    {
+      "path": "raw/stage3-runtime-run2/reown-runtime-verification.json",
+      "size": 2699,
+      "sha256": "446f12f761c6229f4b9d36c8a2800d07c6c274038559395490a552708b33b60e"
+    },
+    {
+      "path": "reports/task-16f-reown-implementation-brief.md",
+      "size": 1927,
+      "sha256": "2fdb98e754222263cfa9e6db203ffd3a11eaaebec78bab08ab06b39d1d30c02e"
+    },
+    {
+      "path": "reports/task-16f-reown-inputs.md",
+      "size": 9590,
+      "sha256": "d982d9298568d0203c5b694c4a7ae16ba47748616159cbbfec9d9fd5d4f746e2"
+    },
+    {
+      "path": "reports/task-16f-reown-readiness.md",
+      "size": 10156,
+      "sha256": "90016cf844171bb15b4307bc527ea062d7ad94ae261772bb6d60b677c3a21f32"
+    },
+    {
+      "path": "reports/task-16f-reown-source-fix1-report.md",
+      "size": 3067,
+      "sha256": "f1e09344ce2284f2a9c4e06b420d86098abcde22a32e535adbb34e1df43a7d48"
+    },
+    {
+      "path": "reports/task-16f-reown-source-fix1-review.md",
+      "size": 2638,
+      "sha256": "7a752b2c8e02f985c4dc9abd4624eb1680a50a70a47818fc763ad877379aca1b"
+    },
+    {
+      "path": "reports/task-16f-reown-source-report.md",
+      "size": 9341,
+      "sha256": "1ccf10b126309006dc4e828acfca69d30359b3812935b2cd4553c873cc03f66c"
+    },
+    {
+      "path": "reports/task-16f-reown-source-review.md",
+      "size": 5728,
+      "sha256": "632a99c338819ce0b902bed49e67261e2160fa3774ea7f353489b825bf8626cb"
+    },
+    {
+      "path": "reports/task-16f-reown-stage2-report.md",
+      "size": 7389,
+      "sha256": "bdff9d4c704e0ae2703c4e7de157101049a3508e3d8d720debf248f8e96437a4"
+    },
+    {
+      "path": "reports/task-16f-reown-stage2-review.md",
+      "size": 4315,
+      "sha256": "c303730c94aa9712b0be97142dcb2450b383643910d9397f5b6ea16b8e88b77d"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-runtime-fix1-report.md",
+      "size": 5242,
+      "sha256": "f69f9013c5a4c3e6e588db8aef13e1edde6ba802930718c1eb03cb055f43c120"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-runtime-fix1-review.md",
+      "size": 3168,
+      "sha256": "b1298972a639934453bb5f6956e04aa4591173c1adf02b09854ab65e955e0cb9"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-runtime-report.md",
+      "size": 5994,
+      "sha256": "29f602d588a1bd9421ee61e09c657b4ba8bde1a37af2764b5091d8cce2febc50"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-runtime-review.md",
+      "size": 3788,
+      "sha256": "7dbab3ff24d6b9546821a506af332ceb03880033bbddad88a49d990346f8506c"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-source-fix1-report.md",
+      "size": 4244,
+      "sha256": "8cd62665c714f74744197805d597cb28b1860e8d80e9a6949b3b39ecbaa7e9b1"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-source-fix1-review.md",
+      "size": 3663,
+      "sha256": "be8ccad8cb749944ba46ef09986ce63a5ab547f646d4fcbfc96d4484e530e68d"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-source-fix2-report.md",
+      "size": 1451,
+      "sha256": "6500de97a81737c41c3f4d747f953dcaffe4a78a557e7c951016e4e151784d7c"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-source-fix2-review.md",
+      "size": 1713,
+      "sha256": "72625e2e615fd8eb8aa312fd9335c1731c4059d953c2941620f2e5517cbdb4f4"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-source-report.md",
+      "size": 5979,
+      "sha256": "e9cbb3715978615b3a717a5019033bbfc701182f81ae8df2d09b40d82f573259"
+    },
+    {
+      "path": "reports/task-16f-reown-stage3-source-review.md",
+      "size": 5598,
+      "sha256": "fe830e684e65856b468945ec3f0c3425de88a2d304c5e99520bb7540f9911c61"
+    },
+    {
+      "path": "reviews/task-16f-reown-source-fix1-review.diff",
+      "size": 8687,
+      "sha256": "a3e010de75dcf002a790e07bfd74002ee106c4a92ffa905534f2a84c45feb06f"
+    },
+    {
+      "path": "reviews/task-16f-reown-source-review.diff",
+      "size": 19417,
+      "sha256": "2f25d48b2dd97771daddccc57d051475e39a5378d9fd0af004594a447290cd3a"
+    },
+    {
+      "path": "reviews/task-16f-reown-stage2-review.diff",
+      "size": 87442,
+      "sha256": "0e53d07f0720af196c38993163134c3306faa566af2b78b5b3b7b27ea21904c8"
+    },
+    {
+      "path": "reviews/task-16f-reown-stage3-runtime-fix1-review.diff",
+      "size": 17202,
+      "sha256": "9b39df2ee210a4908244a129eb53da101d12f1281f8e0a630347154aa21df46e"
+    },
+    {
+      "path": "reviews/task-16f-reown-stage3-source-fix1-review.diff",
+      "size": 21713,
+      "sha256": "9dbd4eaa7f3147a6ab00534d8686fb9d99e11440e6751304a2fdee279d60a355"
+    },
+    {
+      "path": "reviews/task-16f-reown-stage3-source-fix2-review.diff",
+      "size": 3909,
+      "sha256": "b1ed67cdda2ed25d84b8636a08a6531457a009ffc4998c65dee987a88c0051f0"
+    },
+    {
+      "path": "reviews/task-16f-reown-stage3-source-review.diff",
+      "size": 38521,
+      "sha256": "92d27058eedbca5ecf4536f779a1e0520d1a394c313c5d7bdddca480a21205c0"
+    },
+    {
+      "path": "source-proof/candidate1/arm64-symbol-diff.txt",
+      "size": 45,
+      "sha256": "d6bf5a1a542542d03ac412a0f5020a52b94fcf5e14d80ebe4533da1dc9aa23b1"
+    },
+    {
+      "path": "source-proof/candidate1/bindings-corrected/uniffi/uniffi_yttrium/uniffi_yttrium.kt",
+      "size": 44816,
+      "sha256": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84"
+    },
+    {
+      "path": "source-proof/candidate1/bindings-corrected/uniffi/yttrium/yttrium.kt",
+      "size": 193374,
+      "sha256": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad"
+    },
+    {
+      "path": "source-proof/candidate1/candidate-audit.json",
+      "size": 3804,
+      "sha256": "112963c7b32b9c29693729d917f713ab6c09436a2b25b7e3686059bd8262a22c"
+    },
+    {
+      "path": "source-proof/candidate1/compiled-license-index.json",
+      "size": 95960,
+      "sha256": "51c749b5f91025adb040972935b23c0c9ffe463e2410abba07785e74ae0d10ee"
+    },
+    {
+      "path": "source-proof/candidate1/corrected-binding-comparison.json",
+      "size": 466,
+      "sha256": "019a6381210642ea2fc8e49081693f4d45671be13a23eba58e137ffdbe4d03fc"
+    },
+    {
+      "path": "source-proof/candidate1/dependency-license-inventory.json",
+      "size": 223119,
+      "sha256": "094c2c3c893831d739e4d56cdc92de7ddf8a498572c9d8bb53668d65e3a3f725"
+    },
+    {
+      "path": "source-proof/candidate1/elf-arm64-v8a.txt",
+      "size": 1657,
+      "sha256": "25451823530b6e66bf65112ab7038d271dffc712b1f9ea977c91238e7fe318bf"
+    },
+    {
+      "path": "source-proof/candidate1/elf-armeabi-v7a.txt",
+      "size": 1450,
+      "sha256": "c9b0b1b04113862c0cdd3236663b645db40271ec4120894d84de215924a5caf2"
+    },
+    {
+      "path": "source-proof/candidate1/elf-x86.txt",
+      "size": 1459,
+      "sha256": "6831f59b8dadc2cce75aca6268270c71f35fc69e27314b1631db7d293f6a69e5"
+    },
+    {
+      "path": "source-proof/candidate1/elf-x86_64.txt",
+      "size": 1657,
+      "sha256": "788729a778c9e750cf263910e9a8ba31d01e68327b8e76c851117c542fbc835f"
+    },
+    {
+      "path": "source-proof/candidate1/link-proof.json",
+      "size": 1641,
+      "sha256": "846b51588b7b7b5405538bdbcf4817329b0ce9b2d027837c58ff70a8e0df3bfc"
+    },
+    {
+      "path": "source-proof/candidate1/manifest.json",
+      "size": 27726,
+      "sha256": "ebdbf3a660255fc0a10a5880c570303d6b674b3363af7fc0fff67542d00f8e52"
+    },
+    {
+      "path": "source-proof/candidate1/native/arm64-v8a/libuniffi_yttrium_wcpay.so",
+      "size": 2295408,
+      "sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff"
+    },
+    {
+      "path": "source-proof/candidate1/native/armeabi-v7a/libuniffi_yttrium_wcpay.so",
+      "size": 1537000,
+      "sha256": "7fe6289eb4717de1896c1d3b24ed1f8c2aa97886903bcc22790db1f8fc003f2b"
+    },
+    {
+      "path": "source-proof/candidate1/native/x86/libuniffi_yttrium_wcpay.so",
+      "size": 2346620,
+      "sha256": "2357fb466421faf309042d1cbc11c3b8bef4fb92ee864f1a9272774a08a3332b"
+    },
+    {
+      "path": "source-proof/candidate1/native/x86_64/libuniffi_yttrium_wcpay.so",
+      "size": 2616880,
+      "sha256": "36a95b0e288c1dd78f3db0086c51b5bee5a5fe0203fda2ce3c48c79667416bf4"
+    },
+    {
+      "path": "source-proof/candidate1/strict-elf-audit.json",
+      "size": 314,
+      "sha256": "6c25be65e08cabc5a2826fa1cdf08e0a05fbb79a0a7dcf29a6b3fb213383540d"
+    },
+    {
+      "path": "source-proof/candidate1/uniffi-initial-binding.diff",
+      "size": 472,
+      "sha256": "ee0ca23b1631b691513df629a5bc66e52f4c4cefc3c18edd4dc457558aeb5800"
+    },
+    {
+      "path": "source-proof/candidate1/yttrium-initial-binding.diff",
+      "size": 451,
+      "sha256": "24a3b65b3c7f1c503ac93e430779dd72ff4151aec513d6b2dfcb8dc087e1fadf"
+    },
+    {
+      "path": "source-proof/upstream/.github__workflows__release-kotlin-all.yml",
+      "size": 19422,
+      "sha256": "fd73b9c6d9e8e6d21c8d5579fbf1b336325cd54cb3cc468a0af7a1bad48ffdda"
+    },
+    {
+      "path": "source-proof/upstream/Cargo.lock",
+      "size": 418376,
+      "sha256": "ac084735f19fd9796dcce2cf672f6e616f43798601bfd0f22e1e7e8a85e45f2b"
+    },
+    {
+      "path": "source-proof/upstream/Cargo.toml",
+      "size": 10148,
+      "sha256": "368a68dc35c50fdd8ec176b29a23c49c2197e908b76e8cf876f6d15cfc62ddbf"
+    },
+    {
+      "path": "source-proof/upstream/LICENSE",
+      "size": 11340,
+      "sha256": "cae4d0efa77b9342647e2773f440d5a6a5c1fd61da7a097a30c3c8ca88955800"
+    },
+    {
+      "path": "source-proof/upstream/crates__kotlin-ffi__Cargo.toml",
+      "size": 1499,
+      "sha256": "02dab0198ee34438d46367650265646acf02009db11d612552b341b1b219998b"
+    },
+    {
+      "path": "source-proof/upstream/crates__kotlin-ffi__android__yttrium-wcpay__build.gradle",
+      "size": 2684,
+      "sha256": "be9af69be62f7e7f92db5d7e9e50972155ec2a9b5a7d0da2d84e0933ca829992"
+    },
+    {
+      "path": "source-proof/upstream/crates__kotlin-ffi__uniffi.toml",
+      "size": 122,
+      "sha256": "1bb8245bb686f26011e1b3d8f7c11dbfe7236905543acc5ce7dc068451caf83e"
+    },
+    {
+      "path": "source-proof/upstream/crates__yttrium__src__pay__json.rs",
+      "size": 28723,
+      "sha256": "d7fc9ecd19c9363c23c3de22df56a52cb09a96716949f357fcc344e50efbf8d5"
+    },
+    {
+      "path": "source-proof/upstream/crates__yttrium__src__pay__mod.rs",
+      "size": 110867,
+      "sha256": "f8a281ff06916c7e47541c1eaebb4d97c14225dcf02d3ba4455510bef273c9f5"
+    },
+    {
+      "path": "source-proof/upstream/generated-uniffi_yttrium.kt",
+      "size": 44816,
+      "sha256": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84"
+    },
+    {
+      "path": "source-proof/upstream/generated-yttrium.kt",
+      "size": 193374,
+      "sha256": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad"
+    },
+    {
+      "path": "source-proof/upstream/jitpack.yml",
+      "size": 5064,
+      "sha256": "5bf83093c6e9ed899ad76c3910fe022f02b28a88e1ef0a030e678a7131a92115"
+    },
+    {
+      "path": "source-proof/upstream/kotlin-wcpay-artifacts.zip",
+      "size": 4593500,
+      "sha256": "f1669618cf7af4d79cb748052d542d53281588e04e576cb69b065117da7cb17b"
+    },
+    {
+      "path": "source-proof/upstream/manifest.json",
+      "size": 3736,
+      "sha256": "fc5bfc3a0e9454a76c61d3d6ea818098220343263c5bb18e93effe59f6bfee16"
+    },
+    {
+      "path": "source-proof/upstream/workflows/release-kotlin-all.yml",
+      "size": 19422,
+      "sha256": "fd73b9c6d9e8e6d21c8d5579fbf1b336325cd54cb3cc468a0af7a1bad48ffdda"
+    },
+    {
+      "path": "source/android/build.gradle.kts",
+      "size": 2579,
+      "sha256": "4ab490171ced992c7034bad19c77eef28472a6e5c543b4346ee39aa782090dec"
+    },
+    {
+      "path": "source/android/native/reown_wcpay/README.md",
+      "size": 2002,
+      "sha256": "75418e808ab78803f004f29ded0763ed3f17d5a4f023f33cc987e97caa4f6a90"
+    },
+    {
+      "path": "source/scripts/build_reown_wcpay_android.py",
+      "size": 14951,
+      "sha256": "3c8316ac0302bc4b06937442fc1d1b7d17a1a7cfcd9c711f84da4c65fe98a8a2"
+    },
+    {
+      "path": "source/scripts/build_reown_wcpay_maven.py",
+      "size": 9798,
+      "sha256": "de2cac6b451d9d7a1304955f4390d394da9d593fafcfac3e9a97a07735bdf835"
+    },
+    {
+      "path": "source/scripts/prepare_reown_wcpay_fixture.py",
+      "size": 3021,
+      "sha256": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802"
+    },
+    {
+      "path": "source/test/scripts/test_reown_wcpay_build.py",
+      "size": 5457,
+      "sha256": "c7c923b4360d41dc88d843967e71477c7b033d700b5ec5d22d052035776a692e"
+    },
+    {
+      "path": "source/test/scripts/test_reown_wcpay_fixture.py",
+      "size": 9525,
+      "sha256": "a9928ac05c0e8721e48379a66fd21083280e3376b9d663253f3073e937c5404b"
+    },
+    {
+      "path": "source/test/scripts/test_reown_wcpay_maven.py",
+      "size": 6206,
+      "sha256": "d2decee11b5ef04d0adf222ac161cae90880bc470598b480f6eff4fbccdaf650"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts",
+      "size": 1570,
+      "sha256": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml",
+      "size": 514,
+      "sha256": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt",
+      "size": 5515,
+      "sha256": "c2c96d6f707b34c02be63c41bd59d2b9d4a5caa69a4ee3decbc6e8321b266848"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts",
+      "size": 142,
+      "sha256": "64dc0b52c1b38387c0d82b59d5bc03d2ee1b6db49c372ed88a5d6dc8e8fe618a"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json",
+      "size": 3447,
+      "sha256": "4bf465b3a79f5035c385fd497d308f042e50b88c99432dadc6a8b736c2ab5203"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/gradle.properties",
+      "size": 49,
+      "sha256": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66"
+    },
+    {
+      "path": "source/tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts",
+      "size": 337,
+      "sha256": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290"
+    },
+    {
+      "path": "source/tools/android_native_smoke/run_reown_wcpay_fixture.py",
+      "size": 8269,
+      "sha256": "01cdaf400ff29aae76d682fb8c9f77e08543937ccaca882c94b4edc6903629dc"
+    },
+    {
+      "path": "source/tools/android_native_smoke/verify_reown_wcpay_fixture.py",
+      "size": 17461,
+      "sha256": "e94213ddd1bc4e2736fdf2fee52826db513b4b041c91e320a66bfc825c285687"
+    },
+    {
+      "path": "verify_evidence.py",
+      "size": 10461,
+      "sha256": "9250cf72693fd41402aa0c94a68eb25a94bc34dfdc4bf6d758d0c691b7d4723a"
+    },
+    {
+      "path": "verify_evidence_controls.py",
+      "size": 3074,
+      "sha256": "eb68c9644cd48d84e2b48ac1034a78bc44af038a4c54adce7c8b9620474392b8"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+# JitPack configuration for building Yttrium Kotlin bindings
+# Multi-module setup for proper Maven artifact publishing
+#
+# This publishes three separate artifacts:
+# - com.github.reown-com:yttrium:version
+# - com.github.reown-com:yttrium-utils:version
+# - com.github.reown-com:yttrium-wcpay:version
+
+jdk:
+  - openjdk17
+
+before_install:
+  - |
+    set -e
+    echo "JitPack build starting..."
+    echo "Git ref: $GIT_TAG"
+    echo "Git commit: $GIT_COMMIT"
+    echo "Git branch: $GIT_BRANCH"
+    echo "JitPack VERSION: $VERSION"
+
+    # Determine the tag - JitPack passes the requested version
+    if [ -n "$GIT_TAG" ]; then
+      RELEASE_TAG="$GIT_TAG"
+      echo "Using GIT_TAG: $RELEASE_TAG"
+    elif [ -n "$VERSION" ]; then
+      RELEASE_TAG="$VERSION"
+      echo "Using VERSION: $RELEASE_TAG"
+    else
+      ALL_TAGS=$(git tag --points-at HEAD 2>/dev/null || echo "")
+      echo "Tags at HEAD: $ALL_TAGS"
+      RELEASE_TAG=$(echo "$ALL_TAGS" | head -1)
+
+      if [ -z "$RELEASE_TAG" ]; then
+        echo "ERROR: Could not determine release tag!"
+        echo "JitPack can only build from tagged releases."
+        echo "To use this library:"
+        echo "1. First create a GitHub release by running the workflow:"
+        echo "   https://github.com/reown-com/yttrium/actions"
+        echo "2. Then use the tag version in your dependency:"
+        echo "   implementation 'com.github.reown-com:yttrium:0.9.82'"
+        echo ""
+        echo "Available releases: https://github.com/reown-com/yttrium/releases"
+        exit 1
+      fi
+    fi
+
+    echo "Using release tag: $RELEASE_TAG"
+
+    # Download all artifact zips from the release
+    # Each release should contain all three artifact zips
+
+    echo "Downloading yttrium artifacts..."
+    mkdir -p crates/kotlin-ffi/android/build/generated/yttrium/{jniLibs,kotlin}
+    if curl -L -f -o yttrium-artifacts.zip "https://github.com/reown-com/yttrium/releases/download/${RELEASE_TAG}/kotlin-artifacts.zip" 2>/dev/null; then
+      unzip -q yttrium-artifacts.zip -d yttrium-dl
+      if [ -d "yttrium-dl/yttrium/libs" ]; then
+        cp -r yttrium-dl/yttrium/libs/* crates/kotlin-ffi/android/build/generated/yttrium/jniLibs/
+      fi
+      if [ -d "yttrium-dl/yttrium/kotlin-bindings" ]; then
+        cp -r yttrium-dl/yttrium/kotlin-bindings/* crates/kotlin-ffi/android/build/generated/yttrium/kotlin/
+      fi
+      echo "Yttrium artifacts installed"
+      rm -rf yttrium-dl yttrium-artifacts.zip
+    else
+      echo "Warning: Could not download yttrium artifacts"
+    fi
+
+    echo "Downloading utils artifacts..."
+    mkdir -p crates/kotlin-ffi/android/build/generated/utils/{jniLibs,kotlin}
+    if curl -L -f -o utils-artifacts.zip "https://github.com/reown-com/yttrium/releases/download/${RELEASE_TAG}/kotlin-utils-artifacts.zip" 2>/dev/null; then
+      unzip -q utils-artifacts.zip -d utils-dl
+      if [ -d "utils-dl/yttrium/libs" ]; then
+        cp -r utils-dl/yttrium/libs/* crates/kotlin-ffi/android/build/generated/utils/jniLibs/
+      fi
+      if [ -d "utils-dl/yttrium/kotlin-utils-bindings" ]; then
+        cp -r utils-dl/yttrium/kotlin-utils-bindings/* crates/kotlin-ffi/android/build/generated/utils/kotlin/
+      fi
+      echo "Utils artifacts installed"
+      rm -rf utils-dl utils-artifacts.zip
+    else
+      echo "Warning: Could not download utils artifacts"
+    fi
+
+    echo "Downloading wcpay artifacts..."
+    mkdir -p crates/kotlin-ffi/android/build/generated/wcpay/{jniLibs,kotlin}
+    if curl -L -f -o wcpay-artifacts.zip "https://github.com/reown-com/yttrium/releases/download/${RELEASE_TAG}/kotlin-wcpay-artifacts.zip" 2>/dev/null; then
+      unzip -q wcpay-artifacts.zip -d wcpay-dl
+      if [ -d "wcpay-dl/yttrium/libs" ]; then
+        cp -r wcpay-dl/yttrium/libs/* crates/kotlin-ffi/android/build/generated/wcpay/jniLibs/
+      fi
+      if [ -d "wcpay-dl/yttrium/kotlin-wcpay-bindings" ]; then
+        cp -r wcpay-dl/yttrium/kotlin-wcpay-bindings/* crates/kotlin-ffi/android/build/generated/wcpay/kotlin/
+      fi
+      echo "WCPay artifacts installed"
+      rm -rf wcpay-dl wcpay-artifacts.zip
+    else
+      echo "Warning: Could not download wcpay artifacts"
+    fi
+
+    echo "Artifact download complete"
+    ls -R crates/kotlin-ffi/android/build/generated/ || true
+
+install:
+  - |
+    set -e
+
+    # Determine the version
+    if [ -n "$GIT_TAG" ]; then
+      RELEASE_TAG="$GIT_TAG"
+    elif [ -n "$VERSION" ]; then
+      RELEASE_TAG="$VERSION"
+    else
+      RELEASE_TAG=$(git tag --points-at HEAD 2>/dev/null | head -1)
+      if [ -z "$RELEASE_TAG" ]; then
+        echo "ERROR: Could not determine release tag in install step!"
+        exit 1
+      fi
+    fi
+
+    echo "Building all modules from tag: $RELEASE_TAG"
+
+    cd crates/kotlin-ffi/android
+    ./gradlew \
+      :yttrium:assembleRelease \
+      :yttrium-utils:assembleRelease \
+      :yttrium-wcpay:assembleRelease \
+      :yttrium:publishReleasePublicationToMavenLocal \
+      :yttrium-utils:publishReleasePublicationToMavenLocal \
+      :yttrium-wcpay:publishReleasePublicationToMavenLocal \
+      -Pversion="$RELEASE_TAG"

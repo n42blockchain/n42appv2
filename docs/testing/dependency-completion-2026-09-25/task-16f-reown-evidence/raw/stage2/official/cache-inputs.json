@@ -1,0 +1,17 @@
+{
+  "yttrium-wcpay-0.10.60.aar": {
+    "cache_path": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.github.reown-com.yttrium/yttrium-wcpay/0.10.60/341f3dbb0dd590e13a86bab782cba62a707e193f/yttrium-wcpay-0.10.60.aar",
+    "sha256": "07b139f458f9eda49445649cf2496b020b8664e0b0c9c7ca30c89a06259b75e8",
+    "bytes": 5000718
+  },
+  "yttrium-wcpay-0.10.60.pom": {
+    "cache_path": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.github.reown-com.yttrium/yttrium-wcpay/0.10.60/3c53f6e169e757680521910807e0870717b45aa2/yttrium-wcpay-0.10.60.pom",
+    "sha256": "1092df0f34ecb578abcfef1ab23ec6fe8dee0b99ddbcb2693fadb76c03e126fe",
+    "bytes": 2435
+  },
+  "yttrium-wcpay-0.10.60.module": {
+    "cache_path": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/com.github.reown-com.yttrium/yttrium-wcpay/0.10.60/b4b3147b5059fd176a59768ea33eef1f672f15c/yttrium-wcpay-0.10.60.module",
+    "sha256": "c82d81c852af42d42cc913a1364733882dddec175fb19c8f1369a9856921cfad",
+    "bytes": 2969
+  }
+}

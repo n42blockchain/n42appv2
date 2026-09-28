@@ -1,0 +1,11 @@
+{
+  "original_binding_sha256": {
+    "generated-yttrium.kt": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad",
+    "generated-uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84"
+  },
+  "altered_binding_sha256": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
+  "changed_checksum": "register_logger 32546 -> 32547",
+  "candidate_aar_sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303",
+  "native_member": "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+  "native_sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff"
+}

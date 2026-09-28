@@ -1,0 +1,76 @@
+{
+  "arm64-v8a": {
+    "baseline_sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+    "raw_sha256": "1668a21872c1f242f5eb97cfbd4b23f969a9e0bf7d2256247f7680b9a90b52d2",
+    "stripped_sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+    "elf_class": 64,
+    "program_headers": [
+      "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0f4248 0x0f4248 R   0x4000",
+      "LOAD           0x0f4280 0x00000000000f8280 0x00000000000f8280 0x125f80 0x125f80 R E 0x4000",
+      "LOAD           0x21a200 0x0000000000222200 0x0000000000222200 0x014d10 0x015e00 RW  0x4000",
+      "LOAD           0x22ef10 0x000000000023af10 0x000000000023af10 0x001030 0x0019c0 RW  0x4000",
+      "GNU_RELRO      0x21a200 0x0000000000222200 0x0000000000222200 0x014d10 0x015e00 R   0x1"
+    ],
+    "baseline_exports": 189,
+    "candidate_exports": 189,
+    "added_exports": [],
+    "removed_exports": [],
+    "baseline_strict_elf": false,
+    "raw_strict_elf": true,
+    "stripped_strict_elf": true
+  },
+  "armeabi-v7a": {
+    "baseline_sha256": "5a54515b31b2a338e728ab9ca3b0c89fb15a54edec7635a7790df9c2dd38f596",
+    "raw_sha256": "122c723e15fb3f33b33b0a853e0d016d7870faccd9210d39cecd2fc6471bc93c",
+    "stripped_sha256": "7fe6289eb4717de1896c1d3b24ed1f8c2aa97886903bcc22790db1f8fc003f2b",
+    "elf_class": 32,
+    "program_headers": [
+      "LOAD           0x000000 0x00000000 0x00000000 0x74030 0x74030 R   0x4000",
+      "LOAD           0x074080 0x00078080 0x00078080 0xf5e50 0xf5e50 R E 0x4000",
+      "LOAD           0x169ed0 0x00171ed0 0x00171ed0 0x0c710 0x0e130 RW  0x4000",
+      "LOAD           0x1765e0 0x001825e0 0x001825e0 0x008fc 0x009e5 RW  0x4000",
+      "GNU_RELRO      0x169ed0 0x00171ed0 0x00171ed0 0x0c710 0x0e130 R   0x1"
+    ],
+    "baseline_exports": 189,
+    "candidate_exports": 189,
+    "added_exports": [],
+    "removed_exports": []
+  },
+  "x86": {
+    "baseline_sha256": "9dcd85ae494dff33a284b45e40282abf159863f0a4a06273e58d03c3f6690141",
+    "raw_sha256": "839b76c6a0ba9eba839d1bf9eb6c6f1a97172eb557a9d2911e24c111d55ad5be",
+    "stripped_sha256": "2357fb466421faf309042d1cbc11c3b8bef4fb92ee864f1a9272774a08a3332b",
+    "elf_class": 32,
+    "program_headers": [
+      "LOAD           0x000000 0x00000000 0x00000000 0xce208 0xce208 R   0x4000",
+      "LOAD           0x0ce240 0x000d2240 0x000d2240 0x1616d0 0x1616d0 R E 0x4000",
+      "LOAD           0x22f910 0x00237910 0x00237910 0x0c7b4 0x106f0 RW  0x4000",
+      "LOAD           0x23c0c8 0x002480c8 0x002480c8 0x008e0 0x00de4 RW  0x4000",
+      "GNU_RELRO      0x22f910 0x00237910 0x00237910 0x0c7b4 0x106f0 R   0x1"
+    ],
+    "baseline_exports": 189,
+    "candidate_exports": 189,
+    "added_exports": [],
+    "removed_exports": []
+  },
+  "x86_64": {
+    "baseline_sha256": "86058de377fd55904caf9db06e6ef185b69121888e1a598928e3cdb09cbf3885",
+    "raw_sha256": "b62c3462c7ffbe9b6eed5808fd382f56a3d9fc207a4d9657ec2dd661a1295636",
+    "stripped_sha256": "36a95b0e288c1dd78f3db0086c51b5bee5a5fe0203fda2ce3c48c79667416bf4",
+    "elf_class": 64,
+    "program_headers": [
+      "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0fb434 0x0fb434 R   0x4000",
+      "LOAD           0x0fb440 0x00000000000ff440 0x00000000000ff440 0x16d0b0 0x16d0b0 R E 0x4000",
+      "LOAD           0x2684f0 0x00000000002704f0 0x00000000002704f0 0x0151c0 0x017b10 RW  0x4000",
+      "LOAD           0x27d6b0 0x00000000002896b0 0x00000000002896b0 0x001050 0x0019f0 RW  0x4000",
+      "GNU_RELRO      0x2684f0 0x00000000002704f0 0x00000000002704f0 0x0151c0 0x017b10 R   0x1"
+    ],
+    "baseline_exports": 189,
+    "candidate_exports": 189,
+    "added_exports": [],
+    "removed_exports": [],
+    "baseline_strict_elf": false,
+    "raw_strict_elf": true,
+    "stripped_strict_elf": true
+  }
+}

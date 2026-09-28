@@ -1,0 +1,21 @@
+{
+  "changed_members": [
+    "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+    "jni/armeabi-v7a/libuniffi_yttrium_wcpay.so",
+    "jni/x86/libuniffi_yttrium_wcpay.so",
+    "jni/x86_64/libuniffi_yttrium_wcpay.so"
+  ],
+  "total_members": 13,
+  "official_sha256": "07b139f458f9eda49445649cf2496b020b8664e0b0c9c7ca30c89a06259b75e8",
+  "maintained_sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303",
+  "output_files": {
+    "yttrium-wcpay-0.10.60.aar": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303",
+    "yttrium-wcpay-0.10.60.module": "199ad7987dfbc037816d914939536955bf1b8b76a0ae19ee3f3f03b6bc83f8f9",
+    "yttrium-wcpay-0.10.60.pom": "1092df0f34ecb578abcfef1ab23ec6fe8dee0b99ddbcb2693fadb76c03e126fe"
+  },
+  "pom_dependencies": 5,
+  "api_dependencies": 2,
+  "runtime_dependencies": 5,
+  "candidate_manifest_sha256": "ebdbf3a660255fc0a10a5880c570303d6b674b3363af7fc0fff67542d00f8e52",
+  "binding_comparison_sha256": "019a6381210642ea2fc8e49081693f4d45671be13a23eba58e137ffdbe4d03fc"
+}

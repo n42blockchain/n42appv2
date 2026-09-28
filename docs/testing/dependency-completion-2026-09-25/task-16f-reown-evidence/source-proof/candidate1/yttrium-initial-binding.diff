@@ -1,0 +1,11 @@
+--- .superpowers/sdd/dependency-completion-20260925/task-16f-reown-source-inputs/generated-yttrium.kt	2026-09-27 00:39:35
++++ .superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/bindings/uniffi/yttrium/yttrium.kt	2026-09-27 20:58:16
+@@ -362,7 +362,7 @@
+     if (libOverride != null) {
+         return libOverride
+     }
+-    return "uniffi_yttrium_wcpay"
++    return "uniffi_yttrium.raw"
+ }
+ 
+ // Define FFI callback types

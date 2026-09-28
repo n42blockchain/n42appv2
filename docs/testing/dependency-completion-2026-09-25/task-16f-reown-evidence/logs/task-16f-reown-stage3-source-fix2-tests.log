@@ -1,0 +1,17 @@
+test_bad_aar_is_rejected_before_staging (test_reown_wcpay_fixture.ReownFixturePrepTest) ... ok
+test_mismatch_changes_one_checksum_and_preserves_native_member (test_reown_wcpay_fixture.ReownFixturePrepTest) ... ok
+test_all_missing_maps_are_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_candidate_apk_members_are_page_aligned_and_exact (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_candidate_missing_typed_method_error_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_changed_compiled_source_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_changed_prepared_mismatch_native_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_mismatch_acceptance_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_same_wrong_jna_in_all_phases_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_substituted_apk_is_rejected_before_device (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_unreviewed_git_head_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+test_wrong_strict_device_state_is_rejected (test_reown_wcpay_fixture.ReownFixtureVerifierTest) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.073s
+
+OK

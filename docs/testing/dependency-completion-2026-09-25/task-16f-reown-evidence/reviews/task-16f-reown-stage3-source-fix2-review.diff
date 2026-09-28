@@ -1,0 +1,67 @@
+diff --git a/pubspec.yaml b/pubspec.yaml
+index c3d834065..fccbce22d 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -2,7 +2,7 @@ name: n42_wallet
+ description: "N42 Wallet - Enterprise cryptocurrency wallet application"
+ publish_to: 'none'
+ 
+-version: 2.4.8+2026072935
++version: 2.4.8+2026072936
+ 
+ environment:
+   sdk: ">=3.13.4 <4.0.0"
+diff --git a/test/scripts/test_reown_wcpay_fixture.py b/test/scripts/test_reown_wcpay_fixture.py
+index ba9cd30fe..debf221a0 100644
+--- a/test/scripts/test_reown_wcpay_fixture.py
++++ b/test/scripts/test_reown_wcpay_fixture.py
+@@ -128,6 +128,23 @@ class ReownFixtureVerifierTest(unittest.TestCase):
+             with self.assertRaisesRegex(ValueError, "compiled fixture source SHA256 mismatch"):
+                 require_build_epoch(root, mismatch, jna)
+ 
++    def test_changed_prepared_mismatch_native_is_rejected(self):
++        mismatch = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/mismatch-input"
++        jna = next(Path("/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0").rglob("*.aar"))
++        with tempfile.TemporaryDirectory() as folder:
++            copy = Path(folder)
++            for relative in (
++                "bindings/yttrium.kt", "bindings/uniffi_yttrium.kt",
++                "preparation.json", "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
++            ):
++                target = copy / relative
++                target.parent.mkdir(parents=True, exist_ok=True)
++                shutil.copyfile(mismatch / relative, target)
++            native = copy / "jni/arm64-v8a/libuniffi_yttrium_wcpay.so"
++            native.write_bytes(native.read_bytes() + b"tampered")
++            with self.assertRaisesRegex(ValueError, "prepared mismatch input SHA256 mismatch"):
++                require_build_epoch(ROOT, copy, jna)
++
+     def test_same_wrong_jna_in_all_phases_is_rejected(self):
+         for phase in APK_SHA256:
+             with self.subTest(phase=phase):
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json b/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json
+index edfef8392..33d8a1816 100644
+--- a/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json
++++ b/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json
+@@ -25,7 +25,8 @@
+   "prepared_mismatch_input_sha256": {
+     "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
+     "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
+-    "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8"
++    "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8",
++    "jni/arm64-v8a/libuniffi_yttrium_wcpay.so": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff"
+   },
+   "jna": {
+     "aar_sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38",
+diff --git a/tools/android_native_smoke/verify_reown_wcpay_fixture.py b/tools/android_native_smoke/verify_reown_wcpay_fixture.py
+index 4e2db3699..0626da07a 100644
+--- a/tools/android_native_smoke/verify_reown_wcpay_fixture.py
++++ b/tools/android_native_smoke/verify_reown_wcpay_fixture.py
+@@ -38,6 +38,7 @@ MISMATCH_INPUT_SHA256 = {
+     "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
+     "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
+     "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8",
++    "jni/arm64-v8a/libuniffi_yttrium_wcpay.so": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+ }
+ SOURCE_FILES = tuple(ROOT / relative for relative in BUILD_INPUT_SHA256) + (
+     ROOT / "tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json",

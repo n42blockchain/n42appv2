@@ -1,0 +1,23 @@
+{
+  "selected": [
+    {
+      "scope": "app-release-runtime",
+      "coordinate": "com.github.reown-com.yttrium:yttrium-wcpay:0.10.60",
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/reown_wcpay/maven/com/github/reown-com/yttrium/yttrium-wcpay/0.10.60/yttrium-wcpay-0.10.60.aar",
+      "sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303"
+    },
+    {
+      "scope": "plugin-releaseCompileClasspath",
+      "coordinate": "com.github.reown-com.yttrium:yttrium-wcpay:0.10.60",
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/reown_wcpay/maven/com/github/reown-com/yttrium/yttrium-wcpay/0.10.60/yttrium-wcpay-0.10.60.aar",
+      "sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303"
+    },
+    {
+      "scope": "plugin-releaseRuntimeClasspath",
+      "coordinate": "com.github.reown-com.yttrium:yttrium-wcpay:0.10.60",
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/reown_wcpay/maven/com/github/reown-com/yttrium/yttrium-wcpay/0.10.60/yttrium-wcpay-0.10.60.aar",
+      "sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303"
+    }
+  ],
+  "jna": "net.java.dev.jna:jna:5.17.0"
+}

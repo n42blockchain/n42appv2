@@ -1,0 +1,393 @@
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 97562144c..c3d834065 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -2,7 +2,7 @@ name: n42_wallet
+ description: "N42 Wallet - Enterprise cryptocurrency wallet application"
+ publish_to: 'none'
+ 
+-version: 2.4.8+2026072934
++version: 2.4.8+2026072935
+ 
+ environment:
+   sdk: ">=3.13.4 <4.0.0"
+diff --git a/test/scripts/test_reown_wcpay_fixture.py b/test/scripts/test_reown_wcpay_fixture.py
+index 08b72c45f..ba9cd30fe 100644
+--- a/test/scripts/test_reown_wcpay_fixture.py
++++ b/test/scripts/test_reown_wcpay_fixture.py
+@@ -1,6 +1,7 @@
+ """Focused controls for the synthetic Reown fixture inputs."""
+ 
+ import hashlib
++import shutil
+ import tempfile
+ import unittest
+ from pathlib import Path
+@@ -8,8 +9,10 @@ from zipfile import ZipFile, ZIP_STORED
+ 
+ from scripts.prepare_reown_wcpay_fixture import prepare_mismatch
+ from tools.android_native_smoke.verify_reown_wcpay_fixture import (
+-    member_and_executable_offsets,
++    BUILD_INPUT_SHA256, APK_SHA256, member_and_executable_offsets,
++    require_apks, require_build_epoch, require_jna_member, require_maps,
+     require_strict,
++    verify_git_epoch,
+     verify_result,
+ )
+ 
+@@ -100,6 +103,46 @@ class ReownFixtureVerifierTest(unittest.TestCase):
+         with self.assertRaisesRegex(ValueError, "mismatchError"):
+             verify_result("mismatch", result)
+ 
++    def test_substituted_apk_is_rejected_before_device(self):
++        built = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build"
++        with tempfile.TemporaryDirectory() as folder:
++            candidate = Path(folder) / "candidate.apk"
++            candidate.write_bytes((built / "candidate.apk").read_bytes() + b"substituted")
++            apks = {phase: built / f"{phase}.apk" for phase in APK_SHA256}
++            apks["candidate"] = candidate
++            with self.assertRaisesRegex(ValueError, "candidate: pinned APK SHA256 mismatch"):
++                require_apks(apks)
++
++    def test_changed_compiled_source_is_rejected(self):
++        mismatch = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/mismatch-input"
++        jna = next(Path("/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0").rglob("*.aar"))
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder)
++            for relative in (*BUILD_INPUT_SHA256,
++                             "tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json"):
++                target = root / relative
++                target.parent.mkdir(parents=True, exist_ok=True)
++                shutil.copyfile(ROOT / relative, target)
++            changed = root / "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt"
++            changed.write_bytes(changed.read_bytes() + b"\n// changed after build\n")
++            with self.assertRaisesRegex(ValueError, "compiled fixture source SHA256 mismatch"):
++                require_build_epoch(root, mismatch, jna)
++
++    def test_same_wrong_jna_in_all_phases_is_rejected(self):
++        for phase in APK_SHA256:
++            with self.subTest(phase=phase):
++                with self.assertRaisesRegex(ValueError, "packaged JNA member SHA256 mismatch"):
++                    require_jna_member(b"same wrong JNI bytes")
++
++    def test_all_missing_maps_are_rejected(self):
++        with self.assertRaisesRegex(ValueError, "missing executable APK maps"):
++            require_maps({"executableApkMaps": []}, "/data/app/x/base.apk",
++                         [(16384, 16384)], "candidate", "lib/arm64-v8a/libjnidispatch.so")
++
++    def test_unreviewed_git_head_is_rejected(self):
++        with self.assertRaisesRegex(ValueError, "git_head"):
++            verify_git_epoch("0" * 40, {})
++
+ 
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json b/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json
+new file mode 100644
+index 000000000..edfef8392
+--- /dev/null
++++ b/tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json
+@@ -0,0 +1,36 @@
++{
++  "purpose": "Pin the three compiled synthetic APKs before later runner and verifier edits",
++  "build_git_head": "bde30ab48be123b7d6ab86201f76c43fa8f6c894",
++  "build_git_head_note": "Fixture sources were uncommitted during compilation; the exact source hashes below were subsequently committed in d9c6ee20f.",
++  "fixture_source_commit": "d9c6ee20fffc744cb4dc9257a2dde79c1504bb9d",
++  "compile_logs": {
++    "baseline": "task-16f-reown-stage3-baseline-compile.log",
++    "candidate": "task-16f-reown-stage3-candidate-compile7.log",
++    "mismatch": "task-16f-reown-stage3-mismatch-compile.log"
++  },
++  "apk_sha256": {
++    "baseline": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
++    "candidate": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
++    "mismatch": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7"
++  },
++  "compiled_fixture_source_sha256": {
++    "tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
++    "tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts": "64dc0b52c1b38387c0d82b59d5bc03d2ee1b6db49c372ed88a5d6dc8e8fe618a",
++    "tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
++    "tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
++    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
++    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "4acb7bb91c2fe51774b4924d4239ffb32047036dc7e4c6eb636b1185395c726b",
++    "scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802"
++  },
++  "prepared_mismatch_input_sha256": {
++    "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
++    "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
++    "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8"
++  },
++  "jna": {
++    "aar_sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38",
++    "aar_arm64_member_sha256": "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06",
++    "apk_arm64_member_sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
++    "transform": "AGP mergeReleaseNativeLibs retained the AAR member; stripReleaseDebugSymbols produced the APK member. These are distinct bytes."
++  }
++}
+diff --git a/tools/android_native_smoke/run_reown_wcpay_fixture.py b/tools/android_native_smoke/run_reown_wcpay_fixture.py
+index 370def766..293896212 100644
+--- a/tools/android_native_smoke/run_reown_wcpay_fixture.py
++++ b/tools/android_native_smoke/run_reown_wcpay_fixture.py
+@@ -12,8 +12,9 @@ import sys
+ import time
+ 
+ from verify_reown_wcpay_fixture import (
+-    DEVICE, JNA_AAR_SHA256, PACKAGES, WCPAY, WCPAY_SHA256,
+-    digest, member_and_executable_offsets, require, require_strict, verify,
++    DEVICE, PACKAGES, SOURCE_FILES, WCPAY, WCPAY_SHA256,
++    digest, member_and_executable_offsets, require, require_apks,
++    require_build_epoch, require_strict, verify, verify_git_epoch,
+ )
+ 
+ 
+@@ -21,20 +22,6 @@ ROOT = Path(__file__).resolve().parents[2]
+ ADB = Path("/opt/homebrew/share/android-commandlinetools/platform-tools/adb")
+ AAPT = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt")
+ ZIPALIGN = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign")
+-FIXTURE = ROOT / "tools/android_native_smoke/reown_wcpay_fixture"
+-SOURCE_FILES = (
+-    FIXTURE / "settings.gradle.kts",
+-    FIXTURE / "build.gradle.kts",
+-    FIXTURE / "gradle.properties",
+-    FIXTURE / "app/build.gradle.kts",
+-    FIXTURE / "app/src/main/AndroidManifest.xml",
+-    FIXTURE / "app/src/main/java/ai/n42/fixture/reown/MainActivity.kt",
+-    ROOT / "scripts/prepare_reown_wcpay_fixture.py",
+-    ROOT / "tools/android_native_smoke/run_reown_wcpay_fixture.py",
+-    ROOT / "tools/android_native_smoke/verify_reown_wcpay_fixture.py",
+-)
+-
+-
+ def call(argv):
+     result = subprocess.run([str(value) for value in argv], cwd=ROOT,
+                             capture_output=True, text=True, check=False)
+@@ -108,13 +95,17 @@ def run_phase(phase, apk, record):
+     require(record["force_stop"]["exit"] == 0, f"{phase}: force-stop failed")
+ 
+ 
+-def run(apks, jna_aar, out_dir):
++def run(apks, jna_aar, mismatch_dir, out_dir):
+     for tool in (ADB, AAPT, ZIPALIGN):
+         require(tool.is_file(), f"missing tool: {tool}")
+     for phase, apk in apks.items():
+         require(apk.is_file(), f"missing {phase} APK: {apk}")
+-    require(jna_aar.is_file() and digest(jna_aar) == JNA_AAR_SHA256,
+-            "JNA 5.17.0 input identity mismatch")
++    require(jna_aar.is_file(), f"missing JNA AAR: {jna_aar}")
++    require_apks(apks)
++    build_epoch = require_build_epoch(ROOT, mismatch_dir, jna_aar)
++    git_head = call(["git", "rev-parse", "HEAD"])["stdout"]
++    source_sha256 = {str(path): digest(path) for path in SOURCE_FILES}
++    verify_git_epoch(git_head, source_sha256)
+     require(not out_dir.exists(), f"output already exists: {out_dir}")
+     out_dir.mkdir(parents=True)
+     receipt_file = out_dir / "reown-runtime-receipt.json"
+@@ -122,8 +113,9 @@ def run(apks, jna_aar, out_dir):
+     receipt = {
+         "schema_version": 1, "device": DEVICE,
+         "started_utc": datetime.now(timezone.utc).isoformat(),
+-        "git_head": call(["git", "rev-parse", "HEAD"])["stdout"],
+-        "source_sha256": {str(path): digest(path) for path in SOURCE_FILES},
++        "git_head": git_head,
++        "source_sha256": source_sha256,
++        "build_epoch": build_epoch,
+         "tool_sha256": {str(path): digest(path) for path in (ADB, AAPT, ZIPALIGN)},
+         "jna_aar_sha256": digest(jna_aar),
+         "device_state": adb("get-state"),
+@@ -149,7 +141,7 @@ def run(apks, jna_aar, out_dir):
+         receipt_file.write_text(json.dumps(receipt, indent=2) + "\n")
+     require(all(item["exit"] == 0 for item in receipt["strict_restore"]),
+             "strict/offline restoration failed")
+-    result = verify(receipt, apks, SOURCE_FILES, jna_aar)
++    result = verify(receipt, apks, jna_aar, mismatch_dir)
+     verification_file.write_text(json.dumps(result, indent=2) + "\n")
+     return receipt_file, verification_file
+ 
+@@ -159,11 +151,13 @@ def main():
+     for phase in PACKAGES:
+         parser.add_argument(f"--{phase}-apk", type=Path, required=True)
+     parser.add_argument("--jna-aar", type=Path, required=True)
++    parser.add_argument("--mismatch-dir", type=Path, required=True)
+     parser.add_argument("--out-dir", type=Path, required=True)
+     args = parser.parse_args()
+     apks = {phase: getattr(args, phase + "_apk").resolve() for phase in PACKAGES}
+     try:
+-        receipt, verification = run(apks, args.jna_aar.resolve(), args.out_dir.resolve())
++        receipt, verification = run(apks, args.jna_aar.resolve(),
++                                    args.mismatch_dir.resolve(), args.out_dir.resolve())
+     except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
+         print(f"Reown fixture rejected: {error}", file=sys.stderr)
+         return 1
+diff --git a/tools/android_native_smoke/verify_reown_wcpay_fixture.py b/tools/android_native_smoke/verify_reown_wcpay_fixture.py
+index c28b0bb57..4e2db3699 100644
+--- a/tools/android_native_smoke/verify_reown_wcpay_fixture.py
++++ b/tools/android_native_smoke/verify_reown_wcpay_fixture.py
+@@ -7,15 +7,43 @@ import json
+ from pathlib import Path
+ import re
+ import struct
++import subprocess
+ import sys
+ from zipfile import ZipFile, ZIP_STORED
+ 
+ 
+ PAGE = 16384
+ DEVICE = "emulator-5560"
++ROOT = Path(__file__).resolve().parents[2]
+ WCPAY = "lib/arm64-v8a/libuniffi_yttrium_wcpay.so"
+ JNA = "lib/arm64-v8a/libjnidispatch.so"
+ JNA_AAR_SHA256 = "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38"
++JNA_AAR_MEMBER_SHA256 = "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06"
++JNA_APK_MEMBER_SHA256 = "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c"
++APK_SHA256 = {
++    "baseline": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
++    "candidate": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
++    "mismatch": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7",
++}
++BUILD_INPUT_SHA256 = {
++    "tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
++    "tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts": "64dc0b52c1b38387c0d82b59d5bc03d2ee1b6db49c372ed88a5d6dc8e8fe618a",
++    "tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
++    "tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
++    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
++    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "4acb7bb91c2fe51774b4924d4239ffb32047036dc7e4c6eb636b1185395c726b",
++    "scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802",
++}
++MISMATCH_INPUT_SHA256 = {
++    "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
++    "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
++    "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8",
++}
++SOURCE_FILES = tuple(ROOT / relative for relative in BUILD_INPUT_SHA256) + (
++    ROOT / "tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json",
++    ROOT / "tools/android_native_smoke/run_reown_wcpay_fixture.py",
++    ROOT / "tools/android_native_smoke/verify_reown_wcpay_fixture.py",
++)
+ PACKAGES = {phase: f"ai.n42.fixture.reown.{phase}" for phase in
+             ("baseline", "candidate", "mismatch")}
+ WCPAY_SHA256 = {
+@@ -35,6 +63,72 @@ def digest(path):
+     return sha256(Path(path).read_bytes()).hexdigest()
+ 
+ 
++def require_jna_member(data):
++    require(sha256(data).hexdigest() == JNA_APK_MEMBER_SHA256,
++            "packaged JNA member SHA256 mismatch")
++
++
++def require_build_epoch(root, mismatch_dir, jna_aar):
++    manifest = json.loads((Path(root) / "tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json").read_text())
++    require(manifest.get("apk_sha256") == APK_SHA256 and
++            manifest.get("compiled_fixture_source_sha256") == BUILD_INPUT_SHA256 and
++            manifest.get("prepared_mismatch_input_sha256") == MISMATCH_INPUT_SHA256 and
++            manifest.get("build_git_head") == "bde30ab48be123b7d6ab86201f76c43fa8f6c894" and
++            manifest.get("fixture_source_commit") == "d9c6ee20fffc744cb4dc9257a2dde79c1504bb9d",
++            "fixture build epoch manifest mismatch")
++    jna_manifest = manifest.get("jna", {})
++    require(jna_manifest.get("aar_sha256") == JNA_AAR_SHA256 and
++            jna_manifest.get("aar_arm64_member_sha256") == JNA_AAR_MEMBER_SHA256 and
++            jna_manifest.get("apk_arm64_member_sha256") == JNA_APK_MEMBER_SHA256,
++            "JNA build epoch manifest mismatch")
++    for relative, expected in BUILD_INPUT_SHA256.items():
++        require(digest(Path(root) / relative) == expected,
++                f"compiled fixture source SHA256 mismatch: {relative}")
++    for relative, expected in MISMATCH_INPUT_SHA256.items():
++        require(digest(Path(mismatch_dir) / relative) == expected,
++                f"prepared mismatch input SHA256 mismatch: {relative}")
++    require(digest(jna_aar) == JNA_AAR_SHA256, "JNA 5.17.0 AAR identity mismatch")
++    with ZipFile(jna_aar) as archive:
++        source_member = archive.read("jni/arm64-v8a/libjnidispatch.so")
++    require(sha256(source_member).hexdigest() == JNA_AAR_MEMBER_SHA256,
++            "source JNA ARM64 member SHA256 mismatch")
++    return {"compiled_inputs": BUILD_INPUT_SHA256,
++            "prepared_mismatch_inputs": MISMATCH_INPUT_SHA256,
++            "jna_aar_sha256": JNA_AAR_SHA256,
++            "jna_aar_arm64_sha256": JNA_AAR_MEMBER_SHA256}
++
++
++def require_apks(apks):
++    require(set(apks) == set(APK_SHA256), "missing or extra fixture APK")
++    for phase, expected in APK_SHA256.items():
++        require(digest(apks[phase]) == expected, f"{phase}: pinned APK SHA256 mismatch")
++        native, _, _ = member_and_executable_offsets(apks[phase], WCPAY)
++        require(sha256(native).hexdigest() == WCPAY_SHA256[phase],
++                f"{phase}: pinned WCPay member SHA256 mismatch")
++        jna, _, _ = member_and_executable_offsets(apks[phase], JNA)
++        require_jna_member(jna)
++
++
++def verify_git_epoch(head, observed_sources):
++    require(isinstance(head, str) and re.fullmatch(r"[0-9a-f]{40}", head),
++            "git_head is not a full commit ID")
++    present = subprocess.run(["git", "cat-file", "-e", f"{head}^{{commit}}"], cwd=ROOT,
++                             capture_output=True, check=False)
++    require(present.returncode == 0, "git_head is not an available commit")
++    expected = {str(path): digest(path) for path in SOURCE_FILES}
++    require(observed_sources == expected, "source input identity mismatch")
++    for path in SOURCE_FILES:
++        relative = str(path.relative_to(ROOT))
++        result = subprocess.run(["git", "show", f"{head}:{relative}"], cwd=ROOT,
++                                capture_output=True, check=False)
++        require(result.returncode == 0, f"git_head lacks reviewed source: {relative}")
++        require(sha256(result.stdout).hexdigest() == expected[str(path)],
++                f"git_head source SHA256 mismatch: {relative}")
++    for relative, pinned in BUILD_INPUT_SHA256.items():
++        require(expected[str(ROOT / relative)] == pinned,
++                f"git_head compiled source differs: {relative}")
++
++
+ def require_strict(snapshot, phase):
+     expected = {
+         "page_size": "16384", "linker_mode": "fatal",
+@@ -121,6 +215,7 @@ def require_maps(result, apk_path, loads, phase, member):
+ 
+ def verify_phase(phase, item, apk):
+     require(item.get("package") == PACKAGES[phase], f"{phase}: package mismatch")
++    require(digest(apk) == APK_SHA256[phase], f"{phase}: pinned APK SHA256 mismatch")
+     require(item.get("apk_sha256") == digest(apk), f"{phase}: local APK SHA mismatch")
+     require_strict(item.get("pre", {}), f"{phase} pre")
+     require_strict(item.get("post", {}), f"{phase} post")
+@@ -147,6 +242,8 @@ def verify_phase(phase, item, apk):
+     members = {}
+     for member in (WCPAY, JNA):
+         data, offset, loads = member_and_executable_offsets(apk, member)
++        if member == JNA:
++            require_jna_member(data)
+         members[member] = {"sha256": sha256(data).hexdigest(), "data_offset": offset,
+                            "executable_loads": loads}
+         if phase != "baseline" or result["status"] == "PASS":
+@@ -158,14 +255,16 @@ def verify_phase(phase, item, apk):
+             "status": result["status"], "members": members}
+ 
+ 
+-def verify(receipt, apks, source_files, jna_aar):
++def verify(receipt, apks, jna_aar, mismatch_dir):
+     require(receipt.get("schema_version") == 1 and receipt.get("device") == DEVICE,
+             "receipt schema/device mismatch")
++    require_apks(apks)
++    build_epoch = require_build_epoch(ROOT, mismatch_dir, jna_aar)
++    require(receipt.get("build_epoch") == build_epoch, "build epoch identity mismatch")
++    verify_git_epoch(receipt.get("git_head"), receipt.get("source_sha256"))
+     require_strict(receipt.get("final", {}), "final")
+     require(receipt.get("jna_aar_sha256") == JNA_AAR_SHA256 == digest(jna_aar),
+             "JNA 5.17.0 AAR identity mismatch")
+-    expected_sources = {str(path): digest(path) for path in source_files}
+-    require(receipt.get("source_sha256") == expected_sources, "source input identity mismatch")
+     phases = receipt.get("phases", {})
+     require(set(phases) == set(PACKAGES), "missing or extra runtime phase")
+     results = {phase: verify_phase(phase, phases[phase], apks[phase]) for phase in PACKAGES}
+@@ -190,11 +289,12 @@ def main():
+     parser.add_argument("--candidate-apk", type=Path, required=True)
+     parser.add_argument("--mismatch-apk", type=Path, required=True)
+     parser.add_argument("--jna-aar", type=Path, required=True)
+-    parser.add_argument("--source", type=Path, action="append", required=True)
++    parser.add_argument("--mismatch-dir", type=Path, required=True)
+     args = parser.parse_args()
+     apks = {name: getattr(args, name + "_apk") for name in PACKAGES}
+     try:
+-        result = verify(json.loads(args.receipt.read_text()), apks, args.source, args.jna_aar)
++        result = verify(json.loads(args.receipt.read_text()), apks, args.jna_aar,
++                        args.mismatch_dir)
+     except (OSError, ValueError, KeyError, struct.error) as error:
+         print(f"Reown fixture verification rejected: {error}", file=sys.stderr)
+         return 1

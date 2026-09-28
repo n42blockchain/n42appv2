@@ -1,0 +1,53 @@
+{
+  "baseline": {
+    "bytes": 3699052,
+    "sha256": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899",
+    "lib/arm64-v8a/libuniffi_yttrium_wcpay.so": {
+      "bytes": 2272176,
+      "sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+      "compression": 0
+    },
+    "lib/arm64-v8a/libjnidispatch.so": {
+      "bytes": 165992,
+      "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+      "compression": 0
+    },
+    "zipalign": "pass",
+    "signature": "pass",
+    "no_internet_permission": true
+  },
+  "candidate": {
+    "bytes": 3722284,
+    "sha256": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1",
+    "lib/arm64-v8a/libuniffi_yttrium_wcpay.so": {
+      "bytes": 2295408,
+      "sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+      "compression": 0
+    },
+    "lib/arm64-v8a/libjnidispatch.so": {
+      "bytes": 165992,
+      "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+      "compression": 0
+    },
+    "zipalign": "pass",
+    "signature": "pass",
+    "no_internet_permission": true
+  },
+  "mismatch": {
+    "bytes": 3722284,
+    "sha256": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c",
+    "lib/arm64-v8a/libuniffi_yttrium_wcpay.so": {
+      "bytes": 2295408,
+      "sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+      "compression": 0
+    },
+    "lib/arm64-v8a/libjnidispatch.so": {
+      "bytes": 165992,
+      "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+      "compression": 0
+    },
+    "zipalign": "pass",
+    "signature": "pass",
+    "no_internet_permission": true
+  }
+}

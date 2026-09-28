@@ -1,0 +1,74 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/Users/jieliu/.gradle/wrapper/dists/gradle-9.8.0-all/619e6l8zt76uzaekhqdol0b60/gradle-9.8.0/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts:29:43: 'fun srcDir(srcDir: Any): Any' is deprecated. Use `directories` mutable set instead.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts:30:46: 'fun srcDir(srcDir: Any): Any' is deprecated. Use `directories` mutable set instead.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:generateReleaseResources
+> Task :app:mergeReleaseNativeLibs
+> Task :app:packageReleaseResources
+> Task :app:processReleaseNavigationResources
+
+> Task :app:stripReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libjnidispatch.so. Run with --info option to learn more.
+
+> Task :app:javaPreCompileRelease
+> Task :app:checkReleaseAarMetadata
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:parseReleaseLocalResources
+> Task :app:compileReleaseNavigationResources
+> Task :app:extractReleaseNativeSymbolTables
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease
+> Task :app:mergeReleaseNativeDebugMetadata
+> Task :app:generateReleaseRFile
+> Task :app:mergeReleaseResources
+
+> Task :app:processReleaseMainManifest
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml:2:64-97 Warning:
+	android:extractNativeLibs should not be specified in this source AndroidManifest.xml file. See https://d.android.com/guide/topics/manifest/application-element#extractNativeLibs for more information.
+The AGP Upgrade Assistant can remove the attribute from the AndroidManifest.xml file and update the build file accordingly. See https://d.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :app:compileReleaseKotlin FAILED
+
+[Incubating] Problems report is available at: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/reown_wcpay_fixture/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileReleaseKotlin' (registered by plugin 'com.android.internal.application').
+> Could not isolate parameters org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@2032da9c of artifact transform BuildToolsApiClasspathEntrySnapshotTransform
+   > Could not isolate value org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@2032da9c of type BuildToolsApiClasspathEntrySnapshotTransform.Parameters
+      > Could not resolve all files for configuration ':app:kotlinBuildToolsApiClasspath'.
+         > Could not resolve org.jetbrains.kotlin:kotlin-build-tools-impl:2.2.10.
+           Required by:
+               project ':app'
+            > No cached version of org.jetbrains.kotlin:kotlin-build-tools-impl:2.2.10 available for offline mode.
+            > No cached version of org.jetbrains.kotlin:kotlin-build-tools-impl:2.2.10 available for offline mode.
+
+* Try:
+> Run the 'artifactTransforms' report task to view details about registered transforms.
+> Review the documentation on Artifact Transforms at https://docs.gradle.org/9.8.0/userguide/artifact_transforms.html.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 11s
+20 actionable tasks: 19 executed, 1 up-to-date

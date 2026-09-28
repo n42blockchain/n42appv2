@@ -1,0 +1,42 @@
+{
+  "yttrium-LICENSE": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/source/LICENSE",
+    "sha256": "cae4d0efa77b9342647e2773f440d5a6a5c1fd61da7a097a30c3c8ca88955800",
+    "bytes": 11340
+  },
+  "ring-0.16.20-LICENSE": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ring-0.16.20/LICENSE",
+    "sha256": "76b39f9b371688eac9d8323f96ee80b3aef5ecbc2217f25377bd4e4a615296a9",
+    "bytes": 10125
+  },
+  "ring-0.16.20-fiat-LICENSE": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/ring-0.16.20/third_party/fiat/LICENSE",
+    "sha256": "0c125a4dab5ab869473e6491db22f6c0a7f8a4de58588d03bb2b16c0c8ebd7de",
+    "bytes": 1161
+  },
+  "openssl-src-300.5.5-LICENSE-MIT": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-src-300.5.5+3.5.5/LICENSE-MIT",
+    "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
+    "bytes": 1057
+  },
+  "openssl-src-300.5.5-LICENSE-APACHE": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-src-300.5.5+3.5.5/LICENSE-APACHE",
+    "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "bytes": 10847
+  },
+  "openssl-3.5.5-LICENSE.txt": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/openssl-src-300.5.5+3.5.5/openssl/LICENSE.txt",
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+    "bytes": 10175
+  },
+  "curve25519-dalek-derive-0.1.1-LICENSE-MIT": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-derive-0.1.1/LICENSE-MIT",
+    "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "bytes": 1023
+  },
+  "curve25519-dalek-derive-0.1.1-LICENSE-APACHE": {
+    "source": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-derive-0.1.1/LICENSE-APACHE",
+    "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "bytes": 10847
+  }
+}

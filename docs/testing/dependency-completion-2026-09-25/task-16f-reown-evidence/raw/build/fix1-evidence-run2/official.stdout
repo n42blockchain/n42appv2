@@ -1,0 +1,49 @@
+{
+  "source_commit": "fc2dc73ae1e1af2b29363c6d239c0e3a19ec8f7c",
+  "source_sha256": {
+    "Cargo.lock": "ac084735f19fd9796dcce2cf672f6e616f43798601bfd0f22e1e7e8a85e45f2b",
+    "Cargo.toml": "368a68dc35c50fdd8ec176b29a23c49c2197e908b76e8cf876f6d15cfc62ddbf",
+    ".github/workflows/release-kotlin-all.yml": "fd73b9c6d9e8e6d21c8d5579fbf1b336325cd54cb3cc468a0af7a1bad48ffdda",
+    "crates/kotlin-ffi/Cargo.toml": "02dab0198ee34438d46367650265646acf02009db11d612552b341b1b219998b",
+    "crates/kotlin-ffi/uniffi.toml": "1bb8245bb686f26011e1b3d8f7c11dbfe7236905543acc5ce7dc068451caf83e",
+    "LICENSE": "cae4d0efa77b9342647e2773f440d5a6a5c1fd61da7a097a30c3c8ca88955800"
+  },
+  "baseline_binding_sha256": {
+    "yttrium.kt": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad",
+    "uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84"
+  },
+  "tool_sha256": {
+    "rustc": "210df6794001b73ec3d453878707fa1e0bdcb63c427024a6e6574bbe5615a4da",
+    "cargo": "7672ead309d505577c018fff2cafb3433601f073e38cbe87359ac1f7b944bbf5",
+    "cargo-ndk": "bc7db831467cb741b38755ef2f5180f41c7379f43532b3e3336a77edbf04d30b",
+    "source.properties": "c00aa236fdb205e9be9edd9e2169763e48aca52735efff4e16f34205d49783b5",
+    "clang-19": "df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718",
+    "lld": "295bc36e1b10be0137f09904b7cc928a11ab3d44a8ec8250e4087ebd71f091c2",
+    "llvm-strip": "438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f",
+    "llvm-readelf": "37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995",
+    "llvm-ar": "3705c4237aab47a369b999f5b0af572a6ea56488df7174aaab29e5fc4b082ea3",
+    "perl": "53bce3db7e095b596fa42626b55edc63e3388d7afecf45a0b1ecc5211721c812"
+  },
+  "rust_std_sha256": {
+    "aarch64-linux-android": {
+      "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/aarch64-linux-android/lib/libstd-50ea83e28e8091b9.rlib",
+      "sha256": "6144f5b618aff7f5853a26a567a75a0d20e9b1caed331fe017a055709be806d0"
+    },
+    "armv7-linux-androideabi": {
+      "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/armv7-linux-androideabi/lib/libstd-d275750c5e73b45c.rlib",
+      "sha256": "9f977d37a9c1d5c6a5f44daac6652b3280b1b077c6f3c6b375106059de31f73e"
+    },
+    "i686-linux-android": {
+      "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/i686-linux-android/lib/libstd-ff9895e419c17cde.rlib",
+      "sha256": "21d08f0e66746e2c23e425399ed0a9293c97d912b35b5b71a4d3cd00e6fe959c"
+    },
+    "x86_64-linux-android": {
+      "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/x86_64-linux-android/lib/libstd-c937df34a3a40e50.rlib",
+      "sha256": "844f963c1ac6bc123ce60a08cfa950b25c9997f8a97208e4b8fee96dcd47fc74"
+    }
+  },
+  "android_api": 21,
+  "profile": "uniffi-release-kotlin-wcpay",
+  "features": "android,pay,uniffi/cli",
+  "rustflags": "-C link-arg=-Wl,--gc-sections -C link-arg=-Wl,-z,max-page-size=16384 -C link-arg=-Wl,-z,common-page-size=16384"
+}

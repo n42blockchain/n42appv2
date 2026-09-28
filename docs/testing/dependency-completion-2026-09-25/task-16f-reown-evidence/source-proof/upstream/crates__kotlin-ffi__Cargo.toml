@@ -1,0 +1,62 @@
+[package]
+name = "kotlin-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "uniffi_yttrium"
+crate-type = ["staticlib", "cdylib"]
+
+[features]
+default = []
+account_client = ["yttrium/account_client"]
+chain_abstraction_client = ["yttrium/chain_abstraction_client"]
+erc6492_client = ["yttrium/erc6492_client"]
+sign_client = ["yttrium/sign_client"]
+solana = ["yttrium/solana"]
+sui = ["yttrium/sui"]
+stacks = ["yttrium/stacks"]
+ton = ["yttrium/ton"]
+tron = ["yttrium/tron"]
+eip155 = ["yttrium/eip155"]
+pay = ["yttrium/pay", "dep:pay-api", "pay-api/uniffi"]
+
+android = ["yttrium/android"]
+ios = ["yttrium/ios"]
+
+[build-dependencies]
+uniffi_build.workspace = true
+
+[dependencies]
+yttrium = { path = "../yttrium", default-features = false, features = ["uniffi"] }
+uniffi = { workspace = true, features = ["tokio", "cli"] }
+pay-api = { path = "../pay-api", optional = true }
+openssl = { version = "0.10", features = ["vendored"] }
+openssl-sys = { version = "0.9.103", features = ["vendored"] }
+relay_rpc.workspace = true
+alloy.workspace = true
+
+# Errors
+eyre.workspace = true
+
+# Async
+tokio.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+
+# Networking
+reqwest.workspace = true
+
+# Logging
+log.workspace = true
+thiserror.workspace = true
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "uniffi-bindgen.rs"
+
+[package.metadata.cargo-udeps.ignore]
+# These crates are needed for Linux builds, but will give unused deps error when built on macOS
+normal = ["openssl", "openssl-sys"]

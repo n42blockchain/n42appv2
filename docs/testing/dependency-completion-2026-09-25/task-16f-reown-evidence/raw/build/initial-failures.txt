@@ -1,0 +1,20 @@
+Task 16F WCPay source stage: observed terminal failures, transcribed from tool output.
+
+1. First recipe preflight (before candidate1 existed), exit 1:
+WCPay build failed: UniFFI checksums disabled
+Cause: preflight matched a commented `# omit_checksums = true` line. Fixed to reject only active settings.
+
+2. Second recipe preflight (before candidate1 existed), exit 1:
+This binary may only be called via `cargo ndk`.
+WCPay build failed: Command '['/Users/jieliu/.cargo/bin/cargo-ndk', '--version']' returned non-zero exit status 1.
+Cause: cargo-ndk subcommand binary was invoked directly. Fixed to invoke pinned Cargo `cargo ndk`.
+
+3. candidate1 wrapper after four native build and strip logs exited 0, wrapper exit 1:
+WCPay build failed: generated binding bytes differ from release; inspect full diff
+Cause: bindgen input copy was named `libuniffi_yttrium.raw.so`, leading to one wrong loader string in each Kotlin file. Full initial diffs are candidate1/{yttrium,uniffi}-initial-binding.diff. Corrected bindgen from original `libuniffi_yttrium.so` exited 0; both corrected files match official release bytes.
+
+4. Offline metadata/notice inventory, exit 101:
+error: failed to download `Inflector v0.11.4`
+Caused by:
+  attempting to make an HTTP request, but --offline was specified
+Cause: metadata resolves unused workspace dependencies outside the compiled WCPay graph. Locked online metadata then completed into the isolated task Cargo cache.

@@ -1,0 +1,12 @@
+{
+  "yttrium.kt": {
+    "candidate_sha256": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad",
+    "release_sha256": "92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad",
+    "byte_equal": true
+  },
+  "uniffi_yttrium.kt": {
+    "candidate_sha256": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
+    "release_sha256": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
+    "byte_equal": true
+  }
+}

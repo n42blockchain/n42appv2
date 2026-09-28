@@ -1,0 +1,7 @@
+{
+  "artifact": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/native-candidate-audit.zip",
+  "libraries_checked": 2,
+  "unaligned_libraries": [],
+  "passed": true,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}

@@ -1,0 +1,38 @@
+{
+  "merged": {
+    "original_path": "tools/android_native_smoke/reown_wcpay_fixture/app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib/arm64-v8a/libjnidispatch.so",
+    "retained_path": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/jna-merged-arm64.so",
+    "bytes": 176520,
+    "sha256": "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06"
+  },
+  "stripped": {
+    "original_path": "tools/android_native_smoke/reown_wcpay_fixture/app/build/intermediates/stripped_native_libs/release/stripReleaseDebugSymbols/out/lib/arm64-v8a/libjnidispatch.so",
+    "retained_path": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/jna-stripped-arm64.so",
+    "bytes": 165992,
+    "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c"
+  },
+  "source": {
+    "aar": "/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0/4134d63c53cbf9650b11ee950df093add29f14cf/jna-5.17.0.aar",
+    "aar_sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38",
+    "bytes": 176520,
+    "sha256": "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06"
+  },
+  "baseline": {
+    "apk": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/baseline.apk",
+    "apk_sha256": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
+    "bytes": 165992,
+    "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c"
+  },
+  "candidate": {
+    "apk": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/candidate.apk",
+    "apk_sha256": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
+    "bytes": 165992,
+    "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c"
+  },
+  "mismatch": {
+    "apk": ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/mismatch.apk",
+    "apk_sha256": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7",
+    "bytes": 165992,
+    "sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c"
+  }
+}

@@ -1,0 +1,9 @@
+# Task16F Reown WCPay maintained native build
+
+Prepared, NOT dispatched. Read task-16f-reown-readiness.md and task-16f-reown-inputs.md for exact inputs/acceptance. Sole tracked writer only after root handoff. Source fc2dc73ae1e1af2b29363c6d239c0e3a19ec8f7c, lock ac084735f19fd9796dcce2cf672f6e616f43798601bfd0f22e1e7e8a85e45f2b; use exact WCPay release-kotlin-all route, not generic build-kotlin.sh. Rust1.97.1/cargo-ndk4.1.2/NDK28.2 explicit maintained toolchain. Preserve four ABI/API/features/profile, final cdylib max/common16384 plus existing GC, actual tool hashes and locked dependencies. Source/tool/env rejection guards and source/notice/patch evidence. No global cache edits, no package removal merely because app points are free.
+
+First source/recipe review, then binary/selection review, then synthetic fixture/evidence. Native-only original AAR repack permitted only with UniFFI0.31 contract30 plus all12 expected checksums and Kotlin public API unchanged. Regenerate actual candidate bindings with official rewrites and inspect full diff. Never bypass contract checks. Preserve nonnative entries and Maven metadata/JNA5.17.0; actual Gradle selected path/hash proof.
+
+Real offline JNA fixture on emulator-5560 only, baseline/candidate fresh processes with exact APK/native/map/PID identity and strict pre/post state. Malformed constructor and method JSON produce typed JsonParse; missing auth produces MissingAuth. Deliberate binding-contract mismatch rejected. No valid payment link, live endpoint/request, actual account or real credentials. Source ordering must demonstrate validation before networking; use synthetic loopback only if necessary. Results bounded to load/contract/error behavior, no successful payment claim.
+
+Keep small English commits, focused tests, no children/push. No full app build unless root batches it. Retain actual historical failures, archive exact evidence before removing scratch.

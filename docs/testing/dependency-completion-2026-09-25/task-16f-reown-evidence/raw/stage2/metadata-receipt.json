@@ -1,0 +1,153 @@
+{
+  "official": {
+    "aar": "07b139f458f9eda49445649cf2496b020b8664e0b0c9c7ca30c89a06259b75e8",
+    "pom": "1092df0f34ecb578abcfef1ab23ec6fe8dee0b99ddbcb2693fadb76c03e126fe",
+    "module": "c82d81c852af42d42cc913a1364733882dddec175fb19c8f1369a9856921cfad"
+  },
+  "maintained": {
+    "aar": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303",
+    "pom": "1092df0f34ecb578abcfef1ab23ec6fe8dee0b99ddbcb2693fadb76c03e126fe",
+    "module": "199ad7987dfbc037816d914939536955bf1b8b76a0ae19ee3f3f03b6bc83f8f9"
+  },
+  "module_component": {
+    "group": "com.github.reown-com",
+    "module": "yttrium",
+    "version": "0.10.60",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "variants": {
+    "releaseVariantReleaseApiPublication": {
+      "dependencies": [
+        {
+          "group": "net.java.dev.jna",
+          "module": "jna",
+          "version": {
+            "requires": "5.17.0"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ]
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.22"
+          }
+        }
+      ],
+      "aar_file": {
+        "name": "yttrium-wcpay-0.10.60.aar",
+        "url": "yttrium-wcpay-0.10.60.aar",
+        "size": 4994538,
+        "sha512": "c83dc01750e23f0d90597bce96e741ed81143fb3286f1adc8e0eb4db0d4ec7cf977523cb5217db14cd4f80cfb48b222b6cdbd002b725d8d95d9f501f812c339c",
+        "sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303",
+        "sha1": "0837363be7a839fb7aa5a97731b9350191b83275",
+        "md5": "c8d487d24ca15b9b37fb0a28a592e71d"
+      }
+    },
+    "releaseVariantReleaseRuntimePublication": {
+      "dependencies": [
+        {
+          "group": "androidx.core",
+          "module": "core-ktx",
+          "version": {
+            "requires": "1.10.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.7.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-android",
+          "version": {
+            "requires": "1.7.1"
+          }
+        },
+        {
+          "group": "net.java.dev.jna",
+          "module": "jna",
+          "version": {
+            "requires": "5.17.0"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ]
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.22"
+          }
+        }
+      ],
+      "aar_file": {
+        "name": "yttrium-wcpay-0.10.60.aar",
+        "url": "yttrium-wcpay-0.10.60.aar",
+        "size": 4994538,
+        "sha512": "c83dc01750e23f0d90597bce96e741ed81143fb3286f1adc8e0eb4db0d4ec7cf977523cb5217db14cd4f80cfb48b222b6cdbd002b725d8d95d9f501f812c339c",
+        "sha256": "edf6908e5ec8c3e0b0ef2d45b47347c55ea84c96907fd952fadb84b038607303",
+        "sha1": "0837363be7a839fb7aa5a97731b9350191b83275",
+        "md5": "c8d487d24ca15b9b37fb0a28a592e71d"
+      }
+    }
+  },
+  "pom_dependencies": [
+    {
+      "groupId": "net.java.dev.jna",
+      "artifactId": "jna",
+      "version": "5.17.0",
+      "type": "aar",
+      "classifier": "android",
+      "scope": "compile"
+    },
+    {
+      "groupId": "org.jetbrains.kotlin",
+      "artifactId": "kotlin-stdlib",
+      "version": "1.9.22",
+      "type": null,
+      "classifier": null,
+      "scope": "compile"
+    },
+    {
+      "groupId": "androidx.core",
+      "artifactId": "core-ktx",
+      "version": "1.10.1",
+      "type": null,
+      "classifier": null,
+      "scope": "runtime"
+    },
+    {
+      "groupId": "org.jetbrains.kotlinx",
+      "artifactId": "kotlinx-coroutines-core",
+      "version": "1.7.1",
+      "type": null,
+      "classifier": null,
+      "scope": "runtime"
+    },
+    {
+      "groupId": "org.jetbrains.kotlinx",
+      "artifactId": "kotlinx-coroutines-android",
+      "version": "1.7.1",
+      "type": null,
+      "classifier": null,
+      "scope": "runtime"
+    }
+  ],
+  "module_dependency_graph_equal": true,
+  "pom_byte_equal": true
+}

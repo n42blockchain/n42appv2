@@ -1,0 +1,9 @@
+command: /Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/bin/cargo run --locked --no-default-features --features=android,pay,uniffi/cli -p kotlin-ffi --bin uniffi-bindgen -- generate --library /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/target/aarch64-linux-android/uniffi-release-kotlin-wcpay/libuniffi_yttrium.so --language kotlin --out-dir /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/bindings-corrected
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.23s
+     Running `/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/target/debug/uniffi-bindgen generate --library /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/target/aarch64-linux-android/uniffi-release-kotlin-wcpay/libuniffi_yttrium.so --language kotlin --out-dir /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-reown-build/candidate1/bindings-corrected`
+Code generation complete, formatting with ktlint (use --no-format to disable)
+Warning: Unable to auto-format uniffi_yttrium.kt using ktlint: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+Code generation complete, formatting with ktlint (use --no-format to disable)
+Warning: Unable to auto-format yttrium.kt using ktlint: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+
+exit: 0

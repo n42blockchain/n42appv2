@@ -1,0 +1,39 @@
+Usage: cargo-ndk [OPTIONS] [CARGO_ARGS]...
+
+Arguments:
+  [CARGO_ARGS]...
+          Args to be passed to cargo
+
+Options:
+  -t, --target <TARGET>
+          Triples for the target. Can be Rust or Android target names (i.e. arm64-v8a)
+          
+          [env: CARGO_NDK_TARGET=]
+          [possible values: armeabi-v7a, arm64-v8a, x86, x86_64]
+
+  -P, --platform <PLATFORM>
+          Platform (also known as API level)
+          
+          [env: CARGO_NDK_PLATFORM=]
+          [default: 21]
+
+      --link-builtins
+          Links Clang builtins library
+          
+          [env: CARGO_NDK_LINK_BUILTINS=]
+
+      --link-libcxx-shared
+          Links libc++_shared library
+          
+          [env: CARGO_NDK_LINK_LIBCXX_SHARED=]
+
+  -o, --output-dir <DIR>
+          Output to a `jniLibs` directory in the correct sub-directories
+          
+          [env: CARGO_NDK_OUTPUT_PATH=]
+
+      --manifest-path <PATH>
+          Path to Cargo.toml
+
+  -h, --help
+          Print help

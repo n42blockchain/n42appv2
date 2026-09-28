@@ -1,0 +1,104 @@
+{
+  "entries": [
+    {
+      "entry": "R.txt",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "AndroidManifest.xml",
+      "old_sha256": "32b927e31d895d7a57ad6fcd5940cc8a6672fe4f6c6ccfc80f575aec0b3a90d8",
+      "new_sha256": "32b927e31d895d7a57ad6fcd5940cc8a6672fe4f6c6ccfc80f575aec0b3a90d8",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "classes.jar",
+      "old_sha256": "358049f36b34c4998416f5d686eb2ded2ffdedebc31a3aa242b25063d1d60cc7",
+      "new_sha256": "358049f36b34c4998416f5d686eb2ded2ffdedebc31a3aa242b25063d1d60cc7",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "META-INF/com/android/build/gradle/aar-metadata.properties",
+      "old_sha256": "9cc8517bbdf06d879f57a2cfd6f8c6914e48800d443421cd850971945f98e7b2",
+      "new_sha256": "9cc8517bbdf06d879f57a2cfd6f8c6914e48800d443421cd850971945f98e7b2",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/arm64-v8a/",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+      "old_sha256": "f16fe81bc00d94ab48548ae4d3136dceab7f3b462496f68dd278217f7c411bb8",
+      "new_sha256": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
+      "changed": true,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/armeabi-v7a/",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/armeabi-v7a/libuniffi_yttrium_wcpay.so",
+      "old_sha256": "5a54515b31b2a338e728ab9ca3b0c89fb15a54edec7635a7790df9c2dd38f596",
+      "new_sha256": "7fe6289eb4717de1896c1d3b24ed1f8c2aa97886903bcc22790db1f8fc003f2b",
+      "changed": true,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/x86/",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/x86/libuniffi_yttrium_wcpay.so",
+      "old_sha256": "9dcd85ae494dff33a284b45e40282abf159863f0a4a06273e58d03c3f6690141",
+      "new_sha256": "2357fb466421faf309042d1cbc11c3b8bef4fb92ee864f1a9272774a08a3332b",
+      "changed": true,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/x86_64/",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false,
+      "zip_info_preserved": true
+    },
+    {
+      "entry": "jni/x86_64/libuniffi_yttrium_wcpay.so",
+      "old_sha256": "86058de377fd55904caf9db06e6ef185b69121888e1a598928e3cdb09cbf3885",
+      "new_sha256": "36a95b0e288c1dd78f3db0086c51b5bee5a5fe0203fda2ce3c48c79667416bf4",
+      "changed": true,
+      "zip_info_preserved": true
+    }
+  ],
+  "changed_members": [
+    "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+    "jni/armeabi-v7a/libuniffi_yttrium_wcpay.so",
+    "jni/x86/libuniffi_yttrium_wcpay.so",
+    "jni/x86_64/libuniffi_yttrium_wcpay.so"
+  ],
+  "metadata_only_aar_digests_changed": true,
+  "pom_byte_equal": true,
+  "classes_jar_sha256": "358049f36b34c4998416f5d686eb2ded2ffdedebc31a3aa242b25063d1d60cc7"
+}

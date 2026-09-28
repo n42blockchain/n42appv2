@@ -1,0 +1,286 @@
+#!/usr/bin/env python3
+"""Relink the exact Yttrium 0.10.60 WCPay release source for Android."""
+
+import argparse
+from hashlib import sha256
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+
+
+SOURCE_REV = 'fc2dc73ae1e1af2b29363c6d239c0e3a19ec8f7c'
+SOURCE_HASHES = {
+    'Cargo.lock': 'ac084735f19fd9796dcce2cf672f6e616f43798601bfd0f22e1e7e8a85e45f2b',
+    'Cargo.toml': '368a68dc35c50fdd8ec176b29a23c49c2197e908b76e8cf876f6d15cfc62ddbf',
+    '.github/workflows/release-kotlin-all.yml': 'fd73b9c6d9e8e6d21c8d5579fbf1b336325cd54cb3cc468a0af7a1bad48ffdda',
+    'crates/kotlin-ffi/Cargo.toml': '02dab0198ee34438d46367650265646acf02009db11d612552b341b1b219998b',
+    'crates/kotlin-ffi/uniffi.toml': '1bb8245bb686f26011e1b3d8f7c11dbfe7236905543acc5ce7dc068451caf83e',
+    'LICENSE': 'cae4d0efa77b9342647e2773f440d5a6a5c1fd61da7a097a30c3c8ca88955800',
+}
+BASELINE_BINDING_HASHES = {
+    'yttrium.kt': '92458f5d5dcc13410f27b733b6c8771164a7e392118ca83313928642b64766ad',
+    'uniffi_yttrium.kt': '5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84',
+}
+TOOL_HASHES = {
+    'rustc': '210df6794001b73ec3d453878707fa1e0bdcb63c427024a6e6574bbe5615a4da',
+    'cargo': '7672ead309d505577c018fff2cafb3433601f073e38cbe87359ac1f7b944bbf5',
+    'cargo-ndk': 'bc7db831467cb741b38755ef2f5180f41c7379f43532b3e3336a77edbf04d30b',
+    'source.properties': 'c00aa236fdb205e9be9edd9e2169763e48aca52735efff4e16f34205d49783b5',
+    'clang-19': 'df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718',
+    'lld': '295bc36e1b10be0137f09904b7cc928a11ab3d44a8ec8250e4087ebd71f091c2',
+    'llvm-strip': '438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f',
+    'llvm-readelf': '37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995',
+    'llvm-ar': '3705c4237aab47a369b999f5b0af572a6ea56488df7174aaab29e5fc4b082ea3',
+    'perl': '53bce3db7e095b596fa42626b55edc63e3388d7afecf45a0b1ecc5211721c812',
+}
+TARGETS = {
+    'aarch64-linux-android': 'arm64-v8a',
+    'armv7-linux-androideabi': 'armeabi-v7a',
+    'i686-linux-android': 'x86',
+    'x86_64-linux-android': 'x86_64',
+}
+RUST_STD_HASHES = {
+    'aarch64-linux-android': '6144f5b618aff7f5853a26a567a75a0d20e9b1caed331fe017a055709be806d0',
+    'armv7-linux-androideabi': '9f977d37a9c1d5c6a5f44daac6652b3280b1b077c6f3c6b375106059de31f73e',
+    'i686-linux-android': '21d08f0e66746e2c23e425399ed0a9293c97d912b35b5b71a4d3cd00e6fe959c',
+    'x86_64-linux-android': '844f963c1ac6bc123ce60a08cfa950b25c9997f8a97208e4b8fee96dcd47fc74',
+}
+FLAGS = '-C link-arg=-Wl,--gc-sections -C link-arg=-Wl,-z,max-page-size=16384 -C link-arg=-Wl,-z,common-page-size=16384'
+PROFILE = 'uniffi-release-kotlin-wcpay'
+FEATURES = 'android,pay,uniffi/cli'
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(path):
+    return sha256(path.read_bytes()).hexdigest()
+
+
+def checked_hash(path, expected):
+    require(path.is_file() and digest(path) == expected,
+            f'byte mismatch: {path}')
+
+
+def output(command, **kwargs):
+    return subprocess.check_output(command, text=True, **kwargs).strip()
+
+
+def run_logged(command, log, *, cwd, env):
+    with log.open('w') as stream:
+        stream.write('command: ' + ' '.join(map(str, command)) + '\n')
+        stream.flush()
+        result = subprocess.run(command, cwd=cwd, env=env, stdout=stream,
+                                stderr=subprocess.STDOUT, check=False)
+        stream.write(f'\nexit: {result.returncode}\n')
+    require(result.returncode == 0, f'build failed; see {log}')
+
+
+def rewrite_binding(text):
+    substitutions = (
+        (r'(?m)^package uniffi\.yttrium$', 'package uniffi.yttrium_wcpay'),
+        (r'(?m)^import uniffi\.yttrium\.', 'import uniffi.yttrium_wcpay.'),
+        (r'(?m)^package uniffi\.uniffi_yttrium$', 'package uniffi.uniffi_yttrium_wcpay'),
+        (r'(?m)^import uniffi\.uniffi_yttrium\.', 'import uniffi.uniffi_yttrium_wcpay.'),
+        (r'\buniffi\.yttrium\.', 'uniffi.yttrium_wcpay.'),
+        (r'\buniffi\.uniffi_yttrium\.', 'uniffi.uniffi_yttrium_wcpay.'),
+        (r'return "uniffi_yttrium"', 'return "uniffi_yttrium_wcpay"'),
+    )
+    for pattern, replacement in substitutions:
+        text = re.sub(pattern, replacement, text)
+    return text
+
+
+def child_environment(inherited, out, ndk, toolchain=None, cargo_ndk=None):
+    env = inherited.copy()
+    for key in tuple(env):
+        if (key in {'RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'CARGO_HOME',
+                    'CARGO_TARGET_DIR', 'RUSTUP_TOOLCHAIN', 'ANDROID_HOME',
+                    'ANDROID_SDK_ROOT', 'ANDROID_NDK_HOME', 'ANDROID_NDK_ROOT',
+                    'CARGO_NDK_PLATFORM', 'CARGO_NDK_TARGET', 'CARGO_NDK_OUTPUT_PATH',
+                    'RUSTC_WRAPPER', 'RUSTC_WORKSPACE_WRAPPER', 'RUSTDOCFLAGS',
+                    'RUSTC', 'RUSTC_BOOTSTRAP', 'CARGO_BUILD_RUSTC',
+                    'CARGO_BUILD_TARGET', 'CC', 'CXX', 'AR', 'LD',
+                    'CFLAGS', 'CXXFLAGS', 'CPPFLAGS', 'LDFLAGS', 'PERL'} or
+                key.startswith(('CARGO_TARGET_', 'CARGO_PROFILE_',
+                                'CC_', 'CXX_', 'AR_', 'CFLAGS_', 'CXXFLAGS_',
+                                'LDFLAGS_', 'PKG_CONFIG_', 'OPENSSL_'))):
+            env.pop(key)
+    env.update({'CARGO_HOME': str(out / 'cargo-home'),
+                'CARGO_TARGET_DIR': str(out / 'target'),
+                'RUSTUP_TOOLCHAIN': '1.97.1',
+                'ANDROID_NDK_HOME': str(ndk), 'ANDROID_NDK_ROOT': str(ndk),
+                'ANDROID_HOME': str(ndk.parent.parent),
+                'ANDROID_SDK_ROOT': str(ndk.parent.parent),
+                'PERL': '/usr/bin/perl',
+                'CARGO_BUILD_JOBS': '4', 'LC_ALL': 'C', 'LANG': 'C'})
+    for target in TARGETS:
+        env['CARGO_TARGET_' + target.upper().replace('-', '_') + '_RUSTFLAGS'] = FLAGS
+    if toolchain is not None and cargo_ndk is not None:
+        env['PATH'] = os.pathsep.join((str(toolchain / 'bin'),
+                                       str(cargo_ndk.parent),
+                                       inherited.get('PATH', '')))
+    return env
+
+
+def binding_command(cargo, linked, bindings):
+    require(linked.name == 'libuniffi_yttrium.so',
+            'UniFFI library filename must match upstream generator input')
+    return [str(cargo), 'run', '--locked', '--no-default-features',
+            f'--features={FEATURES}', '-p', 'kotlin-ffi',
+            '--bin', 'uniffi-bindgen', '--', 'generate',
+            '--library', str(linked), '--language', 'kotlin',
+            '--out-dir', str(bindings)]
+
+
+def verify_baseline_bindings(baseline):
+    files = {name: baseline / ('generated-' + name)
+             for name in BASELINE_BINDING_HASHES}
+    for name, path in files.items():
+        checked_hash(path, BASELINE_BINDING_HASHES[name])
+    return files
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source', required=True, type=Path)
+    parser.add_argument('--out', required=True, type=Path)
+    parser.add_argument('--ndk', required=True, type=Path)
+    parser.add_argument('--rust-toolchain', required=True, type=Path)
+    parser.add_argument('--cargo-ndk', required=True, type=Path)
+    parser.add_argument('--baseline-bindings', required=True, type=Path)
+    parser.add_argument('--preflight-only', action='store_true')
+    args = parser.parse_args()
+    source, out, ndk = args.source.resolve(), args.out.resolve(), args.ndk.resolve()
+    require(out != source and not out.is_relative_to(source), 'output must be outside source')
+    require(not out.exists(), 'output already exists; use a fresh directory')
+    require(output(['git', '-C', str(source), 'rev-parse', 'HEAD']) == SOURCE_REV,
+            'source revision mismatch')
+    require(not output(['git', '-C', str(source), 'status', '--porcelain=v1',
+                        '--untracked-files=all', '--ignore-submodules=all']),
+            'source is dirty')
+    for name, expected in SOURCE_HASHES.items():
+        checked_hash(source / name, expected)
+    workflow = (source / '.github/workflows/release-kotlin-all.yml').read_text()
+    require('cargo ndk -t ${{ matrix.target }} build' in workflow and
+            '--profile=uniffi-release-kotlin-wcpay' in workflow and
+            '--features=android,pay,uniffi/cli' in workflow and
+            'api-level: 35' in workflow, 'upstream WCPay recipe mismatch')
+    require(not re.search(r'(?m)^\s*omit_checksums\s*=\s*true\s*$',
+                          (source / 'crates/kotlin-ffi/uniffi.toml').read_text()),
+            'UniFFI checksums disabled')
+
+    toolchain = args.rust_toolchain.resolve()
+    require(toolchain.name == '1.97.1-aarch64-apple-darwin', 'wrong Rust toolchain')
+    require(ndk.name == '28.2.13676358', 'wrong NDK')
+    bin_dir = ndk / 'toolchains/llvm/prebuilt/darwin-x86_64/bin'
+    tools = {'rustc': toolchain / 'bin/rustc', 'cargo': toolchain / 'bin/cargo',
+             'cargo-ndk': args.cargo_ndk.resolve(),
+             'source.properties': ndk / 'source.properties',
+             'clang-19': bin_dir / 'clang-19', 'lld': bin_dir / 'lld',
+             'llvm-strip': bin_dir / 'llvm-strip',
+             'llvm-readelf': bin_dir / 'llvm-readelf',
+             'llvm-ar': bin_dir / 'llvm-ar',
+             'perl': Path('/usr/bin/perl')}
+    for name, path in tools.items():
+        checked_hash(path, TOOL_HASHES[name])
+    rust_std = {}
+    for target, expected in RUST_STD_HASHES.items():
+        matches = list((toolchain / 'lib/rustlib' / target / 'lib').glob('libstd-*.rlib'))
+        require(len(matches) == 1, f'missing or ambiguous Rust std target: {target}')
+        checked_hash(matches[0], expected)
+        rust_std[target] = {'path': str(matches[0]), 'sha256': expected}
+    require(output([str(toolchain / 'bin/rustc'), '-vV']).splitlines()[0]
+            == 'rustc 1.97.1 (8bab26f4f 2026-07-14)', 'Rust compiler mismatch')
+    env = child_environment(os.environ, out, ndk, toolchain,
+                            args.cargo_ndk.resolve())
+    selected_cargo_ndk = shutil.which('cargo-ndk', path=env['PATH'])
+    require(selected_cargo_ndk is not None and
+            Path(selected_cargo_ndk).resolve() == args.cargo_ndk.resolve(),
+            'cargo-ndk PATH mismatch')
+    require(output([str(toolchain / 'bin/cargo'), 'ndk', '--version'], env=env)
+            == 'cargo-ndk 4.1.2',
+            'cargo-ndk version mismatch')
+
+    baseline = args.baseline_bindings.resolve()
+    baseline_files = verify_baseline_bindings(baseline)
+    if args.preflight_only:
+        print(json.dumps({'source_commit': SOURCE_REV,
+                          'source_sha256': SOURCE_HASHES,
+                          'baseline_binding_sha256': BASELINE_BINDING_HASHES,
+                          'tool_sha256': {name: digest(path)
+                                          for name, path in tools.items()},
+                          'rust_std_sha256': rust_std,
+                          'android_api': 21, 'profile': PROFILE,
+                          'features': FEATURES, 'rustflags': FLAGS}, indent=2))
+        return
+    out.mkdir(parents=True)
+    (out / 'logs').mkdir()
+    manifest = {'source_commit': SOURCE_REV, 'source_sha256': SOURCE_HASHES,
+                'baseline_binding_sha256': BASELINE_BINDING_HASHES,
+                'tool_sha256': {name: {'path': str(path), 'sha256': digest(path)}
+                                for name, path in tools.items()},
+                'rust_std_sha256': rust_std,
+                'rust_version': output([str(toolchain / 'bin/rustc'), '-vV']),
+                'cargo_ndk_version': '4.1.2', 'android_api': 21,
+                'android_api_basis': 'upstream invocation omits -P; cargo-ndk 4.1.2 defaults to 21; upstream Gradle and selected AAR minSdk 21',
+                'profile': PROFILE, 'features': FEATURES, 'rustflags': FLAGS,
+                'targets': {}, 'bindings': {}}
+    (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    for target, abi in TARGETS.items():
+        command = [str(toolchain / 'bin/cargo'), 'ndk', '-t', target, '-P', '21',
+                   'build', '--locked', '--verbose', f'--profile={PROFILE}',
+                   '--no-default-features', f'--features={FEATURES}', '-p', 'kotlin-ffi']
+        log = out / 'logs' / f'build-{target}.log'
+        run_logged(command, log, cwd=source, env=env)
+        lines = log.read_text(errors='replace').splitlines()
+        link_lines = [line for line in lines if 'rustc ' in line and
+                      '--crate-name uniffi_yttrium' in line and
+                      'link-arg=-Wl,-z,max-page-size=16384' in line and
+                      'link-arg=-Wl,-z,common-page-size=16384' in line and
+                      'link-arg=-Wl,--gc-sections' in line]
+        require(link_lines, f'final cdylib link flags absent: {log}')
+        linked = out / 'target' / target / PROFILE / 'libuniffi_yttrium.so'
+        require(linked.is_file(), f'missing cdylib: {linked}')
+        destination = out / 'libs' / abi
+        destination.mkdir(parents=True)
+        raw = destination / 'libuniffi_yttrium.raw.so'
+        shutil.copyfile(linked, raw)
+        if target == 'aarch64-linux-android':
+            bindings = out / 'bindings'
+            bindings.mkdir()
+            run_logged(binding_command(toolchain / 'bin/cargo', linked, bindings),
+                       out / 'logs' / 'uniffi-bindgen.log', cwd=source, env=env)
+            for name, old in baseline_files.items():
+                matches = list(bindings.rglob(name))
+                require(len(matches) == 1, f'expected one binding: {name}')
+                generated = matches[0]
+                generated.write_text(rewrite_binding(generated.read_text()))
+                manifest['bindings'][name] = {'candidate_sha256': digest(generated),
+                                              'release_sha256': digest(old),
+                                              'byte_equal': generated.read_bytes() == old.read_bytes()}
+        candidate = destination / 'libuniffi_yttrium_wcpay.so'
+        shutil.copyfile(raw, candidate)
+        run_logged([str(bin_dir / 'llvm-strip'), '--strip-all', str(candidate)],
+                   out / 'logs' / f'strip-{target}.log', cwd=source, env=env)
+        manifest['targets'][target] = {'abi': abi, 'raw_sha256': digest(raw),
+                                       'stripped_sha256': digest(candidate),
+                                       'link_line': link_lines[-1]}
+        (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    require(all(item['byte_equal'] for item in manifest['bindings'].values()),
+            'generated binding bytes differ from release; inspect full diff')
+    print(out / 'manifest.json')
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (OSError, subprocess.CalledProcessError, ValueError) as error:
+        print(f'WCPay build failed: {error}', file=sys.stderr)
+        sys.exit(1)

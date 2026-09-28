@@ -1,0 +1,9 @@
+test_exact_four_members_change_and_nonnative_bytes_survive (test_reown_wcpay_maven.ReownWcpayMavenTest) ... ok
+test_module_digest_rewrite_keeps_dependencies_and_component (test_reown_wcpay_maven.ReownWcpayMavenTest) ... ok
+test_pom_requires_jna_android_5_17_0 (test_reown_wcpay_maven.ReownWcpayMavenTest) ... ok
+test_wrong_candidate_or_extra_native_member_is_rejected (test_reown_wcpay_maven.ReownWcpayMavenTest) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.014s
+
+OK

@@ -1,0 +1,18 @@
+{
+  "aarch64-linux-android": {
+    "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/aarch64-linux-android/lib/libstd-50ea83e28e8091b9.rlib",
+    "sha256": "6144f5b618aff7f5853a26a567a75a0d20e9b1caed331fe017a055709be806d0"
+  },
+  "armv7-linux-androideabi": {
+    "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/armv7-linux-androideabi/lib/libstd-d275750c5e73b45c.rlib",
+    "sha256": "9f977d37a9c1d5c6a5f44daac6652b3280b1b077c6f3c6b375106059de31f73e"
+  },
+  "i686-linux-android": {
+    "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/i686-linux-android/lib/libstd-ff9895e419c17cde.rlib",
+    "sha256": "21d08f0e66746e2c23e425399ed0a9293c97d912b35b5b71a4d3cd00e6fe959c"
+  },
+  "x86_64-linux-android": {
+    "path": "/Users/jieliu/.rustup/toolchains/1.97.1-aarch64-apple-darwin/lib/rustlib/x86_64-linux-android/lib/libstd-c937df34a3a40e50.rlib",
+    "sha256": "844f963c1ac6bc123ce60a08cfa950b25c9997f8a97208e4b8fee96dcd47fc74"
+  }
+}
