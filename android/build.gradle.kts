@@ -26,6 +26,17 @@ allprojects {
                 includeVersion("net.zetetic", "sqlcipher-android", "4.19.0")
             }
         }
+        // Relinked WCPay 0.10.60 keeps the original Kotlin and Maven dependency API.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri(rootProject.file("native/reown_wcpay/maven"))
+                }
+            }
+            filter {
+                includeVersion("com.github.reown-com.yttrium", "yttrium-wcpay", "0.10.60")
+            }
+        }
         google()
         mavenCentral()
         // ✅ TrustWallet 私有仓库 (需要 GitHub 认证)
