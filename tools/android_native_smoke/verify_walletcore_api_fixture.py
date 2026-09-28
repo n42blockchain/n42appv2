@@ -288,6 +288,17 @@ def parse_events(log, token):
     return events
 
 
+def nonce_logcat(before, after, token):
+    require(before.get("exit") == after.get("exit") == 0,
+            "tagged main-buffer logcat read failed")
+    baseline, current = before.get("stdout", ""), after.get("stdout", "")
+    require(isinstance(baseline, str) and isinstance(current, str) and
+            isinstance(token, str) and token not in baseline,
+            "tagged logcat transport malformed")
+    return "\n".join(row for row in current.splitlines()
+                     if f"{TAG}:" in row and token in row)
+
+
 def require_maps(rows, apk_path, loads):
     require(isinstance(rows, list) and rows, "native executable mappings missing")
     observed = []
@@ -306,12 +317,11 @@ def verify_device(serial, item, apk, out):
     policy = DEVICES[serial]
     require_snapshot(item.get("pre", {}), serial, "pre")
     require_snapshot(item.get("post", {}), serial, "post")
-    for key in ("install", "clear", "pm_path", "pull", "logcat_clear", "start", "force_stop"):
+    for key in ("install", "clear", "pm_path", "pull", "start", "force_stop"):
         require(item.get(key, {}).get("exit") == 0, f"{serial}: {key} failed")
     require_adb_command(item["install"], serial, "install", "-r", apk)
     require_adb_command(item["clear"], serial, "shell", "pm", "clear", PACKAGE)
     require_adb_command(item["pm_path"], serial, "shell", "pm", "path", PACKAGE)
-    require_adb_command(item["logcat_clear"], serial, "logcat", "-c", "-b", "main")
     require_adb_command(item["force_stop"], serial, "shell", "am", "force-stop", PACKAGE)
     require(item.get("badging", {}).get("exit") == 0 and
             f"package: name='{PACKAGE}'" in item["badging"]["stdout"] and
@@ -338,10 +348,12 @@ def verify_device(serial, item, apk, out):
     require_adb_command(item["start"], serial, "shell", "am", "start", "-W", "-n",
                         f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
                         "--es", "token", item["token"])
-    require(item.get("result_logcat", {}).get("exit") == 0, f"{serial}: logcat read failed")
+    require_adb_command(item.get("logcat_baseline", {}), serial, "logcat", "-d", "-b",
+                        "main", "-v", "threadtime", "-s", f"{TAG}:I")
     require_adb_command(item["result_logcat"], serial, "logcat", "-d", "-b", "main", "-v",
                         "threadtime", "-s", f"{TAG}:I")
-    events = parse_events(item["result_logcat"]["stdout"], item["token"])
+    events = parse_events(nonce_logcat(item["logcat_baseline"],
+                                       item["result_logcat"], item["token"]), item["token"])
     require(events == item.get("events"), f"{serial}: parsed events differ from raw logcat")
     begin, loaded, positive, negative, end = events
     apk_path = begin.get("apkPath")

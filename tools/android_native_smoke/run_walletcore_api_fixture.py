@@ -14,7 +14,7 @@ import time
 
 from verify_walletcore_api_fixture import (
     APK_SHA256, DEVICES, EPOCH_SHA256, OWNERS, PACKAGE, ROOT, SOURCES, TAG, TOOLS,
-    digest, inspect_apk, parse_events, require, require_epoch, require_git_head,
+    nonce_logcat, digest, inspect_apk, parse_events, require, require_epoch, require_git_head,
     require_ownership, require_snapshot, snapshot_commands, verify,
 )
 
@@ -107,9 +107,13 @@ def run_device(serial, apk, out, item):
         item["pulled_apk_sha256"] = digest(pulled)
         require(item["pulled_apk_sha256"] == APK_SHA256,
                 f"{serial}: installed APK differs")
-        item["logcat_clear"] = adb(serial, "logcat", "-c", "-b", "main")
-        require(item["logcat_clear"]["exit"] == 0, f"{serial}: logcat clear failed")
+        item["logcat_baseline"] = adb(serial, "logcat", "-d", "-b", "main",
+                                       "-v", "threadtime", "-s", f"{TAG}:I")
+        require(item["logcat_baseline"]["exit"] == 0,
+                f"{serial}: tagged logcat baseline read failed")
         item["token"] = secrets.token_hex(16)
+        require(item["token"] not in item["logcat_baseline"]["stdout"],
+                f"{serial}: launch nonce already occurs in tagged baseline")
         item["start"] = adb(serial, "shell", "am", "start", "-W", "-n",
                             f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
                             "--es", "token", item["token"])
@@ -119,10 +123,11 @@ def run_device(serial, apk, out, item):
                           "-s", f"{TAG}:I")
             item["last_logcat"] = fetched
             require(fetched["exit"] == 0, f"{serial}: logcat failed")
-            if '"kind":"END"' in fetched["stdout"] and item["token"] in fetched["stdout"]:
+            selected = nonce_logcat(item["logcat_baseline"], fetched, item["token"])
+            if '"kind":"END"' in selected:
                 item["result_logcat"] = fetched
                 item["result_attempt"] = attempt + 1
-                item["events"] = parse_events(fetched["stdout"], item["token"])
+                item["events"] = parse_events(selected, item["token"])
                 break
             time.sleep(0.2)
     finally:
