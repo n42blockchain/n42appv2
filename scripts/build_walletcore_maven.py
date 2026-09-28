@@ -4,9 +4,9 @@
 import argparse
 import copy
 from hashlib import md5, sha1, sha256, sha512
+from io import BytesIO
 import json
 from pathlib import Path
-import shutil
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
@@ -54,9 +54,11 @@ def digest(path):
 
 
 def verified_file(path, expected):
-    require(path.is_file() and not path.is_symlink() and digest(path) == expected,
+    require(path.is_file() and not path.is_symlink(),
             f'pinned artifact changed: {path.name}')
-    return path
+    data = path.read_bytes()
+    require(sha256_bytes(data) == expected, f'pinned artifact changed: {path.name}')
+    return data
 
 
 def artifact_references(metadata, sources):
@@ -65,19 +67,18 @@ def artifact_references(metadata, sources):
         for entry in variant.get('files', []):
             name = entry['name']
             require(name == entry['url'], f'artifact URL changed: {name}')
-            path = sources[name]
-            require(path.is_file() and path.stat().st_size == entry['size'] and
-                    digest(path) == entry['sha256'],
+            data = sources[name]
+            require(len(data) == entry['size'] and sha256_bytes(data) == entry['sha256'],
                     f'published metadata artifact mismatch: {name}')
-            references[name] = path
+            references[name] = data
     return references
 
 
-def pom_dependencies(path, expected_artifact, expected_version):
-    root = ET.fromstring(path.read_bytes())
+def pom_dependencies(data, name, expected_artifact, expected_version):
+    root = ET.fromstring(data)
     namespace = {'m': 'http://maven.apache.org/POM/4.0.0'}
     deps = root.findall('m:dependencies/m:dependency', namespace)
-    require(len(deps) == 1, f'unexpected dependencies in {path.name}')
+    require(len(deps) == 1, f'unexpected dependencies in {name}')
     dependency = deps[0]
     require(dependency.findtext('m:groupId', namespaces=namespace) ==
             ('com.trustwallet' if expected_artifact == 'wallet-core-proto'
@@ -85,15 +86,14 @@ def pom_dependencies(path, expected_artifact, expected_version):
             dependency.findtext('m:artifactId', namespaces=namespace) ==
             expected_artifact and
             dependency.findtext('m:version', namespaces=namespace) ==
-            expected_version, f'POM dependency changed: {path.name}')
+            expected_version, f'POM dependency changed: {name}')
 
 
 def repackage_aar(official, replacements, destination):
-    require(official.resolve() != destination.resolve(), 'cannot overwrite official AAR')
     require(set(replacements) == {f'jni/{abi}/libTrustWalletCore.so' for abi in ABIS},
             'candidate native member set changed')
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with ZipFile(official) as baseline, ZipFile(destination, 'w') as maintained:
+    with ZipFile(BytesIO(official)) as baseline, ZipFile(destination, 'w') as maintained:
         names = baseline.namelist()
         require(len(names) == len(set(names)), 'duplicate published AAR member')
         require({name for name in names if name.endswith('.so')} == set(replacements),
@@ -102,7 +102,7 @@ def repackage_aar(official, replacements, destination):
             maintained.writestr(entry, replacements.get(entry.filename,
                                                         baseline.read(entry)))
     members = {}
-    with ZipFile(official) as baseline, ZipFile(destination) as maintained:
+    with ZipFile(BytesIO(official)) as baseline, ZipFile(destination) as maintained:
         require(baseline.namelist() == maintained.namelist(), 'AAR member list changed')
         for name in baseline.namelist():
             old, new = baseline.read(name), maintained.read(name)
@@ -113,13 +113,13 @@ def repackage_aar(official, replacements, destination):
                              'maintained_sha256': sha256_bytes(new),
                              'changed': changed}
     return {'changed_members': sorted(replacements), 'total_members': len(members),
-            'members': members, 'official_sha256': digest(official),
+            'members': members, 'official_sha256': sha256_bytes(official),
             'maintained_sha256': digest(destination)}
 
 
 def rewrite_module_metadata(original, maintained_aar):
     result = copy.deepcopy(original)
-    data = maintained_aar.read_bytes()
+    data = maintained_aar
     changed = []
     for variant in result['variants']:
         if variant['name'] not in ('releaseVariantReleaseApiPublication',
@@ -140,12 +140,12 @@ def build_repo(task, output_root):
     build = task / 'task-16f-walletcore-build'
     official = build / 'official'
     downloads = build / 'downloads'
-    sources = {name: (downloads if name.endswith('-sources.jar') else official) / name
-               for name in PINNED_OFFICIAL}
-    for name, expected in PINNED_OFFICIAL.items():
-        verified_file(sources[name], expected)
-    core_module = json.loads(sources[CORE_MODULE].read_text())
-    proto_module = json.loads(sources[PROTO_MODULE].read_text())
+    source_paths = {name: (downloads if name.endswith('-sources.jar') else official) / name
+                    for name in PINNED_OFFICIAL}
+    sources = {name: verified_file(source_paths[name], expected)
+               for name, expected in PINNED_OFFICIAL.items()}
+    core_module = json.loads(sources[CORE_MODULE])
+    proto_module = json.loads(sources[PROTO_MODULE])
     require(core_module['component'] ==
             {'group': 'com.trustwallet', 'module': 'wallet-core',
              'version': VERSION, 'attributes': {'org.gradle.status': 'release'}},
@@ -156,15 +156,14 @@ def build_repo(task, output_root):
             'proto module coordinate changed')
     artifact_references(core_module, sources)
     artifact_references(proto_module, sources)
-    pom_dependencies(sources[f'wallet-core-{VERSION}.pom'], 'wallet-core-proto', VERSION)
+    pom_dependencies(sources[f'wallet-core-{VERSION}.pom'], f'wallet-core-{VERSION}.pom',
+                     'wallet-core-proto', VERSION)
     pom_dependencies(sources[f'wallet-core-proto-{VERSION}.pom'],
-                     'protobuf-javalite', '3.22.3')
+                     f'wallet-core-proto-{VERSION}.pom', 'protobuf-javalite', '3.22.3')
     strip_manifest_path = build / 'candidate-stripped/strip-manifest.json'
     audit_path = build / 'candidate-stripped/audit/summary.json'
-    verified_file(strip_manifest_path, STRIP_MANIFEST_SHA256)
-    verified_file(audit_path, STRIP_AUDIT_SHA256)
-    strip_manifest = json.loads(strip_manifest_path.read_text())
-    audits = json.loads(audit_path.read_text())
+    strip_manifest = json.loads(verified_file(strip_manifest_path, STRIP_MANIFEST_SHA256))
+    audits = json.loads(verified_file(audit_path, STRIP_AUDIT_SHA256))
     require(set(strip_manifest['abis']) == set(ABIS) and set(audits) == set(ABIS),
             'candidate ABI set changed')
     replacements = {}
@@ -174,11 +173,11 @@ def build_repo(task, output_root):
         require(path.resolve() == (build / 'candidate-stripped/libs' / abi /
                                     'libTrustWalletCore.so').resolve(),
                 f'candidate path changed: {abi}')
-        verified_file(path, PINNED_CANDIDATE[abi])
-        require(path.stat().st_size == record['output']['bytes'] and
+        data = verified_file(path, PINNED_CANDIDATE[abi])
+        require(len(data) == record['output']['bytes'] and
                 record['output']['sha256'] == PINNED_CANDIDATE[abi] and
                 all(audits[abi]['checks'].values()), f'candidate audit changed: {abi}')
-        replacements[f'jni/{abi}/libTrustWalletCore.so'] = path.read_bytes()
+        replacements[f'jni/{abi}/libTrustWalletCore.so'] = data
     core_destination = output_root / 'com/trustwallet/wallet-core' / VERSION
     proto_destination = output_root / 'com/trustwallet/wallet-core-proto' / VERSION
     require(not core_destination.exists() and not proto_destination.exists(),
@@ -189,14 +188,14 @@ def build_repo(task, output_root):
                            core_destination / CORE_AAR)
     require(report['total_members'] == 13 and len(report['changed_members']) == 4,
             'published AAR member count changed')
-    revised = rewrite_module_metadata(core_module, core_destination / CORE_AAR)
+    revised = rewrite_module_metadata(core_module, (core_destination / CORE_AAR).read_bytes())
     (core_destination / CORE_MODULE).write_text(json.dumps(revised, indent=2) + '\n')
     for name in (f'wallet-core-{VERSION}.pom', f'wallet-core-{VERSION}-sources.jar'):
-        shutil.copyfile(sources[name], core_destination / name)
+        (core_destination / name).write_bytes(sources[name])
     for name in (f'wallet-core-proto-{VERSION}.jar',
                  f'wallet-core-proto-{VERSION}.pom', PROTO_MODULE,
                  f'wallet-core-proto-{VERSION}-sources.jar'):
-        shutil.copyfile(sources[name], proto_destination / name)
+        (proto_destination / name).write_bytes(sources[name])
     report['core_files'] = {p.name: digest(p) for p in sorted(core_destination.iterdir())}
     report['proto_files'] = {p.name: digest(p) for p in sorted(proto_destination.iterdir())}
     return report
