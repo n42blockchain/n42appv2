@@ -183,6 +183,30 @@ def verify_versions(tool_inputs):
                 f'actual tool version mismatch: {name}')
 
 
+def invalidate_receipt(receipt, inputs):
+    if receipt is None:
+        return
+    require(not receipt.is_symlink(), 'receipt path must not be a symlink')
+    destination = receipt.resolve()
+    for path in (inputs.source_inputs, inputs.tool_inputs, inputs.boost_manifest):
+        require(destination != path.resolve(), 'receipt overlaps an input manifest')
+    for path in (inputs.source, inputs.boost_headers, inputs.official_dir):
+        require(not destination.is_relative_to(path.resolve()),
+                'receipt overlaps an input tree')
+    if receipt.exists():
+        require(receipt.is_file(), 'receipt path is not a file')
+        try:
+            previous = json.loads(receipt.read_text())
+        except (UnicodeError, json.JSONDecodeError) as error:
+            raise ValueError('existing receipt is not a prior success receipt') from error
+        require(isinstance(previous, dict) and previous.get('passed') is True and
+                isinstance(previous.get('source'), dict) and
+                previous.get('source', {}).get('commit') == SOURCE_COMMIT and
+                previous.get('tool_inputs_sha256') == TOOL_INPUTS_SHA256,
+                'existing receipt is not a prior success receipt')
+        receipt.unlink()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('source', 'source_inputs', 'tool_inputs', 'boost_manifest',
@@ -191,6 +215,7 @@ def main():
     parser.add_argument('--receipt', type=Path)
     args = parser.parse_args()
     try:
+        invalidate_receipt(args.receipt, args)
         source_inputs = pinned_json(args.source_inputs, SOURCE_INPUTS_SHA256)
         tools = pinned_json(args.tool_inputs, TOOL_INPUTS_SHA256)
         boost = pinned_json(args.boost_manifest, BOOST_MANIFEST_SHA256)

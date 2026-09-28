@@ -2,7 +2,10 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from zipfile import ZipFile
 
@@ -19,6 +22,64 @@ def digest(data):
 
 
 class WalletCoreAndroidPreflightTest(unittest.TestCase):
+    def test_receipt_rejects_input_paths_without_deleting_them(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / 'source-inputs.json'
+            manifest.write_text('{"source": true}\n')
+            source = root / 'source'
+            source.mkdir()
+            source_file = source / 'selected.txt'
+            source_file.write_text('source bytes')
+            boost = root / 'boost'
+            boost.mkdir()
+            official = root / 'official'
+            official.mkdir()
+            inputs = SimpleNamespace(source_inputs=manifest,
+                                     tool_inputs=root / 'tool-inputs.json',
+                                     boost_manifest=root / 'boost-manifest.json',
+                                     source=source, boost_headers=boost,
+                                     official_dir=official)
+            for path in (manifest, source_file):
+                with self.assertRaisesRegex(ValueError, 'receipt overlaps an input'):
+                    preflight.invalidate_receipt(path, inputs)
+            alias = root / 'receipt.json'
+            alias.symlink_to(manifest)
+            with self.assertRaisesRegex(ValueError, 'must not be a symlink'):
+                preflight.invalidate_receipt(alias, inputs)
+            self.assertEqual(manifest.read_text(), '{"source": true}\n')
+            self.assertEqual(source_file.read_text(), 'source bytes')
+
+    def test_cli_failure_clears_prior_success_receipt(self):
+        task = SCRIPT.parents[1] / '.superpowers/sdd/dependency-completion-20260925'
+        build = task / 'task-16f-walletcore-build'
+        source_inputs = task / 'task-16f-walletcore-source-inputs/manifest.json'
+        if not source_inputs.is_file() or not build.is_dir():
+            self.skipTest('Wallet Core task-owned source/tool inputs are absent')
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            receipt = root / 'final-preflight.json'
+            changed = root / 'changed-source-inputs.json'
+            changed.write_bytes(source_inputs.read_bytes() + b' ')
+            command = [sys.executable]
+            if sys.flags.optimize:
+                command.append('-O')
+            command += [str(SCRIPT), '--source', str(build / 'source'),
+                        '--source-inputs', str(source_inputs),
+                        '--tool-inputs', str(build / 'tool-inputs.json'),
+                        '--boost-manifest', str(build / 'boost-header-manifest.json'),
+                        '--boost-headers', str(build / 'host-tools/boost-1.90.0_1/include/boost'),
+                        '--official-dir', str(build / 'official'),
+                        '--receipt', str(receipt)]
+            passed = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(passed.returncode, 0, passed.stderr)
+            self.assertTrue(json.loads(receipt.read_text())['passed'])
+            command[command.index('--source-inputs') + 1] = str(changed)
+            failed = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(failed.returncode, 1, failed.stderr)
+            self.assertIn('manifest SHA256 mismatch', failed.stderr)
+            self.assertFalse(receipt.exists(), 'stale success receipt survived failed preflight')
+
     def test_pinned_json_rejects_a_changed_manifest(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'inputs.json'
