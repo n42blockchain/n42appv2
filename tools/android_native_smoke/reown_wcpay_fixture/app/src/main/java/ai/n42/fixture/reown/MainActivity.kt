@@ -18,8 +18,8 @@ import uniffi.yttrium_wcpay.uniffiEnsureInitialized
 
 class MainActivity : Activity() {
     private val tag = "N42_REOWN_FIXTURE"
-    private val config = """{"base_url":"http://127.0.0.1:9","sdk_name":"fixture","sdk_version":"0","sdk_platform":"android","bundle_id":"fixture","app_id":"synthetic-only","client_id":"fixed-fixture"}"""
-    private val missingAuth = """{"base_url":"http://127.0.0.1:9","sdk_name":"fixture","sdk_version":"0","sdk_platform":"android","bundle_id":"fixture","client_id":"fixed-fixture"}"""
+    private val config = """{"baseUrl":"http://127.0.0.1:9","sdkName":"fixture","sdkVersion":"0","sdkPlatform":"android","bundleId":"fixture","appId":"synthetic-only","clientId":"fixed-fixture"}"""
+    private val missingAuth = """{"baseUrl":"http://127.0.0.1:9","sdkName":"fixture","sdkVersion":"0","sdkPlatform":"android","bundleId":"fixture","apiKey":null,"appId":null,"clientId":"fixed-fixture"}"""
 
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)

@@ -21,9 +21,9 @@ JNA_AAR_SHA256 = "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf
 JNA_AAR_MEMBER_SHA256 = "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06"
 JNA_APK_MEMBER_SHA256 = "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c"
 APK_SHA256 = {
-    "baseline": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
-    "candidate": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
-    "mismatch": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7",
+    "baseline": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899",
+    "candidate": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1",
+    "mismatch": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c",
 }
 BUILD_INPUT_SHA256 = {
     "tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
@@ -31,7 +31,7 @@ BUILD_INPUT_SHA256 = {
     "tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
     "tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
     "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
-    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "4acb7bb91c2fe51774b4924d4239ffb32047036dc7e4c6eb636b1185395c726b",
+    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "c2c96d6f707b34c02be63c41bd59d2b9d4a5caa69a4ee3decbc6e8321b266848",
     "scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802",
 }
 MISMATCH_INPUT_SHA256 = {
@@ -74,8 +74,8 @@ def require_build_epoch(root, mismatch_dir, jna_aar):
     require(manifest.get("apk_sha256") == APK_SHA256 and
             manifest.get("compiled_fixture_source_sha256") == BUILD_INPUT_SHA256 and
             manifest.get("prepared_mismatch_input_sha256") == MISMATCH_INPUT_SHA256 and
-            manifest.get("build_git_head") == "bde30ab48be123b7d6ab86201f76c43fa8f6c894" and
-            manifest.get("fixture_source_commit") == "d9c6ee20fffc744cb4dc9257a2dde79c1504bb9d",
+            manifest.get("build_git_head") == "1a538f09081332adb03f0be523109c4d7c0e2f04" and
+            manifest.get("fixture_source_commit") is None,
             "fixture build epoch manifest mismatch")
     jna_manifest = manifest.get("jna", {})
     require(jna_manifest.get("aar_sha256") == JNA_AAR_SHA256 and
@@ -140,6 +140,27 @@ def require_strict(snapshot, phase):
         require(isinstance(observed, dict), f"{phase}: missing {name}")
         require(observed.get("exit") == 0, f"{phase}: {name} command failed")
         require(observed.get("stdout") == value, f"{phase}: {name} mismatch")
+
+
+def parse_result_logcat(output, phase):
+    lines = [line for line in output.splitlines() if "N42_REOWN_FIXTURE:" in line]
+    require(len(lines) == 1, f"{phase}: expected exactly one fresh fixture log record")
+    match = re.fullmatch(
+        r"\d\d-\d\d\s+\d\d:\d\d:\d\d\.\d+\s+(\d+)\s+\d+\s+I\s+N42_REOWN_FIXTURE:\s+(.+)",
+        lines[0],
+    )
+    require(match is not None, f"{phase}: malformed fixture log framing")
+    try:
+        record = json.loads(match.group(2))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"{phase}: malformed or truncated fixture JSON") from error
+    require(isinstance(record, dict), f"{phase}: fixture log is not a JSON object")
+    require(record.get("phase") == phase, f"{phase}: log phase mismatch")
+    require(type(record.get("pid")) is int and record["pid"] == int(match.group(1)),
+            f"{phase}: log PID mismatch")
+    require(isinstance(record.get("nonce"), str) and record["nonce"],
+            f"{phase}: missing log process nonce")
+    return record
 
 
 def member_and_executable_offsets(apk, member):
@@ -220,13 +241,14 @@ def verify_phase(phase, item, apk):
     require(item.get("apk_sha256") == digest(apk), f"{phase}: local APK SHA mismatch")
     require_strict(item.get("pre", {}), f"{phase} pre")
     require_strict(item.get("post", {}), f"{phase} post")
-    for command in ("install", "clear", "start", "pm_path", "force_stop"):
+    for command in ("install", "clear", "logcat_clear", "start", "pm_path", "force_stop"):
         require(item.get(command, {}).get("exit") == 0, f"{phase}: {command} failed")
     result = item.get("result")
     require(isinstance(result, dict), f"{phase}: missing in-process result")
-    fetched = item.get("result_fetch", {})
-    require(fetched.get("exit") == 0 and json.loads(fetched.get("stdout", "null")) == result,
-            f"{phase}: result differs from fetched app file")
+    fetched = item.get("result_logcat", {})
+    require(fetched.get("exit") == 0, f"{phase}: logcat read failed")
+    require(parse_result_logcat(fetched.get("stdout", ""), phase) == result,
+            f"{phase}: result differs from fresh tagged logcat")
     verify_result(phase, result)
     require(isinstance(result.get("pid"), int) and result["pid"] > 0,
             f"{phase}: missing PID")

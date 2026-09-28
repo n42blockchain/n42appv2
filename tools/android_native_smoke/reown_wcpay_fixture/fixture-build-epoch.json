@@ -1,17 +1,24 @@
 {
-  "purpose": "Pin the three compiled synthetic APKs before later runner and verifier edits",
-  "build_git_head": "bde30ab48be123b7d6ab86201f76c43fa8f6c894",
-  "build_git_head_note": "Fixture sources were uncommitted during compilation; the exact source hashes below were subsequently committed in d9c6ee20f.",
-  "fixture_source_commit": "d9c6ee20fffc744cb4dc9257a2dde79c1504bb9d",
+  "purpose": "Pin the corrected three-APK synthetic fixture epoch after run1 exposed transport and JSON casing defects",
+  "build_git_head": "1a538f09081332adb03f0be523109c4d7c0e2f04",
+  "build_git_head_note": "Corrected fixture source was uncommitted during compilation; its exact hash below is committed with this manifest. Runtime git_head verifies the later source commit.",
+  "fixture_source_commit": null,
+  "previous_epoch": {
+    "source_commit": "d9c6ee20fffc744cb4dc9257a2dde79c1504bb9d",
+    "baseline_apk_sha256": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
+    "candidate_apk_sha256": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
+    "mismatch_apk_sha256": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7",
+    "run1_result": "Stopped at baseline because run-as cannot read a non-debuggable release fixture; tagged logcat showed an in-process JsonParse for missingAuth due to snake_case input."
+  },
   "compile_logs": {
-    "baseline": "task-16f-reown-stage3-baseline-compile.log",
-    "candidate": "task-16f-reown-stage3-candidate-compile7.log",
-    "mismatch": "task-16f-reown-stage3-mismatch-compile.log"
+    "baseline": "task-16f-reown-stage3-runtime-fix1-baseline-build.log",
+    "candidate": "task-16f-reown-stage3-runtime-fix1-candidate-build.log",
+    "mismatch": "task-16f-reown-stage3-runtime-fix1-mismatch-build.log"
   },
   "apk_sha256": {
-    "baseline": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
-    "candidate": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
-    "mismatch": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7"
+    "baseline": "0f516541ecb9a66ebbaa00f06213997b73bccff0edec0eba11b68bad3118f899",
+    "candidate": "f39af567815adbc6f34c8012027b69c0438ff89449fafa4f8dfa691d3c5a38b1",
+    "mismatch": "33a03048f4709b7c83b029020c22059255f0a6391354029a4cf5efd1f501643c"
   },
   "compiled_fixture_source_sha256": {
     "tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
@@ -19,7 +26,7 @@
     "tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
     "tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
     "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
-    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "4acb7bb91c2fe51774b4924d4239ffb32047036dc7e4c6eb636b1185395c726b",
+    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "c2c96d6f707b34c02be63c41bd59d2b9d4a5caa69a4ee3decbc6e8321b266848",
     "scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802"
   },
   "prepared_mismatch_input_sha256": {

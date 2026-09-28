@@ -10,6 +10,7 @@ from zipfile import ZipFile, ZIP_STORED
 from scripts.prepare_reown_wcpay_fixture import prepare_mismatch
 from tools.android_native_smoke.verify_reown_wcpay_fixture import (
     BUILD_INPUT_SHA256, APK_SHA256, member_and_executable_offsets,
+    parse_result_logcat,
     require_apks, require_build_epoch, require_jna_member, require_maps,
     require_strict,
     verify_git_epoch,
@@ -60,7 +61,7 @@ class ReownFixturePrepTest(unittest.TestCase):
 
 class ReownFixtureVerifierTest(unittest.TestCase):
     def test_candidate_apk_members_are_page_aligned_and_exact(self):
-        apk = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/candidate.apk"
+        apk = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2/candidate.apk"
         if not apk.is_file():
             self.skipTest("Candidate fixture APK has not been built")
         native, offset, loads = member_and_executable_offsets(
@@ -80,6 +81,20 @@ class ReownFixtureVerifierTest(unittest.TestCase):
         snapshot["package_compat_disabled"]["stdout"] = "false"
         with self.assertRaisesRegex(ValueError, "package_compat_disabled mismatch"):
             require_strict(snapshot, "candidate pre")
+
+    def test_logcat_result_requires_exact_phase_pid_and_complete_json(self):
+        line = ('09-27 22:02:34.638 17994 17994 I N42_REOWN_FIXTURE: '
+                '{"phase":"baseline","pid":17994,"nonce":"fresh","status":"PASS"}')
+        self.assertEqual(parse_result_logcat("--------- beginning of main\n" + line,
+                                             "baseline")["nonce"], "fresh")
+        with self.assertRaisesRegex(ValueError, "phase mismatch"):
+            parse_result_logcat(line, "candidate")
+        with self.assertRaisesRegex(ValueError, "PID mismatch"):
+            parse_result_logcat(line.replace('"pid":17994', '"pid":17995'), "baseline")
+        with self.assertRaisesRegex(ValueError, "malformed or truncated"):
+            parse_result_logcat(line[:-1], "baseline")
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            parse_result_logcat(line + "\n" + line, "baseline")
 
     def test_candidate_missing_typed_method_error_is_rejected(self):
         result = {
@@ -104,7 +119,7 @@ class ReownFixtureVerifierTest(unittest.TestCase):
             verify_result("mismatch", result)
 
     def test_substituted_apk_is_rejected_before_device(self):
-        built = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build"
+        built = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build-v2"
         with tempfile.TemporaryDirectory() as folder:
             candidate = Path(folder) / "candidate.apk"
             candidate.write_bytes((built / "candidate.apk").read_bytes() + b"substituted")

@@ -13,7 +13,7 @@ import time
 
 from verify_reown_wcpay_fixture import (
     DEVICE, PACKAGES, SOURCE_FILES, WCPAY, WCPAY_SHA256,
-    digest, member_and_executable_offsets, require, require_apks,
+    digest, member_and_executable_offsets, parse_result_logcat, require, require_apks,
     require_build_epoch, require_strict, verify, verify_git_epoch,
 )
 
@@ -76,20 +76,27 @@ def run_phase(phase, apk, record):
     record["clear"] = adb("shell", "pm", "clear", package)
     require(record["clear"]["exit"] == 0, f"{phase}: cannot clear synthetic app")
     record["pm_path"] = adb("shell", "pm", "path", package)
+    record["logcat_clear"] = adb("logcat", "-c")
+    require(record["logcat_clear"]["exit"] == 0,
+            f"{phase}: cannot clear dedicated emulator log before launch")
     record["start"] = adb("shell", "am", "start", "-W", "-n",
                           f"{package}/ai.n42.fixture.reown.MainActivity",
                           "--es", "phase", phase)
     require(record["start"]["exit"] == 0, f"{phase}: launch failed")
-    for attempt in range(60):
-        fetched = adb("shell", "run-as", package, "cat", "files/result.json")
-        if fetched["exit"] == 0:
-            record["result_fetch"] = fetched
-            record["result_attempt"] = attempt + 1
-            record["result"] = json.loads(fetched["stdout"])
-            break
-        time.sleep(0.2)
-    record["post"] = device_snapshot()
-    record["force_stop"] = adb("shell", "am", "force-stop", package)
+    try:
+        for attempt in range(60):
+            fetched = adb("logcat", "-d", "-v", "threadtime", "-s", "N42_REOWN_FIXTURE:I")
+            record["last_logcat"] = fetched
+            require(fetched["exit"] == 0, f"{phase}: logcat read failed")
+            if "N42_REOWN_FIXTURE:" in fetched["stdout"]:
+                record["result_logcat"] = fetched
+                record["result_attempt"] = attempt + 1
+                record["result"] = parse_result_logcat(fetched["stdout"], phase)
+                break
+            time.sleep(0.2)
+    finally:
+        record["post"] = device_snapshot()
+        record["force_stop"] = adb("shell", "am", "force-stop", package)
     require("result" in record, f"{phase}: no in-process result; preserve log and inspect crash")
     require_strict(record["post"], f"{phase} post")
     require(record["force_stop"]["exit"] == 0, f"{phase}: force-stop failed")
