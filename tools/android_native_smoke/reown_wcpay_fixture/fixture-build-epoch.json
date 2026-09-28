@@ -1,0 +1,36 @@
+{
+  "purpose": "Pin the three compiled synthetic APKs before later runner and verifier edits",
+  "build_git_head": "bde30ab48be123b7d6ab86201f76c43fa8f6c894",
+  "build_git_head_note": "Fixture sources were uncommitted during compilation; the exact source hashes below were subsequently committed in d9c6ee20f.",
+  "fixture_source_commit": "d9c6ee20fffc744cb4dc9257a2dde79c1504bb9d",
+  "compile_logs": {
+    "baseline": "task-16f-reown-stage3-baseline-compile.log",
+    "candidate": "task-16f-reown-stage3-candidate-compile7.log",
+    "mismatch": "task-16f-reown-stage3-mismatch-compile.log"
+  },
+  "apk_sha256": {
+    "baseline": "4002e6ce637096b093fd2c9d1c6d00629651306c925090cc99009299b2364c31",
+    "candidate": "efde15a54e9812d6853c4678720ac338a0eeae82717f90e66d978f3283d40b21",
+    "mismatch": "4ee64642f12adcb657aa04cc75f5730b1f099fa6fd1c68edfb67abb1454f77a7"
+  },
+  "compiled_fixture_source_sha256": {
+    "tools/android_native_smoke/reown_wcpay_fixture/settings.gradle.kts": "6cdcc706ac5c837f4733cbb404fdbff7991183528cb210ce2745dd23d3c22290",
+    "tools/android_native_smoke/reown_wcpay_fixture/build.gradle.kts": "64dc0b52c1b38387c0d82b59d5bc03d2ee1b6db49c372ed88a5d6dc8e8fe618a",
+    "tools/android_native_smoke/reown_wcpay_fixture/gradle.properties": "99b7c4b05d0fd58d4e7cde949210477af3fd11cb580f8b3b524e7381388f9e66",
+    "tools/android_native_smoke/reown_wcpay_fixture/app/build.gradle.kts": "845ab605ba7b4e929a79646ebaa7d88fafca5cf7570075c0fc962e62bf4af386",
+    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/AndroidManifest.xml": "c85e139594d0d4bb30d1c92afb7cff2c42b1f1071254c67df361d35064707b41",
+    "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt": "4acb7bb91c2fe51774b4924d4239ffb32047036dc7e4c6eb636b1185395c726b",
+    "scripts/prepare_reown_wcpay_fixture.py": "50e11a04cf56c69252e199188083a19b21ae70ae3f535eab7fb66826412f4802"
+  },
+  "prepared_mismatch_input_sha256": {
+    "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
+    "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
+    "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8"
+  },
+  "jna": {
+    "aar_sha256": "4dbeffffa665d97ad5aa7eee297531d3c841a86716ab7f774fd6956422b3cf38",
+    "aar_arm64_member_sha256": "abc26e994517bcaa3309acdb0a27373864086c7569c89d3087b8626fada9ef06",
+    "apk_arm64_member_sha256": "ddfc6c965bbe366615c000ec1f06552ddf0bb2b4f9d921d0bff8c75b3cb2ca4c",
+    "transform": "AGP mergeReleaseNativeLibs retained the AAR member; stripReleaseDebugSymbols produced the APK member. These are distinct bytes."
+  }
+}

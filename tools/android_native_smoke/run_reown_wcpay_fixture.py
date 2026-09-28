@@ -12,8 +12,9 @@ import sys
 import time
 
 from verify_reown_wcpay_fixture import (
-    DEVICE, JNA_AAR_SHA256, PACKAGES, WCPAY, WCPAY_SHA256,
-    digest, member_and_executable_offsets, require, require_strict, verify,
+    DEVICE, PACKAGES, SOURCE_FILES, WCPAY, WCPAY_SHA256,
+    digest, member_and_executable_offsets, require, require_apks,
+    require_build_epoch, require_strict, verify, verify_git_epoch,
 )
 
 
@@ -21,20 +22,6 @@ ROOT = Path(__file__).resolve().parents[2]
 ADB = Path("/opt/homebrew/share/android-commandlinetools/platform-tools/adb")
 AAPT = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt")
 ZIPALIGN = Path("/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign")
-FIXTURE = ROOT / "tools/android_native_smoke/reown_wcpay_fixture"
-SOURCE_FILES = (
-    FIXTURE / "settings.gradle.kts",
-    FIXTURE / "build.gradle.kts",
-    FIXTURE / "gradle.properties",
-    FIXTURE / "app/build.gradle.kts",
-    FIXTURE / "app/src/main/AndroidManifest.xml",
-    FIXTURE / "app/src/main/java/ai/n42/fixture/reown/MainActivity.kt",
-    ROOT / "scripts/prepare_reown_wcpay_fixture.py",
-    ROOT / "tools/android_native_smoke/run_reown_wcpay_fixture.py",
-    ROOT / "tools/android_native_smoke/verify_reown_wcpay_fixture.py",
-)
-
-
 def call(argv):
     result = subprocess.run([str(value) for value in argv], cwd=ROOT,
                             capture_output=True, text=True, check=False)
@@ -108,13 +95,17 @@ def run_phase(phase, apk, record):
     require(record["force_stop"]["exit"] == 0, f"{phase}: force-stop failed")
 
 
-def run(apks, jna_aar, out_dir):
+def run(apks, jna_aar, mismatch_dir, out_dir):
     for tool in (ADB, AAPT, ZIPALIGN):
         require(tool.is_file(), f"missing tool: {tool}")
     for phase, apk in apks.items():
         require(apk.is_file(), f"missing {phase} APK: {apk}")
-    require(jna_aar.is_file() and digest(jna_aar) == JNA_AAR_SHA256,
-            "JNA 5.17.0 input identity mismatch")
+    require(jna_aar.is_file(), f"missing JNA AAR: {jna_aar}")
+    require_apks(apks)
+    build_epoch = require_build_epoch(ROOT, mismatch_dir, jna_aar)
+    git_head = call(["git", "rev-parse", "HEAD"])["stdout"]
+    source_sha256 = {str(path): digest(path) for path in SOURCE_FILES}
+    verify_git_epoch(git_head, source_sha256)
     require(not out_dir.exists(), f"output already exists: {out_dir}")
     out_dir.mkdir(parents=True)
     receipt_file = out_dir / "reown-runtime-receipt.json"
@@ -122,8 +113,9 @@ def run(apks, jna_aar, out_dir):
     receipt = {
         "schema_version": 1, "device": DEVICE,
         "started_utc": datetime.now(timezone.utc).isoformat(),
-        "git_head": call(["git", "rev-parse", "HEAD"])["stdout"],
-        "source_sha256": {str(path): digest(path) for path in SOURCE_FILES},
+        "git_head": git_head,
+        "source_sha256": source_sha256,
+        "build_epoch": build_epoch,
         "tool_sha256": {str(path): digest(path) for path in (ADB, AAPT, ZIPALIGN)},
         "jna_aar_sha256": digest(jna_aar),
         "device_state": adb("get-state"),
@@ -149,7 +141,7 @@ def run(apks, jna_aar, out_dir):
         receipt_file.write_text(json.dumps(receipt, indent=2) + "\n")
     require(all(item["exit"] == 0 for item in receipt["strict_restore"]),
             "strict/offline restoration failed")
-    result = verify(receipt, apks, SOURCE_FILES, jna_aar)
+    result = verify(receipt, apks, jna_aar, mismatch_dir)
     verification_file.write_text(json.dumps(result, indent=2) + "\n")
     return receipt_file, verification_file
 
@@ -159,11 +151,13 @@ def main():
     for phase in PACKAGES:
         parser.add_argument(f"--{phase}-apk", type=Path, required=True)
     parser.add_argument("--jna-aar", type=Path, required=True)
+    parser.add_argument("--mismatch-dir", type=Path, required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
     args = parser.parse_args()
     apks = {phase: getattr(args, phase + "_apk").resolve() for phase in PACKAGES}
     try:
-        receipt, verification = run(apks, args.jna_aar.resolve(), args.out_dir.resolve())
+        receipt, verification = run(apks, args.jna_aar.resolve(),
+                                    args.mismatch_dir.resolve(), args.out_dir.resolve())
     except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
         print(f"Reown fixture rejected: {error}", file=sys.stderr)
         return 1

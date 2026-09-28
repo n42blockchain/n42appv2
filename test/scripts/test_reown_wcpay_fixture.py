@@ -1,6 +1,7 @@
 """Focused controls for the synthetic Reown fixture inputs."""
 
 import hashlib
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,8 +9,10 @@ from zipfile import ZipFile, ZIP_STORED
 
 from scripts.prepare_reown_wcpay_fixture import prepare_mismatch
 from tools.android_native_smoke.verify_reown_wcpay_fixture import (
-    member_and_executable_offsets,
+    BUILD_INPUT_SHA256, APK_SHA256, member_and_executable_offsets,
+    require_apks, require_build_epoch, require_jna_member, require_maps,
     require_strict,
+    verify_git_epoch,
     verify_result,
 )
 
@@ -99,6 +102,46 @@ class ReownFixtureVerifierTest(unittest.TestCase):
         result["mismatchError"] = "Mismatched binding was accepted"
         with self.assertRaisesRegex(ValueError, "mismatchError"):
             verify_result("mismatch", result)
+
+    def test_substituted_apk_is_rejected_before_device(self):
+        built = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build"
+        with tempfile.TemporaryDirectory() as folder:
+            candidate = Path(folder) / "candidate.apk"
+            candidate.write_bytes((built / "candidate.apk").read_bytes() + b"substituted")
+            apks = {phase: built / f"{phase}.apk" for phase in APK_SHA256}
+            apks["candidate"] = candidate
+            with self.assertRaisesRegex(ValueError, "candidate: pinned APK SHA256 mismatch"):
+                require_apks(apks)
+
+    def test_changed_compiled_source_is_rejected(self):
+        mismatch = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/mismatch-input"
+        jna = next(Path("/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0").rglob("*.aar"))
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            for relative in (*BUILD_INPUT_SHA256,
+                             "tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json"):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, target)
+            changed = root / "tools/android_native_smoke/reown_wcpay_fixture/app/src/main/java/ai/n42/fixture/reown/MainActivity.kt"
+            changed.write_bytes(changed.read_bytes() + b"\n// changed after build\n")
+            with self.assertRaisesRegex(ValueError, "compiled fixture source SHA256 mismatch"):
+                require_build_epoch(root, mismatch, jna)
+
+    def test_same_wrong_jna_in_all_phases_is_rejected(self):
+        for phase in APK_SHA256:
+            with self.subTest(phase=phase):
+                with self.assertRaisesRegex(ValueError, "packaged JNA member SHA256 mismatch"):
+                    require_jna_member(b"same wrong JNI bytes")
+
+    def test_all_missing_maps_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "missing executable APK maps"):
+            require_maps({"executableApkMaps": []}, "/data/app/x/base.apk",
+                         [(16384, 16384)], "candidate", "lib/arm64-v8a/libjnidispatch.so")
+
+    def test_unreviewed_git_head_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "git_head"):
+            verify_git_epoch("0" * 40, {})
 
 
 if __name__ == "__main__":
