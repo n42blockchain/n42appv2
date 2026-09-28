@@ -89,8 +89,7 @@ def snapshot_commands(serial):
             "compat": ("shell", "getprop", "pm.16kb.app_compat.disabled"),
         })
     else:
-        commands["page"] = ("shell", "sh", "-c",
-                            "grep KernelPageSize /proc/1/smaps | head -1")
+        commands["page"] = ("shell", "head", "-n", "20", "/proc/1/smaps")
     return commands
 
 
@@ -256,9 +255,12 @@ def require_snapshot(snapshot, serial, label):
                     f"{label}: strict 16 KB {key} changed")
     else:
         item = snapshot.get("page", {})
+        lines = item.get("stdout", "").splitlines()
         require(item.get("exit") == 0 and
-                re.fullmatch(r"KernelPageSize:\s+4 kB", item.get("stdout", "")),
-                f"{label}: API 26 /proc/1/smaps did not prove 4 KB pages")
+                len(lines) == 20 and
+                sum(bool(re.fullmatch(r"KernelPageSize:\s+4 kB", row)) for row in lines) == 1 and
+                sum(bool(re.fullmatch(r"MMUPageSize:\s+4 kB", row)) for row in lines) == 1,
+                f"{label}: API 26 /proc/1/smaps did not prove kernel/MMU 4 KB pages")
 
 
 def parse_events(log, token):

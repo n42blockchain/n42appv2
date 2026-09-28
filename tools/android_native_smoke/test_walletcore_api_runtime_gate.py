@@ -27,7 +27,10 @@ def snapshot(serial):
     values = {"boot": "1", "sdk": "26" if serial == "emulator-5562" else "37",
               "abi": "arm64-v8a", "airplane": "1", "wifi": "0", "route": "",
               "default_network": "Active default network: none",
-              "page": "KernelPageSize:        4 kB" if serial == "emulator-5562" else "16384",
+              "page": ("\n".join(["00400000-0056c000 r-xp /init", *["field: 0"] * 12,
+                                    "KernelPageSize:        4 kB",
+                                    "MMUPageSize:           4 kB", *["field: 0"] * 5])
+                       if serial == "emulator-5562" else "16384"),
               "linker": "fatal", "compat": "true"}
     state = {"state": adb_result(serial, "device", "get-state")}
     state.update({key: adb_result(serial, values[key], *command)
@@ -74,8 +77,19 @@ class RuntimeGateTests(unittest.TestCase):
         api26 = snapshot("emulator-5562")
         gate.require_snapshot(strict, "emulator-5560", "test")
         gate.require_snapshot(api26, "emulator-5562", "test")
-        api26["page"]["stdout"] = "KernelPageSize:        16 kB"
+        api26["page"]["stdout"] = api26["page"]["stdout"].replace(
+            "KernelPageSize:        4 kB", "KernelPageSize:        16 kB")
         with self.assertRaisesRegex(ValueError, "4 KB"):
+            gate.require_snapshot(api26, "emulator-5562", "test")
+        api26 = snapshot("emulator-5562")
+        api26["page"]["stdout"] = api26["page"]["stdout"].replace(
+            "MMUPageSize:           4 kB", "MMUPageSize:           16 kB")
+        with self.assertRaisesRegex(ValueError, "4 KB"):
+            gate.require_snapshot(api26, "emulator-5562", "test")
+        api26 = snapshot("emulator-5562")
+        api26["page"]["argv"] = [gate.ADB, "-s", "emulator-5562", "shell", "sh", "-c",
+                                 "grep KernelPageSize /proc/1/smaps | head -1"]
+        with self.assertRaisesRegex(ValueError, "command/serial"):
             gate.require_snapshot(api26, "emulator-5562", "test")
         strict["linker"]["stdout"] = "true"
         with self.assertRaisesRegex(ValueError, "strict 16 KB"):
