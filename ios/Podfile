@@ -193,6 +193,23 @@ post_integrate do |installer|
     contents = File.read(xcconfig_path)
     contents = contents.gsub(/ -l"sqlite3(?:\.0)?"/, '')
     contents = contents.gsub(/ -framework "SQLCipher"/, '')
+
+    # TensorFlowLiteSelectTfOps (pulled in by flutter_gemma) ships only an
+    # ios-arm64 device slice, so linking it unconditionally breaks simulator
+    # builds. Keep the full flag set for device SDKs and drop that framework
+    # for the simulator; on-device LLM is simply unavailable there.
+    # A conditional key's $(inherited) resolves to the unconditional value, so
+    # append to an existing device-only line rather than adding a duplicate key.
+    tf_flag = ' -framework "TensorFlowLiteSelectTfOps"'
+    if contents =~ /^OTHER_LDFLAGS = .*#{Regexp.escape(tf_flag)}/
+      contents = contents.sub(/^(OTHER_LDFLAGS = .*?)#{Regexp.escape(tf_flag)}/, '\1')
+      device_key = /^OTHER_LDFLAGS\[sdk=iphoneos\*\] = .*$/
+      if contents =~ device_key
+        contents = contents.sub(device_key) { |line| line + tf_flag }
+      else
+        contents += "OTHER_LDFLAGS[sdk=iphoneos*] = $(inherited)#{tf_flag}\n"
+      end
+    end
     File.write(xcconfig_path, contents)
   end
 end
