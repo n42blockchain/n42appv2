@@ -1,0 +1,18 @@
+test_phase_receipt_survives_actual_json_round_trip (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ERROR
+
+======================================================================
+ERROR: test_phase_receipt_survives_actual_json_round_trip (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/scripts/test_walletcore_fixture.py", line 187, in test_phase_receipt_survives_actual_json_round_trip
+    verifier.verify_phase("candidate", replayed, APKS["candidate"])
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_walletcore_fixture.py", line 262, in verify_phase
+    require(item.get("member_data_offset") == offset and
+  File "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/tools/android_native_smoke/verify_walletcore_fixture.py", line 55, in require
+    raise ValueError(message)
+ValueError: candidate: recorded native ZIP mapping differs
+
+----------------------------------------------------------------------
+Ran 1 test in 0.035s
+
+FAILED (errors=1)

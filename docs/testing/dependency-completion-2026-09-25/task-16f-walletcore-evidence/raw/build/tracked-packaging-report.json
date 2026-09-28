@@ -1,0 +1,90 @@
+{
+  "changed_members": [
+    "jni/arm64-v8a/libTrustWalletCore.so",
+    "jni/armeabi-v7a/libTrustWalletCore.so",
+    "jni/x86/libTrustWalletCore.so",
+    "jni/x86_64/libTrustWalletCore.so"
+  ],
+  "total_members": 13,
+  "members": {
+    "R.txt": {
+      "official_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maintained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false
+    },
+    "AndroidManifest.xml": {
+      "official_sha256": "a32bcd35fab8001f6934932fc89abf3cc58b87bca8acd6eda1f59f445304f6e4",
+      "maintained_sha256": "a32bcd35fab8001f6934932fc89abf3cc58b87bca8acd6eda1f59f445304f6e4",
+      "changed": false
+    },
+    "classes.jar": {
+      "official_sha256": "5e86c61d0121af19c1bcf99043b21a6e4c8fa479bb6d1c9a20967eadb8bb6d4b",
+      "maintained_sha256": "5e86c61d0121af19c1bcf99043b21a6e4c8fa479bb6d1c9a20967eadb8bb6d4b",
+      "changed": false
+    },
+    "META-INF/com/android/build/gradle/aar-metadata.properties": {
+      "official_sha256": "9cc8517bbdf06d879f57a2cfd6f8c6914e48800d443421cd850971945f98e7b2",
+      "maintained_sha256": "9cc8517bbdf06d879f57a2cfd6f8c6914e48800d443421cd850971945f98e7b2",
+      "changed": false
+    },
+    "jni/": {
+      "official_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maintained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false
+    },
+    "jni/arm64-v8a/": {
+      "official_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maintained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false
+    },
+    "jni/arm64-v8a/libTrustWalletCore.so": {
+      "official_sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+      "maintained_sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d",
+      "changed": true
+    },
+    "jni/armeabi-v7a/": {
+      "official_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maintained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false
+    },
+    "jni/armeabi-v7a/libTrustWalletCore.so": {
+      "official_sha256": "3b66dc5938fdb878e20e32ba057919607d089914660fa6d9d612beffb0f492ba",
+      "maintained_sha256": "70de897add9f5a4d661b0429e29a41f9f167ce00a4c4cc680c03b2952cd0370e",
+      "changed": true
+    },
+    "jni/x86/": {
+      "official_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maintained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false
+    },
+    "jni/x86/libTrustWalletCore.so": {
+      "official_sha256": "8416c51a3eb9df172dc3554fc855f91c4b0d8193b098d4fa50c6deacb93fcb37",
+      "maintained_sha256": "fdd8161a94c389fe992826769756dfd59c81b94f48b5f55c9018ec3620e03f8d",
+      "changed": true
+    },
+    "jni/x86_64/": {
+      "official_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maintained_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed": false
+    },
+    "jni/x86_64/libTrustWalletCore.so": {
+      "official_sha256": "213a17051219547795fd4b4a51de9fde760c84f5f19258027367e2d8e2eeb3f0",
+      "maintained_sha256": "abee03b7fbbdb90a6bdeec7fdf857ef2fb60df9b8ffc6f6d7dbb56af8332d1f3",
+      "changed": true
+    }
+  },
+  "official_sha256": "04ea7ab9527beeb3f4d650b13108deb08ec8a857f4e62b86df3e953dfa9e4d87",
+  "maintained_sha256": "560cf86e132e4b4ee18afb70daf670e12e8fd34684a03eb38b9e49e39cd0f57d",
+  "core_files": {
+    "wallet-core-4.8.4-sources.jar": "226c2847b6a4fc0e930eb4283e5224509527eb91644d5a1ec41ef60d1fbda0f4",
+    "wallet-core-4.8.4.aar": "560cf86e132e4b4ee18afb70daf670e12e8fd34684a03eb38b9e49e39cd0f57d",
+    "wallet-core-4.8.4.module": "92018655c514146e2ad0222a23e66024811f3f638b0a264a2f2b1ed5c70a76f1",
+    "wallet-core-4.8.4.pom": "6c68514803d192ef49f45a74cc5d5bf07a87b855a398b6b2ce99bd695b17b0af"
+  },
+  "proto_files": {
+    "wallet-core-proto-4.8.4-sources.jar": "cf637bfd06879e9cfa35cd47f6a2ea56f2ea8ab987fe4410f9dcfa14ad268d12",
+    "wallet-core-proto-4.8.4.jar": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+    "wallet-core-proto-4.8.4.module": "127c83647137fa0b6c9be1284c39d6d265c760a3a3ea5e866cb4085db8f62885",
+    "wallet-core-proto-4.8.4.pom": "5a2b60b85426bfc85e13055db5fcb92332e6827a348b64a934a1ea997ad398fe"
+  }
+}

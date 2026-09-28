@@ -1,0 +1,199 @@
+{
+  "candidate_passed": true,
+  "baseline_status": "PASS",
+  "parity": "all five cases equal",
+  "phases": {
+    "baseline": {
+      "pid": 19272,
+      "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+      "status": "PASS",
+      "apk_sha256": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19",
+      "member_sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+      "member_data_offset": 2048000,
+      "elf64_aligned": false,
+      "cases": {
+        "hdwallet": {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "hdwallet",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "entropy": "ba5821e8c356c05ba5f025d9532fe0f21f65d594",
+            "seedSha256": "a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541",
+            "keySha256": "fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9",
+            "bitcoinAddress": "bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85"
+          }
+        },
+        "ethereumLegacy": {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "ethereumLegacy",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9",
+            "signingOutputSha256": "e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f",
+            "signingOutputBytes": 217,
+            "error": "OK"
+          }
+        },
+        "ethereum1559": {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "ethereum1559",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689",
+            "signingOutputSha256": "95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63",
+            "signingOutputBytes": 357,
+            "error": "OK"
+          }
+        },
+        "bitcoinCompilerV2": {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "bitcoinCompilerV2",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "preimageSha256": "6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e",
+            "preimageBytes": 73,
+            "signingOutputSha256": "d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55",
+            "signingOutputBytes": 434,
+            "encodedSha256": "56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf",
+            "txid": "c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885"
+          }
+        },
+        "bitcoinAppP2wsh": {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "bitcoinAppP2wsh",
+          "required": false,
+          "outcome": "OBSERVED",
+          "result": {
+            "signingInputSha256": "055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039",
+            "preimageSha256": "fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98",
+            "preimageBytes": 145,
+            "preimageError": "OK",
+            "preimageErrorMessage": "",
+            "hashPublicKeysCount": 0,
+            "compilerOutputSha256": "b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6",
+            "compilerOutputBytes": 34,
+            "compilerError": "Error_invalid_params",
+            "compilerErrorMessage": "empty signatures or publickeys",
+            "encodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "encodedBytes": 0
+          }
+        }
+      }
+    },
+    "candidate": {
+      "pid": 19382,
+      "token": "d8214b597ba3affec071d7c578a5b951",
+      "status": "PASS",
+      "apk_sha256": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90",
+      "member_sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d",
+      "member_data_offset": 2048000,
+      "elf64_aligned": true,
+      "cases": {
+        "hdwallet": {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "hdwallet",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "entropy": "ba5821e8c356c05ba5f025d9532fe0f21f65d594",
+            "seedSha256": "a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541",
+            "keySha256": "fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9",
+            "bitcoinAddress": "bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85"
+          }
+        },
+        "ethereumLegacy": {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "ethereumLegacy",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9",
+            "signingOutputSha256": "e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f",
+            "signingOutputBytes": 217,
+            "error": "OK"
+          }
+        },
+        "ethereum1559": {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "ethereum1559",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689",
+            "signingOutputSha256": "95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63",
+            "signingOutputBytes": 357,
+            "error": "OK"
+          }
+        },
+        "bitcoinCompilerV2": {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "bitcoinCompilerV2",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "preimageSha256": "6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e",
+            "preimageBytes": 73,
+            "signingOutputSha256": "d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55",
+            "signingOutputBytes": 434,
+            "encodedSha256": "56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf",
+            "txid": "c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885"
+          }
+        },
+        "bitcoinAppP2wsh": {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "bitcoinAppP2wsh",
+          "required": false,
+          "outcome": "OBSERVED",
+          "result": {
+            "signingInputSha256": "055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039",
+            "preimageSha256": "fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98",
+            "preimageBytes": 145,
+            "preimageError": "OK",
+            "preimageErrorMessage": "",
+            "hashPublicKeysCount": 0,
+            "compilerOutputSha256": "b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6",
+            "compilerOutputBytes": 34,
+            "compilerError": "Error_invalid_params",
+            "compilerErrorMessage": "empty signatures or publickeys",
+            "encodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "encodedBytes": 0
+          }
+        }
+      }
+    }
+  }
+}

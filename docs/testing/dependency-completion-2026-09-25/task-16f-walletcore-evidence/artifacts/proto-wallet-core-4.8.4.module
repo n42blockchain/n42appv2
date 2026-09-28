@@ -1,0 +1,98 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.trustwallet",
+    "module": "wallet-core-proto",
+    "version": "4.8.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.10.2"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.protobuf",
+          "module": "protobuf-javalite",
+          "version": {
+            "requires": "3.22.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "wallet-core-proto-4.8.4.jar",
+          "url": "wallet-core-proto-4.8.4.jar",
+          "size": 3408348,
+          "sha512": "5b8e33917723e8b43f5fe43e5373baed0acef44cf996cb309206ae7cee9e1f0310b79a041175205dad22718b3d1ef59684b7bce28a6974fb62c3a02da02cc3d9",
+          "sha256": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+          "sha1": "731220516c02ee4d0b88b0a9bf44301d696af5f9",
+          "md5": "3ae958d46ece28338086888f2c5d0c9a"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.protobuf",
+          "module": "protobuf-javalite",
+          "version": {
+            "requires": "3.22.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "wallet-core-proto-4.8.4.jar",
+          "url": "wallet-core-proto-4.8.4.jar",
+          "size": 3408348,
+          "sha512": "5b8e33917723e8b43f5fe43e5373baed0acef44cf996cb309206ae7cee9e1f0310b79a041175205dad22718b3d1ef59684b7bce28a6974fb62c3a02da02cc3d9",
+          "sha256": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+          "sha1": "731220516c02ee4d0b88b0a9bf44301d696af5f9",
+          "md5": "3ae958d46ece28338086888f2c5d0c9a"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "wallet-core-proto-4.8.4-sources.jar",
+          "url": "wallet-core-proto-4.8.4-sources.jar",
+          "size": 942338,
+          "sha512": "a112f7dd003146537d6f15b042de2aca2cafd4f02c9d9203454ee0ea67b74c2dc1220f3a14ae1ee7441cafc33a4f6dd0be73b8bb6c808fc6e0b4c0827329cdf6",
+          "sha256": "cf637bfd06879e9cfa35cd47f6a2ea56f2ea8ab987fe4410f9dcfa14ad268d12",
+          "sha1": "9cf39f7f339f58b9771ada0268e8ba1109d5375b",
+          "md5": "1c5fc3e81b7d4b3a1d1b19ac0bf017b4"
+        }
+      ]
+    }
+  ]
+}

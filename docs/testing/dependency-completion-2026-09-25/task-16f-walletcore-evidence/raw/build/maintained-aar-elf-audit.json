@@ -1,0 +1,7 @@
+{
+  "artifact": "android/native/wallet_core/maven/com/trustwallet/wallet-core/4.8.4/wallet-core-4.8.4.aar",
+  "libraries_checked": 2,
+  "unaligned_libraries": [],
+  "passed": true,
+  "scope": "ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification"
+}

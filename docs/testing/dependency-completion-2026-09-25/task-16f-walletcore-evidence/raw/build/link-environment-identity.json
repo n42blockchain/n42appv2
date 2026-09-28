@@ -1,0 +1,43 @@
+{
+  "generation_environment_file_sha256": "75d6cd7ecb89ff14521cf928186c4021f370b9c2e88d597ac842d750c0a8103c",
+  "configure_recorded_environment_equal": true,
+  "ninja_pid": 49001,
+  "ninja_selected_environment_equal": true,
+  "poison_absent": [
+    "RUBYOPT",
+    "RUBYLIB",
+    "PERL5OPT",
+    "PERL5LIB",
+    "CPATH",
+    "C_INCLUDE_PATH",
+    "CPLUS_INCLUDE_PATH",
+    "LIBRARY_PATH",
+    "CFLAGS",
+    "CXXFLAGS",
+    "CPPFLAGS",
+    "LDFLAGS",
+    "SDKROOT"
+  ],
+  "allowed_keys": [
+    "ANDROID_HOME",
+    "ANDROID_NDK_HOME",
+    "BOOST_ROOT",
+    "CARGO_BUILD_JOBS",
+    "CARGO_HOME",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_CONFIG_NOSYSTEM",
+    "GIT_TERMINAL_PROMPT",
+    "JAVA_HOME",
+    "LANG",
+    "LC_ALL",
+    "PATH",
+    "PREFIX",
+    "RUSTC",
+    "RUSTDOC",
+    "RUSTUP_HOME",
+    "TMPDIR",
+    "WALLETCORE_CARGO_BIN",
+    "WALLETCORE_CARGO_CALLS",
+    "WALLETCORE_SOURCE"
+  ]
+}

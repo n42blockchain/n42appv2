@@ -1,0 +1,17 @@
+test_aar_requires_pinned_class_and_native_bytes (test.scripts.test_build_walletcore_fixture.WalletCoreFixtureBuildTest) ... ok
+test_checked_buffer_cannot_be_changed_by_later_path_swap (test.scripts.test_build_walletcore_fixture.WalletCoreFixtureBuildTest) ... ok
+test_real_input_preflight_rejects_tampered_pin (test.scripts.test_build_walletcore_fixture.WalletCoreFixtureBuildTest) ... ok
+test_baseline_native_load_failure_is_preserved_as_failure (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_candidate_requires_native_maps_and_all_tagged_goldens (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_epoch_and_exact_apk_members_are_pinned_before_device (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_fresh_logcat_token_pid_and_case_framing (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_full_replay_records_baseline_load_failure_without_claiming_parity (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_full_replay_requires_parity_when_baseline_loaded (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_git_epoch_contains_every_reviewed_source (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_runner_rejects_wrong_apk_before_any_adb_call (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+test_strict_state_requires_wifi_and_offline_route (test.scripts.test_walletcore_fixture.WalletCoreFixtureVerifierTest) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 2.099s
+
+OK

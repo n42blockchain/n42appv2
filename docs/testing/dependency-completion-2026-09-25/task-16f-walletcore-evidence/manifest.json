@@ -1,0 +1,620 @@
+{
+  "schema_version": 1,
+  "members": [
+    {
+      "path": "ACCEPTANCE.md",
+      "size": 2628,
+      "sha256": "0e1b1dc04352183afa252e59fcdf8b17b0bb29a96b812a27bf96bee3d5491070"
+    },
+    {
+      "path": "README.md",
+      "size": 2805,
+      "sha256": "dae96f419e6e9bc4591288d5eeef218012c1617db434e097ee9cf7111b861ec2"
+    },
+    {
+      "path": "artifacts/maintained-wallet-core-4.8.4-sources.jar",
+      "size": 77500,
+      "sha256": "226c2847b6a4fc0e930eb4283e5224509527eb91644d5a1ec41ef60d1fbda0f4"
+    },
+    {
+      "path": "artifacts/maintained-wallet-core-4.8.4.aar",
+      "size": 29994963,
+      "sha256": "560cf86e132e4b4ee18afb70daf670e12e8fd34684a03eb38b9e49e39cd0f57d"
+    },
+    {
+      "path": "artifacts/maintained-wallet-core-4.8.4.module",
+      "size": 3085,
+      "sha256": "92018655c514146e2ad0222a23e66024811f3f638b0a264a2f2b1ed5c70a76f1"
+    },
+    {
+      "path": "artifacts/maintained-wallet-core-4.8.4.pom",
+      "size": 1006,
+      "sha256": "6c68514803d192ef49f45a74cc5d5bf07a87b855a398b6b2ce99bd695b17b0af"
+    },
+    {
+      "path": "artifacts/official-wallet-core-4.8.4-sources.jar",
+      "size": 77500,
+      "sha256": "226c2847b6a4fc0e930eb4283e5224509527eb91644d5a1ec41ef60d1fbda0f4"
+    },
+    {
+      "path": "artifacts/official-wallet-core-4.8.4.aar",
+      "size": 29995077,
+      "sha256": "04ea7ab9527beeb3f4d650b13108deb08ec8a857f4e62b86df3e953dfa9e4d87"
+    },
+    {
+      "path": "artifacts/official-wallet-core-4.8.4.module",
+      "size": 3085,
+      "sha256": "03e1e68e20b7abd6078e6bd3dec041b9da7639048bf91d4b2cb6571c748b725f"
+    },
+    {
+      "path": "artifacts/official-wallet-core-4.8.4.pom",
+      "size": 1006,
+      "sha256": "6c68514803d192ef49f45a74cc5d5bf07a87b855a398b6b2ce99bd695b17b0af"
+    },
+    {
+      "path": "artifacts/proto-wallet-core-4.8.4-sources.jar",
+      "size": 942338,
+      "sha256": "cf637bfd06879e9cfa35cd47f6a2ea56f2ea8ab987fe4410f9dcfa14ad268d12"
+    },
+    {
+      "path": "artifacts/proto-wallet-core-4.8.4.jar",
+      "size": 3408348,
+      "sha256": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b"
+    },
+    {
+      "path": "artifacts/proto-wallet-core-4.8.4.module",
+      "size": 3141,
+      "sha256": "127c83647137fa0b6c9be1284c39d6d265c760a3a3ea5e866cb4085db8f62885"
+    },
+    {
+      "path": "artifacts/proto-wallet-core-4.8.4.pom",
+      "size": 988,
+      "sha256": "5a2b60b85426bfc85e13055db5fcb92332e6827a348b64a934a1ea997ad398fe"
+    },
+    {
+      "path": "artifacts/protobuf-javalite-4.36.2.jar",
+      "size": 1022979,
+      "sha256": "8f4f93d08cb37130ecb0bc69d376d7d27c36ff04ddb1bb27430b06caa9fa062e"
+    },
+    {
+      "path": "artifacts/run1-baseline.apk",
+      "size": 19796976,
+      "sha256": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19"
+    },
+    {
+      "path": "artifacts/run1-candidate.apk",
+      "size": 19801272,
+      "sha256": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90"
+    },
+    {
+      "path": "licenses/boost-1.90.0-LICENSE_1_0.txt",
+      "size": 1338,
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+    },
+    {
+      "path": "licenses/protobuf-3.20.3-LICENSE",
+      "size": 1732,
+      "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d"
+    },
+    {
+      "path": "licenses/trezor-chacha20poly1305-LICENSE",
+      "size": 1078,
+      "sha256": "4830b13259395753eda841ebdd0699050df3836d3f3056c6ee0256e7f83ceb5e"
+    },
+    {
+      "path": "licenses/trezor-crypto-LICENSE",
+      "size": 1114,
+      "sha256": "b53d2eb93806f3d618370726f27eafeb6c279c7a90351297f79e073e49e569be"
+    },
+    {
+      "path": "licenses/wallet-core-LICENSE",
+      "size": 10757,
+      "sha256": "acebc15b086cea49799f5f86b1fc60afe82f99a0ece7ab37ccf3e0f1094df0a6"
+    },
+    {
+      "path": "licenses/wallet-core-LICENSE-3RD-PARTY.txt",
+      "size": 44707,
+      "sha256": "231c51196b17515caf6aa3b8898e7e19dd87ec93c73f1282b3efae1a7b37363a"
+    },
+    {
+      "path": "logs/app-selection-full-artifacts-failed.log",
+      "size": 477931,
+      "sha256": "300088e9d74f6d80ae9bc0c33425ba7bd1c7853ac08ec909ed6b8e25063ccdbc"
+    },
+    {
+      "path": "logs/app-selection-initial-success.log",
+      "size": 36967,
+      "sha256": "8a5010c5e2a436613a2edbb62e95bbfb6edaa7b237d707ae5fa61a132c0faa1a"
+    },
+    {
+      "path": "logs/app-selection.log",
+      "size": 37153,
+      "sha256": "57ea826bf7ca019f5d1d25e4764a1e9de917635c8cef1a3238bd6b32c5bebe23"
+    },
+    {
+      "path": "logs/cmake/arm64-v8a/build.log",
+      "size": 1084071,
+      "sha256": "37d077f0a50b05475221247d939572e4d9289b20372ae68c64d18e0efe70b9fe"
+    },
+    {
+      "path": "logs/cmake/arm64-v8a/configure.log",
+      "size": 5493,
+      "sha256": "d6bb0cf29f6572373be9dc76e1646f370d531a3329432b605e869ab8bdd03d5b"
+    },
+    {
+      "path": "logs/cmake/armeabi-v7a/build.log",
+      "size": 1090965,
+      "sha256": "d32bce315f9cb95327a3055846dafb12b4619cfab4be46f825b38c83bae989db"
+    },
+    {
+      "path": "logs/cmake/armeabi-v7a/configure.log",
+      "size": 5499,
+      "sha256": "d7d8165ed45dc099ca4d06f825002820f684a8a6225397c40d78bc3b85577ca2"
+    },
+    {
+      "path": "logs/cmake/x86/build.log",
+      "size": 1086183,
+      "sha256": "10801ac4c4cc775e365d189973bafa0c119b22a19179120c42485f593e32f8f3"
+    },
+    {
+      "path": "logs/cmake/x86/configure.log",
+      "size": 5475,
+      "sha256": "d0351c632d42a7631d4606647a94d042f4911fb807f4e38f96bad1687e94a912"
+    },
+    {
+      "path": "logs/cmake/x86_64/build.log",
+      "size": 1083294,
+      "sha256": "f92e6eaf3d3f814432ba1379c0e44977e78d2ff395fc156e1395f48ff800df0b"
+    },
+    {
+      "path": "logs/cmake/x86_64/configure.log",
+      "size": 5484,
+      "sha256": "cb9e17897215d9dba0373700a5963e0167e1ce5cb43f4e567c02044421514c68"
+    },
+    {
+      "path": "logs/env-tests-green.log",
+      "size": 530,
+      "sha256": "b36a51244e7ea94f7590e06cc7c1889e8684e4645193bd1c487382d628606690"
+    },
+    {
+      "path": "logs/final-preflight-fix1-optimized.log",
+      "size": 705,
+      "sha256": "0db2da3e389a3c64818d4025b60af79fe960e4aa92f19176c22b7ff04a790dfc"
+    },
+    {
+      "path": "logs/final-preflight-fix1.log",
+      "size": 705,
+      "sha256": "0db2da3e389a3c64818d4025b60af79fe960e4aa92f19176c22b7ff04a790dfc"
+    },
+    {
+      "path": "logs/fixture-json-roundtrip-final-optimized.log",
+      "size": 1790,
+      "sha256": "90dffdd9ad48f07d757fa26a0c14aa6b1af0386d70106d7efea0ee0448b1d777"
+    },
+    {
+      "path": "logs/fixture-json-roundtrip-final.log",
+      "size": 1790,
+      "sha256": "d6f9910247f87c5254829e4572898daded4c5ff480de6f5a923537a25a76fb6e"
+    },
+    {
+      "path": "logs/fixture-json-roundtrip-red.log",
+      "size": 1239,
+      "sha256": "743d8def7484a30962efd59dabd56088666268977aa7ee9aa65eb81ecf4d9aa1"
+    },
+    {
+      "path": "logs/fixture-runtime-run1.log",
+      "size": 400,
+      "sha256": "edeb78ef861376fcb53122f222374c73c1009e87a8d5977eddf5f3858e239b4e"
+    },
+    {
+      "path": "logs/fixture-source-tests-final.log",
+      "size": 1663,
+      "sha256": "f1cac3fc293c4842b60f5483ca67eae4d004cae50a1964028d495cd1a86d8659"
+    },
+    {
+      "path": "logs/generation.log",
+      "size": 37358,
+      "sha256": "18995d5fa8f3769bd1a5e87f62e960fef30b4a7b698e0154b57168bbc7621526"
+    },
+    {
+      "path": "logs/link-runner.log",
+      "size": 1342,
+      "sha256": "2fa2db8b62dabb9e0d984b54499ee57a6787c173d89f8ad3e717a6521df61f96"
+    },
+    {
+      "path": "logs/link-tests-green.log",
+      "size": 345,
+      "sha256": "b5a75f36bffb4336a43bbd64c27cd526edae3b0a1370e2eaf212028461d222de"
+    },
+    {
+      "path": "logs/link-tests-optimized.log",
+      "size": 345,
+      "sha256": "b5a75f36bffb4336a43bbd64c27cd526edae3b0a1370e2eaf212028461d222de"
+    },
+    {
+      "path": "logs/packaging-fix1-green.log",
+      "size": 715,
+      "sha256": "d69b0cd32cc2a5d3b15e4cf0853aaa4f26d0ca8b3ea9f8e5cecc76d804fafbd5"
+    },
+    {
+      "path": "logs/packaging-fix1-optimized.log",
+      "size": 715,
+      "sha256": "90371f02fea0c0f63dd4217f3e2309f274d5b7072144b3ffda4706fdeb056f18"
+    },
+    {
+      "path": "logs/packaging-tests-green.log",
+      "size": 101,
+      "sha256": "5279d1fc9a1ced44f9c96da1414ef59e4676f963fbad52e7a1a2903538819b0d"
+    },
+    {
+      "path": "logs/resolve-walletcore-sources-standalone-mainconfig.log",
+      "size": 549,
+      "sha256": "5ec91afb5d3ff0a76fe71210a0ad98cd32cb86b9eee8692a4c11e6bb8b0455e5"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-golden-normal.log",
+      "size": 116,
+      "sha256": "49c9d72aaa08ab348e16725dd20fdb49fb6b502d2ea5936092ca96af4686f592"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-golden-optimized.log",
+      "size": 116,
+      "sha256": "49c9d72aaa08ab348e16725dd20fdb49fb6b502d2ea5936092ca96af4686f592"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-installed-apk-normal.log",
+      "size": 112,
+      "sha256": "434cbf7076c7d474ef4bd32efe1e73cc2bc92a2a1d15dc8950c169796c60369c"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-installed-apk-optimized.log",
+      "size": 112,
+      "sha256": "434cbf7076c7d474ef4bd32efe1e73cc2bc92a2a1d15dc8950c169796c60369c"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-map-offset-normal.log",
+      "size": 116,
+      "sha256": "49c9d72aaa08ab348e16725dd20fdb49fb6b502d2ea5936092ca96af4686f592"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-map-offset-optimized.log",
+      "size": 116,
+      "sha256": "49c9d72aaa08ab348e16725dd20fdb49fb6b502d2ea5936092ca96af4686f592"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-pid-normal.log",
+      "size": 116,
+      "sha256": "49c9d72aaa08ab348e16725dd20fdb49fb6b502d2ea5936092ca96af4686f592"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-pid-optimized.log",
+      "size": 116,
+      "sha256": "49c9d72aaa08ab348e16725dd20fdb49fb6b502d2ea5936092ca96af4686f592"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-strict-mode-normal.log",
+      "size": 117,
+      "sha256": "c3425c958b306c9f6ca6f76ad62f224cd4ee938dfe441b4f8d85a3529d660388"
+    },
+    {
+      "path": "logs/runtime/tamper/wrong-strict-mode-optimized.log",
+      "size": 117,
+      "sha256": "c3425c958b306c9f6ca6f76ad62f224cd4ee938dfe441b4f8d85a3529d660388"
+    },
+    {
+      "path": "logs/runtime/verify-normal.log",
+      "size": 8025,
+      "sha256": "48eb85f73e745abf77bb146efdf5dbfab7e0e15a8a658cf3b02e0fd58a2cda7a"
+    },
+    {
+      "path": "logs/runtime/verify-optimized.log",
+      "size": 8025,
+      "sha256": "48eb85f73e745abf77bb146efdf5dbfab7e0e15a8a658cf3b02e0fd58a2cda7a"
+    },
+    {
+      "path": "logs/strip/arm64-v8a.log",
+      "size": 357,
+      "sha256": "98a61c30068280c659136d9eb6391ee1790bab01a5f4be28f27b06d8ceaa0eb2"
+    },
+    {
+      "path": "logs/strip/armeabi-v7a.log",
+      "size": 359,
+      "sha256": "d092891c771f368efda5946731b61304b3ef23de3b96481a101d247409ea6863"
+    },
+    {
+      "path": "logs/strip/x86.log",
+      "size": 351,
+      "sha256": "45fe3aa227331633c9aff34cf1bd17dc3b3c1d2d757449705800df69f9394fae"
+    },
+    {
+      "path": "logs/strip/x86_64.log",
+      "size": 354,
+      "sha256": "c0073b373d7c6a292cf9bfca4a0569e4aff08eb8e378c40644c94d72b6725207"
+    },
+    {
+      "path": "members.txt",
+      "size": 5071,
+      "sha256": "20aefd904caed42f8ac88cffe5efb9dbb016a25c8edaf24eeb56faf8f08215cc"
+    },
+    {
+      "path": "raw/build/candidate-native.json",
+      "size": 1293,
+      "sha256": "ba62b74696eaf2e4fb2f391c88ac83d68a4d2398184f3ab0152ec84f58a60769"
+    },
+    {
+      "path": "raw/build/candidate-stripped/audit/summary.json",
+      "size": 2500,
+      "sha256": "b9fc268ef4c0575ebc18432a8119710c46e3d96f92ed300759362ea506402e8c"
+    },
+    {
+      "path": "raw/build/candidate-stripped/strip-manifest.json",
+      "size": 3120,
+      "sha256": "10d13a583bb8e9b26ad3eac7c6c3d4b45ea0bfc3606c7f159dea0581a41db817"
+    },
+    {
+      "path": "raw/build/cargo-license-inventory.json",
+      "size": 380381,
+      "sha256": "7de0e0e94b96b51815385edb0ad3646e3006aa208bd83cb373a4aed0d635739b"
+    },
+    {
+      "path": "raw/build/codegen-v2-package-graph-summary.json",
+      "size": 70,
+      "sha256": "40683940a80473940d756c1458e18c77edb1f1a2c5d45cdfcd4dc8fbeac6ba9d"
+    },
+    {
+      "path": "raw/build/final-preflight.json",
+      "size": 779,
+      "sha256": "f6b796ab68259b9b1456ba6bbdd5e82133acac1e19e46ac3018d2da5b6afa753"
+    },
+    {
+      "path": "raw/build/generated-outputs.json",
+      "size": 161758,
+      "sha256": "bf90d3a23eb754fa59df4d869fdd1d04c53eb499d86b91013a3ff8bab36d1821"
+    },
+    {
+      "path": "raw/build/generation-environment.json",
+      "size": 3218,
+      "sha256": "75d6cd7ecb89ff14521cf928186c4021f370b9c2e88d597ac842d750c0a8103c"
+    },
+    {
+      "path": "raw/build/generation-preflight-process.json",
+      "size": 1614,
+      "sha256": "b8ac3f03533cecf3001752255e78089ee04ce3d2abf709c51e8251ed3b4fee2f"
+    },
+    {
+      "path": "raw/build/java-api-compare/javac-command.json",
+      "size": 779,
+      "sha256": "ad83e1b34e1795ff98eeadd36c4892789ab5d151a6e30117d10568411c3739c6"
+    },
+    {
+      "path": "raw/build/link-environment-identity.json",
+      "size": 889,
+      "sha256": "6523ad77ea1cf8e9043d91ca2838f398a72c0ec1678b45c2250d64b186812f4c"
+    },
+    {
+      "path": "raw/build/maintained-aar-elf-audit.json",
+      "size": 296,
+      "sha256": "f017b7b3d8c3a3016231df8c26cc30e33efc60796206fecec43f1d46028929fa"
+    },
+    {
+      "path": "raw/build/official/cache-inputs.json",
+      "size": 2646,
+      "sha256": "155e011ae64a8b70c444af6493f600731c9787921c08a4f52f6623e85ceb9888"
+    },
+    {
+      "path": "raw/build/rust-archives.json",
+      "size": 1378,
+      "sha256": "5206251069cbc844de00d9ee567ffbf3a5ff659ae4798855c8da8a6f42a55c23"
+    },
+    {
+      "path": "raw/build/rust-package-graph-summary.json",
+      "size": 73,
+      "sha256": "fa2de7ff00f9acb1c3d58bd03a4652c89645bb1f816c9e1a2943db524d60aa59"
+    },
+    {
+      "path": "raw/build/tool-inputs.json",
+      "size": 13006,
+      "sha256": "602a75a4ff15dbba669a4e815f17fcf0023ae851a57035d9047056fe9716c83f"
+    },
+    {
+      "path": "raw/build/tracked-packaging-report.json",
+      "size": 4522,
+      "sha256": "5b0b35e196db66efefc72869a1c1d8c213ed5f2e832d9f52fcbc3a72a157fd3d"
+    },
+    {
+      "path": "raw/runtime-receipt.json",
+      "size": 66560,
+      "sha256": "8c6dca7101874304da191f0185a2a25f4d1565f750522ff37ca7d8f001a9aa00"
+    },
+    {
+      "path": "raw/runtime-verification.json",
+      "size": 8025,
+      "sha256": "48eb85f73e745abf77bb146efdf5dbfab7e0e15a8a658cf3b02e0fd58a2cda7a"
+    },
+    {
+      "path": "reports/task-16f-walletcore-build-report.md",
+      "size": 19628,
+      "sha256": "be5be97a6483e16070620fe03c0e4ba559095f04216f1798f2eedfad8f072a63"
+    },
+    {
+      "path": "reports/task-16f-walletcore-implementation-brief.md",
+      "size": 2392,
+      "sha256": "d880b3a6099ca35e6081a1468b6eaec97c910c711ca8e5f805bae49b0f13134f"
+    },
+    {
+      "path": "reports/task-16f-walletcore-inputs.md",
+      "size": 9739,
+      "sha256": "d8a2b09d839c9f5613fe934278c0abc6635b7359f237a398383c0a5288261a6d"
+    },
+    {
+      "path": "reports/task-16f-walletcore-next-checkpoint.md",
+      "size": 6934,
+      "sha256": "1dfaa6db5753537a6da81b11d2131c5d60cc553ff1638f83e2daca7b890d76c4"
+    },
+    {
+      "path": "reports/task-16f-walletcore-packaging-report.md",
+      "size": 10429,
+      "sha256": "1dad3d18c25b15dab5d178692cfd5d5d6c816ca39fd82a19f430d2ae1f5faf35"
+    },
+    {
+      "path": "reports/task-16f-walletcore-readiness.md",
+      "size": 13171,
+      "sha256": "8874cb295ae184ec16d685c2be2279a9b30d3a367b22a0c7997f6f4326a9feea"
+    },
+    {
+      "path": "reports/task-16f-walletcore-runtime-brief.md",
+      "size": 8973,
+      "sha256": "2cc66cc4fa50df6e647ddb48d89ed7a91d6a9d2721d83e6eb2f2e519bd6eeeaf"
+    },
+    {
+      "path": "reports/task-16f-walletcore-runtime-report.md",
+      "size": 14089,
+      "sha256": "895f799b9d250da62a25ecf07a573bcaae024ec04144884470abc031d7d287fe"
+    },
+    {
+      "path": "reports/task-16f-walletcore-source-report.md",
+      "size": 11709,
+      "sha256": "4463eccb1fa9e6957c22419e0436495ef5c77b5432e1b32de1714beacb5b4d95"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-fixture-fix1-review.md",
+      "size": 915,
+      "sha256": "c6b84eee50dde569ff2e624b37fae36370f871ac8f7b844e1dec715724be5048"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-fixture-review.md",
+      "size": 1820,
+      "sha256": "6844a26d85bcf8f7c5cd71db0c2897610b8a701af07227c092b90d4d50957e06"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-generation-fix1-review.md",
+      "size": 2704,
+      "sha256": "d2994840172325ae375e8164b9d9b0cfedc1ed16192b6a1a253da6642274ae21"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-generation-review.md",
+      "size": 3785,
+      "sha256": "c356449f6c74ccab6fc7a05b85d7bf37c366799c0a33e83a36638243e0fe730d"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-link-fix1-review.md",
+      "size": 4713,
+      "sha256": "e8740c9d27a3c8b73495ddedb98ee761ff0b2860803218b15d8f94525902ba04"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-link-fix2-review.md",
+      "size": 1634,
+      "sha256": "2eaa0e043dd90f400ca352fae1b527655d960a633547f48e37438b085fdb4ee9"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-link-review.md",
+      "size": 3831,
+      "sha256": "2b0a9d74c2f375e2e692d2293625e90157e22ba820a54638c66760e07a551e8c"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-packaging-fix1-review.md",
+      "size": 2069,
+      "sha256": "660a869420581393c5e0cd05ea8a54d671f8cf767514c88c7e3e16d96d43aab8"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-packaging-review.md",
+      "size": 3928,
+      "sha256": "bbb9e1bb9348248cb8135029b82743975d225ff39cc0eb0f33eaadc9ec7ca115"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-source-fix1-review.md",
+      "size": 1895,
+      "sha256": "14c96bbefccc1320ea3af6eac98939917a94d6b20d34fd46d910bfb90f178638"
+    },
+    {
+      "path": "reviews/task-16f-walletcore-source-review.md",
+      "size": 3636,
+      "sha256": "5c493f4204c2259c7a09e5edb21b07aab2ecc9a5b502905859c8f125c53a7e16"
+    },
+    {
+      "path": "source/android/app/src/main/kotlin/ai/n42/www/walletcore/TransactionSignerHandler.kt",
+      "size": 77548,
+      "sha256": "e0469876fd7c2d6ee432cdc1e7f0884cae04e6f9c368d074f3791a7c41f7c0dc"
+    },
+    {
+      "path": "source/android/native/wallet_core/README.md",
+      "size": 2069,
+      "sha256": "d8adf2bc236e61e86a50f0788c965350d97f4f823bb5021f48d7e99ef27fc785"
+    },
+    {
+      "path": "source/scripts/build_walletcore_fixture.py",
+      "size": 10042,
+      "sha256": "316487b2fca8f783f1ecad0d2bb667c100978799d5b579f1a9aef64a4f2f3d18"
+    },
+    {
+      "path": "source/scripts/build_walletcore_maven.py",
+      "size": 10639,
+      "sha256": "720c6cfe7899f221f8bc3d6cbdc5840ef5e38b31fbc1ae253b0ec878038e06e2"
+    },
+    {
+      "path": "source/scripts/walletcore_android_generate.py",
+      "size": 7334,
+      "sha256": "40c427a940b90c9bcfb078dab625fc38ec53dad0a261ce5f53541d19ec3d38ab"
+    },
+    {
+      "path": "source/scripts/walletcore_android_link.py",
+      "size": 9265,
+      "sha256": "22f866ea18834b14ee7aa0b82c88bc531ddef7948ecfa75e8ebc8010a678cbf4"
+    },
+    {
+      "path": "source/scripts/walletcore_android_preflight.py",
+      "size": 12094,
+      "sha256": "7d6cb95cd86202146e7a27f2f41ff8d118cbe192beb88974ffcf56bc79693d7e"
+    },
+    {
+      "path": "source/tools/android_native_smoke/run_walletcore_fixture.py",
+      "size": 9441,
+      "sha256": "b8d1ff9a010fc633cec497b6ed15b3f569a5c39a1070bea0c485c6e6c27f3fe6"
+    },
+    {
+      "path": "source/tools/android_native_smoke/verify_walletcore_fixture.py",
+      "size": 18717,
+      "sha256": "c2029a0fc7e43db9a0d30507435743c3e0859fe6caf5f0851791e69d84703e33"
+    },
+    {
+      "path": "source/tools/android_native_smoke/walletcore_fixture/app/build.gradle.kts",
+      "size": 1567,
+      "sha256": "5d755316ba1c328a04b87100d2975203e82788d21e6e2c3f8858b6b0136050ec"
+    },
+    {
+      "path": "source/tools/android_native_smoke/walletcore_fixture/app/src/main/AndroidManifest.xml",
+      "size": 485,
+      "sha256": "d4da49f1e8f7c9ee30be863d34ba20d358ed5dba0d2161e1cd22f04895a24782"
+    },
+    {
+      "path": "source/tools/android_native_smoke/walletcore_fixture/app/src/main/java/ai/n42/fixture/walletcore/MainActivity.java",
+      "size": 19512,
+      "sha256": "e0e42d0f055e65224903ca9116db5a3f86f8ac9d2b60c3a74c4afb3f755754f1"
+    },
+    {
+      "path": "source/tools/android_native_smoke/walletcore_fixture/build.gradle.kts",
+      "size": 179,
+      "sha256": "d427f3d52a7f790915922ae521eae46a1d6d3c194aa9d6a7ef70033016b8a98a"
+    },
+    {
+      "path": "source/tools/android_native_smoke/walletcore_fixture/fixture-build-epoch.json",
+      "size": 3819,
+      "sha256": "7972005cc581a681c2921b101eacb8e49157eaf424c9f05479abef1b3e471ac9"
+    },
+    {
+      "path": "source/tools/android_native_smoke/walletcore_fixture/settings.gradle.kts",
+      "size": 336,
+      "sha256": "bc40157aad0ada01baccba58aef9233a5b580a7f9dec465efac3cf3c0942ef07"
+    },
+    {
+      "path": "verify_evidence.py",
+      "size": 13531,
+      "sha256": "865773dc57d96f79e6da40182601f55484127c78ea46ea97f78b9b103439997c"
+    },
+    {
+      "path": "verify_evidence_controls.py",
+      "size": 3404,
+      "sha256": "0b76e3a9633e5e1fe46439c582fbcef89804c0c607f0101862dc071df92ba00c"
+    }
+  ]
+}

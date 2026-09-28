@@ -1,0 +1,10 @@
+test_build_repo_uses_only_checked_buffers_after_source_swap (test.scripts.test_build_walletcore_maven.WalletCoreMavenTest) ... ok
+test_checked_bytes_survive_path_swap_before_packaging (test.scripts.test_build_walletcore_maven.WalletCoreMavenTest) ... ok
+test_module_rehash_preserves_sources_and_proto_dependency (test.scripts.test_build_walletcore_maven.WalletCoreMavenTest) ... ok
+test_published_artifact_mutations_are_rejected (test.scripts.test_build_walletcore_maven.WalletCoreMavenTest) ... ok
+test_repackage_changes_exactly_four_jni_members (test.scripts.test_build_walletcore_maven.WalletCoreMavenTest) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.020s
+
+OK

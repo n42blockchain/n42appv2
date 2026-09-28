@@ -1,0 +1,7 @@
+test_generated_manifest_detects_changed_output (test.scripts.test_walletcore_android_link.WalletCoreAndroidLinkTest) ... ok
+test_patch_changes_only_android_shared_target (test.scripts.test_walletcore_android_link.WalletCoreAndroidLinkTest) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK

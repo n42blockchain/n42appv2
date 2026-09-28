@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "source_commit": "d40d24a63d92619167903369308bf0e2f7eb3a59",
+  "source_tree": "7960465634763a9e3d4262f8cebcef094d94b71f",
+  "vendor_tree": "8090b28cfc7c6529fe03c34e5fe8b727fe67ad7f",
+  "boost": {
+    "header_files": 15987,
+    "total_bytes": 150815898,
+    "canonical_sha256": "b4cdc1afe5362fc41c292d76076a1322aaf21bedd167f59a3954879ee21e63ce"
+  },
+  "versions": {
+    "protoc": "libprotoc 3.20.3",
+    "cbindgen": "cbindgen 0.28.0",
+    "rustc": "rustc 1.94.0-nightly (f52090008 2025-12-10)",
+    "cargo": "cargo 1.94.0-nightly (2c283a9a5 2025-12-04)",
+    "android_cmake": "cmake version 3.22.1-g37088a8",
+    "jdk17": "openjdk version \"17.0.18\" 2026-01-20",
+    "ruby": "ruby 2.6.10p210 (2022-04-12 revision 67958) [universal.arm64e-darwin25]"
+  },
+  "files": {
+    "protobuf_archive": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/downloads/protobuf-java-3.20.3.tar.gz",
+      "bytes": 5563837,
+      "sha256": "aa109c630d85a3ef625d69344a83e72bf3d58df034db8d099c95c51f01cde20e"
+    },
+    "json_archive": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/downloads/nlohmann-json-3.11.3-include.zip",
+      "bytes": 299825,
+      "sha256": "a22461d13119ac5c78f205d3df1db13403e58ce1bb1794edc9313677313f4a9d"
+    },
+    "protobuf_header": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/include/google/protobuf/message.h",
+      "bytes": 69579,
+      "sha256": "298a7ff479420041d526d6aee6b7a6738c2d3465fa6b149b4fee9d0ea01df4f8"
+    },
+    "json_header": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/include/nlohmann/json.hpp",
+      "bytes": 198618,
+      "sha256": "2432cbf7f4258453538eca193cd937fc777462ae2ce8ee9f46e6ee460ef56bea"
+    },
+    "protoc": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/bin/protoc",
+      "bytes": 4548832,
+      "sha256": "5ee0c4680223aacd3d02f3d453730050a60adae6b024978ecd611678d71452dc"
+    },
+    "protoc_gen_c_typedef": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/bin/protoc-gen-c-typedef",
+      "bytes": 1734792,
+      "sha256": "cf2708b9a1c45db4c1f0154aa66e521a629c7fa1fbde1df8408652de8f10f14f"
+    },
+    "protoc_gen_swift_typealias": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/bin/protoc-gen-swift-typealias",
+      "bytes": 1751864,
+      "sha256": "db4f9a5582d8c4280f3d5d9c4a35dc1c697d25098f4018158251ac03d2b01488"
+    },
+    "cbindgen": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/host-tools/bin/cbindgen",
+      "bytes": 5891728,
+      "sha256": "a6a0afa89371c45036eb029f32a40210b5d2ea8889354876987f899d11206b3c"
+    },
+    "cbindgen_crate": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/cargo-home/registry/cache/index.crates.io-1949cf8c6b5b557f/cbindgen-0.28.0.crate",
+      "bytes": 223401,
+      "sha256": "eadd868a2ce9ca38de7eeafdcec9c7065ef89b42b32f0839278d55f35c54d1ff"
+    },
+    "rustc": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin/rustc",
+      "bytes": 414264,
+      "sha256": "99442d9cd9384587f6dd71ca88b6d494df1099419399490b20e996a3d73a2b11"
+    },
+    "cargo": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin/cargo",
+      "bytes": 30259944,
+      "sha256": "f2eca1cf61038e333908629c46448b3b522b0da14a0df629b656be02dcf137aa"
+    },
+    "rustdoc": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin/rustdoc",
+      "bytes": 11564744,
+      "sha256": "24c746cab82ef6ac1547c5e63416290956c846bc6b7508f0edb4b26114e9dc72"
+    },
+    "rust_src_manifest": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/Cargo.toml",
+      "bytes": 2137,
+      "sha256": "4edae29821d45751e44aa0f8a7a3e3b61fb9c71eaa3595965e7e57d03448a4dc"
+    },
+    "ndk_source_properties": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/source.properties",
+      "bytes": 108,
+      "sha256": "c00aa236fdb205e9be9edd9e2169763e48aca52735efff4e16f34205d49783b5"
+    },
+    "ndk_clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+      "bytes": 172733264,
+      "sha256": "df85444b66234bf4cae267e22bde45ea8fef596d30ca2991b2091a27e6ea7718"
+    },
+    "ndk_lld": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld",
+      "bytes": 115866400,
+      "sha256": "295bc36e1b10be0137f09904b7cc928a11ab3d44a8ec8250e4087ebd71f091c2"
+    },
+    "ndk_llvm_ar": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+      "bytes": 27160192,
+      "sha256": "3705c4237aab47a369b999f5b0af572a6ea56488df7174aaab29e5fc4b082ea3"
+    },
+    "ndk_llvm_readelf": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-readelf",
+      "bytes": 11757520,
+      "sha256": "37e565359be0c9f2868348dd314416a420d137ee84c891ec8474cf7d29cfd995"
+    },
+    "ndk_arm64_api28_clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android28-clang",
+      "bytes": 201,
+      "sha256": "c0e2e0373d192a8f9339e3148b2c56d41f60286ea5ff6ed3920c767be8090857"
+    },
+    "ndk_armv7_api28_clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/armv7a-linux-androideabi28-clang",
+      "bytes": 204,
+      "sha256": "15a4ddc9dbe494910c6e574cc805c6e89f4ea601cb081701e22117acdd0208f1"
+    },
+    "ndk_x86_api28_clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/i686-linux-android28-clang",
+      "bytes": 198,
+      "sha256": "9340c2e9c1dff3d3d12af77ded2e5ac88c441c0a6582c4b29f41a166c13e789f"
+    },
+    "ndk_x64_api28_clang": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/x86_64-linux-android28-clang",
+      "bytes": 200,
+      "sha256": "fe5db826a077c03fd48a11d9cdc7c8c01a3f536d2bc1cd5553bff1c7b14b43c9"
+    },
+    "android_cmake": {
+      "path": "/Users/jieliu/.codex/toolchains/android-sdk-37/cmake/3.22.1/bin/cmake",
+      "bytes": 19618128,
+      "sha256": "e46c7ffb232c25a43e130509368dd6b88f492f110ab6b44c69c639ac1ed8c8f6"
+    },
+    "jdk17_java": {
+      "path": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/java",
+      "bytes": 70464,
+      "sha256": "bf8efe506d54531fbab37b4cc52e004dfa203583d1aa086f132348d484ce456f"
+    },
+    "jdk17_javac": {
+      "path": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/javac",
+      "bytes": 70464,
+      "sha256": "b41f27f480057c876b18449e8a1dfffbc6cce0192759c239337f91f04c232662"
+    },
+    "ruby": {
+      "path": "/usr/bin/ruby",
+      "bytes": 134912,
+      "sha256": "4d57327e7abe67e1c3f84a0869f4239b3324a3d7ea20a70077450e688282fe4f"
+    },
+    "boost_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/host-tools/boost-1.90.0_1/LICENSE_1_0.txt",
+      "bytes": 1338,
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+    },
+    "rust_std_aarch64-linux-android": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/aarch64-linux-android/lib/libstd-10c003588676fb48.rlib",
+      "bytes": 20348034,
+      "sha256": "6dbd9da2630c6aae3b338c7bb63c4e98951923f1b997b6a9e6c837c11bd58985"
+    },
+    "rust_std_armv7-linux-androideabi": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/armv7-linux-androideabi/lib/libstd-bd90a5634161c46a.rlib",
+      "bytes": 18009004,
+      "sha256": "246ae4ddd50b3aeb7bed27a94318bd9e3405a7c7a565bc6948f8fb722c33b7e7"
+    },
+    "rust_std_x86_64-linux-android": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/x86_64-linux-android/lib/libstd-7f2494703cab205e.rlib",
+      "bytes": 20038498,
+      "sha256": "0986caf652a1e8bcc18e1346863315b4f0b8635795057e30541a76b0010c80ea"
+    },
+    "rust_std_i686-linux-android": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/i686-linux-android/lib/libstd-e73a9d5f29d8fe50.rlib",
+      "bytes": 17758852,
+      "sha256": "9096700e5b17ac1721311b0c62a280b110d6eb11c710053047f3dad37e3bdc69"
+    },
+    "walletcore_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/LICENSE",
+      "bytes": 10757,
+      "sha256": "acebc15b086cea49799f5f86b1fc60afe82f99a0ece7ab37ccf3e0f1094df0a6"
+    },
+    "walletcore_third_party_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/LICENSE-3RD-PARTY.txt",
+      "bytes": 44707,
+      "sha256": "231c51196b17515caf6aa3b8898e7e19dd87ec93c73f1282b3efae1a7b37363a"
+    },
+    "trezor_crypto_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/trezor-crypto/crypto/LICENSE",
+      "bytes": 1114,
+      "sha256": "b53d2eb93806f3d618370726f27eafeb6c279c7a90351297f79e073e49e569be"
+    },
+    "trezor_chacha_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/trezor-crypto/crypto/chacha20poly1305/LICENSE",
+      "bytes": 1078,
+      "sha256": "4830b13259395753eda841ebdd0699050df3836d3f3056c6ee0256e7f83ceb5e"
+    },
+    "protobuf_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/src/protobuf/protobuf-3.20.3/LICENSE",
+      "bytes": 1732,
+      "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d"
+    },
+    "json_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/LICENSE.MIT",
+      "bytes": 1076,
+      "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14"
+    },
+    "cbindgen_license": {
+      "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/cargo-home/registry/src/index.crates.io-1949cf8c6b5b557f/cbindgen-0.28.0/LICENSE",
+      "bytes": 16725,
+      "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+    }
+  }
+}

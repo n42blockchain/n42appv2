@@ -1,0 +1,22 @@
+{
+  "ANDROID_HOME": "/Users/jieliu/.codex/toolchains/android-sdk-37",
+  "ANDROID_NDK_HOME": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358",
+  "BOOST_ROOT": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/host-tools/boost-1.90.0_1",
+  "CARGO_BUILD_JOBS": "2",
+  "CARGO_HOME": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/cargo-home",
+  "GIT_CONFIG_GLOBAL": "/dev/null",
+  "GIT_CONFIG_NOSYSTEM": "1",
+  "GIT_TERMINAL_PROMPT": "0",
+  "JAVA_HOME": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
+  "LANG": "en_US.UTF-8",
+  "LC_ALL": "en_US.UTF-8",
+  "PATH": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/locked-cargo:/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/bin:/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/host-tools/bin:/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin:/Users/jieliu/.codex/toolchains/android-sdk-37/cmake/3.22.1/bin:/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin:/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+  "PREFIX": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local",
+  "RUSTC": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin/rustc",
+  "RUSTDOC": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin/rustdoc",
+  "RUSTUP_HOME": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup",
+  "TMPDIR": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/tmp",
+  "WALLETCORE_CARGO_BIN": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/bin/cargo",
+  "WALLETCORE_CARGO_CALLS": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/cargo-calls.jsonl",
+  "WALLETCORE_SOURCE": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source"
+}

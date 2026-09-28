@@ -1,0 +1,1343 @@
+{
+  "schema_version": 1,
+  "device": "emulator-5560",
+  "started_utc": "2026-09-28T05:32:49.126230+00:00",
+  "git_head": "9e755995b78c08275e390a87914a04ce69d8fb34",
+  "source_sha256": {
+    "tools/android_native_smoke/walletcore_fixture/settings.gradle.kts": "bc40157aad0ada01baccba58aef9233a5b580a7f9dec465efac3cf3c0942ef07",
+    "tools/android_native_smoke/walletcore_fixture/build.gradle.kts": "d427f3d52a7f790915922ae521eae46a1d6d3c194aa9d6a7ef70033016b8a98a",
+    "tools/android_native_smoke/walletcore_fixture/app/build.gradle.kts": "5d755316ba1c328a04b87100d2975203e82788d21e6e2c3f8858b6b0136050ec",
+    "tools/android_native_smoke/walletcore_fixture/app/src/main/AndroidManifest.xml": "d4da49f1e8f7c9ee30be863d34ba20d358ed5dba0d2161e1cd22f04895a24782",
+    "tools/android_native_smoke/walletcore_fixture/app/src/main/java/ai/n42/fixture/walletcore/MainActivity.java": "e0e42d0f055e65224903ca9116db5a3f86f8ac9d2b60c3a74c4afb3f755754f1",
+    "scripts/build_walletcore_fixture.py": "316487b2fca8f783f1ecad0d2bb667c100978799d5b579f1a9aef64a4f2f3d18",
+    "tools/android_native_smoke/walletcore_fixture/fixture-build-epoch.json": "7972005cc581a681c2921b101eacb8e49157eaf424c9f05479abef1b3e471ac9",
+    "tools/android_native_smoke/run_walletcore_fixture.py": "b8d1ff9a010fc633cec497b6ed15b3f569a5c39a1070bea0c485c6e6c27f3fe6",
+    "tools/android_native_smoke/verify_walletcore_fixture.py": "c2029a0fc7e43db9a0d30507435743c3e0859fe6caf5f0851791e69d84703e33"
+  },
+  "build_epoch_sha256": "7972005cc581a681c2921b101eacb8e49157eaf424c9f05479abef1b3e471ac9",
+  "build_epoch": {
+    "schema_version": 1,
+    "purpose": "Exact two-APK Wallet Core offline fixture build epoch before device execution",
+    "build_git_head": "89e214c2a6f30c0a5ee7c7c26682eeb110207df0",
+    "build_git_head_note": "Fixture source and build recipe were uncommitted at compile time; compiled source and artifact hashes are recorded below for later reviewed commit verification.",
+    "fixture_source_commit": null,
+    "compiled_fixture_source_sha256": {
+      "tools/android_native_smoke/walletcore_fixture/settings.gradle.kts": "bc40157aad0ada01baccba58aef9233a5b580a7f9dec465efac3cf3c0942ef07",
+      "tools/android_native_smoke/walletcore_fixture/build.gradle.kts": "d427f3d52a7f790915922ae521eae46a1d6d3c194aa9d6a7ef70033016b8a98a",
+      "tools/android_native_smoke/walletcore_fixture/app/build.gradle.kts": "5d755316ba1c328a04b87100d2975203e82788d21e6e2c3f8858b6b0136050ec",
+      "tools/android_native_smoke/walletcore_fixture/app/src/main/AndroidManifest.xml": "d4da49f1e8f7c9ee30be863d34ba20d358ed5dba0d2161e1cd22f04895a24782",
+      "tools/android_native_smoke/walletcore_fixture/app/src/main/java/ai/n42/fixture/walletcore/MainActivity.java": "e0e42d0f055e65224903ca9116db5a3f86f8ac9d2b60c3a74c4afb3f755754f1"
+    },
+    "build_script_sha256": "316487b2fca8f783f1ecad0d2bb667c100978799d5b579f1a9aef64a4f2f3d18",
+    "input_sha256": {
+      "baseline_aar": "04ea7ab9527beeb3f4d650b13108deb08ec8a857f4e62b86df3e953dfa9e4d87",
+      "candidate_aar": "560cf86e132e4b4ee18afb70daf670e12e8fd34684a03eb38b9e49e39cd0f57d",
+      "proto_jar": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+      "javalite_jar": "8f4f93d08cb37130ecb0bc69d376d7d27c36ff04ddb1bb27430b06caa9fa062e"
+    },
+    "aar_members": {
+      "baseline": {
+        "classes_sha256": "5e86c61d0121af19c1bcf99043b21a6e4c8fa479bb6d1c9a20967eadb8bb6d4b",
+        "arm64_jni_sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7"
+      },
+      "candidate": {
+        "classes_sha256": "5e86c61d0121af19c1bcf99043b21a6e4c8fa479bb6d1c9a20967eadb8bb6d4b",
+        "arm64_jni_sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d"
+      }
+    },
+    "gradle_sha256": "f1a69bc070c613e5818d469a1248c1833519dd096d6828bb6fa4cde76de769e0",
+    "aapt2_jar_sha256": "eb93ce9d0fa121333f12395b3ab30822c5cdb9155737f20d342fe71809757059",
+    "aapt2_executable_sha256": "a6d0102e909213b2bbc50f5bf6e082a9727c029c4a48fca02fbaebbf87e65155",
+    "fixture_keystore_sha256": "01083a606e5c1b34569db06e43607040efe8acbfbc0336f74f85593db4752132",
+    "apk_sha256": {
+      "baseline": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19",
+      "candidate": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90"
+    },
+    "apk_bytes": {
+      "baseline": 19796976,
+      "candidate": 19801272
+    },
+    "apk_locations": {
+      "baseline": "task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk",
+      "candidate": "task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+    },
+    "apk_arm64_member_sha256": {
+      "baseline": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+      "candidate": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d"
+    },
+    "apk_member_data_offset": {
+      "baseline": 2048000,
+      "candidate": 2048000
+    },
+    "compile_failures": [
+      "baseline: offline task-owned Gradle home lacked AGP AAPT2 9.4.1 artifact",
+      "baseline2: offline task-owned Gradle home lacked lint-gradle 32.4.1; fixture-only lint disabled"
+    ],
+    "compile_success": [
+      "baseline3",
+      "candidate1",
+      "baseline4",
+      "candidate2",
+      "baseline5",
+      "candidate3"
+    ],
+    "source_change_after_first_success": "Current baseline5/candidate3 source emits BEGIN before load, LOADED/maps after load, and stage-tagged app-shaped P2WSH results. Previous successful APKs retained as source-history evidence."
+  },
+  "device_tool_sha256": {
+    "/opt/homebrew/share/android-commandlinetools/platform-tools/adb": "534893b946847fdf6f9998108af469e646679824d75098247ca438948fa2dffc",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt": "170717682f714712c5b6854af73cfe37aeda342ff422384e98d67fc1b490f49b",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign": "0427144f4a3fd242c5a159e7088637082539ae556bc1d2bbc2032bb775d47cea",
+    "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/apksigner": "b47549e373b895ce6ca620d0c7887e674d9615ffa837a86ac601dcfd04adb0f0"
+  },
+  "device_state": {
+    "argv": [
+      "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+      "-s",
+      "emulator-5560",
+      "get-state"
+    ],
+    "exit": 0,
+    "stdout": "device",
+    "stderr": ""
+  },
+  "initial": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "wifi_on": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "wifi_on"
+      ],
+      "exit": 0,
+      "stdout": "0",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "phases": {
+    "baseline": {
+      "package": "ai.n42.fixture.walletcore.baseline",
+      "apk_sha256": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19",
+      "apk_bytes": 19796976,
+      "member_data_offset": 2048000,
+      "member_executable_loads": [
+        [
+          2048000,
+          17301504
+        ]
+      ],
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "wifi_on": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "wifi_on"
+          ],
+          "exit": 0,
+          "stdout": "0",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.walletcore.baseline' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'26'\ntargetSdkVersion:'37'\napplication: label='' icon=''\nlaunchable-activity: name='ai.n42.fixture.walletcore.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales:\ndensities:\nnative-code: 'arm64-v8a'",
+        "stderr": ""
+      },
+      "permissions": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "permissions",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: ai.n42.fixture.walletcore.baseline",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     207 META-INF/version-control-info.textproto (OK - compressed)\n     296 classes.dex (OK - compressed)\n  988506 classes2.dex (OK - compressed)\n 2048000 lib/arm64-v8a/libTrustWalletCore.so (OK)\n19736967 core/java_features_proto-descriptor-set.proto.bin (OK - compressed)\n19737765 google/protobuf/any.proto (OK - compressed)\n19740283 google/protobuf/api.proto (OK - compressed)\n19743522 google/protobuf/descriptor.proto (OK - compressed)\n19760046 google/protobuf/duration.proto (OK - compressed)\n19762161 google/protobuf/empty.proto (OK - compressed)\n19763429 google/protobuf/field_mask.proto (OK - compressed)\n19766636 google/protobuf/source_context.proto (OK - compressed)\n19767888 google/protobuf/struct.proto (OK - compressed)\n19769903 google/protobuf/timestamp.proto (OK - compressed)\n19772861 google/protobuf/type.proto (OK - compressed)\n19775530 google/protobuf/wrappers.proto (OK - compressed)\n19777366 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n19777975 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n19779888 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n19781044 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n19781230 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n19781646 kotlin/kotlin.kotlin_builtins (OK - compressed)\n19787054 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n19788476 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n19789960 AndroidManifest.xml (OK - compressed)\n19790692 resources.arsc (OK)\nVerification successful",
+        "stderr": ""
+      },
+      "apksigner": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/apksigner",
+          "verify",
+          "--verbose",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): false\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1",
+        "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::loadLibrary has been called by org.conscrypt.NativeLibraryUtil in an unnamed module (file:/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/lib/apksigner.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled"
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.walletcore.baseline"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.walletcore.baseline"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~KEWdUPgxk23hNAQL2M8SUQ==/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==/base.apk",
+        "stderr": ""
+      },
+      "pull": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "pull",
+          "/data/app/~~KEWdUPgxk23hNAQL2M8SUQ==/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==/base.apk",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-runtime-run1/baseline-installed.apk"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "/data/app/~~KEWdUPgxk23hNAQL2M8SUQ==/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==/base.apk: 1 file pulled, 0 skipped. 45.7 MB/s (19796976 bytes in 0.413s)"
+      },
+      "pulled_apk_sha256": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19",
+      "logcat_clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-c"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.walletcore.baseline/ai.n42.fixture.walletcore.MainActivity",
+          "--es",
+          "phase",
+          "baseline",
+          "--es",
+          "token",
+          "ef150e3178e9eb6ac01af2f8d90e2b9b"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.walletcore.baseline/ai.n42.fixture.walletcore.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.walletcore.baseline/ai.n42.fixture.walletcore.MainActivity\nWaitTime: 404\nComplete",
+        "stderr": ""
+      },
+      "last_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_WALLETCORE_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-28 01:32:51.761 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"BEGIN\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"apkPath\":\"\\/data\\/app\\/~~KEWdUPgxk23hNAQL2M8SUQ==\\/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==\\/base.apk\",\"apkSha256\":\"ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19\",\"libraryLookupPath\":\"\\/data\\/app\\/~~KEWdUPgxk23hNAQL2M8SUQ==\\/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==\\/base.apk!\\/lib\\/arm64-v8a\\/libTrustWalletCore.so\"}\n09-28 01:32:51.770 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"LOADED\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"nativeMaps\":[\"7541a226c000-7541a32ec000 r-xp 001f4000 fe:05 164079                     \\/data\\/app\\/~~KEWdUPgxk23hNAQL2M8SUQ==\\/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==\\/base.apk\"]}\n09-28 01:32:51.800 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"hdwallet\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"entropy\":\"ba5821e8c356c05ba5f025d9532fe0f21f65d594\",\"seedSha256\":\"a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541\",\"keySha256\":\"fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9\",\"bitcoinAddress\":\"bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85\"}}\n09-28 01:32:51.805 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"ethereumLegacy\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9\",\"signingOutputSha256\":\"e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f\",\"signingOutputBytes\":217,\"error\":\"OK\"}}\n09-28 01:32:51.805 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"ethereum1559\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689\",\"signingOutputSha256\":\"95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63\",\"signingOutputBytes\":357,\"error\":\"OK\"}}\n09-28 01:32:51.851 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"bitcoinCompilerV2\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"preimageSha256\":\"6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e\",\"preimageBytes\":73,\"signingOutputSha256\":\"d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55\",\"signingOutputBytes\":434,\"encodedSha256\":\"56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf\",\"txid\":\"c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885\"}}\n09-28 01:32:51.853 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"bitcoinAppP2wsh\",\"required\":false,\"outcome\":\"OBSERVED\",\"result\":{\"signingInputSha256\":\"055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039\",\"preimageSha256\":\"fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98\",\"preimageBytes\":145,\"preimageError\":\"OK\",\"preimageErrorMessage\":\"\",\"hashPublicKeysCount\":0,\"compilerOutputSha256\":\"b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6\",\"compilerOutputBytes\":34,\"compilerError\":\"Error_invalid_params\",\"compilerErrorMessage\":\"empty signatures or publickeys\",\"encodedSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"encodedBytes\":0}}\n09-28 01:32:51.853 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"END\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"status\":\"PASS\"}",
+        "stderr": ""
+      },
+      "result_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_WALLETCORE_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-28 01:32:51.761 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"BEGIN\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"apkPath\":\"\\/data\\/app\\/~~KEWdUPgxk23hNAQL2M8SUQ==\\/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==\\/base.apk\",\"apkSha256\":\"ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19\",\"libraryLookupPath\":\"\\/data\\/app\\/~~KEWdUPgxk23hNAQL2M8SUQ==\\/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==\\/base.apk!\\/lib\\/arm64-v8a\\/libTrustWalletCore.so\"}\n09-28 01:32:51.770 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"LOADED\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"nativeMaps\":[\"7541a226c000-7541a32ec000 r-xp 001f4000 fe:05 164079                     \\/data\\/app\\/~~KEWdUPgxk23hNAQL2M8SUQ==\\/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==\\/base.apk\"]}\n09-28 01:32:51.800 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"hdwallet\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"entropy\":\"ba5821e8c356c05ba5f025d9532fe0f21f65d594\",\"seedSha256\":\"a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541\",\"keySha256\":\"fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9\",\"bitcoinAddress\":\"bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85\"}}\n09-28 01:32:51.805 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"ethereumLegacy\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9\",\"signingOutputSha256\":\"e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f\",\"signingOutputBytes\":217,\"error\":\"OK\"}}\n09-28 01:32:51.805 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"ethereum1559\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689\",\"signingOutputSha256\":\"95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63\",\"signingOutputBytes\":357,\"error\":\"OK\"}}\n09-28 01:32:51.851 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"bitcoinCompilerV2\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"preimageSha256\":\"6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e\",\"preimageBytes\":73,\"signingOutputSha256\":\"d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55\",\"signingOutputBytes\":434,\"encodedSha256\":\"56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf\",\"txid\":\"c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885\"}}\n09-28 01:32:51.853 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"name\":\"bitcoinAppP2wsh\",\"required\":false,\"outcome\":\"OBSERVED\",\"result\":{\"signingInputSha256\":\"055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039\",\"preimageSha256\":\"fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98\",\"preimageBytes\":145,\"preimageError\":\"OK\",\"preimageErrorMessage\":\"\",\"hashPublicKeysCount\":0,\"compilerOutputSha256\":\"b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6\",\"compilerOutputBytes\":34,\"compilerError\":\"Error_invalid_params\",\"compilerErrorMessage\":\"empty signatures or publickeys\",\"encodedSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"encodedBytes\":0}}\n09-28 01:32:51.853 19272 19272 I N42_WALLETCORE_FIXTURE: {\"kind\":\"END\",\"phase\":\"baseline\",\"token\":\"ef150e3178e9eb6ac01af2f8d90e2b9b\",\"pid\":19272,\"status\":\"PASS\"}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "events": [
+        {
+          "kind": "BEGIN",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "apkPath": "/data/app/~~KEWdUPgxk23hNAQL2M8SUQ==/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==/base.apk",
+          "apkSha256": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19",
+          "libraryLookupPath": "/data/app/~~KEWdUPgxk23hNAQL2M8SUQ==/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==/base.apk!/lib/arm64-v8a/libTrustWalletCore.so"
+        },
+        {
+          "kind": "LOADED",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "nativeMaps": [
+            "7541a226c000-7541a32ec000 r-xp 001f4000 fe:05 164079                     /data/app/~~KEWdUPgxk23hNAQL2M8SUQ==/ai.n42.fixture.walletcore.baseline-qY7wMI5VnwT7Cr93M8r-Uw==/base.apk"
+          ]
+        },
+        {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "hdwallet",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "entropy": "ba5821e8c356c05ba5f025d9532fe0f21f65d594",
+            "seedSha256": "a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541",
+            "keySha256": "fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9",
+            "bitcoinAddress": "bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "ethereumLegacy",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9",
+            "signingOutputSha256": "e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f",
+            "signingOutputBytes": 217,
+            "error": "OK"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "ethereum1559",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689",
+            "signingOutputSha256": "95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63",
+            "signingOutputBytes": 357,
+            "error": "OK"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "bitcoinCompilerV2",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "preimageSha256": "6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e",
+            "preimageBytes": 73,
+            "signingOutputSha256": "d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55",
+            "signingOutputBytes": 434,
+            "encodedSha256": "56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf",
+            "txid": "c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "name": "bitcoinAppP2wsh",
+          "required": false,
+          "outcome": "OBSERVED",
+          "result": {
+            "signingInputSha256": "055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039",
+            "preimageSha256": "fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98",
+            "preimageBytes": 145,
+            "preimageError": "OK",
+            "preimageErrorMessage": "",
+            "hashPublicKeysCount": 0,
+            "compilerOutputSha256": "b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6",
+            "compilerOutputBytes": 34,
+            "compilerError": "Error_invalid_params",
+            "compilerErrorMessage": "empty signatures or publickeys",
+            "encodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "encodedBytes": 0
+          }
+        },
+        {
+          "kind": "END",
+          "phase": "baseline",
+          "token": "ef150e3178e9eb6ac01af2f8d90e2b9b",
+          "pid": 19272,
+          "status": "PASS"
+        }
+      ],
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "wifi_on": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "wifi_on"
+          ],
+          "exit": 0,
+          "stdout": "0",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.walletcore.baseline"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "candidate": {
+      "package": "ai.n42.fixture.walletcore.candidate",
+      "apk_sha256": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90",
+      "apk_bytes": 19801272,
+      "member_data_offset": 2048000,
+      "member_executable_loads": [
+        [
+          2048000,
+          17317888
+        ]
+      ],
+      "pre": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "wifi_on": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "wifi_on"
+          ],
+          "exit": 0,
+          "stdout": "0",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "badging": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "badging",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: name='ai.n42.fixture.walletcore.candidate' versionCode='' versionName='' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'\nsdkVersion:'26'\ntargetSdkVersion:'37'\napplication: label='' icon=''\nlaunchable-activity: name='ai.n42.fixture.walletcore.MainActivity'  label='' icon=''\nfeature-group: label=''\n  uses-feature: name='android.hardware.faketouch'\n  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'\nmain\nsupports-screens: 'small' 'normal' 'large' 'xlarge'\nsupports-any-density: 'true'\nlocales:\ndensities:\nnative-code: 'arm64-v8a'",
+        "stderr": ""
+      },
+      "permissions": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/aapt",
+          "dump",
+          "permissions",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "package: ai.n42.fixture.walletcore.candidate",
+        "stderr": ""
+      },
+      "zipalign": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/zipalign",
+          "-c",
+          "-P",
+          "16",
+          "-v",
+          "4",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifying alignment of /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk (4)...\n      87 META-INF/com/android/build/gradle/app-metadata.properties (OK - compressed)\n     207 META-INF/version-control-info.textproto (OK - compressed)\n     296 classes.dex (OK - compressed)\n  988506 classes2.dex (OK - compressed)\n 2048000 lib/arm64-v8a/libTrustWalletCore.so (OK)\n19741263 core/java_features_proto-descriptor-set.proto.bin (OK - compressed)\n19742061 google/protobuf/any.proto (OK - compressed)\n19744579 google/protobuf/api.proto (OK - compressed)\n19747818 google/protobuf/descriptor.proto (OK - compressed)\n19764342 google/protobuf/duration.proto (OK - compressed)\n19766457 google/protobuf/empty.proto (OK - compressed)\n19767725 google/protobuf/field_mask.proto (OK - compressed)\n19770932 google/protobuf/source_context.proto (OK - compressed)\n19772184 google/protobuf/struct.proto (OK - compressed)\n19774199 google/protobuf/timestamp.proto (OK - compressed)\n19777157 google/protobuf/type.proto (OK - compressed)\n19779826 google/protobuf/wrappers.proto (OK - compressed)\n19781662 kotlin/annotation/annotation.kotlin_builtins (OK - compressed)\n19782271 kotlin/collections/collections.kotlin_builtins (OK - compressed)\n19784184 kotlin/concurrent/atomics/atomics.kotlin_builtins (OK - compressed)\n19785340 kotlin/coroutines/coroutines.kotlin_builtins (OK - compressed)\n19785526 kotlin/internal/internal.kotlin_builtins (OK - compressed)\n19785942 kotlin/kotlin.kotlin_builtins (OK - compressed)\n19791350 kotlin/ranges/ranges.kotlin_builtins (OK - compressed)\n19792772 kotlin/reflect/reflect.kotlin_builtins (OK - compressed)\n19794256 AndroidManifest.xml (OK - compressed)\n19794988 resources.arsc (OK)\nVerification successful",
+        "stderr": ""
+      },
+      "apksigner": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/apksigner",
+          "verify",
+          "--verbose",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): false\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1",
+        "stderr": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::loadLibrary has been called by org.conscrypt.NativeLibraryUtil in an unnamed module (file:/opt/homebrew/share/android-commandlinetools/build-tools/36.0.0/lib/apksigner.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled"
+      },
+      "install": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "install",
+          "-r",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+        ],
+        "exit": 0,
+        "stdout": "Performing Streamed Install\nSuccess",
+        "stderr": ""
+      },
+      "clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "clear",
+          "ai.n42.fixture.walletcore.candidate"
+        ],
+        "exit": 0,
+        "stdout": "Success",
+        "stderr": ""
+      },
+      "pm_path": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "pm",
+          "path",
+          "ai.n42.fixture.walletcore.candidate"
+        ],
+        "exit": 0,
+        "stdout": "package:/data/app/~~q7ACL3psUcLKQZt-N_5AdQ==/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==/base.apk",
+        "stderr": ""
+      },
+      "pull": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "pull",
+          "/data/app/~~q7ACL3psUcLKQZt-N_5AdQ==/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==/base.apk",
+          "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-runtime-run1/candidate-installed.apk"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "/data/app/~~q7ACL3psUcLKQZt-N_5AdQ==/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==/base.apk: 1 file pulled, 0 skipped. 21.0 MB/s (19801272 bytes in 0.898s)"
+      },
+      "pulled_apk_sha256": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90",
+      "logcat_clear": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-c"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "token": "d8214b597ba3affec071d7c578a5b951",
+      "start": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "start",
+          "-W",
+          "-n",
+          "ai.n42.fixture.walletcore.candidate/ai.n42.fixture.walletcore.MainActivity",
+          "--es",
+          "phase",
+          "candidate",
+          "--es",
+          "token",
+          "d8214b597ba3affec071d7c578a5b951"
+        ],
+        "exit": 0,
+        "stdout": "Starting: Intent { cmp=ai.n42.fixture.walletcore.candidate/ai.n42.fixture.walletcore.MainActivity (has extras) }\nStatus: ok\nLaunchState: UNKNOWN (0)\nActivity: ai.n42.fixture.walletcore.candidate/ai.n42.fixture.walletcore.MainActivity\nWaitTime: 781\nComplete",
+        "stderr": ""
+      },
+      "last_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_WALLETCORE_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-28 01:32:57.279 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"BEGIN\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"apkPath\":\"\\/data\\/app\\/~~q7ACL3psUcLKQZt-N_5AdQ==\\/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==\\/base.apk\",\"apkSha256\":\"86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90\",\"libraryLookupPath\":\"\\/data\\/app\\/~~q7ACL3psUcLKQZt-N_5AdQ==\\/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==\\/base.apk!\\/lib\\/arm64-v8a\\/libTrustWalletCore.so\"}\n09-28 01:32:57.298 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"LOADED\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"nativeMaps\":[\"7541a0814000-7541a1898000 r-xp 001f4000 fe:05 164090                     \\/data\\/app\\/~~q7ACL3psUcLKQZt-N_5AdQ==\\/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==\\/base.apk\"]}\n09-28 01:32:57.302 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"hdwallet\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"entropy\":\"ba5821e8c356c05ba5f025d9532fe0f21f65d594\",\"seedSha256\":\"a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541\",\"keySha256\":\"fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9\",\"bitcoinAddress\":\"bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85\"}}\n09-28 01:32:57.309 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"ethereumLegacy\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9\",\"signingOutputSha256\":\"e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f\",\"signingOutputBytes\":217,\"error\":\"OK\"}}\n09-28 01:32:57.311 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"ethereum1559\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689\",\"signingOutputSha256\":\"95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63\",\"signingOutputBytes\":357,\"error\":\"OK\"}}\n09-28 01:32:57.323 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"bitcoinCompilerV2\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"preimageSha256\":\"6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e\",\"preimageBytes\":73,\"signingOutputSha256\":\"d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55\",\"signingOutputBytes\":434,\"encodedSha256\":\"56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf\",\"txid\":\"c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885\"}}\n09-28 01:32:57.327 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"bitcoinAppP2wsh\",\"required\":false,\"outcome\":\"OBSERVED\",\"result\":{\"signingInputSha256\":\"055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039\",\"preimageSha256\":\"fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98\",\"preimageBytes\":145,\"preimageError\":\"OK\",\"preimageErrorMessage\":\"\",\"hashPublicKeysCount\":0,\"compilerOutputSha256\":\"b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6\",\"compilerOutputBytes\":34,\"compilerError\":\"Error_invalid_params\",\"compilerErrorMessage\":\"empty signatures or publickeys\",\"encodedSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"encodedBytes\":0}}\n09-28 01:32:57.328 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"END\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"status\":\"PASS\"}",
+        "stderr": ""
+      },
+      "result_logcat": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "logcat",
+          "-d",
+          "-v",
+          "threadtime",
+          "-s",
+          "N42_WALLETCORE_FIXTURE:I"
+        ],
+        "exit": 0,
+        "stdout": "--------- beginning of main\n09-28 01:32:57.279 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"BEGIN\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"apkPath\":\"\\/data\\/app\\/~~q7ACL3psUcLKQZt-N_5AdQ==\\/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==\\/base.apk\",\"apkSha256\":\"86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90\",\"libraryLookupPath\":\"\\/data\\/app\\/~~q7ACL3psUcLKQZt-N_5AdQ==\\/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==\\/base.apk!\\/lib\\/arm64-v8a\\/libTrustWalletCore.so\"}\n09-28 01:32:57.298 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"LOADED\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"nativeMaps\":[\"7541a0814000-7541a1898000 r-xp 001f4000 fe:05 164090                     \\/data\\/app\\/~~q7ACL3psUcLKQZt-N_5AdQ==\\/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==\\/base.apk\"]}\n09-28 01:32:57.302 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"hdwallet\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"entropy\":\"ba5821e8c356c05ba5f025d9532fe0f21f65d594\",\"seedSha256\":\"a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541\",\"keySha256\":\"fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9\",\"bitcoinAddress\":\"bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85\"}}\n09-28 01:32:57.309 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"ethereumLegacy\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9\",\"signingOutputSha256\":\"e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f\",\"signingOutputBytes\":217,\"error\":\"OK\"}}\n09-28 01:32:57.311 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"ethereum1559\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"encodedSha256\":\"80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689\",\"signingOutputSha256\":\"95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63\",\"signingOutputBytes\":357,\"error\":\"OK\"}}\n09-28 01:32:57.323 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"bitcoinCompilerV2\",\"required\":true,\"outcome\":\"PASS\",\"result\":{\"preimageSha256\":\"6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e\",\"preimageBytes\":73,\"signingOutputSha256\":\"d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55\",\"signingOutputBytes\":434,\"encodedSha256\":\"56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf\",\"txid\":\"c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885\"}}\n09-28 01:32:57.327 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"CASE\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"name\":\"bitcoinAppP2wsh\",\"required\":false,\"outcome\":\"OBSERVED\",\"result\":{\"signingInputSha256\":\"055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039\",\"preimageSha256\":\"fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98\",\"preimageBytes\":145,\"preimageError\":\"OK\",\"preimageErrorMessage\":\"\",\"hashPublicKeysCount\":0,\"compilerOutputSha256\":\"b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6\",\"compilerOutputBytes\":34,\"compilerError\":\"Error_invalid_params\",\"compilerErrorMessage\":\"empty signatures or publickeys\",\"encodedSha256\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"encodedBytes\":0}}\n09-28 01:32:57.328 19382 19382 I N42_WALLETCORE_FIXTURE: {\"kind\":\"END\",\"phase\":\"candidate\",\"token\":\"d8214b597ba3affec071d7c578a5b951\",\"pid\":19382,\"status\":\"PASS\"}",
+        "stderr": ""
+      },
+      "result_attempt": 1,
+      "events": [
+        {
+          "kind": "BEGIN",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "apkPath": "/data/app/~~q7ACL3psUcLKQZt-N_5AdQ==/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==/base.apk",
+          "apkSha256": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90",
+          "libraryLookupPath": "/data/app/~~q7ACL3psUcLKQZt-N_5AdQ==/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==/base.apk!/lib/arm64-v8a/libTrustWalletCore.so"
+        },
+        {
+          "kind": "LOADED",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "nativeMaps": [
+            "7541a0814000-7541a1898000 r-xp 001f4000 fe:05 164090                     /data/app/~~q7ACL3psUcLKQZt-N_5AdQ==/ai.n42.fixture.walletcore.candidate-rq3dshS1of_lU_ngO3XNaQ==/base.apk"
+          ]
+        },
+        {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "hdwallet",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "entropy": "ba5821e8c356c05ba5f025d9532fe0f21f65d594",
+            "seedSha256": "a2a5857c3b07cf5ff323965415cf613c537de636048d45cac98f34d4e8465541",
+            "keySha256": "fe70bba8854574d5be02812242a2eef9c751727de44c64b6fa82cd0e9dc817d9",
+            "bitcoinAddress": "bc1qumwjg8danv2vm29lp5swdux4r60ezptzz7ce85"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "ethereumLegacy",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "c7325f51d075b5ae401dd3efb237094a9fc2da5bd01f01fa83247d6debcffce9",
+            "signingOutputSha256": "e359c6cb6c7d3a15c65e5291ecd71525300eb7b4a9f3c61bc93015d607b80b3f",
+            "signingOutputBytes": 217,
+            "error": "OK"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "ethereum1559",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "encodedSha256": "80ec2b5d2d47df61175d4bb9305fc9b136819579853f78cbec7beb6e367aa689",
+            "signingOutputSha256": "95dae64df5853c38ea494902c232cec5bd444c43a25ef659dea657825e573f63",
+            "signingOutputBytes": 357,
+            "error": "OK"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "bitcoinCompilerV2",
+          "required": true,
+          "outcome": "PASS",
+          "result": {
+            "preimageSha256": "6ce8788317ac65bb3a347e55d6ca780c7f84d26e306f478c02327f490c36964e",
+            "preimageBytes": 73,
+            "signingOutputSha256": "d2c28d7206482dcb865f1341031677d06a8d41a744e4ee689e0f73e3944d9f55",
+            "signingOutputBytes": 434,
+            "encodedSha256": "56fcd3c80cb10c4ff7026bfa583a38475700a211e21d034e747589f2259007bf",
+            "txid": "c19f410bf1d70864220e93bca20f836aaaf8cdde84a46692616e9f4480d54885"
+          }
+        },
+        {
+          "kind": "CASE",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "name": "bitcoinAppP2wsh",
+          "required": false,
+          "outcome": "OBSERVED",
+          "result": {
+            "signingInputSha256": "055e7541a412da6339384ff4819867f1ed78ccf00cde21f4aeb75193e7ce0039",
+            "preimageSha256": "fd9d048fb9eb560483aab366da56ec9e334ba0c3b44ba5b2adffd6464db4cf98",
+            "preimageBytes": 145,
+            "preimageError": "OK",
+            "preimageErrorMessage": "",
+            "hashPublicKeysCount": 0,
+            "compilerOutputSha256": "b27e90d7f391f151e916a1df175fa9937c48807e399321a13b2aa7e0357f16f6",
+            "compilerOutputBytes": 34,
+            "compilerError": "Error_invalid_params",
+            "compilerErrorMessage": "empty signatures or publickeys",
+            "encodedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "encodedBytes": 0
+          }
+        },
+        {
+          "kind": "END",
+          "phase": "candidate",
+          "token": "d8214b597ba3affec071d7c578a5b951",
+          "pid": 19382,
+          "status": "PASS"
+        }
+      ],
+      "post": {
+        "page_size": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getconf",
+            "PAGE_SIZE"
+          ],
+          "exit": 0,
+          "stdout": "16384",
+          "stderr": ""
+        },
+        "linker_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "bionic.linker.16kb.app_compat.enabled"
+          ],
+          "exit": 0,
+          "stdout": "fatal",
+          "stderr": ""
+        },
+        "package_compat_disabled": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "getprop",
+            "pm.16kb.app_compat.disabled"
+          ],
+          "exit": 0,
+          "stdout": "true",
+          "stderr": ""
+        },
+        "airplane_mode": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "airplane_mode_on"
+          ],
+          "exit": 0,
+          "stdout": "1",
+          "stderr": ""
+        },
+        "wifi_on": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "wifi_on"
+          ],
+          "exit": 0,
+          "stdout": "0",
+          "stderr": ""
+        },
+        "ip_route": {
+          "argv": [
+            "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+            "-s",
+            "emulator-5560",
+            "shell",
+            "ip",
+            "route"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "force_stop": {
+        "argv": [
+          "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+          "-s",
+          "emulator-5560",
+          "shell",
+          "am",
+          "force-stop",
+          "ai.n42.fixture.walletcore.candidate"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  },
+  "strict_setup": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "strict_restore": [
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "cmd",
+        "connectivity",
+        "airplane-mode",
+        "enable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "svc",
+        "wifi",
+        "disable"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "bionic.linker.16kb.app_compat.enabled",
+        "fatal"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "setprop",
+        "pm.16kb.app_compat.disabled",
+        "true"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "final": {
+    "page_size": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getconf",
+        "PAGE_SIZE"
+      ],
+      "exit": 0,
+      "stdout": "16384",
+      "stderr": ""
+    },
+    "linker_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "bionic.linker.16kb.app_compat.enabled"
+      ],
+      "exit": 0,
+      "stdout": "fatal",
+      "stderr": ""
+    },
+    "package_compat_disabled": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "getprop",
+        "pm.16kb.app_compat.disabled"
+      ],
+      "exit": 0,
+      "stdout": "true",
+      "stderr": ""
+    },
+    "airplane_mode": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "airplane_mode_on"
+      ],
+      "exit": 0,
+      "stdout": "1",
+      "stderr": ""
+    },
+    "wifi_on": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "settings",
+        "get",
+        "global",
+        "wifi_on"
+      ],
+      "exit": 0,
+      "stdout": "0",
+      "stderr": ""
+    },
+    "ip_route": {
+      "argv": [
+        "/opt/homebrew/share/android-commandlinetools/platform-tools/adb",
+        "-s",
+        "emulator-5560",
+        "shell",
+        "ip",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

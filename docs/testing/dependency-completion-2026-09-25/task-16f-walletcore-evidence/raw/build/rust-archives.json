@@ -1,0 +1,22 @@
+{
+  "arm64-v8a": {
+    "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/target/aarch64-linux-android/release/libwallet_core_rs.a",
+    "bytes": 19675162,
+    "sha256": "5888e672c1e04b918eb3d5c84c9d8268f2fe0e08092666cc2c2ffb2c53a097c2"
+  },
+  "armeabi-v7a": {
+    "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/target/armv7-linux-androideabi/release/libwallet_core_rs.a",
+    "bytes": 16984864,
+    "sha256": "befcc6da08a5b55f1a863265caf41d45924c369eff0334de418aba38b1a3f22c"
+  },
+  "x86": {
+    "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/target/i686-linux-android/release/libwallet_core_rs.a",
+    "bytes": 18907590,
+    "sha256": "1aef18d44e9b748214474e2a59cc1f4e17a813d080a0d2e7771c3e86bff85bd5"
+  },
+  "x86_64": {
+    "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/target/x86_64-linux-android/release/libwallet_core_rs.a",
+    "bytes": 21050498,
+    "sha256": "79e7195105061192a0faabc4b57977517f4fcee378597fa5a8aa8ebf68ca05a4"
+  }
+}

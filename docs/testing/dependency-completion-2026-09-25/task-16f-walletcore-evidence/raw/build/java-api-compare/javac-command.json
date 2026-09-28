@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/javac",
+    "--release",
+    "8",
+    "-cp",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/downloads/protobuf-javalite-3.22.3.jar",
+    "-d",
+    "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/java-api-compare/classes",
+    "@/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/java-api-compare/sources.args"
+  ],
+  "sources": 141,
+  "argfile_sha256": "4d0a8b9dbf0d1a437471f9c7ac06379f05a7593a4ff951b22f499e1613b6150d"
+}

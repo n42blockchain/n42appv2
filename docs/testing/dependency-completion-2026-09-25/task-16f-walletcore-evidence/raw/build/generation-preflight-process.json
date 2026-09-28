@@ -1,0 +1,27 @@
+{
+  "stdout": "{\"abi\": [\"arm64-v8a\", \"armeabi-v7a\", \"x86\", \"x86_64\"], \"boost\": {\"bytes\": 150815898, \"canonical_sha256\": \"b4cdc1afe5362fc41c292d76076a1322aaf21bedd167f59a3954879ee21e63ce\", \"files\": 15987}, \"built_candidate\": false, \"official_aar_sha256\": \"04ea7ab9527beeb3f4d650b13108deb08ec8a857f4e62b86df3e953dfa9e4d87\", \"official_proto_sha256\": \"95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b\", \"passed\": true, \"source\": {\"commit\": \"d40d24a63d92619167903369308bf0e2f7eb3a59\", \"selected_files\": 41, \"tree\": \"7960465634763a9e3d4262f8cebcef094d94b71f\", \"trezor_tree\": \"8090b28cfc7c6529fe03c34e5fe8b727fe67ad7f\"}, \"tool_inputs_sha256\": \"602a75a4ff15dbba669a4e815f17fcf0023ae851a57035d9047056fe9716c83f\"}",
+  "receipt": {
+    "passed": true,
+    "source": {
+      "commit": "d40d24a63d92619167903369308bf0e2f7eb3a59",
+      "tree": "7960465634763a9e3d4262f8cebcef094d94b71f",
+      "trezor_tree": "8090b28cfc7c6529fe03c34e5fe8b727fe67ad7f",
+      "selected_files": 41
+    },
+    "tool_inputs_sha256": "602a75a4ff15dbba669a4e815f17fcf0023ae851a57035d9047056fe9716c83f",
+    "boost": {
+      "files": 15987,
+      "bytes": 150815898,
+      "canonical_sha256": "b4cdc1afe5362fc41c292d76076a1322aaf21bedd167f59a3954879ee21e63ce"
+    },
+    "official_aar_sha256": "04ea7ab9527beeb3f4d650b13108deb08ec8a857f4e62b86df3e953dfa9e4d87",
+    "official_proto_sha256": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+    "abi": [
+      "arm64-v8a",
+      "armeabi-v7a",
+      "x86",
+      "x86_64"
+    ],
+    "built_candidate": false
+  }
+}

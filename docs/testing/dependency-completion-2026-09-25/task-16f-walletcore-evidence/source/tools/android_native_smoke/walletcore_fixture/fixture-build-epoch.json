@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "purpose": "Exact two-APK Wallet Core offline fixture build epoch before device execution",
+  "build_git_head": "89e214c2a6f30c0a5ee7c7c26682eeb110207df0",
+  "build_git_head_note": "Fixture source and build recipe were uncommitted at compile time; compiled source and artifact hashes are recorded below for later reviewed commit verification.",
+  "fixture_source_commit": null,
+  "compiled_fixture_source_sha256": {
+    "tools/android_native_smoke/walletcore_fixture/settings.gradle.kts": "bc40157aad0ada01baccba58aef9233a5b580a7f9dec465efac3cf3c0942ef07",
+    "tools/android_native_smoke/walletcore_fixture/build.gradle.kts": "d427f3d52a7f790915922ae521eae46a1d6d3c194aa9d6a7ef70033016b8a98a",
+    "tools/android_native_smoke/walletcore_fixture/app/build.gradle.kts": "5d755316ba1c328a04b87100d2975203e82788d21e6e2c3f8858b6b0136050ec",
+    "tools/android_native_smoke/walletcore_fixture/app/src/main/AndroidManifest.xml": "d4da49f1e8f7c9ee30be863d34ba20d358ed5dba0d2161e1cd22f04895a24782",
+    "tools/android_native_smoke/walletcore_fixture/app/src/main/java/ai/n42/fixture/walletcore/MainActivity.java": "e0e42d0f055e65224903ca9116db5a3f86f8ac9d2b60c3a74c4afb3f755754f1"
+  },
+  "build_script_sha256": "316487b2fca8f783f1ecad0d2bb667c100978799d5b579f1a9aef64a4f2f3d18",
+  "input_sha256": {
+    "baseline_aar": "04ea7ab9527beeb3f4d650b13108deb08ec8a857f4e62b86df3e953dfa9e4d87",
+    "candidate_aar": "560cf86e132e4b4ee18afb70daf670e12e8fd34684a03eb38b9e49e39cd0f57d",
+    "proto_jar": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+    "javalite_jar": "8f4f93d08cb37130ecb0bc69d376d7d27c36ff04ddb1bb27430b06caa9fa062e"
+  },
+  "aar_members": {
+    "baseline": {
+      "classes_sha256": "5e86c61d0121af19c1bcf99043b21a6e4c8fa479bb6d1c9a20967eadb8bb6d4b",
+      "arm64_jni_sha256": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7"
+    },
+    "candidate": {
+      "classes_sha256": "5e86c61d0121af19c1bcf99043b21a6e4c8fa479bb6d1c9a20967eadb8bb6d4b",
+      "arm64_jni_sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d"
+    }
+  },
+  "gradle_sha256": "f1a69bc070c613e5818d469a1248c1833519dd096d6828bb6fa4cde76de769e0",
+  "aapt2_jar_sha256": "eb93ce9d0fa121333f12395b3ab30822c5cdb9155737f20d342fe71809757059",
+  "aapt2_executable_sha256": "a6d0102e909213b2bbc50f5bf6e082a9727c029c4a48fca02fbaebbf87e65155",
+  "fixture_keystore_sha256": "01083a606e5c1b34569db06e43607040efe8acbfbc0336f74f85593db4752132",
+  "apk_sha256": {
+    "baseline": "ac812aa92dcbd548cf255fe7fa16d1bb6a87d3cc2b7148877fedc2eab9ddcd19",
+    "candidate": "86f81f61703dbdb31d52ce0c643fb03cc0797dc09a095e20cf72066724259f90"
+  },
+  "apk_bytes": {
+    "baseline": 19796976,
+    "candidate": 19801272
+  },
+  "apk_locations": {
+    "baseline": "task-16f-walletcore-fixture-build/baseline5/walletcore-baseline.apk",
+    "candidate": "task-16f-walletcore-fixture-build/candidate3/walletcore-candidate.apk"
+  },
+  "apk_arm64_member_sha256": {
+    "baseline": "d01ca3db4312b3b64e3f8feddf581c3be8d25d729456873bb9042ed8c2d447e7",
+    "candidate": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d"
+  },
+  "apk_member_data_offset": {
+    "baseline": 2048000,
+    "candidate": 2048000
+  },
+  "compile_failures": [
+    "baseline: offline task-owned Gradle home lacked AGP AAPT2 9.4.1 artifact",
+    "baseline2: offline task-owned Gradle home lacked lint-gradle 32.4.1; fixture-only lint disabled"
+  ],
+  "compile_success": [
+    "baseline3",
+    "candidate1",
+    "baseline4",
+    "candidate2",
+    "baseline5",
+    "candidate3"
+  ],
+  "source_change_after_first_success": "Current baseline5/candidate3 source emits BEGIN before load, LOADED/maps after load, and stage-tagged app-shaped P2WSH results. Previous successful APKs retained as source-history evidence."
+}

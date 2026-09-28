@@ -1,0 +1,8 @@
+test_cargo_inserts_locked_before_program_arguments (test.scripts.test_walletcore_android_generate.WalletCoreAndroidGenerateTest) ... ok
+test_generator_environment_excludes_injected_build_overrides (test.scripts.test_walletcore_android_generate.WalletCoreAndroidGenerateTest) ... ok
+test_preflight_requires_process_success_despite_existing_receipt (test.scripts.test_walletcore_android_generate.WalletCoreAndroidGenerateTest) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+OK

@@ -1,0 +1,104 @@
+{
+  "arm64-v8a": {
+    "bytes": 17693184,
+    "sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d",
+    "global_export_count": 10936,
+    "jni_export_count": 435,
+    "undefined_symbol_tuples": 250,
+    "needed": [
+      "liblog.so",
+      "libm.so",
+      "libdl.so",
+      "libc.so"
+    ],
+    "soname": [
+      "libTrustWalletCore.so"
+    ],
+    "checks": {
+      "hash": true,
+      "global_exports_equal_unstripped": true,
+      "global_exports_equal_official": true,
+      "soname_equal": true,
+      "needed_equal": true,
+      "load_16k": true,
+      "relro_16k": true,
+      "repo_elf64_audit": true
+    }
+  },
+  "armeabi-v7a": {
+    "bytes": 12613620,
+    "sha256": "70de897add9f5a4d661b0429e29a41f9f167ce00a4c4cc680c03b2952cd0370e",
+    "global_export_count": 10932,
+    "jni_export_count": 435,
+    "undefined_symbol_tuples": 246,
+    "needed": [
+      "liblog.so",
+      "libm.so",
+      "libdl.so",
+      "libc.so"
+    ],
+    "soname": [
+      "libTrustWalletCore.so"
+    ],
+    "checks": {
+      "hash": true,
+      "global_exports_equal_unstripped": true,
+      "global_exports_equal_official": true,
+      "soname_equal": true,
+      "needed_equal": true,
+      "load_16k": true,
+      "relro_16k": true
+    }
+  },
+  "x86": {
+    "bytes": 20416716,
+    "sha256": "fdd8161a94c389fe992826769756dfd59c81b94f48b5f55c9018ec3620e03f8d",
+    "global_export_count": 10947,
+    "jni_export_count": 435,
+    "undefined_symbol_tuples": 248,
+    "needed": [
+      "liblog.so",
+      "libm.so",
+      "libdl.so",
+      "libc.so"
+    ],
+    "soname": [
+      "libTrustWalletCore.so"
+    ],
+    "checks": {
+      "hash": true,
+      "global_exports_equal_unstripped": true,
+      "global_exports_equal_official": true,
+      "soname_equal": true,
+      "needed_equal": true,
+      "load_16k": true,
+      "relro_16k": true
+    }
+  },
+  "x86_64": {
+    "bytes": 19166392,
+    "sha256": "abee03b7fbbdb90a6bdeec7fdf857ef2fb60df9b8ffc6f6d7dbb56af8332d1f3",
+    "global_export_count": 11044,
+    "jni_export_count": 435,
+    "undefined_symbol_tuples": 248,
+    "needed": [
+      "liblog.so",
+      "libm.so",
+      "libdl.so",
+      "libc.so"
+    ],
+    "soname": [
+      "libTrustWalletCore.so"
+    ],
+    "checks": {
+      "hash": true,
+      "global_exports_equal_unstripped": true,
+      "global_exports_equal_official": true,
+      "soname_equal": true,
+      "needed_equal": true,
+      "load_16k": true,
+      "relro_16k": true,
+      "repo_elf64_audit": true
+    }
+  }
+}

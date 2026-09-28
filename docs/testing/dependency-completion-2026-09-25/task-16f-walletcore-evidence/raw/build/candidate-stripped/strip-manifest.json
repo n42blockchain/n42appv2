@@ -1,0 +1,55 @@
+{
+  "strip_tool": "/Users/jieliu/.codex/toolchains/android-sdk-37/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-strip",
+  "strip_tool_sha256": "438848c3cb13a8fa7607507779465f3e3426637eb2e9c605cde44e49c8539f1f",
+  "flag": "--strip-all",
+  "abis": {
+    "arm64-v8a": {
+      "input": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/arm64-v8a/libTrustWalletCore.so",
+        "bytes": 138543864,
+        "sha256": "008c11cbc6b45e90c1994febc4052203122260ae11c7e15babe5c137d2260fd5"
+      },
+      "output": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-stripped/libs/arm64-v8a/libTrustWalletCore.so",
+        "bytes": 17693184,
+        "sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d"
+      }
+    },
+    "armeabi-v7a": {
+      "input": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/armeabi-v7a/libTrustWalletCore.so",
+        "bytes": 109651696,
+        "sha256": "d292c42d4ba27c8c0cb349746f02eefae05f431bca545716748985f11c3bc9cb"
+      },
+      "output": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-stripped/libs/armeabi-v7a/libTrustWalletCore.so",
+        "bytes": 12613620,
+        "sha256": "70de897add9f5a4d661b0429e29a41f9f167ce00a4c4cc680c03b2952cd0370e"
+      }
+    },
+    "x86": {
+      "input": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/x86/libTrustWalletCore.so",
+        "bytes": 114634756,
+        "sha256": "a491945d6f0f5ee7a4290f01a4da5ee1bce2b34fec26e77b3b51778f5ef1eaf0"
+      },
+      "output": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-stripped/libs/x86/libTrustWalletCore.so",
+        "bytes": 20416716,
+        "sha256": "fdd8161a94c389fe992826769756dfd59c81b94f48b5f55c9018ec3620e03f8d"
+      }
+    },
+    "x86_64": {
+      "input": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-cmake/x86_64/libTrustWalletCore.so",
+        "bytes": 131656504,
+        "sha256": "e76ccb0991534ac3bd3d4b1d63964144cbdbfaa5cf86c6a655701abdc924db49"
+      },
+      "output": {
+        "path": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/candidate-stripped/libs/x86_64/libTrustWalletCore.so",
+        "bytes": 19166392,
+        "sha256": "abee03b7fbbdb90a6bdeec7fdf857ef2fb60df9b8ffc6f6d7dbb56af8332d1f3"
+      }
+    }
+  }
+}

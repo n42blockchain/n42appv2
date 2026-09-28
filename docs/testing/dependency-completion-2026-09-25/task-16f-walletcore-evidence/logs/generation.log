@@ -1,0 +1,514 @@
+{"cwd": "/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source", "command": ["/bin/bash", "tools/generate-files", "android"]}
+PREFIX: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/build/local/bin/protoc
+libprotoc 3.20.3
+Use ANDROID_NDK_HOME
+Generating Android targets
+   Compiling compiler_builtins v0.1.160 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+   Compiling libc v0.2.178
+   Compiling object v0.37.3
+   Compiling std v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/std)
+   Compiling proc-macro2 v1.0.93
+   Compiling unicode-ident v1.0.6
+   Compiling libc v0.2.153
+   Compiling version_check v0.9.4
+   Compiling typenum v1.16.0
+   Compiling generic-array v0.14.7
+   Compiling quote v1.0.38
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.96
+   Compiling serde v1.0.228
+   Compiling autocfg v1.1.0
+   Compiling syn v1.0.107
+   Compiling zeroize_derive v1.4.2
+   Compiling serde_derive v1.0.228
+   Compiling num-traits v0.2.19
+   Compiling core v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/core)
+   Compiling rustc-std-workspace-core v1.99.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-core)
+   Compiling alloc v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/alloc)
+   Compiling rustc-std-workspace-alloc v1.99.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-alloc)
+   Compiling unwind v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/unwind)
+   Compiling gimli v0.32.3
+   Compiling memchr v2.7.6
+   Compiling adler2 v2.0.1
+   Compiling miniz_oxide v0.8.9
+   Compiling addr2line v0.25.1
+   Compiling panic_unwind v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/panic_unwind)
+   Compiling panic_abort v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/panic_abort)
+   Compiling std_detect v0.1.5 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/std_detect)
+   Compiling hashbrown v0.16.1
+   Compiling rustc-demangle v0.1.26
+   Compiling cfg-if v1.0.4
+   Compiling hashbrown v0.15.2
+   Compiling equivalent v1.0.0
+   Compiling indexmap v2.7.0
+   Compiling rustc-std-workspace-std v1.99.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-std)
+   Compiling rustc-literal-escaper v0.0.5
+   Compiling proc_macro v0.0.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/rustup/toolchains/nightly-2025-12-11-aarch64-apple-darwin/lib/rustlib/src/rust/library/proc_macro)
+   Compiling thiserror v1.0.38
+   Compiling radium v0.6.2
+   Compiling toml_datetime v0.6.5
+   Compiling thiserror-impl v1.0.38
+   Compiling memchr v2.5.0
+   Compiling once_cell v1.19.0
+   Compiling crunchy v0.2.2
+   Compiling winnow v0.4.7
+   Compiling num-integer v0.1.46
+   Compiling num-bigint v0.4.6
+   Compiling toml_edit v0.19.11
+   Compiling paste v1.0.11
+   Compiling proc-macro-crate v1.3.1
+   Compiling parity-scale-codec-derive v2.3.1
+   Compiling ark-ff-macros v0.4.2
+   Compiling derivative v2.2.0
+   Compiling ark-ff-asm v0.4.2
+   Compiling impl-trait-for-tuples v0.2.2
+   Compiling bitcoin-private v0.1.0
+   Compiling log v0.4.17
+   Compiling atty v0.2.14
+   Compiling aho-corasick v0.7.20
+   Compiling quick-error v1.2.3
+   Compiling cfg-if v1.0.0
+   Compiling regex-syntax v0.6.29
+   Compiling unicode-width v0.1.10
+   Compiling textwrap v0.11.0
+   Compiling humantime v1.3.0
+   Compiling ansi_term v0.12.1
+   Compiling termcolor v1.2.0
+   Compiling regex v1.7.3
+   Compiling bitflags v1.3.2
+   Compiling minimal-lexical v0.2.1
+   Compiling vec_map v0.8.2
+   Compiling cc v1.0.79
+   Compiling strsim v0.8.0
+   Compiling secp256k1-sys v0.8.1
+   Compiling clap v2.34.0
+   Compiling nom v7.1.3
+   Compiling env_logger v0.7.1
+   Compiling semver v1.0.17
+   Compiling pb-rs v0.10.0
+   Compiling either v1.8.1
+   Compiling itertools v0.10.5
+   Compiling rustc_version v0.4.0
+   Compiling curve25519-dalek v4.1.3
+   Compiling hex_lit v0.1.1
+   Compiling ppv-lite86 v0.2.17
+   Compiling rand_core v0.6.4
+   Compiling rand_chacha v0.3.1
+   Compiling serde_json v1.0.145
+   Compiling crypto-common v0.1.6
+   Compiling rand v0.8.5
+   Compiling ark-std v0.4.0
+   Compiling digest v0.10.6
+   Compiling itoa v1.0.6
+   Compiling ryu v1.0.13
+   Compiling ark-serialize v0.4.2
+   Compiling zeroize v1.8.2
+   Compiling bitcoin v0.30.1
+   Compiling subtle v2.4.1
+   Compiling ark-ff v0.4.2
+   Compiling crypto-bigint v0.5.1
+   Compiling hex v0.4.3
+   Compiling tw_proto v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_proto)
+   Compiling unsafe-libyaml v0.2.11
+   Compiling serde_yaml v0.9.34+deprecated
+   Compiling derive-syn-parse v0.2.0
+   Compiling tw_macros v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_macros)
+   Compiling starknet-ff v0.3.3
+   Compiling starknet-curve v0.3.0
+   Compiling starknet-crypto-codegen v0.3.1
+   Compiling rustversion v1.0.14
+   Compiling heck v0.4.1
+   Compiling strum_macros v0.25.3
+   Compiling getrandom v0.2.9
+   Compiling const-oid v0.9.2
+   Compiling block-buffer v0.10.3
+   Compiling cpufeatures v0.2.12
+   Compiling hmac v0.12.1
+   Compiling der v0.7.3
+   Compiling tw_cosmos_sdk v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_cosmos_sdk)
+   Compiling byteorder v1.4.3
+   Compiling spki v0.7.1
+   Compiling sha2 v0.10.6
+   Compiling ff v0.13.0
+   Compiling funty v1.1.0
+   Compiling wyz v0.2.0
+   Compiling half v1.8.2
+   Compiling base16ct v0.2.0
+   Compiling ciborium-io v0.2.1
+   Compiling tap v1.0.1
+   Compiling bitvec v0.20.4
+   Compiling ciborium-ll v0.2.1
+   Compiling sec1 v0.7.1
+   Compiling group v0.13.0
+   Compiling pkcs8 v0.10.2
+   Compiling bcs v0.1.6
+   Compiling hkdf v0.12.3
+   Compiling bech32 v0.9.1
+   Compiling rustc-hex v2.1.0
+   Compiling arrayvec v0.7.4
+   Compiling static_assertions v1.1.0
+   Compiling byte-slice-cast v1.2.2
+   Compiling parity-scale-codec v2.3.1
+   Compiling elliptic-curve v0.13.4
+   Compiling ciborium v0.2.1
+   Compiling keccak v0.1.3
+   Compiling rfc6979 v0.4.0
+   Compiling inout v0.1.3
+   Compiling digest v0.9.0
+   Compiling block-buffer v0.9.0
+   Compiling bs58 v0.4.0
+   Compiling tw_memory v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_memory)
+   Compiling data-encoding v2.4.0
+   Compiling tw_encoding v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_encoding)
+   Compiling sha3 v0.10.6
+   Compiling cipher v0.4.4
+   Compiling blake-hash v0.4.1
+   Compiling uint v0.9.5
+   Compiling impl-codec v0.5.1
+   Compiling fixed-hash v0.7.0
+   Compiling sha1 v0.10.5
+   Compiling impl-serde v0.3.2
+   Compiling ripemd v0.1.3
+   Compiling groestl v0.10.1
+   Compiling signature v2.1.0
+   Compiling universal-hash v0.5.1
+   Compiling blake2b-ref v0.3.1
+   Compiling opaque-debug v0.3.1
+   Compiling tw_hash v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_hash)
+   Compiling poly1305 v0.8.0
+   Compiling ecdsa v0.16.6
+   Compiling primitive-types v0.10.1
+   Compiling salsa20 v0.10.2
+   Compiling bitcoin_hashes v0.12.0
+   Compiling aead v0.5.2
+   Compiling lazy_static v1.4.0
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling crypto_secretbox v0.1.1
+   Compiling secp256k1 v0.27.0
+   Compiling primeorder v0.13.1
+   Compiling p256 v0.13.2
+   Compiling starknet-crypto v0.5.1
+   Compiling crypto_box v0.9.1
+   Compiling tw_number v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_number)
+   Compiling k256 v0.13.1
+   Compiling quick-protobuf v0.8.1
+   Compiling tw_misc v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_misc)
+   Compiling blake2 v0.10.6
+   Compiling num-iter v0.1.43
+   Compiling num-rational v0.4.1
+   Compiling thiserror v2.0.17
+   Compiling tw_keypair v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_keypair)
+   Compiling derivation-path v0.2.0
+   Compiling tw_coin_entry v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_coin_entry)
+   Compiling thiserror-impl v2.0.17
+   Compiling anyhow v1.0.75
+   Compiling ref-cast v1.0.25
+   Compiling ref-cast-impl v1.0.25
+   Compiling ident_case v1.0.1
+   Compiling strsim v0.11.1
+   Compiling fnv v1.0.7
+   Compiling proc-macro-error-attr v1.0.4
+   Compiling darling_core v0.21.3
+   Compiling cfg_aliases v0.1.1
+   Compiling borsh v1.3.1
+   Compiling proc-macro-error v1.0.4
+   Compiling winnow v0.5.40
+   Compiling darling_macro v0.21.3
+   Compiling darling v0.21.3
+   Compiling toml_edit v0.21.1
+   Compiling serde_with_macros v3.16.0
+   Compiling syn_derive v0.1.8
+   Compiling proc-macro-crate v3.1.0
+   Compiling tw_internet_computer v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_internet_computer)
+   Compiling borsh-derive v1.3.1
+   Compiling serde_repr v0.1.17
+   Compiling tw_bech32_address v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_bech32_address)
+   Compiling tw_coin_registry v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_coin_registry)
+   Compiling tw_base58_address v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_base58_address)
+   Compiling tw_utxo v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/frameworks/tw_utxo)
+   Compiling bytes v1.11.1
+   Compiling rlp v0.5.2
+   Compiling tw_bitcoin v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_bitcoin)
+   Compiling tw_evm v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_evm)
+   Compiling tw_scale v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_scale)
+   Compiling num-complex v0.4.4
+   Compiling num v0.4.1
+   Compiling tw_ss58_address v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_ss58_address)
+   Compiling cobs v0.3.0
+   Compiling serde_bytes v0.11.12
+   Compiling crc-catalog v2.4.0
+   Compiling ethnum v1.4.0
+   Compiling move-core-types v0.0.4 (https://github.com/move-language/move?rev=ea70797099baea64f05194a918cebd69ed02b285#ea707970)
+   Compiling crc v3.2.1
+   Compiling postcard v1.1.3
+   Compiling tw_substrate v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/frameworks/tw_substrate)
+   Compiling serde_with v3.16.0
+   Compiling bitreader v0.3.8
+   Compiling bitstream-io v2.5.0
+   Compiling tw_ton_sdk v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/frameworks/tw_ton_sdk)
+   Compiling tw_zcash v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_zcash)
+   Compiling bigdecimal v0.3.1
+   Compiling bincode v1.3.3
+   Compiling tw_solana v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_solana)
+   Compiling tw_ripple v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_ripple)
+   Compiling tw_komodo v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_komodo)
+   Compiling tw_ton v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_ton)
+   Compiling tw_sui v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_sui)
+   Compiling tw_polymesh v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_polymesh)
+   Compiling tw_polkadot v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_polkadot)
+   Compiling tw_aptos v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_aptos)
+   Compiling tw_ethereum v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_ethereum)
+   Compiling tw_binance v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_binance)
+   Compiling tw_greenfield v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_greenfield)
+   Compiling tw_ronin v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_ronin)
+   Compiling tw_groestlcoin v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_groestlcoin)
+   Compiling tw_decred v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_decred)
+   Compiling tw_bitcoincash v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_bitcoincash)
+   Compiling tw_cosmos v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_cosmos)
+   Compiling tw_thorchain v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_thorchain)
+   Compiling tw_native_injective v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_native_injective)
+   Compiling tw_native_evmos v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_native_evmos)
+   Compiling tw_pactus v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/chains/tw_pactus)
+   Compiling strum v0.25.0
+   Compiling tw_any_coin v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_any_coin)
+   Compiling uuid v1.7.0
+   Compiling wallet-core-rs v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/wallet_core_rs)
+   Compiling tw_tests v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/rust/tw_tests)
+    Finished `release` profile [optimized] target(s) in 6m 12s
+WARN: Skip tw_hash::OUTPUT_HASH_LEN_RANGE - (Unsupported expression. Expr::Range { attrs: [], start: Some(Expr::Lit { attrs: [], lit: Lit::Int { token: 1 } }), limits: RangeLimits::Closed(DotDotEq), end: Some(Expr::Lit { attrs: [], lit: Lit::Int { token: 64 } }) })
+WARN: Skip tw_hash::CRC32_TABLE - (not `pub`).
+WARN: Skip tw_keypair::R_LENGTH - (not `pub`).
+WARN: Skip tw_keypair::S_LENGTH - (not `pub`).
+WARN: Skip tw_keypair::NONCE_LEN - (not `pub`).
+WARN: Skip tw_keypair::PUBLIC_KEY_LEN - (not `pub`).
+WARN: Skip tw_keypair::EDWARDS_POINT_SIGN - (not `pub`).
+WARN: Skip tw_keypair::LEN - (Unsupported path expression. Path { leading_colon: None, segments: [PathSegment { ident: Ident(secp256k1), arguments: PathArguments::None }, PathSep, PathSegment { ident: Ident(constants), arguments: PathArguments::None }, PathSep, PathSegment { ident: Ident(SCHNORR_SIGNATURE_SIZE), arguments: PathArguments::None }] })
+WARN: Skip tw_keypair::SIGN_RETRIES - (not `pub`).
+WARN: Skip tw_evm::WORD_LEN - (not `pub`).
+WARN: Skip tw_evm::MAX_RECURSION_DEPTH - (not `pub`).
+WARN: Skip tw_evm::ERC4337_BIZ_ACCOUNT_ABI - (not `pub`).
+WARN: Skip tw_evm::BIZ_PASSKEY_SESSION_ACCOUNT_ABI - (not `pub`).
+WARN: Skip tw_evm::ERC1155_ABI - (not `pub`).
+WARN: Skip tw_evm::EIP_1967_PROXY_BYTE_CODE_HEX - (Unsupported literal expression. Lit::Str { token: "0x608060405260405162000c5138038062000c51833981810160405281019062000029919062000580565b6200003d828260006200004560201b60201c565b5050620007d7565b62000056836200008860201b60201c565b600082511180620000645750805b156200008357620000818383620000df60201b620000371760201c565b505b505050565b62000099816200011560201b60201c565b8073ffffffffffffffffffffffffffffffffffffffff167fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b60405160405180910390a250565b60606200010d838360405180606001604052806027815260200162000c2a60279139620001eb60201b60201c565b905092915050565b6200012b816200027d60201b620000641760201c565b6200016d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040162000164906200066d565b60405180910390fd5b80620001a77f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc60001b620002a060201b620000871760201c565b60000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b60606000808573ffffffffffffffffffffffffffffffffffffffff1685604051620002179190620006dc565b600060405180830381855af49150503d806000811462000254576040519150601f19603f3d011682016040523d82523d6000602084013e62000259565b606091505b50915091506200027286838387620002aa60201b60201c565b925050509392505050565b6000808273ffffffffffffffffffffffffffffffffffffffff163b119050919050565b6000819050919050565b606083156200031a5760008351036200031157620002ce856200027d60201b60201c565b62000310576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401620003079062000745565b60405180910390fd5b5b8290506200032d565b6200032c83836200033560201b60201c565b5b949350505050565b600082511115620003495781518083602001fd5b806040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016200037f9190620007b3565b60405180910390fd5b6000604051905090565b600080fd5b600080fd5b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000620003c9826200039c565b9050919050565b620003db81620003bc565b8114620003e757600080fd5b50565b600081519050620003fb81620003d0565b92915050565b600080fd5b600080fd5b6000601f19601f8301169050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b62000456826200040b565b810181811067ffffffffffffffff821117156200047857620004776200041c565b5b80604052505050565b60006200048d62000388565b90506200049b82826200044b565b919050565b600067ffffffffffffffff821115620004be57620004bd6200041c565b5b620004c9826200040b565b9050602081019050919050565b60005b83811015620004f6578082015181840152602081019050620004d9565b60008484015250505050565b6000620005196200051384620004a0565b62000481565b90508281526020810184848401111562000538576200053762000406565b5b62000545848285620004d6565b509392505050565b600082601f83011262000565576200056462000401565b5b81516200057784826020860162000502565b91505092915050565b600080604083850312156200059a576200059962000392565b5b6000620005aa85828601620003ea565b925050602083015167ffffffffffffffff811115620005ce57620005cd62000397565b5b620005dc858286016200054d565b9150509250929050565b600082825260208201905092915050565b7f455243313936373a206e657720696d706c656d656e746174696f6e206973206e60008201527f6f74206120636f6e747261637400000000000000000000000000000000000000602082015250565b600062000655602d83620005e6565b91506200066282620005f7565b604082019050919050565b60006020820190508181036000830152620006888162000646565b9050919050565b600081519050919050565b600081905092915050565b6000620006b2826200068f565b620006be81856200069a565b9350620006d0818560208601620004d6565b80840191505092915050565b6000620006ea8284620006a5565b915081905092915050565b7f416464726573733a2063616c6c20746f206e6f6e2d636f6e7472616374000000600082015250565b60006200072d601d83620005e6565b91506200073a82620006f5565b602082019050919050565b6000602082019050818103600083015262000760816200071e565b9050919050565b600081519050919050565b60006200077f8262000767565b6200078b8185620005e6565b93506200079d818560208601620004d6565b620007a8816200040b565b840191505092915050565b60006020820190508181036000830152620007cf818462000772565b905092915050565b61044380620007e76000396000f3fe6080604052366100135761001161001d565b005b61001b61001d565b005b610025610091565b610035610030610093565b6100a2565b565b606061005c83836040518060600160405280602781526020016103e7602791396100c8565b905092915050565b6000808273ffffffffffffffffffffffffffffffffffffffff163b119050919050565b6000819050919050565b565b600061009d61014e565b905090565b3660008037600080366000845af43d6000803e80600081146100c3573d6000f35b3d6000fd5b60606000808573ffffffffffffffffffffffffffffffffffffffff16856040516100f291906102db565b600060405180830381855af49150503d806000811461012d576040519150601f19603f3d011682016040523d82523d6000602084013e610132565b606091505b5091509150610143868383876101a5565b925050509392505050565b600061017c7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc60001b610087565b60000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b606083156102075760008351036101ff576101bf85610064565b6101fe576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016101f59061034f565b60405180910390fd5b5b829050610212565b610211838361021a565b5b949350505050565b60008251111561022d5781518083602001fd5b806040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161026191906103c4565b60405180910390fd5b600081519050919050565b600081905092915050565b60005b8381101561029e578082015181840152602081019050610283565b60008484015250505050565b60006102b58261026a565b6102bf8185610275565b93506102cf818560208601610280565b80840191505092915050565b60006102e782846102aa565b915081905092915050565b600082825260208201905092915050565b7f416464726573733a2063616c6c20746f206e6f6e2d636f6e7472616374000000600082015250565b6000610339601d836102f2565b915061034482610303565b602082019050919050565b600060208201905081810360008301526103688161032c565b9050919050565b600081519050919050565b6000601f19601f8301169050919050565b60006103968261036f565b6103a081856102f2565b93506103b0818560208601610280565b6103b98161037a565b840191505092915050565b600060208201905081810360008301526103de818461038b565b90509291505056fe416464726573733a206c6f772d6c6576656c2064656c65676174652063616c6c206661696c6564a2646970667358221220e57dd3eafc9985be746025b6d82d4f011b9a7bb3db56f9a1eb7eadfddd376b6064736f6c63430008110033416464726573733a206c6f772d6c6576656c2064656c65676174652063616c6c206661696c6564" })
+WARN: Skip tw_evm::ERC20_ABI - (not `pub`).
+WARN: Skip tw_evm::ERC4337_SIMPLE_ACCOUNT_ABI - (not `pub`).
+WARN: Skip tw_evm::ERC721_ABI - (not `pub`).
+WARN: Skip tw_evm::MAX_RECURSION_DEPTH - (not `pub`).
+WARN: Skip tw_evm::MAX_ARRAY_LENGTH - (not `pub`).
+WARN: Skip tw_evm::BARZ_SIGNED_DATA_PREFIX - (Unsupported literal expression. Lit::Str { token: "1901" })
+WARN: Skip tw_evm::BARZ_DOMAIN_SEPARATOR_TYPE_HASH - (Unsupported literal expression. Lit::Str { token: "47e79534a245952e8b16893a336b85a3d9ea9fa8c573f3d803afb92a79469218" })
+WARN: Skip tw_evm::BARZ_MSG_HASH_DATA - (Unsupported literal expression. Lit::Str { token: "b1bcb804a4a3a1af3ee7920d949bdfd417ea1b736c3552c8d6563a229a619100" })
+WARN: Skip tw_evm::BARZ_DIAMOND_CUT_SELECTOR - (Unsupported literal expression. Lit::Str { token: "1f931c1c" })
+WARN: Skip tw_evm::BARZ_DATA_LOCATION_CHUNK - (Unsupported literal expression. Lit::Str { token: "60" })
+WARN: Skip tw_evm::BIZ_PASSKEY_USEROP_VALIDATION_NONCE_KEY - (not `pub`).
+WARN: Skip tw_evm::SIGNATURE_V_MIN_LEN - (not `pub`).
+WARN: Skip tw_evm::FCL_ELLIPTIC_ZZ_STR - (Unsupported literal expression. Lit::Str { token: "0xFFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551" })
+WARN: Skip tw_evm::EIP1559_TX_TYPE - (not `pub`).
+WARN: Skip tw_evm::EIP7702_TX_TYPE - (not `pub`).
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ethereum"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "solana"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "ton"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+WARN: Missing `[defines]` entry for `feature = "utils"` in cbindgen config.
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source
+Generating C++ files...
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/codegen-v2 /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded digest v0.10.7
+  Downloaded block-buffer v0.10.4
+  Downloaded itoa v1.0.10
+  Downloaded pathdiff v0.2.1
+  Downloaded indexmap v2.2.5
+  Downloaded thiserror-impl v1.0.58
+  Downloaded convert_case v0.6.0
+  Downloaded thiserror v1.0.58
+  Downloaded unsafe-libyaml v0.2.10
+  Downloaded serde_yaml v0.9.32
+  Downloaded serde v1.0.197
+  Downloaded unicode-segmentation v1.11.0
+  Downloaded pest v2.7.8
+  Downloaded serde_json v1.0.114
+  Downloaded hashbrown v0.14.3
+  Downloaded handlebars v4.5.0
+  Downloaded aho-corasick v1.1.2
+  Downloaded memchr v2.7.1
+  Downloaded serde_derive v1.0.197
+  Downloaded ryu v1.0.17
+  Downloaded regex v1.11.1
+  Downloaded ucd-trie v0.1.6
+  Downloaded typenum v1.17.0
+  Downloaded pest_meta v2.7.8
+  Downloaded pest_derive v2.7.8
+  Downloaded regex-syntax v0.8.5
+  Downloaded log v0.4.21
+  Downloaded sha2 v0.10.8
+  Downloaded pest_generator v2.7.8
+  Downloaded regex-automata v0.4.9
+   Compiling proc-macro2 v1.0.93
+   Compiling unicode-ident v1.0.12
+   Compiling memchr v2.7.1
+   Compiling thiserror v1.0.58
+   Compiling quote v1.0.38
+   Compiling serde v1.0.197
+   Compiling syn v2.0.96
+   Compiling ucd-trie v0.1.6
+   Compiling once_cell v1.19.0
+   Compiling serde_json v1.0.114
+   Compiling itoa v1.0.10
+   Compiling equivalent v1.0.1
+   Compiling ryu v1.0.17
+   Compiling hashbrown v0.14.3
+   Compiling indexmap v2.2.5
+   Compiling thiserror-impl v1.0.58
+   Compiling serde_derive v1.0.197
+   Compiling pest v2.7.8
+   Compiling pest_meta v2.7.8
+   Compiling pest_generator v2.7.8
+   Compiling aho-corasick v1.1.2
+   Compiling regex-syntax v0.8.5
+   Compiling regex-automata v0.4.9
+   Compiling pest_derive v2.7.8
+   Compiling toml_datetime v0.6.5
+   Compiling winnow v0.5.40
+   Compiling unsafe-libyaml v0.2.10
+   Compiling log v0.4.21
+   Compiling unicode-segmentation v1.11.0
+   Compiling handlebars v4.5.0
+   Compiling convert_case v0.6.0
+   Compiling serde_yaml v0.9.32
+   Compiling toml_edit v0.21.1
+   Compiling regex v1.11.1
+   Compiling heck v0.4.1
+   Compiling pathdiff v0.2.1
+   Compiling codegen-v2 v0.1.0 (/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source/codegen-v2)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 15.55s
+     Running `target/debug/parser cpp`
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/source
+Found an enum Purpose
+Found an enum FilecoinAddressType
+Found a struct CoinTypeConfiguration
+Found a class HDWallet
+Found an enum Derivation
+Found a struct TransactionUtil
+Found a struct EthereumRlp
+Found a struct TransactionCompiler
+Found a class Biz
+Found a struct StarkWare
+Found an enum BitcoinSigHashType
+Found a class BizPasskeySession
+Found a struct EthereumAbiValue
+Found a class NervosAddress
+Found an enum HRP
+Found an enum StoredKeyEncryption
+Found a struct Base64
+Found a class SegwitAddress
+Found a class TONWallet
+Found a struct EthereumMessageSigner
+Found an enum StellarMemoType
+Found a struct TransactionDecoder
+Found a class BitcoinAddress
+Found a class PrivateKey
+Found a class AnyAddress
+Found a struct AsnParser
+Found a struct THORChainSwap
+Found a struct Base58
+Found an enum HDVersion
+Found a class TONMessageSigner
+Found a struct Cardano
+Found a class DerivationPathIndex
+Found a class WebAuthnSolidity
+Found a struct LiquidStaking
+Found an enum CoinType
+Found a class TONAddressConverter
+Found a class PublicKey
+Found a class WalletConnectRequest
+Found a struct TronMessageSigner
+Found a struct WebAuthn
+Found a struct PBKDF2
+Found an enum FiroAddressType
+Found a struct FilecoinAddressConverter
+Found a class CryptoBoxSecretKey
+Found an enum Curve
+Found a struct Base32
+Found a struct EthereumAbi
+Found a struct TezosMessageSigner
+Found an enum StellarPassphrase
+Found a struct Hash
+Found a class StoredKey
+Found an enum PrivateKeyType
+Found an enum PublicKeyType
+Found a class BitcoinScript
+Found a class FIOAccount
+Found a class GroestlcoinAddress
+Found a struct CryptoBox
+Found a struct Mnemonic
+Found a class EthereumAbiFunction
+Found an enum StellarVersionByte
+Found a class Ethereum
+Found a struct AES
+Found a class DerivationPath
+Found a class Eip7702
+Found a class SolanaTransaction
+Found a class NEARAccount
+Found a struct BitcoinMessageSigner
+Found a class Account
+Found a class MessageSigner
+Found a struct StarkExMessageSigner
+Found an enum StoredKeyEncryptionLevel
+Found an enum EthereumChainID
+Found a class SolanaAddress
+Found a class DataVector
+Found an enum AESPaddingMode
+Found a class CryptoBoxPublicKey
+Found a struct Bech32
+Found an enum Blockchain
+Found a class Barz
+Processing swift conversion
+Processing kotlin conversion
+
+WARNING: skipping xcodegen generation
+generator_exit=0
