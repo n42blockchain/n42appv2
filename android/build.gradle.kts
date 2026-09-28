@@ -37,6 +37,18 @@ allprojects {
                 includeVersion("com.github.reown-com.yttrium", "yttrium-wcpay", "0.10.60")
             }
         }
+        // The maintained Wallet Core 4.8.4 JNI AAR uses the published proto companion.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri(rootProject.file("native/wallet_core/maven"))
+                }
+            }
+            filter {
+                includeVersion("com.trustwallet", "wallet-core", "4.8.4")
+                includeVersion("com.trustwallet", "wallet-core-proto", "4.8.4")
+            }
+        }
         google()
         mavenCentral()
         // ✅ TrustWallet 私有仓库 (需要 GitHub 认证)
