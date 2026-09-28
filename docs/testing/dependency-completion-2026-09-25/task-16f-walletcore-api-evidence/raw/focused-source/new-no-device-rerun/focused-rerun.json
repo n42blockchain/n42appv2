@@ -1,0 +1,64 @@
+{
+  "git_head": "4a64e0c0df43d65d3d2e1bef138e597c42273c6f",
+  "kind": "new-no-device-focused-regression-after-archive-review",
+  "records": [
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-m",
+        "unittest",
+        "tools/android_native_smoke/test_walletcore_api_builder.py",
+        "-v"
+      ],
+      "exit": 0,
+      "log": "builder-normal.log",
+      "log_sha256": "a4ea87e3cd6edad283f10725d387e3a7b5c64c1b8c4d20cff2fafc0eaefd357a"
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-O",
+        "-m",
+        "unittest",
+        "tools/android_native_smoke/test_walletcore_api_builder.py",
+        "-v"
+      ],
+      "exit": 0,
+      "log": "builder-optimized.log",
+      "log_sha256": "2d40fc1ce5b260b9d9fcd63f00db0a667922d72d0b59850292a18fdae0663e3d"
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-m",
+        "unittest",
+        "tools/android_native_smoke/test_walletcore_api_runtime_gate.py",
+        "-v"
+      ],
+      "exit": 0,
+      "log": "runtime-gate-normal.log",
+      "log_sha256": "e8c2d9a4acee091d0a0b7a1f8560079b85fc7b8ee772c62b4069b1913e7e9c54"
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-O",
+        "-m",
+        "unittest",
+        "tools/android_native_smoke/test_walletcore_api_runtime_gate.py",
+        "-v"
+      ],
+      "exit": 0,
+      "log": "runtime-gate-optimized.log",
+      "log_sha256": "ba049e3b8053697ede3e948a133eb2f23b564f2a219fbcf3a026220a938d4a86"
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": {
+    "scripts/build_walletcore_api_fixture.py": "90ed626adee2912c923d612391ef2eda3d7a2d87a75f43f2b68f205b67a78450",
+    "tools/android_native_smoke/run_walletcore_api_fixture.py": "9a238a7dc4252c1687ddab5b1311e4d8bb848bb563d8e7f777e761071f401f06",
+    "tools/android_native_smoke/test_walletcore_api_builder.py": "f81bf74b36027eb78edb925b47c2ccc5300d94e88c716e0940a968382103b0b9",
+    "tools/android_native_smoke/test_walletcore_api_runtime_gate.py": "1fdc54f68fc8ca5dc3126036bdc481b535e207c1acbd116eb385a8b8c59b1704",
+    "tools/android_native_smoke/verify_walletcore_api_fixture.py": "5ebecac7a9c72672038dfe1a15dc08f2ff98beda8cb7b09a8d950a33e5ddd4a9"
+  }
+}

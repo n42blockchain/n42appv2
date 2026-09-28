@@ -1,0 +1,9 @@
+test_candidate_aar_tamper_rejected_before_output (tools.android_native_smoke.test_walletcore_api_builder.FixtureBuilderTests) ... ok
+test_fixture_activity_tamper_rejected_before_output (tools.android_native_smoke.test_walletcore_api_builder.FixtureBuilderTests) ... ok
+test_manifest_has_no_internet_permission (tools.android_native_smoke.test_walletcore_api_builder.FixtureBuilderTests) ... ok
+test_production_adapter_tamper_rejected_before_output (tools.android_native_smoke.test_walletcore_api_builder.FixtureBuilderTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.024s
+
+OK

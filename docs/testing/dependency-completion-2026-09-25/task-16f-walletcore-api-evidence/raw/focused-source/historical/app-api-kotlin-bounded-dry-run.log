@@ -1,0 +1,1589 @@
+command=['./gradlew', '--offline', '--max-workers=2', ':app:compileReleaseKotlin', '-x', ':app:compileFlutterBuildRelease', '--dry-run']
+exit=0
+stdout:
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :gradle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle:pluginDescriptors UP-TO-DATE
+> Task :gradle:processResources UP-TO-DATE
+
+> Task :gradle:compileKotlin
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/Deeplink.kt:13:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/Deeplink.kt:15:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/Deeplink.kt:17:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/Deeplink.kt:19:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:12:8 'interface ApkVariant : Any, BaseVariant, InstallableVariant, AndroidArtifactVariant, InternalBaseVariant' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:172:29 'val properties: (Mutable)Map<String, out Any?>' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:179:31 'val properties: (Mutable)Map<String, out Any?>' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:234:49 'val properties: (Mutable)Map<String, out Any?>' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:242:53 'val properties: (Mutable)Map<String, out Any?>' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:664:69 'interface ApkVariant : Any, BaseVariant, InstallableVariant, AndroidArtifactVariant, InternalBaseVariant' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/FlutterPluginUtils.kt:766:29 Condition is always 'true'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/VersionFetcher.kt:64:47 'val properties: (Mutable)Map<String, out Any?>' is deprecated. Deprecated in Java.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/plugins/PluginHandler.kt:168:70 Unchecked cast of 'NamedDomainObjectContainer<out BuildType>' to 'NamedDomainObjectContainer<BuildType>'.
+w: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/flutter-sdk/packages/flutter_tools/gradle/src/main/kotlin/plugins/PluginHandler.kt:169:75 Unchecked cast of 'NamedDomainObjectContainer<out BuildType>' to 'NamedDomainObjectContainer<BuildType>'.
+
+> Task :gradle:compileJava NO-SOURCE
+> Task :gradle:compileGroovy NO-SOURCE
+> Task :gradle:classes UP-TO-DATE
+> Task :gradle:jar UP-TO-DATE
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.enableJetifier=true' is deprecated.
+The current default is 'false'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: API 'applicationVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling applicationVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'testVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling testVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'unitTestVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling unitTestVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':app' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :android_file_picker
+WARNING: API 'libraryVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling libraryVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':android_file_picker' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :app_badge_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':app_badge_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :app_links
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':app_links' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :audioplayers_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':audioplayers_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :background_downloader
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':background_downloader' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :connectivity_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':connectivity_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :device_info_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':device_info_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_analytics
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_analytics' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_core
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_core' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_crashlytics
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_crashlytics' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :firebase_messaging
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':firebase_messaging' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_background
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_background' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_callkit_incoming
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_callkit_incoming' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_contacts
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_contacts' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_facebook_auth
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_facebook_auth' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_gemma
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_gemma' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_local_notifications
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_local_notifications' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_mining
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_mining' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_new_badger
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_new_badger' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_plugin_android_lifecycle
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_plugin_android_lifecycle' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_secure_storage
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_secure_storage' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_tts
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_tts' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_vodozemac
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_vodozemac' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :flutter_webrtc
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':flutter_webrtc' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :fluttertoast
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':fluttertoast' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :fluwx
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':fluwx' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :geocoding_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':geocoding_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :geolocator_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':geolocator_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_commons
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_commons' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_face_detection
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_face_detection' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_selfie_segmentation
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_selfie_segmentation' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_text_recognition
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_text_recognition' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_mlkit_translation
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_mlkit_translation' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :google_sign_in_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':google_sign_in_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :image_picker_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':image_picker_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :in_app_purchase_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':in_app_purchase_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :integration_test
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':integration_test' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :jni
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':jni' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :jni_flutter
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':jni_flutter' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :large_file_handler
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':large_file_handler' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :livekit_client
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':livekit_client' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :local_auth_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':local_auth_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :mobile_scanner
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':mobile_scanner' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :open_filex
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':open_filex' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :package_info_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':package_info_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :pdfx
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':pdfx' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :permission_handler_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':permission_handler_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :photo_manager
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':photo_manager' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :pro_image_editor
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':pro_image_editor' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :quick_actions_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':quick_actions_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :record_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':record_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :saver_gallery
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':saver_gallery' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :share_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':share_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :shared_preferences_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':shared_preferences_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :sign_in_with_apple
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':sign_in_with_apple' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :sqflite_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':sqflite_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :sqflite_sqlcipher
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':sqflite_sqlcipher' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :twitter_login
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':twitter_login' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :url_launcher_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':url_launcher_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :video_compress
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':video_compress' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :video_player_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':video_player_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :video_thumbnail
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':video_thumbnail' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :wakelock_plus
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':wakelock_plus' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :walletconnect_pay
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':walletconnect_pay' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :web3auth_flutter
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':web3auth_flutter' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+
+> Configure project :webview_flutter_android
+w: [33m[1m⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage[0m[0m
+The 'org.jetbrains.kotlin.android' plugin in project ':webview_flutter_android' is no longer required for Kotlin support since AGP 9.0.
+[32m[1mSolution:[0m[0m
+[32m[3mRemove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.[0m[0m
+[36mSee [0m[34mhttps://kotl.in/gradle/agp-built-in-kotlin[0m[36m for more details.[0m
+
+:android_file_picker:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:android_file_picker:preBuild SKIPPED
+:android_file_picker:preReleaseBuild SKIPPED
+:android_file_picker:generateReleaseResources SKIPPED
+:android_file_picker:packageReleaseResources SKIPPED
+:android_file_picker:processReleaseNavigationResources SKIPPED
+:android_file_picker:parseReleaseLocalResources SKIPPED
+:android_file_picker:generateReleaseRFile SKIPPED
+:android_file_picker:compileReleaseKotlin SKIPPED
+:android_file_picker:javaPreCompileRelease SKIPPED
+:android_file_picker:compileReleaseJavaWithJavac SKIPPED
+:android_file_picker:bundleLibCompileToJarRelease SKIPPED
+:app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:app:cleanMergeReleaseAssets SKIPPED
+:android_file_picker:generateReleaseAssets SKIPPED
+:android_file_picker:mergeReleaseAssets SKIPPED
+:app:generateReleaseAssets SKIPPED
+:app:validateCompileSdkVersion SKIPPED
+:app:preBuild SKIPPED
+:app:preReleaseBuild SKIPPED
+:app_badge_plus:generateReleaseAssets SKIPPED
+:app_badge_plus:preBuild SKIPPED
+:app_badge_plus:preReleaseBuild SKIPPED
+:app_badge_plus:mergeReleaseAssets SKIPPED
+:app_links:generateReleaseAssets SKIPPED
+:app_links:preBuild SKIPPED
+:app_links:preReleaseBuild SKIPPED
+:app_links:mergeReleaseAssets SKIPPED
+:audioplayers_android:generateReleaseAssets SKIPPED
+:audioplayers_android:preBuild SKIPPED
+:audioplayers_android:preReleaseBuild SKIPPED
+:audioplayers_android:mergeReleaseAssets SKIPPED
+:background_downloader:generateReleaseAssets SKIPPED
+:background_downloader:preBuild SKIPPED
+:background_downloader:preReleaseBuild SKIPPED
+:background_downloader:mergeReleaseAssets SKIPPED
+:connectivity_plus:generateReleaseAssets SKIPPED
+:connectivity_plus:preBuild SKIPPED
+:connectivity_plus:preReleaseBuild SKIPPED
+:connectivity_plus:mergeReleaseAssets SKIPPED
+:device_info_plus:generateReleaseAssets SKIPPED
+:device_info_plus:preBuild SKIPPED
+:device_info_plus:preReleaseBuild SKIPPED
+:device_info_plus:mergeReleaseAssets SKIPPED
+:firebase_analytics:generateReleaseAssets SKIPPED
+:firebase_analytics:preBuild SKIPPED
+:firebase_analytics:preReleaseBuild SKIPPED
+:firebase_analytics:mergeReleaseAssets SKIPPED
+:firebase_core:generateReleaseAssets SKIPPED
+:firebase_core:preBuild SKIPPED
+:firebase_core:preReleaseBuild SKIPPED
+:firebase_core:mergeReleaseAssets SKIPPED
+:firebase_crashlytics:generateReleaseAssets SKIPPED
+:firebase_crashlytics:preBuild SKIPPED
+:firebase_crashlytics:preReleaseBuild SKIPPED
+:firebase_crashlytics:mergeReleaseAssets SKIPPED
+:firebase_messaging:generateReleaseAssets SKIPPED
+:firebase_messaging:preBuild SKIPPED
+:firebase_messaging:preReleaseBuild SKIPPED
+:firebase_messaging:mergeReleaseAssets SKIPPED
+:flutter_background:generateReleaseAssets SKIPPED
+:flutter_background:preBuild SKIPPED
+:flutter_background:preReleaseBuild SKIPPED
+:flutter_background:mergeReleaseAssets SKIPPED
+:flutter_callkit_incoming:generateReleaseAssets SKIPPED
+:flutter_callkit_incoming:preBuild SKIPPED
+:flutter_callkit_incoming:preReleaseBuild SKIPPED
+:flutter_callkit_incoming:mergeReleaseAssets SKIPPED
+:flutter_contacts:generateReleaseAssets SKIPPED
+:flutter_contacts:preBuild SKIPPED
+:flutter_contacts:preReleaseBuild SKIPPED
+:flutter_contacts:mergeReleaseAssets SKIPPED
+:flutter_facebook_auth:generateReleaseAssets SKIPPED
+:flutter_facebook_auth:preBuild SKIPPED
+:flutter_facebook_auth:preReleaseBuild SKIPPED
+:flutter_facebook_auth:mergeReleaseAssets SKIPPED
+:flutter_gemma:generateReleaseAssets SKIPPED
+:flutter_gemma:preBuild SKIPPED
+:flutter_gemma:preReleaseBuild SKIPPED
+:flutter_gemma:mergeReleaseAssets SKIPPED
+:flutter_local_notifications:generateReleaseAssets SKIPPED
+:flutter_local_notifications:preBuild SKIPPED
+:flutter_local_notifications:preReleaseBuild SKIPPED
+:flutter_local_notifications:mergeReleaseAssets SKIPPED
+:flutter_mining:generateReleaseAssets SKIPPED
+:flutter_mining:preBuild SKIPPED
+:flutter_mining:preReleaseBuild SKIPPED
+:flutter_mining:mergeReleaseAssets SKIPPED
+:flutter_new_badger:generateReleaseAssets SKIPPED
+:flutter_new_badger:preBuild SKIPPED
+:flutter_new_badger:preReleaseBuild SKIPPED
+:flutter_new_badger:mergeReleaseAssets SKIPPED
+:flutter_plugin_android_lifecycle:generateReleaseAssets SKIPPED
+:flutter_plugin_android_lifecycle:preBuild SKIPPED
+:flutter_plugin_android_lifecycle:preReleaseBuild SKIPPED
+:flutter_plugin_android_lifecycle:mergeReleaseAssets SKIPPED
+:flutter_secure_storage:generateReleaseAssets SKIPPED
+:flutter_secure_storage:preBuild SKIPPED
+:flutter_secure_storage:preReleaseBuild SKIPPED
+:flutter_secure_storage:mergeReleaseAssets SKIPPED
+:flutter_tts:generateReleaseAssets SKIPPED
+:flutter_tts:preBuild SKIPPED
+:flutter_tts:preReleaseBuild SKIPPED
+:flutter_tts:mergeReleaseAssets SKIPPED
+:flutter_vodozemac:generateReleaseAssets SKIPPED
+:flutter_vodozemac:preBuild SKIPPED
+:flutter_vodozemac:preReleaseBuild SKIPPED
+:flutter_vodozemac:mergeReleaseAssets SKIPPED
+:flutter_webrtc:generateReleaseAssets SKIPPED
+:flutter_webrtc:preBuild SKIPPED
+:flutter_webrtc:preReleaseBuild SKIPPED
+:flutter_webrtc:mergeReleaseAssets SKIPPED
+:fluttertoast:generateReleaseAssets SKIPPED
+:fluttertoast:preBuild SKIPPED
+:fluttertoast:preReleaseBuild SKIPPED
+:fluttertoast:mergeReleaseAssets SKIPPED
+:fluwx:generateReleaseAssets SKIPPED
+:fluwx:preBuild SKIPPED
+:fluwx:preReleaseBuild SKIPPED
+:fluwx:mergeReleaseAssets SKIPPED
+:geocoding_android:generateReleaseAssets SKIPPED
+:geocoding_android:preBuild SKIPPED
+:geocoding_android:preReleaseBuild SKIPPED
+:geocoding_android:mergeReleaseAssets SKIPPED
+:geolocator_android:generateReleaseAssets SKIPPED
+:geolocator_android:preBuild SKIPPED
+:geolocator_android:preReleaseBuild SKIPPED
+:geolocator_android:mergeReleaseAssets SKIPPED
+:google_mlkit_commons:generateReleaseAssets SKIPPED
+:google_mlkit_commons:preBuild SKIPPED
+:google_mlkit_commons:preReleaseBuild SKIPPED
+:google_mlkit_commons:mergeReleaseAssets SKIPPED
+:google_mlkit_face_detection:generateReleaseAssets SKIPPED
+:google_mlkit_face_detection:preBuild SKIPPED
+:google_mlkit_face_detection:preReleaseBuild SKIPPED
+:google_mlkit_face_detection:mergeReleaseAssets SKIPPED
+:google_mlkit_selfie_segmentation:generateReleaseAssets SKIPPED
+:google_mlkit_selfie_segmentation:preBuild SKIPPED
+:google_mlkit_selfie_segmentation:preReleaseBuild SKIPPED
+:google_mlkit_selfie_segmentation:mergeReleaseAssets SKIPPED
+:google_mlkit_text_recognition:generateReleaseAssets SKIPPED
+:google_mlkit_text_recognition:preBuild SKIPPED
+:google_mlkit_text_recognition:preReleaseBuild SKIPPED
+:google_mlkit_text_recognition:mergeReleaseAssets SKIPPED
+:google_mlkit_translation:generateReleaseAssets SKIPPED
+:google_mlkit_translation:preBuild SKIPPED
+:google_mlkit_translation:preReleaseBuild SKIPPED
+:google_mlkit_translation:mergeReleaseAssets SKIPPED
+:google_sign_in_android:generateReleaseAssets SKIPPED
+:google_sign_in_android:preBuild SKIPPED
+:google_sign_in_android:preReleaseBuild SKIPPED
+:google_sign_in_android:mergeReleaseAssets SKIPPED
+:image_picker_android:generateReleaseAssets SKIPPED
+:image_picker_android:preBuild SKIPPED
+:image_picker_android:preReleaseBuild SKIPPED
+:image_picker_android:mergeReleaseAssets SKIPPED
+:in_app_purchase_android:generateReleaseAssets SKIPPED
+:in_app_purchase_android:preBuild SKIPPED
+:in_app_purchase_android:preReleaseBuild SKIPPED
+:in_app_purchase_android:mergeReleaseAssets SKIPPED
+:jni:generateReleaseAssets SKIPPED
+:jni:preBuild SKIPPED
+:jni:preReleaseBuild SKIPPED
+:jni:mergeReleaseAssets SKIPPED
+:jni_flutter:generateReleaseAssets SKIPPED
+:jni_flutter:preBuild SKIPPED
+:jni_flutter:preReleaseBuild SKIPPED
+:jni_flutter:mergeReleaseAssets SKIPPED
+:large_file_handler:generateReleaseAssets SKIPPED
+:large_file_handler:preBuild SKIPPED
+:large_file_handler:preReleaseBuild SKIPPED
+:large_file_handler:mergeReleaseAssets SKIPPED
+:livekit_client:generateReleaseAssets SKIPPED
+:livekit_client:preBuild SKIPPED
+:livekit_client:preReleaseBuild SKIPPED
+:livekit_client:mergeReleaseAssets SKIPPED
+:local_auth_android:generateReleaseAssets SKIPPED
+:local_auth_android:preBuild SKIPPED
+:local_auth_android:preReleaseBuild SKIPPED
+:local_auth_android:mergeReleaseAssets SKIPPED
+:mobile_scanner:generateReleaseAssets SKIPPED
+:mobile_scanner:preBuild SKIPPED
+:mobile_scanner:preReleaseBuild SKIPPED
+:mobile_scanner:mergeReleaseAssets SKIPPED
+:open_filex:generateReleaseAssets SKIPPED
+:open_filex:preBuild SKIPPED
+:open_filex:preReleaseBuild SKIPPED
+:open_filex:mergeReleaseAssets SKIPPED
+:package_info_plus:generateReleaseAssets SKIPPED
+:package_info_plus:preBuild SKIPPED
+:package_info_plus:preReleaseBuild SKIPPED
+:package_info_plus:mergeReleaseAssets SKIPPED
+:pdfx:generateReleaseAssets SKIPPED
+:pdfx:preBuild SKIPPED
+:pdfx:preReleaseBuild SKIPPED
+:pdfx:mergeReleaseAssets SKIPPED
+:permission_handler_android:generateReleaseAssets SKIPPED
+:permission_handler_android:preBuild SKIPPED
+:permission_handler_android:preReleaseBuild SKIPPED
+:permission_handler_android:mergeReleaseAssets SKIPPED
+:photo_manager:generateReleaseAssets SKIPPED
+:photo_manager:preBuild SKIPPED
+:photo_manager:preReleaseBuild SKIPPED
+:photo_manager:mergeReleaseAssets SKIPPED
+:pro_image_editor:generateReleaseAssets SKIPPED
+:pro_image_editor:preBuild SKIPPED
+:pro_image_editor:preReleaseBuild SKIPPED
+:pro_image_editor:mergeReleaseAssets SKIPPED
+:quick_actions_android:generateReleaseAssets SKIPPED
+:quick_actions_android:preBuild SKIPPED
+:quick_actions_android:preReleaseBuild SKIPPED
+:quick_actions_android:mergeReleaseAssets SKIPPED
+:record_android:generateReleaseAssets SKIPPED
+:record_android:preBuild SKIPPED
+:record_android:preReleaseBuild SKIPPED
+:record_android:mergeReleaseAssets SKIPPED
+:saver_gallery:generateReleaseAssets SKIPPED
+:saver_gallery:preBuild SKIPPED
+:saver_gallery:preReleaseBuild SKIPPED
+:saver_gallery:mergeReleaseAssets SKIPPED
+:share_plus:generateReleaseAssets SKIPPED
+:share_plus:preBuild SKIPPED
+:share_plus:preReleaseBuild SKIPPED
+:share_plus:mergeReleaseAssets SKIPPED
+:shared_preferences_android:generateReleaseAssets SKIPPED
+:shared_preferences_android:preBuild SKIPPED
+:shared_preferences_android:preReleaseBuild SKIPPED
+:shared_preferences_android:mergeReleaseAssets SKIPPED
+:sign_in_with_apple:generateReleaseAssets SKIPPED
+:sign_in_with_apple:preBuild SKIPPED
+:sign_in_with_apple:preReleaseBuild SKIPPED
+:sign_in_with_apple:mergeReleaseAssets SKIPPED
+:sqflite_android:generateReleaseAssets SKIPPED
+:sqflite_android:preBuild SKIPPED
+:sqflite_android:preReleaseBuild SKIPPED
+:sqflite_android:mergeReleaseAssets SKIPPED
+:sqflite_sqlcipher:generateReleaseAssets SKIPPED
+:sqflite_sqlcipher:preBuild SKIPPED
+:sqflite_sqlcipher:preReleaseBuild SKIPPED
+:sqflite_sqlcipher:mergeReleaseAssets SKIPPED
+:twitter_login:generateReleaseAssets SKIPPED
+:twitter_login:preBuild SKIPPED
+:twitter_login:preReleaseBuild SKIPPED
+:twitter_login:mergeReleaseAssets SKIPPED
+:url_launcher_android:generateReleaseAssets SKIPPED
+:url_launcher_android:preBuild SKIPPED
+:url_launcher_android:preReleaseBuild SKIPPED
+:url_launcher_android:mergeReleaseAssets SKIPPED
+:video_compress:generateReleaseAssets SKIPPED
+:video_compress:preBuild SKIPPED
+:video_compress:preReleaseBuild SKIPPED
+:video_compress:mergeReleaseAssets SKIPPED
+:video_player_android:generateReleaseAssets SKIPPED
+:video_player_android:preBuild SKIPPED
+:video_player_android:preReleaseBuild SKIPPED
+:video_player_android:mergeReleaseAssets SKIPPED
+:video_thumbnail:generateReleaseAssets SKIPPED
+:video_thumbnail:preBuild SKIPPED
+:video_thumbnail:preReleaseBuild SKIPPED
+:video_thumbnail:mergeReleaseAssets SKIPPED
+:wakelock_plus:generateReleaseAssets SKIPPED
+:wakelock_plus:preBuild SKIPPED
+:wakelock_plus:preReleaseBuild SKIPPED
+:wakelock_plus:mergeReleaseAssets SKIPPED
+:walletconnect_pay:generateReleaseAssets SKIPPED
+:walletconnect_pay:preBuild SKIPPED
+:walletconnect_pay:preReleaseBuild SKIPPED
+:walletconnect_pay:mergeReleaseAssets SKIPPED
+:web3auth_flutter:generateReleaseAssets SKIPPED
+:web3auth_flutter:preBuild SKIPPED
+:web3auth_flutter:preReleaseBuild SKIPPED
+:web3auth_flutter:mergeReleaseAssets SKIPPED
+:webview_flutter_android:generateReleaseAssets SKIPPED
+:webview_flutter_android:preBuild SKIPPED
+:webview_flutter_android:preReleaseBuild SKIPPED
+:webview_flutter_android:mergeReleaseAssets SKIPPED
+:app:mergeReleaseAssets SKIPPED
+:app:copyFlutterAssetsRelease SKIPPED
+:app:generateReleaseResValues SKIPPED
+:app:generateReleaseResources SKIPPED
+:app:processReleaseGoogleServices SKIPPED
+:app:packageReleaseResources SKIPPED
+:app_badge_plus:processReleaseNavigationResources SKIPPED
+:app_links:processReleaseNavigationResources SKIPPED
+:audioplayers_android:processReleaseNavigationResources SKIPPED
+:background_downloader:processReleaseNavigationResources SKIPPED
+:connectivity_plus:processReleaseNavigationResources SKIPPED
+:device_info_plus:processReleaseNavigationResources SKIPPED
+:firebase_analytics:processReleaseNavigationResources SKIPPED
+:firebase_core:processReleaseNavigationResources SKIPPED
+:firebase_crashlytics:processReleaseNavigationResources SKIPPED
+:firebase_messaging:processReleaseNavigationResources SKIPPED
+:flutter_background:processReleaseNavigationResources SKIPPED
+:flutter_callkit_incoming:processReleaseNavigationResources SKIPPED
+:flutter_contacts:processReleaseNavigationResources SKIPPED
+:flutter_facebook_auth:processReleaseNavigationResources SKIPPED
+:flutter_gemma:processReleaseNavigationResources SKIPPED
+:flutter_local_notifications:processReleaseNavigationResources SKIPPED
+:flutter_mining:processReleaseNavigationResources SKIPPED
+:flutter_new_badger:processReleaseNavigationResources SKIPPED
+:flutter_plugin_android_lifecycle:processReleaseNavigationResources SKIPPED
+:flutter_secure_storage:processReleaseNavigationResources SKIPPED
+:flutter_tts:processReleaseNavigationResources SKIPPED
+:flutter_vodozemac:processReleaseNavigationResources SKIPPED
+:flutter_webrtc:processReleaseNavigationResources SKIPPED
+:fluttertoast:processReleaseNavigationResources SKIPPED
+:fluwx:processReleaseNavigationResources SKIPPED
+:geocoding_android:processReleaseNavigationResources SKIPPED
+:geolocator_android:processReleaseNavigationResources SKIPPED
+:google_mlkit_commons:processReleaseNavigationResources SKIPPED
+:google_mlkit_face_detection:processReleaseNavigationResources SKIPPED
+:google_mlkit_selfie_segmentation:processReleaseNavigationResources SKIPPED
+:google_mlkit_text_recognition:processReleaseNavigationResources SKIPPED
+:google_mlkit_translation:processReleaseNavigationResources SKIPPED
+:google_sign_in_android:processReleaseNavigationResources SKIPPED
+:image_picker_android:processReleaseNavigationResources SKIPPED
+:in_app_purchase_android:processReleaseNavigationResources SKIPPED
+:jni:processReleaseNavigationResources SKIPPED
+:jni_flutter:processReleaseNavigationResources SKIPPED
+:large_file_handler:processReleaseNavigationResources SKIPPED
+:livekit_client:processReleaseNavigationResources SKIPPED
+:local_auth_android:processReleaseNavigationResources SKIPPED
+:mobile_scanner:processReleaseNavigationResources SKIPPED
+:open_filex:processReleaseNavigationResources SKIPPED
+:package_info_plus:processReleaseNavigationResources SKIPPED
+:pdfx:processReleaseNavigationResources SKIPPED
+:permission_handler_android:processReleaseNavigationResources SKIPPED
+:photo_manager:processReleaseNavigationResources SKIPPED
+:pro_image_editor:processReleaseNavigationResources SKIPPED
+:quick_actions_android:processReleaseNavigationResources SKIPPED
+:record_android:processReleaseNavigationResources SKIPPED
+:saver_gallery:processReleaseNavigationResources SKIPPED
+:share_plus:processReleaseNavigationResources SKIPPED
+:shared_preferences_android:processReleaseNavigationResources SKIPPED
+:sign_in_with_apple:processReleaseNavigationResources SKIPPED
+:sqflite_android:processReleaseNavigationResources SKIPPED
+:sqflite_sqlcipher:processReleaseNavigationResources SKIPPED
+:twitter_login:processReleaseNavigationResources SKIPPED
+:url_launcher_android:processReleaseNavigationResources SKIPPED
+:video_compress:processReleaseNavigationResources SKIPPED
+:video_player_android:processReleaseNavigationResources SKIPPED
+:video_thumbnail:processReleaseNavigationResources SKIPPED
+:wakelock_plus:processReleaseNavigationResources SKIPPED
+:walletconnect_pay:processReleaseNavigationResources SKIPPED
+:web3auth_flutter:processReleaseNavigationResources SKIPPED
+:webview_flutter_android:processReleaseNavigationResources SKIPPED
+:app:processReleaseNavigationResources SKIPPED
+:app:parseReleaseLocalResources SKIPPED
+:app:generateReleaseRFile SKIPPED
+:app_badge_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:app_badge_plus:generateReleaseResources SKIPPED
+:app_badge_plus:packageReleaseResources SKIPPED
+:app_badge_plus:parseReleaseLocalResources SKIPPED
+:app_badge_plus:generateReleaseRFile SKIPPED
+:app_badge_plus:compileReleaseKotlin SKIPPED
+:app_badge_plus:javaPreCompileRelease SKIPPED
+:app_badge_plus:compileReleaseJavaWithJavac SKIPPED
+:app_badge_plus:bundleLibCompileToJarRelease SKIPPED
+:app_links:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:app_links:generateReleaseResources SKIPPED
+:app_links:packageReleaseResources SKIPPED
+:app_links:parseReleaseLocalResources SKIPPED
+:app_links:generateReleaseRFile SKIPPED
+:app_links:compileReleaseKotlin SKIPPED
+:app_links:javaPreCompileRelease SKIPPED
+:app_links:compileReleaseJavaWithJavac SKIPPED
+:app_links:bundleLibCompileToJarRelease SKIPPED
+:audioplayers_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:audioplayers_android:generateReleaseResources SKIPPED
+:audioplayers_android:packageReleaseResources SKIPPED
+:audioplayers_android:parseReleaseLocalResources SKIPPED
+:audioplayers_android:generateReleaseRFile SKIPPED
+:audioplayers_android:compileReleaseKotlin SKIPPED
+:audioplayers_android:javaPreCompileRelease SKIPPED
+:audioplayers_android:compileReleaseJavaWithJavac SKIPPED
+:audioplayers_android:bundleLibCompileToJarRelease SKIPPED
+:background_downloader:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:background_downloader:generateReleaseResources SKIPPED
+:background_downloader:packageReleaseResources SKIPPED
+:background_downloader:parseReleaseLocalResources SKIPPED
+:background_downloader:generateReleaseRFile SKIPPED
+:background_downloader:compileReleaseKotlin SKIPPED
+:background_downloader:javaPreCompileRelease SKIPPED
+:background_downloader:compileReleaseJavaWithJavac SKIPPED
+:background_downloader:bundleLibCompileToJarRelease SKIPPED
+:connectivity_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:connectivity_plus:generateReleaseResources SKIPPED
+:connectivity_plus:packageReleaseResources SKIPPED
+:connectivity_plus:parseReleaseLocalResources SKIPPED
+:connectivity_plus:generateReleaseRFile SKIPPED
+:connectivity_plus:compileReleaseKotlin SKIPPED
+:connectivity_plus:javaPreCompileRelease SKIPPED
+:connectivity_plus:compileReleaseJavaWithJavac SKIPPED
+:connectivity_plus:bundleLibCompileToJarRelease SKIPPED
+:device_info_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:device_info_plus:generateReleaseResources SKIPPED
+:device_info_plus:packageReleaseResources SKIPPED
+:device_info_plus:parseReleaseLocalResources SKIPPED
+:device_info_plus:generateReleaseRFile SKIPPED
+:device_info_plus:compileReleaseKotlin SKIPPED
+:device_info_plus:javaPreCompileRelease SKIPPED
+:device_info_plus:compileReleaseJavaWithJavac SKIPPED
+:device_info_plus:bundleLibCompileToJarRelease SKIPPED
+:firebase_analytics:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:firebase_analytics:generateReleaseBuildConfig SKIPPED
+:firebase_analytics:generateReleaseResources SKIPPED
+:firebase_analytics:packageReleaseResources SKIPPED
+:firebase_analytics:parseReleaseLocalResources SKIPPED
+:firebase_analytics:generateReleaseRFile SKIPPED
+:firebase_core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:firebase_core:generateReleaseBuildConfig SKIPPED
+:firebase_core:generateReleaseResources SKIPPED
+:firebase_core:packageReleaseResources SKIPPED
+:firebase_core:parseReleaseLocalResources SKIPPED
+:firebase_core:generateReleaseRFile SKIPPED
+:firebase_core:compileReleaseKotlin SKIPPED
+:firebase_core:javaPreCompileRelease SKIPPED
+:firebase_core:compileReleaseJavaWithJavac SKIPPED
+:firebase_core:bundleLibCompileToJarRelease SKIPPED
+:firebase_analytics:compileReleaseKotlin SKIPPED
+:firebase_analytics:javaPreCompileRelease SKIPPED
+:firebase_analytics:compileReleaseJavaWithJavac SKIPPED
+:firebase_analytics:bundleLibCompileToJarRelease SKIPPED
+:firebase_crashlytics:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:firebase_crashlytics:generateReleaseBuildConfig SKIPPED
+:firebase_crashlytics:generateReleaseResources SKIPPED
+:firebase_crashlytics:packageReleaseResources SKIPPED
+:firebase_crashlytics:parseReleaseLocalResources SKIPPED
+:firebase_crashlytics:generateReleaseRFile SKIPPED
+:firebase_crashlytics:compileReleaseKotlin SKIPPED
+:firebase_crashlytics:javaPreCompileRelease SKIPPED
+:firebase_crashlytics:compileReleaseJavaWithJavac SKIPPED
+:firebase_crashlytics:bundleLibCompileToJarRelease SKIPPED
+:firebase_messaging:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:firebase_messaging:generateReleaseBuildConfig SKIPPED
+:firebase_messaging:generateReleaseResources SKIPPED
+:firebase_messaging:packageReleaseResources SKIPPED
+:firebase_messaging:parseReleaseLocalResources SKIPPED
+:firebase_messaging:generateReleaseRFile SKIPPED
+:firebase_messaging:compileReleaseKotlin SKIPPED
+:firebase_messaging:javaPreCompileRelease SKIPPED
+:firebase_messaging:compileReleaseJavaWithJavac SKIPPED
+:firebase_messaging:bundleLibCompileToJarRelease SKIPPED
+:flutter_background:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_background:generateReleaseResources SKIPPED
+:flutter_background:packageReleaseResources SKIPPED
+:flutter_background:parseReleaseLocalResources SKIPPED
+:flutter_background:generateReleaseRFile SKIPPED
+:flutter_background:compileReleaseKotlin SKIPPED
+:flutter_background:javaPreCompileRelease SKIPPED
+:flutter_background:compileReleaseJavaWithJavac SKIPPED
+:flutter_background:bundleLibCompileToJarRelease SKIPPED
+:flutter_callkit_incoming:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_callkit_incoming:generateReleaseResources SKIPPED
+:flutter_callkit_incoming:packageReleaseResources SKIPPED
+:flutter_callkit_incoming:parseReleaseLocalResources SKIPPED
+:flutter_callkit_incoming:generateReleaseRFile SKIPPED
+:flutter_callkit_incoming:compileReleaseKotlin SKIPPED
+:flutter_callkit_incoming:javaPreCompileRelease SKIPPED
+:flutter_callkit_incoming:compileReleaseJavaWithJavac SKIPPED
+:flutter_callkit_incoming:bundleLibCompileToJarRelease SKIPPED
+:flutter_contacts:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_contacts:generateReleaseResources SKIPPED
+:flutter_contacts:packageReleaseResources SKIPPED
+:flutter_contacts:parseReleaseLocalResources SKIPPED
+:flutter_contacts:generateReleaseRFile SKIPPED
+:flutter_contacts:compileReleaseKotlin SKIPPED
+:flutter_contacts:javaPreCompileRelease SKIPPED
+:flutter_contacts:compileReleaseJavaWithJavac SKIPPED
+:flutter_contacts:bundleLibCompileToJarRelease SKIPPED
+:flutter_facebook_auth:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_facebook_auth:generateReleaseResources SKIPPED
+:flutter_facebook_auth:packageReleaseResources SKIPPED
+:flutter_facebook_auth:parseReleaseLocalResources SKIPPED
+:flutter_facebook_auth:generateReleaseRFile SKIPPED
+:flutter_facebook_auth:compileReleaseKotlin SKIPPED
+:flutter_facebook_auth:javaPreCompileRelease SKIPPED
+:flutter_facebook_auth:compileReleaseJavaWithJavac SKIPPED
+:flutter_facebook_auth:bundleLibCompileToJarRelease SKIPPED
+:flutter_gemma:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_gemma:generateReleaseResources SKIPPED
+:flutter_gemma:packageReleaseResources SKIPPED
+:flutter_gemma:parseReleaseLocalResources SKIPPED
+:flutter_gemma:generateReleaseRFile SKIPPED
+:large_file_handler:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:large_file_handler:generateReleaseResources SKIPPED
+:large_file_handler:packageReleaseResources SKIPPED
+:large_file_handler:parseReleaseLocalResources SKIPPED
+:large_file_handler:generateReleaseRFile SKIPPED
+:large_file_handler:compileReleaseKotlin SKIPPED
+:large_file_handler:javaPreCompileRelease SKIPPED
+:large_file_handler:compileReleaseJavaWithJavac SKIPPED
+:large_file_handler:bundleLibCompileToJarRelease SKIPPED
+:flutter_gemma:compileReleaseKotlin SKIPPED
+:flutter_gemma:javaPreCompileRelease SKIPPED
+:flutter_gemma:compileReleaseJavaWithJavac SKIPPED
+:flutter_gemma:bundleLibCompileToJarRelease SKIPPED
+:flutter_local_notifications:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_local_notifications:generateReleaseResources SKIPPED
+:flutter_local_notifications:packageReleaseResources SKIPPED
+:flutter_local_notifications:parseReleaseLocalResources SKIPPED
+:flutter_local_notifications:generateReleaseRFile SKIPPED
+:flutter_local_notifications:compileReleaseKotlin SKIPPED
+:flutter_local_notifications:javaPreCompileRelease SKIPPED
+:flutter_local_notifications:compileReleaseJavaWithJavac SKIPPED
+:flutter_local_notifications:bundleLibCompileToJarRelease SKIPPED
+:flutter_mining:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_mining:generateReleaseResources SKIPPED
+:flutter_mining:packageReleaseResources SKIPPED
+:flutter_mining:parseReleaseLocalResources SKIPPED
+:flutter_mining:generateReleaseRFile SKIPPED
+:flutter_mining:compileReleaseKotlin SKIPPED
+:flutter_mining:javaPreCompileRelease SKIPPED
+:flutter_mining:compileReleaseJavaWithJavac SKIPPED
+:flutter_mining:bundleLibCompileToJarRelease SKIPPED
+:flutter_new_badger:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_new_badger:generateReleaseResources SKIPPED
+:flutter_new_badger:packageReleaseResources SKIPPED
+:flutter_new_badger:parseReleaseLocalResources SKIPPED
+:flutter_new_badger:generateReleaseRFile SKIPPED
+:flutter_new_badger:compileReleaseKotlin SKIPPED
+:flutter_new_badger:javaPreCompileRelease SKIPPED
+:flutter_new_badger:compileReleaseJavaWithJavac SKIPPED
+:flutter_new_badger:bundleLibCompileToJarRelease SKIPPED
+:flutter_plugin_android_lifecycle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_plugin_android_lifecycle:generateReleaseResources SKIPPED
+:flutter_plugin_android_lifecycle:packageReleaseResources SKIPPED
+:flutter_plugin_android_lifecycle:parseReleaseLocalResources SKIPPED
+:flutter_plugin_android_lifecycle:generateReleaseRFile SKIPPED
+:flutter_plugin_android_lifecycle:compileReleaseKotlin SKIPPED
+:flutter_plugin_android_lifecycle:javaPreCompileRelease SKIPPED
+:flutter_plugin_android_lifecycle:compileReleaseJavaWithJavac SKIPPED
+:flutter_plugin_android_lifecycle:bundleLibCompileToJarRelease SKIPPED
+:flutter_secure_storage:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_secure_storage:generateReleaseBuildConfig SKIPPED
+:flutter_secure_storage:generateReleaseResources SKIPPED
+:flutter_secure_storage:packageReleaseResources SKIPPED
+:flutter_secure_storage:parseReleaseLocalResources SKIPPED
+:flutter_secure_storage:generateReleaseRFile SKIPPED
+:flutter_secure_storage:compileReleaseKotlin SKIPPED
+:flutter_secure_storage:javaPreCompileRelease SKIPPED
+:flutter_secure_storage:compileReleaseJavaWithJavac SKIPPED
+:flutter_secure_storage:bundleLibCompileToJarRelease SKIPPED
+:flutter_tts:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_tts:generateReleaseResources SKIPPED
+:flutter_tts:packageReleaseResources SKIPPED
+:flutter_tts:parseReleaseLocalResources SKIPPED
+:flutter_tts:generateReleaseRFile SKIPPED
+:flutter_tts:compileReleaseKotlin SKIPPED
+:flutter_tts:javaPreCompileRelease SKIPPED
+:flutter_tts:compileReleaseJavaWithJavac SKIPPED
+:flutter_tts:bundleLibCompileToJarRelease SKIPPED
+:flutter_vodozemac:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_vodozemac:generateReleaseResources SKIPPED
+:flutter_vodozemac:packageReleaseResources SKIPPED
+:flutter_vodozemac:parseReleaseLocalResources SKIPPED
+:flutter_vodozemac:generateReleaseRFile SKIPPED
+:flutter_vodozemac:compileReleaseKotlin SKIPPED
+:flutter_vodozemac:javaPreCompileRelease SKIPPED
+:flutter_vodozemac:compileReleaseJavaWithJavac SKIPPED
+:flutter_vodozemac:bundleLibCompileToJarRelease SKIPPED
+:flutter_webrtc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:flutter_webrtc:generateReleaseResources SKIPPED
+:flutter_webrtc:packageReleaseResources SKIPPED
+:flutter_webrtc:parseReleaseLocalResources SKIPPED
+:flutter_webrtc:generateReleaseRFile SKIPPED
+:flutter_webrtc:compileReleaseKotlin SKIPPED
+:flutter_webrtc:javaPreCompileRelease SKIPPED
+:flutter_webrtc:compileReleaseJavaWithJavac SKIPPED
+:flutter_webrtc:bundleLibCompileToJarRelease SKIPPED
+:fluttertoast:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:fluttertoast:generateReleaseResources SKIPPED
+:fluttertoast:packageReleaseResources SKIPPED
+:fluttertoast:parseReleaseLocalResources SKIPPED
+:fluttertoast:generateReleaseRFile SKIPPED
+:fluttertoast:compileReleaseKotlin SKIPPED
+:fluttertoast:javaPreCompileRelease SKIPPED
+:fluttertoast:compileReleaseJavaWithJavac SKIPPED
+:fluttertoast:bundleLibCompileToJarRelease SKIPPED
+:fluwx:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:fluwx:generateFluwxHelperFile SKIPPED
+:fluwx:generateReleaseResources SKIPPED
+:fluwx:packageReleaseResources SKIPPED
+:fluwx:parseReleaseLocalResources SKIPPED
+:fluwx:generateReleaseRFile SKIPPED
+:fluwx:compileReleaseKotlin SKIPPED
+:fluwx:javaPreCompileRelease SKIPPED
+:fluwx:compileReleaseJavaWithJavac SKIPPED
+:fluwx:bundleLibCompileToJarRelease SKIPPED
+:geocoding_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:geocoding_android:generateReleaseResources SKIPPED
+:geocoding_android:packageReleaseResources SKIPPED
+:geocoding_android:parseReleaseLocalResources SKIPPED
+:geocoding_android:generateReleaseRFile SKIPPED
+:geocoding_android:compileReleaseKotlin SKIPPED
+:geocoding_android:javaPreCompileRelease SKIPPED
+:geocoding_android:compileReleaseJavaWithJavac SKIPPED
+:geocoding_android:bundleLibCompileToJarRelease SKIPPED
+:geolocator_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:geolocator_android:generateReleaseResources SKIPPED
+:geolocator_android:packageReleaseResources SKIPPED
+:geolocator_android:parseReleaseLocalResources SKIPPED
+:geolocator_android:generateReleaseRFile SKIPPED
+:geolocator_android:compileReleaseKotlin SKIPPED
+:geolocator_android:javaPreCompileRelease SKIPPED
+:geolocator_android:compileReleaseJavaWithJavac SKIPPED
+:geolocator_android:bundleLibCompileToJarRelease SKIPPED
+:google_mlkit_commons:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:google_mlkit_commons:generateReleaseResources SKIPPED
+:google_mlkit_commons:packageReleaseResources SKIPPED
+:google_mlkit_commons:parseReleaseLocalResources SKIPPED
+:google_mlkit_commons:generateReleaseRFile SKIPPED
+:google_mlkit_commons:compileReleaseKotlin SKIPPED
+:google_mlkit_commons:javaPreCompileRelease SKIPPED
+:google_mlkit_commons:compileReleaseJavaWithJavac SKIPPED
+:google_mlkit_commons:bundleLibCompileToJarRelease SKIPPED
+:google_mlkit_face_detection:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:google_mlkit_face_detection:generateReleaseResources SKIPPED
+:google_mlkit_face_detection:packageReleaseResources SKIPPED
+:google_mlkit_face_detection:parseReleaseLocalResources SKIPPED
+:google_mlkit_face_detection:generateReleaseRFile SKIPPED
+:google_mlkit_face_detection:compileReleaseKotlin SKIPPED
+:google_mlkit_face_detection:javaPreCompileRelease SKIPPED
+:google_mlkit_face_detection:compileReleaseJavaWithJavac SKIPPED
+:google_mlkit_face_detection:bundleLibCompileToJarRelease SKIPPED
+:google_mlkit_selfie_segmentation:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:google_mlkit_selfie_segmentation:generateReleaseResources SKIPPED
+:google_mlkit_selfie_segmentation:packageReleaseResources SKIPPED
+:google_mlkit_selfie_segmentation:parseReleaseLocalResources SKIPPED
+:google_mlkit_selfie_segmentation:generateReleaseRFile SKIPPED
+:google_mlkit_selfie_segmentation:compileReleaseKotlin SKIPPED
+:google_mlkit_selfie_segmentation:javaPreCompileRelease SKIPPED
+:google_mlkit_selfie_segmentation:compileReleaseJavaWithJavac SKIPPED
+:google_mlkit_selfie_segmentation:bundleLibCompileToJarRelease SKIPPED
+:google_mlkit_text_recognition:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:google_mlkit_text_recognition:generateReleaseResources SKIPPED
+:google_mlkit_text_recognition:packageReleaseResources SKIPPED
+:google_mlkit_text_recognition:parseReleaseLocalResources SKIPPED
+:google_mlkit_text_recognition:generateReleaseRFile SKIPPED
+:google_mlkit_text_recognition:compileReleaseKotlin SKIPPED
+:google_mlkit_text_recognition:javaPreCompileRelease SKIPPED
+:google_mlkit_text_recognition:compileReleaseJavaWithJavac SKIPPED
+:google_mlkit_text_recognition:bundleLibCompileToJarRelease SKIPPED
+:google_mlkit_translation:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:google_mlkit_translation:generateReleaseResources SKIPPED
+:google_mlkit_translation:packageReleaseResources SKIPPED
+:google_mlkit_translation:parseReleaseLocalResources SKIPPED
+:google_mlkit_translation:generateReleaseRFile SKIPPED
+:google_mlkit_translation:compileReleaseKotlin SKIPPED
+:google_mlkit_translation:javaPreCompileRelease SKIPPED
+:google_mlkit_translation:compileReleaseJavaWithJavac SKIPPED
+:google_mlkit_translation:bundleLibCompileToJarRelease SKIPPED
+:google_sign_in_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:google_sign_in_android:generateReleaseResources SKIPPED
+:google_sign_in_android:packageReleaseResources SKIPPED
+:google_sign_in_android:parseReleaseLocalResources SKIPPED
+:google_sign_in_android:generateReleaseRFile SKIPPED
+:google_sign_in_android:compileReleaseKotlin SKIPPED
+:google_sign_in_android:javaPreCompileRelease SKIPPED
+:google_sign_in_android:compileReleaseJavaWithJavac SKIPPED
+:google_sign_in_android:bundleLibCompileToJarRelease SKIPPED
+:image_picker_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:image_picker_android:generateReleaseResources SKIPPED
+:image_picker_android:packageReleaseResources SKIPPED
+:image_picker_android:parseReleaseLocalResources SKIPPED
+:image_picker_android:generateReleaseRFile SKIPPED
+:image_picker_android:compileReleaseKotlin SKIPPED
+:image_picker_android:javaPreCompileRelease SKIPPED
+:image_picker_android:compileReleaseJavaWithJavac SKIPPED
+:image_picker_android:bundleLibCompileToJarRelease SKIPPED
+:in_app_purchase_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:in_app_purchase_android:generateReleaseBuildConfig SKIPPED
+:in_app_purchase_android:generateReleaseResources SKIPPED
+:in_app_purchase_android:packageReleaseResources SKIPPED
+:in_app_purchase_android:parseReleaseLocalResources SKIPPED
+:in_app_purchase_android:generateReleaseRFile SKIPPED
+:in_app_purchase_android:compileReleaseKotlin SKIPPED
+:in_app_purchase_android:javaPreCompileRelease SKIPPED
+:in_app_purchase_android:compileReleaseJavaWithJavac SKIPPED
+:in_app_purchase_android:bundleLibCompileToJarRelease SKIPPED
+:jni:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:jni:generateReleaseResources SKIPPED
+:jni:packageReleaseResources SKIPPED
+:jni:parseReleaseLocalResources SKIPPED
+:jni:generateReleaseRFile SKIPPED
+:jni:compileReleaseKotlin SKIPPED
+:jni:javaPreCompileRelease SKIPPED
+:jni:compileReleaseJavaWithJavac SKIPPED
+:jni:bundleLibCompileToJarRelease SKIPPED
+:jni_flutter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:jni_flutter:generateReleaseResources SKIPPED
+:jni_flutter:packageReleaseResources SKIPPED
+:jni_flutter:parseReleaseLocalResources SKIPPED
+:jni_flutter:generateReleaseRFile SKIPPED
+:jni_flutter:compileReleaseKotlin SKIPPED
+:jni_flutter:javaPreCompileRelease SKIPPED
+:jni_flutter:compileReleaseJavaWithJavac SKIPPED
+:jni_flutter:bundleLibCompileToJarRelease SKIPPED
+:livekit_client:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:livekit_client:generateReleaseResources SKIPPED
+:livekit_client:packageReleaseResources SKIPPED
+:livekit_client:parseReleaseLocalResources SKIPPED
+:livekit_client:generateReleaseRFile SKIPPED
+:livekit_client:compileReleaseKotlin SKIPPED
+:livekit_client:javaPreCompileRelease SKIPPED
+:livekit_client:compileReleaseJavaWithJavac SKIPPED
+:livekit_client:bundleLibCompileToJarRelease SKIPPED
+:local_auth_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:local_auth_android:generateReleaseResources SKIPPED
+:local_auth_android:packageReleaseResources SKIPPED
+:local_auth_android:parseReleaseLocalResources SKIPPED
+:local_auth_android:generateReleaseRFile SKIPPED
+:local_auth_android:compileReleaseKotlin SKIPPED
+:local_auth_android:javaPreCompileRelease SKIPPED
+:local_auth_android:compileReleaseJavaWithJavac SKIPPED
+:local_auth_android:bundleLibCompileToJarRelease SKIPPED
+:mobile_scanner:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:mobile_scanner:generateReleaseResources SKIPPED
+:mobile_scanner:packageReleaseResources SKIPPED
+:mobile_scanner:parseReleaseLocalResources SKIPPED
+:mobile_scanner:generateReleaseRFile SKIPPED
+:mobile_scanner:compileReleaseKotlin SKIPPED
+:mobile_scanner:javaPreCompileRelease SKIPPED
+:mobile_scanner:compileReleaseJavaWithJavac SKIPPED
+:mobile_scanner:bundleLibCompileToJarRelease SKIPPED
+:open_filex:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:open_filex:generateReleaseResources SKIPPED
+:open_filex:packageReleaseResources SKIPPED
+:open_filex:parseReleaseLocalResources SKIPPED
+:open_filex:generateReleaseRFile SKIPPED
+:open_filex:compileReleaseKotlin SKIPPED
+:open_filex:javaPreCompileRelease SKIPPED
+:open_filex:compileReleaseJavaWithJavac SKIPPED
+:open_filex:bundleLibCompileToJarRelease SKIPPED
+:package_info_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:package_info_plus:generateReleaseResources SKIPPED
+:package_info_plus:packageReleaseResources SKIPPED
+:package_info_plus:parseReleaseLocalResources SKIPPED
+:package_info_plus:generateReleaseRFile SKIPPED
+:package_info_plus:compileReleaseKotlin SKIPPED
+:package_info_plus:javaPreCompileRelease SKIPPED
+:package_info_plus:compileReleaseJavaWithJavac SKIPPED
+:package_info_plus:bundleLibCompileToJarRelease SKIPPED
+:pdfx:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:pdfx:generateReleaseResources SKIPPED
+:pdfx:packageReleaseResources SKIPPED
+:pdfx:parseReleaseLocalResources SKIPPED
+:pdfx:generateReleaseRFile SKIPPED
+:pdfx:compileReleaseKotlin SKIPPED
+:pdfx:javaPreCompileRelease SKIPPED
+:pdfx:compileReleaseJavaWithJavac SKIPPED
+:pdfx:bundleLibCompileToJarRelease SKIPPED
+:permission_handler_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:permission_handler_android:generateReleaseResources SKIPPED
+:permission_handler_android:packageReleaseResources SKIPPED
+:permission_handler_android:parseReleaseLocalResources SKIPPED
+:permission_handler_android:generateReleaseRFile SKIPPED
+:permission_handler_android:compileReleaseKotlin SKIPPED
+:permission_handler_android:javaPreCompileRelease SKIPPED
+:permission_handler_android:compileReleaseJavaWithJavac SKIPPED
+:permission_handler_android:bundleLibCompileToJarRelease SKIPPED
+:photo_manager:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:photo_manager:generateReleaseResources SKIPPED
+:photo_manager:packageReleaseResources SKIPPED
+:photo_manager:parseReleaseLocalResources SKIPPED
+:photo_manager:generateReleaseRFile SKIPPED
+:photo_manager:compileReleaseKotlin SKIPPED
+:photo_manager:javaPreCompileRelease SKIPPED
+:photo_manager:compileReleaseJavaWithJavac SKIPPED
+:photo_manager:bundleLibCompileToJarRelease SKIPPED
+:pro_image_editor:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:pro_image_editor:generateReleaseResources SKIPPED
+:pro_image_editor:packageReleaseResources SKIPPED
+:pro_image_editor:parseReleaseLocalResources SKIPPED
+:pro_image_editor:generateReleaseRFile SKIPPED
+:pro_image_editor:compileReleaseKotlin SKIPPED
+:pro_image_editor:javaPreCompileRelease SKIPPED
+:pro_image_editor:compileReleaseJavaWithJavac SKIPPED
+:pro_image_editor:bundleLibCompileToJarRelease SKIPPED
+:quick_actions_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:quick_actions_android:generateReleaseResources SKIPPED
+:quick_actions_android:packageReleaseResources SKIPPED
+:quick_actions_android:parseReleaseLocalResources SKIPPED
+:quick_actions_android:generateReleaseRFile SKIPPED
+:quick_actions_android:compileReleaseKotlin SKIPPED
+:quick_actions_android:javaPreCompileRelease SKIPPED
+:quick_actions_android:compileReleaseJavaWithJavac SKIPPED
+:quick_actions_android:bundleLibCompileToJarRelease SKIPPED
+:record_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:record_android:generateReleaseResources SKIPPED
+:record_android:packageReleaseResources SKIPPED
+:record_android:parseReleaseLocalResources SKIPPED
+:record_android:generateReleaseRFile SKIPPED
+:record_android:compileReleaseKotlin SKIPPED
+:record_android:javaPreCompileRelease SKIPPED
+:record_android:compileReleaseJavaWithJavac SKIPPED
+:record_android:bundleLibCompileToJarRelease SKIPPED
+:saver_gallery:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:saver_gallery:generateReleaseResources SKIPPED
+:saver_gallery:packageReleaseResources SKIPPED
+:saver_gallery:parseReleaseLocalResources SKIPPED
+:saver_gallery:generateReleaseRFile SKIPPED
+:saver_gallery:compileReleaseKotlin SKIPPED
+:saver_gallery:javaPreCompileRelease SKIPPED
+:saver_gallery:compileReleaseJavaWithJavac SKIPPED
+:saver_gallery:bundleLibCompileToJarRelease SKIPPED
+:share_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:share_plus:generateReleaseResources SKIPPED
+:share_plus:packageReleaseResources SKIPPED
+:share_plus:parseReleaseLocalResources SKIPPED
+:share_plus:generateReleaseRFile SKIPPED
+:share_plus:compileReleaseKotlin SKIPPED
+:share_plus:javaPreCompileRelease SKIPPED
+:share_plus:compileReleaseJavaWithJavac SKIPPED
+:share_plus:bundleLibCompileToJarRelease SKIPPED
+:shared_preferences_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:shared_preferences_android:generateReleaseResources SKIPPED
+:shared_preferences_android:packageReleaseResources SKIPPED
+:shared_preferences_android:parseReleaseLocalResources SKIPPED
+:shared_preferences_android:generateReleaseRFile SKIPPED
+:shared_preferences_android:compileReleaseKotlin SKIPPED
+:shared_preferences_android:javaPreCompileRelease SKIPPED
+:shared_preferences_android:compileReleaseJavaWithJavac SKIPPED
+:shared_preferences_android:bundleLibCompileToJarRelease SKIPPED
+:sign_in_with_apple:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:sign_in_with_apple:generateReleaseResources SKIPPED
+:sign_in_with_apple:packageReleaseResources SKIPPED
+:sign_in_with_apple:parseReleaseLocalResources SKIPPED
+:sign_in_with_apple:generateReleaseRFile SKIPPED
+:sign_in_with_apple:compileReleaseKotlin SKIPPED
+:sign_in_with_apple:javaPreCompileRelease SKIPPED
+:sign_in_with_apple:compileReleaseJavaWithJavac SKIPPED
+:sign_in_with_apple:bundleLibCompileToJarRelease SKIPPED
+:sqflite_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:sqflite_android:generateReleaseResources SKIPPED
+:sqflite_android:packageReleaseResources SKIPPED
+:sqflite_android:parseReleaseLocalResources SKIPPED
+:sqflite_android:generateReleaseRFile SKIPPED
+:sqflite_android:compileReleaseKotlin SKIPPED
+:sqflite_android:javaPreCompileRelease SKIPPED
+:sqflite_android:compileReleaseJavaWithJavac SKIPPED
+:sqflite_android:bundleLibCompileToJarRelease SKIPPED
+:sqflite_sqlcipher:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:sqflite_sqlcipher:generateReleaseResources SKIPPED
+:sqflite_sqlcipher:packageReleaseResources SKIPPED
+:sqflite_sqlcipher:parseReleaseLocalResources SKIPPED
+:sqflite_sqlcipher:generateReleaseRFile SKIPPED
+:sqflite_sqlcipher:compileReleaseKotlin SKIPPED
+:sqflite_sqlcipher:javaPreCompileRelease SKIPPED
+:sqflite_sqlcipher:compileReleaseJavaWithJavac SKIPPED
+:sqflite_sqlcipher:bundleLibCompileToJarRelease SKIPPED
+:twitter_login:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:twitter_login:generateReleaseResources SKIPPED
+:twitter_login:packageReleaseResources SKIPPED
+:twitter_login:parseReleaseLocalResources SKIPPED
+:twitter_login:generateReleaseRFile SKIPPED
+:twitter_login:compileReleaseKotlin SKIPPED
+:twitter_login:javaPreCompileRelease SKIPPED
+:twitter_login:compileReleaseJavaWithJavac SKIPPED
+:twitter_login:bundleLibCompileToJarRelease SKIPPED
+:url_launcher_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:url_launcher_android:generateReleaseBuildConfig SKIPPED
+:url_launcher_android:generateReleaseResources SKIPPED
+:url_launcher_android:packageReleaseResources SKIPPED
+:url_launcher_android:parseReleaseLocalResources SKIPPED
+:url_launcher_android:generateReleaseRFile SKIPPED
+:url_launcher_android:compileReleaseKotlin SKIPPED
+:url_launcher_android:javaPreCompileRelease SKIPPED
+:url_launcher_android:compileReleaseJavaWithJavac SKIPPED
+:url_launcher_android:bundleLibCompileToJarRelease SKIPPED
+:video_compress:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:video_compress:generateReleaseResources SKIPPED
+:video_compress:packageReleaseResources SKIPPED
+:video_compress:parseReleaseLocalResources SKIPPED
+:video_compress:generateReleaseRFile SKIPPED
+:video_compress:compileReleaseKotlin SKIPPED
+:video_compress:javaPreCompileRelease SKIPPED
+:video_compress:compileReleaseJavaWithJavac SKIPPED
+:video_compress:bundleLibCompileToJarRelease SKIPPED
+:video_player_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:video_player_android:generateReleaseResources SKIPPED
+:video_player_android:packageReleaseResources SKIPPED
+:video_player_android:parseReleaseLocalResources SKIPPED
+:video_player_android:generateReleaseRFile SKIPPED
+:video_player_android:compileReleaseKotlin SKIPPED
+:video_player_android:javaPreCompileRelease SKIPPED
+:video_player_android:compileReleaseJavaWithJavac SKIPPED
+:video_player_android:bundleLibCompileToJarRelease SKIPPED
+:video_thumbnail:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:video_thumbnail:generateReleaseResources SKIPPED
+:video_thumbnail:packageReleaseResources SKIPPED
+:video_thumbnail:parseReleaseLocalResources SKIPPED
+:video_thumbnail:generateReleaseRFile SKIPPED
+:video_thumbnail:compileReleaseKotlin SKIPPED
+:video_thumbnail:javaPreCompileRelease SKIPPED
+:video_thumbnail:compileReleaseJavaWithJavac SKIPPED
+:video_thumbnail:bundleLibCompileToJarRelease SKIPPED
+:wakelock_plus:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:wakelock_plus:generateReleaseResources SKIPPED
+:wakelock_plus:packageReleaseResources SKIPPED
+:wakelock_plus:parseReleaseLocalResources SKIPPED
+:wakelock_plus:generateReleaseRFile SKIPPED
+:wakelock_plus:compileReleaseKotlin SKIPPED
+:wakelock_plus:javaPreCompileRelease SKIPPED
+:wakelock_plus:compileReleaseJavaWithJavac SKIPPED
+:wakelock_plus:bundleLibCompileToJarRelease SKIPPED
+:walletconnect_pay:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:walletconnect_pay:generateReleaseResources SKIPPED
+:walletconnect_pay:packageReleaseResources SKIPPED
+:walletconnect_pay:parseReleaseLocalResources SKIPPED
+:walletconnect_pay:generateReleaseRFile SKIPPED
+:walletconnect_pay:compileReleaseKotlin SKIPPED
+:walletconnect_pay:javaPreCompileRelease SKIPPED
+:walletconnect_pay:compileReleaseJavaWithJavac SKIPPED
+:walletconnect_pay:bundleLibCompileToJarRelease SKIPPED
+:web3auth_flutter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:web3auth_flutter:generateReleaseResources SKIPPED
+:web3auth_flutter:packageReleaseResources SKIPPED
+:web3auth_flutter:parseReleaseLocalResources SKIPPED
+:web3auth_flutter:generateReleaseRFile SKIPPED
+:web3auth_flutter:compileReleaseKotlin SKIPPED
+:web3auth_flutter:javaPreCompileRelease SKIPPED
+:web3auth_flutter:compileReleaseJavaWithJavac SKIPPED
+:web3auth_flutter:bundleLibCompileToJarRelease SKIPPED
+:webview_flutter_android:checkKotlinGradlePluginConfigurationErrors SKIPPED
+:webview_flutter_android:generateReleaseResources SKIPPED
+:webview_flutter_android:packageReleaseResources SKIPPED
+:webview_flutter_android:parseReleaseLocalResources SKIPPED
+:webview_flutter_android:generateReleaseRFile SKIPPED
+:webview_flutter_android:compileReleaseKotlin SKIPPED
+:webview_flutter_android:javaPreCompileRelease SKIPPED
+:webview_flutter_android:compileReleaseJavaWithJavac SKIPPED
+:webview_flutter_android:bundleLibCompileToJarRelease SKIPPED
+:app:compileReleaseKotlin SKIPPED
+
+[Incubating] Problems report is available at: file:///Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 32s
+4 actionable tasks: 1 executed, 3 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.0/userguide/configuration_cache_enabling.html
+
+stderr:
+WARNING: Your Android app project: app located at: /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): app_badge_plus, firebase_analytics, firebase_core, firebase_crashlytics, flutter_background, flutter_callkit_incoming, flutter_gemma, flutter_mining, flutter_tts, flutter_webrtc, fluwx, large_file_handler, livekit_client, pdfx, photo_manager, record_android, saver_gallery, twitter_login, video_compress, walletconnect_pay, web3auth_flutter
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors

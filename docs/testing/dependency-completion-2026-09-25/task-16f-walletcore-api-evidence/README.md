@@ -16,6 +16,13 @@ runner, verifier, and build epoch bytes used for this APK and runtime; `raw/`
 holds the recorded build, owner, runtime, and review evidence. The original task
 path embedded in receipts is historical data, not an archive dependency.
 
+`raw/focused-source/historical/` retains the original nine small Java, Dart,
+Kotlin, and Gradle probe logs. The first two green Java unit logs are diagnostic
+five-test runs; only `adapter-unit-green-final.log` shows six tests. The builder
+and runtime gate logs in `raw/focused-source/new-no-device-rerun/` are a **new**
+post-review source epoch, with their own HEAD, command and source hashes. They
+were rerun without an emulator; they are not retroactive run 5 evidence.
+
 The exact APK is a **synthetic fixture**, signed with its fixture debug key. No
 signing key is archived. The older Wallet Core evidence archive contains the
 four-ABI native build, official comparison, Maven metadata, and license records.

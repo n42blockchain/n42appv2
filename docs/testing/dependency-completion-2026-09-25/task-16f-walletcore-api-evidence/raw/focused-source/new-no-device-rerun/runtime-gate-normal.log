@@ -1,0 +1,12 @@
+test_exact_epoch_and_both_mapping_page_sizes (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+test_launch_subprocess_timeout_is_bounded_failure (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+test_logcat_token_and_pid_rejected (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+test_owner_receipts_and_host_pid_are_bound (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+test_strict_and_api26_policies_are_distinct (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+test_substituted_apk_rejected (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+test_synthetic_replay_rejects_wrong_native_map_and_error (tools.android_native_smoke.test_walletcore_api_runtime_gate.RuntimeGateTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.222s
+
+OK

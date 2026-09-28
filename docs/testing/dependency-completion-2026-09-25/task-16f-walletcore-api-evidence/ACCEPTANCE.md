@@ -17,3 +17,8 @@
 The independent runtime review is in `raw/reviews/runtime-review.md`. The
 historical attempts and their fixes remain in `raw/`; their failure is not
 relabelled as native failure or full runtime acceptance.
+
+Historical focused logs include the RED compile, final six Java tests, six Dart
+tests, exact Kotlin snippet compile and both Gradle dry-run outcomes. Four
+builder and runtime gate test logs were rerun later, without a device, under
+normal and optimized Python and are explicitly marked as a new source epoch.

@@ -63,7 +63,14 @@ def main():
         path.write_text(json.dumps(receipt))
 
     rejected(wrong_log, "missing API 26 raw log", evidence.replay_runtime)
-    print(json.dumps({"passed": True, "negative_controls": 4}, sort_keys=True))
+
+    def false_final_java_count(root):
+        path = root / "raw/focused-source/historical/app-api-test/adapter-unit-green-final.log"
+        path.write_text(path.read_text().replace("OK (6 tests)", "OK (5 tests)"))
+
+    rejected(false_final_java_count, "false final Java test count",
+             evidence.focused_source_checks)
+    print(json.dumps({"passed": True, "negative_controls": 5}, sort_keys=True))
     return 0
 
 

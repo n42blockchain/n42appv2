@@ -1,0 +1,9 @@
+00:00 +0: loading /Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/test/core/wallet_sdk/wallet_signer_test.dart
+00:00 +0: WalletSigner signTransaction throws when native returns empty data
+00:00 +1: WalletSigner signTransactionWithGas throws when native returns empty data
+00:00 +2: WalletSigner signBtcP2wsh throws when native returns empty data
+00:00 +3: WalletSigner signBtcP2wsh propagates native signing failure
+[Trustdart] WARN: signTransaction_btc_p2wsh: PlatformException(btc_p2wsh_signing_failed, Bitcoin V2 pre-sign V2 error: Error_not_supported, null, null)
+00:00 +4: WalletSigner signTransactionByteArray throws on invalid payload
+00:00 +5: WalletSigner getMaxTransactionValue throws when native returns empty data
+00:00 +6: All tests passed!

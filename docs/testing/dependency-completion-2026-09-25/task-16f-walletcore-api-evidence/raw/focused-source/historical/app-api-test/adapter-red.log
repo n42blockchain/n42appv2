@@ -1,0 +1,20 @@
+command=['/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin/javac', '--release', '8', '-d', '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/.superpowers/sdd/dependency-completion-20260925/task-16f-walletcore-build/app-api-test/classes', '-cp', '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/native/wallet_core/maven/com/trustwallet/wallet-core-proto/4.8.4/wallet-core-proto-4.8.4.jar:/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/docs/testing/dependency-completion-2026-09-25/task-16f-walletcore-evidence/artifacts/protobuf-javalite-4.36.2.jar:/Users/jieliu/.gradle/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar', '/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/test/java/ai/n42/www/walletcore/BitcoinV2SigningAdapterTest.java']
+exit=1
+stdout:
+
+stderr:
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/test/java/ai/n42/www/walletcore/BitcoinV2SigningAdapterTest.java:57: 错误: 程序包BitcoinV2SigningAdapter不存在
+    private static final class Engine implements BitcoinV2SigningAdapter.Compiler {
+                                                                        ^
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/test/java/ai/n42/www/walletcore/BitcoinV2SigningAdapterTest.java:67: 错误: 方法不会覆盖或实现超类型的方法
+        @Override
+        ^
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/test/java/ai/n42/www/walletcore/BitcoinV2SigningAdapterTest.java:73: 错误: 方法不会覆盖或实现超类型的方法
+        @Override
+        ^
+/Users/jieliu/.codex/worktrees/n42appv2-dependency-completion/android/app/src/test/java/ai/n42/www/walletcore/BitcoinV2SigningAdapterTest.java:84: 错误: 找不到符号
+        return BitcoinV2SigningAdapter.compile(INPUT, KEY, hash -> {
+               ^
+  符号:   变量 BitcoinV2SigningAdapter
+  位置: 类 BitcoinV2SigningAdapterTest
+4 个错误

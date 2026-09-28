@@ -63,14 +63,14 @@
   ],
   "members": [
     {
-      "bytes": 1154,
+      "bytes": 1464,
       "path": "ACCEPTANCE.md",
-      "sha256": "627351d2addbcd2bb957262ad1839b304b11c52f29305d3e2b7271a17269ac74"
+      "sha256": "1313ae2d89a2c9198fcb34ba021774758da6c8dd9346fe63268c2e47f33edce3"
     },
     {
-      "bytes": 1907,
+      "bytes": 2380,
       "path": "README.md",
-      "sha256": "3b287a444e323c525bd28917cc9f07d29c9b2d979709f7cefab10325d9e159a2"
+      "sha256": "a623e2e96bc0df5d669d2c86268e920d54e812ada91d56bd3a7026db05f69ae6"
     },
     {
       "bytes": 9244278,
@@ -78,9 +78,9 @@
       "sha256": "f9b15324ae7b7390e63f41d170e51164ee0beb1c447e99706aa022e706218a0d"
     },
     {
-      "bytes": 2377,
+      "bytes": 3283,
       "path": "members.txt",
-      "sha256": "11db0c94a2f303f13c02fbce575e990514ef418c05844959d976cb6f655a3544"
+      "sha256": "0fcdfc156125de633e671d70812a6be685227c60c34d2e804ae57d7f84be2586"
     },
     {
       "bytes": 3378,
@@ -96,6 +96,76 @@
       "bytes": 4424,
       "path": "raw/build-result.json",
       "sha256": "448023c3f8b664d17fcc28a04762e4de0f7a56147dd488e1971f41b3117fa636"
+    },
+    {
+      "bytes": 94854,
+      "path": "raw/focused-source/historical/app-api-kotlin-bounded-dry-run.log",
+      "sha256": "a1bf9a951d0d2fa4d9fc903b2daffe803d9d2305bb6eb1a3f6717acc73057f8c"
+    },
+    {
+      "bytes": 7,
+      "path": "raw/focused-source/historical/app-api-test/adapter-compile-green-final.log",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "bytes": 1199,
+      "path": "raw/focused-source/historical/app-api-test/adapter-compile-green.log",
+      "sha256": "faf52484ae3118a62eb3b32f7314024611b8af6b63a287c34267a817d88ddc22"
+    },
+    {
+      "bytes": 4049,
+      "path": "raw/focused-source/historical/app-api-test/adapter-kotlin-snippet-compile.log",
+      "sha256": "dd097e442cb2f55484d9d4c9dc41b7cb9bb5bbac38daa1312c81f81ad2a45795"
+    },
+    {
+      "bytes": 2081,
+      "path": "raw/focused-source/historical/app-api-test/adapter-red.log",
+      "sha256": "eb671f2a45c0c84ebe72d494e7db9351ad2c37f1512b9e0185755598e576185e"
+    },
+    {
+      "bytes": 62,
+      "path": "raw/focused-source/historical/app-api-test/adapter-unit-green-final.log",
+      "sha256": "deacb489384ae69d2a97ff22a5e5e0cdbbf5acb3674d89d235364396aae4762b"
+    },
+    {
+      "bytes": 1020,
+      "path": "raw/focused-source/historical/app-api-test/adapter-unit-green.log",
+      "sha256": "62e5bf4a10c9def9f24853db4a061f30fb8d8366c2908b01270ce9ca09936b53"
+    },
+    {
+      "bytes": 68970,
+      "path": "raw/focused-source/historical/app-api-unit-dry-run.log",
+      "sha256": "ae722f7455a9f5b52287db420d7625765a6da08e4bde03cf280860f7f7cdf1a1"
+    },
+    {
+      "bytes": 768,
+      "path": "raw/focused-source/historical/app-api-wallet-signer-test.log",
+      "sha256": "ae114513bc82da03b9b33ef106faca520f3fed8795275dd0a6ab89e3a9340b45"
+    },
+    {
+      "bytes": 630,
+      "path": "raw/focused-source/new-no-device-rerun/builder-normal.log",
+      "sha256": "a4ea87e3cd6edad283f10725d387e3a7b5c64c1b8c4d20cff2fafc0eaefd357a"
+    },
+    {
+      "bytes": 630,
+      "path": "raw/focused-source/new-no-device-rerun/builder-optimized.log",
+      "sha256": "2d40fc1ce5b260b9d9fcd63f00db0a667922d72d0b59850292a18fdae0663e3d"
+    },
+    {
+      "bytes": 2366,
+      "path": "raw/focused-source/new-no-device-rerun/focused-rerun.json",
+      "sha256": "8dc7cc1e5e97510c8196d77f4cb834399c367d8c726c89f14ea861e8068cb4de"
+    },
+    {
+      "bytes": 1004,
+      "path": "raw/focused-source/new-no-device-rerun/runtime-gate-normal.log",
+      "sha256": "e8c2d9a4acee091d0a0b7a1f8560079b85fc7b8ee772c62b4069b1913e7e9c54"
+    },
+    {
+      "bytes": 1004,
+      "path": "raw/focused-source/new-no-device-rerun/runtime-gate-optimized.log",
+      "sha256": "ba049e3b8053697ede3e948a133eb2f23b564f2a219fbcf3a026220a938d4a86"
     },
     {
       "bytes": 710,
@@ -298,14 +368,14 @@
       "sha256": "4ac4a871295d0ecc7363a843bc71f316f3175ad77aaa87ae7a0d3f2f9aa51e1a"
     },
     {
-      "bytes": 12127,
+      "bytes": 15006,
       "path": "verify_evidence.py",
-      "sha256": "9bfd8da34a04bad2891890db5032b7018cc35c114986d2a7046b1e95c5248544"
+      "sha256": "1ed303675bd008713fd3e54ddb091936e50923b818912694de6c7c5b9fd8c733"
     },
     {
-      "bytes": 2380,
+      "bytes": 2711,
       "path": "verify_evidence_controls.py",
-      "sha256": "8f669aae439a6d75006e128a77af569edc0858156ace9240af6fa42db743a46d"
+      "sha256": "e80a352dff299dfdceb175b563e320480f516c831de186e98bbd61f9e5653e6b"
     }
   ],
   "schema_version": 1

@@ -225,18 +225,70 @@ def historical_failures():
     return sorted(heads)
 
 
+def focused_source_checks():
+    base = "raw/focused-source/historical/"
+    facts = {
+        "app-api-test/adapter-red.log": "BitcoinV2SigningAdapter",
+        "app-api-test/adapter-unit-green.log": "OK (5 tests)",
+        "app-api-test/adapter-unit-green-final.log": "OK (6 tests)",
+        "app-api-test/adapter-kotlin-snippet-compile.log": "exit=0",
+        "app-api-wallet-signer-test.log": "+6: All tests passed!",
+        "app-api-unit-dry-run.log": "BUILD FAILED",
+        "app-api-kotlin-bounded-dry-run.log": "compileReleaseKotlin",
+    }
+    for name, marker in facts.items():
+        require(marker in (ROOT / base / name).read_text(),
+                f"historical focused result changed: {name}")
+    for name in ("adapter-compile-green.log", "adapter-compile-green-final.log"):
+        require((ROOT / base / "app-api-test" / name).is_file(),
+                f"historical compile log missing: {name}")
+
+    # These are new no-device checks after archive review, never historical run5 claims.
+    root = "raw/focused-source/new-no-device-rerun/"
+    receipt = read_json(root + "focused-rerun.json")
+    require(receipt.get("schema_version") == 1 and
+            receipt.get("kind") == "new-no-device-focused-regression-after-archive-review" and
+            receipt.get("git_head") == "4a64e0c0df43d65d3d2e1bef138e597c42273c6f",
+            "new focused rerun epoch changed")
+    for name, expected in receipt["source_sha256"].items():
+        require(digest(ROOT / "source" / name) == expected,
+                f"focused rerun source differs: {name}")
+    expected = {"builder-normal.log": ("builder.py", 4),
+                "builder-optimized.log": ("builder.py", 4),
+                "runtime-gate-normal.log": ("runtime_gate.py", 7),
+                "runtime-gate-optimized.log": ("runtime_gate.py", 7)}
+    require(len(receipt.get("records", [])) == len(expected) and
+            {item["log"] for item in receipt["records"]} == set(expected),
+            "new focused rerun record count changed")
+    for record in receipt["records"]:
+        name = record["log"]
+        require(name in expected and record["exit"] == 0 and
+                digest(ROOT / root / name) == record["log_sha256"] and
+                record["command"][-4:] ==
+                ["-m", "unittest", "tools/android_native_smoke/test_walletcore_api_" +
+                 expected[name][0], "-v"],
+                f"new focused rerun command/result differs: {name}")
+        require(("-O" in record["command"]) == ("optimized" in name) and
+                f"Ran {expected[name][1]} tests" in (ROOT / root / name).read_text() and
+                "\nOK\n" in (ROOT / root / name).read_text(),
+                f"new focused rerun output differs: {name}")
+    return len(facts) + 2 + len(expected)
+
+
 def main():
     try:
         members = verify_members()
         runtime = replay_runtime()
         failed = historical_failures()
+        focused = focused_source_checks()
     except (OSError, ValueError, KeyError, TypeError, ImportError) as error:
         print(f"Wallet Core API evidence rejected: {error}", file=sys.stderr)
         return 1
     print(json.dumps({"passed": True, "members": members,
                       "runtime_pids": {serial: item["pid"] for serial, item
                                        in runtime["devices"].items()},
-                      "preserved_partial_attempts": failed}, sort_keys=True))
+                      "preserved_partial_attempts": failed,
+                      "focused_source_logs": focused}, sort_keys=True))
     return 0
 
 
