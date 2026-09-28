@@ -61,6 +61,24 @@ class WalletCoreAndroidLinkTest(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, 'generation environment changed'):
                         link.load_pinned_environment(path)
 
+    def test_link_environment_parses_the_checked_bytes(self):
+        original = ENVIRONMENT.read_bytes()
+        poisoned = json.loads(original)
+        poisoned['PATH'] = '/tmp/poison:' + poisoned['PATH']
+
+        class ReplacedBetweenReads:
+            def __fspath__(self):
+                return str(ENVIRONMENT)
+
+            def read_text(self):
+                return json.dumps(poisoned)
+
+            def read_bytes(self):
+                return original
+
+        self.assertEqual(link.load_pinned_environment(ReplacedBetweenReads()),
+                         json.loads(original))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -54,9 +54,10 @@ def pinned_json(path, expected):
 
 
 def load_pinned_environment(path):
-    require(digest(path) == GENERATION_ENVIRONMENT_SHA256,
+    raw = path.read_bytes()
+    require(sha256_bytes(raw) == GENERATION_ENVIRONMENT_SHA256,
             'generation environment changed')
-    env = json.loads(path.read_text())
+    env = json.loads(raw)
     require(isinstance(env, dict) and len(env) == 20 and
             all(isinstance(key, str) and isinstance(value, str)
                 for key, value in env.items()), 'generation environment schema mismatch')
