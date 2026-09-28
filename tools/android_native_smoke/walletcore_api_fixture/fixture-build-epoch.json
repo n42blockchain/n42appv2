@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_artifact": "task-16f-walletcore-api-fixture/build3/walletcore-api-candidate.apk",
+  "apk_sha256": "f3f627565b70b42787f15bce7cf1c8024a6c4696b916a289e196a96d6526b855",
+  "apk_bytes": 19801272,
+  "apk_arm64_member_sha256": "f2ad3625ae3e691369baaf3bede441f9b56500e5a2655b33baa0ca2866fa3a3d",
+  "apk_arm64_member_data_offset": 2048000,
+  "compiled_adapter_sha256": "aaff324d1ab949204c8613c57fae5eed860abc97d04e6b8351d56d39cd2e3ce9",
+  "builder_sha256": "90ed626adee2912c923d612391ef2eda3d7a2d87a75f43f2b68f205b67a78450",
+  "compiled_fixture_source_sha256": {
+    "settings.gradle.kts": "4ac4a871295d0ecc7363a843bc71f316f3175ad77aaa87ae7a0d3f2f9aa51e1a",
+    "build.gradle.kts": "d427f3d52a7f790915922ae521eae46a1d6d3c194aa9d6a7ef70033016b8a98a",
+    "app/build.gradle.kts": "8264dc7fe4614f203b1383b045921f7901258c96a14b300b4862d93c19022479",
+    "app/src/main/AndroidManifest.xml": "ce1f1cfe13819cc4e791aef4dd0660c393a9c28f837490e7932d1493c59f61f6",
+    "app/src/main/java/ai/n42/fixture/walletcoreapi/MainActivity.java": "80527f9fb27a4cc4a846abbaa21811424439726f04acc1755c61536b8c64f94b"
+  },
+  "input_sha256": {
+    "candidate_aar": "560cf86e132e4b4ee18afb70daf670e12e8fd34684a03eb38b9e49e39cd0f57d",
+    "proto_jar": "95659a930e640196ace64743377d013f9cc71cdbfe471c1279fa9f7d65812a4b",
+    "javalite_jar": "8f4f93d08cb37130ecb0bc69d376d7d27c36ff04ddb1bb27430b06caa9fa062e"
+  },
+  "tool_sha256": {
+    "gradle": "f1a69bc070c613e5818d469a1248c1833519dd096d6828bb6fa4cde76de769e0",
+    "aapt2": "a6d0102e909213b2bbc50f5bf6e082a9727c029c4a48fca02fbaebbf87e65155",
+    "aapt2_jar": "eb93ce9d0fa121333f12395b3ab30822c5cdb9155737f20d342fe71809757059"
+  }
+}

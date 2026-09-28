@@ -120,20 +120,20 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         val txData: Map<String, Any>? = call.argument("txData")
         val pkStr: String? = call.argument("pk")
         if (txData != null && path != null && coin != null && mnemonic != null && pkStr != null) {
-            if (mnemonic != "") {
-                val wallet = HDWallet(mnemonic, passphrase)
-                val txHash: String = signBitcoinTransactionP2wsh(wallet, path, txData, null)
-                result.success(txHash)
-            } else if (pkStr != "") {
-                val pk: ByteArray = aBase64.decode(pkStr, 64)
-
-                val privateKey = PrivateKey(pk)
-                val txHash: String = signBitcoinTransactionP2wsh(null, path, txData, privateKey)
-                result.success(txHash)
-
-            } else {
-                result.error("no_wallet",
-                    "Could not generate wallet, why?", null)
+            try {
+                if (mnemonic != "") {
+                    val wallet = HDWallet(mnemonic, passphrase)
+                    result.success(signBitcoinTransactionP2wsh(wallet, path, txData, null))
+                } else if (pkStr != "") {
+                    val pk: ByteArray = aBase64.decode(pkStr, 64)
+                    val privateKey = PrivateKey(pk)
+                    result.success(signBitcoinTransactionP2wsh(null, path, txData, privateKey))
+                } else {
+                    result.error("no_wallet", "Could not generate wallet, why?", null)
+                }
+            } catch (error: Exception) {
+                result.error("btc_p2wsh_signing_failed",
+                    error.message ?: "BTC P2WSH signing failed", null)
             }
         } else {
             result.error("arguments_null", "[txData], [coin] and [path] and [mnemonic] and [privateKey] cannot be null", null)
@@ -1060,26 +1060,30 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             )
         val legacySigningInput = Bitcoin.SigningInput.newBuilder()
             .setSigningV2(signingInput)
-        val preImageHashes = TransactionCompiler.preImageHashes(CoinType.BITCOIN, legacySigningInput.build().toByteArray())
-        val preSigningOutput: Bitcoin.PreSigningOutput = Bitcoin.PreSigningOutput.parseFrom(preImageHashes)
-        val signatureVec = DataVector()
-        val pubkeyVec = DataVector()
-        for (h in preSigningOutput.hashPublicKeysList) {
-            val preImageHash = h.dataHash.toByteArray()
-            val signature = privateKey.signAsDER(preImageHash)
+        val encoded = BitcoinV2SigningAdapter.compile(
+            legacySigningInput.build().toByteArray(),
+            privateKey.getPublicKeySecp256k1(true).data(),
+            { hash -> privateKey.signAsDER(hash) },
+            object : BitcoinV2SigningAdapter.Compiler {
+                override fun preImageHashes(originalInput: ByteArray): ByteArray =
+                    TransactionCompiler.preImageHashes(CoinType.BITCOIN, originalInput)
 
-            val publicKey = privateKey.getPublicKeySecp256k1(true)
-
-            signatureVec.add(signature)
-            pubkeyVec.add(publicKey.data())
-        }
-        val finalTx = TransactionCompiler.compileWithSignatures(
-            CoinType.BITCOIN,
-            preImageHashes,
-            signatureVec,
-            pubkeyVec
+                override fun compileWithSignatures(
+                    originalInput: ByteArray,
+                    signatures: MutableList<ByteArray>,
+                    publicKeys: MutableList<ByteArray>
+                ): ByteArray {
+                    val signatureVec = DataVector()
+                    val pubkeyVec = DataVector()
+                    signatures.forEach(signatureVec::add)
+                    publicKeys.forEach(pubkeyVec::add)
+                    return TransactionCompiler.compileWithSignatures(
+                        CoinType.BITCOIN, originalInput, signatureVec, pubkeyVec
+                    )
+                }
+            }
         )
-        return Numeric.toHexString(finalTx)
+        return Numeric.toHexString(encoded)
     }
 
     private fun signBitcoinTransactionMaxValue(wallet: HDWallet?, path: String, txData: Map<String, Any>, coinType: CoinType, pk: PrivateKey?): String {

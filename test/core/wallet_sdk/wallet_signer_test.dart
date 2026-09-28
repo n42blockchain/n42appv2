@@ -77,6 +77,32 @@ void main() {
       );
     });
 
+    test('signBtcP2wsh propagates native signing failure', () async {
+      messenger.setMockMethodCallHandler(channel, (call) async {
+        if (call.method == 'signTransaction_btc_p2wsh') {
+          throw PlatformException(
+            code: 'btc_p2wsh_signing_failed',
+            message: 'Bitcoin V2 pre-sign V2 error: Error_not_supported',
+          );
+        }
+        return null;
+      });
+
+      await expectLater(
+        WalletSigner(Trustdart()).signBtcP2wsh(
+          path: "m/84'/0'/0'/0/0",
+          txData: const {'inputs': []},
+        ),
+        throwsA(
+          isA<TransactionException>().having(
+            (error) => error.code,
+            'code',
+            'SIGNING_FAILED',
+          ),
+        ),
+      );
+    });
+
     test('signTransactionByteArray throws on invalid payload', () async {
       messenger.setMockMethodCallHandler(channel, (call) async {
         if (call.method == 'signTransaction_byteArray') {
