@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
@@ -267,9 +268,9 @@ void main() {
       snapshot.coinModels.add(chain);
 
       final tokens = await bridge.getSupportedTokens();
-      final usdc =
-          tokens.singleWhere((token) => token.symbol == 'USDC')
-              as WalletBridgeTokenInfo;
+      final TokenInfo usdc = tokens.singleWhere(
+        (token) => token.symbol == 'USDC',
+      );
 
       expect(usdc.chain, 'ethereum');
       expect(usdc.network, 'mainnet');
@@ -322,6 +323,28 @@ void main() {
         usdc.contractAddress,
         '0x1234567890abcdef1234567890abcdef12345678',
       );
+    },
+  );
+
+  test(
+    'native asset identity and selected receiver survive TokenInfo type',
+    () async {
+      final native = CoinModel.fromMap({
+        'coinType': 'N',
+        'miniName': 'N',
+        'mKey': 'N',
+        'blockchainType': 'N42',
+        'decimals': 18,
+        'isContract': false,
+      })..address = 'NselectedReceiver';
+      snapshot.coinModels.add(native);
+
+      final TokenInfo asset = (await bridge.getSupportedTokens()).single;
+      expect(asset.chain, 'N');
+      expect(asset.network, 'mainnet');
+      expect(asset.assetType, 'native');
+      expect(asset.assetId, isNull);
+      expect(asset.receiverAddress, 'NselectedReceiver');
     },
   );
 
@@ -437,7 +460,9 @@ void main() {
         }),
       );
 
-      final result = await bridge.requestTransferExact(
+      final IWalletBridge walletBridge = bridge;
+      final result = await requestWalletTransferExact(
+        walletBridge,
         toAddress: '0x2222222222222222222222222222222222222222',
         amount: '9007199254.123456',
         token: 'USDC',
@@ -465,6 +490,86 @@ void main() {
         sentParams?.chainConfig?['mKey'],
         '0xabcdef0123456789abcdef0123456789abcdef01',
       );
+    },
+  );
+
+  test(
+    'Chat dispatcher rejects mismatched or partial assets before send',
+    () async {
+      snapshot.walletInfoLsit.add(WalletInfo());
+      final chain =
+          CoinModel.fromMap({
+              'coinType': 'ETH',
+              'miniName': 'ETH',
+              'mKey': 'ethereum',
+              'blockchainType': 'Ethereum',
+              'decimals': 18,
+              'isContract': false,
+            })
+            ..address = '0x1111111111111111111111111111111111111111'
+            ..tokens['USDC'] = <String, dynamic>{
+              'coinType': 'ETH',
+              'miniName': 'USDC',
+              'mKey': '0xabcdef0123456789abcdef0123456789abcdef01',
+              'blockchainType': 'Ethereum',
+              'decimals': 6,
+              'isContract': true,
+              'contract': '0xabcdef0123456789abcdef0123456789abcdef01',
+              'path': {'legacy': "m/44'/60'/0'/0/0"},
+            };
+      snapshot.coinModels.add(chain);
+      var sends = 0;
+      final IWalletBridge walletBridge = N42WalletBridge(
+        senderResolver: (coinType, {chainConfig}) => _CapturingSender((_) {
+          sends++;
+        }),
+      );
+      for (final request in [
+        (
+          chain: 'solana',
+          network: 'mainnet',
+          assetId: '0xabcdef0123456789abcdef0123456789abcdef01',
+          amount: '1',
+        ),
+        (
+          chain: 'ethereum',
+          network: 'testnet',
+          assetId: '0xabcdef0123456789abcdef0123456789abcdef01',
+          amount: '1',
+        ),
+        (
+          chain: 'ethereum',
+          network: 'mainnet',
+          assetId: '0x1111111111111111111111111111111111111111',
+          amount: '1',
+        ),
+        (
+          chain: '',
+          network: 'mainnet',
+          assetId: '0xabcdef0123456789abcdef0123456789abcdef01',
+          amount: '1',
+        ),
+        (chain: 'ethereum', network: 'mainnet', assetId: '', amount: '1'),
+        (
+          chain: 'ethereum',
+          network: 'mainnet',
+          assetId: '0xabcdef0123456789abcdef0123456789abcdef01',
+          amount: '1.0000001',
+        ),
+      ]) {
+        final result = await requestWalletTransferExact(
+          walletBridge,
+          toAddress: '0x2222222222222222222222222222222222222222',
+          amount: request.amount,
+          token: 'USDC',
+          chain: request.chain,
+          network: request.network,
+          assetType: 'token',
+          assetId: request.assetId,
+        );
+        expect(result.success, isFalse, reason: '$request');
+        expect(sends, 0, reason: '$request');
+      }
     },
   );
 

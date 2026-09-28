@@ -99,12 +99,7 @@ String? decodeAbiString(String raw) {
 typedef WalletBridgeSenderResolver =
     ChainSender Function(String coinType, {Map<String, dynamic>? chainConfig});
 
-/// App-owned token metadata that is richer than the current Chat Git API.
-///
-/// The current [TokenInfo] contract carries the contract address but does not
-/// expose chain, network, or payment asset identity. Keeping these fields on
-/// the app-owned subtype preserves them for wallet code while remaining
-/// compatible with older Chat releases.
+/// App-owned token type that publishes exact payment identity to Chat.
 class WalletBridgeTokenInfo extends TokenInfo {
   const WalletBridgeTokenInfo({
     required super.symbol,
@@ -113,21 +108,15 @@ class WalletBridgeTokenInfo extends TokenInfo {
     required super.contractAddress,
     required super.iconUrl,
     required super.isNative,
-    required this.chain,
-    required this.network,
-    required this.assetType,
-    required this.assetId,
-    required this.receiverAddress,
+    required super.chain,
+    required super.network,
+    required super.assetType,
+    required super.assetId,
+    required super.receiverAddress,
   });
-
-  final String chain;
-  final String network;
-  final String assetType;
-  final String? assetId;
-  final String? receiverAddress;
 }
 
-class N42WalletBridge implements IWalletBridge {
+class N42WalletBridge implements IWalletBridge, IExactWalletTransfer {
   N42WalletBridge({WalletBridgeSenderResolver? senderResolver})
     : _senderResolver = senderResolver ?? _defaultSenderResolver;
 
@@ -242,6 +231,7 @@ class N42WalletBridge implements IWalletBridge {
     memo: memo,
   );
 
+  @override
   Future<TransferResult> requestTransferExact({
     required String toAddress,
     required String amount,
