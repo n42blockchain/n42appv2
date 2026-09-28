@@ -311,7 +311,7 @@ def verify_device(serial, item, apk, out):
     require_adb_command(item["install"], serial, "install", "-r", apk)
     require_adb_command(item["clear"], serial, "shell", "pm", "clear", PACKAGE)
     require_adb_command(item["pm_path"], serial, "shell", "pm", "path", PACKAGE)
-    require_adb_command(item["logcat_clear"], serial, "logcat", "-c")
+    require_adb_command(item["logcat_clear"], serial, "logcat", "-c", "-b", "main")
     require_adb_command(item["force_stop"], serial, "shell", "am", "force-stop", PACKAGE)
     require(item.get("badging", {}).get("exit") == 0 and
             f"package: name='{PACKAGE}'" in item["badging"]["stdout"] and
@@ -339,7 +339,7 @@ def verify_device(serial, item, apk, out):
                         f"{PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
                         "--es", "token", item["token"])
     require(item.get("result_logcat", {}).get("exit") == 0, f"{serial}: logcat read failed")
-    require_adb_command(item["result_logcat"], serial, "logcat", "-d", "-v",
+    require_adb_command(item["result_logcat"], serial, "logcat", "-d", "-b", "main", "-v",
                         "threadtime", "-s", f"{TAG}:I")
     events = parse_events(item["result_logcat"]["stdout"], item["token"])
     require(events == item.get("events"), f"{serial}: parsed events differ from raw logcat")

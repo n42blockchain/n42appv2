@@ -107,7 +107,7 @@ def run_device(serial, apk, out, item):
         item["pulled_apk_sha256"] = digest(pulled)
         require(item["pulled_apk_sha256"] == APK_SHA256,
                 f"{serial}: installed APK differs")
-        item["logcat_clear"] = adb(serial, "logcat", "-c")
+        item["logcat_clear"] = adb(serial, "logcat", "-c", "-b", "main")
         require(item["logcat_clear"]["exit"] == 0, f"{serial}: logcat clear failed")
         item["token"] = secrets.token_hex(16)
         item["start"] = adb(serial, "shell", "am", "start", "-W", "-n",
@@ -115,7 +115,8 @@ def run_device(serial, apk, out, item):
                             "--es", "token", item["token"])
         require(item["start"]["exit"] == 0, f"{serial}: start failed")
         for attempt in range(60):
-            fetched = adb(serial, "logcat", "-d", "-v", "threadtime", "-s", f"{TAG}:I")
+            fetched = adb(serial, "logcat", "-d", "-b", "main", "-v", "threadtime",
+                          "-s", f"{TAG}:I")
             item["last_logcat"] = fetched
             require(fetched["exit"] == 0, f"{serial}: logcat failed")
             if '"kind":"END"' in fetched["stdout"] and item["token"] in fetched["stdout"]:

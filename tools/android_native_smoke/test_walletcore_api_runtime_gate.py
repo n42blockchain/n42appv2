@@ -140,13 +140,13 @@ class RuntimeGateTests(unittest.TestCase):
                 "initial": snapshot(serial), "apk_info": info,
                 "pulled_apk_sha256": gate.APK_SHA256, "token": token,
                 "pm_path": adb_result(serial, "package:" + path, "shell", "pm", "path", gate.PACKAGE),
-                "result_logcat": adb_result(serial, log, "logcat", "-d", "-v", "threadtime", "-s", f"{gate.TAG}:I"), "events": events,
+                "result_logcat": adb_result(serial, log, "logcat", "-d", "-b", "main", "-v", "threadtime", "-s", f"{gate.TAG}:I"), "events": events,
                 "badging": success(f"package: name='{gate.PACKAGE}'"),
                 "permissions": success(""), "zipalign": success(""),
                 "apksigner": success(""),
                 "install": adb_result(serial, "", "install", "-r", str(apk)),
                 "clear": adb_result(serial, "", "shell", "pm", "clear", gate.PACKAGE),
-                "logcat_clear": adb_result(serial, "", "logcat", "-c"),
+                "logcat_clear": adb_result(serial, "", "logcat", "-c", "-b", "main"),
                 "start": adb_result(serial, "", "shell", "am", "start", "-W", "-n",
                                     f"{gate.PACKAGE}/ai.n42.fixture.walletcoreapi.MainActivity",
                                     "--es", "token", token),
@@ -158,6 +158,10 @@ class RuntimeGateTests(unittest.TestCase):
             item["pull_path"] = str(pulled)
             item["pull"] = adb_result(serial, "", "pull", path, str(pulled))
             self.assertEqual(gate.verify_device(serial, item, apk, out)["pid"], pid)
+            item["logcat_clear"]["argv"] = [gate.ADB, "-s", serial, "logcat", "-c"]
+            with self.assertRaisesRegex(ValueError, "command/serial"):
+                gate.verify_device(serial, item, apk, out)
+            item["logcat_clear"]["argv"] = [gate.ADB, "-s", serial, "logcat", "-c", "-b", "main"]
             pulled.unlink()
             with self.assertRaisesRegex(ValueError, "retained installed APK"):
                 gate.verify_device(serial, item, apk, out)
@@ -184,14 +188,14 @@ class RuntimeGateTests(unittest.TestCase):
             item["events"][1]["nativeMaps"] = []
             item["result_logcat"] = adb_result(serial, "\n".join(
                 f"09-28 01:02:03.456 {pid} {pid} I {gate.TAG}: {json.dumps(e, separators=(',', ':'))}"
-                for e in item["events"]), "logcat", "-d", "-v", "threadtime", "-s", f"{gate.TAG}:I")
+                for e in item["events"]), "logcat", "-d", "-b", "main", "-v", "threadtime", "-s", f"{gate.TAG}:I")
             with self.assertRaisesRegex(ValueError, "native executable mappings missing"):
                 gate.verify_device(serial, item, apk, out)
             item["events"][1]["nativeMaps"] = [mapping]
             item["events"][3]["result"]["error"] = "OK"
             item["result_logcat"] = adb_result(serial, "\n".join(
                 f"09-28 01:02:03.456 {pid} {pid} I {gate.TAG}: {json.dumps(e, separators=(',', ':'))}"
-                for e in item["events"]), "logcat", "-d", "-v", "threadtime", "-s", f"{gate.TAG}:I")
+                for e in item["events"]), "logcat", "-d", "-b", "main", "-v", "threadtime", "-s", f"{gate.TAG}:I")
             with self.assertRaisesRegex(ValueError, "explicit error"):
                 gate.verify_device(serial, item, apk, out)
 
