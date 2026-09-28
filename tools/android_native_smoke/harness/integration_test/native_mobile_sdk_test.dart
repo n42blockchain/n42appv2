@@ -38,7 +38,7 @@ void main() {
       raw['feeCallSha256'],
       '3f6579def870d65ab2b87cfba1708875dc6b0e98f3163c1e4e769f18ff027fa8',
     );
-    final deposit = jsonDecode(raw!['deposit']!) as Map<String, dynamic>;
+    final deposit = jsonDecode(raw['deposit']!) as Map<String, dynamic>;
     final exit = jsonDecode(raw['exit']!) as Map<String, dynamic>;
     final feeCall = jsonDecode(raw['feeCall']!) as Map<String, dynamic>;
     expect(

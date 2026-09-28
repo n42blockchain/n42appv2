@@ -18,6 +18,11 @@ analyzer:
     # This repository directory is a local mirror only; production resolves
     # n42_chat from the Git dependency in pubspec.yaml.
     - "packages/n42_chat/**"
+    # Manifest-pinned historical evidence source trees have intentionally
+    # missing relative dependencies. Keep their bytes and analyze active tools.
+    - "docs/testing/dependency-completion-2026-09-25/task-16f-sqlcipher-evidence/source/**"
+    - "docs/testing/dependency-completion-2026-09-25/task-16f-vodo-evidence/source/**"
+    - "docs/testing/dependency-completion-2026-09-25/native-sdk-evidence/datastore/fixture-overlay/**"
     # Nested Flutter example/test projects with their own pubspec — should not
     # be analyzed by the host project (would error on their own imports).
     - "packages/webview_flutter_wkwebview/example/**"
