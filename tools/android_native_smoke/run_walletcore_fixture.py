@@ -63,7 +63,8 @@ def run_phase(phase, apk, out_dir, item):
     _, offset, loads = member_and_executable_offsets(apk)
     item.update({"package": package, "apk_sha256": APK_SHA256[phase],
                  "apk_bytes": apk.stat().st_size, "member_data_offset": offset,
-                 "member_executable_loads": loads, "pre": device_snapshot()})
+                 "member_executable_loads": [list(pair) for pair in loads],
+                 "pre": device_snapshot()})
     require_strict(item["pre"], f"{phase} pre")
     item["badging"] = call([AAPT, "dump", "badging", apk])
     require(item["badging"]["exit"] == 0, f"{phase}: aapt badging failed")

@@ -260,7 +260,7 @@ def verify_phase(phase, item, apk):
     if phase == "candidate":
         require(aligned_elf(native), "candidate: APK native LOAD/RELRO alignment failed")
     require(item.get("member_data_offset") == offset and
-            item.get("member_executable_loads") == loads,
+            item.get("member_executable_loads") == [list(pair) for pair in loads],
             f"{phase}: recorded native ZIP mapping differs")
     cases = {event["name"]: event for event in events if event["kind"] == "CASE"}
     if phase == "candidate":

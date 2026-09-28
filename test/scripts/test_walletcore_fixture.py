@@ -61,7 +61,8 @@ def phase_receipt(phase, loaded=True):
                         **({} if loaded else {"error": "native load failed"})))
     return {
         "package": verifier.PACKAGES[phase], "apk_sha256": verifier.APK_SHA256[phase],
-        "member_data_offset": offset, "member_executable_loads": loads,
+        "member_data_offset": offset,
+        "member_executable_loads": [list(pair) for pair in loads],
         "pre": snapshot(), "post": snapshot(), "token": token,
         "pulled_apk_sha256": verifier.APK_SHA256[phase],
         "pm_path": {"exit": 0, "stdout": f"package:{apk_path}"},
@@ -180,6 +181,11 @@ class WalletCoreFixtureVerifierTest(unittest.TestCase):
         wrong["permissions"]["stdout"] += "\nuses-permission: android.permission.INTERNET"
         with self.assertRaisesRegex(ValueError, "ZIP/package inspection"):
             verifier.verify_phase("candidate", wrong, APKS["candidate"])
+
+    def test_phase_receipt_survives_actual_json_round_trip(self):
+        item = phase_receipt("candidate")
+        replayed = json.loads(json.dumps(item))
+        verifier.verify_phase("candidate", replayed, APKS["candidate"])
 
     def test_baseline_native_load_failure_is_preserved_as_failure(self):
         item = phase_receipt("baseline", loaded=False)
