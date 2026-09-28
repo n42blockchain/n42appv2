@@ -38,6 +38,7 @@ MISMATCH_INPUT_SHA256 = {
     "bindings/yttrium.kt": "f7dad73161fd6090abedbf6ca8cf4ead768fb7980ab0d3c29007dc050c078934",
     "bindings/uniffi_yttrium.kt": "5bf20f4f39126830d1ecc00f43498c079ae06f1fc8dcd5db4141d0c97f168f84",
     "preparation.json": "08d7e19a5d34682dfdd48c4e6b6b98407fee19a5e417d0d5fd4d3ecc374b86a8",
+    "jni/arm64-v8a/libuniffi_yttrium_wcpay.so": "a89f233ea9a99d4cfb7591bc87bc468adae422c118e452524fcacb38467d9bff",
 }
 SOURCE_FILES = tuple(ROOT / relative for relative in BUILD_INPUT_SHA256) + (
     ROOT / "tools/android_native_smoke/reown_wcpay_fixture/fixture-build-epoch.json",

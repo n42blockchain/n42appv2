@@ -128,6 +128,23 @@ class ReownFixtureVerifierTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "compiled fixture source SHA256 mismatch"):
                 require_build_epoch(root, mismatch, jna)
 
+    def test_changed_prepared_mismatch_native_is_rejected(self):
+        mismatch = ROOT / ".superpowers/sdd/dependency-completion-20260925/task-16f-reown-stage3-build/mismatch-input"
+        jna = next(Path("/Users/jieliu/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/5.17.0").rglob("*.aar"))
+        with tempfile.TemporaryDirectory() as folder:
+            copy = Path(folder)
+            for relative in (
+                "bindings/yttrium.kt", "bindings/uniffi_yttrium.kt",
+                "preparation.json", "jni/arm64-v8a/libuniffi_yttrium_wcpay.so",
+            ):
+                target = copy / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(mismatch / relative, target)
+            native = copy / "jni/arm64-v8a/libuniffi_yttrium_wcpay.so"
+            native.write_bytes(native.read_bytes() + b"tampered")
+            with self.assertRaisesRegex(ValueError, "prepared mismatch input SHA256 mismatch"):
+                require_build_epoch(ROOT, copy, jna)
+
     def test_same_wrong_jna_in_all_phases_is_rejected(self):
         for phase in APK_SHA256:
             with self.subTest(phase=phase):
