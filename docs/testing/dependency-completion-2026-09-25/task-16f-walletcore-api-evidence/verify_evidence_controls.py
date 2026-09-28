@@ -70,7 +70,30 @@ def main():
 
     rejected(false_final_java_count, "false final Java test count",
              evidence.focused_source_checks)
-    print(json.dumps({"passed": True, "negative_controls": 5}, sort_keys=True))
+
+    rerun = Path("raw/focused-source/new-no-device-rerun/focused-rerun.json")
+
+    def changed_rerun(root, change):
+        path = root / rerun
+        receipt = json.loads(path.read_bytes())
+        change(receipt)
+        path.write_text(json.dumps(receipt))
+
+    rejected(lambda root: changed_rerun(root, lambda item: item.update(source_sha256={})),
+             "empty focused source set", evidence.focused_source_checks)
+
+    def drop_source(item):
+        item["source_sha256"].pop("tools/android_native_smoke/test_walletcore_api_builder.py")
+
+    rejected(lambda root: changed_rerun(root, drop_source),
+             "dropped focused source", evidence.focused_source_checks)
+
+    def change_executable(item):
+        item["records"][0]["command"][0] = "/tmp/unreviewed-python3"
+
+    rejected(lambda root: changed_rerun(root, change_executable),
+             "changed focused executable", evidence.focused_source_checks)
+    print(json.dumps({"passed": True, "negative_controls": 8}, sort_keys=True))
     return 0
 
 

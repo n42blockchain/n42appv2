@@ -250,6 +250,13 @@ def focused_source_checks():
             receipt.get("kind") == "new-no-device-focused-regression-after-archive-review" and
             receipt.get("git_head") == "4a64e0c0df43d65d3d2e1bef138e597c42273c6f",
             "new focused rerun epoch changed")
+    sources = {"scripts/build_walletcore_api_fixture.py",
+               "tools/android_native_smoke/run_walletcore_api_fixture.py",
+               "tools/android_native_smoke/test_walletcore_api_builder.py",
+               "tools/android_native_smoke/test_walletcore_api_runtime_gate.py",
+               "tools/android_native_smoke/verify_walletcore_api_fixture.py"}
+    require(set(receipt.get("source_sha256", {})) == sources,
+            "new focused rerun source set changed")
     for name, expected in receipt["source_sha256"].items():
         require(digest(ROOT / "source" / name) == expected,
                 f"focused rerun source differs: {name}")
@@ -262,14 +269,16 @@ def focused_source_checks():
             "new focused rerun record count changed")
     for record in receipt["records"]:
         name = record["log"]
-        require(name in expected and record["exit"] == 0 and
+        require(name in expected, f"unexpected focused rerun log: {name}")
+        command = (["/Applications/Xcode.app/Contents/Developer/usr/bin/python3"] +
+                   (["-O"] if "optimized" in name else []) +
+                   ["-m", "unittest", "tools/android_native_smoke/test_walletcore_api_" +
+                    expected[name][0], "-v"])
+        require(record["exit"] == 0 and
                 digest(ROOT / root / name) == record["log_sha256"] and
-                record["command"][-4:] ==
-                ["-m", "unittest", "tools/android_native_smoke/test_walletcore_api_" +
-                 expected[name][0], "-v"],
+                record["command"] == command,
                 f"new focused rerun command/result differs: {name}")
-        require(("-O" in record["command"]) == ("optimized" in name) and
-                f"Ran {expected[name][1]} tests" in (ROOT / root / name).read_text() and
+        require(f"Ran {expected[name][1]} tests" in (ROOT / root / name).read_text() and
                 "\nOK\n" in (ROOT / root / name).read_text(),
                 f"new focused rerun output differs: {name}")
     return len(facts) + 2 + len(expected)

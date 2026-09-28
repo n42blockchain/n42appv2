@@ -368,14 +368,14 @@
       "sha256": "4ac4a871295d0ecc7363a843bc71f316f3175ad77aaa87ae7a0d3f2f9aa51e1a"
     },
     {
-      "bytes": 15006,
+      "bytes": 15624,
       "path": "verify_evidence.py",
-      "sha256": "1ed303675bd008713fd3e54ddb091936e50923b818912694de6c7c5b9fd8c733"
+      "sha256": "52133932b7f76d2332db38802ef34a77b8a525c53f5a8bbaffeecd4d4362b9dd"
     },
     {
-      "bytes": 2711,
+      "bytes": 3638,
       "path": "verify_evidence_controls.py",
-      "sha256": "e80a352dff299dfdceb175b563e320480f516c831de186e98bbd61f9e5653e6b"
+      "sha256": "300c60fe3316c02033049b33e199be8a8337b5e4313451300443288450f6e3de"
     }
   ],
   "schema_version": 1
