@@ -22,6 +22,7 @@ class WalletInfoData {
   final String chainType;
   final String? mnemonic;
   final String? privateKey;
+  final String? walletUuid;
   final String? avatarUrl;
   final bool isMainWallet;
   final DateTime createdAt;
@@ -37,6 +38,7 @@ class WalletInfoData {
     required this.chainType,
     this.mnemonic,
     this.privateKey,
+    this.walletUuid,
     this.avatarUrl,
     this.isMainWallet = false,
     required this.createdAt,
@@ -69,6 +71,7 @@ class WalletInfoData {
       chainType: 'multi', // Multi-chain wallet
       mnemonic: json['mnemonic'] as String?,
       privateKey: json['privateKey'] as String?,
+      walletUuid: json['UUID'] as String?,
       isMainWallet: json['mainWallet'] as bool? ?? false,
       createdAt: json['timestamp'] != null
           ? DateTime.fromMillisecondsSinceEpoch(
@@ -97,9 +100,10 @@ class WalletInfoData {
   }
 
   /// Convert to legacy format for storage
-  Map<String, dynamic> toLegacyJson() {
+  Map<String, dynamic> toLegacyJson({String? ownerUuid}) {
     return {
       'walletName': name,
+      'UUID': ownerUuid ?? walletUuid,
       'mnemonic': mnemonic,
       'privateKey': privateKey,
       'timestamp': timestamp,
@@ -117,6 +121,7 @@ class WalletInfoData {
     String? chainType,
     String? mnemonic,
     String? privateKey,
+    String? walletUuid,
     String? avatarUrl,
     bool? isMainWallet,
     DateTime? createdAt,
@@ -132,6 +137,7 @@ class WalletInfoData {
       chainType: chainType ?? this.chainType,
       mnemonic: mnemonic ?? this.mnemonic,
       privateKey: privateKey ?? this.privateKey,
+      walletUuid: walletUuid ?? this.walletUuid,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       isMainWallet: isMainWallet ?? this.isMainWallet,
       createdAt: createdAt ?? this.createdAt,
@@ -178,22 +184,23 @@ final walletListProvider =
     });
 
 class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
+  late String _walletStorageUuid;
+
   @override
   Future<List<WalletInfoData>> build() async {
-    return await _loadWallets();
+    _walletStorageUuid = AppGlobals.walletStorageUuid;
+    return await _loadWallets(_walletStorageUuid);
   }
 
   /// Load wallets from SPUtil storage
-  Future<List<WalletInfoData>> _loadWallets() async {
+  Future<List<WalletInfoData>> _loadWallets(String userUUID) async {
     final spUtil = ref.read(spUtilProvider);
     final walletAll = await spUtil.getWalletInfo();
+    if (userUUID != AppGlobals.walletStorageUuid) return [];
 
     if (walletAll == null) {
       return [];
     }
-
-    // Get user UUID for wallet lookup
-    final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
 
     // Get user's wallet data
     Map<String, dynamic>? walletUser = walletAll[userUUID];
@@ -207,50 +214,63 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
     return walletInfos
         .whereType<Map<String, dynamic>>()
         .map(WalletInfoData.fromLegacyJson)
+        .where(
+          (wallet) =>
+              wallet.walletUuid == null ||
+              wallet.walletUuid!.isEmpty ||
+              wallet.walletUuid == userUUID,
+        )
         .toList();
   }
 
   /// Refresh wallet list from storage
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => _loadWallets());
+    state = await AsyncValue.guard(() => _loadWallets(_walletStorageUuid));
   }
 
   /// Add a new wallet
   Future<void> addWallet(WalletInfoData wallet) async {
+    if (_walletStorageUuid != AppGlobals.walletStorageUuid) return;
     final current = state.value ?? [];
     final updated = [...current, wallet];
     state = AsyncValue.data(updated);
-    await _saveWallets(updated);
+    await _saveWallets(updated, _walletStorageUuid);
   }
 
   /// Remove a wallet by address
   Future<void> removeWallet(String address) async {
+    if (_walletStorageUuid != AppGlobals.walletStorageUuid) return;
     final current = state.value ?? [];
     final updated = current.where((w) => w.address != address).toList();
     state = AsyncValue.data(updated);
-    await _saveWallets(updated);
+    await _saveWallets(updated, _walletStorageUuid);
   }
 
   /// Update a wallet
   Future<void> updateWallet(WalletInfoData wallet) async {
+    if (_walletStorageUuid != AppGlobals.walletStorageUuid) return;
     final current = state.value ?? [];
     final index = current.indexWhere((w) => w.timestamp == wallet.timestamp);
     if (index != -1) {
       final updated = [...current];
       updated[index] = wallet;
       state = AsyncValue.data(updated);
-      await _saveWallets(updated);
+      await _saveWallets(updated, _walletStorageUuid);
     }
   }
 
   /// Save wallets to storage
-  Future<void> _saveWallets(List<WalletInfoData> wallets) async {
+  Future<void> _saveWallets(
+    List<WalletInfoData> wallets,
+    String userUUID,
+  ) async {
+    if (userUUID != AppGlobals.walletStorageUuid) return;
     final spUtil = ref.read(spUtilProvider);
-    final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
 
     // Get current storage
     final walletAll = await spUtil.getWalletInfo() ?? {};
+    if (userUUID != AppGlobals.walletStorageUuid) return;
 
     // Get current index
     final currentIndex = ref.read(selectedWalletIndexProvider);
@@ -260,7 +280,9 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
     walletAll[userUUID] = {
       'index': currentIndex,
       'miningIndex': miningIndex,
-      'wallet': wallets.map((w) => w.toLegacyJson()).toList(),
+      'wallet': wallets
+          .map((w) => w.toLegacyJson(ownerUuid: userUUID))
+          .toList(),
     };
 
     await spUtil.setWalletInfo(walletAll);
@@ -272,6 +294,7 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
 /// Subclasses specify [storageKey] to read/write the correct field.
 abstract class _WalletIndexNotifier extends StateNotifier<int> {
   final Ref _ref;
+  final String _walletStorageUuid = AppGlobals.walletStorageUuid;
 
   /// JSON key inside the user's wallet map (e.g. 'index', 'miningIndex').
   String get storageKey;
@@ -299,12 +322,13 @@ abstract class _WalletIndexNotifier extends StateNotifier<int> {
   }
 
   Future<void> _saveToStorage() async {
+    if (_walletStorageUuid != AppGlobals.walletStorageUuid) return;
     final spUtil = _ref.read(spUtilProvider);
     final walletAll = await spUtil.getWalletInfo();
+    if (_walletStorageUuid != AppGlobals.walletStorageUuid) return;
     if (walletAll != null) {
-      final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-      if (walletAll[userUUID] != null) {
-        walletAll[userUUID][storageKey] = state;
+      if (walletAll[_walletStorageUuid] != null) {
+        walletAll[_walletStorageUuid][storageKey] = state;
         await spUtil.setWalletInfo(walletAll);
       }
     }
@@ -313,9 +337,9 @@ abstract class _WalletIndexNotifier extends StateNotifier<int> {
   Future<Map<String, dynamic>?> _getUserWalletMap() async {
     final spUtil = _ref.read(spUtilProvider);
     final walletAll = await spUtil.getWalletInfo();
+    if (_walletStorageUuid != AppGlobals.walletStorageUuid) return null;
     if (walletAll == null) return null;
-    final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-    return walletAll[userUUID];
+    return walletAll[_walletStorageUuid];
   }
 }
 

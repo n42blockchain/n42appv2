@@ -109,17 +109,17 @@ class WalletActionProvider extends ChangeNotifier
   // ── 置顶同步缓存（避免无变化时重复遍历）────────────────────────────────────
   /// 上次 _syncPinnedState 时的 fingerprint；格式：pinnedHash|coinListLength
   String _lastSyncFingerprint = '';
-  String defaultWalletUUID = "AstranetWallet";
-  String get userUUID {
-    if (AppGlobals.userInfo == null) return defaultWalletUUID;
-    return AppGlobals.userInfo?.uuid ?? "";
-  }
+  String get userUUID => AppGlobals.walletStorageUuid;
 
   late final TokenViewApi tokenViewApi = TokenViewApi();
   Load _load = Load.finish; //当前状态
   Load get load => _load;
   Load loadBalance = Load.finish;
   bool buildwallet = false;
+  String? _walletInitializationOwnerUuid;
+  String? _walletInfoStorageOwnerUuid;
+  bool _walletReinitializationQueued = false;
+  bool _walletReinitializationShouldInitCoinInfo = false;
   //数字格式化实例
   final NumberFormat _oCcy = NumberFormat("#,##0.00", "en_US");
 
@@ -128,6 +128,9 @@ class WalletActionProvider extends ChangeNotifier
   List<WalletInfo> get walletInfoLsit => _walletInfoLsit;
   @override
   List<WalletInfo> get walletInfoList => _walletInfoLsit;
+
+  String get walletDataOwnerUuid =>
+      _walletInitializationOwnerUuid ?? _walletInfoStorageOwnerUuid ?? userUUID;
 
   /// 现在读 [walletInfo] / [walletMap] 是否安全。
   ///

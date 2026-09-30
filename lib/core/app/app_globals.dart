@@ -6,6 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter/material.dart';
+import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
@@ -67,6 +68,19 @@ class AppGlobals {
 
   /// Current logged-in user
   static UserInfo? userInfo;
+
+  /// Stable storage namespace for wallet data. Host-authenticated accounts use
+  /// their UUID; chat-only accounts use their Matrix user ID so separate
+  /// registrations on one device do not share the anonymous wallet.
+  static String get walletStorageUuid {
+    final hostUuid = userInfo?.uuid?.trim();
+    if (hostUuid != null && hostUuid.isNotEmpty) return hostUuid;
+
+    final chatUserId = N42Chat.currentUser?.userId.trim();
+    if (chatUserId != null && chatUserId.isNotEmpty) return chatUserId;
+
+    return 'AstranetWallet';
+  }
 
   /// Current active ID (use nextId for thread-safe auto-increment)
   static int _currentId = 0;
