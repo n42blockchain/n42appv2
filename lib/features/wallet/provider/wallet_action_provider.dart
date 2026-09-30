@@ -185,7 +185,7 @@ class WalletActionProvider extends ChangeNotifier
     if (_publicKeyAndPrivateKeyPair == null) {
       await getPublicKeyAndPrivateKeyPairN();
     }
-    return _publicKeyAndPrivateKeyPair!;
+    return _publicKeyAndPrivateKeyPair ?? {};
   }
 
   //当前钱包数据

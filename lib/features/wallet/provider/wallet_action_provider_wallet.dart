@@ -4,7 +4,15 @@ part of 'wallet_action_provider.dart';
 extension WalletActionProviderWallet on WalletActionProvider {
   void _clearWalletListForOwner(String ownerUuid) {
     _walletInfoStorageOwnerUuid = ownerUuid;
+    for (final wallet in _walletInfoLsit) {
+      wallet.clearSensitiveData();
+    }
     _walletInfoLsit = [];
+    _publicKeyAndPrivateKeyPair?.clear();
+    _publicKeyAndPrivateKeyPair = null;
+    coinRefreshMap.clear();
+    _lastSyncFingerprint = '';
+    _coinListBuildRevision++;
     walletIndex = 0;
     walletMiningIndex = 0;
   }
@@ -479,9 +487,12 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   //返回公钥、私钥对
   Future<void> getPublicKeyAndPrivateKeyPairN() async {
-    _publicKeyAndPrivateKeyPair = {};
+    final ownerUuid = walletDataOwnerUuid;
+    final wallets = List<WalletInfo>.of(walletInfoLsit);
+    final keyPairs = <String, String>{};
     Trustdart trustdart = Trustdart();
-    for (WalletInfo wInfo in walletInfoLsit) {
+    for (WalletInfo wInfo in wallets) {
+      if (ownerUuid != userUUID || ownerUuid != walletDataOwnerUuid) return;
       if (wInfo.mainWallet == false) {
         continue;
       }
@@ -526,6 +537,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
           mnemonic: wInfo.mnemonic ?? "",
           pk: wInfo.privateKey ?? "",
         );
+        if (ownerUuid != userUUID || ownerUuid != walletDataOwnerUuid) return;
         if (privateKeyStr.isEmpty) {
           if (kDebugMode) {
             debugPrint(
@@ -539,7 +551,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
         final privateKey = bytesToHex(
           base64Decode(pkPair['privateKey'].toString()),
         );
-        _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
+        keyPairs[pubKey] = privateKey;
       } catch (e) {
         if (kDebugMode) {
           debugPrint(
@@ -547,6 +559,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
           );
         }
       }
+    }
+    if (ownerUuid == userUUID && ownerUuid == walletDataOwnerUuid) {
+      _publicKeyAndPrivateKeyPair = keyPairs;
     }
   }
 
