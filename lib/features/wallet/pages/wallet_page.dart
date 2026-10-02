@@ -43,7 +43,14 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 class WalletPage extends ConsumerStatefulWidget {
-  const WalletPage({super.key});
+  const WalletPage({
+    super.key,
+    @visibleForTesting this.initializeWalletForTest,
+  });
+
+  @visibleForTesting
+  final Future<void> Function(WalletActionProvider provider)?
+  initializeWalletForTest;
 
   @override
   ConsumerState<WalletPage> createState() => _WalletPageState();
@@ -89,7 +96,12 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       // 通知会发生在 ConsumerStatefulElement 还在 mount 的过程中，触发
       // Riverpod 的「Tried to modify a provider while the widget tree was
       // building」断言——T26 真机探针抓到的就是这条。
-      ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+      final initializeForTest = widget.initializeWalletForTest;
+      if (initializeForTest == null) {
+        ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+      } else {
+        initializeForTest(ref.read(wapBridgeProvider));
+      }
       _startPriceTimer();
     });
   }

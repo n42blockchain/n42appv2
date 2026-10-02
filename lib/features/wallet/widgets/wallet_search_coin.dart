@@ -35,7 +35,15 @@ part 'wallet_search_coin_item.dart';
 class WalletSearchCoin extends ConsumerStatefulWidget {
   final int type; // 0 转账，1 收币
   final String? toAddress;
-  const WalletSearchCoin(this.type, {this.toAddress, super.key});
+  @visibleForTesting
+  final SPUtil? searchHistoryStorageForTesting;
+
+  const WalletSearchCoin(
+    this.type, {
+    this.toAddress,
+    @visibleForTesting this.searchHistoryStorageForTesting,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletSearchCoin> createState() => _WalletSearchCoinState();
@@ -56,6 +64,9 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   static const Duration _debounceDuration = Duration(milliseconds: 300);
   static const Duration _historyIoDuration = Duration(milliseconds: 800);
 
+  SPUtil get _searchHistoryStorage =>
+      widget.searchHistoryStorageForTesting ?? SPUtil();
+
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   @override
@@ -70,7 +81,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     // 如果有待写入的历史记录，dispose 前立即触发（fire-and-forget）
     if (_saveHistoryDebounce?.isActive == true) {
       _saveHistoryDebounce!.cancel();
-      SPUtil().saveCoinSearchHistory(_history);
+      _searchHistoryStorage.saveCoinSearchHistory(_history);
     }
     _inputCtrl.dispose();
     _focusNode.dispose();
@@ -81,7 +92,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
 
   Future<void> _loadHistory() async {
     try {
-      final history = await SPUtil().getCoinSearchHistory();
+      final history = await _searchHistoryStorage.getCoinSearchHistory();
       if (mounted) setState(() => _history = history);
     } catch (e) {
       AppLogger.w('WalletSearchCoin', '_loadHistory error: $e');
@@ -102,7 +113,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     // 防抖写入：取消前次定时，重新计时
     _saveHistoryDebounce?.cancel();
     _saveHistoryDebounce = Timer(_historyIoDuration, () {
-      SPUtil().saveCoinSearchHistory(updated).catchError((e) {
+      _searchHistoryStorage.saveCoinSearchHistory(updated).catchError((e) {
         AppLogger.w('WalletSearchCoin', '_saveToHistory error: $e');
       });
     });
@@ -113,7 +124,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     final previous = List<String>.from(_history);
     setState(() => _history = updated);
     try {
-      await SPUtil().saveCoinSearchHistory(updated);
+      await _searchHistoryStorage.saveCoinSearchHistory(updated);
     } catch (e) {
       AppLogger.w('WalletSearchCoin', '_removeFromHistory error: $e');
       if (mounted) {
@@ -126,7 +137,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
     final previous = List<String>.from(_history);
     setState(() => _history = []);
     try {
-      await SPUtil().saveCoinSearchHistory([]);
+      await _searchHistoryStorage.saveCoinSearchHistory([]);
     } catch (e) {
       AppLogger.w('WalletSearchCoin', '_clearHistory error: $e');
       if (mounted) {
