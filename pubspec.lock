@@ -340,10 +340,10 @@ packages:
     dependency: transitive
     description:
       name: canonical_json
-      sha256: d6be1dd66b420c6ac9f42e3693e09edf4ff6edfee26cb4c28c1c019fdb8c0c15
+      sha256: "618db0b1ea4238a3ef2f325908beee6269550d73b69dc5220456b75ce3cec072"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.3"
   characters:
     dependency: transitive
     description:
