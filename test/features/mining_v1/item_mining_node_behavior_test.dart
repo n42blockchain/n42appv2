@@ -6,7 +6,7 @@ import '../../helpers/widget_test_helpers.dart';
 
 void main() {
   testWidgets('long RPC endpoints fit in a narrow node option', (tester) async {
-    tester.view.physicalSize = const Size(390, 844);
+    tester.view.physicalSize = const Size(320, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -16,11 +16,13 @@ void main() {
       wrapForTest(
         Center(
           child: SizedBox(
-            width: 330,
+            width: 260,
             child: ItemMiningNode(
               countryName: 'USA',
-              nodeAddress: 'https://rpc.n42.world',
-              socketUrl: 'wss://ws.n42.world',
+              nodeAddress:
+                  'https://rpc.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
+              socketUrl:
+                  'wss://ws.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
               icon: '',
               isSelected: true,
               onTap: () => tapped = true,
@@ -32,8 +34,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('USA'), findsOneWidget);
-    expect(find.text('https://rpc.n42.world'), findsOneWidget);
-    expect(find.text('wss://ws.n42.world'), findsOneWidget);
+    expect(
+      find.text(
+        'https://rpc.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'wss://ws.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
+      ),
+      findsOneWidget,
+    );
     expect(find.byIcon(Icons.check), findsOneWidget);
     expect(tester.takeException(), isNull);
 
