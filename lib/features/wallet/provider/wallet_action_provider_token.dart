@@ -330,16 +330,24 @@ extension WalletActionProviderToken on WalletActionProvider {
   //添加代币
   void addWalletChainToken(Map<String, dynamic> token) {
     String symbolStr = token['coinType'].toString().toUpperCase();
+    final chain = walletMap[symbolStr];
+    if (chain == null) {
+      throw StateError('Missing parent chain configuration for $symbolStr');
+    }
+    final coinIndex = _coinModels.indexWhere(
+      (e) => e.config.coinType == token['coinType'],
+    );
+    if (coinIndex == -1) {
+      throw StateError('Missing parent coin model for $symbolStr');
+    }
+
     Map<dynamic, dynamic> t;
-    if (walletMap[symbolStr]['isTest']) {
-      t = walletMap[symbolStr]['testnets'][0]['testnetContract'];
+    if (chain['isTest']) {
+      t = chain['testnets'][0]['testnetContract'];
       if (t.isEmpty) {
-        walletMap[symbolStr]['testnets'][0]['testnetContract'] = {
-          '${token['mKey']}': token,
-        };
+        chain['testnets'][0]['testnetContract'] = {'${token['mKey']}': token};
       } else {
-        Map<String, dynamic> tokens =
-            walletMap[symbolStr]['testnets'][0]['testnetContract'];
+        Map<String, dynamic> tokens = chain['testnets'][0]['testnetContract'];
         final t = tokens[token['mKey']];
         if (t == null) {
           tokens[token['mKey']] = token;
@@ -348,11 +356,11 @@ extension WalletActionProviderToken on WalletActionProvider {
         }
       }
     } else {
-      t = walletMap[symbolStr]['mainnets'];
+      t = chain['mainnets'];
       if (t.isEmpty) {
-        walletMap[symbolStr]['mainnets'] = {'${token['mKey']}': token};
+        chain['mainnets'] = {'${token['mKey']}': token};
       } else {
-        Map<String, dynamic> tokens = walletMap[symbolStr]['mainnets'];
+        Map<String, dynamic> tokens = chain['mainnets'];
         final t = tokens[token['mKey']];
         if (t == null) {
           tokens[token['mKey']] = token;
@@ -363,9 +371,6 @@ extension WalletActionProviderToken on WalletActionProvider {
     }
     saveWalletInfo(walletInfo, walletIndex);
 
-    final coinIndex = _coinModels.indexWhere(
-      (e) => e.config.coinType == token['coinType'],
-    );
     CoinModel mm = _coinModels[coinIndex];
     CoinModel cm = CoinModel.fromMap(token);
     cm.pathIndex = mm.pathIndex;
