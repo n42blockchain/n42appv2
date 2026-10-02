@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -27,7 +28,22 @@ import 'package:n42_wallet/generated/l10n.dart';
 class TransactionDetailTrx extends StatefulWidget {
   final String txHash;
   final CoinModel coinModel;
-  const TransactionDetailTrx(this.coinModel, this.txHash, {super.key});
+
+  @visibleForTesting
+  final Future<MessageModel> Function(String, {bool isTest})?
+  transactionLookupForTesting;
+
+  @visibleForTesting
+  final Future<List<TransationRecordModel>> Function(String, String)?
+  recordLoaderForTesting;
+
+  const TransactionDetailTrx(
+    this.coinModel,
+    this.txHash, {
+    super.key,
+    this.transactionLookupForTesting,
+    this.recordLoaderForTesting,
+  });
 
   @override
   State<TransactionDetailTrx> createState() => _TransactionDetailTrxState();
@@ -102,10 +118,13 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     }
     if (mounted) setState(() => load = Load.loading);
 
-    final trModelList = await db.selectTransationRecordTxHash(
-      _txHash,
-      widget.coinModel.address,
-    );
+    final recordLoader = widget.recordLoaderForTesting;
+    final trModelList = recordLoader == null
+        ? await db.selectTransationRecordTxHash(
+            _txHash,
+            widget.coinModel.address,
+          )
+        : await recordLoader(_txHash, widget.coinModel.address.toString());
     if (trModelList.isNotEmpty) {
       trm = trModelList[0];
     } else {
@@ -119,10 +138,13 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
 
   Future<bool> getTransactionByHash() async {
     final previousTransactionInfo = transactionInfo;
-    final rData = await transactionApi.trxTransactionInfoHash(
-      _txHash,
-      isTest: widget.coinModel.isTest,
-    );
+    final lookup = widget.transactionLookupForTesting;
+    final rData = lookup == null
+        ? await transactionApi.trxTransactionInfoHash(
+            _txHash,
+            isTest: widget.coinModel.isTest,
+          )
+        : await lookup(_txHash, isTest: widget.coinModel.isTest);
     if (rData.error) {
       errorMessage = rData.data.toString();
       if (shouldContinueTrxDetailPolling(
