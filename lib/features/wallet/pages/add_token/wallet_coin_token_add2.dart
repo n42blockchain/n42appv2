@@ -17,8 +17,19 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 class WalletCoinTokenAdd2 extends ConsumerStatefulWidget {
   final CoinModel coinModel;
+  final TokenViewApi? tokenViewApi;
+  @visibleForTesting
+  final void Function(Map<String, dynamic>)? onAddToken;
+  @visibleForTesting
+  final void Function(Map<String, dynamic>)? onRemoveToken;
 
-  const WalletCoinTokenAdd2(this.coinModel, {super.key});
+  const WalletCoinTokenAdd2(
+    this.coinModel, {
+    this.tokenViewApi,
+    this.onAddToken,
+    this.onRemoveToken,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletCoinTokenAdd2> createState() =>
@@ -66,7 +77,6 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     if (coinMap['edit'] == true) return;
     setState(() => coinMap['edit'] = true);
     try {
-      final wap = ref.read(wapBridgeProvider);
       final baseToken =
           json.decode(json.encode(widget.coinModel.coin))
               as Map<String, dynamic>;
@@ -87,7 +97,12 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         ..['decimals_verified'] = false
         ..['canEdit'] = true;
       addSymbol = '$addSymbol,${coinMap['coin_name']}';
-      wap.addWalletChainToken(baseToken);
+      final onAddToken = widget.onAddToken;
+      if (onAddToken == null) {
+        ref.read(wapBridgeProvider).addWalletChainToken(baseToken);
+      } else {
+        onAddToken(baseToken);
+      }
       setState(() {
         coinMap['isAdd'] = true;
         coinMap['edit'] = false;
@@ -102,7 +117,12 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     if (coinMap['edit'] == true) return;
     setState(() => coinMap['edit'] = true);
     try {
-      ref.read(wapBridgeProvider).removeWalletChainToken(coinMap);
+      final onRemoveToken = widget.onRemoveToken;
+      if (onRemoveToken == null) {
+        ref.read(wapBridgeProvider).removeWalletChainToken(coinMap);
+      } else {
+        onRemoveToken(coinMap);
+      }
       coinMap['isAdd'] = false;
       removeSymbol = true;
       setState(() => coinMap['edit'] = false);
@@ -131,7 +151,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
   Future<void> getTokenList() async {
     setState(() => load = Load.loading);
     try {
-      final tokenViewApi = TokenViewApi();
+      final tokenViewApi = widget.tokenViewApi ?? TokenViewApi();
       String fullname = widget.coinModel.coin['name'];
       if (fullname == 'AmazeToken') fullname = 'Amaze Chain';
 
