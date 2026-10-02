@@ -38,6 +38,14 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
   AuthStatus? _lastChatAuthStatus;
   bool _localeListenerRegistered = false;
 
+  /// Exposed for deterministic host-routing tests; production reads N42Chat.
+  @visibleForTesting
+  bool get chatIsInitialized => N42Chat.isInitialized;
+
+  /// Exposed for deterministic host-routing tests; production reads N42Chat.
+  @visibleForTesting
+  bool get chatIsLoggedIn => N42Chat.isLoggedIn;
+
   /// Initialize N42Chat module (runs in background, does not block UI).
   Future<void> initN42Chat() async {
     try {
@@ -372,7 +380,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
   }
 
-  bool get isChatSessionReady => N42Chat.isInitialized && N42Chat.isLoggedIn;
+  bool get isChatSessionReady => chatIsInitialized && chatIsLoggedIn;
 
   bool isChatDeepLink(DeepLinkType type) {
     return type == DeepLinkType.chat ||
@@ -382,7 +390,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
   }
 
   Future<void> routeChatSsoDeepLink(DeepLinkData data) async {
-    if (!N42Chat.isInitialized) {
+    if (!chatIsInitialized) {
       _pendingChatSsoDeepLink = data;
       AppLogger.d(
         'ChatSso',
@@ -417,7 +425,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
 
     try {
-      await N42Chat.loginWithLoginToken(
+      await loginN42ChatWithLoginToken(
         homeserver: homeserver,
         loginToken: loginToken,
       );
@@ -431,12 +439,48 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
   }
 
+  @visibleForTesting
+  Future<void> loginN42ChatWithLoginToken({
+    required String homeserver,
+    required String loginToken,
+  }) => N42Chat.loginWithLoginToken(
+    homeserver: homeserver,
+    loginToken: loginToken,
+  );
+
+  @visibleForTesting
+  void notifyN42ChatUserChanged() => N42Chat.notifyUserChanged();
+
+  @visibleForTesting
+  Future<void> checkChatPushPermission() =>
+      AppPushUtils.checkAndPromptPermission();
+
+  @visibleForTesting
+  Future<void> checkChatBackgroundDelivery() =>
+      AppPushUtils.checkAndPromptBgDelivery();
+
   Future<void> openChatEntry(BuildContext navContext) async {
     if (!mounted) return;
     await Navigator.of(
       navContext,
     ).push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
   }
+
+  @visibleForTesting
+  Future<void> openN42ChatConversation(
+    String roomId, {
+    required BuildContext context,
+  }) => N42Chat.openConversation(roomId, context: context);
+
+  @visibleForTesting
+  Future<String> createN42ChatDirectMessage(String userId) =>
+      N42Chat.createDirectMessage(userId);
+
+  @visibleForTesting
+  Future<void> openN42ChatUserProfile(
+    String userId, {
+    required BuildContext context,
+  }) => N42Chat.openUserProfile(userId, context: context);
 
   Future<void> openChatConversation(
     BuildContext navContext,
@@ -448,7 +492,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
 
     try {
-      await N42Chat.openConversation(roomId, context: navContext);
+      await openN42ChatConversation(roomId, context: navContext);
     } catch (e, s) {
       AppLogger.e(
         'ChatDeepLink',
@@ -468,9 +512,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
 
     try {
-      final roomId = await N42Chat.createDirectMessage(userId);
+      final roomId = await createN42ChatDirectMessage(userId);
       if (!mounted || !navContext.mounted) return;
-      await N42Chat.openConversation(roomId, context: navContext);
+      await openN42ChatConversation(roomId, context: navContext);
     } catch (e, s) {
       AppLogger.e(
         'ChatDeepLink',
@@ -493,7 +537,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
 
     try {
-      await N42Chat.openUserProfile(userId, context: navContext);
+      await openN42ChatUserProfile(userId, context: navContext);
     } catch (e, s) {
       AppLogger.e(
         'ChatDeepLink',
@@ -510,13 +554,13 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     DeepLinkData data, {
     required BuildContext navContext,
   }) async {
-    if (!N42Chat.isInitialized) {
+    if (!chatIsInitialized) {
       _pendingChatDeepLink = data;
       AppLogger.d('ChatDeepLink', 'queued until N42Chat initializes: $data');
       return;
     }
 
-    if (isChatDeepLink(data.type) && !N42Chat.isLoggedIn) {
+    if (isChatDeepLink(data.type) && !chatIsLoggedIn) {
       _pendingChatDeepLink = data;
       await openChatEntry(navContext);
       return;
@@ -597,18 +641,18 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     if (status == AuthStatus.authenticated &&
         previousStatus != AuthStatus.authenticated) {
       unawaited(clearPendingCancelledChatDataPurgeCompat());
-      N42Chat.notifyUserChanged();
+      notifyN42ChatUserChanged();
       // Chat 登录成功后检查推送权限，未开启则提醒用户；
       // 国产 ROM 另引导开启自启动+电池白名单，否则后台收不到消息。
-      AppPushUtils.checkAndPromptPermission();
-      AppPushUtils.checkAndPromptBgDelivery();
+      checkChatPushPermission();
+      checkChatBackgroundDelivery();
       return;
     }
 
     if ((status == AuthStatus.unauthenticated ||
             status == AuthStatus.initial) &&
         previousStatus != status) {
-      N42Chat.notifyUserChanged();
+      notifyN42ChatUserChanged();
       globalProviderContainer.read(unreadCountProvider.notifier).reset();
       AppPushUtils.clearBadgeOnly();
     }
