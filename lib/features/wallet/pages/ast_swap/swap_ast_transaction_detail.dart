@@ -13,7 +13,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SwapAstTransactionDetail extends StatefulWidget {
   final SwapAstOrderModel orderModel;
-  const SwapAstTransactionDetail(this.orderModel, {super.key});
+  final SwapAstApi? swapAstApiForTesting;
+
+  const SwapAstTransactionDetail(
+    this.orderModel, {
+    super.key,
+    this.swapAstApiForTesting,
+  });
 
   @override
   State<SwapAstTransactionDetail> createState() =>
@@ -26,6 +32,8 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
   IconData? iconData;
   late String createStr;
   late SwapAstOrderModel _orderModel;
+  late final SwapAstApi _swapAstApi =
+      widget.swapAstApiForTesting ?? SwapAstApi();
 
   @override
   void initState() {
@@ -50,7 +58,7 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
 
   Future<void> _loadOrderDetail() async {
     try {
-      final MessageModel rData = await SwapAstApi().getNftOrAstDetail(
+      final MessageModel rData = await _swapAstApi.getNftOrAstDetail(
         _orderModel.id ?? 0,
       );
       if (!mounted) return;
@@ -123,10 +131,11 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
       child: Column(
         children: [
           Container(
-            height: su.setWidth(80),
+            constraints: BoxConstraints(minHeight: su.setWidth(80)),
             width: double.infinity,
             margin: EdgeInsets.only(bottom: AppSpacing.space12),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
@@ -144,34 +153,35 @@ class _SwapAstTransactionDetailState extends State<SwapAstTransactionDetail> {
                     ),
                   ],
                 ),
-                Row(
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runSpacing: su.setWidth(4),
                   children: [
                     Text(
                       createStr,
                       style: AppTypography.caption.copyWith(color: subtitle),
                     ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: su.setWidth(4)),
-                            child: Icon(
-                              iconData,
-                              color: stateColor,
-                              size: su.setWidth(30),
-                              fill: 0,
-                            ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: su.setWidth(4)),
+                          child: Icon(
+                            iconData,
+                            color: stateColor,
+                            size: su.setWidth(30),
+                            fill: 0,
                           ),
-                          Text(
-                            stateStr,
-                            style: AppTypography.caption.copyWith(
-                              color: stateColor,
-                            ),
-                            textAlign: TextAlign.right,
+                        ),
+                        Text(
+                          stateStr,
+                          style: AppTypography.caption.copyWith(
+                            color: stateColor,
                           ),
-                        ],
-                      ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ],
                     ),
                   ],
                 ),
