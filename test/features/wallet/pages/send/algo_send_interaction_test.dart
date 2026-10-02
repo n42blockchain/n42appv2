@@ -5,6 +5,7 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_algo.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
@@ -184,6 +185,8 @@ void main() {
       await state.sendTransaction();
       expect(validatedAddresses, isEmpty);
       expect(state.load, Load.loading);
+      expect(find.byType(WalletBaseSend), findsNothing);
+      expect(find.byType(WalletChainSendAlgo), findsOneWidget);
       await tester.pump(const Duration(seconds: 8));
 
       state.load = Load.finish;
@@ -193,7 +196,8 @@ void main() {
       expect(validatedAddresses, ['invalid']);
       expect(state.toErrorMessage, isNotEmpty);
       expect(state.load, Load.finish);
-      expect(find.textContaining('Confirm '), findsNothing);
+      expect(find.byType(WalletBaseSend), findsNothing);
+      expect(find.byType(WalletChainSendAlgo), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
