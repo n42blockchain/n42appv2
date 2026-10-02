@@ -257,59 +257,67 @@ class AATransactionPreview extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.local_gas_station,
-                size: 22.w,
-                color: sponsored ? success : subtitleColor,
-              ),
-              SizedBox(width: 8.w),
-              Flexible(
-                child: Text(
-                  S.of(context).g_key_t_17,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.caption.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: subtitleColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (sponsored)
-            Row(
+          Expanded(
+            child: Row(
               children: [
-                Flexible(
+                Icon(
+                  Icons.local_gas_station,
+                  size: 22.w,
+                  color: sponsored ? success : subtitleColor,
+                ),
+                SizedBox(width: 8.w),
+                Expanded(
                   child: Text(
-                    data.formattedGasCost,
+                    S.of(context).g_key_t_17,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w400,
-                      decoration: TextDecoration.lineThrough,
                       color: subtitleColor,
                     ),
                   ),
                 ),
-                SizedBox(width: 8.w),
-                Flexible(
-                  child: Text(
-                    S.of(context).g_key_aa_free,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.bodySm.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: success,
+              ],
+            ),
+          ),
+          if (sponsored)
+            Expanded(
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      data.formattedGasCost,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w400,
+                        decoration: TextDecoration.lineThrough,
+                        color: subtitleColor,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(width: 8.w),
+                  Flexible(
+                    child: Text(
+                      S.of(context).g_key_aa_free,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.bodySm.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: success,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )
           else
-            Text(
-              data.formattedGasCost,
-              style: AppTypography.bodySm.copyWith(
-                fontWeight: FontWeight.w600,
-                color: _color(context, AppThemeKeys.mainTextColor),
+            Flexible(
+              child: Text(
+                data.formattedGasCost,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.bodySm.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: _color(context, AppThemeKeys.mainTextColor),
+                ),
               ),
             ),
         ],
