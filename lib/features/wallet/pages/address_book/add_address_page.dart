@@ -109,6 +109,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       }
     }
 
+    if (!mounted) return null;
     setState(() {});
     return result;
   }
