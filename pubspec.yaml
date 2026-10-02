@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072927
+version: 2.4.8+2026072928
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -54,13 +54,13 @@ dependencies:
   webview_flutter_wkwebview: ^3.26.1
   web_socket_channel: ^3.0.3
   http: ^1.6.0
-  url_launcher: ^6.3.2
+  url_launcher: ^6.3.3
   flutter_cache_manager: ^3.4.5
 
   # === Blockchain & Crypto ===
   eip712: ^1.0.1  # 替换 eth_sig_util，支持 EIP-712 typed data signing
   web3dart: ^3.0.3
-  web3auth_flutter: ^7.0.0
+  web3auth_flutter: ^7.0.1
   fast_base58: ^0.2.2
   bech32: ^0.2.2
   crypto: ^3.0.7
@@ -78,7 +78,7 @@ dependencies:
   # === Utilities ===
   validators: ^3.0.0
   event_bus: ^2.0.1
-  fluttertoast: ^10.0.0
+  fluttertoast: ^10.0.2
   flustars_flutter3: ^3.0.0
   date_format: ^2.0.9
   convert: ^3.1.2

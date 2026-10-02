@@ -1596,10 +1596,17 @@ class FirebasePushService implements IPushNotificationService {
   Future<NotificationPermissionStatus> getPermissionStatus() async {
     final settings = await FirebaseMessaging.instance.getNotificationSettings();
 
-    switch (settings.authorizationStatus) {
+    return permissionStatusForAuthorizationStatus(settings.authorizationStatus);
+  }
+
+  static NotificationPermissionStatus permissionStatusForAuthorizationStatus(
+    AuthorizationStatus status,
+  ) {
+    switch (status) {
       case AuthorizationStatus.authorized:
         return NotificationPermissionStatus.granted;
       case AuthorizationStatus.denied:
+      case AuthorizationStatus.deniedPermanently:
         return NotificationPermissionStatus.denied;
       case AuthorizationStatus.notDetermined:
         return NotificationPermissionStatus.notDetermined;
