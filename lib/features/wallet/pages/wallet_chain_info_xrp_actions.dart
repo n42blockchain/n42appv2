@@ -258,16 +258,20 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
         children: [
           Row(
             children: [
-              Text(
-                '$title:',
-                style: AppTypography.body.copyWith(
-                  color: AppColorTokens.of(context).textSubtitle,
+              Expanded(
+                child: Text(
+                  '$title:',
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
                 ),
               ),
-              Text(
-                value,
-                style: AppTypography.body.copyWith(
-                  color: AppColorTokens.of(context).textItem,
+              Expanded(
+                child: Text(
+                  value,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textItem,
+                  ),
                 ),
               ),
             ],
