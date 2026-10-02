@@ -1,0 +1,4 @@
+c3b072bbe73b7a8c29191e340690d22958889c035fbdcedec735cb5700978913  /tmp/chat-coverage-20261002-pushed/lcov.info
+afe6e1658bdffee9bd212f52cb4ab67750cfcfb41623c83c2f0940806fe2c787  /tmp/chat-coverage-20261002-pushed.jsonl
+681a46e59b989d43e894d4af153bf929423deae7383050d15a9b517aae00e94b  docs/testing/coverage-expansion-2026-10-02/artifacts/chat-post-readonly-composer-full-20261002-lcov.info.gz
+2029f519dadc6b36f8e825f468701e307a69a6184bea5e0ce1a7160b97a79664  docs/testing/coverage-expansion-2026-10-02/artifacts/chat-post-readonly-composer-full-20261002-machine.jsonl.gz
