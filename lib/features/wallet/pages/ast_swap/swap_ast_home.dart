@@ -86,7 +86,10 @@ bool _swapBoolValue(dynamic value, {bool fallback = false}) {
 
 class SwapAstHome extends ConsumerStatefulWidget {
   final double? getAstNum;
-  const SwapAstHome({this.getAstNum, super.key});
+  @visibleForTesting
+  final SwapAstApi? swapAstApiForTesting;
+
+  const SwapAstHome({this.getAstNum, this.swapAstApiForTesting, super.key});
 
   @override
   ConsumerState<SwapAstHome> createState() => _SwapAstHomeState();
@@ -123,7 +126,8 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
   BigInt gasPrice = BigInt.zero;
   BigInt gas = BigInt.zero;
 
-  late final SwapAstApi _swapAstApi = SwapAstApi();
+  late final SwapAstApi _swapAstApi =
+      widget.swapAstApiForTesting ?? SwapAstApi();
   late final TokenViewApi _tokenViewApi = TokenViewApi();
 
   Map<String, dynamic> get _payCoinData => payCoinModel?.coin ?? const {};
@@ -148,7 +152,9 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     super.initState();
     payTextEditingController.text = "0";
     getTextEditingController.text = "${widget.getAstNum ?? 0}";
-    init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) init();
+    });
   }
 
   @override
