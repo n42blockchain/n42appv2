@@ -324,10 +324,14 @@ mixin _WidgetsMixin on _LogicMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  value,
-                  style: AppTypography.body.copyWith(
-                    color: AppColorTokens.of(context).textPrimary,
+                Flexible(
+                  child: Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                 ),
                 Image.asset(
