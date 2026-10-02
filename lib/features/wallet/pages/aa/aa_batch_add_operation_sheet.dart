@@ -30,6 +30,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   String _selectedToken = 'ETH';
   String? _toError;
   String? _amountError;
+  String? _calldataError;
 
   static const _ethLikeTokens = ['ETH', 'BNB', 'MATIC', 'AVAX', 'ARB'];
   @override
@@ -45,12 +46,19 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     setState(() {
       _toError = null;
       _amountError = null;
+      _calldataError = null;
     });
 
     bool valid = true;
 
     if (!FeatureAddressUtils.isValidEvmAddress(_toController.text.trim())) {
       setState(() => _toError = 'Invalid address (0x...)');
+      valid = false;
+    }
+
+    if (_selectedType == BatchOperationType.custom &&
+        _calldataController.text.trim().isEmpty) {
+      setState(() => _calldataError = 'Calldata is required');
       valid = false;
     }
 
@@ -177,7 +185,9 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                     labelText: S.of(context).g_ui_calldata_hex,
                     hintText: '0x...',
                     border: OutlineInputBorder(),
+                    errorText: _calldataError,
                   ),
+                  onChanged: (_) => setState(() => _calldataError = null),
                 ),
               ],
               SizedBox(height: AppSpacing.space6),
