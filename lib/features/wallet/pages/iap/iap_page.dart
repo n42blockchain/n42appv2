@@ -84,7 +84,10 @@ class _IapPageState extends State<IapPage> {
   void _onPurchaseUpdate(List<PurchaseDetails> purchases) {
     for (final p in purchases) {
       if (p.status == PurchaseStatus.pending) {
-        // do nothing
+        if (mounted && !_pending.contains(p.productID)) {
+          setState(() => _pending.add(p.productID));
+        }
+        continue;
       } else if (p.status == PurchaseStatus.purchased ||
           p.status == PurchaseStatus.restored) {
         _iap.completePurchase(p);
@@ -115,7 +118,19 @@ class _IapPageState extends State<IapPage> {
     setState(() => _pending.add(product.id));
     final param = PurchaseParam(productDetails: product);
     // 消耗型商品用 buyConsumable，非消耗型用 buyNonConsumable
-    await _iap.buyConsumable(purchaseParam: param);
+    try {
+      final started = await _iap.buyConsumable(purchaseParam: param);
+      if (!started && mounted) {
+        setState(() => _pending.remove(product.id));
+        ToastUtils.showError(
+          S.of(context).g_iap_failed('Purchase could not be started'),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _pending.remove(product.id));
+      ToastUtils.showError(S.of(context).g_iap_failed(e.toString()));
+    }
   }
 
   Future<void> _restore() async {
