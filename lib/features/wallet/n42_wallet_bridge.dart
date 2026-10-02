@@ -445,6 +445,7 @@ class N42WalletBridge implements IWalletBridge {
         'memo': ?memo,
       },
     );
+    final createdAt = DateTime.now();
 
     return PaymentRequest(
       requestId: requestId,
@@ -453,8 +454,8 @@ class N42WalletBridge implements IWalletBridge {
       receiverAddress: address,
       memo: memo,
       qrCodeData: qrUri.toString(),
-      createdAt: DateTime.now(),
-      expiresAt: DateTime.now().add(const Duration(minutes: 30)),
+      createdAt: createdAt,
+      expiresAt: createdAt.add(const Duration(minutes: 30)),
     );
   }
 

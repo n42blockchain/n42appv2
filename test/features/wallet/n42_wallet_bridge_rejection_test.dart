@@ -75,6 +75,45 @@ void main() {
     },
   );
 
+  test('payment request encodes its recipient and optional memo', () async {
+    const address = '0x1111111111111111111111111111111111111111';
+    snapshot.walletInfoLsit.add(WalletInfo());
+    snapshot.addresses['ETH'] = address;
+
+    final request = await bridge.generatePaymentRequest(
+      amount: '0.125',
+      token: 'ETH',
+      memo: 'rent',
+    );
+    final uri = Uri.parse(request.qrCodeData);
+    expect(request.expiresAt, isNotNull);
+    final lifetime = request.expiresAt!.difference(request.createdAt);
+
+    expect(request.requestId, isNotEmpty);
+    expect(request.receiverAddress, address);
+    expect(uri.scheme, 'n42');
+    expect(uri.host, 'pay');
+    expect(uri.queryParameters, {
+      'address': address,
+      'amount': '0.125',
+      'token': 'ETH',
+      'memo': 'rent',
+    });
+    expect(lifetime, greaterThanOrEqualTo(const Duration(minutes: 29)));
+    expect(lifetime, lessThanOrEqualTo(const Duration(minutes: 30)));
+  });
+
+  test('address validation enforces supported address shapes', () {
+    final evmAddress = '0x${List.filled(40, 'a').join()}';
+    final validNAddress = 'N${List.filled(29, 'a').join()}';
+
+    expect(bridge.isValidAddress(evmAddress), isTrue);
+    expect(bridge.isValidAddress('0x${List.filled(39, 'a').join()}'), isFalse);
+    expect(bridge.isValidAddress(validNAddress), isTrue);
+    expect(bridge.isValidAddress('N${List.filled(28, 'a').join()}'), isFalse);
+    expect(bridge.isValidAddress('N${List.filled(50, 'a').join()}'), isFalse);
+  });
+
   for (final amount in [
     '0',
     '-1',
