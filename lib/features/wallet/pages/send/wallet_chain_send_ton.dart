@@ -34,6 +34,8 @@ import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:web3dart/web3dart.dart';
 
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+
 part 'wallet_chain_send_ton_logic.dart';
 part 'wallet_chain_send_ton_widgets.dart';
 

@@ -33,6 +33,8 @@ import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+
 part 'wallet_chain_send_trx_logic.dart';
 part 'wallet_chain_send_trx_widgets.dart';
 

@@ -130,8 +130,16 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
       return;
     }
 
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
     // Balance check for non-contract coins
     final valueBi = ethToWeiString(value, decimals);
+    if (valueBi <= BigInt.zero) {
+      _setAmountError(S.of(context).g_key_46(minValue));
+      return;
+    }
     if (coin['isContract'] == false &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       _setAmountError(S.of(context).g_key_47);

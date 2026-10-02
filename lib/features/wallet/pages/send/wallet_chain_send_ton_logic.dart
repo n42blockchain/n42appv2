@@ -209,15 +209,37 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     }
 
     final checkValue = regular.regularDouble(value);
-    final dValue = double.parse(value);
-
     if (!checkValue && !checkValue1) {
       amountErrorMessage = S.of(context).g_key_134;
-    } else if (dValue <= 0 || dValue < minValue) {
-      amountErrorMessage = S.of(context).g_key_46(minValue);
-    } else {
-      amountErrorMessage = "";
+      setState(() {});
+      return;
     }
+
+    final dValue = double.tryParse(value);
+    if (dValue == null || dValue <= 0 || dValue < minValue) {
+      amountErrorMessage = S.of(context).g_key_46(minValue);
+      setState(() {});
+      return;
+    }
+
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, _decimals)) {
+      amountErrorMessage = S.of(context).g_key_134;
+      setState(() {});
+      return;
+    }
+    final valueBi = ethToWeiString(value, _decimals);
+    if (valueBi <= BigInt.zero) {
+      amountErrorMessage = S.of(context).g_key_46(minValue);
+      setState(() {});
+      return;
+    }
+    if (!_isContract && valueBi + totalGasPrice > widget.coinModel.balance) {
+      amountErrorMessage = S.of(context).g_key_47;
+      setState(() {});
+      return;
+    }
+    transferValue = valueBi;
+    amountErrorMessage = "";
     setState(() {});
   }
 

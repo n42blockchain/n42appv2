@@ -196,7 +196,20 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       return;
     }
 
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      amountErrorMessage = S.of(context).g_key_134;
+      setState(() {});
+      return;
+    }
     final BigInt valueBi = ethToWeiString(value, decimals);
+    // Positive decimal input below the chain's precision converts to zero
+    // smallest units (for TRX, anything below 0.000001). Never accept or pass
+    // a zero-value transfer after unit conversion.
+    if (valueBi <= BigInt.zero) {
+      amountErrorMessage = S.of(context).g_key_46(minValue);
+      setState(() {});
+      return;
+    }
     if (widget.coinModel.coin['isContract'] == false &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       amountErrorMessage = S.of(context).g_key_47;

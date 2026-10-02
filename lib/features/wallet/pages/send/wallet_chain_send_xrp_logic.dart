@@ -155,10 +155,21 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       setState(() {});
       return;
     }
+    final decimals = (widget.coinModel.coin['decimals'] as num).toInt();
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      amountErrorMessage = S.of(context).g_key_134;
+      setState(() {});
+      return;
+    }
     final BigInt valueBi = ethToWeiString(
       value,
       widget.coinModel.coin['decimals'],
     );
+    if (valueBi <= BigInt.zero) {
+      amountErrorMessage = S.of(context).g_key_46(0);
+      setState(() {});
+      return;
+    }
     final BigInt vb1 =
         widget.coinModel.balance -
         BigInt.from(widget.coinModel.other?.getLockAmount ?? 0);

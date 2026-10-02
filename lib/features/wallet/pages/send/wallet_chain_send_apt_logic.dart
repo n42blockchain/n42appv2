@@ -117,7 +117,16 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       _setAmountError(S.of(context).g_key_46(0));
       return;
     }
-    final valueBi = ethToWeiString(value, widget.coinModel.coin['decimals']);
+    final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 0;
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
+    final valueBi = ethToWeiString(value, decimals);
+    if (valueBi <= BigInt.zero) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
     if (widget.coinModel.coin['isContract'] == false) {
       if (valueBi + totalGasPrice > widget.coinModel.balance) {
         _setAmountError(S.of(context).g_key_47);
