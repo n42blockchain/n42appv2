@@ -172,6 +172,32 @@ void main() {
     expect(state.transferValue, BigInt.from(1234567));
   });
 
+  testWidgets(
+    'ALGO send preflight rejects loading and invalid recipient before confirmation',
+    (tester) async {
+      final state = await mount(tester);
+      state.valueTextEditingController.text = '1';
+      state.toTextEditingController.text = 'invalid';
+      state.totalGasPrice = BigInt.from(1000);
+      state.load = Load.loading;
+
+      await state.sendTransaction();
+      expect(validatedAddresses, isEmpty);
+      expect(state.load, Load.loading);
+      await tester.pump(const Duration(seconds: 8));
+
+      state.load = Load.finish;
+      await state.sendTransaction();
+      await tester.pumpAndSettle();
+
+      expect(validatedAddresses, ['invalid']);
+      expect(state.toErrorMessage, isNotEmpty);
+      expect(state.load, Load.finish);
+      expect(find.textContaining('Confirm '), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('ALGO recipient validation trims chain prefix and rejects self', (
     tester,
   ) async {
