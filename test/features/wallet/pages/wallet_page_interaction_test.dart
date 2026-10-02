@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_search_coin.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
@@ -86,6 +87,45 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets(
+    'wallet home returns to loading while the selected wallet index is invalid',
+    (tester) async {
+      final wallet = WalletInfo(
+        walletName: 'Synthetic wallet',
+        password: 'synthetic-protected-wallet',
+        walletUuid: 'synthetic-account',
+        coinInfo: <String, dynamic>{},
+      );
+
+      await pumpWalletPage(
+        tester,
+        initializeWalletForTest: (provider) async {
+          provider.walletInfoList.add(wallet);
+          provider.walletIndex = 0;
+          provider.walletMiningIndex = 0;
+          provider.buildwallet = false;
+          provider.refresh();
+        },
+      );
+
+      expect(find.byType(WalletBoard), findsOneWidget);
+      store.walletIndex = 1;
+      store.refresh();
+      await tester.pump();
+
+      expect(find.byType(Loading), findsOneWidget);
+      expect(find.byType(WalletBoard), findsNothing);
+      expect(tester.takeException(), isNull);
+
+      store.walletIndex = 0;
+      store.refresh();
+      await tester.pump();
+      expect(find.byType(WalletBoard), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   testWidgets('loaded watch-only wallet refuses to open the send flow', (
     tester,
   ) async {
@@ -119,6 +159,37 @@ void main() {
     expect(toastMessages, [S.current.g_key_watch_only_cant_send]);
     expect(find.byType(WalletSearchCoin), findsNothing);
     expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('unbacked wallet without a recovery phrase cannot send', (
+    tester,
+  ) async {
+    final wallet = WalletInfo(
+      walletName: 'Synthetic unbacked wallet',
+      password: '',
+      walletUuid: 'synthetic-unbacked-account',
+      coinInfo: <String, dynamic>{},
+    );
+
+    await pumpWalletPage(
+      tester,
+      initializeWalletForTest: (provider) async {
+        provider.walletInfoList.add(wallet);
+        provider.walletIndex = 0;
+        provider.walletMiningIndex = 0;
+        provider.buildwallet = false;
+        provider.refresh();
+      },
+    );
+
+    await tester.tap(find.byKey(const ValueKey<String>('wallet_action_send')));
+    await tester.pump();
+
+    expect(toastMessages, [walletBackupPhraseUnavailableMessage]);
+    expect(find.byType(WalletSearchCoin), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tester.pump(const Duration(seconds: 8));
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
