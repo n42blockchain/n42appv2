@@ -229,54 +229,57 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                token.humanBalance,
-                style: AppTypography.body.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: _color(AppThemeKeys.mainTextColor),
-                ),
-              ),
-              SizedBox(height: su.setWidth(8)),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: () => _ignoreToken(token),
-                    child: Text(
-                      s.g_key_token_discovery_ignore,
-                      style: AppTypography.caption.copyWith(
-                        color: _color(AppThemeKeys.itemSubtitleTextColor),
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: su.setWidth(170)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  token.humanBalance,
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: _color(AppThemeKeys.mainTextColor),
                   ),
-                  SizedBox(width: su.setWidth(16)),
-                  GestureDetector(
-                    onTap: () => _addToken(token),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: su.setWidth(20),
-                        vertical: su.setWidth(8),
-                      ),
-                      decoration: BoxDecoration(
-                        color: accent,
-                        borderRadius: BorderRadius.circular(su.setWidth(8)),
-                      ),
+                ),
+                SizedBox(height: su.setWidth(8)),
+                Wrap(
+                  alignment: WrapAlignment.end,
+                  spacing: su.setWidth(16),
+                  children: [
+                    GestureDetector(
+                      onTap: () => _ignoreToken(token),
                       child: Text(
-                        s.g_key_token_discovery_add,
+                        s.g_key_token_discovery_ignore,
                         style: AppTypography.caption.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
+                          color: _color(AppThemeKeys.itemSubtitleTextColor),
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    GestureDetector(
+                      onTap: () => _addToken(token),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: su.setWidth(20),
+                          vertical: su.setWidth(8),
+                        ),
+                        decoration: BoxDecoration(
+                          color: accent,
+                          borderRadius: BorderRadius.circular(su.setWidth(8)),
+                        ),
+                        child: Text(
+                          s.g_key_token_discovery_add,
+                          style: AppTypography.caption.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -308,27 +311,35 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => setState(() {
-              for (final t in _tokens) {
-                t.isSelected = !allSelected;
-              }
-            }),
-            child: Text(
-              allSelected
-                  ? s.g_key_token_discovery_deselect_all
-                  : s.g_key_token_discovery_select_all,
-              style: AppTypography.bodySm.copyWith(
-                color: _color(AppThemeKeys.mainBlueColor),
+          SizedBox(
+            width: su.setWidth(110),
+            child: GestureDetector(
+              onTap: () => setState(() {
+                for (final t in _tokens) {
+                  t.isSelected = !allSelected;
+                }
+              }),
+              child: Text(
+                allSelected
+                    ? s.g_key_token_discovery_deselect_all
+                    : s.g_key_token_discovery_select_all,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.bodySm.copyWith(
+                  color: _color(AppThemeKeys.mainBlueColor),
+                ),
               ),
             ),
           ),
-          const Spacer(),
-          SizedBox(
-            height: su.setWidth(80),
-            child: AppButton(
-              label: s.g_key_token_discovery_add_selected(selectedCount),
-              onPressed: selectedCount > 0 ? _addSelected : null,
+          SizedBox(width: su.setWidth(16)),
+          Expanded(
+            child: SizedBox(
+              height: su.setWidth(80),
+              child: AppButton(
+                label: s.g_key_token_discovery_add_selected(selectedCount),
+                expand: false,
+                onPressed: selectedCount > 0 ? _addSelected : null,
+              ),
             ),
           ),
         ],
