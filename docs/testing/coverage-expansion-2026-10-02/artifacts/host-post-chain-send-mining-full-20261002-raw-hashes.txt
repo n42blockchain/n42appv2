@@ -1,0 +1,4 @@
+4a12ad4ab807861ec9c72ac0f510dde49d5dbc9ce667f5ce99fd2113f584d993  coverage/lcov.info
+068f65a76feeeda1377f8f0be7cb93ea4804e08bbae1a5317abb0a2d1e53778c  /tmp/host-coverage-20261002-after-mining.jsonl
+4a8d0fc02a68bc966c03b5798b9bcc521547e4c39bac2a9ad49ab31f889dd7b1  docs/testing/coverage-expansion-2026-10-02/artifacts/host-post-chain-send-mining-full-20261002-lcov.info.gz
+eadacd3059567cdcd2090ee729344b85035e8a874d17f9b09fa828de519009f9  docs/testing/coverage-expansion-2026-10-02/artifacts/host-post-chain-send-mining-full-20261002-machine.jsonl.gz
