@@ -3,6 +3,16 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
+
+class _WalletAdapter extends Fake implements LegacyWalletActionProviderAdapter {
+  @override
+  List<WalletInfo> walletInfoLsit = [];
+
+  @override
+  int walletMiningIndex = -1;
+}
 
 class _FakeMiningApi extends MiningApi {
   _FakeMiningApi({this.runClientResult}) : super.init();
@@ -56,6 +66,37 @@ void main() {
       expect(events.single.intValue, 3);
     },
   );
+
+  test('miningWalletList keeps only N wallets and fills optional fields', () {
+    final walletAdapter = _WalletAdapter();
+    globalWapAdapter = walletAdapter;
+    walletAdapter.walletInfoLsit = [
+      WalletInfo()
+        ..walletName = 'Validator'
+        ..mainWallet = true
+        ..coinInfo = {
+          'N': {'address': 'n-address'},
+        },
+      WalletInfo()..coinInfo = {'N': <String, dynamic>{}},
+      WalletInfo()
+        ..walletName = 'EVM only'
+        ..coinInfo = {'ETH': <String, dynamic>{}},
+    ];
+
+    final provider = MiningV2Provider();
+    addTearDown(provider.dispose);
+    final wallets = provider.miningWalletList;
+
+    expect(wallets, hasLength(2));
+    expect(
+      wallets.map((wallet) => (wallet.index, wallet.name, wallet.address)),
+      [(0, 'Validator', 'n-address'), (1, 'Account2', '')],
+    );
+    expect(wallets.first.isMainWallet, isTrue);
+    expect(wallets.every((wallet) => wallet.hasCoinN), isTrue);
+    walletAdapter.walletMiningIndex = 2;
+    expect(provider.currentMiningWalletIndex, 2);
+  });
 
   test('runMining marks the provider active when the client starts', () async {
     final provider = MiningV2Provider()
