@@ -90,6 +90,20 @@ bool hasAtMostDecimalPlaces(String input, int decimals) {
   return dotIndex < 0 || mantissa.length - dotIndex - 1 <= decimals;
 }
 
+/// Whether converting [input] to [decimals] decimal places discards no value.
+///
+/// Extra fractional zeroes are equivalent (`1.2300` at 2 decimals), while any
+/// non-zero digit beyond the on-chain precision would be silently truncated.
+bool hasNoNonZeroBeyondDecimalPlaces(String input, int decimals) {
+  if (decimals < 0) return false;
+  final normalized = input.trim();
+  final dotIndex = normalized.indexOf('.');
+  if (dotIndex < 0) return true;
+  final fraction = normalized.substring(dotIndex + 1);
+  return fraction.length <= decimals ||
+      !RegExp(r'[1-9]').hasMatch(fraction.substring(decimals));
+}
+
 /// 限制十进制金额输入的格式与小数位数。
 ///
 /// 支持用户输入中间态（空字符串、`1.`），但拒绝多个小数点、负数和超过

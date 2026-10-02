@@ -66,6 +66,16 @@ void main() {
     });
   });
 
+  group('hasNoNonZeroBeyondDecimalPlaces', () {
+    test('rejects discarded non-zero digits but accepts equivalent zeroes', () {
+      expect(hasNoNonZeroBeyondDecimalPlaces('1.2300001', 2), isFalse);
+      expect(hasNoNonZeroBeyondDecimalPlaces('1.2300000', 2), isTrue);
+      expect(hasNoNonZeroBeyondDecimalPlaces('1.23', 2), isTrue);
+      expect(hasNoNonZeroBeyondDecimalPlaces('1.01', 0), isFalse);
+      expect(hasNoNonZeroBeyondDecimalPlaces('1.00', 0), isTrue);
+    });
+  });
+
   group('doubleAmountToBigInt', () {
     test('matches the double shortest representation exactly', () {
       expect(doubleAmountToBigInt(0.1, 18), BigInt.parse('100000000000000000'));

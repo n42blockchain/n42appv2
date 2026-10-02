@@ -342,7 +342,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       _setAmountError(S.of(context).g_key_134);
       return;
     }
-    if (!hasAtMostDecimalPlaces(value, decimals)) {
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
       _setAmountError(S.of(context).g_key_134);
       return;
     }
