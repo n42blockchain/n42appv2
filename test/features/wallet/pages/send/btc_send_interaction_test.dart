@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_btc.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
@@ -198,6 +199,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(state.toErrorMessage, isNotEmpty);
+    expect(find.byType(WalletBaseSend), findsNothing);
     expect(find.widgetWithText(FilledButton, 'Send'), findsOneWidget);
     expect(trustdartCalls, isNot(contains('signTransaction')));
     expect(tester.takeException(), isNull);
@@ -216,6 +218,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Failed to get data'), findsOneWidget);
+    expect(find.byType(WalletBaseSend), findsNothing);
     expect(find.widgetWithText(FilledButton, 'Send'), findsOneWidget);
     expect(trustdartCalls, isNot(contains('signTransaction')));
     expect(tester.takeException(), isNull);
