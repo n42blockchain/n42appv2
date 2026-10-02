@@ -95,22 +95,31 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
 
   Widget _buildSummaryRow(BuildContext context, String label, String value) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppTypography.bodySm.copyWith(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.ff888888.name,
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.bodySm.copyWith(
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
             ),
           ),
         ),
-        Text(
-          value,
-          style: AppTypography.bodySm.copyWith(
-            color: AppColorTokens.of(context).textPrimary,
-            fontWeight: FontWeight.w600,
+        SizedBox(width: AppSpacing.space4),
+        Expanded(
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.end,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
