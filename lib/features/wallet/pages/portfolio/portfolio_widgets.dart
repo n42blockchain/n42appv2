@@ -44,10 +44,14 @@ class SummaryCard extends StatelessWidget {
             children: [
               Icon(icon, size: 30.sp, color: valueColor),
               SizedBox(width: 10.w),
-              Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  color: textColor.withAlpha(153),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.caption.copyWith(
+                    color: textColor.withAlpha(153),
+                  ),
                 ),
               ),
             ],
