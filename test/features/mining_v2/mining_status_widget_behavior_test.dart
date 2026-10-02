@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
+import 'package:n42_wallet/features/mining_v2/pages/mining_node_detail_page.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 import 'package:n42_wallet/features/mining_v2/widgets/mining_status_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -16,9 +18,12 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    addTearDown(mining.dispose);
     await tester.pumpWidget(
-      wrapForTest(MiningStatusWidget(mpValue: mining), themeMode: themeMode),
+      wrapForTest(
+        MiningStatusWidget(mpValue: mining),
+        themeMode: themeMode,
+        overrides: [miningBridgeProvider.overrideWith((ref) => mining)],
+      ),
     );
     await tester.pumpAndSettle();
   }
@@ -66,6 +71,12 @@ void main() {
 
     expect(mining.disconnectCalls, 1);
     expect(mining.checkCalls, 0);
+
+    await tester.tap(find.byIcon(Icons.arrow_forward_ios));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MiningNodeDetailPage), findsOneWidget);
+    expect(find.text(S.of(context).g_mining_key_47), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
