@@ -253,4 +253,75 @@ void main() {
     expect(host.chatRoutes, isEmpty);
     expect(app.globalProviderContainer.read(unreadCountProvider), 7);
   });
+
+  testWidgets('chat deep link classifier accepts only chat destinations', (
+    tester,
+  ) async {
+    final host = await mount(tester);
+    for (final type in [
+      DeepLinkType.chat,
+      DeepLinkType.user,
+      DeepLinkType.group,
+      DeepLinkType.friendCard,
+    ]) {
+      expect(host.isChatDeepLink(type), isTrue, reason: type.name);
+    }
+    for (final type in DeepLinkType.values.where(
+      (type) => ![
+        DeepLinkType.chat,
+        DeepLinkType.user,
+        DeepLinkType.group,
+        DeepLinkType.friendCard,
+      ].contains(type),
+    )) {
+      expect(host.isChatDeepLink(type), isFalse, reason: type.name);
+    }
+  });
+
+  testWidgets('unsupported pending deep link is ignored by every flush', (
+    tester,
+  ) async {
+    final host = await mount(tester);
+    final unsupported = link(DeepLinkType.walletConnect, 'pairing');
+    await host.routeChatDeepLink(unsupported, navContext: host.context);
+    await host.flushPendingChatDeepLink();
+    await host.flushPendingChatDeepLink();
+    expect(host.chatRoutes, [unsupported]);
+  });
+
+  testWidgets('chat navigation helpers open the chat entry before login', (
+    tester,
+  ) async {
+    final host = await mount(tester);
+
+    Future<void> expectChatEntry(Future<void> Function() open) async {
+      final navigation = open();
+      await tester.pumpAndSettle();
+      expect(find.text('Chat initialization failed'), findsOneWidget);
+      AppGlobals.navigatorKey.currentState!.pop();
+      await tester.pumpAndSettle();
+      await navigation;
+    }
+
+    await expectChatEntry(
+      () => host.openChatConversation(host.context, '!room:example.org'),
+    );
+    await expectChatEntry(
+      () => host.openDirectMessage(host.context, '@user:example.org'),
+    );
+    await expectChatEntry(
+      () => host.openChatUserProfile(host.context, '@user:example.org'),
+    );
+  });
+
+  testWidgets('chat entry does nothing after its host is disposed', (
+    tester,
+  ) async {
+    final host = await mount(tester);
+    final hostContext = host.context;
+    await tester.pumpWidget(const SizedBox.shrink());
+    expect(host.mounted, isFalse);
+    await host.openChatEntry(hostContext);
+    expect(find.text('N42 Chat'), findsNothing);
+  });
 }
