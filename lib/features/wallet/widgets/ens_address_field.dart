@@ -103,6 +103,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   void initState() {
     super.initState();
     widget.controller.addListener(_onTextChanged);
+    _onTextChanged();
   }
 
   @override
