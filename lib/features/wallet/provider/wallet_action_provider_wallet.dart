@@ -315,11 +315,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
     if (_walletInfoLsit.isEmpty) return null;
     if (info == null) {
       //不传 默认移除第一个
-      _walletInfoLsit.removeAt(0);
-      // Clamp walletIndex after removal
-      if (walletIndex >= _walletInfoLsit.length) {
-        walletIndex = _walletInfoLsit.length - 1;
-      }
+      _removeWalletAt(0);
       return null;
     } else {
       final rIndex = _walletInfoLsit.indexWhere((e) => e == info);
@@ -348,16 +344,24 @@ extension WalletActionProviderWallet on WalletActionProvider {
           return rmm;
         }
       }
-      if (rIndex < walletIndex) {
-        walletIndex--;
-        _walletInfoLsit.remove(info);
-        //setWalletIndex(walletIndex);
-      } else {
-        _walletInfoLsit.remove(info);
-      }
+      _removeWalletAt(rIndex);
       saveWalletInfoAll();
       return null;
     }
+  }
+
+  void _removeWalletAt(int index) {
+    _walletInfoLsit.removeAt(index);
+    int adjustIndex(int value) {
+      if (value > index) value--;
+      if (value >= _walletInfoLsit.length) {
+        value = _walletInfoLsit.length - 1;
+      }
+      return value;
+    }
+
+    walletIndex = adjustIndex(walletIndex);
+    walletMiningIndex = adjustIndex(walletMiningIndex);
   }
 
   //isFirst 用户第一次创建钱包 缓存中还未有数据

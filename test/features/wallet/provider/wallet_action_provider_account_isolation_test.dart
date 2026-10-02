@@ -14,7 +14,18 @@ import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _WalletStoragePlatform extends TestFlutterSecureStoragePlatform {
-  _WalletStoragePlatform(super.data);
+  _WalletStoragePlatform(super.data, {this.failingReadKey});
+
+  final String? failingReadKey;
+
+  @override
+  Future<String?> read({
+    required String key,
+    required Map<String, String> options,
+  }) async {
+    if (key == failingReadKey) throw StateError('synthetic storage failure');
+    return super.read(key: key, options: options);
+  }
 }
 
 void main() {
@@ -125,6 +136,50 @@ void main() {
     },
   );
 
+  test('getWalletInfo restores the selected and mining indexes', () async {
+    final firstWallet = WalletInfo(walletName: 'First');
+    final selectedWallet = WalletInfo(walletName: 'Selected');
+    secureStorage = _WalletStoragePlatform({
+      'walletInfo': jsonEncode({
+        accountUuid: {
+          'index': 1,
+          'miningIndex': -1,
+          'wallet': [firstWallet.toJson(), selectedWallet.toJson()],
+        },
+      }),
+    });
+    FlutterSecureStoragePlatform.instance = secureStorage;
+
+    await store.getWalletInfo();
+
+    expect(store.walletInfoLsit.map((wallet) => wallet.walletName), [
+      'First',
+      'Selected',
+    ]);
+    expect(store.walletIndex, 1);
+    expect(store.walletMiningIndex, 1);
+  });
+
+  test('getWalletInfo propagates secure mnemonic read failures', () async {
+    final wallet = WalletInfo(
+      walletName: 'Wallet missing JSON mnemonic',
+      walletUuid: accountUuid,
+      timestamp: 'synthetic-wallet-for-read-error',
+    );
+    secureStorage = _WalletStoragePlatform({
+      'walletInfo': jsonEncode({
+        accountUuid: {
+          'index': 0,
+          'wallet': [wallet.toJson()],
+        },
+      }),
+    }, failingReadKey: 'mnemonic_synthetic-wallet-for-read-error');
+    FlutterSecureStoragePlatform.instance = secureStorage;
+
+    await expectLater(store.getWalletInfo(), throwsA(isA<StateError>()));
+    expect(store.walletInfoLsit.single.walletName, wallet.walletName);
+  });
+
   test('findWallet matches a private key or falls back to mnemonic', () {
     final primary = WalletInfo(walletName: 'Primary')
       ..privateKey = 'private-key-primary'
@@ -168,4 +223,127 @@ void main() {
     expect(await store.deleteWalletInfo(), isNull);
     expect(store.walletIndex, -1);
   });
+
+  test(
+    'deleting a wallet before the selected wallet decrements its index',
+    () async {
+      final first = WalletInfo(walletName: 'First');
+      final removed = WalletInfo(walletName: 'Removed');
+      final selected = WalletInfo(walletName: 'Selected');
+      store.walletInfoLsit.addAll([first, removed, selected]);
+      store.walletIndex = 2;
+      store.walletMiningIndex = 2;
+      secureStorage.data['walletInfo'] = jsonEncode({
+        accountUuid: {
+          'index': 2,
+          'miningIndex': 2,
+          'wallet': [first.toJson(), removed.toJson(), selected.toJson()],
+        },
+      });
+
+      expect(await store.deleteWalletInfo(info: removed), isNull);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(store.walletInfoLsit, [same(first), same(selected)]);
+      expect(store.walletIndex, 1);
+      expect(store.walletMiningIndex, 1);
+      final persisted =
+          jsonDecode(secureStorage.data['walletInfo']!) as Map<String, dynamic>;
+      final account = persisted[accountUuid] as Map<String, dynamic>;
+      expect(account['index'], 1);
+      expect(account['miningIndex'], 1);
+      expect(
+        (account['wallet'] as List<dynamic>).map(
+          (item) => (item as Map<String, dynamic>)['walletName'],
+        ),
+        ['First', 'Selected'],
+      );
+    },
+  );
+
+  test(
+    'deleting a wallet after the selected wallet preserves its index',
+    () async {
+      final selected = WalletInfo(walletName: 'Selected');
+      final removed = WalletInfo(walletName: 'Removed');
+      store.walletInfoLsit.addAll([selected, removed]);
+      store.walletIndex = 0;
+      secureStorage.data['walletInfo'] = jsonEncode({
+        accountUuid: {
+          'index': 0,
+          'miningIndex': 0,
+          'wallet': [selected.toJson(), removed.toJson()],
+        },
+      });
+
+      expect(await store.deleteWalletInfo(info: removed), isNull);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(store.walletInfoLsit, [same(selected)]);
+      expect(store.walletIndex, 0);
+    },
+  );
+
+  test('deleting a wallet outside the list leaves state unchanged', () async {
+    final retained = WalletInfo(walletName: 'Retained');
+    store.walletInfoLsit.add(retained);
+    store.walletIndex = 0;
+    final persistedBefore = secureStorage.data['walletInfo'];
+
+    expect(
+      await store.deleteWalletInfo(info: WalletInfo(walletName: 'Unknown')),
+      isNull,
+    );
+
+    expect(store.walletInfoLsit, [same(retained)]);
+    expect(store.walletIndex, 0);
+    expect(secureStorage.data['walletInfo'], persistedBefore);
+  });
+
+  test('deleting the last selected wallet clamps both indexes', () async {
+    final retained = WalletInfo(walletName: 'Retained');
+    final removed = WalletInfo(walletName: 'Selected');
+    store.walletInfoLsit.addAll([retained, removed]);
+    store.walletIndex = 1;
+    store.walletMiningIndex = 1;
+    secureStorage.data['walletInfo'] = jsonEncode({
+      accountUuid: {
+        'index': 1,
+        'miningIndex': 1,
+        'wallet': [retained.toJson(), removed.toJson()],
+      },
+    });
+
+    expect(await store.deleteWalletInfo(info: removed), isNull);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(store.walletInfoLsit, [same(retained)]);
+    expect(store.walletIndex, 0);
+    expect(store.walletMiningIndex, 0);
+    final persisted =
+        jsonDecode(secureStorage.data['walletInfo']!) as Map<String, dynamic>;
+    final account = persisted[accountUuid] as Map<String, dynamic>;
+    expect(account['index'], 0);
+    expect(account['miningIndex'], 0);
+  });
+
+  test(
+    'checkWalletMnemonic maps invalid and failing SDK responses to -1',
+    () async {
+      final info = WalletInfo(walletName: 'Synthetic')
+        ..mnemonic = 'synthetic test phrase';
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(trustdart, (call) async {
+        expect(call.method, 'checkMnemonic');
+        return false;
+      });
+      expect(await store.checkWalletMnemonic(info), -1);
+
+      messenger.setMockMethodCallHandler(trustdart, (call) async {
+        throw PlatformException(code: 'synthetic-sdk-error');
+      });
+      expect(await store.checkWalletMnemonic(info), -1);
+    },
+  );
 }
