@@ -12,12 +12,14 @@ final _fixtureKey = web3.EthPrivateKey.fromInt(BigInt.one);
 
 class _Client extends Fake implements wc.ReownWalletKit {
   final responses = <(String, wc.JsonRpcResponse)>[];
+  Object? responseFailure;
 
   @override
   Future<void> respondSessionRequest({
     required String topic,
     required wc.JsonRpcResponse response,
   }) async {
+    if (responseFailure != null) throw responseFailure!;
     responses.add((topic, response));
   }
 }
@@ -193,6 +195,60 @@ void main() {
       },
     );
   }
+
+  test(
+    'odd-length hex personal_sign input reports a recoverable error',
+    () async {
+      provider.actionData = _request('personal_sign', [
+        '0xabc',
+        _fixtureKey.address.with0x,
+      ]);
+      await provider.messageSignTap();
+      expect(client.responses, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+      expect(provider.errorMessage, isNotEmpty);
+    },
+  );
+
+  test('invalid typed-data JSON reports a recoverable error', () async {
+    provider.actionData = _request('eth_signTypedData_v4', [
+      _fixtureKey.address.with0x,
+      '{not-json',
+    ]);
+    await provider.messageSignTap();
+    expect(client.responses, isEmpty);
+    expect(provider.walletConnectState, WalletConnectState.error);
+    expect(provider.errorMessage, contains('FormatException'));
+  });
+
+  test(
+    'typed data missing required fields reports a recoverable error',
+    () async {
+      provider.actionData = _request('eth_signTypedData_v4', [
+        _fixtureKey.address.with0x,
+        jsonEncode({'types': {}, 'domain': {}, 'message': {}}),
+      ]);
+      await provider.messageSignTap();
+      expect(client.responses, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+      expect(provider.errorMessage, contains('primaryType'));
+    },
+  );
+
+  test(
+    'failed wallet-kit response is converted to provider error state',
+    () async {
+      client.responseFailure = StateError('client disconnected');
+      provider.actionData = _request('personal_sign', [
+        'hello',
+        _fixtureKey.address.with0x,
+      ]);
+      await provider.messageSignTap();
+      expect(client.responses, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+      expect(provider.errorMessage, contains('client disconnected'));
+    },
+  );
 
   for (final method in [
     'tron_signMessage',

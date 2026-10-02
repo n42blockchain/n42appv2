@@ -102,7 +102,7 @@ mixin WalletConnectSigning
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
-        signClient!.respondSessionRequest(
+        await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
             id: eventData.id,
@@ -134,7 +134,7 @@ mixin WalletConnectSigning
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
-        signClient!.respondSessionRequest(
+        await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
             id: eventData.id,
@@ -169,7 +169,7 @@ mixin WalletConnectSigning
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
-        signClient!.respondSessionRequest(
+        await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
             id: eventData.id,
@@ -181,7 +181,7 @@ mixin WalletConnectSigning
       } else if (eventData.method == "eth_sign") {
         // eth_sign signs arbitrary data and can be exploited to phish
         // transaction signatures. Reject it — DApps should use personal_sign.
-        signClient!.respondSessionRequest(
+        await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
             id: eventData.id,
@@ -214,7 +214,7 @@ mixin WalletConnectSigning
         }
       }
 
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -295,7 +295,7 @@ mixin WalletConnectSigning
       mnemonic: credentials.mnemonic,
       pk: credentials.privateKey,
     );
-    signClient!.respondSessionRequest(
+    await signClient!.respondSessionRequest(
       topic: eventData.topic,
       response: wallet_connect.JsonRpcResponse(
         id: eventData.id,
@@ -358,7 +358,7 @@ mixin WalletConnectSigning
         );
         return;
       }
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -367,7 +367,7 @@ mixin WalletConnectSigning
       );
     } else {
       // solana_signTransaction: return the signed transaction
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -437,7 +437,7 @@ mixin WalletConnectSigning
       );
     }
 
-    signClient!.respondSessionRequest(
+    await signClient!.respondSessionRequest(
       topic: eventData.topic,
       response: wallet_connect.JsonRpcResponse(
         id: eventData.id,
@@ -513,7 +513,7 @@ mixin WalletConnectSigning
         );
         return;
       }
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -522,7 +522,7 @@ mixin WalletConnectSigning
       );
     } else {
       // aptos_signTransaction: return signed bytes
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -570,7 +570,7 @@ mixin WalletConnectSigning
       return;
     }
     // signedResult is base64(flag+sig+pubkey) as returned by native code
-    signClient!.respondSessionRequest(
+    await signClient!.respondSessionRequest(
       topic: eventData.topic,
       response: wallet_connect.JsonRpcResponse(
         id: eventData.id,
@@ -645,7 +645,7 @@ mixin WalletConnectSigning
         );
         return;
       }
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -653,7 +653,7 @@ mixin WalletConnectSigning
         ),
       );
     } else {
-      signClient!.respondSessionRequest(
+      await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
