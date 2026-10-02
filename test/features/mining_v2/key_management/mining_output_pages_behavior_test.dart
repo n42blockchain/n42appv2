@@ -34,6 +34,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(MiningOutputPk), findsOneWidget);
+    expect(
+      tester.widget<MiningOutputPk>(find.byType(MiningOutputPk)).value,
+      validator,
+    );
     expect(tester.takeException(), isNull);
   });
 
