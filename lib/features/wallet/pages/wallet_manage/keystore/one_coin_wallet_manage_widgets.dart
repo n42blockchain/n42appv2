@@ -38,7 +38,8 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     vertical: AppSpacing.space4,
   );
 
-  bool get _hasMnemonic => widget.walletInfo.privateKey == null;
+  bool get _hasMnemonic =>
+      !widget.walletInfo.watchOnly && widget.walletInfo.privateKey == null;
 
   // ── Wallet info section ────────────────────────────────────────────────────
 
@@ -335,6 +336,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   }
 
   void _onSignMessageTap() {
+    if (widget.walletInfo.watchOnly) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -411,7 +413,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
 
   Future<void> _onExportKeystoreTap() async {
     try {
-      if (load == Load.loading) return;
+      if (widget.walletInfo.watchOnly || load == Load.loading) return;
       if (mounted) {
         setState(() => load = Load.loading);
       }
@@ -434,6 +436,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       final flag = await tipsDialog3(
         context,
         _buildNewPasswordDialog(controller, controller2),
+        awaitDismissal: true,
       );
       if (!mounted) return;
       if (flag != true) return;
@@ -470,6 +473,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         context,
         S.of(context).g_key_ex_keystore_pwd_title,
         controller: controller,
+        awaitDismissal: true,
       );
       if (!mounted) return;
       if (flag != true) return;
@@ -606,12 +610,14 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   }
 
   Future<void> _onExportPrivateKeyTap() async {
+    if (widget.walletInfo.watchOnly) return;
     final controller = TextEditingController();
     try {
       final flag = await tipsDialog4(
         context,
         S.of(context).g_key_ex_pk_pwd_title,
         controller: controller,
+        awaitDismissal: true,
       );
       if (!mounted) return;
       if (flag != true) return;

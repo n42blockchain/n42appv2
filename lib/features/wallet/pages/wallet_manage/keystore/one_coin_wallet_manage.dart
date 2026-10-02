@@ -86,6 +86,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
 
   /// 异步派生并展示公钥。公钥是公开信息，失败静默（不阻塞页面、不显示公钥行）。
   Future<void> loadPublicKey() async {
+    if (widget.walletInfo.watchOnly) return;
     try {
       final pub = await Trustdart().getPublicKey(
         widget.model.config.coinType,
@@ -220,9 +221,12 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                 child: Column(
                   children: [
                     _buildWalletInfo(),
-                    if (messageSignSupported(widget.model))
+                    if (!widget.walletInfo.watchOnly &&
+                        messageSignSupported(widget.model))
                       _buildSignMessageEntry(),
-                    if (widget.walletInfo.privateKey == null) _buildExport(),
+                    if (!widget.walletInfo.watchOnly &&
+                        widget.walletInfo.privateKey == null)
+                      _buildExport(),
                   ],
                 ),
               ),
