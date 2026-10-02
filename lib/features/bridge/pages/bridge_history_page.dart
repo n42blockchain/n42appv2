@@ -117,8 +117,10 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 状态 + 时间
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: AppSpacing.space2,
             children: [
               _buildStatusBadge(context, tx.status),
               Text(
