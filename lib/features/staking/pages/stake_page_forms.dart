@@ -239,17 +239,27 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppTypography.bodySm.copyWith(
-            color: AppColorTokens.of(context).textSubtitle,
+        Expanded(
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ),
-        Text(
-          value,
-          style: AppTypography.bodySm.copyWith(
-            fontWeight: FontWeight.w600,
-            color: valueColor ?? AppColorTokens.of(context).success,
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: AppTypography.bodySm.copyWith(
+              fontWeight: FontWeight.w600,
+              color: valueColor ?? AppColorTokens.of(context).success,
+            ),
           ),
         ),
       ],
