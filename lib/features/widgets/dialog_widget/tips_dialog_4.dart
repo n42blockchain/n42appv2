@@ -11,6 +11,7 @@ Future<bool?> tipsDialog4(
   String? title, {
   TextEditingController? controller,
   String? hintText,
+  bool awaitDismissal = false,
 }) async {
   return await tipsDialog3(
     context,
@@ -114,5 +115,6 @@ Future<bool?> tipsDialog4(
         ],
       ),
     ),
+    awaitDismissal: awaitDismissal,
   );
 }
