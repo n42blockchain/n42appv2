@@ -130,16 +130,27 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       setState(() {});
       return;
     }
+    final decimals = (widget.coinModel.coin['decimals'] as num).toInt();
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      amountErrorMessage = S.of(context).g_key_134;
+      setState(() {});
+      return;
+    }
     final BigInt valueBi = ethToWeiString(
       value,
       widget.coinModel.coin['decimals'],
     );
-    if (!widget.coinModel.config.isContract) {
-      if (valueBi + totalGasPrice > widget.coinModel.balance) {
-        amountErrorMessage = S.of(context).g_key_47;
-        setState(() {});
-        return;
-      }
+    if (valueBi <= BigInt.zero) {
+      amountErrorMessage = S.of(context).g_key_46(0);
+      setState(() {});
+      return;
+    }
+    if (valueBi > widget.coinModel.balance ||
+        (!widget.coinModel.config.isContract &&
+            valueBi + totalGasPrice > widget.coinModel.balance)) {
+      amountErrorMessage = S.of(context).g_key_47;
+      setState(() {});
+      return;
     }
     transferValue = valueBi;
     amountErrorMessage = "";
