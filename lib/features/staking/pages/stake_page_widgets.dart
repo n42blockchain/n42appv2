@@ -57,11 +57,15 @@ mixin _StakeViewsMixin
                   children: [
                     Row(
                       children: [
-                        Text(
-                          widget.protocol.name,
-                          style: AppTypography.headline.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                        Expanded(
+                          child: Text(
+                            widget.protocol.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.headline.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         if (widget.protocol.isLiquid) ...[
