@@ -32,6 +32,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/transaction_pr
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
+import 'package:n42_wallet/features/wallet/pages/send/sui_amount_utils.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 
@@ -41,7 +42,16 @@ part 'wallet_chain_send_sui_widgets.dart';
 class WalletChainSendSui extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? initialToAddress;
-  const WalletChainSendSui(this.coinModel, {this.initialToAddress, super.key});
+  final Future<MessageModel?> Function(CoinModel coin)? gasPriceLoader;
+  final Future<List<dynamic>> Function(CoinModel coin)? ownedObjectsLoader;
+
+  const WalletChainSendSui(
+    this.coinModel, {
+    this.initialToAddress,
+    this.gasPriceLoader,
+    this.ownedObjectsLoader,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletChainSendSui> createState() => _WalletChainSendSuiState();

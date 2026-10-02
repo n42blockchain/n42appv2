@@ -90,12 +90,13 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     final coin = widget.coinModel.coin;
     final rpc = coin['custom'] == true ? coin['service'] as String? : null;
     final mm =
-        await tokenViewApi.getGasPrice(
-          coin['blockchainType'],
-          coin['coinType'],
-          isTest: widget.coinModel.isTest,
-          rpc: rpc,
-        ) ??
+        await (widget.gasPriceLoader?.call(widget.coinModel) ??
+            tokenViewApi.getGasPrice(
+              coin['blockchainType'],
+              coin['coinType'],
+              isTest: widget.coinModel.isTest,
+              rpc: rpc,
+            )) ??
         MessageModel.error();
     if (!mounted) return;
     if (!mm.error) {
@@ -110,9 +111,11 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   /// 获取持有的所有可用 SUI 资产 (Coin objects)
   Future<void> getOwnerObjects() async {
-    final List<dynamic> v = await SuiApi(
-      isTest: widget.coinModel.isTest,
-    ).getOwnedObjects(widget.coinModel.address);
+    final List<dynamic> v =
+        await (widget.ownedObjectsLoader?.call(widget.coinModel) ??
+            SuiApi(
+              isTest: widget.coinModel.isTest,
+            ).getOwnedObjects(widget.coinModel.address));
     if (!mounted) return;
     utxos = [
       for (final Map utxo in v)
@@ -213,6 +216,23 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       setError(S.of(context).g_key_134);
       return;
     }
+    final BigInt? parsedValue = suiAmountToBaseUnits(
+      value,
+      (coin['decimals'] as num).toInt(),
+    );
+    if (parsedValue == null) {
+      setError(S.of(context).g_key_134);
+      return;
+    }
+    final BigInt valueBi = parsedValue;
+    if (valueBi == BigInt.zero) {
+      setError(S.of(context).g_key_46(minValue));
+      return;
+    }
+    if (valueBi.isNegative) {
+      setError(S.of(context).g_key_134);
+      return;
+    }
 
     final dValue = double.parse(value);
     if (dValue <= 0 || dValue < minValue) {
@@ -220,7 +240,6 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       return;
     }
 
-    final valueBi = ethToWeiString(value, coin['decimals']);
     if (!coin['isContract'] &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       setError(S.of(context).g_key_47);
