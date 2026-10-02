@@ -41,36 +41,38 @@ class ItemMiningNode extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  countryName,
-                  style: AppTypography.body.copyWith(
-                    color: AppColorTokens.of(context).textPrimary,
-                  ),
-                ),
-                SizedBox(height: AppSpacing.space4),
-                Text(
-                  nodeAddress,
-                  style: AppTypography.body.copyWith(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainGreyColor.name,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    countryName,
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
-                ),
-                SizedBox(height: AppSpacing.space4),
-                Text(
-                  socketUrl,
-                  style: AppTypography.body.copyWith(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainGreyColor.name,
+                  SizedBox(height: AppSpacing.space4),
+                  Text(
+                    nodeAddress,
+                    style: AppTypography.body.copyWith(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainGreyColor.name,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: AppSpacing.space4),
+                  Text(
+                    socketUrl,
+                    style: AppTypography.body.copyWith(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainGreyColor.name,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             isSelected
                 ? Icon(
