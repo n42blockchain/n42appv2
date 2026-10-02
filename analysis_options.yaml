@@ -18,6 +18,8 @@ analyzer:
     # This repository directory is a local mirror only; production resolves
     # n42_chat from the Git dependency in pubspec.yaml.
     - "packages/n42_chat/**"
+    # This local package has its own pubspec and is analyzed from its package root.
+    - "packages/n42_jmt_verify/**"
     # Nested Flutter example/test projects with their own pubspec — should not
     # be analyzed by the host project (would error on their own imports).
     - "packages/webview_flutter_wkwebview/example/**"
