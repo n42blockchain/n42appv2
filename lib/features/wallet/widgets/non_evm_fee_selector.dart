@@ -216,28 +216,30 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
       padding: EdgeInsets.all(AppSpacing.space8),
       margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.local_gas_station,
-                size: ScreenUtil().setWidth(40),
-                color: blueColor,
-              ),
-              SizedBox(width: AppSpacing.space4),
-              Flexible(
-                child: Text(
-                  S.of(context).g_key_t_16,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.body.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: mainText,
+          Expanded(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.local_gas_station,
+                  size: ScreenUtil().setWidth(40),
+                  color: blueColor,
+                ),
+                SizedBox(width: AppSpacing.space4),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_key_t_16,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: mainText,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          SizedBox(width: AppSpacing.space4),
           Text(
             '$formatted $unit',
             style: AppTypography.body.copyWith(color: mainText),
@@ -401,12 +403,25 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: AppTypography.bodySm.copyWith(color: subtitleText)),
-        Text(
-          value,
-          style: AppTypography.bodySm.copyWith(
-            fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
-            color: mainText,
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.bodySm.copyWith(color: subtitleText),
+          ),
+        ),
+        SizedBox(width: AppSpacing.space4),
+        Flexible(
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.end,
+            style: AppTypography.bodySm.copyWith(
+              fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
+              color: mainText,
+            ),
           ),
         ),
       ],

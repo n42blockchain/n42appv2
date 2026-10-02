@@ -41,24 +41,26 @@ class _AlertsOverviewSheet extends StatelessWidget {
             ScreenUtil().setWidth(40) +
             MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SheetDragHandle(subtitleText: subtitleText),
-          SizedBox(height: AppSpacing.space4),
-          Text(
-            S.of(context).g_key_gas_alert,
-            style: AppTypography.headline.copyWith(
-              fontWeight: FontWeight.w600,
-              color: mainText,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SheetDragHandle(subtitleText: subtitleText),
+            SizedBox(height: AppSpacing.space4),
+            Text(
+              S.of(context).g_key_gas_alert,
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
+                color: mainText,
+              ),
             ),
-          ),
-          SizedBox(height: AppSpacing.space4),
-          ...networks.map(
-            (n) => _buildNetworkTile(context, n, mainText, subtitleText),
-          ),
-        ],
+            SizedBox(height: AppSpacing.space4),
+            ...networks.map(
+              (n) => _buildNetworkTile(context, n, mainText, subtitleText),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -71,25 +73,31 @@ class _AlertsOverviewSheet extends StatelessWidget {
   ) {
     final config = alertConfigs[n.symbol];
     final hasAlert = config != null && config.enabled;
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: _NetworkIcon(network: n, size: 40, iconSize: 22),
-      title: Text(n.name, style: AppTypography.body.copyWith(color: mainText)),
-      subtitle: hasAlert
-          ? Text(
-              '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
-              style: AppTypography.caption.copyWith(color: n.color),
-            )
-          : Text(
-              '—',
-              style: AppTypography.caption.copyWith(color: subtitleText),
-            ),
-      trailing: Icon(
-        hasAlert ? Icons.notifications_active : Icons.notifications_none,
-        color: hasAlert ? n.color : subtitleText,
-        size: ScreenUtil().setWidth(36),
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: _NetworkIcon(network: n, size: 40, iconSize: 22),
+        title: Text(
+          n.name,
+          style: AppTypography.body.copyWith(color: mainText),
+        ),
+        subtitle: hasAlert
+            ? Text(
+                '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
+                style: AppTypography.caption.copyWith(color: n.color),
+              )
+            : Text(
+                '—',
+                style: AppTypography.caption.copyWith(color: subtitleText),
+              ),
+        trailing: Icon(
+          hasAlert ? Icons.notifications_active : Icons.notifications_none,
+          color: hasAlert ? n.color : subtitleText,
+          size: ScreenUtil().setWidth(36),
+        ),
+        onTap: () => onNetworkTap(n),
       ),
-      onTap: () => onNetworkTap(n),
     );
   }
 }
