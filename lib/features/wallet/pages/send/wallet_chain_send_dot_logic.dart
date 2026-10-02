@@ -125,10 +125,20 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
       return;
     }
 
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
     final BigInt valueBi = ethToWeiString(
       value,
       widget.coinModel.coin['decimals'],
     );
+    // Reject positive decimal input that truncates to zero planck at DOT's
+    // precision. Otherwise the form considers a zero-value transfer valid.
+    if (valueBi <= BigInt.zero) {
+      _setAmountError(S.of(context).g_key_46(minValue));
+      return;
+    }
     if (!widget.coinModel.config.isContract &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       _setAmountError(S.of(context).g_key_47);

@@ -90,7 +90,12 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     if (double.parse(value) <= 0) return S.of(context).g_key_46(0);
 
     final int decimals = widget.coinModel.coin['decimals'] as int;
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      return S.of(context).g_key_46(0);
+    }
     final BigInt valueBi = ethToWeiString(value, decimals);
+    // Reject a value that converts to zero before allowing a zero-value transfer.
+    if (valueBi <= BigInt.zero) return S.of(context).g_key_46(0);
 
     if (widget.coinModel.config.blockchainType == BlockchainType.Ripple.name) {
       final BigInt reserve = ethToWeiString("10", decimals);

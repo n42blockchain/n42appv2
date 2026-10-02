@@ -28,6 +28,8 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+
 part 'wallet_chain_send_memo_logic.dart';
 part 'wallet_chain_send_memo_widgets.dart';
 

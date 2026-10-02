@@ -209,6 +209,10 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       _setAmountError(S.of(context).g_key_46(0));
       return;
     }
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, 8)) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
     // Quick balance check using last-known fee as estimate.
     final transactionTotal =
         dec.Decimal.parse(value) +

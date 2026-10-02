@@ -44,6 +44,8 @@ import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+
 part 'wallet_chain_send_btc_logic.dart';
 part 'wallet_chain_send_btc_tx.dart';
 part 'wallet_chain_send_btc_widgets.dart';

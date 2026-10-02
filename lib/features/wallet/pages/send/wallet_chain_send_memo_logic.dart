@@ -87,10 +87,21 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       return;
     }
 
+    final decimals = (widget.coinModel.coin['decimals'] as num).toInt();
+    if (!hasNoNonZeroBeyondDecimalPlaces(value, decimals)) {
+      amountError = S.of(context).g_key_134;
+      setState(() {});
+      return;
+    }
     final BigInt valueBi = ethToWeiString(
       value,
       widget.coinModel.coin['decimals'] as int,
     );
+    if (valueBi <= BigInt.zero) {
+      amountError = S.of(context).g_key_46(minValue);
+      setState(() {});
+      return;
+    }
     if (widget.coinModel.coin['isContract'] != true &&
         valueBi + totalGasPrice > widget.coinModel.balance) {
       amountError = S.of(context).g_key_47;

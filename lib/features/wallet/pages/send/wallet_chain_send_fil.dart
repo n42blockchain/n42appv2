@@ -34,6 +34,8 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:decimal/decimal.dart' as dec;
 
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+
 part 'wallet_chain_send_fil_logic.dart';
 part 'wallet_chain_send_fil_widgets.dart';
 
