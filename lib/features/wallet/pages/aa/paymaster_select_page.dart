@@ -24,12 +24,16 @@ class PaymasterSelectPage extends StatefulWidget {
   final PaymasterOption currentOption;
   final int chainId;
   final String chainSymbol;
+  @visibleForTesting
+  final Future<List<PaymasterOption>> Function(int chainId, String symbol)?
+  loadOptionsForTesting;
 
   const PaymasterSelectPage({
     super.key,
     required this.currentOption,
     required this.chainId,
     this.chainSymbol = '',
+    @visibleForTesting this.loadOptionsForTesting,
   });
 
   @override
@@ -54,19 +58,38 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     _loadPaymasterOptions();
   }
 
+  @override
+  void didUpdateWidget(covariant PaymasterSelectPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.chainId == widget.chainId &&
+        oldWidget.chainSymbol == widget.chainSymbol) {
+      return;
+    }
+
+    _selectedOption = widget.currentOption;
+    _availableOptions = [];
+    _loadState = _LoadState.loading;
+    _loadPaymasterOptions(notifyLoading: false);
+  }
+
   String get _resolvedSymbol => widget.chainSymbol.isNotEmpty
       ? widget.chainSymbol
       : _chainSymbolFromId(widget.chainId);
 
-  Future<void> _loadPaymasterOptions() async {
+  Future<void> _loadPaymasterOptions({bool notifyLoading = true}) async {
     final requestId = ++_loadRequestId;
-    setState(() => _loadState = _LoadState.loading);
+    if (notifyLoading) setState(() => _loadState = _LoadState.loading);
     try {
-      final options = await PaymasterService.loadOptions(
-        chainId: widget.chainId,
-        chainSymbol: _resolvedSymbol,
-        apiKey: null,
-      );
+      final options =
+          await (widget.loadOptionsForTesting?.call(
+                widget.chainId,
+                _resolvedSymbol,
+              ) ??
+              PaymasterService.loadOptions(
+                chainId: widget.chainId,
+                chainSymbol: _resolvedSymbol,
+                apiKey: null,
+              ));
       if (mounted && requestId == _loadRequestId) {
         setState(() {
           _availableOptions = options;
