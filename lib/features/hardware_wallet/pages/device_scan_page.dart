@@ -210,10 +210,15 @@ class _DeviceScanPageState extends State<DeviceScanPage>
             ),
             SizedBox(height: su.setWidth(16)),
             Text(
-              provider.isScanning
-                  ? 'Looking for devices...'
-                  : 'No devices found',
-              style: AppTypography.body.copyWith(color: subtitle),
+              provider.errorMessage ??
+                  (provider.isScanning
+                      ? 'Looking for devices...'
+                      : 'No devices found'),
+              style: AppTypography.body.copyWith(
+                color: provider.errorMessage == null
+                    ? subtitle
+                    : AppColorTokens.of(context).danger,
+              ),
             ),
           ],
         ),
