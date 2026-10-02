@@ -82,7 +82,7 @@ dependencies:
   # ============================================
   # MIT License
   cached_network_image: ^3.4.1
-  shimmer: ^3.0.0
+  shimmer: ^4.0.0
   flutter_slidable: ^4.0.3
 
   # ============================================
@@ -230,7 +230,7 @@ dependencies:
   twitter_login: ^4.4.2  # Twitter 登录
   fluwx: ^5.0.0  # 微信 SDK（登录、分享等）
   # OTP 输入框
-  pinput: ^6.0.2
+  pinput: ^7.0.0
   # 生物识别 - 面部/指纹登录
   local_auth: ^3.0.2
 
