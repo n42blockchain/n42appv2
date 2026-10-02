@@ -295,31 +295,31 @@ PODS:
     - GoogleToolboxForMac/Defines (= 4.2.1)
   - GoogleToolboxForMac/StringEncoding (4.2.1):
     - GoogleToolboxForMac/Defines (= 4.2.1)
-  - GoogleUtilities/AppDelegateSwizzler (8.1.3):
+  - GoogleUtilities/AppDelegateSwizzler (8.1.4):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (8.1.3):
+  - GoogleUtilities/Environment (8.1.4):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.3):
+  - GoogleUtilities/Logger (8.1.4):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (8.1.3):
+  - GoogleUtilities/MethodSwizzler (8.1.4):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.1.3):
+  - GoogleUtilities/Network (8.1.4):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (8.1.3)":
+  - "GoogleUtilities/NSData+zlib (8.1.4)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.3)
-  - GoogleUtilities/Reachability (8.1.3):
+  - GoogleUtilities/Privacy (8.1.4)
+  - GoogleUtilities/Reachability (8.1.4):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (8.1.3):
+  - GoogleUtilities/UserDefaults (8.1.4):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMAppAuth (5.0.0):
@@ -533,14 +533,14 @@ PODS:
     - KeychainSwift (~> 20.0.0)
     - Torus-utils (~> 10.0.1)
     - TorusSessionManager (~> 6.1.0)
-  - web3auth_flutter (2.0.1):
+  - web3auth_flutter (7.0.1):
     - Flutter
     - Web3Auth (~> 12.0.1)
   - WebRTC-SDK (150.7871.01)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
-  - WechatOpenSDK-XCFramework (2.0.8)
+  - WechatOpenSDK-XCFramework (2.0.9)
   - YttriumWrapper (0.10.59)
 
 DEPENDENCIES:
@@ -867,7 +867,7 @@ SPEC CHECKSUMS:
   flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113
   flutter_vodozemac: 46015daf07988356d46784d05ab0c7afca00ff36
   flutter_webrtc: 99283145164f482a16bf7122ef407b5d59d43158
-  fluttertoast: fe6790210fdba20801685be946e3a2124b72eef5
+  fluttertoast: 1a1c71b9fbdf68f5fef34d2c548d5038ac51c0ea
   fluwx: 2ef787502fccb3f3596b380509001a8ea71cbbff
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   geocoding_ios: 33776c9ebb98d037b5e025bb0e7537f6dd19646e
@@ -884,7 +884,7 @@ SPEC CHECKSUMS:
   GoogleMLKit: b1eee21a41c57704fe72483b15c85cb2c0cd7444
   GoogleSignIn: e449a40a92e9f2eea56e98b5214d13725dc5a00a
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
-  GoogleUtilities: 4e0c2ad9fa0d0d18b5c4df8bf57b461cba35b0bb
+  GoogleUtilities: db34c1c11c6f2eccb6fab2340cb8ceb1451299dc
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
@@ -955,13 +955,12 @@ SPEC CHECKSUMS:
   walletconnect_pay: f32ca9b9f5c9e29583072b082a6ef7b5d4e12288
   WalletCoreSwiftProtobuf: a4798576a2d309511fc45f81843d348732ec571d
   Web3Auth: 5459b2d5bcdb150c5e84c7229639422cba684814
-  web3auth_flutter: 9c145c6b87ac77f1cbd2a016188ac9ec6162b243
+  web3auth_flutter: 3c8ec5760dccbc0a3e4fc0c09000ae9eaae1c9d2
   WebRTC-SDK: 7dc931c64c00c735a614382f1a59cf65019c3c17
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
-  WechatOpenSDK-XCFramework: 5e86024eb6276280a679402e471bd77606114f3c
+  WechatOpenSDK-XCFramework: 996f8fe4f5ca9d75529546f7246da459ef31aa0d
   YttriumWrapper: 64983f0edbf609b800ac3074010224fc5341aaeb
 
-
-PODFILE CHECKSUM: fcc58a57c56898aade7fc8322465459e0f284248
+PODFILE CHECKSUM: 6dac5200b240178ea27e2ee8bcdd851fc6ce359a
 
 COCOAPODS: 1.17.0
