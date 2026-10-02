@@ -88,4 +88,84 @@ void main() {
       expect(persisted, contains('AstranetWallet'));
     },
   );
+
+  test(
+    'getWalletInfo restores a missing mnemonic from secure storage',
+    () async {
+      const walletId = 'wallet-missing-json-mnemonic';
+      const restoredMnemonic = 'synthetic restored wallet words';
+      const legacyMnemonic = 'synthetic legacy wallet words';
+      final wallet = WalletInfo(
+        walletName: 'Restored wallet',
+        walletUuid: accountUuid,
+        timestamp: walletId,
+      )..mainWallet = true;
+      final legacyWallet = WalletInfo(
+        walletName: 'Legacy wallet',
+        walletUuid: accountUuid,
+      );
+      secureStorage = _WalletStoragePlatform({
+        'walletInfo': jsonEncode({
+          accountUuid: {
+            'index': 0,
+            'wallet': [wallet.toJson(), legacyWallet.toJson()],
+          },
+        }),
+        'mnemonic_$walletId': restoredMnemonic,
+        'mnemonic_${accountUuid}_1': legacyMnemonic,
+      });
+      FlutterSecureStoragePlatform.instance = secureStorage;
+
+      await store.getWalletInfo();
+
+      expect(store.walletInfoLsit, hasLength(2));
+      expect(store.walletInfoLsit.first.walletName, 'Restored wallet');
+      expect(store.walletInfoLsit[0].mnemonic, restoredMnemonic);
+      expect(store.walletInfoLsit[1].mnemonic, legacyMnemonic);
+    },
+  );
+
+  test('findWallet matches a private key or falls back to mnemonic', () {
+    final primary = WalletInfo(walletName: 'Primary')
+      ..privateKey = 'private-key-primary'
+      ..mnemonic = 'primary recovery words';
+    final secondary = WalletInfo(walletName: 'Secondary')
+      ..privateKey = 'private-key-secondary'
+      ..mnemonic = 'secondary recovery words';
+    store.walletInfoLsit.addAll([primary, secondary]);
+
+    expect(
+      store.findWallet(
+        pk: 'private-key-primary',
+        mnemonic: 'secondary recovery words',
+      ),
+      same(primary),
+    );
+    expect(
+      store.findWallet(mnemonic: 'secondary recovery words'),
+      same(secondary),
+    );
+    expect(store.findWallet(pk: 'unknown-private-key'), isNull);
+  });
+
+  test(
+    'deleteWalletInfo removes the default first wallet and clamps index',
+    () async {
+      final removed = WalletInfo(walletName: 'First');
+      final retained = WalletInfo(walletName: 'Second');
+      store.walletInfoLsit.addAll([removed, retained]);
+      store.walletIndex = 1;
+
+      final result = await store.deleteWalletInfo();
+
+      expect(result, isNull);
+      expect(store.walletInfoLsit, [same(retained)]);
+      expect(store.walletIndex, 0);
+    },
+  );
+
+  test('deleteWalletInfo is a no-op when the wallet list is empty', () async {
+    expect(await store.deleteWalletInfo(), isNull);
+    expect(store.walletIndex, -1);
+  });
 }
