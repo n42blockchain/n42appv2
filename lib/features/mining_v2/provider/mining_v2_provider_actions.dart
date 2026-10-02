@@ -296,6 +296,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       } else {
         errorMessage = "Error!";
         depositLoad = Load.finish;
+        notifyListeners();
       }
     } catch (e) {
       ToastUtils.show(e.toString());
