@@ -121,4 +121,77 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  testWidgets('watch-only wallet can still open the receive asset selector', (
+    tester,
+  ) async {
+    final wallet = WalletInfo(
+      walletName: 'Synthetic watch-only wallet',
+      password: 'synthetic-protected-wallet',
+      walletUuid: 'synthetic-watch-only-account',
+      coinInfo: <String, dynamic>{},
+    )..watchOnly = true;
+
+    await pumpWalletPage(
+      tester,
+      initializeWalletForTest: (provider) async {
+        provider.walletInfoList.add(wallet);
+        provider.walletIndex = 0;
+        provider.walletMiningIndex = 0;
+        provider.buildwallet = false;
+        provider.refresh();
+      },
+    );
+
+    await tester.tap(
+      find.byKey(const ValueKey<String>('wallet_action_receive')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(WalletSearchCoin), findsOneWidget);
+    expect(toastMessages, isEmpty);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets(
+    'ENS and smart-account entries explain unavailable EVM features',
+    (tester) async {
+      final wallet = WalletInfo(
+        walletName: 'Synthetic wallet without EVM address',
+        password: 'synthetic-protected-wallet',
+        walletUuid: 'synthetic-no-evm-account',
+        coinInfo: <String, dynamic>{},
+      );
+
+      await pumpWalletPage(
+        tester,
+        initializeWalletForTest: (provider) async {
+          provider.walletInfoList.add(wallet);
+          provider.walletIndex = 0;
+          provider.walletMiningIndex = 0;
+          provider.buildwallet = false;
+          provider.refresh();
+        },
+      );
+
+      await tester.tap(
+        find.byKey(const ValueKey<String>('wallet_feature_ens')),
+      );
+      await tester.pump();
+      await tester.tap(
+        find.byKey(const ValueKey<String>('wallet_feature_smart_account')),
+      );
+      await tester.pump();
+
+      expect(toastMessages, [
+        S.current.g_key_bridge_chain_not_supported,
+        S.current.g_key_bridge_chain_not_supported,
+      ]);
+      expect(find.byType(WalletSearchCoin), findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pump(const Duration(seconds: 8));
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 }
