@@ -255,13 +255,16 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             size: ScreenUtil().setWidth(24),
           ),
           SizedBox(width: AppSpacing.space2),
-          Text(
-            name,
-            style: AppTypography.bodySm.copyWith(
-              color: AppColorTokens.of(context).textPrimary,
+          Expanded(
+            child: Text(
+              name,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.bodySm.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
-          const Spacer(),
+          SizedBox(width: AppSpacing.space2),
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.space2,
