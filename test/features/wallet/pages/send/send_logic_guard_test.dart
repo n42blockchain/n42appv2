@@ -11,8 +11,32 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_logic.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
+
+class _GasPriceApi extends TokenViewApi {
+  String? blockchain;
+  String? coinType;
+  bool? isTest;
+  String? rpc;
+  MessageModel? response;
+
+  @override
+  Future<MessageModel?> getGasPrice(
+    String blockchain,
+    String coinType, {
+    bool isTest = false,
+    String? rpc,
+    String signMessage = '',
+  }) async {
+    this.blockchain = blockchain;
+    this.coinType = coinType;
+    this.isTest = isTest;
+    this.rpc = rpc;
+    return response;
+  }
+}
 
 /// Uses the production validation/navigation state machine. Only external
 /// address resolution, gas estimation, and signing are substituted offline.
@@ -32,9 +56,10 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
   CoinModel? chainModel;
   @override
   final regular = Regular();
+  TokenViewApi? api;
   @override
   TokenViewApi get tokenViewApi =>
-      throw StateError('Unexpected live API access');
+      api ?? (throw StateError('Unexpected live API access'));
   @override
   final toTextEditingController = TextEditingController(text: 'recipient');
   @override
@@ -177,6 +202,112 @@ void main() {
     expect(state.transferValue, BigInt.from(1000000));
     state.amountCheck(value: '1.000001');
     expect(state.amountErrorMessage, isNotEmpty);
+  });
+
+  testWidgets('gas price uses a custom chain test RPC and totals base fee', (
+    tester,
+  ) async {
+    final state = await mount(tester, blockchain: 'Tron');
+    final api = _GasPriceApi()
+      ..response = (MessageModel()..data = BigInt.from(7));
+    state.api = api;
+    state.coinModel
+      ..isTest = true
+      ..coin['custom'] = true
+      ..coin['service_test'] = 'https://test-rpc.example';
+    state.gas = BigInt.from(3);
+
+    await state.getGasPrice();
+
+    expect(api.blockchain, 'Tron');
+    expect(api.coinType, 'ETH');
+    expect(api.isTest, isTrue);
+    expect(api.rpc, 'https://test-rpc.example');
+    expect(state.gasPrice, BigInt.from(7));
+    expect(state.totalGasPrice, BigInt.from(21));
+    expect(state.load, Load.finish);
+  });
+
+  testWidgets('gas price API errors retain message and leave fee calculable', (
+    tester,
+  ) async {
+    final state = await mount(tester, blockchain: 'Tron');
+    state.api = _GasPriceApi()
+      ..response = (MessageModel.error()..data = 'offline');
+    state.gas = BigInt.from(3);
+
+    await state.getGasPrice();
+
+    expect(state.errorMessage, 'offline');
+    expect(state.gasPrice, BigInt.zero);
+    expect(state.totalGasPrice, BigInt.zero);
+    expect(state.load, Load.finish);
+    await tester.pump(const Duration(seconds: 8));
+  });
+
+  testWidgets('missing gas price response falls back to a visible error', (
+    tester,
+  ) async {
+    final state = await mount(tester, blockchain: 'Tron');
+    final api = _GasPriceApi();
+    state.api = api;
+
+    await state.getGasPrice();
+
+    expect(api.blockchain, 'Tron');
+    expect(state.errorMessage, 'null');
+    expect(state.load, Load.finish);
+    await tester.pump(const Duration(seconds: 8));
+  });
+
+  testWidgets('gas price with an empty coin type exits without API call', (
+    tester,
+  ) async {
+    final state = await mount(tester, blockchain: 'Tron');
+    final api = _GasPriceApi();
+    state.api = api;
+    state.coinModel.coin['coinType'] = '';
+
+    await state.getGasPrice();
+
+    expect(state.errorMessage, 'Invalid coin configuration');
+    expect(api.blockchain, isNull);
+    expect(state.load, Load.finish);
+    await tester.pump(const Duration(seconds: 8));
+  });
+
+  testWidgets('layer two gas adds its fixed L1 data fee', (tester) async {
+    final state = await mount(tester, blockchain: 'Ethereum');
+    final api = _GasPriceApi()
+      ..response = (MessageModel()..data = BigInt.from(16));
+    state.api = api;
+    state.gasPrice = BigInt.from(10);
+    state.gas = BigInt.from(100);
+
+    await state.getGasPriceLayer2();
+
+    expect(api.blockchain, 'Ethereum');
+    expect(api.coinType, 'ETH');
+    expect(api.isTest, isFalse);
+    expect(api.rpc, isNotEmpty);
+    expect(state.gasPriceEth, BigInt.from(16));
+    expect(state.totalGasPrice, BigInt.from(210000));
+    expect(state.load, Load.finish);
+  });
+
+  testWidgets('layer two gas error keeps fee response visible', (tester) async {
+    final state = await mount(tester, blockchain: 'Ethereum');
+    final api = _GasPriceApi()
+      ..response = (MessageModel.error()..data = 'l1 unavailable');
+    state.api = api;
+
+    await state.getGasPriceLayer2();
+
+    expect(state.errorMessage, 'l1 unavailable');
+    expect(state.gasPriceEth, BigInt.zero);
+    expect(state.totalGasPrice, BigInt.zero);
+    expect(state.load, Load.finish);
+    await tester.pump(const Duration(seconds: 8));
   });
 
   testWidgets(
