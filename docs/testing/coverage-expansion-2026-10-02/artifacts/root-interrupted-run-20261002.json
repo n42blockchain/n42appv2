@@ -1,0 +1,10 @@
+{
+  "status": "interrupted; not a valid full-suite or coverage result",
+  "test_events": {
+    "test_success": 111,
+    "test_failure": 0,
+    "test_error": 0,
+    "test_skip": 0,
+    "done": false
+  }
+}

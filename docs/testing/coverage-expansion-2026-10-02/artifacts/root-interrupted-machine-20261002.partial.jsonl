@@ -1,0 +1,405 @@
+{"protocolVersion":"0.1.1","runnerVersion":"1.31.0","pid":27242,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":0}
+{"count":396,"time":6,"type":"allSuites"}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55507/l6MOLWNRJfg=/"}}]
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":2745}
+{"group":{"id":2,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":12,"line":null,"column":null,"url":null},"type":"group","time":2746}
+{"group":{"id":3,"suiteID":0,"parentID":2,"name":"Core Business Benchmark","metadata":{"skip":false,"skipReason":null},"testCount":12,"line":20,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"group","time":2747}
+{"test":{"id":4,"name":"Core Business Benchmark (setUpAll)","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":23,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":2747}
+{"testID":4,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":2757}
+{"group":{"id":5,"suiteID":0,"parentID":3,"name":"Core Business Benchmark Wallet Operations","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":32,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"group","time":2757}
+{"test":{"id":6,"name":"Core Business Benchmark Wallet Operations measure_wallet_balance_fetch","suiteID":0,"groupIDs":[2,3,5],"metadata":{"skip":false,"skipReason":null},"line":33,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":2757}
+{"testID":6,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2974}
+{"test":{"id":7,"name":"Core Business Benchmark Wallet Operations measure_transaction_list_load","suiteID":0,"groupIDs":[2,3,5],"metadata":{"skip":false,"skipReason":null},"line":46,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":2974}
+{"testID":7,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3285}
+{"test":{"id":8,"name":"Core Business Benchmark Wallet Operations measure_wallet_address_generation","suiteID":0,"groupIDs":[2,3,5],"metadata":{"skip":false,"skipReason":null},"line":58,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":3287}
+{"testID":8,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3395}
+{"test":{"id":9,"name":"Core Business Benchmark Wallet Operations measure_transaction_signing","suiteID":0,"groupIDs":[2,3,5],"metadata":{"skip":false,"skipReason":null},"line":70,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":3396}
+{"testID":9,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3554}
+{"group":{"id":10,"suiteID":0,"parentID":3,"name":"Core Business Benchmark Chat Operations","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":83,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"group","time":3555}
+{"test":{"id":11,"name":"Core Business Benchmark Chat Operations measure_chat_list_load","suiteID":0,"groupIDs":[2,3,10],"metadata":{"skip":false,"skipReason":null},"line":84,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":3555}
+{"testID":11,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3714}
+{"test":{"id":12,"name":"Core Business Benchmark Chat Operations measure_message_send","suiteID":0,"groupIDs":[2,3,10],"metadata":{"skip":false,"skipReason":null},"line":96,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":3714}
+{"testID":12,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3825}
+{"test":{"id":13,"name":"Core Business Benchmark Chat Operations measure_message_decrypt","suiteID":0,"groupIDs":[2,3,10],"metadata":{"skip":false,"skipReason":null},"line":108,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":3826}
+{"testID":13,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3888}
+{"group":{"id":14,"suiteID":0,"parentID":3,"name":"Core Business Benchmark Mining Operations","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":121,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"group","time":3893}
+{"test":{"id":15,"name":"Core Business Benchmark Mining Operations measure_mining_status_check","suiteID":0,"groupIDs":[2,3,14],"metadata":{"skip":false,"skipReason":null},"line":122,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":3893}
+{"testID":15,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4104}
+{"test":{"id":16,"name":"Core Business Benchmark Mining Operations measure_mining_data_load","suiteID":0,"groupIDs":[2,3,14],"metadata":{"skip":false,"skipReason":null},"line":134,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":4105}
+{"testID":16,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4415}
+{"group":{"id":17,"suiteID":0,"parentID":3,"name":"Core Business Benchmark Data Operations","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":147,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"group","time":4415}
+{"test":{"id":18,"name":"Core Business Benchmark Data Operations measure_local_storage_read","suiteID":0,"groupIDs":[2,3,17],"metadata":{"skip":false,"skipReason":null},"line":148,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":4415}
+{"testID":18,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4453}
+{"test":{"id":19,"name":"Core Business Benchmark Data Operations measure_local_storage_write","suiteID":0,"groupIDs":[2,3,17],"metadata":{"skip":false,"skipReason":null},"line":160,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":4454}
+{"testID":19,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4506}
+{"test":{"id":20,"name":"Core Business Benchmark Data Operations measure_json_parse_large","suiteID":0,"groupIDs":[2,3,17],"metadata":{"skip":false,"skipReason":null},"line":172,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":4507}
+{"testID":20,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4564}
+{"test":{"id":21,"name":"Core Business Benchmark (tearDownAll)","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/core_business_benchmark_test.dart"},"type":"testStart","time":4570}
+{"testID":21,"messageType":"print","message":"\n============================================================","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"BENCHMARK RESULTS: core_business_benchmark","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"Timestamp: 2026-10-02 04:02:22.814286","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"============================================================","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"wallet_balance_fetch:","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"  Min: 212ms","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"  Max: 212ms","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"  Avg: 212.00ms","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"transaction_list_load:","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"  Min: 302ms","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"  Max: 302ms","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"  Avg: 302.00ms","type":"print","time":4598}
+{"testID":21,"messageType":"print","message":"address_generation:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 101ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 101ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 101.00ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"transaction_signing:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 152ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 152ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 152.00ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"chat_list_load:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 153ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 153ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 153.00ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"message_send:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 102ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 102ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 102.00ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"message_decrypt:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 55ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 55ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 55.00ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"mining_status_check:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 204ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 204ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 204.00ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"mining_data_load:","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Min: 303ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Max: 303ms","type":"print","time":4599}
+{"testID":21,"messageType":"print","message":"  Avg: 303.00ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"local_storage_read:","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Min: 27ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Max: 27ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Avg: 27.00ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"local_storage_write:","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Min: 38ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Max: 38ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Avg: 38.00ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"json_parse_large:","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Min: 53ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Max: 53ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"  Avg: 53.00ms","type":"print","time":4600}
+{"testID":21,"messageType":"print","message":"============================================================","type":"print","time":4600}
+{"testID":21,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":4600}
+{"suite":{"id":22,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"suite","time":4897}
+{"test":{"id":23,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart","suiteID":22,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":4897}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55522/20CIkp04dKw=/"}}]
+{"testID":23,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5398}
+{"group":{"id":24,"suiteID":22,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":5398}
+{"group":{"id":25,"suiteID":22,"parentID":24,"name":"Startup Benchmark","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":20,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"group","time":5398}
+{"test":{"id":26,"name":"Startup Benchmark (setUpAll)","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":23,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5399}
+{"testID":26,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5408}
+{"test":{"id":27,"name":"Startup Benchmark measure_cold_start_time","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":33,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5408}
+{"testID":27,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5516}
+{"test":{"id":28,"name":"Startup Benchmark measure_warm_start_time","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":52,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5516}
+{"testID":28,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5571}
+{"test":{"id":29,"name":"Startup Benchmark measure_first_frame_time","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":71,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5571}
+{"testID":29,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5593}
+{"test":{"id":30,"name":"Startup Benchmark measure_dependency_injection_time","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":89,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5594}
+{"testID":30,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5630}
+{"test":{"id":31,"name":"Startup Benchmark measure_firebase_init_time","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":107,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5632}
+{"testID":31,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5743}
+{"test":{"id":32,"name":"Startup Benchmark (tearDownAll)","suiteID":22,"groupIDs":[24,25],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/startup_benchmark_test.dart"},"type":"testStart","time":5744}
+{"testID":32,"messageType":"print","message":"\n============================================================","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"BENCHMARK RESULTS: startup_benchmark","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"Timestamp: 2026-10-02 04:02:25.465456","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"============================================================","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"cold_start:","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"  Min: 103ms","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"  Max: 103ms","type":"print","time":5766}
+{"testID":32,"messageType":"print","message":"  Avg: 103.00ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Median: 103ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"warm_start:","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Min: 53ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Max: 53ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Avg: 53.00ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Median: 53ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"first_frame:","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Min: 19ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Max: 19ms","type":"print","time":5767}
+{"testID":32,"messageType":"print","message":"  Avg: 19.00ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Median: 19ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"di_init:","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Min: 32ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Max: 32ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Avg: 32.00ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Median: 32ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"firebase_init:","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Min: 103ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Max: 103ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Avg: 103.00ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"  Median: 103ms","type":"print","time":5768}
+{"testID":32,"messageType":"print","message":"============================================================","type":"print","time":5768}
+{"testID":32,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5769}
+{"suite":{"id":33,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"suite","time":6075}
+{"test":{"id":34,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart","suiteID":33,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6075}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55535/Ox4apukdmOI=/"}}]
+{"testID":34,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":6637}
+{"group":{"id":35,"suiteID":33,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":6637}
+{"group":{"id":36,"suiteID":33,"parentID":35,"name":"Navigation Benchmark","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":20,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"group","time":6637}
+{"test":{"id":37,"name":"Navigation Benchmark (setUpAll)","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":23,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":6637}
+{"testID":37,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":6646}
+{"test":{"id":38,"name":"Navigation Benchmark measure_home_to_wallet_navigation","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":32,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":6647}
+{"testID":38,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6755}
+{"test":{"id":39,"name":"Navigation Benchmark measure_wallet_to_send_navigation","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":49,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":6755}
+{"testID":39,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6842}
+{"test":{"id":40,"name":"Navigation Benchmark measure_home_to_mining_navigation","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":61,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":6842}
+{"testID":40,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6970}
+{"test":{"id":41,"name":"Navigation Benchmark measure_home_to_chat_navigation","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":73,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":6970}
+{"testID":41,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7078}
+{"test":{"id":42,"name":"Navigation Benchmark measure_settings_page_load","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":85,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":7079}
+{"testID":42,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7143}
+{"test":{"id":43,"name":"Navigation Benchmark measure_back_navigation","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":97,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":7143}
+{"testID":43,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7188}
+{"test":{"id":44,"name":"Navigation Benchmark measure_tab_switch","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":110,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":7188}
+{"testID":44,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":7210}
+{"test":{"id":45,"name":"Navigation Benchmark (tearDownAll)","suiteID":33,"groupIDs":[35,36],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/benchmark/navigation_benchmark_test.dart"},"type":"testStart","time":7210}
+{"testID":45,"messageType":"print","message":"\n============================================================","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"BENCHMARK RESULTS: navigation_benchmark","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"Timestamp: 2026-10-02 04:02:26.704173","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"============================================================","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"home_to_wallet:","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"  Min: 103ms","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"  Max: 103ms","type":"print","time":7234}
+{"testID":45,"messageType":"print","message":"  Avg: 103.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"wallet_to_send:","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Min: 83ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Max: 83ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Avg: 83.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"home_to_mining:","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Min: 123ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Max: 123ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Avg: 123.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"home_to_chat:","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Min: 101ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Max: 101ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Avg: 101.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"settings_load:","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Min: 54ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Max: 54ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Avg: 54.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"back_navigation:","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Min: 34ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Max: 34ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Avg: 34.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"tab_switch:","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Min: 16ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Max: 16ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"  Avg: 16.00ms","type":"print","time":7235}
+{"testID":45,"messageType":"print","message":"============================================================","type":"print","time":7235}
+{"testID":45,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":7236}
+{"suite":{"id":46,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"suite","time":7515}
+{"test":{"id":47,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart","suiteID":46,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":7515}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55548/hRP7cODzuHI=/"}}]
+{"testID":47,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":8745}
+{"group":{"id":48,"suiteID":46,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":18,"line":null,"column":null,"url":null},"type":"group","time":8745}
+{"group":{"id":49,"suiteID":46,"parentID":48,"name":"Localization Tests","metadata":{"skip":false,"skipReason":null},"testCount":12,"line":16,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8745}
+{"group":{"id":50,"suiteID":46,"parentID":49,"name":"Localization Tests Token Name Consistency","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":24,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8745}
+{"test":{"id":51,"name":"Localization Tests Token Name Consistency referral text should use N token, not AST","suiteID":46,"groupIDs":[48,49,50],"metadata":{"skip":false,"skipReason":null},"line":25,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8745}
+{"testID":51,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8771}
+{"test":{"id":52,"name":"Localization Tests Token Name Consistency verification reward text should use N token, not AST","suiteID":46,"groupIDs":[48,49,50],"metadata":{"skip":false,"skipReason":null},"line":40,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8772}
+{"testID":52,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8773}
+{"test":{"id":53,"name":"Localization Tests Token Name Consistency buy N protocol text should not use old AST branding","suiteID":46,"groupIDs":[48,49,50],"metadata":{"skip":false,"skipReason":null},"line":55,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8773}
+{"testID":53,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8790}
+{"group":{"id":54,"suiteID":46,"parentID":49,"name":"Localization Tests Share Texts","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":87,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8790}
+{"test":{"id":55,"name":"Localization Tests Share Texts share referral text should be correct","suiteID":46,"groupIDs":[48,49,54],"metadata":{"skip":false,"skipReason":null},"line":88,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8790}
+{"testID":55,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8791}
+{"test":{"id":56,"name":"Localization Tests Share Texts share via text should exist","suiteID":46,"groupIDs":[48,49,54],"metadata":{"skip":false,"skipReason":null},"line":92,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8791}
+{"testID":56,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8792}
+{"test":{"id":57,"name":"Localization Tests Share Texts share link text should exist","suiteID":46,"groupIDs":[48,49,54],"metadata":{"skip":false,"skipReason":null},"line":96,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8792}
+{"testID":57,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8793}
+{"test":{"id":58,"name":"Localization Tests Share Texts share code text should exist","suiteID":46,"groupIDs":[48,49,54],"metadata":{"skip":false,"skipReason":null},"line":100,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8793}
+{"testID":58,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8794}
+{"group":{"id":59,"suiteID":46,"parentID":49,"name":"Localization Tests Common Texts","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":105,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8794}
+{"test":{"id":60,"name":"Localization Tests Common Texts app title should be N42Wallet","suiteID":46,"groupIDs":[48,49,59],"metadata":{"skip":false,"skipReason":null},"line":106,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8794}
+{"testID":60,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8795}
+{"test":{"id":61,"name":"Localization Tests Common Texts settings text should be correct","suiteID":46,"groupIDs":[48,49,59],"metadata":{"skip":false,"skipReason":null},"line":111,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8795}
+{"testID":61,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8796}
+{"test":{"id":62,"name":"Localization Tests Common Texts theme settings should be correct","suiteID":46,"groupIDs":[48,49,59],"metadata":{"skip":false,"skipReason":null},"line":115,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8796}
+{"testID":62,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8797}
+{"group":{"id":63,"suiteID":46,"parentID":49,"name":"Localization Tests Wallet Texts","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":123,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8797}
+{"test":{"id":64,"name":"Localization Tests Wallet Texts wallet related texts should not contain old token names","suiteID":46,"groupIDs":[48,49,63],"metadata":{"skip":false,"skipReason":null},"line":124,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8797}
+{"testID":64,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8798}
+{"group":{"id":65,"suiteID":46,"parentID":49,"name":"Localization Tests Mining Texts","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":147,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8798}
+{"test":{"id":66,"name":"Localization Tests Mining Texts mining texts should use correct token name","suiteID":46,"groupIDs":[48,49,65],"metadata":{"skip":false,"skipReason":null},"line":148,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8798}
+{"testID":66,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8799}
+{"group":{"id":67,"suiteID":46,"parentID":48,"name":"Localization Widget Tests","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":157,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":8799}
+{"test":{"id":68,"name":"Localization Widget Tests should load English locale correctly","suiteID":46,"groupIDs":[48,67],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":158,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":8799}
+{"testID":68,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9196}
+{"test":{"id":69,"name":"Localization Widget Tests should support locale switching","suiteID":46,"groupIDs":[48,67],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":183,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":9197}
+{"testID":69,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9220}
+{"group":{"id":70,"suiteID":46,"parentID":48,"name":"Supported Locales","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":215,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"group","time":9221}
+{"test":{"id":71,"name":"Supported Locales should support English","suiteID":46,"groupIDs":[48,70],"metadata":{"skip":false,"skipReason":null},"line":216,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":9221}
+{"testID":71,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9223}
+{"test":{"id":72,"name":"Supported Locales should support Traditional Chinese","suiteID":46,"groupIDs":[48,70],"metadata":{"skip":false,"skipReason":null},"line":223,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":9223}
+{"testID":72,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9224}
+{"test":{"id":73,"name":"Supported Locales should support Portuguese (Brazil)","suiteID":46,"groupIDs":[48,70],"metadata":{"skip":false,"skipReason":null},"line":232,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":9224}
+{"testID":73,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9224}
+{"test":{"id":74,"name":"Supported Locales should have valid delegate","suiteID":46,"groupIDs":[48,70],"metadata":{"skip":false,"skipReason":null},"line":241,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/localization_test.dart"},"type":"testStart","time":9225}
+{"testID":74,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":9225}
+{"suite":{"id":75,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"suite","time":14842}
+{"test":{"id":76,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart","suiteID":75,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":14842}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55574/do8pWtStiHw=/"}}]
+{"testID":76,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":15938}
+{"group":{"id":77,"suiteID":75,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":11,"line":null,"column":null,"url":null},"type":"group","time":15939}
+{"group":{"id":78,"suiteID":75,"parentID":77,"name":"Market i18n keys","metadata":{"skip":false,"skipReason":null},"testCount":11,"line":15,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"group","time":15939}
+{"test":{"id":79,"name":"Market i18n keys g_market_high_24h is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":22,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15939}
+{"testID":79,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15964}
+{"test":{"id":80,"name":"Market i18n keys g_market_low_24h is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15964}
+{"testID":80,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15965}
+{"test":{"id":81,"name":"Market i18n keys g_market_fdv is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":32,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15966}
+{"testID":81,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15966}
+{"test":{"id":82,"name":"Market i18n keys g_market_rank is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":36,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15966}
+{"testID":82,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15967}
+{"test":{"id":83,"name":"Market i18n keys g_market_ath is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":41,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15967}
+{"testID":83,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15968}
+{"test":{"id":84,"name":"Market i18n keys g_market_atl is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":46,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15968}
+{"testID":84,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15971}
+{"test":{"id":85,"name":"Market i18n keys g_market_liquidity_score is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":51,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15972}
+{"testID":85,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15973}
+{"test":{"id":86,"name":"Market i18n keys g_market_7d_change is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":55,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15973}
+{"testID":86,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15974}
+{"test":{"id":87,"name":"Market i18n keys g_market_30d_change is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":59,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15974}
+{"testID":87,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15974}
+{"test":{"id":88,"name":"Market i18n keys g_market_depth is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":63,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15975}
+{"testID":88,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15975}
+{"test":{"id":89,"name":"Market i18n keys g_market_no_chart is non-empty","suiteID":75,"groupIDs":[77,78],"metadata":{"skip":false,"skipReason":null},"line":67,"column":5,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/l10n/market_i18n_test.dart"},"type":"testStart","time":15975}
+{"testID":89,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15976}
+{"suite":{"id":90,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"suite","time":17388}
+{"test":{"id":91,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart","suiteID":90,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":17388}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55589/aQ5eOacdI3A=/"}}]
+{"testID":91,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":18475}
+{"group":{"id":92,"suiteID":90,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":6,"line":null,"column":null,"url":null},"type":"group","time":18475}
+{"test":{"id":93,"name":"(setUpAll)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":127,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":18475}
+{"testID":93,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":18483}
+{"test":{"id":94,"name":"HoldingRow no overflow (light)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":179,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":18483}
+{"testID":94,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18941}
+{"test":{"id":95,"name":"MoverRow no overflow (light)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":190,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":18941}
+{"testID":95,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18999}
+{"test":{"id":96,"name":"SummaryCard pair no overflow (light)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":201,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":18999}
+{"testID":96,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19046}
+{"test":{"id":97,"name":"HoldingRow no overflow (dark)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":179,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":19046}
+{"testID":97,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19097}
+{"test":{"id":98,"name":"MoverRow no overflow (dark)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":190,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":19097}
+{"testID":98,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19161}
+{"test":{"id":99,"name":"SummaryCard pair no overflow (dark)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":201,"root_column":5,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/portfolio_overflow_test.dart"},"type":"testStart","time":19161}
+{"testID":99,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19209}
+{"test":{"id":100,"name":"(tearDownAll)","suiteID":90,"groupIDs":[92],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":19209}
+{"testID":100,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":19210}
+{"suite":{"id":101,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/screenshots/market_regression_test.dart"},"type":"suite","time":22292}
+{"test":{"id":102,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/screenshots/market_regression_test.dart","suiteID":101,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":22292}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55608/JYoqyD1tVio=/"}}]
+{"testID":102,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":23601}
+{"group":{"id":103,"suiteID":101,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":23602}
+{"test":{"id":104,"name":"market page renders without exceptions (dark)","suiteID":101,"groupIDs":[103],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":100,"root_column":3,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/market_regression_test.dart"},"type":"testStart","time":23602}
+{"testID":104,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24264}
+{"test":{"id":105,"name":"market page renders without exceptions (light)","suiteID":101,"groupIDs":[103],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":108,"root_column":3,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/market_regression_test.dart"},"type":"testStart","time":24264}
+{"testID":105,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24318}
+{"suite":{"id":106,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"suite","time":25661}
+{"test":{"id":107,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart","suiteID":106,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":25661}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55628/caTWZPXlYi4=/"}}]
+{"testID":107,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":26931}
+{"group":{"id":108,"suiteID":106,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":8,"line":null,"column":null,"url":null},"type":"group","time":26931}
+{"test":{"id":109,"name":"(setUpAll)","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":20,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":26931}
+{"testID":109,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":26955}
+{"test":{"id":110,"name":"ar limit-form at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":26955}
+{"testID":110,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30577}
+{"test":{"id":111,"name":"ar import-backup at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":30582}
+{"testID":111,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30832}
+{"test":{"id":112,"name":"de limit-form at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":30833}
+{"testID":112,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30931}
+{"test":{"id":113,"name":"de import-backup at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":30931}
+{"testID":113,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31005}
+{"test":{"id":114,"name":"ur limit-form at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":31005}
+{"testID":114,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31099}
+{"test":{"id":115,"name":"ur import-backup at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":31099}
+{"testID":115,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31169}
+{"test":{"id":116,"name":"sw limit-form at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":31169}
+{"testID":116,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31252}
+{"test":{"id":117,"name":"sw import-backup at narrow width and larger text","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":39,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/localized_wallet_screenshot_test.dart"},"type":"testStart","time":31252}
+{"testID":117,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31316}
+{"test":{"id":118,"name":"(tearDownAll)","suiteID":106,"groupIDs":[108],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":31316}
+{"testID":118,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":31318}
+{"suite":{"id":119,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"suite","time":32856}
+{"test":{"id":120,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart","suiteID":119,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":32857}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55649/yUoWmnghSJo=/"}}]
+{"testID":120,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":34078}
+{"group":{"id":121,"suiteID":119,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":12,"line":null,"column":null,"url":null},"type":"group","time":34078}
+{"test":{"id":122,"name":"(setUpAll)","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":51,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":34078}
+{"testID":122,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":34097}
+{"test":{"id":123,"name":"profile light has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":34097}
+{"testID":123,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35065}
+{"test":{"id":124,"name":"swap-confirm light has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35065}
+{"testID":124,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35159}
+{"test":{"id":125,"name":"activity light has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35159}
+{"testID":125,"messageType":"print","message":"[CurrentUser] WARN: _loadFromStorage error: MissingPluginException(No implementation found for method read on channel plugins.it_nomads.com/flutter_secure_storage)","type":"print","time":35303}
+{"testID":125,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35310}
+{"test":{"id":126,"name":"asset-history light has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35310}
+{"testID":126,"messageType":"print","message":"[CurrentUser] WARN: _loadFromStorage error: MissingPluginException(No implementation found for method read on channel plugins.it_nomads.com/flutter_secure_storage)","type":"print","time":35481}
+{"testID":126,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35488}
+{"test":{"id":127,"name":"limit-form light has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35488}
+{"testID":127,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35670}
+{"test":{"id":128,"name":"limit-orders light has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35671}
+{"testID":128,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35748}
+{"test":{"id":129,"name":"profile dark has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35749}
+{"testID":129,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35851}
+{"test":{"id":130,"name":"swap-confirm dark has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35851}
+{"testID":130,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35913}
+{"test":{"id":131,"name":"activity dark has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35914}
+{"testID":131,"messageType":"print","message":"[CurrentUser] WARN: _loadFromStorage error: MissingPluginException(No implementation found for method read on channel plugins.it_nomads.com/flutter_secure_storage)","type":"print","time":35979}
+{"testID":131,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35984}
+{"test":{"id":132,"name":"asset-history dark has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":35984}
+{"testID":132,"messageType":"print","message":"[CurrentUser] WARN: _loadFromStorage error: MissingPluginException(No implementation found for method read on channel plugins.it_nomads.com/flutter_secure_storage)","type":"print","time":36064}
+{"testID":132,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36069}
+{"test":{"id":133,"name":"limit-form dark has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":36069}
+{"testID":133,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36150}
+{"test":{"id":134,"name":"limit-orders dark has no layout errors","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":61,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/wallet_audit_screenshot_test.dart"},"type":"testStart","time":36150}
+{"testID":134,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36218}
+{"test":{"id":135,"name":"(tearDownAll)","suiteID":119,"groupIDs":[121],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":36218}
+{"testID":135,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":36220}
+{"suite":{"id":136,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart"},"type":"suite","time":37718}
+{"test":{"id":137,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart","suiteID":136,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":37718}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55668/-fHtUVizzlM=/"}}]
+{"testID":137,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":38992}
+{"group":{"id":138,"suiteID":136,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":38993}
+{"test":{"id":139,"name":"(setUpAll)","suiteID":136,"groupIDs":[138],"metadata":{"skip":false,"skipReason":null},"line":16,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart"},"type":"testStart","time":38993}
+{"testID":139,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":39010}
+{"test":{"id":140,"name":"phishing warning light text scale 1.0","suiteID":136,"groupIDs":[138],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":19,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart"},"type":"testStart","time":39010}
+{"testID":140,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39648}
+{"test":{"id":141,"name":"phishing warning light text scale 1.6","suiteID":136,"groupIDs":[138],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":19,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart"},"type":"testStart","time":39648}
+{"testID":141,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39716}
+{"test":{"id":142,"name":"phishing warning dark text scale 1.0","suiteID":136,"groupIDs":[138],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":19,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart"},"type":"testStart","time":39717}
+{"testID":142,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39776}
+{"test":{"id":143,"name":"phishing warning dark text scale 1.6","suiteID":136,"groupIDs":[138],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":19,"root_column":7,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/security_audit_screenshot_test.dart"},"type":"testStart","time":39776}
+{"testID":143,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":39836}
+{"test":{"id":144,"name":"(tearDownAll)","suiteID":136,"groupIDs":[138],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":39836}
+{"testID":144,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":39838}
+{"suite":{"id":145,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/screenshots/home_screenshot_test.dart"},"type":"suite","time":41682}
+{"test":{"id":146,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/screenshots/home_screenshot_test.dart","suiteID":145,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":41683}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:55702/ouWgAonMfs8=/"}}]
+{"testID":146,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":59544}
+{"group":{"id":147,"suiteID":145,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":15,"line":null,"column":null,"url":null},"type":"group","time":59544}
+{"test":{"id":148,"name":"(setUpAll)","suiteID":145,"groupIDs":[147],"metadata":{"skip":false,"skipReason":null},"line":289,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/home_screenshot_test.dart"},"type":"testStart","time":59544}
+{"testID":148,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":59555}
+{"test":{"id":149,"name":"cv light","suiteID":145,"groupIDs":[147],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":306,"root_column":3,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/screenshots/home_screenshot_test.dart"},"type":"testStart","time":59555}

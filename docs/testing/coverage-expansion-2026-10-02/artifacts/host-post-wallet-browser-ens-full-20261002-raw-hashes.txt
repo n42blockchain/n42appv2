@@ -1,0 +1,4 @@
+e3780d5cc38f8709b849140321be456f5251c9e5035e9aa5a5743c47f5d33d1f  coverage/lcov.info
+f1d84c7f67824f6731c08881904c63d8c8175e8cbc934d7a661542b3e12b89e7  /tmp/host-coverage-20261002-final.jsonl
+f24102f81479322971617843d8927c7716958976a90f8407b9cf25922bba5527  docs/testing/coverage-expansion-2026-10-02/artifacts/host-post-wallet-browser-ens-full-20261002-lcov.info.gz
+aeb15c7d922d31a2ec2131f72de4421380f8934e0cb3c72f04c349b71740d1a4  docs/testing/coverage-expansion-2026-10-02/artifacts/host-post-wallet-browser-ens-full-20261002-machine.jsonl.gz
