@@ -26,8 +26,13 @@ import 'session_key_sheets.dart';
 /// - Create new keys via a guided wizard with preset permission templates
 class SessionKeyManagePage extends StatefulWidget {
   final SmartAccount account;
+  final SessionKeyRepository? repositoryForTesting;
 
-  const SessionKeyManagePage({super.key, required this.account});
+  const SessionKeyManagePage({
+    super.key,
+    required this.account,
+    this.repositoryForTesting,
+  });
 
   @override
   State<SessionKeyManagePage> createState() => _SessionKeyManagePageState();
@@ -41,9 +46,8 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
     length: 3,
     vsync: this,
   );
-  late final SessionKeyRepository _repository = SessionKeyRepository(
-    AppDatabase(),
-  );
+  late final SessionKeyRepository _repository =
+      widget.repositoryForTesting ?? SessionKeyRepository(AppDatabase());
   bool _isLoading = true;
   List<SessionKeyData> _sessionKeys = [];
 
@@ -117,6 +121,16 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
       widget.account.chainId,
     );
     if (!mounted) return;
+
+    if (!ok) {
+      final currentIndex = _sessionKeys.indexWhere(
+        (item) => item.keyAddress == key.keyAddress,
+      );
+      if (currentIndex >= 0 &&
+          _sessionKeys[currentIndex].status == SessionKeyStatus.revoked) {
+        setState(() => _sessionKeys[currentIndex] = key);
+      }
+    }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
