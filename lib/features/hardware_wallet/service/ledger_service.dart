@@ -113,6 +113,9 @@ class LedgerService {
         },
         onError: (error) {
           AppLogger.w('LedgerService', 'scan error: $error');
+          if (_connectionState == HardwareWalletConnectionState.scanning) {
+            _updateConnectionState(HardwareWalletConnectionState.error);
+          }
         },
         onDone: () {
           if (_connectionState == HardwareWalletConnectionState.scanning) {
