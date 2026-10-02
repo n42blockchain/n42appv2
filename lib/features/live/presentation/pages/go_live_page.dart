@@ -24,15 +24,30 @@ import '../widgets/live_player_view.dart';
 /// 开播端：申请摄像头/麦克风权限 → 创建 Matrix 直播间 → 以主播身份发布
 /// 摄像头 + 麦克风。主播同屏可见观众弹幕与在线人数；roomId 可分享给观众。
 class GoLivePage extends StatefulWidget {
-  const GoLivePage({super.key});
+  const GoLivePage({
+    super.key,
+    @visibleForTesting this.chatServiceForTesting,
+    @visibleForTesting this.videoServiceForTesting,
+    @visibleForTesting this.permissionRequestForTesting,
+  });
+
+  @visibleForTesting
+  final LiveChatService? chatServiceForTesting;
+
+  @visibleForTesting
+  final LiveVideoService? videoServiceForTesting;
+
+  @visibleForTesting
+  final Future<Map<Permission, PermissionStatus>> Function()?
+  permissionRequestForTesting;
 
   @override
   State<GoLivePage> createState() => _GoLivePageState();
 }
 
 class _GoLivePageState extends State<GoLivePage> {
-  final LiveVideoService _video = LiveVideoService();
-  final LiveChatService _chat = LiveChatService();
+  late final LiveVideoService _video;
+  late final LiveChatService _chat;
   Stream<List<LiveDanmu>>? _danmu;
   Timer? _heartbeat;
   final LiveBeautySettingsStore _beautyStore = LiveBeautySettingsStore();
@@ -48,6 +63,8 @@ class _GoLivePageState extends State<GoLivePage> {
   @override
   void initState() {
     super.initState();
+    _video = widget.videoServiceForTesting ?? LiveVideoService();
+    _chat = widget.chatServiceForTesting ?? LiveChatService();
     unawaited(
       _beautyStore.load().then((settings) {
         if (mounted) setState(() => _beauty = settings);
@@ -64,10 +81,9 @@ class _GoLivePageState extends State<GoLivePage> {
     });
     try {
       // 1. 权限
-      final statuses = await [
-        Permission.camera,
-        Permission.microphone,
-      ].request();
+      final statuses =
+          await (widget.permissionRequestForTesting?.call() ??
+              [Permission.camera, Permission.microphone].request());
       // 权限弹窗耗时期间用户可能已退出页面；此刻尚未创建任何资源，直接放弃。
       if (!mounted) return;
       final granted = statuses.values.every((s) => s.isGranted);
@@ -103,7 +119,11 @@ class _GoLivePageState extends State<GoLivePage> {
         videoError = '$e';
         // join 可能已创建了部分本地 LiveKit 状态；尽力清理，但保留该 service
         // 实例供页面最终 dispose，不影响已经建立的 Matrix 直播层。
-        await _video.leave();
+        try {
+          await _video.leave();
+        } catch (_) {
+          // LiveKit 清理失败不应终止已建立的 Matrix 直播；dispose 时仍会再兜底。
+        }
       }
       // 视频尝试完成、心跳启动前用户退出：按实际加入状态清理。
       if (!mounted) {
