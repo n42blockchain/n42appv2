@@ -99,6 +99,7 @@ class StakingProvider extends ChangeNotifier {
     if (_selectedProtocol == null) return;
 
     _state = StakingState.loading;
+    _errorMessage = null;
     notifyListeners();
 
     try {
@@ -143,6 +144,7 @@ class StakingProvider extends ChangeNotifier {
     StakingChainType chainType,
   ) async {
     _state = StakingState.loading;
+    _errorMessage = null;
     notifyListeners();
 
     try {
@@ -219,6 +221,7 @@ class StakingProvider extends ChangeNotifier {
     Map<StakingChainType, String> addresses,
   ) async {
     _state = StakingState.loading;
+    _errorMessage = null;
     notifyListeners();
 
     List<StakingPosition> allPositions = [];
