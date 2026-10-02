@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072946
+version: 2.4.8+2026072947
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -47,6 +47,7 @@ dependencies:
   dio: ^5.11.1
   # NewsApi 解析 RSS feed（已在 transitive 树里，这里显式声明以避免依赖飘移）
   xml: ^6.6.1
+  unorm_dart: ^0.3.2
   connectivity_plus: ^7.3.1
   cached_network_image: ^3.4.1
   webview_flutter: ^4.14.1

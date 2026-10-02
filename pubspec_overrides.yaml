@@ -1,4 +1,6 @@
 dependency_overrides:
+  # The pinned Chat Git source uses the API-compatible NFC implementation.
+  unorm_dart: ^0.3.2
   audioplayers_darwin:
     path: packages/audioplayers_darwin
   webview_flutter_wkwebview:
