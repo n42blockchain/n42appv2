@@ -64,7 +64,15 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: _labelStyle(context)),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: _labelStyle(context),
+          ),
+        ),
         Expanded(
           child: Text(
             value,
@@ -90,7 +98,14 @@ Widget coinInfoStatRowColored(BuildContext context, String label, double pct) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: _labelStyle(context)),
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: _labelStyle(context),
+          ),
+        ),
         Text(
           fmtPct(pct),
           style: AppTypography.body.copyWith(

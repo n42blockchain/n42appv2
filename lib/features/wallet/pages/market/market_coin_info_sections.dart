@@ -55,7 +55,7 @@ Widget buildCoinInfoHeader(
               padding: EdgeInsets.all(AppSpacing.space2),
               child: ImageNetWork(
                 imageUrl: coin['image']?.toString() ?? '',
-                placeholder: 'assets/img/list.default.png',
+                placeholder: 'assets/img/list_default.png',
               ),
             ),
           ),

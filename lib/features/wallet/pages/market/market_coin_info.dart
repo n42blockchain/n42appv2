@@ -23,7 +23,14 @@ import 'market_coin_info_sections.dart';
 
 class MarketCoinInfo extends ConsumerStatefulWidget {
   final Map<String, dynamic> coin;
-  const MarketCoinInfo(this.coin, {super.key});
+  @visibleForTesting
+  final Future<dynamic> Function(String coinId)? loadCoinInfoForTesting;
+
+  const MarketCoinInfo(
+    this.coin, {
+    super.key,
+    @visibleForTesting this.loadCoinInfoForTesting,
+  });
 
   @override
   ConsumerState<MarketCoinInfo> createState() => _MarketCoinInfoState();
@@ -221,7 +228,9 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       return;
     }
     try {
-      final info = await ref.read(wapBridgeProvider).getCoinsBaseInfo(geckoId);
+      final info =
+          await (widget.loadCoinInfoForTesting?.call(geckoId) ??
+              ref.read(wapBridgeProvider).getCoinsBaseInfo(geckoId));
       if (!mounted || requestId != _infoGeneration || _coinId != geckoId) {
         return;
       }
@@ -238,7 +247,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
       _fetchChartData();
     } catch (e) {
       AppLogger.w('MarketCoinInfo', 'failed to fetch base info: $e');
-      if (mounted) {
+      if (mounted && requestId == _infoGeneration && _coinId == geckoId) {
         setState(() => _infoLoad = Load.error);
       }
     }
