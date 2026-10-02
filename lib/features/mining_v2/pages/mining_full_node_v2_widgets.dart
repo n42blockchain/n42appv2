@@ -17,11 +17,15 @@ mixin _MiningFullNodeV2WidgetsMixin
           ),
         ),
         SizedBox(width: AppSpacing.space4),
-        Text(
-          title,
-          style: AppTypography.body.copyWith(
-            color: AppColorTokens.of(context).textPrimary,
-            fontWeight: FontWeight.w600,
+        Expanded(
+          child: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
