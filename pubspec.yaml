@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072957
+version: 2.4.8+2026072958
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -90,7 +90,7 @@ dependencies:
   photo_manager: ^3.12.0
   file_picker: ^11.0.3
   video_compress: ^3.1.4
-  video_player: ^2.14.0
+  video_player: ^2.14.1
   pro_image_editor: ^13.5.0
   open_filex: ^4.7.0
   share_plus: ^12.0.2
@@ -200,6 +200,7 @@ dev_dependencies:
   bloc_test: ^10.0.0
   sqflite_common_ffi: ^2.3.7+1
   webview_flutter_platform_interface: ^2.15.1
+  video_player_platform_interface: ^6.9.0
 
 flutter:
   # Keep native plugin resolution consistent with the validated iOS release.
