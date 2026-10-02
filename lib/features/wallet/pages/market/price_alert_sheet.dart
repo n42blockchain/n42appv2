@@ -196,15 +196,18 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         size: 22.sp,
                       ),
                       SizedBox(width: 8.w),
-                      Text(
-                        S
-                            .of(context)
-                            .g_alert_title(widget.symbol.toUpperCase()),
-                        style: AppTypography.headline.copyWith(
-                          color: textColor,
+                      Expanded(
+                        child: Text(
+                          S
+                              .of(context)
+                              .g_alert_title(widget.symbol.toUpperCase()),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.headline.copyWith(
+                            color: textColor,
+                          ),
                         ),
                       ),
-                      const Spacer(),
                       if (_existing != null)
                         TextButton(
                           onPressed: _saving ? null : _delete,
@@ -245,22 +248,26 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      _DirectionChip(
-                        label: S.of(context).g_alert_above,
-                        selected: _alertAbove,
-                        onTap: () => setState(() => _alertAbove = true),
-                        accentColor: accentColor,
-                        textColor: textColor,
-                        dividerColor: dividerColor,
+                      Expanded(
+                        child: _DirectionChip(
+                          label: S.of(context).g_alert_above,
+                          selected: _alertAbove,
+                          onTap: () => setState(() => _alertAbove = true),
+                          accentColor: accentColor,
+                          textColor: textColor,
+                          dividerColor: dividerColor,
+                        ),
                       ),
                       SizedBox(width: 10.w),
-                      _DirectionChip(
-                        label: S.of(context).g_alert_below,
-                        selected: !_alertAbove,
-                        onTap: () => setState(() => _alertAbove = false),
-                        accentColor: accentColor,
-                        textColor: textColor,
-                        dividerColor: dividerColor,
+                      Expanded(
+                        child: _DirectionChip(
+                          label: S.of(context).g_alert_below,
+                          selected: !_alertAbove,
+                          onTap: () => setState(() => _alertAbove = false),
+                          accentColor: accentColor,
+                          textColor: textColor,
+                          dividerColor: dividerColor,
+                        ),
                       ),
                     ],
                   ),
@@ -428,11 +435,15 @@ class _DirectionChip extends StatelessWidget {
                 Icon(Icons.check, size: 28.sp, color: accentColor),
                 SizedBox(width: AppSpacing.space2),
               ],
-              Text(
-                label,
-                style: AppTypography.body.copyWith(
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                  color: selected ? accentColor : textColor.withAlpha(153),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.body.copyWith(
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    color: selected ? accentColor : textColor.withAlpha(153),
+                  ),
                 ),
               ),
             ],
