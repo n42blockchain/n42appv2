@@ -93,10 +93,13 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              QrImageView(
-                data: address.isEmpty ? '0x0' : address,
-                version: QrVersions.auto,
-                size: 200.0,
+              SizedBox.square(
+                dimension: 200,
+                child: QrImageView(
+                  data: address.isEmpty ? '0x0' : address,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
               ),
               const SizedBox(height: 12),
               SelectableText(
