@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/evm_transaction_hash_input.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/evm_transaction_requests.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
@@ -31,6 +32,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 part 'transaction_detail_eth_sections.dart';
+
+typedef EthDetailLookupForTesting =
+    Future<MessageModel> Function(
+      String txHash, {
+      required String? coinType,
+      required bool isTest,
+    });
+
+typedef EthDetailRecordLoaderForTesting =
+    Future<List<TransationRecordModel>> Function(String txHash, String address);
 
 bool _isReceiptSuccess(dynamic status) {
   if (status == null) return false;
@@ -53,7 +64,23 @@ bool shouldContinueEthReceiptPolling({
 class TransactionDetailEth extends StatefulWidget {
   final String txHash;
   final CoinModel coinModel;
-  const TransactionDetailEth(this.coinModel, this.txHash, {super.key});
+  @visibleForTesting
+  final EthDetailLookupForTesting? transactionLookupForTesting;
+
+  @visibleForTesting
+  final EthDetailLookupForTesting? receiptLookupForTesting;
+
+  @visibleForTesting
+  final EthDetailRecordLoaderForTesting? recordLoaderForTesting;
+
+  const TransactionDetailEth(
+    this.coinModel,
+    this.txHash, {
+    this.transactionLookupForTesting,
+    this.receiptLookupForTesting,
+    this.recordLoaderForTesting,
+    super.key,
+  });
 
   @override
   State<TransactionDetailEth> createState() => _TransactionDetailEthState();
@@ -133,10 +160,13 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       return;
     }
     if (mounted) setState(() => load = Load.loading);
-    final trModelList = await db.selectTransationRecordTxHash(
-      _txHash,
-      widget.coinModel.address,
-    );
+    final recordLoader = widget.recordLoaderForTesting;
+    final trModelList = recordLoader == null
+        ? await db.selectTransationRecordTxHash(
+            _txHash,
+            widget.coinModel.address,
+          )
+        : await recordLoader(_txHash, widget.coinModel.address.toString());
     if (trModelList.isNotEmpty) {
       trm = trModelList[0];
     } else {
@@ -163,12 +193,19 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   bool owner = true; // 是否是自己的交易信息
 
   Future<bool> getTransactionByHash() async {
-    final rData = await fetchEvmTransactionByHash(
-      ethAPI,
-      txHash: _txHash,
-      coinType: widget.coinModel.config.coinType,
-      isTest: widget.coinModel.isTest,
-    );
+    final lookup = widget.transactionLookupForTesting;
+    final rData = lookup == null
+        ? await fetchEvmTransactionByHash(
+            ethAPI,
+            txHash: _txHash,
+            coinType: widget.coinModel.config.coinType,
+            isTest: widget.coinModel.isTest,
+          )
+        : await lookup(
+            _txHash,
+            coinType: widget.coinModel.config.coinType,
+            isTest: widget.coinModel.isTest,
+          );
     if (rData.error != false) {
       errorMessage = rData.data.toString();
       owner = false;
@@ -326,12 +363,19 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   }
 
   Future<void> getTransactionReceipt() async {
-    final rData = await fetchEvmTransactionReceipt(
-      ethAPI,
-      txHash: _txHash,
-      coinType: widget.coinModel.config.coinType,
-      isTest: widget.coinModel.isTest,
-    );
+    final lookup = widget.receiptLookupForTesting;
+    final rData = lookup == null
+        ? await fetchEvmTransactionReceipt(
+            ethAPI,
+            txHash: _txHash,
+            coinType: widget.coinModel.config.coinType,
+            isTest: widget.coinModel.isTest,
+          )
+        : await lookup(
+            _txHash,
+            coinType: widget.coinModel.config.coinType,
+            isTest: widget.coinModel.isTest,
+          );
     final requestError = rData.error != false;
     final receipt = rData.data as Map<String, dynamic>?;
     transactionInfoReceipt = receipt;
