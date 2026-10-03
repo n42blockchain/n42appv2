@@ -372,10 +372,10 @@ packages:
     dependency: "direct main"
     description:
       name: chewie
-      sha256: "53dadd2c5b6748742d7744072b38a417ad22691ca55715850300ee793dc7cb27"
+      sha256: "56b6641693ddd72f0cd54ddfedf4f3e9390e6d7b7b22dc2503b7e6ad91476f7f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.13.1"
+    version: "1.17.2"
   cli_config:
     dependency: transitive
     description:
@@ -2078,8 +2078,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: c9e8dc3e9d7d7ac165c5d43bae3cebdadd8b6149
-      resolved-ref: c9e8dc3e9d7d7ac165c5d43bae3cebdadd8b6149
+      ref: "755096fc31345568dc9a2e89b27009fb370da201"
+      resolved-ref: "755096fc31345568dc9a2e89b27009fb370da201"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
