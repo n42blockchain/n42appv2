@@ -105,6 +105,14 @@ The Chat migration branch passed a fresh full run on 2026-10-02 with Flutter 3.4
 
 With explicit authorization, the macOS deployment floor is now 12.0 in the Runner project and Podfile, and CocoaPods post-install sets every pod target configuration to 12.0. `macos/Podfile.lock` records the resulting Podfile checksum. The macOS Release build passed on Flutter 3.44.8 / Dart 3.12.2 using `/opt/homebrew/bin/flutter build macos --release -v`; the resulting `N42 Chat.app` is universal (arm64 and x86_64), reports `LSMinimumSystemVersion=12.0`, and passes `codesign --verify --deep --strict` with an ad-hoc local signature. Xcode reported `BUILD SUCCEEDED`; no build errors occurred. Third-party SQLCipher emitted compiler warnings. The complete verbose log and exit marker are retained locally at `/tmp/host-macos-release-20261002.log` and `/tmp/host-macos-release-20261002.exit`.
 
+## Cached network image update
+
+The host and authoritative Chat repository now use `cached_network_image` 4.0.3, with `cached_network_image_platform_interface` 5.0.2 and `cached_network_image_web` 2.0.2. Chat commit `9cd024ee5d41976de0247c5efe4ead6cada99e6b` updates its root and example lockfiles; host commit `b5bd77efc83e5dced873ca8ad6a5801fdef17d88` updates the host constraint, lockfile, and Chat pin together. The 4.0 package changelog records the internal Material import migration and Flutter 3.44 / Dart 3.12 floor. The inspected public `CachedNetworkImage` constructor and callback signatures are unchanged from 3.4.1.
+
+Version 4.0.4 was not selected: its `material_ui ^1.3.0` bound points at a retracted release, and the next available `material_ui` line requires Dart 3.13 / Flutter 3.47. The host and Chat constraints intentionally cap this family at 4.0.3 under the fixed toolchain. See the upstream [`cached_network_image` changelog](https://pub.dev/packages/cached_network_image/changelog) and [`material_ui` versions](https://pub.dev/packages/material_ui/versions).
+
+On Chat, both root and example `flutter pub get --enforce-lockfile` passed. Seven image-bearing UI test files passed 37 tests with one existing skip; targeted analysis covered 21 files with zero errors and six existing informational lints. On the host, `flutter pub get --enforce-lockfile`, the `ImageNetWork` configuration/custom-builder test plus two NFT widget suites (9 tests), and targeted analysis (6 files, no issues) passed. The wrapper regression asserts the cache manager and error callback wiring but does not invoke the asynchronous disk-removal side effect; that platform-backed error path remains unverified. An incremental macOS Release build passed, the app remained universal, its declared minimum OS is 12.0, and strict code-signature verification passed. The full host suite and its 70% coverage gate have not yet been rerun on this updated graph; the archived 70.187244% result is from the earlier `b85bb9ca` dependency graph.
+
 ## Reproduction commands
 
 ```sh
