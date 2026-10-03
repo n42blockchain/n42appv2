@@ -7,6 +7,29 @@ import 'package:n42_wallet/features/live/presentation/pages/go_live_page.dart';
 import 'package:n42_wallet/features/live/presentation/pages/live_home_page.dart';
 
 void main() {
+  testWidgets('live action pushes the go-live route and close returns home', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+
+    await tester.pumpWidget(
+      const ProviderScope(child: MaterialApp(home: LiveApp())),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LiveHomePage), findsOneWidget);
+    await tester.tap(find.byTooltip('开始直播'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GoLivePage), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LiveHomePage), findsOneWidget);
+    expect(find.byType(GoLivePage), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'reopening Live starts at the requested entry, not the previous route',
     (tester) async {

@@ -1425,10 +1425,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: d7a3576cb312649eaa51f2356450aed686085fb58fcdebda5b359aa951eef7ea
+      sha256: "530dcbb298dc7c319aea9e3b7c580a61effb2abee2c93825d2dd8d5af0e230f1"
       url: "https://pub.dev"
     source: hosted
-    version: "17.5.0"
+    version: "18.0.2"
   google_cloud:
     dependency: transitive
     description:
@@ -2078,8 +2078,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4bed0759cbce363aa3aaa2965c6b596642987c20"
-      resolved-ref: "4bed0759cbce363aa3aaa2965c6b596642987c20"
+      ref: "7f014c3d3c6e10e3372d8cf2df6f4cd711a625da"
+      resolved-ref: "7f014c3d3c6e10e3372d8cf2df6f4cd711a625da"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"

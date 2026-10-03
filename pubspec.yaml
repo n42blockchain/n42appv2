@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072987
+version: 2.4.8+2026072989
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -132,7 +132,7 @@ dependencies:
   firebase_analytics: ^12.6.0
 
   # === Enterprise Architecture ===
-  go_router: ^17.5.0
+  go_router: ^18.0.2
   dartz: ^0.10.1
   equatable: ^2.1.0
   freezed_annotation: ^3.1.0
@@ -145,7 +145,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 4bed0759cbce363aa3aaa2965c6b596642987c20
+      ref: 7f014c3d3c6e10e3372d8cf2df6f4cd711a625da
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
