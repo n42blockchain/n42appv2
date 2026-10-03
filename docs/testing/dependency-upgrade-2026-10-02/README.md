@@ -95,6 +95,16 @@ The final clean dependency graph at host `b85bb9ca` then passed the full host su
 
 The Chat example Web build was attempted but is blocked before map-specific code by the existing `sqlcipher_flutter_libs` / `sqlite3` `dart:ffi` import reaching `dart2js`. The Chat package has no iOS example runner, so this record does not claim an iOS build result.
 
+## File picker and sharing plugin migration
+
+The authoritative Chat repository migration branch `codex/chat-file-picker-share-plus-13-20261002` is pinned at `60bfd34ccd303f359140a0d871dfda193bdb6ef4`. It migrates Chat file picking to `file_picker` 13 and refreshes the Chat root and example dependency locks for `share_plus` 13. The host integration commit `577e2fade95480ec15dcceb84784ef987e741d88` updates the host call sites, constraints, lockfile, and Chat pin together; `device_info_plus` is 13.3.0 and `package_info_plus` is 10.2.2. A single documented override for `package_info_plus` remains necessary because `reown_core 1.5.1` has an older upper bound; the sole Reown call uses `PackageInfo.fromPlatform().packageName`.
+
+The Chat migration branch passed a fresh full run on 2026-10-02 with Flutter 3.44.8 / Dart 3.12.2: `flutter test --no-pub --coverage --concurrency=2 --machine`, 6,745 visible plus 522 hidden tests, 0 failures, 0 skipped. The machine stream ended with `done success=true`. Fresh Chat LCOV: 35,344 / 135,252 lines (26.131961%). Logs are retained at `/tmp/chat-file-picker-share-full-retry-20261002-machine.jsonl`, `/tmp/chat-file-picker-share-full-retry-20261002.stderr`, and `/tmp/chat-file-picker-share-full-retry-20261002-test-exit`; the coverage file is in the isolated Chat test worktree.
+
+## macOS Release build floor
+
+With explicit authorization, the macOS deployment floor is now 12.0 in the Runner project and Podfile, and CocoaPods post-install sets every pod target configuration to 12.0. `macos/Podfile.lock` records the resulting Podfile checksum. The macOS Release build passed on Flutter 3.44.8 / Dart 3.12.2 using `/opt/homebrew/bin/flutter build macos --release -v`; the resulting `N42 Chat.app` is universal (arm64 and x86_64), reports `LSMinimumSystemVersion=12.0`, and passes `codesign --verify --deep --strict` with an ad-hoc local signature. Xcode reported `BUILD SUCCEEDED`; no build errors occurred. Third-party SQLCipher emitted compiler warnings. The complete verbose log and exit marker are retained locally at `/tmp/host-macos-release-20261002.log` and `/tmp/host-macos-release-20261002.exit`.
+
 ## Reproduction commands
 
 ```sh
