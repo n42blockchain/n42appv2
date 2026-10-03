@@ -429,7 +429,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.26.1"
+    version: "3.26.2"
   xdg_directories:
     dependency: transitive
     description:

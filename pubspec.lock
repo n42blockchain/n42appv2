@@ -3382,7 +3382,7 @@ packages:
       path: "packages/webview_flutter_wkwebview"
       relative: true
     source: path
-    version: "3.26.1"
+    version: "3.26.2"
   win32:
     dependency: transitive
     description:

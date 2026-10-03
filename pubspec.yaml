@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072998
+version: 2.4.8+2026072999
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -52,7 +52,7 @@ dependencies:
   cached_network_image: '>=4.0.3 <4.0.4' # 4.0.4's material_ui bound blocks Dart 3.12
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.14.1
-  webview_flutter_wkwebview: ^3.26.1
+  webview_flutter_wkwebview: ^3.26.2
   web_socket_channel: ^3.0.3
   http: ^1.6.0
   url_launcher: ^6.3.3

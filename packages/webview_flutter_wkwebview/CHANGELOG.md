@@ -1,3 +1,8 @@
+## 3.26.2
+
+* Regenerates Pigeon channels with Pigeon 29.0.4, fixing nullish error responses and
+  malformed Pigeon error descriptions.
+
 ## 3.26.1
 
 * Updates pigeon dev_dependency to ^27.3.2 for analyzer 14 compatibility.
