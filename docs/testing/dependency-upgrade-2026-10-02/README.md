@@ -131,3 +131,11 @@ git diff --check
 ```
 
 The full host coverage gate remains 70%; no threshold was lowered for this dependency work.
+
+## Pro image editor 14 migration
+
+The authoritative Chat source branch `codex/chat-pro-image-editor-14-20261003` is pinned at `c9e8dc3e9d7d7ac165c5d43bae3cebdadd8b6149`. It upgrades `pro_image_editor` 13.5.0 → 14.6.2, adds `material_ui` 1.2.0, migrates the editor theme arguments in `MediaEditorPage` to the package's new standalone Material types, and registers the standalone localization delegates in the Chat example. Host commit `bbdf87c300e1b78bca53388c2729d764c4942ff5` updates the editor/material_ui graph and Chat pin, and registers those delegates in both host `MaterialApp` roots. The host build hook advanced the version from `2.4.8+2026072978` to `2.4.8+2026072979`.
+
+The package metadata for 14.6.2 requires Dart >=3.12.0 and Flutter >=3.44.0, so it resolves under the fixed Flutter 3.44.8 / Dart 3.12.2 acceptance toolchain. Chat root/example and host `flutter pub get --enforce-lockfile` passed. Chat social-image preparation and image-message behavior tests passed (19 tests); targeted analysis of the migrated Chat page and example had no issues. The host Chat initialization, live-chat service, and image-network tests passed (34 tests), and targeted analysis of the two app roots and image crop page had no issues. Host iOS simulator build (`flutter build ios --simulator --no-codesign`) and macOS Release build both exited 0. The macOS app at `build/macos/Build/Products/Release/N42 Chat.app` is universal arm64/x86_64 and passed strict deep signature verification with a local ad-hoc signature.
+
+A dedicated `MediaEditorPage` completion/cancel widget test was not established: the ProImageEditor widget harness did not initialize its image stream or enable the done action with bounded pumps, including when using the existing fixture. No unverified harness test was retained. The migrated route is therefore not directly covered by a new behavior test in this batch; existing social-image preparation tests provide surrounding UI regression coverage. The full host suite and 70% coverage gate have not yet been rerun on this new dependency graph.
