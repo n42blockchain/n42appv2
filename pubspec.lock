@@ -1449,42 +1449,42 @@ packages:
     dependency: transitive
     description:
       name: google_mlkit_commons
-      sha256: c7fc384bdb66c3b83e24e3a41818e61d7a378d900f65f5e775344fbca95a0917
+      sha256: "621e94de22fd0f1e902e593b892746d80ab7542b39c2552aa091d904eb82fc6f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.0"
+    version: "0.13.0"
   google_mlkit_face_detection:
     dependency: "direct main"
     description:
       name: google_mlkit_face_detection
-      sha256: "719735518c0a961072d1757a097af8fec458426accad0a58eae0763942a3f14c"
+      sha256: dd4a6c61e45390217cdc7522e7766b77e9d075cdface0503716ec6722e33d4f4
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.0"
+    version: "0.15.1"
   google_mlkit_selfie_segmentation:
     dependency: transitive
     description:
       name: google_mlkit_selfie_segmentation
-      sha256: "97b5030a066db72321395aded9fef0a12ba6afc182579280674c2443818c732a"
+      sha256: cd814bb3e8c59b896a346cd20a9d93ca9f03c10f24b38405fc683aa942fcd0fa
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.0"
+    version: "0.12.1"
   google_mlkit_text_recognition:
     dependency: "direct main"
     description:
       name: google_mlkit_text_recognition
-      sha256: "8324fdc2628ebeb63568ad06437b984b716d938d87e4ce63ab24dfd3eeebf08a"
+      sha256: e13685af5093c8be009a3555909b72a80e10cfe8f97752bcbdf99fa0ccbda810
       url: "https://pub.dev"
     source: hosted
-    version: "0.16.0"
+    version: "0.17.1"
   google_mlkit_translation:
     dependency: "direct main"
     description:
       name: google_mlkit_translation
-      sha256: "7d8446088a15f00407f03b0bbb4b6364aa72050625aba89dc5de76df6e12ea65"
+      sha256: "7404d9401ee3e5d60644da84244ba81a4a037d7857e6d849fb1bda4ae8ac5d98"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.0"
+    version: "0.15.1"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -2078,8 +2078,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: a57209a1735dc8eeac6bff6b68306c93f69da1ea
-      resolved-ref: a57209a1735dc8eeac6bff6b68306c93f69da1ea
+      ref: "126ca0f94aea66c0e95ddfc8e805223730dc8dcd"
+      resolved-ref: "126ca0f94aea66c0e95ddfc8e805223730dc8dcd"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
