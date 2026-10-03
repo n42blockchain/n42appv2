@@ -2078,8 +2078,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "755096fc31345568dc9a2e89b27009fb370da201"
-      resolved-ref: "755096fc31345568dc9a2e89b27009fb370da201"
+      ref: "4bed0759cbce363aa3aaa2965c6b596642987c20"
+      resolved-ref: "4bed0759cbce363aa3aaa2965c6b596642987c20"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
@@ -2307,14 +2307,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.15.0"
-  pinput:
-    dependency: "direct main"
-    description:
-      name: pinput
-      sha256: "4c3f1b84768b47a56a1abdaca551bd7cef4ac673b882209039ecdf803a5d6e68"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.2"
   pinyin:
     dependency: transitive
     description:
