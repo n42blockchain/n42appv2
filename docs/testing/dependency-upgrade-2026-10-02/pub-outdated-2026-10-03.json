@@ -476,25 +476,6 @@
       }
     },
     {
-      "package": "flutter_contacts",
-      "kind": "transitive",
-      "isDiscontinued": false,
-      "isCurrentRetracted": false,
-      "isCurrentAffectedByAdvisory": false,
-      "current": {
-        "version": "2.5.0"
-      },
-      "upgradable": {
-        "version": "2.6.0"
-      },
-      "resolvable": {
-        "version": "2.6.0"
-      },
-      "latest": {
-        "version": "2.6.0"
-      }
-    },
-    {
       "package": "flutter_gemma",
       "kind": "transitive",
       "isDiscontinued": false,
@@ -685,44 +666,6 @@
       },
       "latest": {
         "version": "5.0.0"
-      }
-    },
-    {
-      "package": "geolocator",
-      "kind": "transitive",
-      "isDiscontinued": false,
-      "isCurrentRetracted": false,
-      "isCurrentAffectedByAdvisory": false,
-      "current": {
-        "version": "14.0.2"
-      },
-      "upgradable": {
-        "version": "14.1.1"
-      },
-      "resolvable": {
-        "version": "14.1.1"
-      },
-      "latest": {
-        "version": "14.1.1"
-      }
-    },
-    {
-      "package": "geolocator_linux",
-      "kind": "transitive",
-      "isDiscontinued": false,
-      "isCurrentRetracted": false,
-      "isCurrentAffectedByAdvisory": false,
-      "current": {
-        "version": "0.2.4"
-      },
-      "upgradable": {
-        "version": "0.2.6"
-      },
-      "resolvable": {
-        "version": "0.2.6"
-      },
-      "latest": {
-        "version": "0.2.6"
       }
     },
     {
