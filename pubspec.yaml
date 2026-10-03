@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072990
+version: 2.4.8+2026072991
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -145,7 +145,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 7f014c3d3c6e10e3372d8cf2df6f4cd711a625da
+      ref: c5e77bf51a1aa11cd451026b366ce2d62633ec03
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
