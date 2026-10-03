@@ -2,6 +2,10 @@
 
 This batch adds behavior tests to the host wallet and Chat plugin, fixes issues reproduced by those checks, and records independent full-suite coverage. The host and Chat raw LCOV denominators remain separate; the host CI gate remains 70%.
 
+## Current continuation checkpoint (2026-10-02)
+
+On host commit `b85bb9ca50716d7cfd4e334cd347e16296c921d8`, a clean full-suite run using Flutter 3.44.8 / Dart 3.12.2 passed 5,330 visible tests and 542 hidden machine events, with 0 failures, errors, or skips (`done.success=true`). Fresh LCOV is 93,561 / 133,302 lines = **70.187244%**, above the unchanged 70% gate. This run includes the catalog-token add/remove regressions and the Chat map dependency pin plus projection dependency upgrades. Raw LCOV SHA-256: `302b542ab5bb87eeb4311937e068027711ee49af357bf6c4a9362d899dc5b436`; raw machine JSONL SHA-256: `4551f0f64b466b9f6e8dc00955bafa68c1f847c4e2000515758b9e12f49c5ff9`.
+
 ## Full results
 
 | Scope | Baseline | Latest run | Change from baseline | Full-suite results |
@@ -13,7 +17,7 @@ This batch adds behavior tests to the host wallet and Chat plugin, fixes issues 
 | Chat plugin pushed snapshot (`e001039c`) | 33,395 / 133,072 (25.095437%) | 36,875 / 133,161 (27.692042%) | +2.596605 pp | 7,208 successes: 6,700 visible + 508 hidden; 0 failures, 1 credential-gated skip; `done.success=true` |
 | Chat plugin active-worktree snapshot | 33,395 / 133,072 (25.095437%) | 37,073 / 133,160 (27.840943%) | +2.745506 pp | 7,212 successful: 6,703 visible + 509 hidden; 0 failures, 1 credential-gated skip; `done.success=true`; includes uncommitted security-device changes |
 
-The latest host coverage result is 82,346 / 133,204, 61.819465%; the unchanged 70% threshold remains unmet. It includes the IAP purchase-state regression tests and the new token-provider, AI Assistant, Browser, wallet-management, ENS, chain-send, and MiningV2 tests below. The MiningV2 batch reproduced a 25px title overflow at a 390×844 viewport and fixed it by constraining the title to the remaining width. Preserve the prior 80,159 / 133,190 and 79,997 / 133,190 full-run traces; the 162-hit difference between those two runs was isolated to four WalletActionProvider/coin-wallet files. The clean pushed Chat snapshot at `e001039c` is 36,875 / 133,161 (27.692042%); a separate active-worktree run also includes uncommitted security-device changes and is recorded separately, not as verification of pushed code. Both scopes remain below 70%.
+The historical host run at 82,346 / 133,204 (61.819465%) predates the continuation batches recorded above. It includes the IAP purchase-state regression tests and the new token-provider, AI Assistant, Browser, wallet-management, ENS, chain-send, and MiningV2 tests below. The MiningV2 batch reproduced a 25px title overflow at a 390×844 viewport and fixed it by constraining the title to the remaining width. Preserve the prior 80,159 / 133,190 and 79,997 / 133,190 full-run traces; the 162-hit difference between those two runs was isolated to four WalletActionProvider/coin-wallet files. The clean pushed Chat snapshot at `e001039c` is 36,875 / 133,161 (27.692042%); a separate active-worktree run also includes uncommitted security-device changes and is recorded separately, not as verification of pushed code. The host and Chat scopes and CI gates remain independent.
 
 An earlier active-checkout rerun was rejected because another Flutter process interleaved output into its machine log. It is superseded by the clean full runs listed above; the earlier quality-gate parser reported 4,996 host passes and 6,658 Chat passes, with no failures. The latest Chat run has one credential-gated `live homeserver media smoke` skip.
 
@@ -58,7 +62,11 @@ Four Earn product-section widget tests cover positions loading versus the empty 
 
 ## Coverage artifacts
 
-The baseline LCOV files are retained in `artifacts/root-baseline-lcov.info.gz` and `artifacts/chat-baseline-lcov.info.gz`. Frozen-snapshot traces remain `artifacts/root-final-lcov.info.gz` and `artifacts/chat-final-lcov.info.gz`. Latest host evidence is `artifacts/host-post-chain-send-mining-full-20261002-lcov.info.gz` and `artifacts/host-post-chain-send-mining-full-20261002-machine.jsonl.gz`; the preceding run remains `artifacts/host-post-wallet-browser-ens-full-20261002-*`; the preceding full run remains `artifacts/host-post-iap-purchase-state-*`, `artifacts/host-post-token-management-full-20261002-*`, and `artifacts/host-post-wallet-token-management-*`. Latest clean pushed-Chat evidence is `artifacts/chat-post-readonly-composer-full-20261002-*`; an in-progress active-worktree snapshot is `artifacts/chat-post-security-device-management-*`. Earlier evidence remains in the other `host-post-*` and `chat-post-*` artifact groups.
+The baseline LCOV files are retained in `artifacts/root-baseline-lcov.info.gz` and `artifacts/chat-baseline-lcov.info.gz`. Frozen-snapshot traces remain `artifacts/root-final-lcov.info.gz` and `artifacts/chat-final-lcov.info.gz`. Latest host evidence is `artifacts/host-post-map-deps-full-20261002-lcov.info.gz` and `artifacts/host-post-map-deps-full-20261002-machine.jsonl.gz`; the preceding run is `artifacts/host-post-chain-send-mining-full-20261002-*`, followed by `artifacts/host-post-wallet-browser-ens-full-20261002-*`, `artifacts/host-post-iap-purchase-state-*`, `artifacts/host-post-token-management-full-20261002-*`, and `artifacts/host-post-wallet-token-management-*`.
+
+Latest host raw machine SHA-256 is `4551f0f64b466b9f6e8dc00955bafa68c1f847c4e2000515758b9e12f49c5ff9` (gzip SHA-256 `4f872e1ccd22d2b24abe7f139bbb4d900676b2437ae0090a24816a9ce27371d9`); latest host raw LCOV SHA-256 is `302b542ab5bb87eeb4311937e068027711ee49af357bf6c4a9362d899dc5b436` (gzip SHA-256 `36bd9878d343ea4ab102b4b1044c487e74a194c079190aa198a245fe7135dd43`).
+
+Latest clean pushed-Chat evidence is `artifacts/chat-post-readonly-composer-full-20261002-*`; an in-progress active-worktree snapshot is `artifacts/chat-post-security-device-management-*`. Earlier evidence remains in the other `host-post-*` and `chat-post-*` artifact groups.
 
 | Scope | Baseline LCOV SHA-256 | Final LCOV SHA-256 | Final gzip SHA-256 |
 | --- | --- | --- | --- |
