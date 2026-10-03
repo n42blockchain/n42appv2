@@ -75,7 +75,14 @@ class _FixtureHttpClient implements HttpClient {
     } else {
       payload = const <String, Object>{};
     }
-    return _FixtureHttpRequest(jsonEncode(payload));
+    final isJsonResponse =
+        url.host == 'api.alternative.me' ||
+        url.path.endsWith('/market/trending') ||
+        url.path.endsWith('/market/search');
+    final body = isJsonResponse
+        ? jsonEncode(payload)
+        : '<rss version="2.0"><channel><title>Fixture</title></channel></rss>';
+    return _FixtureHttpRequest(body);
   }
 
   @override
