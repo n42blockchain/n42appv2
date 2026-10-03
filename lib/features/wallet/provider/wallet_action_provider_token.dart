@@ -399,8 +399,12 @@ extension WalletActionProviderToken on WalletActionProvider {
     tokens.remove(token['contract'].toString().toUpperCase());
 
     // 清理该合约代币对应的置顶记录
-    final tokenMiniName = (miniName ?? token['miniName']?.toString() ?? '')
-        .toUpperCase();
+    final tokenMiniName =
+        (miniName ??
+                token['miniName']?.toString() ??
+                token['coin_name']?.toString() ??
+                '')
+            .toUpperCase();
     if (tokenMiniName.isNotEmpty) {
       walletInfo.pinnedCoins.remove('${symbolStr}_$tokenMiniName');
       _lastSyncFingerprint = ''; // 使缓存失效，下次强制重同步
