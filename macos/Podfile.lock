@@ -24,7 +24,8 @@ PODS:
     - FlutterMacOS
   - facebook_auth_desktop (0.0.3):
     - FlutterMacOS
-  - file_picker (0.0.1):
+  - file_picker_darwin (1.0.0):
+    - Flutter
     - FlutterMacOS
   - file_selector_macos (0.0.1):
     - FlutterMacOS
@@ -288,7 +289,7 @@ DEPENDENCIES:
   - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
   - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - facebook_auth_desktop (from `Flutter/ephemeral/.symlinks/plugins/facebook_auth_desktop/macos`)
-  - file_picker (from `Flutter/ephemeral/.symlinks/plugins/file_picker/macos`)
+  - file_picker_darwin (from `Flutter/ephemeral/.symlinks/plugins/file_picker_darwin/darwin`)
   - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - firebase_analytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
@@ -367,8 +368,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   facebook_auth_desktop:
     :path: Flutter/ephemeral/.symlinks/plugins/facebook_auth_desktop/macos
-  file_picker:
-    :path: Flutter/ephemeral/.symlinks/plugins/file_picker/macos
+  file_picker_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/file_picker_darwin/darwin
   file_selector_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos
   firebase_analytics:
@@ -453,7 +454,7 @@ SPEC CHECKSUMS:
   connectivity_plus: 4adf20a405e25b42b9c9f87feff8f4b6fde18a4e
   device_info_plus: 4fb280989f669696856f8b129e4a5e3cd6c48f76
   facebook_auth_desktop: bf89ccf460c903de45e86fa0c7878b8b62db65fb
-  file_picker: 7584aae6fa07a041af2b36a2655122d42f578c1a
+  file_picker_darwin: 4c2b9a50ea44cb3b071381ea0cf48591bdd80251
   file_selector_macos: 9e9e068e90ebee155097d00e89ae91edb2374db7
   Firebase: 7ca191e43724142f79fae653547b3382c45413cc
   firebase_analytics: b7df5e79df324a07e8d3cc3231f6f6d45bf509c9

@@ -52,12 +52,11 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   Future<void> _pickFile() async {
     setState(() => _error = '');
 
-    FilePickerResult? result;
+    List<PlatformFile> files;
     try {
-      result = await FilePicker.pickFiles(
+      files = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: const ['n42backup', 'json'],
-        withData: false,
       );
     } catch (e) {
       if (!mounted) return;
@@ -65,9 +64,10 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       return;
     }
 
-    if (!mounted || result == null || result.files.isEmpty) return;
+    if (!mounted || files.isEmpty) return;
 
-    final path = result.files.first.path;
+    final file = files.first;
+    final path = file.path;
     if (path == null) {
       if (!mounted) return;
       setState(() => _error = S.of(context).g_ui_backup_file_access);
@@ -84,7 +84,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         return;
       }
       setState(() {
-        _selectedFileName = result!.files.first.name;
+        _selectedFileName = file.name;
         _backupContent = content;
       });
     } catch (e) {

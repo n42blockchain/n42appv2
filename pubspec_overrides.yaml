@@ -7,3 +7,5 @@ dependency_overrides:
     path: packages/webview_flutter_wkwebview
   flutter_secure_storage: ^10.3.4
   flutter_facebook_auth: 7.2.0
+  # reown_core 1.5.1 caps package_info_plus below 10; its sole use is the unchanged PackageInfo.fromPlatform().packageName API.
+  package_info_plus: ^10.2.2
