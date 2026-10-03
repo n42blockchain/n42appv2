@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072920
+version: 2.4.8+2026072921
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -48,19 +48,19 @@ dependencies:
   # NewsApi 解析 RSS feed（已在 transitive 树里，这里显式声明以避免依赖飘移）
   xml: ^6.6.1
   connectivity_plus: ^7.3.1
-  cached_network_image: ^3.4.1
+  cached_network_image: ^4.0.2
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.14.1
   webview_flutter_wkwebview: ^3.26.1
   web_socket_channel: ^3.0.3
   http: ^1.6.0
-  url_launcher: ^6.3.2
+  url_launcher: ^6.3.3
   flutter_cache_manager: ^3.4.5
 
   # === Blockchain & Crypto ===
   eip712: ^1.0.1  # 替换 eth_sig_util，支持 EIP-712 typed data signing
   web3dart: ^3.0.3
-  web3auth_flutter: ^7.0.0
+  web3auth_flutter: ^7.0.1
   fast_base58: ^0.2.2
   bech32: ^0.2.2
   crypto: ^3.0.7
@@ -78,7 +78,7 @@ dependencies:
   # === Utilities ===
   validators: ^3.0.0
   event_bus: ^2.0.1
-  fluttertoast: ^10.0.0
+  fluttertoast: ^10.0.2
   flustars_flutter3: ^3.0.0
   date_format: ^2.0.9
   convert: ^3.1.2
@@ -87,28 +87,28 @@ dependencies:
   # === Media & Files ===
   image_picker: ^1.2.3
   photo_manager: ^3.12.0
-  file_picker: ^11.0.3
+  file_picker: ^13.1.0
   video_compress: ^3.1.4
   video_player: ^2.14.0
-  pro_image_editor: ^13.5.0
+  pro_image_editor: ^14.6.1
   open_filex: ^4.7.0
-  share_plus: ^12.0.2
+  share_plus: ^13.3.0
 
   # === Security & Auth ===
   local_auth: ^3.0.2
   local_auth_android: ^2.2.0
   local_auth_darwin: ^2.0.4
-  permission_handler: ^12.0.3
+  permission_handler: ^13.0.2
   # encrypt 包已被 pointycastle 直接实现替代
   aes_crypt_null_safe: ^3.1.1
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^8.2.0
-  pinput: ^6.0.2
+  pinput: ^7.0.0
 
   # === QR Code ===
   # === Device Info ===
-  device_info_plus: ^12.4.0
-  package_info_plus: ^9.0.1
+  device_info_plus: ^13.3.0
+  package_info_plus: ^10.2.2
 
   # === Notifications ===
   flutter_local_notifications: ^22.3.1
@@ -123,15 +123,15 @@ dependencies:
 
   # === Firebase ===
   firebase_core: ^4.15.0
-  # Chat 3cc19c12 handles the pre-4.10 AuthorizationStatus enum. Messaging
-  # 16.6+ requires 4.10's deniedPermanently case, absent from that Git source.
-  firebase_messaging: '>=16.5.0 <16.6.0'
-  firebase_messaging_platform_interface: '>=4.9.3 <4.10.0'
+  # The integrated Chat migration maps Firebase Messaging's deniedPermanently
+  # status and supports the 4.10+ platform interface.
+  firebase_messaging: ^16.7.0
+  firebase_messaging_platform_interface: ^4.10.0
   firebase_crashlytics: ^5.4.0
   firebase_analytics: ^12.6.0
 
   # === Enterprise Architecture ===
-  go_router: ^17.5.0
+  go_router: ^18.0.1
   dartz: ^0.10.1
   equatable: ^2.1.0
   freezed_annotation: ^3.1.0
@@ -144,40 +144,36 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 3cc19c12a7c9bbf2031270acca8e3922730b55a5
+      ref: e8bd6799352367bb60691110dd625c045c0ad180
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
   # livekit_client / flutter_webrtc 原为 n42_chat 间接依赖，提升为直接依赖以显式使用
   livekit_client: ^2.13.0
+  flutter_webrtc: ^1.6.2+hotfix.3
   # get_it 用于从 n42_chat 注册的全局 GetIt.instance 取 Matrix 仓库（接口未导出）
   get_it: ^9.3.0
   # n42_chat 的原生插件传递依赖提升为直接依赖：git 依赖的传递解析会静默丢弃它们，
   # 显式声明以保证 host 端（含 flutter test）能编译 chat 的 voip/加密/人脸模糊代码。
-  # flutter_callkit_incoming 钉 3.0.0：3.1.x（2026-05 末发布）移除了 n42_chat
-  # voip 代码使用的 CallKitParams.textAccept/textDecline，全新解析会漂到 3.1.x 而编译失败。
-  # 2026-07-26 对 3.1.3 复验：钉死理由仍成立——textAccept/textDecline 依旧不存在，
-  # 且 callkit 的 Event 枚举被重命名，call_notification_service.dart 报 19 处错误。
-  # Upgrade requires a compatible call_notification_service.dart in the pinned Git source.
-  flutter_callkit_incoming: 3.0.0
-  flutter_vodozemac: ^0.6.0
-  google_mlkit_face_detection: ^0.14.0
+  # The Chat Git source is migrated to the current CallKit event/parameter API.
+  flutter_callkit_incoming: ^3.1.6
+  flutter_vodozemac: ^0.8.1
+  google_mlkit_face_detection: ^0.15.1
   # n42_chat native OCR/translation dependencies are declared explicitly so
   # git dependency resolution cannot silently omit their platform plugins.
-  google_mlkit_text_recognition: ^0.16.0
-  google_mlkit_translation: ^0.14.0
+  google_mlkit_text_recognition: ^0.17.1
+  google_mlkit_translation: ^0.15.1
   flutter_background: ^1.3.1
 
 # Keep v10 migration support for legacy encrypted wallet storage. v11 removes
 # legacy cipher/EncryptedSharedPreferences migration and requires compileSdk 37.
 dependency_overrides:
   flutter_secure_storage: ^10.3.4
+  package_info_plus: ^10.2.2
 
 dev_dependencies:
   image_picker_platform_interface: ^2.11.1
   path_provider_platform_interface: ^2.1.3
-  sqlcipher_flutter_libs: ^0.6.8
-  sqlite3: ^2.9.4
   flutter_test:
     sdk: flutter
   integration_test:
@@ -195,7 +191,7 @@ dev_dependencies:
   # === Testing ===
   mockito: ^5.6.4
   mocktail: ^1.0.5
-  vodozemac: ^0.5.0
+  vodozemac: ^0.8.0
   bloc_test: ^10.0.0
   sqflite_common_ffi: ^2.3.7+1
   webview_flutter_platform_interface: ^2.15.1
@@ -226,6 +222,11 @@ flutter:
     # Keep the compatibility copies in sync with the resolved Git dependency.
     - assets/stickers/openmoji/
     - assets/stickers/lottie/
+
+hooks:
+  user_defines:
+    sqlite3:
+      source: sqlcipher
 
 flutter_intl:
   enabled: true

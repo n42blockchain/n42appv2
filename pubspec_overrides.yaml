@@ -5,3 +5,4 @@ dependency_overrides:
     path: packages/webview_flutter_wkwebview
   flutter_secure_storage: ^10.3.4
   flutter_facebook_auth: 7.2.0
+  package_info_plus: ^10.2.2

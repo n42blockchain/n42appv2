@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
-import 'package:sqlite3/open.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/core/services/auto_download_policy_service.dart';
 import 'package:n42_chat/src/core/services/biometric_service.dart';
@@ -32,12 +28,6 @@ class _Policy extends Mock implements AutoDownloadPolicyService {}
 typedef DeviceCapture = Future<void> Function(WidgetTester tester, String name);
 
 void registerChatCoverageDeviceCases(DeviceCapture capture) {
-  setUpAll(() async {
-    if (Platform.isAndroid) {
-      await applyWorkaroundToOpenSqlCipherOnOldAndroidVersions();
-      open.overrideFor(OperatingSystem.android, openCipherOnAndroid);
-    }
-  });
   storage_contracts.registerStorageDatabaseBehaviorTests(
     registerCase: (description, body) =>
         testWidgets(description, (tester) async {

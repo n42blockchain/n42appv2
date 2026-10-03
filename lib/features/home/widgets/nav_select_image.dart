@@ -58,11 +58,11 @@ class NavSelectImage extends StatelessWidget {
           onTap: () async {
             final navigator = Navigator.of(context);
             //从相册选择
-            FilePickerResult? result = await FilePicker.pickFiles(
+            final result = await FilePicker.pickFile(
               type: FileType.image,
             );
             if (!context.mounted) return;
-            final path = result?.files.single.path;
+            final path = result?.path;
             if (path != null) {
               File file = File(path);
               AppLogger.d('NavSelectImage', 'file path: ${file.path}');

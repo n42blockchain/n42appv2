@@ -42,8 +42,8 @@ android {
     buildFeatures {
         resValues = true
     }
-    // Google Play requires API 36 for new mobile submissions from 2026-08-31.
-    compileSdk = 36
+    // Required by permission_handler_android 13 and compatible with the API 36 baseline.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

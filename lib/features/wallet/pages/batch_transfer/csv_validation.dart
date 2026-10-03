@@ -137,19 +137,16 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
   Future<void> _pickFile() async {
     try {
-      final result = await FilePicker.pickFiles(
+      final result = await FilePicker.pickFile(
         type: FileType.custom,
         allowedExtensions: ['csv', 'txt'],
-        withReadStream: false,
       );
       if (!mounted) return;
-      if (result != null && result.files.isNotEmpty) {
-        final path = result.files.single.path;
-        if (path != null) {
-          final content = await File(path).readAsString();
-          if (!mounted) return;
-          _textController.text = content;
-        }
+      final path = result?.path;
+      if (path != null) {
+        final content = await File(path).readAsString();
+        if (!mounted) return;
+        _textController.text = content;
       }
     } catch (e) {
       if (!mounted) return;
