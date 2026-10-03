@@ -1995,7 +1995,7 @@ packages:
     source: hosted
     version: "0.13.0"
   material_ui:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: material_ui
       sha256: fbfb53cab6c4629438feeade5f3d305f72944bc9d9f25786b19106d32b80ec45
@@ -2078,8 +2078,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "9cd024ee5d41976de0247c5efe4ead6cada99e6b"
-      resolved-ref: "9cd024ee5d41976de0247c5efe4ead6cada99e6b"
+      ref: c9e8dc3e9d7d7ac165c5d43bae3cebdadd8b6149
+      resolved-ref: c9e8dc3e9d7d7ac165c5d43bae3cebdadd8b6149
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
@@ -2367,10 +2367,10 @@ packages:
     dependency: "direct main"
     description:
       name: pro_image_editor
-      sha256: "573b441ebfc51891e477dfb2dc629d76c83079cbd4002295b506cf1526e1cefc"
+      sha256: cdc9108e879adac0c094771e3f51454d80f3cb1ffe0d02d5337880e2d289cbe7
       url: "https://pub.dev"
     source: hosted
-    version: "13.5.0"
+    version: "14.6.2"
   process:
     dependency: transitive
     description:

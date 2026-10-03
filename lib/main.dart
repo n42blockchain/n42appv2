@@ -51,6 +51,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_ui/material_ui.dart' as material_ui;
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
@@ -436,7 +437,8 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             locale: locale,
-            localizationsDelegates: [
+            localizationsDelegates: const [
+              ...material_ui.GlobalMaterialLocalizations.delegates,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_ui/material_ui.dart' as material_ui;
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
@@ -42,6 +43,7 @@ class _LiveAppState extends State<LiveApp> {
         theme: ThemeAdapter.buildLight(ThemeAdapter.defaultAccent),
         darkTheme: ThemeAdapter.buildDark(ThemeAdapter.defaultAccent),
         localizationsDelegates: const [
+          ...material_ui.GlobalMaterialLocalizations.delegates,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
