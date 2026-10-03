@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072996
+version: 2.4.8+2026072997
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -124,10 +124,8 @@ dependencies:
 
   # === Firebase ===
   firebase_core: ^4.15.0
-  # Chat 3cc19c12 handles the pre-4.10 AuthorizationStatus enum. Messaging
-  # 16.6+ requires 4.10's deniedPermanently case, absent from that Git source.
-  firebase_messaging: '>=16.5.0 <16.6.0'
-  firebase_messaging_platform_interface: '>=4.9.3 <4.10.0'
+  firebase_messaging: '>=16.7.0 <16.8.0'
+  firebase_messaging_platform_interface: '>=4.10.0 <4.11.0'
   firebase_crashlytics: ^5.4.0
   firebase_analytics: ^12.6.0
 
@@ -145,7 +143,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 126ca0f94aea66c0e95ddfc8e805223730dc8dcd
+      ref: e2135d767e74021992729e5f877a08f763a92f23
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===

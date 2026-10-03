@@ -630,7 +630,9 @@ class AppPushUtils {
       }
 
       // iOS: 尝试通过 Firebase 请求权限（首次会弹系统弹窗）
-      if (defaultTargetPlatform == TargetPlatform.iOS) {
+      if (defaultTargetPlatform == TargetPlatform.iOS &&
+          settings.authorizationStatus !=
+              AuthorizationStatus.deniedPermanently) {
         settings = await FirebaseMessaging.instance.requestPermission(
           alert: true,
           badge: true,

@@ -60,7 +60,7 @@ PODS:
     - Firebase/Crashlytics (= 12.19.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (16.5.0):
+  - firebase_messaging (16.7.0):
     - Firebase/Messaging (= 12.19.0)
     - firebase_core
     - Flutter
@@ -804,7 +804,7 @@ SPEC CHECKSUMS:
   firebase_analytics: 99133ddb6f6cf89c0b49cafae131070607abbfa5
   firebase_core: 55de508663ceda7d1dc369a32b327a5655019ae2
   firebase_crashlytics: 289a6a01605d663873a978d9daaa3648edc3f3b5
-  firebase_messaging: 0d1ad5591e2cd7090e5f77970f2a736a99debce2
+  firebase_messaging: df68cb5feefa02766144a50fa5348362a0127008
   FirebaseAnalytics: e9f8c369447e453da23f0455a06e4910bad10de0
   FirebaseCore: c990214798d7c568ad436a15ba7da25c7a278c9a
   FirebaseCoreExtension: 201c78d7491a273d61d8afbf491214276a951e6d

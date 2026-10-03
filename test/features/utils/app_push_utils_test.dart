@@ -412,6 +412,29 @@ void main() {
     expect(find.byType(AlertDialog), findsNothing);
   });
 
+  testWidgets('permanent notification denial is not requested again', (
+    tester,
+  ) async {
+    final previousPlatform = debugDefaultTargetPlatformOverride;
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    messaging.currentAuthorizationStatus =
+        AuthorizationStatus.deniedPermanently;
+    messaging.requestedAuthorizationStatus =
+        AuthorizationStatus.deniedPermanently;
+    final permissionRequests = messaging.permissionRequests;
+
+    try {
+      await tester.runAsync(AppPushUtils.checkAndPromptPermission);
+
+      expect(messaging.permissionRequests, permissionRequests);
+      expect(find.byType(AlertDialog), findsNothing);
+    } finally {
+      debugDefaultTargetPlatformOverride = previousPlatform;
+      messaging.currentAuthorizationStatus = AuthorizationStatus.authorized;
+      messaging.requestedAuthorizationStatus = AuthorizationStatus.authorized;
+    }
+  });
+
   testWidgets(
     'denied iOS permission retries once and waits for a host context',
     (tester) async {
