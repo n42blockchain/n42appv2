@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import 'package:n42_chat/src/core/notifications/firebase_push_service.dart';
+import 'package:n42_chat/src/core/notifications/push_notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockMatrixClient extends Mock implements matrix.Client {}
@@ -24,6 +25,27 @@ class FakePusher extends Fake implements matrix.Pusher {
 /// - 后台消息处理边界情况
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('notification authorization distinguishes permanent denial', () {
+    expect(
+      FirebasePushService.permissionStatusForAuthorizationStatus(
+        AuthorizationStatus.denied,
+      ),
+      NotificationPermissionStatus.denied,
+    );
+    expect(
+      FirebasePushService.permissionStatusForAuthorizationStatus(
+        AuthorizationStatus.deniedPermanently,
+      ),
+      NotificationPermissionStatus.denied,
+    );
+    expect(
+      FirebasePushService.permissionStatusForAuthorizationStatus(
+        AuthorizationStatus.provisional,
+      ),
+      NotificationPermissionStatus.granted,
+    );
+  });
 
   final List<MethodCall> callkitCalls = [];
 

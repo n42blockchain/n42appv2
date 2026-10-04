@@ -20,7 +20,18 @@ part 'create_finish_content.dart';
 class CreateFinish extends ConsumerStatefulWidget {
   final WalletInfo? wInfo;
   final String createMetod;
-  const CreateFinish({this.wInfo, this.createMetod = "Create", super.key});
+  @visibleForTesting
+  final Future<void> Function(WalletInfo wallet)? addWalletForTesting;
+  @visibleForTesting
+  final Future<int> Function(WalletInfo wallet)? checkWalletMnemonicForTesting;
+
+  const CreateFinish({
+    this.wInfo,
+    this.createMetod = "Create",
+    this.addWalletForTesting,
+    this.checkWalletMnemonicForTesting,
+    super.key,
+  });
 
   @override
   ConsumerState<CreateFinish> createState() => _CreateFinishState();
@@ -72,11 +83,13 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       setState(() => load = Load.loading);
 
       code = widget.createMetod == "Import"
-          ? await walletActionProvider.checkWalletMnemonic(_wInfo!)
+          ? await (widget.checkWalletMnemonicForTesting?.call(_wInfo!) ??
+                walletActionProvider.checkWalletMnemonic(_wInfo!))
           : 0;
 
       if (code == 0) {
-        await walletActionProvider.addWalletInfo(_wInfo!);
+        await (widget.addWalletForTesting?.call(_wInfo!) ??
+            walletActionProvider.addWalletInfo(_wInfo!));
       } else {
         AppLogger.w('CreateFinish', 'create wallet err');
         ToastUtils.showFtToast(child: createWalletErrView('error'));

@@ -10,6 +10,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -202,6 +203,64 @@ void main() {
     );
     expect(store.findWallet(pk: 'unknown-private-key'), isNull);
   });
+
+  test(
+    'setMainWallet persists the selected main wallet and emits selection',
+    () async {
+      final first = WalletInfo(walletName: 'First')..mainWallet = true;
+      final second = WalletInfo(walletName: 'Second')..mainWallet = false;
+      store.walletInfoLsit.addAll([first, second]);
+      store.walletIndex = 0;
+      store.walletMiningIndex = 1;
+      secureStorage.data['walletInfo'] = jsonEncode({
+        accountUuid: {
+          'index': 0,
+          'miningIndex': 1,
+          'wallet': [first.toJson(), second.toJson()],
+        },
+      });
+      final event = eventBus.on<EventPublic>().first;
+
+      final result = store.setMainWallet(1);
+      await event;
+      await Future<void>.delayed(Duration.zero);
+
+      expect(result.error, isFalse);
+      expect(first.mainWallet, isFalse);
+      expect(second.mainWallet, isTrue);
+      final emitted = await event;
+      expect(emitted.type, EventPublicType.selectWallet);
+      expect(emitted.intValue, -1);
+      expect(emitted.stringValue, 'mainwallet');
+      final persisted =
+          jsonDecode(secureStorage.data['walletInfo']!) as Map<String, dynamic>;
+      final persistedWallets =
+          ((persisted[accountUuid] as Map<String, dynamic>)['wallet']
+              as List<dynamic>);
+      expect(
+        persistedWallets.map(
+          (wallet) => (wallet as Map<String, dynamic>)['mainWallet'],
+        ),
+        [false, true],
+      );
+    },
+  );
+
+  test(
+    'setMainWallet reports a missing current main wallet without mutation',
+    () {
+      final first = WalletInfo(walletName: 'First')..mainWallet = false;
+      final second = WalletInfo(walletName: 'Second')..mainWallet = false;
+      store.walletInfoLsit.addAll([first, second]);
+
+      final result = store.setMainWallet(1);
+
+      expect(result.error, isTrue);
+      expect(result.data, 'Main wallet not found!');
+      expect(first.mainWallet, isFalse);
+      expect(second.mainWallet, isFalse);
+    },
+  );
 
   test(
     'deleteWalletInfo removes the default first wallet and clamps index',

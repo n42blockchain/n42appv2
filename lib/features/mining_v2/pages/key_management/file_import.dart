@@ -4,9 +4,11 @@ import 'package:file_picker/file_picker.dart';
 
 class FileImport {
   Future<String> fileImport() async {
-    final result = await FilePicker.pickFile();
-    final path = result?.path;
-    if (path == null) return '';
-    return File(path).readAsString();
+    final files = await FilePicker.pickFiles();
+    if (files.isNotEmpty) {
+      final content = await File(files.first.path!).readAsString();
+      return content;
+    }
+    return "";
   }
 }

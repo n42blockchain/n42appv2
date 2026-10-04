@@ -148,10 +148,12 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   /// 获取友好的错误信息
   String _getErrorMessage(dynamic error) {
     final errorStr = error.toString();
-    if (errorStr.contains('解密失败')) {
+    if (errorStr.contains('解密失败') ||
+        errorStr.toLowerCase().contains('decryption failed')) {
       return S.of(context).g_mining_key_107;
     }
-    if (errorStr.contains('不支持的加密版本')) {
+    if (errorStr.contains('不支持的加密版本') ||
+        errorStr.toLowerCase().contains('unsupported encryption version')) {
       return S.of(context).g_mining_key_108;
     }
     if (errorStr.contains('ArgumentError')) {

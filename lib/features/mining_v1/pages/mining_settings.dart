@@ -138,9 +138,9 @@ class _MiningSettingsState extends State<MiningSettings> {
                 'connectivityResult: $connectivityResult',
               );
               setState(() {
-                isSwitched = !isSwitched;
+                isSwitched = value;
                 SPUtil().setMiningOpen(isSwitched);
-                if (isSwitched) {
+                if (value) {
                   MiningUtils.startMining();
                 } else {
                   MiningUtils.stopMining();

@@ -4,15 +4,20 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/n42_chat.dart'
     show FirebasePushService, PushDedupStore;
 import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/utils/app_push_utils.dart';
 import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_wallet/shared/domain/entities/device_login_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _notificationChannel = MethodChannel(
@@ -32,6 +37,15 @@ class _Firebase extends FirebasePlatform {
   );
 
   @override
+  List<FirebaseAppPlatform> get apps => [_app];
+
+  @override
+  Future<FirebaseAppPlatform> initializeApp({
+    String? name,
+    FirebaseOptions? options,
+  }) async => _app;
+
+  @override
   FirebaseAppPlatform app([String name = '[DEFAULT]']) => _app;
 }
 
@@ -39,6 +53,11 @@ class _Messaging extends FirebaseMessagingPlatform {
   int permissionRequests = 0;
   int initialMessageRequests = 0;
   int backgroundRegistrations = 0;
+  int notificationSettingsRequests = 0;
+  AuthorizationStatus currentAuthorizationStatus =
+      AuthorizationStatus.authorized;
+  AuthorizationStatus requestedAuthorizationStatus =
+      AuthorizationStatus.authorized;
   final presentations = <Map<String, bool>>[];
 
   @override
@@ -82,10 +101,29 @@ class _Messaging extends FirebaseMessagingPlatform {
     bool providesAppNotificationSettings = false,
   }) async {
     permissionRequests++;
-    return const NotificationSettings(
+    return NotificationSettings(
       alert: AppleNotificationSetting.enabled,
       announcement: AppleNotificationSetting.disabled,
-      authorizationStatus: AuthorizationStatus.authorized,
+      authorizationStatus: requestedAuthorizationStatus,
+      badge: AppleNotificationSetting.enabled,
+      carPlay: AppleNotificationSetting.disabled,
+      lockScreen: AppleNotificationSetting.enabled,
+      notificationCenter: AppleNotificationSetting.enabled,
+      showPreviews: AppleShowPreviewSetting.always,
+      timeSensitive: AppleNotificationSetting.disabled,
+      criticalAlert: AppleNotificationSetting.disabled,
+      sound: AppleNotificationSetting.enabled,
+      providesAppNotificationSettings: AppleNotificationSetting.disabled,
+    );
+  }
+
+  @override
+  Future<NotificationSettings> getNotificationSettings() async {
+    notificationSettingsRequests++;
+    return NotificationSettings(
+      alert: AppleNotificationSetting.enabled,
+      announcement: AppleNotificationSetting.disabled,
+      authorizationStatus: currentAuthorizationStatus,
       badge: AppleNotificationSetting.enabled,
       carPlay: AppleNotificationSetting.disabled,
       lockScreen: AppleNotificationSetting.enabled,
@@ -312,5 +350,147 @@ void main() {
     await tester.pump();
     expect(badge, isNull);
     expect(notifications.where((c) => c.method == 'cancelAll'), hasLength(1));
+  });
+
+  testWidgets('background host pushes update badge without touching Riverpod', (
+    tester,
+  ) async {
+    await tester.runAsync(() async {
+      await firebaseMessagingBackgroundEntrypoint(
+        message('background-transfer', data: {'type': 'transfer'}),
+      );
+      await Future<void>.delayed(Duration.zero);
+    });
+
+    expect(app.globalProviderContainer.read(unreadCountProvider), 0);
+    expect(badge, 1);
+    expect(badgeCalls.map((call) => call.method), ['getBadge', 'setBadge']);
+    expect(notifications, isEmpty);
+  });
+
+  testWidgets('background device login shows a stable local notification', (
+    tester,
+  ) async {
+    const incoming = RemoteMessage(
+      messageId: 'background-device-login',
+      data: {
+        'type': 'device_login',
+        'device_id': 'other-device',
+        'device_brand': 'N42',
+        'device_os': 'Android',
+      },
+    );
+    await tester.runAsync(() async {
+      await firebaseMessagingBackgroundEntrypoint(incoming);
+      await firebaseMessagingBackgroundEntrypoint(incoming);
+      await Future<void>.delayed(Duration.zero);
+    });
+
+    final shownCalls = notifications.where((call) => call.method == 'show');
+    expect(shownCalls, hasLength(1));
+    final shown = shownCalls.single;
+    final arguments = shown.arguments as Map;
+    expect(
+      arguments['id'],
+      PushDedupStore.notificationIdForKey(incoming.messageId!),
+    );
+    expect(arguments['title'], 'New Device Login');
+    expect(arguments['body'], 'Your account was logged in on N42 Android');
+    expect(jsonDecode(arguments['payload'] as String), incoming.data);
+    expect(app.globalProviderContainer.read(unreadCountProvider), 0);
+  });
+
+  testWidgets('permission check does not prompt an authorized user', (
+    tester,
+  ) async {
+    final permissionRequests = messaging.permissionRequests;
+    final settingsRequests = messaging.notificationSettingsRequests;
+    await tester.runAsync(AppPushUtils.checkAndPromptPermission);
+
+    expect(messaging.notificationSettingsRequests, settingsRequests + 1);
+    expect(messaging.permissionRequests, permissionRequests);
+    expect(find.byType(AlertDialog), findsNothing);
+  });
+
+  testWidgets(
+    'denied iOS permission retries once and waits for a host context',
+    (tester) async {
+      final previousPlatform = debugDefaultTargetPlatformOverride;
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      messaging.currentAuthorizationStatus = AuthorizationStatus.denied;
+      messaging.requestedAuthorizationStatus = AuthorizationStatus.denied;
+      final permissionRequests = messaging.permissionRequests;
+
+      try {
+        await tester.runAsync(AppPushUtils.checkAndPromptPermission);
+        expect(messaging.permissionRequests, permissionRequests + 1);
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(app.globalProviderContainer.read(unreadCountProvider), 0);
+      } finally {
+        debugDefaultTargetPlatformOverride = previousPlatform;
+        messaging.currentAuthorizationStatus = AuthorizationStatus.authorized;
+        messaging.requestedAuthorizationStatus = AuthorizationStatus.authorized;
+      }
+    },
+  );
+
+  testWidgets('foreground device login from this device is ignored', (
+    tester,
+  ) async {
+    FlutterSecureStorage.setMockInitialValues({'n42_device_id': 'current'});
+    final events = <EventPublic>[];
+    final subscription = eventBus.on<EventPublic>().listen(events.add);
+    addTearDown(subscription.cancel);
+
+    await deliver(
+      tester,
+      message(
+        'device-login-self',
+        data: {'type': 'device_login', 'device_id': 'current'},
+      ),
+    );
+
+    expect(events, isEmpty);
+    expect(shows(), isEmpty);
+  });
+
+  testWidgets('foreground device login from another device emits device info', (
+    tester,
+  ) async {
+    FlutterSecureStorage.setMockInitialValues({'n42_device_id': 'current'});
+    final events = <EventPublic>[];
+    final subscription = eventBus.on<EventPublic>().listen(events.add);
+    addTearDown(subscription.cancel);
+
+    await deliver(
+      tester,
+      message(
+        'device-login-other',
+        data: {
+          'type': 'device_login',
+          'device_id': 'other',
+          'device_brand': 'N42',
+          'device_model': 'Phone',
+          'device_os': 'iOS',
+          'login_time': '2026-10-02T12:00:00Z',
+        },
+      ),
+    );
+
+    expect(events, hasLength(1));
+    expect(events.single.type, EventPublicType.deviceLoginDetected);
+    expect(
+      events.single.param,
+      isA<DeviceLoginInfo>()
+          .having((info) => info.deviceId, 'device id', 'other')
+          .having((info) => info.displayName, 'display name', 'N42 iOS')
+          .having(
+            (info) => info.loginTime,
+            'login time',
+            '2026-10-02T12:00:00Z',
+          ),
+    );
+    expect(shows(), isEmpty);
+    expect(app.globalProviderContainer.read(unreadCountProvider), 0);
   });
 }

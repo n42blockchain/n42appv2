@@ -192,9 +192,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         return BigInt.parse(cleaned) * BigInt.from(10).pow(widget.decimals);
       }
       final parts = cleaned.split('.');
-      final decPart = parts[1].length > widget.decimals
-          ? parts[1].substring(0, widget.decimals)
-          : parts[1].padRight(widget.decimals, '0');
+      if (parts.length != 2 || parts[1].length > widget.decimals) {
+        return BigInt.zero;
+      }
+      final decPart = parts[1].padRight(widget.decimals, '0');
       return BigInt.parse('${parts[0]}$decPart');
     } catch (_) {
       return BigInt.zero;

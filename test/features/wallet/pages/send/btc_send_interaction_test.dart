@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_btc.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
@@ -79,7 +80,11 @@ void main() {
     ..privateKey = 'synthetic-non-secret-test-value'
     ..balance = balance ?? BigInt.from(100000000);
 
-  Future<dynamic> mount(WidgetTester tester, {BigInt? balance}) async {
+  Future<dynamic> mount(
+    WidgetTester tester, {
+    BigInt? balance,
+    bool clearApiError = true,
+  }) async {
     await tester.pumpWidget(
       wrapForTest(
         WalletChainSendBtc(makeCoin(balance: balance)),
@@ -102,10 +107,10 @@ void main() {
           'hex': '0014synthetic-script',
         },
       ]
-      ..utxoLastPage = true
-      // Fee endpoint fails fast offline and leaves an informational error;
-      // clear it so Max exercises the local UTXO/fee path itself.
-      ..errorMessage = '';
+      ..utxoLastPage = true;
+    // Fee endpoint fails fast offline and leaves an informational error;
+    // clear it for local UTXO/Max cases unless a test exercises that gate.
+    if (clearApiError) state.errorMessage = '';
     expect(tester.takeException(), isNull);
     return state;
   }
@@ -145,13 +150,77 @@ void main() {
   ) async {
     final state = await mount(tester);
 
-    await state.maxTag();
+    final maxButton = find.ancestor(
+      of: find.text('Max'),
+      matching: find.byType(InkWell),
+    );
+    await tester.ensureVisible(find.text('Max'));
+    await tester.pumpAndSettle();
+    await tester.tap(maxButton.first);
     await tester.pumpAndSettle();
 
     expect(trustdartCalls, contains('getTransactionMaxValue'));
     expect(state.price, 99999300);
     expect(state.valueTextEditingController.text, '0.999993');
     expect(state.inputUTXO.single['txid'], 'synthetic-txid');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('BTC amount field validates after its debounce interval', (
+    tester,
+  ) async {
+    final state = await mount(tester);
+    final amountField = find.byWidgetPredicate(
+      (widget) =>
+          widget is TextField &&
+          widget.controller == state.valueTextEditingController,
+    );
+
+    await tester.enterText(amountField, '0.5');
+    await tester.pump(const Duration(milliseconds: 299));
+    expect(state.price, 0);
+    await tester.pump(const Duration(milliseconds: 1));
+    await tester.pumpAndSettle();
+
+    expect(state.price, 50000000);
+    expect(state.amountErrorMessage, isEmpty);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('BTC send button rejects an invalid recipient before review', (
+    tester,
+  ) async {
+    final state = await mount(tester);
+    state
+      ..valueTextEditingController.text = '0.5'
+      ..toTextEditingController.text = 'invalid-address';
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Send'));
+    await tester.pumpAndSettle();
+
+    expect(state.toErrorMessage, isNotEmpty);
+    expect(find.byType(WalletBaseSend), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'Send'), findsOneWidget);
+    expect(trustdartCalls, isNot(contains('signTransaction')));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('BTC send button keeps review gated by fee state', (
+    tester,
+  ) async {
+    final state = await mount(tester, clearApiError: false);
+    state
+      ..valueTextEditingController.text = '0.5'
+      ..toTextEditingController.text = recipient;
+
+    expect(find.text('Failed to get data'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Send'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Failed to get data'), findsOneWidget);
+    expect(find.byType(WalletBaseSend), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'Send'), findsOneWidget);
+    expect(trustdartCalls, isNot(contains('signTransaction')));
     expect(tester.takeException(), isNull);
   });
 

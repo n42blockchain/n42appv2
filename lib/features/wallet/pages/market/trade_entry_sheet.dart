@@ -23,6 +23,7 @@ Future<bool?> showTradeEntrySheet({
   required String symbol,
   required String name,
   required double currentPrice,
+  TradeEntryStore? storeForTesting,
 }) {
   return showModalBottomSheet<bool>(
     context: context,
@@ -33,23 +34,47 @@ Future<bool?> showTradeEntrySheet({
       symbol: symbol,
       name: name,
       currentPrice: currentPrice,
+      storeForTesting: storeForTesting,
     ),
   );
 }
 
 // ─── Sheet widget ──────────────────────────────────────────────────────────
 
+/// Persistence boundary for the trade-entry sheet.
+abstract interface class TradeEntryStore {
+  Future<List<PortfolioTrade>> getTradesForCoin(String coinId);
+  Future<void> insertTrade(PortfolioTrade trade);
+  Future<void> deleteTrade(int id);
+}
+
+class _PortfolioTradeStore implements TradeEntryStore {
+  @override
+  Future<List<PortfolioTrade>> getTradesForCoin(String coinId) =>
+      PortfolioTradeService.getTradesForCoin(coinId);
+
+  @override
+  Future<void> insertTrade(PortfolioTrade trade) async {
+    await PortfolioTradeService.insertTrade(trade);
+  }
+
+  @override
+  Future<void> deleteTrade(int id) => PortfolioTradeService.deleteTrade(id);
+}
+
 class _TradeEntrySheet extends StatefulWidget {
   final String coinId;
   final String symbol;
   final String name;
   final double currentPrice;
+  final TradeEntryStore? storeForTesting;
 
   const _TradeEntrySheet({
     required this.coinId,
     required this.symbol,
     required this.name,
     required this.currentPrice,
+    required this.storeForTesting,
   });
 
   @override
@@ -57,6 +82,8 @@ class _TradeEntrySheet extends StatefulWidget {
 }
 
 class _TradeEntrySheetState extends State<_TradeEntrySheet> {
+  late final TradeEntryStore _store =
+      widget.storeForTesting ?? _PortfolioTradeStore();
   final _qtyCtrl = TextEditingController();
   final _priceCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -88,7 +115,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
 
   Future<void> _loadTrades() async {
     try {
-      final list = await PortfolioTradeService.getTradesForCoin(widget.coinId);
+      final list = await _store.getTradesForCoin(widget.coinId);
       if (mounted) setState(() => _trades = list);
     } catch (e) {
       AppLogger.w('TradeEntrySheet', 'failed to load trades: $e');
@@ -104,7 +131,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
 
     setState(() => _loading = true);
     try {
-      await PortfolioTradeService.insertTrade(
+      await _store.insertTrade(
         PortfolioTrade(
           coinId: widget.coinId,
           symbol: widget.symbol.toLowerCase(),
@@ -134,7 +161,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
   Future<void> _deleteTrade(PortfolioTrade trade) async {
     if (trade.id == null) return;
     try {
-      await PortfolioTradeService.deleteTrade(trade.id!);
+      await _store.deleteTrade(trade.id!);
       _changed = true;
       await _loadTrades();
     } catch (e) {
