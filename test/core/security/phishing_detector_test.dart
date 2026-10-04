@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,31 +9,25 @@ void main() {
   group('PhishingDetector', () {
     late PhishingDetector detector;
 
-    setUp(() {
-      // Reset singleton state for each test by using a fresh instance
-      // We access the singleton but need to reset it.
-      detector = PhishingDetector.instance;
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({
+        'phishing_blocklist_time_v1': DateTime.now().millisecondsSinceEpoch,
+      });
+      final prefs = await SharedPreferences.getInstance();
+      detector = PhishingDetector.forTest();
+      await detector.initialize(prefs);
     });
 
-    group('checkUrl - before initialization', () {
-      test('returns safe when not initialized (fail-open)', () {
-        // Create a separate test instance to verify uninitialized behavior
-        // Since singleton is shared, we test the contract:
-        // If somehow called before initialize, should be safe.
-        final result = detector.checkUrl('https://metamask-login.com');
-        // After first setUp initialize is already called, so this tests
-        // the initialized path. We verify fail-open in isolation below.
-        expect(result, isA<PhishingCheckResult>());
-      });
+    test('fails open before initialization', () {
+      final uninitializedDetector = PhishingDetector.forTest();
+
+      expect(
+        uninitializedDetector.checkUrl('https://metamask-login.com'),
+        PhishingCheckResult.safe,
+      );
     });
 
     group('checkUrl - seed blocklist', () {
-      setUpAll(() async {
-        SharedPreferences.setMockInitialValues({});
-        final prefs = await SharedPreferences.getInstance();
-        await PhishingDetector.instance.initialize(prefs);
-      });
-
       test('detects exact seed blocklist domain', () {
         expect(
           detector.checkUrl('https://metamask-login.com/phishing'),
@@ -103,9 +100,6 @@ void main() {
       });
 
       test('does not false-positive on partial domain match', () {
-        // "metamask-login.company.com" should NOT match "metamask-login.com"
-        // because the host doesn't end with ".metamask-login.com"
-        // and isn't exactly "metamask-login.com"
         expect(
           detector.checkUrl('https://metamask-login.company.com'),
           PhishingCheckResult.safe,
@@ -114,47 +108,64 @@ void main() {
     });
 
     group('allowForSession', () {
-      setUpAll(() async {
-        SharedPreferences.setMockInitialValues({});
-        final prefs = await SharedPreferences.getInstance();
-        await PhishingDetector.instance.initialize(prefs);
-      });
-
       test('whitelists URL for session after allowForSession', () {
         const url = 'https://metamask-login.com/phishing-page';
-        // First verify it's detected as phishing
         expect(detector.checkUrl(url), PhishingCheckResult.phishing);
 
-        // User clicks "Proceed Anyway"
         detector.allowForSession(url);
 
-        // Now should return safe
         expect(detector.checkUrl(url), PhishingCheckResult.safe);
       });
 
-      test('allowForSession with empty URL is a no-op', () {
-        // Should not throw
+      test('empty URL leaves blocklist behavior unchanged', () {
         detector.allowForSession('');
+
+        expect(
+          detector.checkUrl('https://metamask-login.com'),
+          PhishingCheckResult.phishing,
+        );
       });
 
-      test('allowForSession with invalid URL is a no-op', () {
+      test('invalid URL leaves blocklist behavior unchanged', () {
         detector.allowForSession('not-a-url');
+
+        expect(
+          detector.checkUrl('https://metamask-login.com'),
+          PhishingCheckResult.phishing,
+        );
       });
     });
 
-    group('cache loading', () {
-      test('loads blocklist from SharedPreferences cache', () async {
-        SharedPreferences.setMockInitialValues({
-          'phishing_blocklist_v1':
-              '{"blacklist":["custom-phishing-domain.xyz"],"whitelist":[]}',
-          'phishing_blocklist_time_v1': DateTime.now().millisecondsSinceEpoch,
-        });
-        // Note: since PhishingDetector is a singleton and already initialized,
-        // we can't truly test re-initialization. This verifies the contract.
-        final prefs = await SharedPreferences.getInstance();
-        // The initialize will be a no-op due to _initialized check.
-        await PhishingDetector.instance.initialize(prefs);
+    test('loads blocklist and whitelist from the cache file', () async {
+      final temporaryDirectory = await Directory.systemTemp.createTemp(
+        'phishing-detector-test-',
+      );
+      addTearDown(() => temporaryDirectory.delete(recursive: true));
+      final cacheFile = File('${temporaryDirectory.path}/blocklist.json');
+      await cacheFile.writeAsString(
+        jsonEncode({
+          'blacklist': ['custom-phishing-domain.xyz'],
+          'whitelist': ['trusted.example'],
+        }),
+      );
+
+      SharedPreferences.setMockInitialValues({
+        'phishing_blocklist_time_v1': DateTime.now().millisecondsSinceEpoch,
       });
+      final prefs = await SharedPreferences.getInstance();
+      final cachedDetector = PhishingDetector.forTest(
+        cacheFileProvider: () async => cacheFile,
+      );
+      await cachedDetector.initialize(prefs);
+
+      expect(
+        cachedDetector.checkUrl('https://custom-phishing-domain.xyz'),
+        PhishingCheckResult.phishing,
+      );
+      expect(
+        cachedDetector.checkUrl('https://trusted.example'),
+        PhishingCheckResult.safe,
+      );
     });
   });
 }

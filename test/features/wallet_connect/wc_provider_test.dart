@@ -276,13 +276,16 @@ void main() {
       expect(() => provider.dispose(), returnsNormally);
     });
 
-    test('double dispose does not throw', () {
+    test('dispose clears sensitive state before notifying listeners', () {
       final provider = WalletConnectProvider();
+      provider.actionData = 'sensitive transaction';
+      provider.actionDataMap = {'signature': 'sensitive'};
+      provider.errorMessage = 'stale error';
       provider.dispose();
-      // Second dispose — ChangeNotifier throws, but the provider
-      // should have cleaned up its state during the first call.
-      // This is a defensive test. If ChangeNotifier.dispose throws on
-      // double-call, that's framework behavior, not our bug.
+
+      expect(provider.actionData, isNull);
+      expect(provider.actionDataMap, isEmpty);
+      expect(provider.errorMessage, isEmpty);
     });
   });
 

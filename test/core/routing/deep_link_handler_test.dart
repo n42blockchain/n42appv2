@@ -267,11 +267,23 @@ void main() {
       expect(DeepLinkHandler.generateGroupLink('group1'), 'n42://group/group1');
     });
 
-    test('should handle dispose gracefully', () {
-      handler.startListening();
-      // Should not throw
-      handler.dispose();
-      handler.dispose(); // Double dispose should be safe
-    });
+    test(
+      'dispose stops navigation and is safe to call more than once',
+      () async {
+        handler.startListening();
+        handler.dispose();
+        handler.dispose();
+        fakeService.emitDeepLink(
+          DeepLinkData(
+            type: DeepLinkType.chat,
+            uri: Uri.parse('n42://chat/room1'),
+            params: {'roomId': 'room1'},
+          ),
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        expect(navigatedData, isEmpty);
+      },
+    );
   });
 }
