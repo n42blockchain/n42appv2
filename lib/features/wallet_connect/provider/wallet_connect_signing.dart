@@ -394,7 +394,10 @@ mixin WalletConnectSigning
 
     final transaction = web3.Transaction(
       from: wallet_types.EthereumAddress.fromHex(from),
-      to: wallet_types.EthereumAddress.fromHex(to ?? "0x"),
+      // A missing `to` is valid for contract-creation transactions.
+      to: to == null || to.isEmpty
+          ? null
+          : wallet_types.EthereumAddress.fromHex(to),
       value: wallet_types.EtherAmount.fromBigInt(
         wallet_types.EtherUnit.wei,
         _parseHexOrDecBigInt(value ?? "0x0"),
