@@ -1,4 +1,6 @@
 dependency_overrides:
+  # simple_html_css 5 has an outdated xml ^6 cap; XML 7 DOM/event APIs are tested at host call sites.
+  xml: ^7.1.0
   # The pinned Chat Git source uses the API-compatible NFC implementation.
   unorm_dart: ^0.3.2
   audioplayers_darwin:

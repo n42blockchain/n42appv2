@@ -18,9 +18,9 @@ on:
   workflow_call:
 
 env:
-  # Match pubspec.yaml: Flutter 3.44.8 ships Dart 3.12.2.
+  # Match pubspec.yaml: Flutter 3.47.5 ships Dart 3.13.4.
   # Java 21 matches android/app/build.gradle.kts compileOptions.
-  FLUTTER_VERSION: '3.44.8'
+  FLUTTER_VERSION: '3.47.5'
   COVERAGE_THRESHOLD: 70
   JAVA_VERSION: '21'
 
