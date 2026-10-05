@@ -191,16 +191,6 @@ class TokenDiscoveryService {
           contract: contract,
           symbol: explorerString(normalized, const ['tokenSymbol']) ?? '',
           name: explorerString(normalized, const ['tokenName']) ?? '',
-          decimals:
-              int.tryParse(
-                explorerString(normalized, const [
-                      'tokenDecimal',
-                      'tokenDecimals',
-                      'decimals',
-                    ]) ??
-                    '0',
-              ) ??
-              0,
         ),
       );
       if (candidates.length >= 30) break; // safety cap
@@ -257,13 +247,32 @@ class TokenDiscoveryService {
           BigInt.tryParse(hex.substring(2), radix: 16) ?? BigInt.zero;
       if (balance == BigInt.zero) return null;
 
+      // Explorer tokenDecimal values can be missing or stale. Read precision
+      // from the same contract before formatting its raw balance.
+      final decimalsResult = await EthAPI()
+          .baseRPCEth(
+            'eth_call',
+            [
+              {'to': candidate.contract, 'data': '0x313ce567'},
+              'latest',
+            ],
+            coinType: coinType,
+            enableRetry: false,
+          )
+          .timeout(const Duration(seconds: 6));
+      if (!decimalsResult.isSuccess) return null;
+      final decimals = parseErc20DecimalsResult(
+        decimalsResult.valueOrNull?.toString() ?? '',
+      );
+      if (decimals == null) return null;
+
       return DiscoveredToken(
         coinType: coinType,
         blockchainType: 'Ethereum',
         contractAddress: candidate.contract,
         symbol: candidate.symbol,
         name: candidate.name,
-        decimals: candidate.decimals,
+        decimals: decimals,
         rawBalance: balance,
       );
     } catch (_) {
@@ -330,7 +339,8 @@ class TokenDiscoveryService {
 
       final tokenAmount = info['tokenAmount'] as Map<String, dynamic>? ?? {};
       final amountStr = tokenAmount['amount'] as String? ?? '0';
-      final decimals = (tokenAmount['decimals'] as num?)?.toInt() ?? 0;
+      final decimals = parseDiscoveredTokenDecimals(tokenAmount['decimals']);
+      if (decimals == null) return null;
       final balance = BigInt.tryParse(amountStr) ?? BigInt.zero;
       if (balance == BigInt.zero) return null;
 
@@ -391,11 +401,9 @@ class _EvmCandidate {
   final String contract;
   final String symbol;
   final String name;
-  final int decimals;
   const _EvmCandidate({
     required this.contract,
     required this.symbol,
     required this.name,
-    required this.decimals,
   });
 }

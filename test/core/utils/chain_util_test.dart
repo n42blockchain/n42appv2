@@ -121,6 +121,10 @@ void main() {
       expect(result, Decimal.zero);
     });
 
+    test('zero-decimal tokens keep their integer balance', () {
+      expect(toEther('123456789', 0), Decimal.parse('123456789'));
+    });
+
     test('1 satoshi (8 decimals) → 0.00000001 BTC', () {
       final result = toEther('1', 8);
       expect(result, Decimal.parse('0.00000001'));

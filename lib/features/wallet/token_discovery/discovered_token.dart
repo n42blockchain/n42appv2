@@ -2,6 +2,23 @@ import 'dart:math';
 
 final RegExp _trailingZeros = RegExp(r'0+$');
 
+/// Parses on-chain token precision without assuming that missing metadata means
+/// a zero-decimal token. Zero is valid; ERC token decimals are uint8 values.
+int? parseDiscoveredTokenDecimals(Object? value) {
+  final int decimals;
+  if (value is int) {
+    decimals = value;
+  } else if (value is String) {
+    final parsed = int.tryParse(value);
+    if (parsed == null) return null;
+    decimals = parsed;
+  } else {
+    return null;
+  }
+  if (decimals < 0 || decimals > 255) return null;
+  return decimals;
+}
+
 /// A token found on-chain but not yet in the user's wallet.
 class DiscoveredToken {
   final String coinType; // internal chain key: ETH, BSC, SOL …
@@ -28,6 +45,7 @@ class DiscoveredToken {
 
   /// Human-readable balance string.
   String get humanBalance {
+    if (parseDiscoveredTokenDecimals(decimals) == null) return '—';
     if (rawBalance == BigInt.zero) return '0';
     if (decimals <= 0) return rawBalance.toString();
     final scale = BigInt.from(10).pow(decimals);

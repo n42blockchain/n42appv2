@@ -538,6 +538,9 @@ class WalletActionProvider extends ChangeNotifier
     coinModel.coin[balanceKey] = balance.toString();
     _safeUpdateWalletMap(coinModel);
     applyCachedBalance(coinModel);
+    if (!hasValidContractTokenDecimals(coinModel)) {
+      return true;
+    }
     coinModel.loadError = false;
     return false;
   }

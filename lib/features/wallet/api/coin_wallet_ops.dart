@@ -15,6 +15,19 @@ bool requiresEvmTokenMetadataVerification(CoinModel coin) {
       coin.coin['decimals_verified'] != true;
 }
 
+/// A contract token must carry an explicit, valid precision. Treating missing
+/// precision as zero exposes its raw smallest-unit balance as whole tokens.
+bool hasValidContractTokenDecimals(CoinModel coin) {
+  if (coin.coin['isContract'] != true) return true;
+  final rawDecimals = coin.coin['decimals'] ?? coin.coin['decimal'];
+  final int? decimals = switch (rawDecimals) {
+    int value => value,
+    String value => int.tryParse(value),
+    _ => null,
+  };
+  return decimals != null && decimals >= 0 && decimals <= 255;
+}
+
 /// Whether a row needs a prominent balance warning.
 ///
 /// A failed refresh for a zero-balance coin does not make the displayed value
@@ -25,12 +38,19 @@ bool requiresEvmTokenMetadataVerification(CoinModel coin) {
 bool shouldShowBalanceLoadWarning(CoinModel coin) {
   return coin.loadError &&
       (coin.balance != BigInt.zero ||
-          requiresEvmTokenMetadataVerification(coin));
+          requiresEvmTokenMetadataVerification(coin) ||
+          !hasValidContractTokenDecimals(coin));
 }
 
 /// Hydrates [coin]'s balance/price/value fields from cached data in the coin map.
 void applyCachedBalance(CoinModel coin) {
   if (requiresEvmTokenMetadataVerification(coin)) {
+    coin.balance = BigInt.zero;
+    coin.value = 0.0;
+    coin.loadError = true;
+    return;
+  }
+  if (!hasValidContractTokenDecimals(coin)) {
     coin.balance = BigInt.zero;
     coin.value = 0.0;
     coin.loadError = true;

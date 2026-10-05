@@ -43,6 +43,43 @@ void main() {
     });
   });
 
+  group('contract token balance precision', () {
+    test('does not expose cached raw units when decimals are missing', () {
+      final token = CoinModel.fromMap({
+        'blockchainType': 'Solana',
+        'coinType': 'SOL',
+        'isContract': true,
+        'canEdit': true,
+        'balance': '1000000000000000000000000000000',
+        'coinPrice': 1.0,
+      });
+
+      applyCachedBalance(token);
+
+      expect(token.balance, BigInt.zero);
+      expect(token.value, 0.0);
+      expect(token.loadError, isTrue);
+    });
+
+    test('keeps a valid zero-decimal token balance', () {
+      final token = CoinModel.fromMap({
+        'blockchainType': 'Solana',
+        'coinType': 'SOL',
+        'isContract': true,
+        'canEdit': true,
+        'decimals': 0,
+        'balance': '123456789',
+        'coinPrice': 1.0,
+      });
+
+      applyCachedBalance(token);
+
+      expect(token.balanceStringAll(), '123456789');
+      expect(token.value, 123456789.0);
+      expect(token.loadError, isFalse);
+    });
+  });
+
   group('balance load warning', () {
     test('hides transient refresh errors for a zero balance', () {
       final coin = CoinModel()..loadError = true;
@@ -64,6 +101,16 @@ void main() {
         'coinType': 'ETH',
         'isContract': true,
         'canEdit': true,
+      })..loadError = true;
+
+      expect(shouldShowBalanceLoadWarning(coin), isTrue);
+    });
+
+    test('warns when a contract token has invalid decimals', () {
+      final coin = CoinModel.fromMap({
+        'blockchainType': 'Solana',
+        'coinType': 'SOL',
+        'isContract': true,
       })..loadError = true;
 
       expect(shouldShowBalanceLoadWarning(coin), isTrue);
