@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/airdrop/pages/airdrop_home_page.dart';
+import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
 import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
@@ -183,6 +185,18 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     SizedBox(height: AppSpacing.space4),
                     // 其他分组
                     _sectionTitle(S.of(context).s_key_10),
+                    if (defaultTargetPlatform == TargetPlatform.iOS)
+                      _menuItem(
+                        "assets/home/tabbar/earn.png",
+                        S.of(context).g_key_earn_title,
+                        automationKey: const ValueKey<String>('drawer_earn'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const EarnPage()),
+                          );
+                        },
+                      ),
                     if (AppConfig.pointsAirdropEnabled) ...[
                       _menuItem(
                         "assets/home/tabbar/earn.png",

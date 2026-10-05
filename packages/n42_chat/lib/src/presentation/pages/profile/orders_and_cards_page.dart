@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../domain/entities/red_packet_entity.dart';
 import '../../../n42_chat.dart';
+import '../red_packet/red_packet_history_page.dart';
 
 /// Activity and card-pack hub used by the Me tab.
 ///
@@ -15,7 +16,9 @@ import '../../../n42_chat.dart';
 /// empty placeholder. Cards delegate to the wallet host where card ownership
 /// lives, while standalone chat presents an explicit unavailable state.
 class OrdersAndCardsPage extends StatefulWidget {
-  const OrdersAndCardsPage({super.key});
+  final String? userId;
+
+  const OrdersAndCardsPage({super.key, this.userId});
 
   @override
   State<OrdersAndCardsPage> createState() => _OrdersAndCardsPageState();
@@ -67,6 +70,26 @@ class _OrdersAndCardsPageState extends State<OrdersAndCardsPage> {
               color: context.textPrimary,
             ),
           ),
+          actions: [
+            IconButton(
+              tooltip: S.of(context)?.redPacketHistory ?? 'Red Packet History',
+              icon: const Icon(Icons.history),
+              onPressed: () {
+                final userId = widget.userId ?? N42Chat.currentUser?.userId;
+                if (userId == null || userId.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Sign in to view history')),
+                  );
+                  return;
+                }
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => RedPacketHistoryPage(userId: userId),
+                  ),
+                );
+              },
+            ),
+          ],
           centerTitle: true,
           bottom: TabBar(
             labelColor: AppColors.primary,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
@@ -65,7 +66,7 @@ class _HomePageState extends ConsumerState<HomePage>
         key: const ValueKey<String>('home_content_mining'),
         child: useV2 ? const MiningTodayV2() : const MiningHomePage(),
       ),
-      if (Platform.isAndroid)
+      if (defaultTargetPlatform == TargetPlatform.android)
         const KeyedSubtree(
           key: ValueKey<String>('home_content_earn'),
           child: EarnPage(),

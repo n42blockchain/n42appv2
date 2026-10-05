@@ -834,9 +834,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _openOrdersAndCards(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => const OrdersAndCardsPage()));
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => OrdersAndCardsPage(userId: _userId),
+      ),
+    );
   }
 
   void _openStickers(BuildContext context) {
