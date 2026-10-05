@@ -610,7 +610,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
         }
         return false;
       }
-      final chainMap = Map<String, dynamic>.from(chainMapWallet);
+      // Wallet configs contain nested maps. A shallow copy lets the imported
+      // wallet reset mutate the shared config used by the active wallet.
+      final chainMap =
+          jsonDecode(jsonEncode(chainMapWallet)) as Map<String, dynamic>;
       chainMap['baseInfo']['isTest'] = false;
       chainMap['baseInfo']['mainnets'] = {};
       chainMap['baseInfo']['balance'] = "0";

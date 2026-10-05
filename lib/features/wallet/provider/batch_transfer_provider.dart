@@ -91,6 +91,7 @@ class BatchTransferProvider extends ChangeNotifier {
     _decimals = decimals;
     _state = BatchTransferState.initial;
     _items = [];
+    _cachedTotalAmount = BigInt.zero;
     _parseErrors = [];
     _gasEstimate = null;
     _errorMessage = null;
