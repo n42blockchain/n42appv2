@@ -1,12 +1,18 @@
-# Dependency upgrade record — 2026-10-02
+# Dependency upgrade record — started 2026-10-02; status refreshed 2026-10-05
 
 This record covers the host application's pinned Chat map update and the first host dependency batch. The audit is a checkpoint, not a claim that every package is upgraded. The host `pubspec.yaml` and lockfile are the source of truth; `packages/n42_chat/` is a cache mirror and was not edited.
 
-## Current resolver snapshot (2026-10-04)
+## Resolver snapshot from 2026-10-04
 
-The host now pins Chat to merged PR #2 (`a24058de8849ab232d743458e88c60d2f042790`), which includes the channel-discovery and red-packet-history entry points. The Chat source was tested at `b976317565e46bf2f6f65e96ac05bc8d28322047`. The earlier sections below record the 2026-10-02 upgrade checkpoint and old Chat map pin; they are historical.
+At this snapshot, the host pinned Chat to merged PR #2 (`a24058de8849ab232d743458e88c60d2f042790`), which included the channel-discovery and red-packet-history entry points. The Chat source was tested at `b976317565e46bf2f6f65e96ac05bc8d28322047`. The 2026-10-05 state is listed below; the earlier sections record older dependency checkpoints.
 
 A fresh Pub resolver audit found newer package versions in both graphs. Host: 23 direct, 8 dev, and 60 transitive dependencies; Chat: 65 direct, 10 dev, and 157 transitive dependencies. The exact upgradable, resolvable, and latest counts are in [`artifacts/pub-outdated-20261004-summary.md`](artifacts/pub-outdated-20261004-summary.md), with compressed machine snapshots beside it. Not every latest version fits current constraints or has completed compatibility work. The full dependency-upgrade request remains open.
+
+## Latest completed state (2026-10-05)
+
+The host repository is at `10a429c7f` and pins Chat to `dadb12a1`. The latest host dependency batch aligned the Chat source API with the host constraints, removed unused or obsolete direct package entries, and updated six compatible packages. The root full suite passed 5,432 tests; coverage was 71.1432%. Analysis exited 0 with no warnings or errors. The independent Chat full suite passed 7,308 tests, skipped 3, and measured 70.0962% coverage; Chat analysis exited 0 with no warnings or errors. See the current task ledger for these acceptance results.
+
+The request to upgrade every dependency is still open. The latest `pub outdated` snapshot lists newer releases that remain outside current constraints or need source/native migration. Keep them open until each graph has a compatible update and its tests and platform builds pass. Do not infer completion from the successful compatible batch.
 
 ## Toolchain and baseline
 

@@ -1,5 +1,9 @@
 # Project and Chat coverage expansion (2026-10-02)
 
+## Superseding full-suite results (2026-10-05)
+
+The 2026-10-02 and 2026-10-04 snapshots below are historical. The latest main-app commit `10a429c7f` passed 5,432 tests with whole-project line coverage of 71.1432%. The separately pinned Chat plugin commit `dadb12a1` passed 7,308 tests, skipped 3, and reached 70.0962%. Both repositories now meet the 70% line-coverage target. Their results are separate and must not be combined. The host and Chat source commits, dependency graph, and current analyzer results are recorded in the [dependency upgrade log](../dependency-upgrade-2026-10-02/README.md).
+
 This batch adds behavior tests to the host wallet and Chat plugin, fixes issues reproduced by those checks, and records independent full-suite coverage. The host and Chat raw LCOV denominators remain separate; the host CI gate remains 70%.
 
 ## Latest Chat full-suite run (2026-10-04)
@@ -88,7 +92,7 @@ Latest host raw machine SHA-256 is `068f65a76feeeda1377f8f0be7cb93ea4804e08bbae1
 
 Latest host LCOV has `wallet_assistant_page.dart` at 202 / 217, `browser_page_widgets.dart` at 209 / 216, `wallet_manage.dart` at 142 / 208, `ens_renew_page.dart` at 175 / 208, `wallet_action_provider_token.dart` at 140 / 249, `wallet_chain_send.dart` at 95 / 209, and `mining_full_node_v2_widgets.dart` at 194 / 208. Next large measured host gaps include `wallet_security_verification_sections.dart` (208 uncovered lines) and `wallet_action_provider_wallet.dart` (194). `iap_page.dart` has 42 uncovered lines (185 / 227), while `wallet_coin_token_add2.dart` has 17, `create_session_key_sheet.dart` 10, `earn_page_products.dart` 11, `session_key_card.dart` 8, and `aa_batch_transaction_body.dart` 1. The largest non-generated Chat gaps are `security_settings_page.dart` (554), `injection.dart` (500), `chat_page.dart` (451), `chat_page_event_handlers.dart` (440), `chat_page_message_actions.dart` (437), and `webrtc_service.dart` (425); `chat_page_more_features.dart` has 393 uncovered lines, `group_settings_page.dart` 299, `message_item.dart` 357, `chat_page_media_actions.dart` 372, and `music_select_sheet.dart` 145, plus `security_settings_page.dart` 378 in the active-worktree trace. These remain behavior-level test targets; generated localization getters should not be swept to inflate the raw score.
 
-These batches are verified but neither scope has reached 70%. Continue COV-01 with targeted behavior tests in both the host app and Chat, keep separate fresh LCOV measurements, and leave the configured 70% gate unchanged.
+At this historical checkpoint, neither scope had reached 70%. The 2026-10-05 full-suite runs above supersede that status. Keep the configured 70% gate unchanged and continue targeted behavior tests where they reduce real risk.
 
 ## Earlier active-checkout checkpoint (2026-10-02)
 
