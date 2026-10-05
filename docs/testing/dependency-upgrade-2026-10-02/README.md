@@ -8,13 +8,41 @@ At this snapshot, the host pinned Chat to merged PR #2 (`a24058de8849ab232d74345
 
 A fresh Pub resolver audit found newer package versions in both graphs. Host: 23 direct, 8 dev, and 60 transitive dependencies; Chat: 65 direct, 10 dev, and 157 transitive dependencies. The exact upgradable, resolvable, and latest counts are in [`artifacts/pub-outdated-20261004-summary.md`](artifacts/pub-outdated-20261004-summary.md), with compressed machine snapshots beside it. Not every latest version fits current constraints or has completed compatibility work. The full dependency-upgrade request remains open.
 
-## Latest completed state (2026-10-05)
+## Previous completed batch (2026-10-05)
 
 The host repository is at `10a429c7f` and pins Chat to `dadb12a1`. The latest host dependency batch aligned the Chat source API with the host constraints, removed unused or obsolete direct package entries, and updated six compatible packages. The root full suite passed 5,432 tests; coverage was 71.1432%. Analysis exited 0 with no warnings or errors. The independent Chat full suite passed 7,308 tests, skipped 3, and measured 70.0962% coverage; Chat analysis exited 0 with no warnings or errors. See the current task ledger for these acceptance results.
 
 The request to upgrade every dependency is still open. The latest `pub outdated` snapshot lists newer releases that remain outside current constraints or need source/native migration. Keep them open until each graph has a compatible update and its tests and platform builds pass. Do not infer completion from the successful compatible batch.
 
-## Toolchain and baseline
+## Additional verified batch (2026-10-05)
+
+This later batch advances the package graph and the Chat example host after the checkpoint above. The host now requires Dart 3.13 / Flutter 3.47 and CI pins Flutter 3.47.5. It pins Chat to `c1388a54452a233aa840a79b4e7980e844228cb2`, which includes the checked-in mobile example hosts, the final dependency migration, and refreshed dependency locks.
+
+Host changes include `easy_refresh` 3.5.1 → 4.0.0, `cached_network_image` 4.0.3 → 4.0.4, `intl` 0.20.2 → 0.20.3, `pro_image_editor` 14.6.2 → 14.8.0, `sqflite` 2.4.4 → 2.4.4+1, `sqlite3` 3.5.2 → 3.7.0, and `xml` 6.6.1 → 7.1.0. `freezed` moved to the latest resolvable 4.0.1; `build_runner`, `intl_utils`, and `mockito` moved to 2.16.1, 2.8.16, and 5.8.1. A normal `flutter pub upgrade` advanced six more allowed transitive packages, including `background_downloader`, cached-image interfaces, `native_toolchain_c`, and `stack_trace`. The XML override is needed because `simple_html_css` 5.0.0 still declares an XML 6-only range; RSS tests and the full suite pass with XML 7.1.0.
+
+Chat replaced `flutter_gemma` with `flutter_edge_ai` 2.0.0 plus `flutter_edge_ai_mediapipe` 1.0.9, and replaced discontinued `flutter_markdown` with `flutter_markdown_plus` 1.0.12. It also upgrades `fluwx` to 6.0.4, `pro_image_editor` to 14.8.0, `material_ui` to 1.5.0, `drift` / `drift_dev` to 2.35.1, `sqlite3` to 3.7.0, and the other compatible packages in its lockfile. Unused `badges` was removed. Chat declares Dart 3.13 / Flutter 3.47 as its floor. The example iOS host supports iOS 16; Android uses API 24+, Java/Kotlin 17, and desugaring 2.1.4.
+
+Validation with Flutter 3.47.5 / Dart 3.13.4:
+
+- Host `flutter test --coverage --concurrency=4 --reporter compact` — 5,432 passed; 94,867 / 133,343 lines, 71.1451% coverage.
+- Chat full suite on the final lockfiles — 7,308 passed, 3 skipped; final 2.x Equatable graph measured 70.0948% coverage (97,035 / 138,434 lines).
+- `flutter analyze --no-fatal-infos` — exit 0; informational lints only.
+- Host Android debug APK and iOS simulator app — both built. The Chat example Android APK and x86_64 iOS simulator app also built.
+- Host and Chat `flutter pub get --enforce-lockfile` — passed.
+- The resolver snapshot after the host's normal `pub upgrade` is preserved in [`artifacts/host-pub-outdated-final-flutter347-20261005.json`](artifacts/host-pub-outdated-final-flutter347-20261005.json). It reports 24 packages with newer releases outside current constraints.
+
+The full-upgrade task remains open. Remaining direct version gaps have concrete compatibility boundaries:
+
+- `equatable` stays at 2.1.0 because `fl_chart` 1.2.0 uses `EquatableMixin`, removed in Equatable 3. Forcing Equatable 3 caused the chart-based host tests to fail compilation, so both Chat and the host use 2.1.0.
+- `connectivity_plus` stays at 7.3.1 and Chat `wakelock_plus` at 1.8.0. Their next releases require `dbus` 0.8, which conflicts with the Linux notification plugin's `dbus` 0.7 range.
+- `cupertino_icons` stays at 1.0.9 because the current `chewie` graph also requires the 1.x icon package.
+- `flutter_secure_storage` remains overridden to 10.3.4 to keep the wallet's legacy encrypted-value migration. Version 11 removes that migration path and raises the Android compile SDK requirement; do not remove this pin until an explicit data migration is in place.
+- `freezed` 4.0.2 requires Analyzer 14, while the latest `intl_utils` requires Analyzer 13. The latest compatible pair is Freezed 4.0.1 with `intl_utils` 2.8.16.
+- `webview_flutter_wkwebview` remains on the local host override; its newer hosted release does not include the host-specific patch. `package_info_plus` and `unorm_dart` overrides already resolve to their latest versions.
+
+The Chat plugin upgrade and refreshed lockfiles are merged to Chat `main` at `c1388a54452a233aa840a79b4e7980e844228cb2`. Host changes are being committed in small batches. Keep this task open for the listed migrations; do not describe the dependency graph as fully latest.
+
+## Toolchain and historical baseline
 
 - Acceptance toolchain: `/opt/homebrew/bin/flutter`, Flutter 3.44.8, Dart 3.12.2. No toolchain upgrade was used.
 - Host baseline before the Chat pin: `65d10df95913388cc9b6560af3c45baea0af177a`.
