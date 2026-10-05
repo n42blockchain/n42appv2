@@ -30,6 +30,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   String _selectedToken = 'ETH';
   String? _toError;
   String? _amountError;
+  String? _tokenAddressError;
   String? _calldataError;
 
   static const _ethLikeTokens = ['ETH', 'BNB', 'MATIC', 'AVAX', 'ARB'];
@@ -46,6 +47,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     setState(() {
       _toError = null;
       _amountError = null;
+      _tokenAddressError = null;
       _calldataError = null;
     });
 
@@ -67,6 +69,23 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
       final amount = double.tryParse(_amountController.text.trim());
       if (amount == null || amount <= 0) {
         setState(() => _amountError = 'Invalid amount');
+        valid = false;
+      }
+    }
+
+    final needsTokenAddress =
+        _selectedType == BatchOperationType.approve ||
+        (_selectedType == BatchOperationType.transfer &&
+            !_ethLikeTokens.contains(_selectedToken));
+    if (needsTokenAddress) {
+      final tokenAddress = _tokenAddressController.text.trim();
+      if (tokenAddress.isEmpty) {
+        setState(
+          () => _tokenAddressError = 'Token contract address is required',
+        );
+        valid = false;
+      } else if (!FeatureAddressUtils.isValidEvmAddress(tokenAddress)) {
+        setState(() => _tokenAddressError = 'Invalid token contract address');
         valid = false;
       }
     }
@@ -158,7 +177,9 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                       labelText: S.of(context).g_ui_token_contract_hint,
                       hintText: '0x...',
                       border: OutlineInputBorder(),
+                      errorText: _tokenAddressError,
                     ),
+                    onChanged: (_) => setState(() => _tokenAddressError = null),
                   ),
                   SizedBox(height: AppSpacing.space4),
                 ],
