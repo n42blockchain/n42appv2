@@ -8,7 +8,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+
+class _MemorySpUtil extends SPUtil {
+  Map<String, dynamic>? storedUser;
+
+  @override
+  Future<Map<String, dynamic>?> getUserInfo() async => storedUser;
+
+  @override
+  Future<void> saveUserInfoJson(Map<String, dynamic> info) async {
+    storedUser = Map<String, dynamic>.of(info);
+  }
+}
 
 void main() {
   // Initialize Flutter binding for tests
@@ -101,14 +115,76 @@ void main() {
     });
   });
 
-  // Note: CurrentUserNotifier tests are skipped because they require
-  // flutter_secure_storage plugin which is not available in unit tests.
-  // These tests should be run as integration tests on actual devices.
-  group('CurrentUserNotifier (state tests only)', () {
-    test('SharedUserInfo equality test', () {
-      // Test that SharedUserInfo can be created and compared
-      // This doesn't require the actual provider which uses secure storage
-      expect(true, true); // Placeholder for future state-only tests
+  group('SharedUserInfo', () {
+    const alice = SharedUserInfo(
+      uuid: 'alice-id',
+      email: 'alice@example.com',
+      name: 'Alice',
+      avatarUrl: 'https://example.com/alice.png',
+      token: 'access-token',
+      desc: 'Wallet owner',
+    );
+
+    test('compares every profile field and round-trips JSON', () {
+      expect(
+        alice,
+        const SharedUserInfo(
+          uuid: 'alice-id',
+          email: 'alice@example.com',
+          name: 'Alice',
+          avatarUrl: 'https://example.com/alice.png',
+          token: 'access-token',
+          image: null,
+          desc: 'Wallet owner',
+        ),
+      );
+      expect(SharedUserInfo.fromJson(alice.toJson()), alice);
+      expect(
+        const SharedUserInfo(uuid: 'alice-id', email: 'other@example.com'),
+        isNot(alice),
+      );
+    });
+
+    test('reads the legacy image field as avatar URL', () {
+      final user = SharedUserInfo.fromJson({
+        'uuid': 'legacy-id',
+        'email': 'legacy@example.com',
+        'image': 'https://example.com/legacy.png',
+      });
+
+      expect(user.avatarUrl, 'https://example.com/legacy.png');
+      expect(user.image, 'https://example.com/legacy.png');
+      expect(user.isLoggedIn, isTrue);
+    });
+  });
+
+  group('CurrentUserNotifier', () {
+    test('loads, publishes, persists, and clears the active profile', () async {
+      final storage = _MemorySpUtil()
+        ..storedUser = const SharedUserInfo(
+          uuid: 'saved-id',
+          email: 'saved@example.com',
+          name: 'Saved user',
+        ).toJson();
+      final notifier = CurrentUserNotifier(storage);
+      addTearDown(notifier.dispose);
+
+      await Future<void>.delayed(Duration.zero);
+      expect(notifier.state?.uuid, 'saved-id');
+      expect(notifier.isLoggedIn, isTrue);
+
+      const nextUser = SharedUserInfo(
+        uuid: 'next-id',
+        email: 'next@example.com',
+        name: 'Next user',
+      );
+      notifier.setUser(nextUser);
+      expect(notifier.state, nextUser);
+      expect(storage.storedUser, nextUser.toJson());
+
+      notifier.clearUser();
+      expect(notifier.state, isNull);
+      expect(notifier.isLoggedIn, isFalse);
     });
   });
 }

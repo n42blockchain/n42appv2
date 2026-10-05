@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +23,11 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 /// Session whitelist: URLs that the user explicitly approved via
 /// "Proceed Anyway" are remembered for the duration of the app session.
 class PhishingDetector {
-  PhishingDetector._();
+  PhishingDetector._() : _cacheFileProvider = null;
+
+  @visibleForTesting
+  PhishingDetector.forTest({Future<File?> Function()? cacheFileProvider})
+    : _cacheFileProvider = cacheFileProvider;
 
   static final PhishingDetector instance = PhishingDetector._();
 
@@ -93,6 +98,7 @@ class PhishingDetector {
 
   /// Per-session whitelist: cleared on every app restart.
   final Set<String> _sessionWhitelist = {};
+  final Future<File?> Function()? _cacheFileProvider;
 
   bool _initialized = false;
   SharedPreferences? _prefs;
@@ -193,6 +199,8 @@ class PhishingDetector {
   }
 
   Future<File?> _cacheFile() async {
+    final cacheFileProvider = _cacheFileProvider;
+    if (cacheFileProvider != null) return cacheFileProvider();
     try {
       final dir = await getApplicationSupportDirectory();
       return File('${dir.path}/$_cacheFileName');

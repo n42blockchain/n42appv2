@@ -5,6 +5,41 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('QA automation quality gate', () {
     test(
+      'unit, widget, and integration tests contain no tautological asserts',
+      () {
+        final files = _dartFilesUnder('test');
+        // Keep the pattern split so this quality gate does not match itself.
+        // ignore: prefer_adjacent_string_concatenation
+        final tautology = RegExp(
+          'ex' +
+              'pect\\s*\\(\\s*(?:' +
+              'tr' +
+              'ue\\s*,\\s*(?:tr' +
+              'ue|isTr' +
+              'ue)|fa' +
+              'lse\\s*,\\s*(?:fa' +
+              'lse|isFa' +
+              'lse))\\s*\\)',
+        );
+        final violations = <String>[];
+
+        for (final file in files) {
+          if (tautology.hasMatch(file.readAsStringSync())) {
+            violations.add(file.path);
+          }
+        }
+
+        expect(
+          violations,
+          isEmpty,
+          reason:
+              'A constant passed as both actual and expected does not test app '
+              'behavior. Assert the state or output produced by the code.',
+        );
+      },
+    );
+
+    test(
       'integration tests contain no unconditional placeholder assertions',
       () {
         final files = _dartFilesUnder('integration_test');

@@ -269,9 +269,17 @@ void main() {
 
     test('should handle dispose gracefully', () {
       handler.startListening();
-      // Should not throw
       handler.dispose();
-      handler.dispose(); // Double dispose should be safe
+      handler.dispose();
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.chat,
+          uri: Uri.parse('n42://chat/room1'),
+          params: {'roomId': 'room1'},
+        ),
+      );
+
+      expect(navigatedData, isEmpty);
     });
   });
 }

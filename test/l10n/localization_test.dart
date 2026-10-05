@@ -213,6 +213,23 @@ void main() {
   });
 
   group('Supported Locales', () {
+    test(
+      'every supported locale loads core wallet and WalletConnect copy',
+      () async {
+        for (final locale in S.delegate.supportedLocales) {
+          final strings = await S.load(locale);
+
+          expect(strings.g_key_login, isNotEmpty, reason: 'locale: $locale');
+          expect(
+            strings.g_wallet_pin_token,
+            isNotEmpty,
+            reason: 'locale: $locale',
+          );
+          expect(strings.g_wc_sessions, isNotEmpty, reason: 'locale: $locale');
+        }
+      },
+    );
+
     test('should support English', () {
       expect(
         S.delegate.supportedLocales.any((l) => l.languageCode == 'en'),
