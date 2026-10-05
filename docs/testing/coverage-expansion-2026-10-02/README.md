@@ -2,6 +2,10 @@
 
 This batch adds behavior tests to the host wallet and Chat plugin, fixes issues reproduced by those checks, and records independent full-suite coverage. The host and Chat raw LCOV denominators remain separate; the host CI gate remains 70%.
 
+## Latest Chat full-suite run (2026-10-04)
+
+The Chat entry-point changes were tested at commit `b976317565e46bf2f6f65e96ac05bc8d28322047`; the host pins the merged PR #2 commit `a24058de8849ab2322d743458e88c60d2f042790`. Flutter 3.44.8 / Dart 3.12.2 completed `flutter test --coverage --reporter compact` with exit 0: 6,742 successful test events, 3 skipped, and no failures. Whole-package LCOV is 35,451 / 135,533 executable lines (**26.156729%**), so Chat remains below the requested 70% target. The compressed LCOV and run details are in [`artifacts/chat-full-20261004-b976317-summary.md`](artifacts/chat-full-20261004-b976317-summary.md). This is a Chat-only measurement; it does not establish current host coverage.
+
 ## Current continuation checkpoint (2026-10-02)
 
 On host commit `577e2fade95480ec15dcceb84784ef987e741d88`, a clean full-suite run using Flutter 3.44.8 / Dart 3.12.2 passed 5,332 visible tests and 543 hidden machine events, with 0 failures, errors, or skips (`done.success=true`). Fresh LCOV is 93,569 / 133,304 lines = **70.192192%**, above the unchanged 70% gate. This run includes the catalog-token add/remove regressions and the Chat map, projection, FilePicker, SharePlus, device-info and package-info dependency upgrades. Raw LCOV SHA-256: `da9c604cdaee78c0c150630e0189869564962c60bc76fa9f85ad1fda066643ea`; raw machine JSONL SHA-256: `f408e1fd636232de5b82b97b89274c991ccb293359797ff43f02bd405b222c4d`.
