@@ -190,9 +190,9 @@ mixin EthTokenApiMixin on TokenApiBase {
       };
     } else {
       final toAddress = strip0x(to);
-      final methodSig = bytesToHex(
-        keccakAscii('transfer(address,uint256)'),
-      ).substring(0, 8).toLowerCase();
+      final methodSig = bytesToHex(keccakAscii('transfer(address,uint256)'))
+          .substring(0, 8)
+          .toLowerCase();
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
       params = {
         'from': from,
@@ -245,9 +245,9 @@ mixin EthTokenApiMixin on TokenApiBase {
   }) async {
     try {
       if (rpc != null) {
-        return EthAPI.init(null, rpc, null).getTransactionCount(address);
+        return await EthAPI.init(null, rpc, null).getTransactionCount(address);
       }
-      return _postWithErrorCheck('v2/eth/transaction/count', {
+      return await _postWithErrorCheck('v2/eth/transaction/count', {
         'coin': coinType.toLowerCase(),
         'hex_address': address,
         'net_mode': netMode,
@@ -267,9 +267,9 @@ mixin EthTokenApiMixin on TokenApiBase {
   }) async {
     try {
       if (rpc != null) {
-        return EthAPI.init(null, rpc, null).sendTransaction(signHash);
+        return await EthAPI.init(null, rpc, null).sendTransaction(signHash);
       }
-      return _postWithErrorCheck('v2/eth/raw/transaction', {
+      return await _postWithErrorCheck('v2/eth/raw/transaction', {
         'coin': coinType,
         'signed_tx': signHash,
         'net_mode': netMode,
@@ -288,7 +288,7 @@ mixin EthTokenApiMixin on TokenApiBase {
   }) async {
     try {
       if (rpc != null) {
-        return EthAPI.init(null, rpc, null).getTransactionReceipt(txHash);
+        return await EthAPI.init(null, rpc, null).getTransactionReceipt(txHash);
       }
       final params = <String, dynamic>{
         'tx_hash': txHash,
@@ -321,8 +321,8 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc != null) return EthAPI.init(null, rpc, null).getGasPrice();
-      return _postWithErrorCheck('v2/eth/gas/price', {
+      if (rpc != null) return await EthAPI.init(null, rpc, null).getGasPrice();
+      return await _postWithErrorCheck('v2/eth/gas/price', {
         'coin': coinType,
         'net_mode': _netMode(isTest),
       }, parseHex: true);

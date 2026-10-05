@@ -20,8 +20,8 @@ class Audit extends RecursiveAstVisitor<void> {
     final parent = node.parent;
     final source = parent.toString();
     for (final arg in node.arguments) {
-      final expression = arg is NamedExpression ? arg.expression : arg;
-      final label = arg is NamedExpression ? arg.name.label.name : '';
+      final expression = arg is NamedArgument ? arg.argumentExpression : arg;
+      final label = arg is NamedArgument ? arg.name.lexeme : '';
       final knownLabel = [
         'label',
         'hintText',

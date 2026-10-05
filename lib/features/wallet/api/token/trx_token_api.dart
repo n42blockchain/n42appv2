@@ -108,7 +108,7 @@ mixin TrxTokenApiMixin on TokenApiBase {
       final sign = json.decode(signHash) as Map<String, dynamic>;
       sign['visible'] = false;
       sign['net_mode'] = 'main';
-      return _trxPost('v1/trx/broadcast/transaction', sign, (d) => d);
+      return await _trxPost('v1/trx/broadcast/transaction', sign, (d) => d);
     } catch (e) {
       return createError(e.toString());
     }

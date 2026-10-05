@@ -59,7 +59,7 @@ class TonApi {
 
   Future<Result<dynamic, AppError>> baseRPCTon(
     String method,
-    var value,
+    dynamic value,
     String path, {
     bool enableRetry = true,
   }) async {
