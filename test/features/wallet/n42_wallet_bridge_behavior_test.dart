@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/n42_chat.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -164,8 +166,20 @@ void main() {
     expect(invalidAmount.errorMessage, 'Invalid NFT transfer amount');
   });
 
-  test('returns without navigation when there are no receive assets', () async {
+  testWidgets('does not navigate when there are no receive assets', (
+    tester,
+  ) async {
+    final previousNavigatorKey = AppGlobals.navigatorKey;
+    final navigatorKey = GlobalKey<NavigatorState>();
+    AppGlobals.navigatorKey = navigatorKey;
+    addTearDown(() => AppGlobals.navigatorKey = previousNavigatorKey);
+    await tester.pumpWidget(
+      MaterialApp(navigatorKey: navigatorKey, home: const SizedBox()),
+    );
+
     await bridge.showReceiveQRCode();
+
+    expect(navigatorKey.currentState!.canPop(), isFalse);
   });
 
   test('signs message using deterministic trustdart test fixture', () async {
