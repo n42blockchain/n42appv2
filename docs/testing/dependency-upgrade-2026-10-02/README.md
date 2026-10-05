@@ -2,6 +2,12 @@
 
 This record covers the host application's pinned Chat map update and the first host dependency batch. The audit is a checkpoint, not a claim that every package is upgraded. The host `pubspec.yaml` and lockfile are the source of truth; `packages/n42_chat/` is a cache mirror and was not edited.
 
+## Current resolver snapshot (2026-10-04)
+
+The host now pins Chat to merged PR #2 (`a24058de8849ab232d743458e88c60d2f042790`), which includes the channel-discovery and red-packet-history entry points. The Chat source was tested at `b976317565e46bf2f6f65e96ac05bc8d28322047`. The earlier sections below record the 2026-10-02 upgrade checkpoint and old Chat map pin; they are historical.
+
+A fresh Pub resolver audit found newer package versions in both graphs. Host: 23 direct, 8 dev, and 60 transitive dependencies; Chat: 65 direct, 10 dev, and 157 transitive dependencies. The exact upgradable, resolvable, and latest counts are in [`artifacts/pub-outdated-20261004-summary.md`](artifacts/pub-outdated-20261004-summary.md), with compressed machine snapshots beside it. Not every latest version fits current constraints or has completed compatibility work. The full dependency-upgrade request remains open.
+
 ## Toolchain and baseline
 
 - Acceptance toolchain: `/opt/homebrew/bin/flutter`, Flutter 3.44.8, Dart 3.12.2. No toolchain upgrade was used.
