@@ -11,6 +11,8 @@
 | Chat 当前结果、入口审计、真机证据 | [Chat 交付索引](chat-audit-2026-09-12/README.md) |
 | Chat 各轮覆盖率与修复 | [合并历史记录](chat-audit-2026-09-12/COVERAGE_HISTORY_2026-09.md) |
 | Chat 行业对比 | [市场竞品对比](2026_Chat市场竞品对比.md) |
+| 当前功能入口审计与清单 | [主程序和 Chat 入口审计](feature-entry-audit-2026-10-04.md) · [主程序静态清单](feature-entry-inventory-2026-10-04.md) |
+| 2026 竞品更新 | [官方资料核对与 N42 对比](market-competitor-update-2026-10-04.md) |
 | 钱包功能与 UI 对接 | [功能入口清单](wallet-feature-wiring-inventory-2026-09-10.md) · [验证报告](wallet-audit-validation-2026-09-10.md) |
 | 钱包本地化与深链接 | [本地化审计](localization-audit-2026-09-11.md) · [深链接跟进](deep-link-followup-2026-09-11.md) |
 | 测试运行与质量策略 | [自动化测试](AUTOMATED_TESTING.md) · [QA 计划](QA_TEST_PLAN.md) |

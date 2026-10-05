@@ -69,8 +69,11 @@ def render():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Fail if the checked-in inventory is stale')
+    parser.add_argument('--output', help='Write or check an inventory at this path (relative to the repository root)')
     args = parser.parse_args()
-    destination = ROOT / 'docs/wallet-feature-wiring-inventory-2026-09-10.md'
+    destination = Path(args.output) if args.output else ROOT / 'docs/wallet-feature-wiring-inventory-2026-09-10.md'
+    if not destination.is_absolute():
+        destination = ROOT / destination
     result = render()
     if args.check:
         if not destination.exists() or destination.read_text() != result:
