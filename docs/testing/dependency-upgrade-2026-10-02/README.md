@@ -16,7 +16,7 @@ The request to upgrade every dependency is still open. The latest `pub outdated`
 
 ## Additional verified batch (2026-10-05)
 
-This later batch advances the package graph and the Chat example host after the checkpoint above. The host now requires Dart 3.13 / Flutter 3.47 and CI pins Flutter 3.47.5. It pins Chat to `c1388a54452a233aa840a79b4e7980e844228cb2`, which includes the checked-in mobile example hosts, the final dependency migration, and refreshed dependency locks.
+This later batch advances the package graph and the Chat example host after the checkpoint above. The host now requires Dart 3.13 / Flutter 3.47 and CI pins Flutter 3.47.5. It pins Chat to `011686ebc73cd7a2a821dc59b9e10acd3ee086f5`, which includes the checked-in mobile example hosts, the final dependency migration, refreshed dependency locks, and light/dark core chat golden tests.
 
 Host changes include `easy_refresh` 3.5.1 → 4.0.0, `cached_network_image` 4.0.3 → 4.0.4, `intl` 0.20.2 → 0.20.3, `pro_image_editor` 14.6.2 → 14.8.0, `sqflite` 2.4.4 → 2.4.4+1, `sqlite3` 3.5.2 → 3.7.0, and `xml` 6.6.1 → 7.1.0. `freezed` moved to the latest resolvable 4.0.1; `build_runner`, `intl_utils`, and `mockito` moved to 2.16.1, 2.8.16, and 5.8.1. A normal `flutter pub upgrade` advanced six more allowed transitive packages, including `background_downloader`, cached-image interfaces, `native_toolchain_c`, and `stack_trace`. The XML override is needed because `simple_html_css` 5.0.0 still declares an XML 6-only range; RSS tests and the full suite pass with XML 7.1.0.
 
@@ -40,7 +40,7 @@ The full-upgrade task remains open. Remaining direct version gaps have concrete 
 - `freezed` 4.0.2 requires Analyzer 14, while the latest `intl_utils` requires Analyzer 13. The latest compatible pair is Freezed 4.0.1 with `intl_utils` 2.8.16.
 - `webview_flutter_wkwebview` remains on the local host override; its newer hosted release does not include the host-specific patch. `package_info_plus` and `unorm_dart` overrides already resolve to their latest versions.
 
-The Chat plugin upgrade and refreshed lockfiles are merged to Chat `main` at `c1388a54452a233aa840a79b4e7980e844228cb2`. Host changes are being committed in small batches. Keep this task open for the listed migrations; do not describe the dependency graph as fully latest.
+The Chat plugin upgrade, refreshed lockfiles, and two core chat golden tests are merged to Chat `main` at `011686ebc73cd7a2a821dc59b9e10acd3ee086f5`. Both golden tests passed on Flutter 3.47.5. Host changes are committed to `master` in three small batches. Keep this task open for the listed migrations; do not describe the dependency graph as fully latest.
 
 ## Toolchain and historical baseline
 
