@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072997
+version: 2.4.8+2026072998
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -48,7 +48,7 @@ dependencies:
   # NewsApi 解析 RSS feed（已在 transitive 树里，这里显式声明以避免依赖飘移）
   xml: ^7.1.0
   unorm_dart: ^0.3.2
-  connectivity_plus: ^7.3.1
+  connectivity_plus: ^7.3.2
   cached_network_image: ^4.0.4
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.14.1
@@ -143,7 +143,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: d5386f16f9f1c4459e6e98340c47efd88101f288
+      ref: 0cee5c69
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
@@ -161,6 +161,8 @@ dependencies:
 # Keep v10 migration support for legacy encrypted wallet storage. v11 removes
 # legacy cipher/EncryptedSharedPreferences migration and requires compileSdk 37.
 dependency_overrides:
+  # connectivity_plus 7.3.2 and Chat wakelock_plus 1.8.1 require dbus 0.8.
+  dbus: ^0.8.0
   flutter_secure_storage: ^10.3.4
 
 dev_dependencies:

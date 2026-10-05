@@ -1,4 +1,5 @@
 dependency_overrides:
+  dbus: ^0.8.0
   # simple_html_css 5 has an outdated xml ^6 cap; XML 7 DOM/event APIs are tested at host call sites.
   xml: ^7.1.0
   # The pinned Chat Git source uses the API-compatible NFC implementation.

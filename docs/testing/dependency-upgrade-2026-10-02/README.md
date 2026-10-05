@@ -2,6 +2,22 @@
 
 This record covers the host application's pinned Chat map update and the first host dependency batch. The audit is a checkpoint, not a claim that every package is upgraded. The host `pubspec.yaml` and lockfile are the source of truth; `packages/n42_chat/` is a cache mirror and was not edited.
 
+## Follow-on compatible batch (2026-10-05)
+
+The host and Chat now use the `dbus` 0.8 line. Chat `main` is at `0cee5c69`; the host pins that SHA. The batch advances Chat `connectivity_plus` 7.3.1 → 7.3.2, `wakelock_plus` 1.8.0 → 1.8.1, `file_picker_linux` 2.0.0 → 2.0.1, `gsettings` 0.2.8 → 0.2.9, `nm` 0.5.0 → 0.6.0, and `sqflite_common` 2.5.13 → 2.5.13+1. The host also advances `connectivity_plus` and the same resolvable Linux / SQLite transitive packages. Both lockfiles resolve with Flutter 3.47.5 / Dart 3.13.4.
+
+`connectivity_plus` 7.3.2 and `wakelock_plus` 1.8.1 require `dbus` 0.8. The notification Linux package still declares `dbus ^0.7.8`, so both manifests keep an explicit `dbus: ^0.8.0` override. Chat's example repeats the override because it resolves as a separate Flutter project. A Linux ARM64 Debug build of the Chat example compiled the notification and dependent Linux plugins successfully with this graph. This verifies compilation; it does not claim device-level notification runtime testing.
+
+Validation for this batch:
+
+- Host full suite — 5,432 passed; LCOV 94,867 / 133,343 lines (71.1451%). The run used `ulimit -n 4096`; an earlier run under the default 256-file limit stalled and was discarded.
+- Host `flutter analyze --no-fatal-infos` — exit 0; 48 informational lints.
+- Chat full suite at final Chat commit `0cee5c69` — 7,310 passed, 3 skipped; coverage 70.1020% (97,045 / 138,434 lines). Three SQLite database behavior suites also passed 18 focused tests; analysis exited 0 with informational lints.
+- Host and Chat lockfile-enforced `flutter pub get` — passed. Chat example lockfile enforcement also passed.
+- Fresh resolver audit: host 22 packages, 19 with a newer latest release and none left resolvable under current constraints; Chat 17 packages, 16 with a newer latest release. Its only remaining resolvable candidate is Equatable 3, which is held because `fl_chart` 1.2.0 depends on `EquatableMixin` removed by that major release.
+
+The full-upgrade task remains open. This batch resolves the earlier `dbus` blocker; Equatable, Cupertino Icons, secure-storage migration, Freezed/Analyzer, and the local WebView override remain separate compatibility boundaries.
+
 ## Resolver snapshot from 2026-10-04
 
 At this snapshot, the host pinned Chat to merged PR #2 (`a24058de8849ab232d743458e88c60d2f042790`), which included the channel-discovery and red-packet-history entry points. The Chat source was tested at `b976317565e46bf2f6f65e96ac05bc8d28322047`. The 2026-10-05 state is listed below; the earlier sections record older dependency checkpoints.
@@ -34,13 +50,13 @@ Validation with Flutter 3.47.5 / Dart 3.13.4:
 The full-upgrade task remains open. Remaining direct version gaps have concrete compatibility boundaries:
 
 - `equatable` stays at 2.1.0 because `fl_chart` 1.2.0 uses `EquatableMixin`, removed in Equatable 3. Forcing Equatable 3 caused the chart-based host tests to fail compilation, so both Chat and the host use 2.1.0.
-- `connectivity_plus` stays at 7.3.1 and Chat `wakelock_plus` at 1.8.0. Their next releases require `dbus` 0.8, which conflicts with the Linux notification plugin's `dbus` 0.7 range.
+- Historical at the `d5386f16` checkpoint: `connectivity_plus` 7.3.1 and Chat `wakelock_plus` 1.8.0 were held by the notification plugin's `dbus` 0.7 range. The follow-on batch above advances them with a tested `dbus` 0.8 override.
 - `cupertino_icons` stays at 1.0.9 because the current `chewie` graph also requires the 1.x icon package.
 - `flutter_secure_storage` remains overridden to 10.3.4 to keep the wallet's legacy encrypted-value migration. Version 11 removes that migration path and raises the Android compile SDK requirement; do not remove this pin until an explicit data migration is in place.
 - `freezed` 4.0.2 requires Analyzer 14, while the latest `intl_utils` requires Analyzer 13. The latest compatible pair is Freezed 4.0.1 with `intl_utils` 2.8.16.
 - `webview_flutter_wkwebview` remains on the local host override; its newer hosted release does not include the host-specific patch. `package_info_plus` and `unorm_dart` overrides already resolve to their latest versions.
 
-The Chat plugin upgrade, refreshed lockfiles, and two core chat golden tests are merged to Chat `main` at `d5386f16f9f1c4459e6e98340c47efd88101f288`. The complete Chat suite and both golden tests passed on Flutter 3.47.5. Host changes are committed to `master` in small batches. Keep this task open for the listed migrations; do not describe the dependency graph as fully latest.
+At the earlier checkpoint, the Chat plugin upgrade, refreshed lockfiles, and two core chat golden tests were merged to Chat `main` at `d5386f16f9f1c4459e6e98340c47efd88101f288`. The complete Chat suite and both golden tests passed on Flutter 3.47.5. The current Chat SHA and later compatible updates are recorded at the top of this file. Keep this task open for the listed migrations; do not describe the dependency graph as fully latest.
 
 ## Toolchain and historical baseline
 
@@ -73,7 +89,7 @@ Direct dependencies with a newer `latest` version in this snapshot:
 | --- | ---: | ---: | --- |
 | `cached_network_image` | 3.4.1 | 4.0.4 | Major upgrade; review widget/cache behavior. |
 | `chewie` | 1.13.1 | 1.17.2 | Same major; review against video-player graph. |
-| `connectivity_plus` | 7.3.1 | 7.3.2 | Patch candidate; fixed SDK resolver did not select it. |
+| `connectivity_plus` | 7.3.1 | 7.3.2 | Historical gap; completed in the follow-on batch above. |
 | `cupertino_icons` | 1.0.9 | 2.0.0 | Major icon-font asset change; check rendered icons. |
 | `device_info_plus` | 12.4.0 | 13.3.0 | Major native plugin update; requires platform builds. |
 | `equatable` | 2.1.0 | 3.0.0 | Major Dart API update. |

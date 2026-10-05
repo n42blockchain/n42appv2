@@ -428,10 +428,10 @@ packages:
     dependency: "direct main"
     description:
       name: connectivity_plus
-      sha256: "762c99f890ca8bf87f7337236f99edd42793843bc6c3631da294a76653a54bd0"
+      sha256: d7749fd36d8b404a4935612b94eca7c3ce3705377ab678e24ff2a4301436f741
       url: "https://pub.dev"
     source: hosted
-    version: "7.3.1"
+    version: "7.3.2"
   connectivity_plus_platform_interface:
     dependency: transitive
     description:
@@ -569,13 +569,13 @@ packages:
     source: hosted
     version: "2.0.9"
   dbus:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: dbus
-      sha256: a48d5da28e89bd02196e80d81ed8d7954923d00a0f4a68cc20b575038f023383
+      sha256: f7db8504e715b835f5ebe5fe74604ccd961d504c73389a5d8e81bafc2e2f3612
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.15"
+    version: "0.8.0"
   decimal:
     dependency: "direct main"
     description:
@@ -796,10 +796,10 @@ packages:
     dependency: transitive
     description:
       name: file_picker_linux
-      sha256: e7db600f50672ce5ebbe422ac0906e0f3d2a476188cc93e7126afee12bf08063
+      sha256: "9c870771500c758eb46506c98532c3ee60e6e51d0a62dcde24a849ef213ea5ce"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   file_picker_platform_interface:
     dependency: transitive
     description:
@@ -1553,10 +1553,10 @@ packages:
     dependency: transitive
     description:
       name: gsettings
-      sha256: "1b0ce661f5436d2db1e51f3c4295a49849f03d304003a7ba177d01e3a858249c"
+      sha256: "5e3e299b871a16d142691aa91595a4d73bab7a7fa65d53db0bf2c576959aaefc"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.9"
   gtk:
     dependency: transitive
     description:
@@ -2078,8 +2078,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d5386f16f9f1c4459e6e98340c47efd88101f288
-      resolved-ref: d5386f16f9f1c4459e6e98340c47efd88101f288
+      ref: "0cee5c69"
+      resolved-ref: "0cee5c69723a514615dfbab754d9056108b196c7"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
@@ -2103,10 +2103,10 @@ packages:
     dependency: transitive
     description:
       name: nm
-      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
+      sha256: "2ae480aa3379716b8bb58dfebb168e2919394c92b629efaaa0baaa5d140786e6"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   node_preamble:
     dependency: transitive
     description:
@@ -2884,10 +2884,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "077e38e82c099534146a2fb31b608c2a3a4489a0f21d9af6b2f5c87b566a1ea0"
+      sha256: da542ae39840132566b8652d6bfab108a972099a8e4377b3bcd98ae1595e6629
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.13"
+    version: "2.5.13+1"
   sqflite_common_ffi:
     dependency: "direct dev"
     description:
@@ -3260,10 +3260,10 @@ packages:
     dependency: transitive
     description:
       name: wakelock_plus
-      sha256: "22b3e7e937721de70e63c85e7139f4ac781dc22863b9262431a53ac030eb074b"
+      sha256: "9a91139ee876c24a9ebe1484e4b9b7923b07d368566a5e0b2301870b0f5029c8"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   wakelock_plus_platform_interface:
     dependency: transitive
     description:
