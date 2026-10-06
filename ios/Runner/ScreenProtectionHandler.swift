@@ -22,6 +22,7 @@ final class ScreenProtectionHandler {
   private weak var originalContentSuperlayer: CALayer?
   private weak var secureCanvasLayer: CALayer?
   private var blurView: UIVisualEffectView?
+  private var captureObserver: N42CaptureStateView?
   private var enabled = false
 
   init(binaryMessenger: FlutterBinaryMessenger) {
@@ -46,6 +47,12 @@ final class ScreenProtectionHandler {
         object: nil
       )
     }
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(onSceneActivated),
+      name: UIScene.didActivateNotification,
+      object: nil
+    )
   }
 
   private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -80,6 +87,7 @@ final class ScreenProtectionHandler {
     if Thread.isMainThread {
       if enable {
         applySecure()
+        onCaptureChanged()
       } else {
         removeSecure()
         removeBlur()
@@ -88,6 +96,7 @@ final class ScreenProtectionHandler {
       DispatchQueue.main.async { [weak self] in
         if enable {
           self?.applySecure()
+          self?.onCaptureChanged()
         } else {
           self?.removeSecure()
           self?.removeBlur()
@@ -124,6 +133,9 @@ final class ScreenProtectionHandler {
     // Flutter 内容留在即将迁移的 secure field canvas 内。
     if protectedWindow != nil, protectedWindow !== window {
       removeSecure()
+      removeBlur()
+      captureObserver?.removeFromSuperview()
+      captureObserver = nil
       secureField.removeFromSuperview()
       protectedWindow = nil
       protectedContentView = nil
@@ -156,6 +168,14 @@ final class ScreenProtectionHandler {
     protectedContentView = contentView
     originalContentSuperlayer = originalSuperlayer
     secureCanvasLayer = canvas.layer
+    let observer = N42CaptureStateView(frame: window.bounds)
+    observer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    observer.isUserInteractionEnabled = false
+    observer.accessibilityElementsHidden = true
+    observer.isOpaque = false
+    observer.onChange = { [weak self] in self?.onCaptureChanged() }
+    captureObserver = observer
+    window.addSubview(observer)
     return true
   }
 
@@ -177,14 +197,26 @@ final class ScreenProtectionHandler {
     originalSuperlayer.addSublayer(contentLayer)
   }
 
-  @available(iOS 11.0, *)
   @objc private func onCaptureChanged() {
     guard enabled else { removeBlur(); return }
-    if keyWindow()?.windowScene?.screen.isCaptured == true {
+    guard let window = protectedWindow ?? keyWindow() else { return }
+    let captured: Bool
+    if #available(iOS 17.0, *) {
+      captured = window.traitCollection.sceneCaptureState == .active
+    } else {
+      captured = window.windowScene?.screen.isCaptured == true
+    }
+    if captured {
       addBlur()
     } else {
       removeBlur()
     }
+  }
+
+  @objc private func onSceneActivated() {
+    guard enabled else { return }
+    applySecure()
+    onCaptureChanged()
   }
 
   private func addBlur() {
@@ -209,6 +241,35 @@ final class ScreenProtectionHandler {
   }
 
   deinit {
+    captureObserver?.removeFromSuperview()
     NotificationCenter.default.removeObserver(self)
+  }
+}
+
+/// Scene capture can change without the legacy UIScreen notification. It also
+/// follows the app when Duo moves the same scene between its two displays.
+private final class N42CaptureStateView: UIView {
+  var onChange: (() -> Void)?
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    if #available(iOS 17.0, *) {
+      registerForTraitChanges([UITraitSceneCaptureState.self]) {
+        (view: N42CaptureStateView, _: UITraitCollection) in
+        view.onChange?()
+      }
+    }
+  }
+
+  required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    onChange?()
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    onChange?()
   }
 }
