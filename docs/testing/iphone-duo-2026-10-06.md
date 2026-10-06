@@ -9,7 +9,7 @@
 - Story taps use local coordinates, including when a pane moves away from the screen origin. Screen-capture detection reads the current scene's screen.
 - Release builds require the iOS 27.1 SDK or newer.
 
-Chat is pinned in `pubspec.yaml` and the generated lockfile to `34018481ea33617c6c7bd22e9d52d3473accd6f9`. The changes are on `n42_chat` branch `fix/iphone-duo-layout-20261006`; the sibling checkout and cache mirror were not edited.
+The initial adaptation pinned Chat to `34018481ea33617c6c7bd22e9d52d3473accd6f9`; the 2.5.1 follow-up pins `a3da656f92889ec2f6b1bc3de24694d66dffcb4f` in `pubspec.yaml` and the generated lockfile. The changes are on `n42_chat` branch `fix/iphone-duo-layout-20261006`; the sibling checkout and cache mirror were not edited.
 
 ## Verification
 
@@ -74,3 +74,27 @@ The existing pre-commit hook increments the build suffix on every commit. These 
 - [Adapt your app for iPhone Duo](https://developer.apple.com/videos/play/tech-talks/111461/)
 - [Reserved regions and flexible layouts](https://developer.apple.com/videos/play/tech-talks/111463/)
 - [Camera adaptation](https://developer.apple.com/videos/play/tech-talks/111465/)
+
+## Follow-up: 2.5.1 compatibility fixes
+
+The user confirmed that no physical iPhone Duo is available. Compatibility work continues with SDK builds, real UIKit tests on the Duo simulator, and behavior tests; this does not close physical-camera or complete-app acceptance.
+
+Additional observed problems were fixed:
+
+- Screen protection now checks scene capture immediately when enabled, observes `UITraitSceneCaptureState` changes on iOS 17+, and restores the previous window's content/mask before protecting a newly active window. iOS 16 retains the screen-notification fallback.
+- Group-call grids limit column counts to the available pane width and permit scrolling when a short pane cannot display every participant. A resize test reaches the last of nine participants in both 320 × 678 and 669 × 456 scenes.
+- One-to-one video-call previews mirror front cameras only, and refresh after a camera switch completes.
+
+The additional Chat fixes are commit `a3da656f92889ec2f6b1bc3de24694d66dffcb4f` on the same dependency branch. The group-call and call-control suites passed 9 tests (`/tmp/n42-duo-call-tests-r3.log`); scoped analysis found no issues (`/tmp/n42-duo-call-analyze.log`).
+
+All 3 native capture-protection tests passed on the actual Duo simulator with iOS 27.1 (`/tmp/n42-duo-protection-probe-tests-r5.log`, exit 0). The probe compiled exact copies of the host handler and host native tests; the handler SHA-256 was `35fd58a3f5daa6919f6bf172be27668bb5364ce34e0585f9c3a19f235379d726`. These tests use real UIKit trait propagation with synthetic capture-state overrides. They verify mask/window behavior, rather than an actual recording or screenshot of the complete wallet application. [Saved native test results](iphone-duo-20261006/native-capture-tests.txt).
+
+The complete arm64 device application built successfully with `flutter build ios --release --no-codesign --dart-define-from-file=.env` (`/tmp/n42-duo-251-device-build.log`, exit 0, Xcode build 609.7 seconds). Mach-O inspection reports platform `IOS`, architecture `arm64`, SDK `27.1`, and deployment minimum `16.0`. This first build was `2.5.1+73010`, before pinning the additional Chat call fixes. It is unsigned and was not installed or uploaded.
+
+With the final Chat dependency, the host's 48 adaptation/behavior tests passed again (`/tmp/n42-duo-251-final-host-tests.log`, exit 0), and the combined Chat layout, responsive, Story, group-call and call-control suites passed 36 tests (`/tmp/n42-duo-251-final-chat-tests.log`, exit 0). Full host analysis exited 0 with 48 informational diagnostics and no errors or warnings (`/tmp/n42-duo-251-final-host-analyze.log`). The native fix, native tests, version 2.5.1 and final Chat pin were committed and pushed as `30d90586e`.
+
+The complete device application was rebuilt after that commit with the final Chat pin (`/tmp/n42-duo-251-final-device-build.log`, exit 0). Embedded metadata confirms `2.5.1+73011`, `arm64`, and `iphoneos27.1`; this is the build containing all follow-up fixes. It remains unsigned and has not been installed or uploaded. [Saved final validation summary](iphone-duo-20261006/final-validation.json). The documentation commit advances the development build suffix through the existing hook; the compiled artifact's identity remains 73011.
+
+Camera discovery was reviewed in the installed `mobile_scanner 7.4.2` and `flutter_webrtc 1.6.2+hotfix.3` native sources: both request wide-angle/ultrawide camera types. This matches Apple's virtual-front-camera discovery guidance. The LiveKit camera switch clears a pinned device ID when changing front/back position. Source inspection supports the selected strategy; it does not prove physical Duo camera switching.
+
+Google's current [iOS ML Kit release table](https://developers.google.com/ml-kit/release-notes) still lists GoogleMLKit 9.0.0 and MLImage 1.0.0-beta8, matching the installed pod graph. No verified newer binary was found to resolve the arm64 simulator limitation. The application has not removed or stubbed OCR, translation, face detection, or segmentation to conceal this limitation.

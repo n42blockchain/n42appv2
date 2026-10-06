@@ -1,0 +1,17 @@
+{
+  "host_commit": "30d90586e2614b067d081a826da7946b32d30d73",
+  "chat_commit": "a3da656f92889ec2f6b1bc3de24694d66dffcb4f",
+  "version": "2.5.1+73011",
+  "architecture": "arm64",
+  "sdk": "iphoneos27.1",
+  "device_build_exit": 0,
+  "signed": false,
+  "uploaded": false,
+  "host_behavior_tests": 48,
+  "chat_behavior_tests": 36,
+  "native_capture_tests": 3,
+  "native_capture_tests_use_synthetic_traits": true,
+  "host_analysis_errors": 0,
+  "host_analysis_warnings": 0,
+  "host_analysis_infos": 48
+}
