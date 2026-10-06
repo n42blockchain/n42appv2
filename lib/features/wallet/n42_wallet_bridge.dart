@@ -16,12 +16,14 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
+import 'package:n42_wallet/features/wallet/services/evm_transfer_receipt_verifier.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
@@ -127,7 +129,11 @@ class WalletBridgeTokenInfo extends TokenInfo {
   final String? receiverAddress;
 }
 
-class N42WalletBridge implements IWalletBridge, IExactWalletTransfer {
+class N42WalletBridge
+    implements
+        IWalletBridge,
+        IExactWalletTransfer,
+        IWalletTransferReceiptVerifier {
   N42WalletBridge({WalletBridgeSenderResolver? senderResolver})
     : _senderResolver = senderResolver ?? _defaultSenderResolver;
 
@@ -262,6 +268,74 @@ class N42WalletBridge implements IWalletBridge, IExactWalletTransfer {
     assetType: assetType,
     assetId: assetId,
   );
+
+  @override
+  Future<WalletTransferReceiptResult> verifyTransferReceipt(
+    WalletTransferReceiptRequest request,
+  ) async {
+    final provider = _provider;
+    if (provider == null) {
+      return const WalletTransferReceiptResult(
+        WalletTransferReceiptState.unavailable,
+      );
+    }
+
+    final matchingCoins = _walletPaymentCoinModels(provider)
+        .where((coin) {
+          final chain = coin.parentChainMKey ?? coin.config.mKey;
+          final assetMatches = request.assetType == 'native'
+              ? !coin.config.isContract && request.assetId == null
+              : request.assetType == 'token' &&
+                    coin.config.isContract &&
+                    sameWalletPaymentAssetId(
+                      _paymentContractFor(coin),
+                      request.assetId,
+                    );
+          return coin.config.blockchainType == BlockchainType.Ethereum.name &&
+              chain == request.chain &&
+              coin.isTest == (request.network == 'testnet') &&
+              assetMatches;
+        })
+        .toList(growable: false);
+    if (matchingCoins.length != 1) {
+      return WalletTransferReceiptResult(
+        matchingCoins.isEmpty
+            ? WalletTransferReceiptState.unsupported
+            : WalletTransferReceiptState.mismatch,
+      );
+    }
+
+    final coin = matchingCoins.single;
+    final coinType = coin.config.coinType;
+    final chainId = EvmSender.resolveChainId(coin.coin, isTest: coin.isTest);
+    if (coinType.isEmpty || chainId == null) {
+      return const WalletTransferReceiptResult(
+        WalletTransferReceiptState.unsupported,
+      );
+    }
+    final rpcOverride = EvmSender.resolveRpcOverride(
+      coin.coin,
+      isTest: coin.isTest,
+    );
+    final ethApi = EthAPI.init(coinType, rpcOverride, null);
+    return EvmTransferReceiptVerifier.verify(
+      request: request,
+      expectedChainId: chainId,
+      requiredConfirmations: coin.isTest ? 1 : 12,
+      decimals: resolveWalletBridgeTokenDecimals(coin.coin),
+      rpcCall: (method, params) async {
+        final result = await ethApi.baseRPCEth(
+          method,
+          params,
+          coinType: coinType,
+          isTest: coin.isTest,
+          enableRetry: false,
+        );
+        if (!result.isSuccess) throw StateError('RPC request failed');
+        return result.valueOrNull;
+      },
+    );
+  }
 
   Future<TransferResult> _requestTransfer({
     required String toAddress,
