@@ -4,12 +4,14 @@
 // LiveKit 直播底座）。功能成熟后再合入主 App 底部 tab。
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/core/platform/adaptive_viewport.dart';
 import 'package:n42_wallet/features/live/presentation/pages/live_app.dart';
 import 'package:n42_wallet/features/live/services/live_bootstrap.dart';
 
@@ -19,11 +21,12 @@ late ProviderContainer liveProviderContainer;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 直播客户端仅竖屏（抖音式全屏直播间）。
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  // iOS 场景允许动态尺寸与横屏；Android 保持现有方向。
+  await SystemChrome.setPreferredOrientations(
+    Platform.isIOS
+        ? []
+        : [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+  );
 
   // Firebase 用于 n42_chat 推送/崩溃上报；MVP 不强依赖，失败则继续。
   try {
@@ -47,7 +50,7 @@ Future<void> main() async {
   runApp(
     UncontrolledProviderScope(
       container: liveProviderContainer,
-      child: const LiveApp(),
+      child: const AdaptiveViewport(child: LiveApp()),
     ),
   );
 }

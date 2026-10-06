@@ -49,8 +49,11 @@ done
 
 python3 scripts/quality_gate.py version "$PUBSPEC"
 IOS_SDK_VERSION="$(xcrun --sdk iphoneos --show-sdk-version)"
-if [ "${IOS_SDK_VERSION%%.*}" -lt 26 ]; then
-  echo "App Store release requires iOS SDK 26 or later" >&2
+IOS_SDK_MAJOR="${IOS_SDK_VERSION%%.*}"
+IOS_SDK_MINOR="${IOS_SDK_VERSION#*.}"
+IOS_SDK_MINOR="${IOS_SDK_MINOR%%.*}"
+if [ "$IOS_SDK_MAJOR" -lt 27 ] || { [ "$IOS_SDK_MAJOR" -eq 27 ] && [ "$IOS_SDK_MINOR" -lt 1 ]; }; then
+  echo "iPhone Duo releases require iOS SDK 27.1 or later (Xcode 27.1+)" >&2
   exit 1
 fi
 

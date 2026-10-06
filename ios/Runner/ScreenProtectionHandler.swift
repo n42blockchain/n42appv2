@@ -180,7 +180,7 @@ final class ScreenProtectionHandler {
   @available(iOS 11.0, *)
   @objc private func onCaptureChanged() {
     guard enabled else { removeBlur(); return }
-    if UIScreen.main.isCaptured {
+    if keyWindow()?.windowScene?.screen.isCaptured == true {
       addBlur()
     } else {
       removeBlur()

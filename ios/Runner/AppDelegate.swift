@@ -7,6 +7,79 @@ import UIKit
 import WebRTC
 import flutter_webrtc
 
+/// Geometry belongs to the Flutter scene, never UIScreen.main. The observer
+/// view participates in UIKit layout invalidation when reserved regions change.
+@objc(N42FlutterViewController)
+class N42FlutterViewController: FlutterViewController {
+  private var viewportChannel: FlutterMethodChannel?
+  private var geometryView: N42GeometryView?
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let channel = FlutterMethodChannel(name: "ai.n42.www/viewport", binaryMessenger: binaryMessenger)
+    viewportChannel = channel
+    let observer = N42GeometryView(frame: view.bounds)
+    observer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    observer.isUserInteractionEnabled = false
+    observer.isOpaque = false
+    observer.accessibilityElementsHidden = true
+    observer.onChange = { [weak channel] geometry in
+      channel?.invokeMethod("regionsChanged", arguments: geometry)
+    }
+    view.addSubview(observer)
+    geometryView = observer
+    channel.setMethodCallHandler { [weak observer] call, result in
+      if call.method == "getRegions" {
+        result(observer?.geometry() ?? ["width": 0, "height": 0, "regions": []])
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+    }
+  }
+}
+
+private final class N42GeometryView: UIView {
+  var onChange: (([String: Any]) -> Void)?
+  private var lastGeometry: NSDictionary?
+
+  func geometry() -> [String: Any] {
+    var regions: [[String: Any]] = []
+    if #available(iOS 27.1, *) {
+      for (kind, name) in [(UIView.ReservedRegion.Kind.division, "division"), (.occlusion, "occlusion")] {
+        for region in reservedRegions(kind: kind) where region.isActive {
+          let frame = region.frame
+          regions.append(["kind": name, "x": frame.minX, "y": frame.minY,
+                          "width": frame.width, "height": frame.height])
+        }
+      }
+    }
+    return ["width": bounds.width, "height": bounds.height, "regions": regions]
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    publishGeometry()
+  }
+
+  override func safeAreaInsetsDidChange() {
+    super.safeAreaInsetsDidChange()
+    setNeedsLayout()
+  }
+
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    setNeedsLayout()
+  }
+
+  private func publishGeometry() {
+    let value = geometry()
+    let dictionary = value as NSDictionary
+    guard lastGeometry?.isEqual(dictionary) != true else { return }
+    lastGeometry = dictionary
+    onChange?(value)
+  }
+}
+
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   private var calendarHandler: N42CalendarHandler?

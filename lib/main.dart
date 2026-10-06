@@ -10,6 +10,7 @@ import 'dart:io';
 
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
+import 'package:n42_wallet/core/platform/adaptive_viewport.dart';
 import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/app/chat_initialization.dart';
@@ -49,7 +50,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
@@ -74,23 +74,13 @@ late ProviderContainer globalProviderContainer;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 设备方向控制：iPad 允许所有方向，iPhone 仅竖屏
-  if (Platform.isIOS) {
-    final firstView = WidgetsBinding.instance.platformDispatcher.views.first;
-    final shortestSide =
-        firstView.physicalSize.shortestSide / firstView.devicePixelRatio;
-    if (shortestSide < 600) {
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    }
-  } else {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
+  // iOS scenes can resize across displays independently of orientation.
+  // An empty preference lets UIKit honor the supported orientations.
+  await SystemChrome.setPreferredOrientations(
+    Platform.isIOS
+        ? []
+        : [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+  );
 
   // _clearKeychainOnFreshInstall moved to _initDeferredServices (post-first-frame)
   await Firebase.initializeApp();
@@ -344,9 +334,8 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     switch (data.type) {
       case DeepLinkType.walletConnect:
         final wcUri = data.params['wcUri'] ?? data.uri.toString();
-        await Navigator.of(
-          navContext,
-        ).push(MaterialPageRoute(builder: (_) => WalletConnectPage(wcUri)));
+        await Navigator.of(navContext)
+            .push(MaterialPageRoute(builder: (_) => WalletConnectPage(wcUri)));
         break;
       case DeepLinkType.groupMining:
         AppLogger.d('DeepLink', 'group mining: ${data.params}');
@@ -410,60 +399,50 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     );
   }
 
-  Size _getDesignSize(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth >= 600) {
-      final scale = screenWidth / 375;
-      return Size(750 * scale, 1334 * scale);
-    }
-    return const Size(750, 1334);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: _getDesignSize(context),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (_, child) {
-        final locale = ref.watch(localeProvider);
-        final themeMode = ref.watch(themeModeProvider);
-        final accentColor = ref.watch(accentColorProvider);
-        return GestureDetector(
-          onTap: () {
-            SystemChannels.textInput.invokeMethod('TextInput.hide');
-          },
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            locale: locale,
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              S.delegate,
-              chat_l10n.S.delegate,
-            ],
-            navigatorKey: AppGlobals.navigatorKey,
-            supportedLocales: S.delegate.supportedLocales,
-            localeResolutionCallback: (locale, supported) {
-              if (locale?.languageCode == 'zh') {
-                return const Locale('zh', 'TW');
-              }
-              for (final s in supported) {
-                if (s.languageCode == locale?.languageCode) return s;
-              }
-              return const Locale('en');
+    return AdaptiveViewport(
+      child: AdaptiveScreenUtil(
+        builder: (_, child) {
+          final locale = ref.watch(localeProvider);
+          final themeMode = ref.watch(themeModeProvider);
+          final accentColor = ref.watch(accentColorProvider);
+          return GestureDetector(
+            onTap: () {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
             },
-            themeMode: themeMode,
-            theme: ThemeAdapter.buildLight(accentColor),
-            darkTheme: ThemeAdapter.buildDark(accentColor),
-            title: 'N42Wallet',
-            home: _widgetPage(),
-            routes: _routes,
-            navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
-          ),
-        );
-      },
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              locale: locale,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                S.delegate,
+                chat_l10n.S.delegate,
+              ],
+              navigatorKey: AppGlobals.navigatorKey,
+              supportedLocales: S.delegate.supportedLocales,
+              localeResolutionCallback: (locale, supported) {
+                if (locale?.languageCode == 'zh') {
+                  return const Locale('zh', 'TW');
+                }
+                for (final s in supported) {
+                  if (s.languageCode == locale?.languageCode) return s;
+                }
+                return const Locale('en');
+              },
+              themeMode: themeMode,
+              theme: ThemeAdapter.buildLight(accentColor),
+              darkTheme: ThemeAdapter.buildDark(accentColor),
+              title: 'N42Wallet',
+              home: _widgetPage(),
+              routes: _routes,
+              navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
+            ),
+          );
+        },
+      ),
     );
   }
 
