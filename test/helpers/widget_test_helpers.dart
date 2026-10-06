@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/platform/adaptive_viewport.dart';
 
 /// Widget Test Wrapper
 ///
@@ -27,6 +28,7 @@ class WidgetTestWrapper extends StatelessWidget {
   final Locale locale;
   final List<Override>? providerOverrides;
   final Size designSize;
+  final bool adaptiveViewport;
 
   const WidgetTestWrapper({
     super.key,
@@ -35,33 +37,40 @@ class WidgetTestWrapper extends StatelessWidget {
     this.locale = const Locale('en'),
     this.providerOverrides,
     this.designSize = const Size(750, 1334),
+    this.adaptiveViewport = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    Widget buildApp(BuildContext context, Widget? child) => MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: locale,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        S.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      themeMode: themeMode,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: Scaffold(body: this.child),
+    );
     return ProviderScope(
       overrides: providerOverrides ?? [],
-      child: ScreenUtilInit(
-        designSize: designSize,
-        minTextAdapt: true,
-        builder: (context, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            locale: locale,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              S.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            themeMode: themeMode,
-            theme: ThemeData.light(),
-            darkTheme: ThemeData.dark(),
-            home: Scaffold(body: this.child),
-          );
-        },
-      ),
+      child: adaptiveViewport
+          ? Directionality(
+              textDirection: TextDirection.ltr,
+              child: AdaptiveViewport(
+                child: AdaptiveScreenUtil(builder: buildApp),
+              ),
+            )
+          : ScreenUtilInit(
+              designSize: designSize,
+              minTextAdapt: true,
+              builder: buildApp,
+            ),
     );
   }
 }
@@ -72,11 +81,13 @@ Widget wrapForTest(
   ThemeMode themeMode = ThemeMode.light,
   Locale locale = const Locale('en'),
   List<Override>? overrides,
+  bool adaptiveViewport = false,
 }) {
   return WidgetTestWrapper(
     themeMode: themeMode,
     locale: locale,
     providerOverrides: overrides,
+    adaptiveViewport: adaptiveViewport,
     child: child,
   );
 }

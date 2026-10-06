@@ -9,6 +9,7 @@ extension on _HomePageState {
     final unselectedColor = AppColorTokens.of(context).textPrimary;
 
     return NavigationRail(
+      minWidth: 88,
       selectedIndex: currentIndex,
       onDestinationSelected: (index) {
         int indexState = 3;
@@ -268,7 +269,8 @@ extension on _HomePageState {
     double? fixedIconSize,
     double? fixedFontSize,
   }) {
-    final width = MediaQuery.of(context).size.width / pagesLength;
+    final media = MediaQuery.of(context);
+    final width = (media.size.width - media.padding.horizontal) / pagesLength;
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final unselectedColor = AppColorTokens.of(context).textTertiary;
@@ -325,7 +327,8 @@ extension on _HomePageState {
     double? fixedIconSize,
     double? fixedFontSize,
   }) {
-    final width = MediaQuery.of(context).size.width / pagesLength;
+    final media = MediaQuery.of(context);
+    final width = (media.size.width - media.padding.horizontal) / pagesLength;
     final currentIndex = ref.watch(homeTabIndexProvider);
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);

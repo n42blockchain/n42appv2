@@ -55,6 +55,7 @@ void main() {
   Future<void> pumpWalletPage(
     WidgetTester tester, {
     Future<void> Function(WalletActionProvider)? initializeWalletForTest,
+    bool adaptiveViewport = false,
   }) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
@@ -62,6 +63,7 @@ void main() {
     await tester.pumpWidget(
       wrapForTest(
         WalletPage(initializeWalletForTest: initializeWalletForTest),
+        adaptiveViewport: adaptiveViewport,
         overrides: [
           wapBridgeProvider.overrideWith((ref) => store),
           wcpBridgeProvider.overrideWith((ref) => walletConnect),
@@ -74,6 +76,44 @@ void main() {
     }
     await tester.pump();
   }
+
+  testWidgets(
+    'wallet controls remain usable through Duo resize and split view',
+    (tester) async {
+      final wallet = WalletInfo(
+        walletName: 'Synthetic wallet',
+        walletUuid: 'synthetic-duo',
+        coinInfo: <String, dynamic>{},
+      );
+      await pumpWalletPage(
+        tester,
+        adaptiveViewport: true,
+        initializeWalletForTest: (provider) async {
+          provider.walletInfoList.add(wallet);
+          provider.walletIndex = 0;
+          provider.walletMiningIndex = 0;
+          provider.buildwallet = false;
+          provider.refresh();
+        },
+      );
+      final pageState = tester.state(find.byType(WalletPage));
+      for (final size in [
+        const Size(800, 720),
+        const Size(720, 800),
+        const Size(320, 720),
+        const Size(844, 390),
+        const Size(390, 844),
+      ]) {
+        tester.view.physicalSize = size;
+        await tester.pump();
+        await tester.pump();
+        expect(tester.state(find.byType(WalletPage)), same(pageState));
+        expect(find.byType(WalletBoard), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      }
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 
   testWidgets('wallet home remains in loading state until a wallet is ready', (
     tester,

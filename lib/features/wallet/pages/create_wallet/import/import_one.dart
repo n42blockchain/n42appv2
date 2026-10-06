@@ -1,4 +1,7 @@
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
+
 import 'dart:async' show unawaited;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -142,126 +145,130 @@ class _ImportOneState extends ConsumerState<ImportOne>
         actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(AppSpacing.space8),
-                      alignment: Alignment.center,
-                      child: Text(
-                        S.of(context).g_key_wallet_c6,
-                        style: AppTypography.titleLg.copyWith(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.space16,
-                        vertical: AppSpacing.space16,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        S.of(context).g_key_wallet_c7,
-                        style: AppTypography.headline.copyWith(
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppSpacing.space4,
-                        horizontal: AppSpacing.space4,
-                      ),
-                      margin: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.space8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColorTokens.of(context).bgSurface,
-                        borderRadius: AppRadius.brSm,
-                      ),
-                      child: TextField(
-                        style: AppTypography.headline.copyWith(
-                          color: AppColorTokens.of(context).brand,
-                        ),
-                        controller: inputEditingController,
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          hintText: S.of(context).g_key_wallet_m21,
-                          border: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          isCollapsed: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.space2,
+      body: ResponsiveContainer(
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(AppSpacing.space8),
+                        alignment: Alignment.center,
+                        child: Text(
+                          S.of(context).g_key_wallet_c6,
+                          style: AppTypography.titleLg.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        maxLines: 8,
-                        onChanged: checkInput,
-                        onEditingComplete: () =>
-                            FocusScope.of(context).unfocus(),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(AppSpacing.space8),
-                      child: Text(
-                        inputMW,
-                        style: AppTypography.headline.copyWith(
-                          color: AppColorTokens.of(context).brand,
-                        ),
-                      ),
-                    ),
-                    if (errorMessage.isNotEmpty)
                       Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(AppSpacing.space8),
-                        margin: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
-                        decoration: BoxDecoration(
-                          color: AppColorTokens.of(context).dangerBg,
-                          borderRadius: AppRadius.brSm,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space16,
+                          vertical: AppSpacing.space16,
                         ),
+                        alignment: Alignment.center,
                         child: Text(
-                          errorMessage,
-                          style: AppTypography.bodySm.copyWith(
-                            color: AppColorTokens.of(context).danger,
+                          S.of(context).g_key_wallet_c7,
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          vertical: AppSpacing.space4,
+                          horizontal: AppSpacing.space4,
+                        ),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColorTokens.of(context).bgSurface,
+                          borderRadius: AppRadius.brSm,
+                        ),
+                        child: TextField(
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).brand,
+                          ),
+                          controller: inputEditingController,
+                          textInputAction: TextInputAction.done,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            hintText: S.of(context).g_key_wallet_m21,
+                            border: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            isCollapsed: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: AppSpacing.space2,
+                            ),
+                          ),
+                          maxLines: 8,
+                          onChanged: checkInput,
+                          onEditingComplete: () =>
+                              FocusScope.of(context).unfocus(),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.all(AppSpacing.space8),
+                        child: Text(
+                          inputMW,
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).brand,
+                          ),
+                        ),
+                      ),
+                      if (errorMessage.isNotEmpty)
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(AppSpacing.space8),
+                          margin: EdgeInsets.only(
+                            top: ScreenUtil().setWidth(30),
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColorTokens.of(context).dangerBg,
+                            borderRadius: AppRadius.brSm,
+                          ),
+                          child: Text(
+                            errorMessage,
+                            style: AppTypography.bodySm.copyWith(
+                              color: AppColorTokens.of(context).danger,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Column(
+                  children: [
+                    const Divider(height: 1),
+                    Container(
+                      height: ScreenUtil().setWidth(148.0),
+                      padding: EdgeInsets.all(AppSpacing.space8),
+                      width: double.infinity,
+                      color: AppColorTokens.of(context).bgBase,
+                      child: AppButton(
+                        label: S.of(context).g_key_11,
+                        onPressed: _onSubmit,
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                children: [
-                  const Divider(height: 1),
-                  Container(
-                    height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(AppSpacing.space8),
-                    width: double.infinity,
-                    color: AppColorTokens.of(context).bgBase,
-                    child: AppButton(
-                      label: S.of(context).g_key_11,
-                      onPressed: _onSubmit,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.5.0+2026073008
+version: 2.5.0+2026073009
 
 environment:
   sdk: ">=3.13.0 <4.0.0"

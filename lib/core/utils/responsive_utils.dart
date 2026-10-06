@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 /// 响应式布局工具类
@@ -63,19 +61,11 @@ class ResponsiveUtils {
   }
 
   /// 是否应使用侧边导航栏（NavigationRail）替代底部 Tab。
-  /// 平板横屏时使用侧边导航。
+  /// 按可用空间判断，展开的 iPhone 也可以使用侧边导航。
   static bool useSideNavigation(BuildContext context) {
-    return isTablet(context) && isLandscape(context);
-  }
-
-  /// 判断当前设备是否为 iPad（仅限 iOS 平台）。
-  /// 在 Android 平板上也可以用 [isTablet] 做宽度判断。
-  static bool get isIPad {
-    if (!Platform.isIOS) return false;
-    final views = WidgetsBinding.instance.platformDispatcher.views;
-    if (views.isEmpty) return false;
-    final view = views.first;
-    return view.physicalSize.shortestSide / view.devicePixelRatio >= 600;
+    final media = MediaQuery.of(context);
+    return media.size.width - media.padding.horizontal >= mobileBreakpoint &&
+        media.size.height - media.padding.vertical >= 480;
   }
 }
 

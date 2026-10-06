@@ -7,6 +7,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
+import 'package:n42_wallet/features/home/widgets/adaptive_home_layout.dart';
 import 'package:n42_wallet/shared/domain/entities/device_login_info.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_home_page.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/device_login_dialog.dart';
@@ -85,9 +86,8 @@ class _HomePageState extends ConsumerState<HomePage>
 
   /// 跳转到聊天页面（使用 N42Chat 插件）
   void _navigateToChat() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
   }
 
   @override
@@ -176,7 +176,6 @@ class _HomePageState extends ConsumerState<HomePage>
     final homeCurrentIndex = ref.watch(homeTabIndexProvider);
     final pages = _buildPages();
     final safeIndex = homeCurrentIndex.clamp(0, pages.length - 1);
-    final useSideNav = ResponsiveUtils.useSideNavigation(context);
 
     return KeyedSubtree(
       key: const ValueKey<String>('home_page'),
@@ -186,26 +185,11 @@ class _HomePageState extends ConsumerState<HomePage>
         body: SafeArea(
           child: Stack(
             children: [
-              if (useSideNav)
-                // iPad 横屏：使用 NavigationRail + 内容区域
-                Row(
-                  children: [
-                    buildNavigationRail(safeIndex),
-                    Expanded(
-                      child: IndexedStack(index: safeIndex, children: pages),
-                    ),
-                  ],
-                )
-              else ...[
-                // 手机 / iPad 竖屏：保持原有底部导航
-                IndexedStack(index: safeIndex, children: pages),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: buildBottomNavBar(context),
-                ),
-              ],
+              AdaptiveHomeLayout(
+                content: IndexedStack(index: safeIndex, children: pages),
+                sideNavigation: buildNavigationRail(safeIndex),
+                bottomNavigation: buildBottomNavBar(context),
+              ),
               if (showTermsOfService == false)
                 Positioned.fill(
                   child: TermsOfServiceWidget(

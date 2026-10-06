@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/platform/adaptive_viewport.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -31,10 +31,7 @@ class _LiveAppState extends State<LiveApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(750, 1334),
-      minTextAdapt: true,
-      splitScreenMode: true,
+    return AdaptiveScreenUtil(
       builder: (_, _) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'N42 Live',

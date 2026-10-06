@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -80,118 +81,120 @@ class _CreateOneState extends ConsumerState<CreateOne> {
         actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      body: ResponsiveContainer(
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(AppSpacing.space8),
+                        alignment: Alignment.center,
+                        child: Text(
+                          S.of(context).g_key_wallet_c8,
+                          style: AppTypography.titleLg.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: ScreenUtil().setWidth(450),
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          "assets/home/splash_2.png",
+                          width: ScreenUtil().setWidth(350),
+                          height: ScreenUtil().setWidth(350),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space16,
+                        ),
+                        child: Text(
+                          S.of(context).g_key_wallet_c9,
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(100)),
+                      _checkWidget(
+                        S.of(context).w_item_1,
+                        checkOne,
+                        (selected) => setState(() => checkOne = selected!),
+                      ),
+                      _checkWidget(
+                        S.of(context).w_item_2,
+                        checkTow,
+                        (selected) => setState(() => checkTow = selected!),
+                      ),
+                      _checkWidget(
+                        S.of(context).w_item_3,
+                        checkThree,
+                        (selected) => setState(() => checkThree = selected!),
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(180.0)),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.all(AppSpacing.space8),
-                      alignment: Alignment.center,
-                      child: Text(
-                        S.of(context).g_key_wallet_c8,
-                        style: AppTypography.titleLg.copyWith(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontWeight: FontWeight.w600,
+                    const Divider(height: 1),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: ScreenUtil().setWidth(148.0),
+                            padding: EdgeInsets.only(
+                              left: ScreenUtil().setWidth(30.0),
+                              top: ScreenUtil().setWidth(30.0),
+                              bottom: ScreenUtil().setWidth(30.0),
+                            ),
+                            color: AppColorTokens.of(context).bgBase,
+                            child: AppButton(
+                              label: S.of(context).g_key_wallet_c10,
+                              onPressed: allChecked ? _onCreateTap : null,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      height: ScreenUtil().setWidth(450),
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/home/splash_2.png",
-                        width: ScreenUtil().setWidth(350),
-                        height: ScreenUtil().setWidth(350),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.space16,
-                      ),
-                      child: Text(
-                        S.of(context).g_key_wallet_c9,
-                        style: AppTypography.headline.copyWith(
-                          color: AppColorTokens.of(context).textPrimary,
+                        SizedBox(width: AppSpacing.space8),
+                        Expanded(
+                          child: Container(
+                            height: ScreenUtil().setWidth(148.0),
+                            padding: EdgeInsets.only(
+                              right: ScreenUtil().setWidth(30.0),
+                              top: ScreenUtil().setWidth(30.0),
+                              bottom: ScreenUtil().setWidth(30.0),
+                            ),
+                            child: AppButton(
+                              label: S.of(context).g_key_wallet_c21,
+                              variant: AppButtonVariant.secondary,
+                              onPressed: _onWatchOnlyTap,
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
+                      ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(100)),
-                    _checkWidget(
-                      S.of(context).w_item_1,
-                      checkOne,
-                      (selected) => setState(() => checkOne = selected!),
-                    ),
-                    _checkWidget(
-                      S.of(context).w_item_2,
-                      checkTow,
-                      (selected) => setState(() => checkTow = selected!),
-                    ),
-                    _checkWidget(
-                      S.of(context).w_item_3,
-                      checkThree,
-                      (selected) => setState(() => checkThree = selected!),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(180.0)),
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                children: [
-                  const Divider(height: 1),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: ScreenUtil().setWidth(148.0),
-                          padding: EdgeInsets.only(
-                            left: ScreenUtil().setWidth(30.0),
-                            top: ScreenUtil().setWidth(30.0),
-                            bottom: ScreenUtil().setWidth(30.0),
-                          ),
-                          color: AppColorTokens.of(context).bgBase,
-                          child: AppButton(
-                            label: S.of(context).g_key_wallet_c10,
-                            onPressed: allChecked ? _onCreateTap : null,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: AppSpacing.space8),
-                      Expanded(
-                        child: Container(
-                          height: ScreenUtil().setWidth(148.0),
-                          padding: EdgeInsets.only(
-                            right: ScreenUtil().setWidth(30.0),
-                            top: ScreenUtil().setWidth(30.0),
-                            bottom: ScreenUtil().setWidth(30.0),
-                          ),
-                          child: AppButton(
-                            label: S.of(context).g_key_wallet_c21,
-                            variant: AppButtonVariant.secondary,
-                            onPressed: _onWatchOnlyTap,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

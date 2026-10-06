@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
@@ -124,189 +125,189 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
         actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(AppSpacing.space8),
-                      alignment: Alignment.center,
-                      child: Text(
-                        S.of(context).g_key_wallet_c47,
-                        style: AppTypography.titleLg.copyWith(
-                          color: AppColorTokens.of(context).textPrimary,
-                          fontWeight: FontWeight.w600,
+      body: ResponsiveContainer(
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(AppSpacing.space8),
+                        alignment: Alignment.center,
+                        child: Text(
+                          S.of(context).g_key_wallet_c47,
+                          style: AppTypography.titleLg.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                    LoginTitle(
-                      title: S.of(context).g_key_wallet_c48,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor10.name,
+                      LoginTitle(
+                        title: S.of(context).g_key_wallet_c48,
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor10.name,
+                        ),
+                        must: true,
                       ),
-                      must: true,
-                    ),
-                    _buildFieldContainer(
-                      child: textFieldStyle3(
-                        context,
-                        onEditingComplete: () {
-                          FocusScope.of(
+                      _buildFieldContainer(
+                        child: textFieldStyle3(
+                          context,
+                          onEditingComplete: () {
+                            FocusScope.of(context)
+                                .requestFocus(_uPasswordFocusNode);
+                          },
+                          height: ScreenUtil().setWidth(108.0),
+                          maxLengths: AppConfig.walletNameMaxLength,
+                          controller: _titleController,
+                          focusNode: _titleFocusNode,
+                          hintText: S.of(context).g_key_wallet_c34,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          errorMessage: titleErrorMessage,
+                          hintStyle: _hintStyle(),
+                        ),
+                      ),
+                      LoginTitle(
+                        title: S.of(context).login_password,
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor10.name,
+                        ),
+                        must: true,
+                      ),
+                      _buildFieldContainer(
+                        child: textFieldStyle3(
+                          context,
+                          onEditingComplete: () {
+                            FocusScope.of(context)
+                                .requestFocus(_uPasswordConfirmFocusNode);
+                          },
+                          height: ScreenUtil().setWidth(108.0),
+                          controller: _uPasswordController,
+                          focusNode: _uPasswordFocusNode,
+                          hintText: S.of(context).rest_Choose_password,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.next,
+                          errorMessage: uPasswordErrorMessage,
+                          hintStyle: _hintStyle(),
+                          obscure: showPwd1,
+                          rightWidget1: _buildPasswordToggle(showPwd1),
+                          rightOnTap1: () {
+                            setState(() {
+                              showPwd1 = !showPwd1;
+                            });
+                          },
+                        ),
+                      ),
+                      LoginTitle(
+                        title: S.of(context).rest_Confirm_password,
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainTextColor10.name,
+                        ),
+                        must: true,
+                      ),
+                      _buildFieldContainer(
+                        bottomMargin: 0,
+                        child: textFieldStyle3(
+                          context,
+                          onEditingComplete: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          height: ScreenUtil().setWidth(108.0),
+                          controller: _uPasswordConfirmController,
+                          focusNode: _uPasswordConfirmFocusNode,
+                          hintText: S.of(context).repeatPassword,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.done,
+                          errorMessage: uPasswordConfirmErrorMessage,
+                          hintStyle: _hintStyle(),
+                          obscure: showPwd2,
+                          rightWidget1: _buildPasswordToggle(showPwd2),
+                          rightOnTap1: () {
+                            setState(() {
+                              showPwd2 = !showPwd2;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setWidth(148.0)),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Column(
+                  children: [
+                    const Divider(height: 1, indent: 0, endIndent: 0),
+                    Container(
+                      height: ScreenUtil().setWidth(148.0),
+                      padding: EdgeInsets.all(AppSpacing.space8),
+                      width: double.infinity,
+                      color: AppColorTokens.of(context).bgBase,
+                      child: AppButton(
+                        label: S.of(context).g_key_115,
+                        onPressed: () async {
+                          final wName = _titleController.text.trim();
+                          final password = _uPasswordController.text.trim();
+                          final rPassword = _uPasswordConfirmController.text
+                              .trim();
+
+                          String titleErr = "", pwdErr = "", confirmErr = "";
+                          if (wName.isEmpty) {
+                            titleErr = S.of(context).g_key_wallet_c34;
+                          } else if (password.isEmpty) {
+                            pwdErr = S.of(context).g_key_21;
+                          } else if (!Regular().isPassword(password)) {
+                            pwdErr = S.of(context).rest_Choose_password;
+                          } else if (rPassword.isEmpty) {
+                            confirmErr = S.of(context).g_key_21;
+                          } else if (password != rPassword) {
+                            confirmErr = S.of(context).g_key_25;
+                          }
+
+                          titleErrorMessage = titleErr;
+                          uPasswordErrorMessage = pwdErr;
+                          uPasswordConfirmErrorMessage = confirmErr;
+
+                          final firstError = [
+                            titleErr,
+                            pwdErr,
+                            confirmErr,
+                          ].firstWhere((e) => e.isNotEmpty, orElse: () => "");
+                          if (firstError.isNotEmpty) {
+                            ToastUtils.show(firstError);
+                            setState(() {});
+                            return;
+                          }
+
+                          widget.wInfo.password = password;
+                          widget.wInfo.walletName = wName;
+                          Navigator.push(
                             context,
-                          ).requestFocus(_uPasswordFocusNode);
-                        },
-                        height: ScreenUtil().setWidth(108.0),
-                        maxLengths: AppConfig.walletNameMaxLength,
-                        controller: _titleController,
-                        focusNode: _titleFocusNode,
-                        hintText: S.of(context).g_key_wallet_c34,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.next,
-                        errorMessage: titleErrorMessage,
-                        hintStyle: _hintStyle(),
-                      ),
-                    ),
-                    LoginTitle(
-                      title: S.of(context).login_password,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor10.name,
-                      ),
-                      must: true,
-                    ),
-                    _buildFieldContainer(
-                      child: textFieldStyle3(
-                        context,
-                        onEditingComplete: () {
-                          FocusScope.of(
-                            context,
-                          ).requestFocus(_uPasswordConfirmFocusNode);
-                        },
-                        height: ScreenUtil().setWidth(108.0),
-                        controller: _uPasswordController,
-                        focusNode: _uPasswordFocusNode,
-                        hintText: S.of(context).rest_Choose_password,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        errorMessage: uPasswordErrorMessage,
-                        hintStyle: _hintStyle(),
-                        obscure: showPwd1,
-                        rightWidget1: _buildPasswordToggle(showPwd1),
-                        rightOnTap1: () {
-                          setState(() {
-                            showPwd1 = !showPwd1;
-                          });
+                            MaterialPageRoute(
+                              builder: (context) => CreateFinish(
+                                wInfo: widget.wInfo,
+                                createMetod: widget.createMetod,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
-                    LoginTitle(
-                      title: S.of(context).rest_Confirm_password,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor10.name,
-                      ),
-                      must: true,
-                    ),
-                    _buildFieldContainer(
-                      bottomMargin: 0,
-                      child: textFieldStyle3(
-                        context,
-                        onEditingComplete: () {
-                          FocusScope.of(context).unfocus();
-                        },
-                        height: ScreenUtil().setWidth(108.0),
-                        controller: _uPasswordConfirmController,
-                        focusNode: _uPasswordConfirmFocusNode,
-                        hintText: S.of(context).repeatPassword,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.done,
-                        errorMessage: uPasswordConfirmErrorMessage,
-                        hintStyle: _hintStyle(),
-                        obscure: showPwd2,
-                        rightWidget1: _buildPasswordToggle(showPwd2),
-                        rightOnTap1: () {
-                          setState(() {
-                            showPwd2 = !showPwd2;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: ScreenUtil().setWidth(148.0)),
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                children: [
-                  const Divider(height: 1, indent: 0, endIndent: 0),
-                  Container(
-                    height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(AppSpacing.space8),
-                    width: double.infinity,
-                    color: AppColorTokens.of(context).bgBase,
-                    child: AppButton(
-                      label: S.of(context).g_key_115,
-                      onPressed: () async {
-                        final wName = _titleController.text.trim();
-                        final password = _uPasswordController.text.trim();
-                        final rPassword = _uPasswordConfirmController.text
-                            .trim();
-
-                        String titleErr = "", pwdErr = "", confirmErr = "";
-                        if (wName.isEmpty) {
-                          titleErr = S.of(context).g_key_wallet_c34;
-                        } else if (password.isEmpty) {
-                          pwdErr = S.of(context).g_key_21;
-                        } else if (!Regular().isPassword(password)) {
-                          pwdErr = S.of(context).rest_Choose_password;
-                        } else if (rPassword.isEmpty) {
-                          confirmErr = S.of(context).g_key_21;
-                        } else if (password != rPassword) {
-                          confirmErr = S.of(context).g_key_25;
-                        }
-
-                        titleErrorMessage = titleErr;
-                        uPasswordErrorMessage = pwdErr;
-                        uPasswordConfirmErrorMessage = confirmErr;
-
-                        final firstError = [
-                          titleErr,
-                          pwdErr,
-                          confirmErr,
-                        ].firstWhere((e) => e.isNotEmpty, orElse: () => "");
-                        if (firstError.isNotEmpty) {
-                          ToastUtils.show(firstError);
-                          setState(() {});
-                          return;
-                        }
-
-                        widget.wInfo.password = password;
-                        widget.wInfo.walletName = wName;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CreateFinish(
-                              wInfo: widget.wInfo,
-                              createMetod: widget.createMetod,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

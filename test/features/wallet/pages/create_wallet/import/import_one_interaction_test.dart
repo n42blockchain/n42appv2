@@ -73,7 +73,10 @@ void main() {
     );
   });
 
-  Future<void> openImport(WidgetTester tester) async {
+  Future<void> openImport(
+    WidgetTester tester, {
+    bool adaptiveViewport = false,
+  }) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -88,6 +91,7 @@ void main() {
             child: const Text('Open synthetic import'),
           ),
         ),
+        adaptiveViewport: adaptiveViewport,
         overrides: [wapBridgeProvider.overrideWith((ref) => store)],
       ),
     );
@@ -112,6 +116,35 @@ void main() {
 
   String inputText(WidgetTester tester) =>
       tester.widget<TextField>(find.byType(TextField)).controller!.text;
+
+  testWidgets(
+    'import draft survives Duo resizing and keyboard remains reachable',
+    (tester) async {
+      await openImport(tester, adaptiveViewport: true);
+      await tester.enterText(find.byType(TextField).first, syntheticPhrase);
+      final pageState = tester.state(find.byType(ImportOne));
+      for (final size in [
+        const Size(800, 720),
+        const Size(720, 800),
+        const Size(320, 720),
+        const Size(844, 390),
+        const Size(390, 844),
+      ]) {
+        tester.view.physicalSize = size;
+        await tester.pump();
+        await tester.pump();
+        expect(tester.state(find.byType(ImportOne)), same(pageState));
+        expect(tester.widget<TextField>(find.byType(TextField).first).controller!.text, syntheticPhrase);
+        expect(tester.takeException(), isNull);
+      }
+      tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+      addTearDown(tester.view.resetViewInsets);
+      await tester.pump();
+      expect(tester.getRect(find.byType(TextField).first).top, lessThan(544));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 
   testWidgets('manual input normalizes whitespace before import', (
     tester,
