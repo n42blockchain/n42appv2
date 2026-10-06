@@ -41,6 +41,8 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   int coinModelsIndex = -1;
   List<CoinModel> coinModels = [];
+  int? _coinModelsWalletIndex;
+  int? _privateKeyWalletIndex;
 
   /// Look up the [CoinModel] for [type] from the loaded chain list.
   /// Returns null when the chain is not configured for the current session.
@@ -228,6 +230,8 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   Future<bool> web3clientInit() async {
     try {
+      _privateKey = null;
+      _privateKeyWalletIndex = null;
       final cm = coinModels[coinModelsIndex];
       web3client = web3.Web3Client(
         cm.isTest ? cm.config.serviceTest : cm.config.service,
@@ -260,11 +264,20 @@ mixin WalletConnectConnection on ChangeNotifier {
             mnemonic,
             cm.config.coinType,
             getPathWithIndex(
-              cm.config.pathForAddrType('legacy')!,
+              cm.config.pathForAddrType(cm.addrType)!,
               cm.pathIndex,
             ),
           );
         }
+      }
+
+      if (globalProviderContainer.read(selectedWalletIndexProvider) !=
+          currentIndex) {
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Active wallet changed during signing setup',
+        );
+        return false;
       }
 
       if (pKey == null) {
@@ -292,17 +305,43 @@ mixin WalletConnectConnection on ChangeNotifier {
         );
         return false;
       }
-      _privateKey = web3.EthPrivateKey(Uint8List.fromList(decodedKey));
+      final key = web3.EthPrivateKey(Uint8List.fromList(decodedKey));
+      final configuredAddress = cm.address?.toString().trim() ?? '';
+      if (configuredAddress.isEmpty ||
+          key.address.with0x.toLowerCase() != configuredAddress.toLowerCase()) {
+        SecureStorage.secureWipeBytes(decodedKey);
+        _privateKey = null;
+        _privateKeyWalletIndex = null;
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Signing key does not match the selected wallet address',
+        );
+        return false;
+      }
+      _privateKey = key;
+      _privateKeyWalletIndex = currentIndex;
       SecureStorage.secureWipeBytes(decodedKey);
       return true;
     } catch (e) {
+      _privateKey = null;
+      _privateKeyWalletIndex = null;
       viewStateDeal(WalletConnectState.error, params: e.toString());
       return false;
     }
   }
 
   Future<bool> web3clientInitFromChainId(String chainStr) async {
-    final namespace = chainStr.split(':')[0];
+    final chainParts = chainStr.split(':');
+    final namespace = chainParts.first;
+    final chainId = chainParts.length > 1 ? chainParts[1] : '';
+    final requestedChainId = namespace == 'eip155'
+        ? int.tryParse(chainId)
+        : null;
+    final selectedWalletIndex = _selectedWalletIndexOrNull();
+    if (selectedWalletIndex != null &&
+        _coinModelsWalletIndex != selectedWalletIndex) {
+      coinModelInit(chainId: requestedChainId ?? -1);
+    }
 
     // Solana: no web3client needed, just locate the coin model
     if (namespace == 'solana') {
@@ -385,7 +424,6 @@ mixin WalletConnectConnection on ChangeNotifier {
     }
 
     // EIP-155 (Ethereum): use web3client
-    final chainId = chainStr.split(':')[1];
     final chainIndex = coinModels.indexWhere((cm) {
       if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
         return false;
@@ -398,7 +436,11 @@ mixin WalletConnectConnection on ChangeNotifier {
       viewStateDeal(WalletConnectState.error, params: 'Error');
       return false;
     }
-    final needsReinit = coinModelsIndex != chainIndex || web3client == null;
+    final needsReinit =
+        coinModelsIndex != chainIndex ||
+        web3client == null ||
+        (selectedWalletIndex != null &&
+            _privateKeyWalletIndex != selectedWalletIndex);
     if (coinModelsIndex != chainIndex) setCoinModelsIndex(chainIndex);
     return needsReinit ? await web3clientInit() : true;
   }
@@ -425,6 +467,7 @@ mixin WalletConnectConnection on ChangeNotifier {
           (cm) => cm.config.blockchainType == BlockchainType.Ethereum.name,
         );
         setCoinModelsIndex(ethIndex >= 0 ? ethIndex : 0);
+        _coinModelsWalletIndex = _selectedWalletIndexOrNull();
         return;
       }
       // 按指定 chainId 查找匹配项
@@ -433,8 +476,17 @@ mixin WalletConnectConnection on ChangeNotifier {
         return cmChainId == chainId;
       });
       if (matchIndex != -1) setCoinModelsIndex(matchIndex);
+      _coinModelsWalletIndex = _selectedWalletIndexOrNull();
     } catch (e) {
       viewStateDeal(WalletConnectState.error, params: e.toString());
+    }
+  }
+
+  int? _selectedWalletIndexOrNull() {
+    try {
+      return globalProviderContainer.read(selectedWalletIndexProvider);
+    } catch (_) {
+      return null;
     }
   }
 

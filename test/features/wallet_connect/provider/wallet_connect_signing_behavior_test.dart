@@ -155,7 +155,10 @@ void main() {
 
   test('WalletKit response failure is surfaced as a signing error', () async {
     walletKit.responseFailure = StateError('session response failed');
-    provider.actionData = _request('personal_sign', ['fixture']);
+    provider.actionData = _request('personal_sign', [
+      'fixture',
+      _testKey.address.with0x,
+    ]);
 
     await provider.messageSignTap();
 

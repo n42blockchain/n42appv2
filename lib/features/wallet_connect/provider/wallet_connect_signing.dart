@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_gas_limit.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_session.dart';
@@ -32,6 +33,8 @@ mixin WalletConnectSigning
       if (walletConnectState == WalletConnectState.messageSign) return;
       viewStateDeal(WalletConnectState.messageSign);
       final eventData = actionData as wallet_connect.SessionRequestEvent;
+      _validateEvmMessageRequestShape(eventData);
+      _verifyEvmMessageSigner(eventData);
       String signedDataHex;
 
       if (eventData.method == "personal_sign") {
@@ -66,6 +69,13 @@ mixin WalletConnectSigning
           return;
         }
         final credentials = await getCurrentWalletCredentials();
+        if (!await _ensureCurrentSignerMatchesCoin(
+          cm,
+          credentials,
+          requestedAddress: requestParams['address'] as String?,
+        )) {
+          return;
+        }
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -91,6 +101,13 @@ mixin WalletConnectSigning
           return;
         }
         final credentials = await getCurrentWalletCredentials();
+        if (!await _ensureCurrentSignerMatchesCoin(
+          cm,
+          credentials,
+          requestedAddress: requestParams['address'] as String?,
+        )) {
+          return;
+        }
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -123,6 +140,13 @@ mixin WalletConnectSigning
           return;
         }
         final credentials = await getCurrentWalletCredentials();
+        if (!await _ensureCurrentSignerMatchesCoin(
+          cm,
+          credentials,
+          requestedAddress: requestParams['address'] as String?,
+        )) {
+          return;
+        }
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -157,6 +181,13 @@ mixin WalletConnectSigning
           return;
         }
         final credentials = await getCurrentWalletCredentials();
+        if (!await _ensureCurrentSignerMatchesCoin(
+          cm,
+          credentials,
+          requestedAddress: requestParams['pubkey'] as String?,
+        )) {
+          return;
+        }
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -187,8 +218,7 @@ mixin WalletConnectSigning
             id: eventData.id,
             error: wallet_connect.JsonRpcError(
               code: 4200,
-              message:
-                  'eth_sign is disabled for security reasons. Use personal_sign instead.',
+              message: 'eth_sign is disabled for security reasons. Use personal_sign instead.',
             ),
           ),
         );
@@ -284,6 +314,7 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
+    if (!await _ensureCurrentSignerMatchesCoin(cm, credentials)) return;
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -320,6 +351,14 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
+    final feePayer = requestParams['feePayer'] as String?;
+    if (!await _ensureCurrentSignerMatchesCoin(
+      cm,
+      credentials,
+      requestedAddress: feePayer,
+    )) {
+      return;
+    }
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -383,13 +422,18 @@ mixin WalletConnectSigning
   ) async {
     final parameters = eventData.params.first as Map<String, dynamic>;
     final from = parameters['from'] as String;
+    final gasLimit = walletConnectGasLimit(parameters);
+    if (from.toLowerCase() != privateKey.address.with0x.toLowerCase()) {
+      throw StateError(
+        'WalletConnect transaction sender does not match the selected wallet',
+      );
+    }
     final to = parameters['to'] as String?;
     final value = parameters['value'] as String?;
     final nonce = parameters['nonce'] as String?;
     final gasPrice = parameters['gasPrice'] as String?;
     final maxFeePerGas = parameters['maxFeePerGas'] as String?;
     final maxPriorityFeePerGas = parameters['maxPriorityFeePerGas'] as String?;
-    final gasLimit = walletConnectGasLimit(parameters);
     final data = parameters['data'] as String?;
 
     final transaction = web3.Transaction(
@@ -450,6 +494,98 @@ mixin WalletConnectSigning
     viewStateDeal(WalletConnectState.connect);
   }
 
+  void _verifyEvmMessageSigner(wallet_connect.SessionRequestEvent eventData) {
+    if (!eventData.chainId.startsWith('eip155:') ||
+        eventData.method == 'eth_sign') {
+      return;
+    }
+
+    final params = eventData.params;
+    if (params is! List || params.length < 2) return;
+    final String? requestedAddress = switch (eventData.method) {
+      'personal_sign' => params[1] as String?,
+      'eth_signTypedData' ||
+      'eth_signTypedData_v3' ||
+      'eth_signTypedData_v4' => params[0] as String?,
+      _ => null,
+    };
+    if (requestedAddress == null ||
+        requestedAddress.toLowerCase() !=
+            privateKey.address.with0x.toLowerCase()) {
+      throw StateError(
+        'WalletConnect message signer does not match the selected wallet',
+      );
+    }
+  }
+
+  void _validateEvmMessageRequestShape(
+    wallet_connect.SessionRequestEvent eventData,
+  ) {
+    if (!eventData.chainId.startsWith('eip155:') ||
+        eventData.method == 'eth_sign') {
+      return;
+    }
+    if (eventData.method != 'personal_sign' &&
+        !_typedDataVersions.containsKey(eventData.method)) {
+      return;
+    }
+    final params = eventData.params;
+    if (params is! List ||
+        params.length < 2 ||
+        params[0] is! String ||
+        params[1] is! String) {
+      throw const FormatException('Invalid WalletConnect signing parameters');
+    }
+  }
+
+  Future<bool> _ensureCurrentSignerMatchesCoin(
+    CoinModel coin,
+    ({String mnemonic, String privateKey}) credentials, {
+    String? requestedAddress,
+  }) async {
+    final address = coin.address?.toString().trim() ?? '';
+    final basePath = coin.config.pathForAddrType(coin.addrType);
+    final privateKey = credentials.privateKey.trim();
+    final mnemonic = credentials.mnemonic.trim();
+    if (address.isEmpty ||
+        basePath == null ||
+        basePath.isEmpty ||
+        (privateKey.isEmpty && mnemonic.isEmpty)) {
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Unable to verify the selected wallet signer',
+      );
+      return false;
+    }
+
+    final derived = await trustdart.generateAddress(
+      coin.config.coinType,
+      getPathWithIndex(basePath, coin.pathIndex),
+      coin.addrType,
+      mnemonic: privateKey.isEmpty ? mnemonic : '',
+      pk: privateKey,
+      isTest: coin.isTest,
+    );
+    final signerAddress = derived[coin.addrType]?.toString().trim() ?? '';
+    final isEvm = coin.config.blockchainType == BlockchainType.Ethereum.name;
+    bool matches(String expected) => isEvm
+        ? signerAddress.toLowerCase() == expected.toLowerCase()
+        : signerAddress == expected;
+
+    if (signerAddress.isEmpty ||
+        !matches(address) ||
+        (requestedAddress != null &&
+            requestedAddress.isNotEmpty &&
+            !matches(requestedAddress.trim()))) {
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Signing key does not match the selected wallet address',
+      );
+      return false;
+    }
+    return true;
+  }
+
   /// Parse a hex (0x-prefixed) or decimal string to BigInt.
   /// DApps send values as hex per JSON-RPC spec (e.g. "0xde0b6b3a7640000").
   static BigInt _parseHexOrDecBigInt(String s) {
@@ -486,6 +622,7 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
+    if (!await _ensureCurrentSignerMatchesCoin(cm, credentials)) return;
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -553,6 +690,7 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
+    if (!await _ensureCurrentSignerMatchesCoin(cm, credentials)) return;
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -612,6 +750,7 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
+    if (!await _ensureCurrentSignerMatchesCoin(cm, credentials)) return;
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,

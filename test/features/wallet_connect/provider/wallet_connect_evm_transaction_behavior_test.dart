@@ -112,7 +112,7 @@ void main() {
     () async {
       provider.actionData = _request('eth_signTransaction', [
         {
-          'from': '0x1111111111111111111111111111111111111111',
+          'from': _Provider._key.address.with0x,
           'to': '0x2222222222222222222222222222222222222222',
           'value': '0xde0b6b3a7640000',
           'gasPrice': '0x2540be400',
@@ -125,10 +125,7 @@ void main() {
       await provider.transactionSignTap();
 
       final transaction = rpc.signedTransaction!;
-      expect(
-        transaction.from!.without0x,
-        '1111111111111111111111111111111111111111',
-      );
+      expect(transaction.from!.without0x, _Provider._key.address.without0x);
       expect(
         transaction.to!.without0x,
         '2222222222222222222222222222222222222222',
@@ -138,7 +135,7 @@ void main() {
       expect(transaction.maxGas, 21000);
       expect(transaction.nonce, 3);
       expect(transaction.data, [0xde, 0xad, 0xbe, 0xef]);
-      expect(provider.keyReads, 1);
+      expect(provider.keyReads, 2);
       expect(client.responses.single.$1, 'evm-request-topic');
       expect(client.responses.single.$2.id, 84);
       expect(client.responses.single.$2.result, '0x010203');
@@ -149,7 +146,7 @@ void main() {
   test('EIP-1559 fee fields are preserved as wei quantities', () async {
     provider.actionData = _request('eth_signTransaction', [
       {
-        'from': '0x1111111111111111111111111111111111111111',
+        'from': _Provider._key.address.with0x,
         'maxFeePerGas': '0x59682f00',
         'maxPriorityFeePerGas': '0x3b9aca00',
         'data': '0x60006000',
@@ -175,7 +172,7 @@ void main() {
     () async {
       provider.actionData = _request('eth_sendTransaction', [
         {
-          'from': '0x1111111111111111111111111111111111111111',
+          'from': _Provider._key.address.with0x,
           'to': '0x2222222222222222222222222222222222222222',
           'gas': '21000',
         },
@@ -192,7 +189,7 @@ void main() {
 
   test('malformed gas cap stops before the signer is called', () async {
     provider.actionData = _request('eth_signTransaction', [
-      {'from': '0x1111111111111111111111111111111111111111', 'gas': '0xZZ'},
+      {'from': _Provider._key.address.with0x, 'gas': '0xZZ'},
     ]);
 
     await provider.transactionSignTap();
@@ -204,11 +201,28 @@ void main() {
     expect(provider.errorMessage, contains('Invalid gas limit'));
   });
 
+  test('transaction from another wallet is rejected before signing', () async {
+    provider.actionData = _request('eth_signTransaction', [
+      {
+        'from': '0x1111111111111111111111111111111111111111',
+        'to': '0x2222222222222222222222222222222222222222',
+      },
+    ]);
+
+    await provider.transactionSignTap();
+
+    expect(rpc.signedTransaction, isNull);
+    expect(rpc.sentTransaction, isNull);
+    expect(client.responses, isEmpty);
+    expect(provider.walletConnectState, WalletConnectState.error);
+    expect(provider.errorMessage, contains('does not match'));
+  });
+
   test('personal_sign signs plain UTF-8 message bytes', () async {
     const message = 'Sign this WalletConnect message';
     provider.actionData = _request('personal_sign', [
       message,
-      '0x1111111111111111111111111111111111111111',
+      _Provider._key.address.with0x,
     ]);
 
     await provider.messageSignTap();
@@ -227,7 +241,7 @@ void main() {
   test('personal_sign decodes hex message bytes before signing', () async {
     provider.actionData = _request('personal_sign', [
       '0x48656c6c6f',
-      '0x1111111111111111111111111111111111111111',
+      _Provider._key.address.with0x,
     ]);
 
     await provider.messageSignTap();
@@ -241,6 +255,23 @@ void main() {
     expect(client.responses.single.$2.result, expected);
     expect(provider.walletConnectState, WalletConnectState.connect);
   });
+
+  test(
+    'personal_sign request for another wallet is rejected before signing',
+    () async {
+      provider.actionData = _request('personal_sign', [
+        'Sign for another wallet',
+        '0x1111111111111111111111111111111111111111',
+      ]);
+
+      await provider.messageSignTap();
+
+      expect(provider.keyReads, 1);
+      expect(client.responses, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+      expect(provider.errorMessage, contains('does not match'));
+    },
+  );
 
   test(
     'eth_sign is rejected without reading or using the private key',
@@ -261,7 +292,7 @@ void main() {
 
   test('typed-data requests sign a 65-byte EIP-712 signature', () async {
     provider.actionData = _request('eth_signTypedData_v4', [
-      '0x1111111111111111111111111111111111111111',
+      _Provider._key.address.with0x,
       '{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"}],"Mail":[{"name":"contents","type":"string"}]},"primaryType":"Mail","domain":{"name":"N42","version":"1","chainId":1},"message":{"contents":"hello"}}',
     ]);
 
@@ -377,18 +408,21 @@ void main() {
   );
 
   test('Solana transaction signing returns the signed transaction', () async {
+    final solanaCoin = sessionCoin(type: 'SOL', blockchain: 'Solana')
+      ..coin['path'] = {'legacy': "m/44'/501'/0'/0'"};
     final calls = <MethodCall>[];
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_trustdartChannel, (call) async {
           calls.add(call);
+          if (call.method == 'generateAddress') {
+            return {'legacy': solanaCoin.address};
+          }
           return 'c2lnbmVkLXRyYW5zYWN0aW9u';
         });
     addTearDown(
       () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(_trustdartChannel, null),
     );
-    final solanaCoin = sessionCoin(type: 'SOL', blockchain: 'Solana')
-      ..coin['path'] = {'legacy': "m/44'/501'/0'/0'"};
     provider
       ..coinModels = [solanaCoin]
       ..coinModelsIndex = 0
@@ -398,9 +432,12 @@ void main() {
 
     await provider.transactionSignTap();
 
-    expect(calls.single.method, 'signTransaction');
-    expect(calls.single.arguments['coin'], 'SOL');
-    expect(calls.single.arguments['mnemonic'], 'fixture mnemonic');
+    expect(calls.map((call) => call.method), [
+      'generateAddress',
+      'signTransaction',
+    ]);
+    expect(calls.last.arguments['coin'], 'SOL');
+    expect(calls.last.arguments['mnemonic'], 'fixture mnemonic');
     expect(client.responses.single.$2.result, {
       'transaction': 'c2lnbmVkLXRyYW5zYWN0aW9u',
     });
@@ -408,17 +445,19 @@ void main() {
   });
 
   test('Aptos signing returns the native signed transaction', () async {
+    final aptosCoin = sessionCoin(type: 'APT', blockchain: 'Aptos')
+      ..coin['path'] = {'legacy': "m/44'/637'/0'/0'"};
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
           _trustdartChannel,
-          (_) async => '0xsigned-aptos-transaction',
+          (call) async => call.method == 'generateAddress'
+              ? {'legacy': aptosCoin.address}
+              : '0xsigned-aptos-transaction',
         );
     addTearDown(
       () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(_trustdartChannel, null),
     );
-    final aptosCoin = sessionCoin(type: 'APT', blockchain: 'Aptos')
-      ..coin['path'] = {'legacy': "m/44'/637'/0'/0'"};
     provider
       ..coinModels = [aptosCoin]
       ..coinModelsIndex = 0
@@ -437,17 +476,19 @@ void main() {
   test(
     'Sui signing returns the signature with its transaction block',
     () async {
+      final suiCoin = sessionCoin(type: 'SUI', blockchain: 'Sui')
+        ..coin['path'] = {'legacy': "m/44'/784'/0'/0'"};
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(
             _trustdartChannel,
-            (_) async => 'base64-sui-signature',
+            (call) async => call.method == 'generateAddress'
+                ? {'legacy': suiCoin.address}
+                : 'base64-sui-signature',
           );
       addTearDown(
         () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(_trustdartChannel, null),
       );
-      final suiCoin = sessionCoin(type: 'SUI', blockchain: 'Sui')
-        ..coin['path'] = {'legacy': "m/44'/784'/0'/0'"};
       provider
         ..coinModels = [suiCoin]
         ..coinModelsIndex = 0
