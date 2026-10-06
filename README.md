@@ -1,12 +1,36 @@
 # N42 Wallet
 
-A comprehensive cross-platform cryptocurrency wallet built with Flutter, featuring multi-chain support, DeFi integration, secure messaging, and advanced Web3 capabilities.
+A Flutter wallet app for Android and iOS, with multi-chain assets, Web3 tools, and an integrated Matrix chat module.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.44.8-blue.svg)](https://flutter.dev)
-[![Chains](https://img.shields.io/badge/Chains-238%2B-green.svg)](#multi-chain-wallet)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.47.0-blue.svg)](https://flutter.dev)
+[![Network catalog](https://img.shields.io/badge/Network_catalog-configured-green.svg)](#multi-chain-wallet)
 
-## Functional audit (2026-09-10)
+## Current product scope (2026-10-05)
+
+N42 Wallet is a Flutter wallet app with an integrated Matrix chat plugin. The source tree contains account and wallet management, token balances and transfers, chain selection, market data, swaps, bridges, staking and Earn pages, NFT and DApp browser features, WalletConnect, account-abstraction tools, mining, loyalty, airdrop, and identity modules. Availability depends on the selected chain, account type, app configuration, and external services; code presence alone does not confirm live network support.
+
+### N42 Chat
+
+The app pins the separate [`n42_chat` plugin](https://github.com/n42blockchain/n42_chat) at commit `0cee5c69` (Matrix Dart SDK 13). In the wallet app, open the left drawer and tap the account card at the top (avatar, name, or the button below it) to enter Chat. Chat also handles chat notification taps and room deep links after initialization.
+
+The plugin provides Matrix direct and group conversations with Olm/Megolm end-to-end encryption, contacts, media and voice messages, message search and organization, group management, one-to-one and group call flows, profile and discovery pages, channel discovery, voice rooms, and Mini App pages. Its wallet bridge exposes in-chat transfer and red-packet flows, while the host supplies wallet actions. The Chat app has its own Messages, Contacts, Discover, and Me navigation; this is a separate navigation surface from the wallet's bottom tabs.
+
+Chat requires a reachable Matrix homeserver. Push delivery, social sign-in, and LiveKit calling also depend on platform credentials and service configuration. Their implementation does not guarantee that every provider or deployment is enabled. The Chat plugin's README and setup instructions are in its [repository](https://github.com/n42blockchain/n42_chat).
+
+### Entry points and limits
+
+- On Android, Earn is a main navigation tab. On iOS, open Earn from the home drawer. The wallet's main navigation also includes the wallet, mining, and market pages.
+- Several modules are opened from the home drawer or from feature pages, including settings, the DApp browser, airdrops, loyalty, and account management.
+- The hardware-wallet area contains account and device support, but production transaction signing is not fully connected to the main wallet send flow. Keystone QR signing is not a completed production route.
+- The iOS app includes an App Store in-app purchase screen. Server-side receipt validation and reliable product fulfillment are not complete, so this does not establish an end-to-end purchase flow. Apple Pay wallet payments are not listed as a supported feature.
+- The chain catalog below is a configuration inventory. Treat network-specific reads, quotes, transaction submission, and recovery as separate capabilities that need chain and service validation.
+
+### Recent verification
+
+On 2026-10-05, the host test suite passed 5,432 tests at 71.1451% line coverage. The pinned Chat source passed 7,310 tests, skipped 3, and measured 70.1020% line coverage. Android debug APK and iOS simulator builds passed for the host. These results are source and build checks; they are not device, store, or production-service acceptance. See the [dependency and compatibility record](docs/testing/dependency-upgrade-2026-10-02/README.md), [coverage report](docs/testing/coverage-expansion-2026-10-02/README.md), and [documentation index](docs/README.md).
+
+## Historical audit reports (2026-09-10)
 
 Start with the [documentation index](docs/README.md) for current module reports, Chat verification, coverage history, and maintenance records.
 
@@ -29,7 +53,7 @@ The [third coverage pass](docs/testing/module-coverage-batch3-2026-09-10.md) ext
 
 ### Multi-Chain Wallet
 
-Support for **238+ blockchain networks** including mainnet and testnet:
+The configured network catalog lists **238+ blockchain entries**, including testnets. This is a configuration inventory, not confirmation that every wallet action works on every listed network:
 
 #### Layer 1 Blockchains
 
@@ -743,27 +767,27 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | Category | Technology |
 |----------|------------|
-| Framework | Flutter 3.44.8+ |
-| Language | Dart 3.11.5+ |
-| State Management | Riverpod, Provider |
-| Blockchain | web3dart, bitcoin_base, solana |
-| Database | SQLite (drift), Secure Storage |
-| Networking | Dio, http |
-| Authentication | Firebase Auth, Google, Apple |
+| Framework | Flutter 3.47.0+ |
+| Language | Dart 3.13.0+ |
+| State Management | Riverpod (wallet host), BLoC (Chat plugin) |
+| Blockchain | web3dart, blockchain_utils, EVM and non-EVM adapters |
+| Database | SQLite, SQLCipher, Drift, Secure Storage |
+| Networking | Dio, HTTP, Matrix client |
+| Authentication | Wallet account security, Matrix auth, configured social sign-in |
 | Push Notifications | Firebase Cloud Messaging |
 | Encryption | PointyCastle, cryptography |
-| WalletConnect | walletconnect_flutter_v2 |
-| Chat | Matrix SDK (n42_chat) |
+| WalletConnect | Reown WalletKit / Sign |
+| Chat | Matrix SDK 13 with vodozemac (n42_chat) |
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
-- Flutter SDK 3.44.8 or higher
-- Dart SDK 3.11.5 or higher
+- Flutter SDK 3.47.0 or higher
+- Dart SDK 3.13.0 or higher
 - Android Studio / Xcode
-- iOS 17.0+ / Android 7.0+
+- iOS 16.0+ and Android API 26+ are the configured minimums; some plugins or Xcode build configurations may require more.
 
 ### Installation
 
@@ -811,51 +835,20 @@ flutter build ios --release
 
 ```
 lib/
-├── src/
-│   ├── wallet/           # Wallet management, transfers, tokens
-│   │   ├── aa/           # Account Abstraction (ERC-4337)
-│   │   │   ├── models/   # SmartAccount, UserOperation
-│   │   │   ├── bundler/  # Bundler client
-│   │   │   ├── paymaster/# Paymaster integration
-│   │   │   └── utils/    # AA utilities
-│   │   ├── api/          # Blockchain APIs
-│   │   ├── models/       # Data models
-│   │   ├── pages/        # Wallet UI pages
-│   │   │   ├── aa/       # Smart Account pages
-│   │   │   └── ens/      # ENS management pages
-│   │   ├── provider/     # State management
-│   │   ├── services/     # ENS, validation services
-│   │   ├── utils/        # Utilities
-│   │   └── widgets/      # Reusable widgets
-│   ├── bridge/           # Cross-chain bridge (LI.FI)
-│   ├── staking/          # Multi-chain staking
-│   ├── earn/             # Yield aggregation
-│   ├── airdrop/          # Airdrop tracker
-│   ├── loyalty/          # Points & rewards
-│   ├── hardware_wallet/  # Ledger integration
-│   ├── miningV2/         # N42 mining
-│   ├── chat/             # Secure messaging
-│   ├── browser/          # DApp browser
-│   ├── wallet_connect/   # WalletConnect v2
-│   ├── pay/              # MoonPay integration
-│   ├── login/            # Authentication
-│   ├── home/             # Main navigation
-│   ├── profile/          # User profile
-│   ├── notification/     # Push notifications
-│   └── widgets/          # Shared UI components
-├── core/
-│   ├── config/           # App configuration
-│   ├── network/          # HTTP client
-│   ├── security/         # Encryption, secure storage
-│   ├── storage/          # Database, preferences
-│   ├── providers/        # Global state
-│   ├── router/           # Navigation
-│   └── utils/            # Core utilities
-├── features/             # Feature modules (Clean Architecture)
-├── shared/               # Cross-feature shared code
-├── presentation/         # Themes, UI adaptation
-└── generated/            # Generated code (l10n, protobuf)
+├── main.dart             # App startup
+├── core/                 # App config, routing, storage, security, providers
+├── features/             # Wallet, bridge, staking, Earn, Chat host, and other features
+├── shared/               # Shared domain and UI code
+├── presentation/         # Themes and presentation adapters
+├── l10n/                 # Source localization files
+└── generated/            # Generated localization and protocol code
+
+packages/                 # Local package dependencies and host patches
+plugins/                  # Local Flutter plugins, including flutter_mining
+android/, ios/, web/      # Native and web platform projects
 ```
+
+The Chat plugin itself is fetched from Git as `n42_chat`; `packages/n42_chat/`, where present, is a dependency cache mirror rather than the plugin's source of truth. The plugin source, release history, and issue tracker are maintained in the [Chat repository](https://github.com/n42blockchain/n42_chat).
 
 ---
 
@@ -872,7 +865,9 @@ lib/
 
 ---
 
-## Version History
+## Version metadata and historical notes
+
+The host app's current release line in `pubspec.yaml` is `2.4.8`; the build number is maintained by the release workflow. The table below contains earlier project milestones and is not a complete release history.
 
 | Version | Date | Changes |
 |---------|------|---------|
