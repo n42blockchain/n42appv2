@@ -127,7 +127,7 @@ class WalletBridgeTokenInfo extends TokenInfo {
   final String? receiverAddress;
 }
 
-class N42WalletBridge implements IWalletBridge {
+class N42WalletBridge implements IWalletBridge, IExactWalletTransfer {
   N42WalletBridge({WalletBridgeSenderResolver? senderResolver})
     : _senderResolver = senderResolver ?? _defaultSenderResolver;
 
@@ -242,6 +242,7 @@ class N42WalletBridge implements IWalletBridge {
     memo: memo,
   );
 
+  @override
   Future<TransferResult> requestTransferExact({
     required String toAddress,
     required String amount,

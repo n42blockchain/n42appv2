@@ -86,6 +86,10 @@ void main() {
     });
   });
 
+  test('opts into exact-asset wallet transfers', () {
+    expect(bridge, isA<IExactWalletTransfer>());
+  });
+
   tearDown(() {
     messenger.setMockMethodCallHandler(trustdart, null);
     resetCrossFeatureServices();
