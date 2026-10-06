@@ -23,6 +23,8 @@ import 'package:n42_wallet/features/utils/app_push_utils.dart';
 import 'package:n42_wallet/features/utils/chat_logout_compat.dart';
 import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
 import 'package:n42_wallet/features/wallet/n42_wallet_bridge.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_chat/n42_chat.dart';
 
@@ -36,6 +38,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
   DeepLinkData? _pendingChatDeepLink;
   DeepLinkData? _pendingChatSsoDeepLink;
   AuthStatus? _lastChatAuthStatus;
+  String? _lastChatWalletStorageUuid;
   bool _localeListenerRegistered = false;
 
   /// Exposed for deterministic host-routing tests; production reads N42Chat.
@@ -328,6 +331,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       });
       _chatUserSubscription?.cancel();
       _chatUserSubscription = N42Chat.userStream.listen((_) {
+        _syncWalletStorageForChatAccount();
         unawaited(flushPendingChatDeepLink());
         unawaited(flushPendingChatSsoDeepLink());
         unawaited(AppPushUtils.flushPendingChatNotification());
@@ -656,6 +660,19 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       globalProviderContainer.read(unreadCountProvider.notifier).reset();
       AppPushUtils.clearBadgeOnly();
     }
+  }
+
+  /// Chat-only accounts do not populate AppGlobals.userInfo. Keep the host
+  /// wallet and its Riverpod list/index state aligned with the active chat ID.
+  void _syncWalletStorageForChatAccount() {
+    final nextUuid = AppGlobals.walletStorageUuid;
+    if (_lastChatWalletStorageUuid == nextUuid) return;
+    _lastChatWalletStorageUuid = nextUuid;
+
+    globalProviderContainer.invalidate(walletListProvider);
+    globalProviderContainer.invalidate(selectedWalletIndexProvider);
+    globalProviderContainer.invalidate(miningWalletIndexProvider);
+    unawaited(globalWapAdapter.initWallet(shouldInitCoinInfo: true));
   }
 
   void disposeChatSubscriptions() {

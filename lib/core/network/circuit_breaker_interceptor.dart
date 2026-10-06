@@ -50,9 +50,9 @@ class CircuitBreakerConfig {
 
 /// Dio interceptor implementing the circuit breaker pattern.
 ///
-/// Tracks consecutive failures to backend services. When failures exceed
-/// [CircuitBreakerConfig.failureThreshold], the circuit **opens** and
-/// immediately rejects all requests for [CircuitBreakerConfig.recoveryTimeout].
+/// Tracks consecutive failures per request origin. When failures for one origin
+/// reach [CircuitBreakerConfig.failureThreshold], that circuit **opens** and
+/// rejects requests to that origin for [CircuitBreakerConfig.recoveryTimeout].
 ///
 /// After the timeout, the circuit transitions to **half-open**, allowing a
 /// single probe request. If it succeeds, the circuit **closes** (normal
@@ -68,29 +68,50 @@ class CircuitBreakerConfig {
 class CircuitBreakerInterceptor extends Interceptor {
   final CircuitBreakerConfig config;
 
-  CircuitState _state = CircuitState.closed;
-  int _failureCount = 0;
-  DateTime? _lastFailureTime;
+  final Map<String, _CircuitSnapshot> _circuits = {};
 
-  /// Visible for testing.
-  CircuitState get state => _state;
+  /// Aggregate state visible for tests and diagnostics.
+  ///
+  /// Requests are isolated by origin. This getter reports the most restrictive
+  /// state across tracked origins for compatibility with existing callers.
+  CircuitState get state {
+    if (_circuits.values.any((circuit) => circuit.state == CircuitState.open)) {
+      return CircuitState.open;
+    }
+    if (_circuits.values.any(
+      (circuit) => circuit.state == CircuitState.halfOpen,
+    )) {
+      return CircuitState.halfOpen;
+    }
+    return CircuitState.closed;
+  }
 
-  /// Visible for testing.
-  int get failureCount => _failureCount;
+  /// Maximum consecutive failure count across tracked origins.
+  int get failureCount => _circuits.values.fold<int>(
+    0,
+    (maximum, circuit) =>
+        circuit.failureCount > maximum ? circuit.failureCount : maximum,
+  );
 
   CircuitBreakerInterceptor({this.config = const CircuitBreakerConfig()});
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    switch (_state) {
+    final circuit = _circuits[_originKey(options.uri)];
+    if (circuit == null) {
+      handler.next(options);
+      return;
+    }
+
+    switch (circuit.state) {
       case CircuitState.closed:
       case CircuitState.halfOpen:
         handler.next(options);
       case CircuitState.open:
-        if (_lastFailureTime != null &&
-            DateTime.now().difference(_lastFailureTime!) >=
+        if (circuit.lastFailureTime != null &&
+            DateTime.now().difference(circuit.lastFailureTime!) >=
                 config.recoveryTimeout) {
-          _state = CircuitState.halfOpen;
+          circuit.state = CircuitState.halfOpen;
           handler.next(options);
         } else {
           handler.reject(
@@ -109,18 +130,21 @@ class CircuitBreakerInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _failureCount = 0;
-    _state = CircuitState.closed;
+    _circuits.remove(_originKey(response.requestOptions.uri));
     handler.next(response);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (_isTripError(err)) {
-      _failureCount++;
-      _lastFailureTime = DateTime.now();
-      if (_failureCount >= config.failureThreshold) {
-        _state = CircuitState.open;
+      final circuit = _circuits.putIfAbsent(
+        _originKey(err.requestOptions.uri),
+        _CircuitSnapshot.new,
+      );
+      circuit.failureCount++;
+      circuit.lastFailureTime = DateTime.now();
+      if (circuit.failureCount >= config.failureThreshold) {
+        circuit.state = CircuitState.open;
       }
     }
     handler.next(err);
@@ -136,13 +160,24 @@ class CircuitBreakerInterceptor extends Interceptor {
     return false;
   }
 
-  /// Manually reset the circuit to closed state.
+  String _originKey(Uri uri) {
+    final scheme = uri.scheme.toLowerCase();
+    final host = uri.host.toLowerCase();
+    final port = uri.port;
+    return '$scheme://$host:$port';
+  }
+
+  /// Manually reset all origin circuits to closed state.
   ///
   /// Useful when external signals (e.g., connectivity restored) indicate
   /// the service may be available again.
   void reset() {
-    _state = CircuitState.closed;
-    _failureCount = 0;
-    _lastFailureTime = null;
+    _circuits.clear();
   }
+}
+
+class _CircuitSnapshot {
+  CircuitState state = CircuitState.closed;
+  int failureCount = 0;
+  DateTime? lastFailureTime;
 }

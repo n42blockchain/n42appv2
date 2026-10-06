@@ -2,50 +2,118 @@ part of 'wallet_action_provider.dart';
 
 /// Wallet CRUD operations: create, import, delete, save, find, backup, key management.
 extension WalletActionProviderWallet on WalletActionProvider {
+  void _clearWalletListForOwner(String ownerUuid) {
+    _walletInfoStorageOwnerUuid = ownerUuid;
+    for (final wallet in _walletInfoLsit) {
+      wallet.clearSensitiveData();
+    }
+    _walletInfoLsit = [];
+    _publicKeyAndPrivateKeyPair?.clear();
+    _publicKeyAndPrivateKeyPair = null;
+    coinRefreshMap.clear();
+    _lastSyncFingerprint = '';
+    _coinListBuildRevision++;
+    walletIndex = 0;
+    walletMiningIndex = 0;
+  }
+
+  String _secureWalletId(WalletInfo wallet, int index, String ownerUuid) {
+    final walletId = wallet.timestamp?.trim();
+    return '${ownerUuid}_${walletId?.isNotEmpty == true ? walletId : index}';
+  }
+
   /// 从 JSON 列表解析钱包，填充 _walletInfoLsit 并设置 index。
-  void _loadWalletList(Map<String, dynamic> source) {
-    walletIndex = source['index'];
-    walletMiningIndex = source['miningIndex'] ?? walletIndex;
-    if (walletMiningIndex == -1) walletMiningIndex = walletIndex;
+  void _loadWalletList(Map<String, dynamic> source, String ownerUuid) {
+    _walletInfoStorageOwnerUuid = ownerUuid;
     _walletInfoLsit = (source['wallet'] as List<dynamic>? ?? [])
         .map((e) => WalletInfo.fromJson(e))
+        .where(
+          (wallet) =>
+              wallet.walletUuid == null ||
+              wallet.walletUuid!.isEmpty ||
+              wallet.walletUuid == ownerUuid,
+        )
         .toList();
+    if (_walletInfoLsit.isEmpty) {
+      walletIndex = 0;
+      walletMiningIndex = 0;
+      return;
+    }
+    final maxIndex = _walletInfoLsit.length - 1;
+    walletIndex = (source['index'] as int? ?? 0).clamp(0, maxIndex);
+    walletMiningIndex = (source['miningIndex'] as int? ?? walletIndex).clamp(
+      0,
+      maxIndex,
+    );
   }
 
   //读取钱包信息
   Future<void> getWalletInfo() async {
+    final storageUuid = _walletInitializationOwnerUuid ?? userUUID;
     Map<String, dynamic>? walletAll = await SPUtil().getWalletInfo();
+    if (storageUuid != userUUID) return;
+
     if (walletAll == null) {
+      _clearWalletListForOwner(storageUuid);
       await createWallet();
     } else {
-      final walletUser = walletAll[userUUID];
+      final walletUser = walletAll[storageUuid];
       if (walletUser != null) {
-        _loadWalletList(walletUser);
-        await _restoreMnemonics();
+        final storedWallets = walletUser['wallet'] as List<dynamic>? ?? [];
+        _loadWalletList(walletUser, storageUuid);
+        if (_walletInfoLsit.isEmpty && storedWallets.isNotEmpty) {
+          // A prior app version could persist another account's in-memory list
+          // under this account. Discard entries carrying a different owner ID.
+          final cleanWalletUser = Map<String, dynamic>.from(walletUser)
+            ..['wallet'] = <dynamic>[];
+          walletAll[storageUuid] = cleanWalletUser;
+          await SPUtil().setWalletInfo(walletAll);
+          _clearWalletListForOwner(storageUuid);
+          await createWallet();
+        } else {
+          await _restoreMnemonics(storageUuid);
+        }
       } else {
         // Authenticated accounts must only load wallets stored under their own
         // UUID. Copying the anonymous wallet here leaks one account's assets
         // into the next account registered on the same device.
+        _clearWalletListForOwner(storageUuid);
         await createWallet();
       }
     }
+    if (storageUuid != userUUID) return;
     _load = Load.finish;
     refresh();
   }
 
   /// 从 SecureStorage 恢复被 WalletDataMigration 清除的 mnemonic
-  Future<void> _restoreMnemonics() async {
+  Future<void> _restoreMnemonics(String ownerUuid) async {
     final secureStorage = SecureStorage();
     for (int i = 0; i < _walletInfoLsit.length; i++) {
+      if (ownerUuid != userUUID) return;
       final wallet = _walletInfoLsit[i];
       if (wallet.hasMnemonic) continue;
-      final walletId = wallet.timestamp ?? '${userUUID}_$i';
-      final mnemonic = await secureStorage.getMnemonic(walletId);
+      final walletId = _secureWalletId(wallet, i, ownerUuid);
+      var mnemonic = await secureStorage.getMnemonic(walletId);
+      // Migrate pre-isolation keys lazily after verifying the wallet itself is
+      // present in this account's stored wallet list.
+      if (mnemonic == null &&
+          wallet.walletUuid == ownerUuid &&
+          wallet.timestamp?.isNotEmpty == true) {
+        mnemonic = await secureStorage.getMnemonic(wallet.timestamp!);
+        if (mnemonic != null && ownerUuid == userUUID) {
+          await secureStorage.saveMnemonic(
+            walletId: walletId,
+            mnemonic: mnemonic,
+          );
+        }
+      }
+      if (ownerUuid != userUUID) return;
       if (mnemonic != null && mnemonic.isNotEmpty) {
         wallet.mnemonic = mnemonic;
         if (kDebugMode) {
           debugPrint(
-            'WalletActionProvider: Restored mnemonic for wallet $walletId',
+            'WalletActionProvider: Restored mnemonic for wallet index $i',
           );
         }
       }
@@ -53,8 +121,23 @@ extension WalletActionProviderWallet on WalletActionProvider {
   }
 
   Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
-    if (buildwallet == true) return;
+    if (buildwallet == true) {
+      if (_walletInitializationOwnerUuid != userUUID) {
+        _walletReinitializationQueued = true;
+        _walletReinitializationShouldInitCoinInfo |= shouldInitCoinInfo;
+        _clearWalletListForOwner(userUUID);
+        coinList = [];
+        _coinModels = [];
+        _aggregatedCoins = [];
+        refresh();
+      }
+      return;
+    }
     buildwallet = true;
+    _walletInitializationOwnerUuid = userUUID;
+    if (_walletInfoStorageOwnerUuid != _walletInitializationOwnerUuid) {
+      _clearWalletListForOwner(_walletInitializationOwnerUuid!);
+    }
     // 入口先清空是为了让骨架屏接管；但构建中途抛错的话不能让用户的资产列表
     // 停在空白——失败时整体回滚到进入前的数据。
     final prevCoinList = coinList;
@@ -66,16 +149,32 @@ extension WalletActionProviderWallet on WalletActionProvider {
     refresh();
     try {
       await getWalletInfo();
+      if (_walletInitializationOwnerUuid != userUUID) return;
       await _syncNewChains();
+      if (_walletInitializationOwnerUuid != userUUID) return;
       await buildCoinModel();
     } catch (_) {
-      coinList = prevCoinList;
-      _coinModels = prevCoinModels;
-      _aggregatedCoins = prevAggregatedCoins;
-      rethrow;
+      if (!_walletReinitializationQueued) {
+        coinList = prevCoinList;
+        _coinModels = prevCoinModels;
+        _aggregatedCoins = prevAggregatedCoins;
+        rethrow;
+      }
     } finally {
       buildwallet = false;
-      refresh();
+      _walletInitializationOwnerUuid = null;
+      if (!_walletReinitializationQueued) refresh();
+    }
+    if (_walletReinitializationQueued) {
+      final shouldInitAgain = _walletReinitializationShouldInitCoinInfo;
+      _walletReinitializationQueued = false;
+      _walletReinitializationShouldInitCoinInfo = false;
+      _clearWalletListForOwner(userUUID);
+      coinList = [];
+      _coinModels = [];
+      _aggregatedCoins = [];
+      await initWallet(shouldInitCoinInfo: shouldInitAgain);
+      return;
     }
     if (shouldInitCoinInfo) {
       eventBus.fire(
@@ -251,12 +350,14 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   //创建钱包
   Future<void> createWallet() async {
+    final ownerUuid = _walletInitializationOwnerUuid ?? userUUID;
     WalletInfo wInfo = WalletInfo(
       walletName: "",
       password: "",
-      walletUuid: userUUID,
+      walletUuid: ownerUuid,
     );
     wInfo.mnemonic = await Trustdart().generateMnemonic();
+    if (ownerUuid != userUUID) return;
     wInfo.walletName = "Account${walletInfoLsit.length + 1}";
     wInfo.coinInfo = chainUrlMap;
     wInfo.mainWallet = true;
@@ -267,6 +368,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
   ///添加钱包
   Future<void> addWalletInfo(WalletInfo info) async {
     try {
+      final ownerUuid = walletDataOwnerUuid;
+      if (ownerUuid != userUUID) return;
+      info.walletUuid = ownerUuid;
       // 克隆一份数据，不污染数据源（存储时不保存助记词）
       final newWalletInfo = WalletInfo.fromJson(info.toJson());
       _walletInfoLsit.add(info);
@@ -277,7 +381,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
       await saveWalletInfo(newWalletInfo, walletIndex, isNewWallet: true);
       // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
       if (info.hasMnemonic) {
-        final walletId = info.timestamp ?? '${userUUID}_$walletIndex';
+        final walletId = _secureWalletId(
+          info,
+          walletIndex,
+          walletDataOwnerUuid,
+        );
         await SecureStorage().saveMnemonic(
           walletId: walletId,
           mnemonic: info.mnemonic!,
@@ -298,7 +406,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
           ? 'Watch ${_walletInfoLsit.length + 1}'
           : name.trim(),
       password: '0', // 非空，避免触发备份提示
-      walletUuid: userUUID,
+      walletUuid: walletDataOwnerUuid,
     );
     wInfo.watchOnly = true;
     wInfo.watchAddress = address.trim();
@@ -383,9 +491,12 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   //返回公钥、私钥对
   Future<void> getPublicKeyAndPrivateKeyPairN() async {
-    _publicKeyAndPrivateKeyPair = {};
+    final ownerUuid = walletDataOwnerUuid;
+    final wallets = List<WalletInfo>.of(walletInfoLsit);
+    final keyPairs = <String, String>{};
     Trustdart trustdart = Trustdart();
-    for (WalletInfo wInfo in walletInfoLsit) {
+    for (WalletInfo wInfo in wallets) {
+      if (ownerUuid != userUUID || ownerUuid != walletDataOwnerUuid) return;
       if (wInfo.mainWallet == false) {
         continue;
       }
@@ -430,6 +541,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
           mnemonic: wInfo.mnemonic ?? "",
           pk: wInfo.privateKey ?? "",
         );
+        if (ownerUuid != userUUID || ownerUuid != walletDataOwnerUuid) return;
         if (privateKeyStr.isEmpty) {
           if (kDebugMode) {
             debugPrint(
@@ -443,7 +555,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
         final privateKey = bytesToHex(
           base64Decode(pkPair['privateKey'].toString()),
         );
-        _publicKeyAndPrivateKeyPair![pubKey] = privateKey;
+        keyPairs[pubKey] = privateKey;
       } catch (e) {
         if (kDebugMode) {
           debugPrint(
@@ -451,6 +563,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
           );
         }
       }
+    }
+    if (ownerUuid == userUUID && ownerUuid == walletDataOwnerUuid) {
+      _publicKeyAndPrivateKeyPair = keyPairs;
     }
   }
 
@@ -513,19 +628,20 @@ extension WalletActionProviderWallet on WalletActionProvider {
     required bool isNewWallet,
   }) async {
     final sPUtils = SPUtil();
+    final storageUuid = walletDataOwnerUuid;
     Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll == null) {
       await sPUtils.setWalletInfo({
-        userUUID: {
+        storageUuid: {
           "index": 0,
           "miningIndex": 0,
           "wallet": [newWalletInfo.toJson()],
         },
       });
     } else {
-      final userWallets = walletAll[userUUID];
+      final userWallets = walletAll[storageUuid];
       if (userWallets == null) {
-        walletAll[userUUID] = {
+        walletAll[storageUuid] = {
           "index": 0,
           "miningIndex": 0,
           "wallet": [newWalletInfo.toJson()],
@@ -538,7 +654,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
         }
         userWallets['index'] = wIndex;
         userWallets['miningIndex'] = walletMiningIndex;
-        walletAll[userUUID] = userWallets;
+        walletAll[storageUuid] = userWallets;
       }
       await sPUtils.setWalletInfo(walletAll);
     }
@@ -548,13 +664,14 @@ extension WalletActionProviderWallet on WalletActionProvider {
   //保存钱包数据
   Future<void> saveWalletInfoAll() async {
     SPUtil sPUtils = SPUtil();
+    final storageUuid = walletDataOwnerUuid;
     Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
     if (walletAll != null) {
-      walletAll[userUUID]['wallet'] = walletInfoLsit
+      walletAll[storageUuid]['wallet'] = walletInfoLsit
           .map((e) => e.toJson())
           .toList();
-      walletAll[userUUID]['index'] = walletIndex;
-      walletAll[userUUID]['miningIndex'] = walletMiningIndex;
+      walletAll[storageUuid]['index'] = walletIndex;
+      walletAll[storageUuid]['miningIndex'] = walletMiningIndex;
       await sPUtils.setWalletInfo(walletAll);
       await refreshWalletListNotifier();
     }
