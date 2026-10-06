@@ -7,6 +7,7 @@ void main() {
   const sender = '0x1111111111111111111111111111111111111111';
   const receiver = '0x2222222222222222222222222222222222222222';
   const token = '0x3333333333333333333333333333333333333333';
+  final blockHash = '0x${'b' * 64}';
   const transferTopic =
       '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
@@ -32,6 +33,8 @@ void main() {
     String input = '0x',
   }) => {
     'hash': hash,
+    'blockHash': blockHash,
+    'blockNumber': '0x10',
     'from': from ?? sender,
     'to': to ?? receiver,
     'value': value ?? '0x1158e460913d0000', // 1.25 ETH
@@ -43,10 +46,16 @@ void main() {
     String blockNumber = '0x10',
   }) => {
     'transactionHash': hash,
+    'blockHash': blockHash,
     'status': status,
     'blockNumber': blockNumber,
     'logs': const <Object?>[],
   };
+
+  Map<String, Object?> canonicalBlock(List<Object?> params, String hash) {
+    expect(params, ['0x10', false]);
+    return {'hash': hash};
+  }
 
   Future<WalletTransferReceiptResult> verify(
     WalletTransferReceiptRequest request, {
@@ -54,16 +63,21 @@ void main() {
     required Map<String, Object?>? receipt,
     String chainId = '0x1',
     String latestBlock = '0x1b',
+    String? canonicalBlockHash,
     int decimals = 18,
   }) => EvmTransferReceiptVerifier.verify(
     request: request,
     expectedChainId: 1,
     requiredConfirmations: 12,
     decimals: decimals,
-    rpcCall: (method, _) async => switch (method) {
+    rpcCall: (method, params) async => switch (method) {
       'eth_chainId' => chainId,
       'eth_getTransactionByHash' => transaction,
       'eth_getTransactionReceipt' => receipt,
+      'eth_getBlockByNumber' => canonicalBlock(
+        params,
+        canonicalBlockHash ?? blockHash,
+      ),
       'eth_blockNumber' => latestBlock,
       _ => throw StateError('Unexpected RPC method $method'),
     },
@@ -122,6 +136,20 @@ void main() {
     expect(wrongAmount.state, WalletTransferReceiptState.mismatch);
   });
 
+  test(
+    'does not accept a native transaction when input data is missing',
+    () async {
+      final transaction = nativeTx()..remove('input');
+      final result = await verify(
+        request(),
+        transaction: transaction,
+        receipt: nativeReceipt(),
+      );
+
+      expect(result.state, WalletTransferReceiptState.mismatch);
+    },
+  );
+
   test('reports an on-chain reverted transaction as failed', () async {
     final result = await verify(
       request(),
@@ -142,6 +170,30 @@ void main() {
     expect(result.state, WalletTransferReceiptState.pending);
   });
 
+  test('does not confirm a receipt from a block removed by a reorg', () async {
+    final result = await verify(
+      request(),
+      transaction: nativeTx(),
+      receipt: nativeReceipt(),
+      canonicalBlockHash: '0x${'c' * 64}',
+    );
+
+    expect(result.state, WalletTransferReceiptState.pending);
+  });
+
+  test(
+    'rejects inconsistent transaction and receipt inclusion fields',
+    () async {
+      final result = await verify(
+        request(),
+        transaction: nativeTx(),
+        receipt: nativeReceipt(blockNumber: '0x11'),
+      );
+
+      expect(result.state, WalletTransferReceiptState.unavailable);
+    },
+  );
+
   test('confirms ERC-20 only when calldata and Transfer log match', () async {
     final amount = BigInt.from(125).toRadixString(16).padLeft(64, '0');
     final addressWord = receiver.substring(2).padLeft(64, '0');
@@ -149,6 +201,8 @@ void main() {
       request(assetType: 'token', assetId: token, amount: '1.25'),
       transaction: {
         'hash': hash,
+        'blockHash': blockHash,
+        'blockNumber': '0x10',
         'from': sender,
         'to': token,
         'value': '0x0',
@@ -164,7 +218,7 @@ void main() {
               '0x${sender.substring(2).padLeft(64, '0')}',
               '0x${receiver.substring(2).padLeft(64, '0')}',
             ],
-            'data': '0x${'7d'}',
+            'data': '0x${BigInt.from(125).toRadixString(16).padLeft(64, '0')}',
           },
         ],
       },
@@ -183,6 +237,8 @@ void main() {
         request(assetType: 'token', assetId: token, amount: '1.25'),
         transaction: {
           'hash': hash,
+          'blockHash': blockHash,
+          'blockNumber': '0x10',
           'from': sender,
           'to': token,
           'value': '0x0',
@@ -198,7 +254,8 @@ void main() {
                 '0x${sender.substring(2).padLeft(64, '0')}',
                 '0x${receiver.substring(2).padLeft(64, '0')}',
               ],
-              'data': '0x7c',
+              'data':
+                  '0x${BigInt.from(124).toRadixString(16).padLeft(64, '0')}',
             },
           ],
         },
@@ -208,4 +265,53 @@ void main() {
       expect(result.state, WalletTransferReceiptState.mismatch);
     },
   );
+
+  test('rejects non-canonical ERC-20 calldata and short event data', () async {
+    final amount = BigInt.from(125).toRadixString(16).padLeft(64, '0');
+    final paddedAddress = '1${'0' * 23}${receiver.substring(2)}';
+    final malformedCalldata = await verify(
+      request(assetType: 'token', assetId: token, amount: '1.25'),
+      transaction: {
+        'hash': hash,
+        'blockHash': blockHash,
+        'blockNumber': '0x10',
+        'from': sender,
+        'to': token,
+        'value': '0x0',
+        'input': '0xa9059cbb$paddedAddress$amount',
+      },
+      receipt: nativeReceipt(),
+      decimals: 2,
+    );
+    final shortEventData = await verify(
+      request(assetType: 'token', assetId: token, amount: '1.25'),
+      transaction: {
+        'hash': hash,
+        'blockHash': blockHash,
+        'blockNumber': '0x10',
+        'from': sender,
+        'to': token,
+        'value': '0x0',
+        'input': '0xa9059cbb${receiver.substring(2).padLeft(64, '0')}$amount',
+      },
+      receipt: {
+        ...nativeReceipt(),
+        'logs': [
+          {
+            'address': token,
+            'topics': [
+              transferTopic,
+              '0x${sender.substring(2).padLeft(64, '0')}',
+              '0x${receiver.substring(2).padLeft(64, '0')}',
+            ],
+            'data': '0x7d',
+          },
+        ],
+      },
+      decimals: 2,
+    );
+
+    expect(malformedCalldata.state, WalletTransferReceiptState.mismatch);
+    expect(shortEventData.state, WalletTransferReceiptState.mismatch);
+  });
 }

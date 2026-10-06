@@ -15,6 +15,7 @@ class EvmTransferReceiptVerifier {
   static final _hashPattern = RegExp(r'^0x[0-9a-fA-F]{64}$');
   static final _addressPattern = RegExp(r'^0x[0-9a-fA-F]{40}$');
   static final _hexPattern = RegExp(r'^0x[0-9a-fA-F]+$');
+  static final _wordPattern = RegExp(r'^0x[0-9a-fA-F]{64}$');
 
   static Future<WalletTransferReceiptResult> verify({
     required WalletTransferReceiptRequest request,
@@ -52,6 +53,41 @@ class EvmTransferReceiptVerifier {
       if (!_same(txHash, request.transactionHash) ||
           !_same(receiptHash, request.transactionHash)) {
         return _mismatch();
+      }
+
+      final transactionBlock = _parseQuantity(transaction['blockNumber']);
+      final includedBlock = _parseQuantity(receipt['blockNumber']);
+      final transactionBlockHash = transaction['blockHash']?.toString();
+      final receiptBlockHash = receipt['blockHash']?.toString();
+      if (transactionBlock == null ||
+          includedBlock == null ||
+          transactionBlockHash == null ||
+          receiptBlockHash == null ||
+          !_hashPattern.hasMatch(transactionBlockHash) ||
+          !_hashPattern.hasMatch(receiptBlockHash)) {
+        return _unavailable();
+      }
+      if (transactionBlock != includedBlock ||
+          !_same(transactionBlockHash, receiptBlockHash)) {
+        return _unavailable();
+      }
+
+      // A receipt may be returned from a stale RPC view during a reorg.
+      // Confirm its block is still canonical before counting confirmations.
+      final canonicalBlock = _asMap(
+        await rpcCall('eth_getBlockByNumber', [
+          _toQuantity(includedBlock),
+          false,
+        ]),
+      );
+      if (canonicalBlock == null) return _pending(requiredConfirmations);
+      final canonicalBlockHash = canonicalBlock['hash']?.toString();
+      if (canonicalBlockHash == null ||
+          !_hashPattern.hasMatch(canonicalBlockHash)) {
+        return _unavailable();
+      }
+      if (!_same(canonicalBlockHash, receiptBlockHash)) {
+        return _pending(requiredConfirmations);
       }
 
       final expectedUnits = _decimalToUnits(request.amount, decimals);
@@ -94,13 +130,15 @@ class EvmTransferReceiptVerifier {
         return _mismatch();
       }
 
-      final includedBlock = _parseQuantity(receipt['blockNumber']);
       final latestBlock = _parseQuantity(
         await rpcCall('eth_blockNumber', const []),
       );
-      if (includedBlock == null || latestBlock == null) return _unavailable();
+      if (latestBlock == null) return _unavailable();
       if (latestBlock < includedBlock) return _mismatch();
-      final confirmations = (latestBlock - includedBlock + BigInt.one).toInt();
+      final confirmationsBig = latestBlock - includedBlock + BigInt.one;
+      final confirmations = confirmationsBig > BigInt.from(0x7fffffff)
+          ? 0x7fffffff
+          : confirmationsBig.toInt();
       if (confirmations < requiredConfirmations) {
         return WalletTransferReceiptResult(
           WalletTransferReceiptState.pending,
@@ -148,7 +186,9 @@ class EvmTransferReceiptVerifier {
     }
     final encodedAddress = input.substring(34, 74);
     final encodedAmount = BigInt.tryParse(input.substring(74, 138), radix: 16);
-    return encodedAddress.toLowerCase() ==
+    final addressPadding = input.substring(10, 34);
+    return RegExp(r'^0+$').hasMatch(addressPadding) &&
+        encodedAddress.toLowerCase() ==
             request.receiverAddress.substring(2).toLowerCase() &&
         encodedAmount == expectedUnits;
   }
@@ -167,13 +207,15 @@ class EvmTransferReceiptVerifier {
         continue;
       }
       final topics = log['topics'];
-      if (topics is! List || topics.length < 3) continue;
+      if (topics is! List || topics.length != 3) continue;
       if (!_same(topics[0]?.toString(), _transferTopic) ||
           !_sameTopicAddress(topics[1]?.toString(), request.senderAddress) ||
           !_sameTopicAddress(topics[2]?.toString(), request.receiverAddress)) {
         continue;
       }
-      final amount = _parseHex(log['data']?.toString() ?? '');
+      final data = log['data']?.toString() ?? '';
+      if (!_wordPattern.hasMatch(data)) return false;
+      final amount = _parseHex(data);
       if (amount == null) return false;
       total += amount;
     }
@@ -213,8 +255,9 @@ class EvmTransferReceiptVerifier {
     return BigInt.tryParse(value.substring(2), radix: 16);
   }
 
-  static bool _emptyInput(Object? value) =>
-      value == null || value.toString().isEmpty || value.toString() == '0x';
+  static String _toQuantity(BigInt value) => '0x${value.toRadixString(16)}';
+
+  static bool _emptyInput(Object? value) => value?.toString() == '0x';
 
   static Map<String, dynamic>? _asMap(Object? value) {
     if (value is Map<String, dynamic>) return value;
