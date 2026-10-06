@@ -5,7 +5,6 @@
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xtz_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -105,7 +104,6 @@ class XtzSender implements ChainSender {
       'branch': mmBranch.data.toString(),
     };
 
-    final wi = globalWapAdapter.walletInfo;
     String signStr;
     if (!AppGlobals.appContext.mounted) {
       return const SendResult.fail('Context is no longer valid');
@@ -114,8 +112,10 @@ class XtzSender implements ChainSender {
       CoinType.XTZ.name,
       params.path,
       signMap,
-      mnemonic: params.privateKey == null ? (wi.mnemonic ?? '') : '',
-      pk: params.privateKey ?? wi.privateKey ?? '',
+      mnemonic: params.privateKey == null
+          ? (params.signingContext?.mnemonic ?? '')
+          : '',
+      pk: params.privateKey ?? params.signingContext?.privateKey ?? '',
     );
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);

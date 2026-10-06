@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 
 import 'chain_sender.dart';
@@ -28,6 +29,7 @@ import 'vet_sender.dart';
 import 'egld_sender.dart';
 import 'hbar_sender.dart';
 import 'strk_sender.dart';
+import 'signing_context_sender.dart';
 
 /// Factory that creates/caches [ChainSender] instances by coin type.
 ///
@@ -52,13 +54,30 @@ class SenderFactory {
   ChainSender getSender(String coinType, {Map<String, dynamic>? chainConfig}) {
     final key = coinType.toUpperCase();
     if (!allChainUrlMap.containsKey(key) && chainConfig != null) {
-      return _createSender(key, chainConfig: chainConfig);
+      return _guard(_createSender(key, chainConfig: chainConfig));
     }
     if (_cache.containsKey(key)) return _cache[key]!;
 
-    final sender = _createSender(key);
+    final sender = _guard(_createSender(key));
     _cache[key] = sender;
     return sender;
+  }
+
+  ChainSender _guard(ChainSender sender) {
+    if (sender is _UnsupportedSender || sender is WalletSigningContextSender) {
+      return sender;
+    }
+    return WalletSigningContextSender(
+      delegate: sender,
+      readSigningContext: (params) {
+        if (params.privateKey != null) return const WalletSigningContext();
+        final wallet = globalWapAdapter.walletInfo;
+        return WalletSigningContext(
+          mnemonic: wallet.mnemonic ?? '',
+          privateKey: wallet.privateKey,
+        );
+      },
+    );
   }
 
   /// Whether [coinType] has a concrete transfer implementation.

@@ -180,6 +180,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                   : valueWei.toDouble() / 1e18,
               decimals: 18,
               path: path,
+              addressType: cm.addrType,
               isTest: cm.isTest,
               privateKey: cm.privateKey,
               chainConfig: cm.coin,
@@ -215,9 +216,8 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
 
   void _showSnack(BuildContext context, String message) {
     if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
     }
   }
 

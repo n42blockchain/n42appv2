@@ -28,13 +28,9 @@ class BtcSender implements ChainSender {
     final isTestNet = params.isTest;
     String fromAddress = params.fromAddress;
 
-    // BCH uses legacy address for UTXOs
-    if (coinType == CoinType.BCH.name) {
-      if (!AppGlobals.appContext.mounted) {
-        return const SendResult.fail('Context is no longer valid');
-      }
-      fromAddress = globalWapAdapter.getAddress(coinType, addrType: 'legacy');
-    }
+    // BCH uses legacy addresses for UTXOs. The wallet configuration currently
+    // selects `legacy`; keep the validated request address instead of rereading
+    // the mutable global wallet after the signing snapshot was captured.
 
     // Get fee rate — use caller-provided value when available (skips API call)
     final int averageValue;
@@ -102,6 +98,7 @@ class BtcSender implements ChainSender {
       params.toAddress,
       max: allValue,
       privateKey: params.privateKey,
+      signingContext: params.signingContext,
     );
     final byteSizeFees = byteSize * averageValue;
 
@@ -161,7 +158,10 @@ class BtcSender implements ChainSender {
         coinType,
         params.path,
         btcTxMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            params.signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     }
 
@@ -258,9 +258,8 @@ class BtcSender implements ChainSender {
       final u = item as Map<String, dynamic>;
       if (isTest) {
         if (u['hex'] == null) {
-          final utxoTx = await BtcApi(
-            test: true,
-          ).getUTXOTxid(u['txid'] as String);
+          final utxoTx = await BtcApi(test: true)
+              .getUTXOTxid(u['txid'] as String);
           if (!utxoTx.error) {
             u['hex'] =
                 (utxoTx.data as Map)['vout']?[u['vout']]?['scriptpubkey'];
@@ -307,6 +306,7 @@ class BtcSender implements ChainSender {
     String toAddress, {
     bool max = false,
     String? privateKey,
+    WalletSigningContext? signingContext,
   }) async {
     final btcTxMap = <String, dynamic>{
       'utxo': utxos,
@@ -322,7 +322,10 @@ class BtcSender implements ChainSender {
         coinType,
         path,
         btcTxMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     } else {
       signByteSize = await _trustdart.signTransactionMaxValue(

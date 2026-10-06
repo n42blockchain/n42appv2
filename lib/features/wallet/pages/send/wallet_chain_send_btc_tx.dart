@@ -184,24 +184,27 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
         8,
       ).toDouble();
 
-      final result = await BtcSender().send(
-        SendParams(
-          coinType: coinType,
-          fromAddress: widget.coinModel.address.toString(),
-          toAddress: btcTransactionRecodeModel.to1,
-          amount: amount,
-          decimals: 8,
-          path: path,
-          sendMax: isMaxSend,
-          isTest: widget.coinModel.isTest,
-          contractAddress: '',
-          tokenDecimals: 0,
-          privateKey: widget.coinModel.privateKey,
-          chainConfig: widget.coinModel.coin,
-          btcFeeRate: _fee.selectedRate,
-          prebuiltUtxos: inputUTXO.isNotEmpty ? List.from(inputUTXO) : null,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(coinType)
+          .send(
+            SendParams(
+              coinType: coinType,
+              fromAddress: widget.coinModel.address.toString(),
+              toAddress: btcTransactionRecodeModel.to1,
+              amount: amount,
+              decimals: 8,
+              path: path,
+              addressType: widget.coinModel.addrType,
+              sendMax: isMaxSend,
+              isTest: widget.coinModel.isTest,
+              contractAddress: '',
+              tokenDecimals: 0,
+              privateKey: widget.coinModel.privateKey,
+              chainConfig: widget.coinModel.coin,
+              btcFeeRate: _fee.selectedRate,
+              prebuiltUtxos: inputUTXO.isNotEmpty ? List.from(inputUTXO) : null,
+            ),
+          );
 
       if (result.success) {
         btcTransactionRecodeModel.txHash = result.txHash ?? '';

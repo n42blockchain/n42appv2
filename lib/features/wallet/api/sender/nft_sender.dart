@@ -112,6 +112,7 @@ class NftSender implements ChainSender {
       tokenId: tokenId,
       nftStandard: nftStandard,
       nftQuantity: nftQuantity,
+      signingMnemonic: params.signingContext?.mnemonic,
     );
     if (signResult is SendResult) return signResult;
 
@@ -157,6 +158,7 @@ class NftSender implements ChainSender {
     required int nftQuantity,
     bool isTest = false,
     String? privateKey,
+    String? signingMnemonic,
   }) async {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
@@ -217,7 +219,7 @@ class NftSender implements ChainSender {
         coinType,
         path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: signingMnemonic ?? globalWapAdapter.walletInfo.mnemonic ?? '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

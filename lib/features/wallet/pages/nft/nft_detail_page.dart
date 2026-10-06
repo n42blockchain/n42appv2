@@ -184,6 +184,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
           amount: 0.0,
           decimals: (coinModel.coin['decimals'] as num?)?.toInt() ?? 18,
           path: path,
+          addressType: coinModel.addrType,
           isTest: coinModel.isTest,
           contractAddress: nft.contractAddress,
           nftTokenId: nft.tokenId,

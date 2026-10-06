@@ -27,6 +27,7 @@ SendParams solSendRequest(
     amount: toEther(confirmed.price.toString(), decimals).toDouble(),
     decimals: decimals,
     path: getPathWithIndex(basePath, account.pathIndex),
+    addressType: account.addrType,
     isTest: confirmed.isTest == 1,
     contractAddress: confirmed.contract,
     tokenDecimals: decimals,

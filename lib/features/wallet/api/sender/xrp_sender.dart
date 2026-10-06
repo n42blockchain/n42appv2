@@ -5,7 +5,6 @@
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -114,7 +113,6 @@ class XrpSender implements ChainSender {
         'destinationTag': params.destinationTag,
     };
 
-    final wi = globalWapAdapter.walletInfo;
     String signStr;
     if (params.privateKey == null) {
       if (!AppGlobals.appContext.mounted) {
@@ -124,8 +122,8 @@ class XrpSender implements ChainSender {
         CoinType.XRP.name,
         params.path,
         signMap,
-        mnemonic: wi.mnemonic ?? '',
-        pk: wi.privateKey ?? '',
+        mnemonic: params.signingContext?.mnemonic ?? '',
+        pk: params.signingContext?.privateKey ?? '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

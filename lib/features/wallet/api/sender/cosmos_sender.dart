@@ -203,7 +203,10 @@ class CosmosSender implements ChainSender {
         CoinType.ATOM.name,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            params.signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

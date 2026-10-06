@@ -160,7 +160,10 @@ class SolSender implements ChainSender {
           CoinType.SOL.name,
           params.path,
           txData,
-          mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+          mnemonic:
+              params.signingContext?.mnemonic ??
+              globalWapAdapter.walletInfo.mnemonic ??
+              '',
         );
       }
       return _trustdart.signTransaction(

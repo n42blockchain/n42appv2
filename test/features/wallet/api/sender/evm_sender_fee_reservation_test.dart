@@ -3,9 +3,24 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+
+class _FakeSigner extends Trustdart {
+  @override
+  Future<Map> generateAddress(
+    String coin,
+    String path,
+    String addressType, {
+    String mnemonic = '',
+    String passphrase = '',
+    String pk = '',
+    bool isImport = false,
+    bool isTest = false,
+  }) async => {addressType: '0x0000000000000000000000000000000000000001'};
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +38,9 @@ void main() {
         final calls = <String>[];
         String? estimatedPrice;
         server.listen((request) async {
-          final body =
-              jsonDecode(await utf8.decoder.bind(request).join())
-                  as Map<String, dynamic>;
+          final body = jsonDecode(
+            await utf8.decoder.bind(request).join(),
+          ) as Map<String, dynamic>;
           final method = body['method'] as String;
           calls.add(method);
           if (method == 'eth_estimateGas') {
@@ -46,7 +61,7 @@ void main() {
           );
           await request.response.close();
         });
-        final sender = EvmSender();
+        final sender = EvmSender(trustdart: _FakeSigner());
         final result = await sender.send(
           SendParams(
             coinType: 'ETH',
@@ -61,6 +76,9 @@ void main() {
               'chainId': 1,
               'service': 'http://127.0.0.1:${server.port}',
             },
+            signingContext: const WalletSigningContext(
+              mnemonic: 'fixture phrase',
+            ),
             tipOverride: BigInt.from(100),
           ),
         );

@@ -5,7 +5,6 @@
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -73,9 +72,8 @@ class NearSender implements ChainSender {
       signingMnemonic = '';
       signingPk = params.privateKey!;
     } else {
-      final wi = globalWapAdapter.walletInfo;
-      signingMnemonic = wi.mnemonic ?? '';
-      signingPk = wi.privateKey ?? '';
+      signingMnemonic = params.signingContext?.mnemonic ?? '';
+      signingPk = params.signingContext?.privateKey ?? '';
     }
     final pubKeyMm = await _trustdart.generateAddress(
       CoinType.NEAR.name,

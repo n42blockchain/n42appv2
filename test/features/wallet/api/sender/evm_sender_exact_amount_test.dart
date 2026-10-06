@@ -10,6 +10,19 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 class _FakeSigner extends Trustdart {
   final payloads = <Map<String, dynamic>>[];
+  String derivedAddress = _senderAddress;
+
+  @override
+  Future<Map> generateAddress(
+    String coin,
+    String path,
+    String addressType, {
+    String mnemonic = '',
+    String passphrase = '',
+    String pk = '',
+    bool isImport = false,
+    bool isTest = false,
+  }) async => {addressType: derivedAddress};
 
   @override
   Future<String> signTransaction(
@@ -27,6 +40,8 @@ class _FakeSigner extends Trustdart {
   }
 }
 
+const _senderAddress = '0x0000000000000000000000000000000000000001';
+
 class _RpcFixture {
   late final HttpServer server;
   final methods = <String>[];
@@ -38,9 +53,9 @@ class _RpcFixture {
   Future<void> start() async {
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     server.listen((request) async {
-      final body =
-          jsonDecode(await utf8.decoder.bind(request).join())
-              as Map<String, dynamic>;
+      final body = jsonDecode(
+        await utf8.decoder.bind(request).join(),
+      ) as Map<String, dynamic>;
       final method = body['method'] as String;
       methods.add(method);
       if (method == 'eth_estimateGas') {
@@ -73,6 +88,7 @@ class _RpcFixture {
 SendParams _params({
   double amount = 1,
   int decimals = 18,
+  String fromAddress = _senderAddress,
   String contract = '',
   int tokenDecimals = 18,
   String? calldata,
@@ -82,7 +98,7 @@ SendParams _params({
   required String rpc,
 }) => SendParams(
   coinType: 'ETH',
-  fromAddress: '0x0000000000000000000000000000000000000001',
+  fromAddress: fromAddress,
   toAddress: '0x0000000000000000000000000000000000000002',
   amount: amount,
   decimals: decimals,
@@ -133,6 +149,20 @@ void main() {
         expect(rpc.estimates.last['value'], '0x${exact.toRadixString(16)}');
         expect(signer.payloads.last['amount'], exact.toRadixString(16));
       }
+    },
+  );
+
+  test(
+    'refuses to sign when the selected key does not match the sender',
+    () async {
+      signer.derivedAddress = '0x0000000000000000000000000000000000000003';
+
+      final result = await sender.send(_params(rpc: rpc.url));
+
+      expect(result.success, isFalse);
+      expect(result.error, 'Signing key does not match sender address');
+      expect(rpc.methods, isEmpty);
+      expect(signer.payloads, isEmpty);
     },
   );
 

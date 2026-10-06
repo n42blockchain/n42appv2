@@ -41,10 +41,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
     }
     final maxIndex = _walletInfoLsit.length - 1;
     walletIndex = (source['index'] as int? ?? 0).clamp(0, maxIndex);
-    walletMiningIndex = (source['miningIndex'] as int? ?? walletIndex).clamp(
-      0,
-      maxIndex,
-    );
+    final savedMiningIndex = source['miningIndex'] as int? ?? walletIndex;
+    walletMiningIndex = (savedMiningIndex < 0 ? walletIndex : savedMiningIndex)
+        .clamp(0, maxIndex);
   }
 
   //读取钱包信息
@@ -122,7 +121,8 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
     if (buildwallet == true) {
-      if (_walletInitializationOwnerUuid != userUUID) {
+      if (_walletInitializationOwnerUuid != null &&
+          _walletInitializationOwnerUuid != userUUID) {
         _walletReinitializationQueued = true;
         _walletReinitializationShouldInitCoinInfo |= shouldInitCoinInfo;
         _clearWalletListForOwner(userUUID);

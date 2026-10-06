@@ -92,6 +92,7 @@ class _NftSendPageState extends State<NftSendPage> {
           amount: 0.0,
           decimals: (coinModel.coin['decimals'] as num?)?.toInt() ?? 18,
           path: path,
+          addressType: coinModel.addrType,
           isTest: coinModel.isTest,
           contractAddress: nft.contractAddress,
           nftTokenId: nft.tokenId,

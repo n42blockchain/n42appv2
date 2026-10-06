@@ -206,6 +206,7 @@ mixin _StakeLogicMixin on State<StakePage> {
             amount: double.tryParse(amountText) ?? 0.0,
             decimals: 18,
             path: getPathWithIndex(basePath, cm.pathIndex),
+            addressType: cm.addrType,
             isTest: false,
             calldata: txData['data']?.toString(),
             // Lido submit 是 payable,value=质押额;精确 wei 透传避免 double 往返

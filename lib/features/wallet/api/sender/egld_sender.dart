@@ -95,7 +95,10 @@ class EgldSender implements ChainSender {
         CoinType.EGLD.name,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            params.signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

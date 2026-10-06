@@ -146,7 +146,10 @@ class TrxSender implements ChainSender {
         CoinType.TRX.name,
         params.path,
         txData,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            params.signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/csv_import_page.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_bottom_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart';
+import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_signer_guard.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_list_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_widgets.dart';
 import 'package:path_provider/path_provider.dart';
@@ -180,9 +182,8 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   void _showSnackBar(String message, {Color? bg}) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: bg));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message), backgroundColor: bg));
   }
 
   BigInt _parseAmount(String amountStr) {
@@ -256,6 +257,23 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     final walletInfo = walletProvider.walletInfo;
     final mnemonic = walletInfo.mnemonic ?? '';
     final privateKey = walletInfo.privateKey ?? '';
+    final coinInfo = walletProvider.walletMap[widget.chainSymbol];
+    if (coinInfo == null) {
+      provider.setError('Chain not supported');
+      return;
+    }
+    final baseInfo = coinInfo['baseInfo'] as Map<String, dynamic>?;
+    final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+    final addressType = coinInfo['addrType']?.toString() ?? 'legacy';
+    final basePath = pathMap?[addressType]?.toString();
+    if (basePath == null || basePath.isEmpty) {
+      provider.setError('Signing derivation path is unavailable');
+      return;
+    }
+    final path = getPathWithIndex(
+      basePath,
+      (coinInfo['pathIndex'] as int?) ?? 0,
+    );
 
     if (mnemonic.isEmpty && privateKey.isEmpty) {
       messenger.showSnackBar(SnackBar(content: Text(l10n.g_key_210)));
@@ -268,18 +286,20 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     provider.setSigningState();
 
     try {
-      final coinInfo = walletProvider.walletMap[widget.chainSymbol];
-      if (coinInfo == null) {
-        provider.setError('Chain not supported');
+      final signerError = await verifyBatchTransferSigner(
+        signer: Trustdart(),
+        coinType: widget.chainSymbol,
+        path: path,
+        addressType: addressType,
+        fromAddress: provider.fromAddress,
+        mnemonic: mnemonic,
+        privateKey: privateKey,
+        isTest: (coinInfo['isTest'] as bool?) ?? false,
+      );
+      if (signerError != null) {
+        provider.setError(signerError);
         return;
       }
-
-      final pathMap = coinInfo['baseInfo']['path'] as Map<String, dynamic>;
-      final pathIndex = coinInfo['pathIndex'] ?? 0;
-      final path = getPathWithIndex(
-        pathMap['legacy'] ?? "m/44'/60'/0'/0/0",
-        pathIndex,
-      );
 
       final trustdart = Trustdart();
       final signedTx = await trustdart.signTransaction(

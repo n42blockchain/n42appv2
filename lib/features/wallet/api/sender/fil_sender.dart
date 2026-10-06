@@ -105,7 +105,10 @@ class FilSender implements ChainSender {
         CoinType.FIL.name,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            params.signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

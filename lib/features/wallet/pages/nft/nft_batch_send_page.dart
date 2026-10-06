@@ -117,6 +117,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
             amount: 0.0,
             decimals: (coinModel.coin['decimals'] as num?)?.toInt() ?? 18,
             path: _derivePath(),
+            addressType: coinModel.addrType,
             isTest: coinModel.isTest,
             contractAddress: item.nft.contractAddress,
             nftTokenId: item.nft.tokenId,

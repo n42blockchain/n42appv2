@@ -246,6 +246,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
               amount: toEther(trModel.price.toString(), decimals).toDouble(),
               decimals: decimals,
               path: path,
+              addressType: widget.coinModel.addrType,
               sendMax: false,
               isTest: widget.coinModel.isTest,
               contractAddress: trModel.contract,

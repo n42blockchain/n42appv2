@@ -17,6 +17,7 @@ import 'package:n42_wallet/features/wallet/api/sender/algo_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/apt_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/btc_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/signing_context_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/cosmos_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/dot_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/egld_sender.dart';
@@ -38,86 +39,91 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 void main() {
   final factory = SenderFactory.instance;
 
+  ChainSender implementation(String coinType) {
+    final sender = factory.getSender(coinType);
+    return sender is WalletSigningContextSender ? sender.delegate : sender;
+  }
+
   group('SenderFactory dispatch by blockchainType', () {
     test('EVM family → EvmSender', () {
       // ETH, BNB, MATIC, ARB, OP, BASE, AVAX etc. all share blockchainType "Ethereum".
-      expect(factory.getSender('ETH'), isA<EvmSender>());
-      expect(factory.getSender('BNB'), isA<EvmSender>());
-      expect(factory.getSender('MATIC'), isA<EvmSender>());
-      expect(factory.getSender('N'), isA<EvmSender>());
+      expect(implementation('ETH'), isA<EvmSender>());
+      expect(implementation('BNB'), isA<EvmSender>());
+      expect(implementation('MATIC'), isA<EvmSender>());
+      expect(implementation('N'), isA<EvmSender>());
     });
 
     test('Bitcoin family → BtcSender', () {
-      expect(factory.getSender('BTC'), isA<BtcSender>());
+      expect(implementation('BTC'), isA<BtcSender>());
     });
 
     test('Cosmos family → CosmosSender', () {
       // ATOM is the canonical Cosmos chain. AKT/OSMO/etc. share blockchainType.
-      expect(factory.getSender('ATOM'), isA<CosmosSender>());
+      expect(implementation('ATOM'), isA<CosmosSender>());
     });
 
     test('Solana → SolSender', () {
-      expect(factory.getSender('SOL'), isA<SolSender>());
+      expect(implementation('SOL'), isA<SolSender>());
     });
 
     test('TRON → TrxSender', () {
-      expect(factory.getSender('TRX'), isA<TrxSender>());
+      expect(implementation('TRX'), isA<TrxSender>());
     });
 
     test('Polkadot → DotSender', () {
-      expect(factory.getSender('DOT'), isA<DotSender>());
+      expect(implementation('DOT'), isA<DotSender>());
     });
 
     test('Aptos → AptSender', () {
-      expect(factory.getSender('APT'), isA<AptSender>());
+      expect(implementation('APT'), isA<AptSender>());
     });
 
     test('TON → TonSender', () {
-      expect(factory.getSender('TON'), isA<TonSender>());
+      expect(implementation('TON'), isA<TonSender>());
     });
 
     test('NEAR → NearSender', () {
-      expect(factory.getSender('NEAR'), isA<NearSender>());
+      expect(implementation('NEAR'), isA<NearSender>());
     });
 
     test('Sui → SuiSender', () {
-      expect(factory.getSender('SUI'), isA<SuiSender>());
+      expect(implementation('SUI'), isA<SuiSender>());
     });
 
     test('Ripple → XrpSender', () {
-      expect(factory.getSender('XRP'), isA<XrpSender>());
+      expect(implementation('XRP'), isA<XrpSender>());
     });
 
     test('Algorand → AlgoSender', () {
-      expect(factory.getSender('ALGO'), isA<AlgoSender>());
+      expect(implementation('ALGO'), isA<AlgoSender>());
     });
 
     test('Tezos → XtzSender', () {
-      expect(factory.getSender('XTZ'), isA<XtzSender>());
+      expect(implementation('XTZ'), isA<XtzSender>());
     });
 
     test('Zilliqa → ZilSender', () {
-      expect(factory.getSender('ZIL'), isA<ZilSender>());
+      expect(implementation('ZIL'), isA<ZilSender>());
     });
 
     test('Filecoin → FilSender', () {
-      expect(factory.getSender('FIL'), isA<FilSender>());
+      expect(implementation('FIL'), isA<FilSender>());
     });
 
     test('Stellar → XlmSender', () {
-      expect(factory.getSender('XLM'), isA<XlmSender>());
+      expect(implementation('XLM'), isA<XlmSender>());
     });
 
     test('Cardano → AdaSender', () {
-      expect(factory.getSender('ADA'), isA<AdaSender>());
+      expect(implementation('ADA'), isA<AdaSender>());
     });
 
     test('VeChain → VetSender', () {
-      expect(factory.getSender('VET'), isA<VetSender>());
+      expect(implementation('VET'), isA<VetSender>());
     });
 
     test('MultiversX → EgldSender', () {
-      expect(factory.getSender('EGLD'), isA<EgldSender>());
+      expect(implementation('EGLD'), isA<EgldSender>());
     });
 
     test('HBAR → EvmSender (registry-defined behaviour)', () {
@@ -126,11 +132,11 @@ void main() {
       // dispatches to EvmSender, NOT HbarSender. The sender_factory's
       // 'Hedera' => HbarSender() branch is currently dead code; this
       // test pins the actual production behaviour.
-      expect(factory.getSender('HBAR'), isA<EvmSender>());
+      expect(implementation('HBAR'), isA<EvmSender>());
     });
 
     test('Starknet → StrkSender', () {
-      expect(factory.getSender('STRK'), isA<StrkSender>());
+      expect(implementation('STRK'), isA<StrkSender>());
     });
   });
 
@@ -154,7 +160,10 @@ void main() {
         },
       );
 
-      expect(sender, isA<EvmSender>());
+      expect(
+        sender is WalletSigningContextSender ? sender.delegate : sender,
+        isA<EvmSender>(),
+      );
     });
 
     test('coinType lookup is case-insensitive', () {

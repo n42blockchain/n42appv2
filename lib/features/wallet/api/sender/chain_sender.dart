@@ -13,6 +13,7 @@ class SendParams {
   final double amount; // decimal amount
   final int decimals; // coin decimals
   final String path; // derivation path
+  final String addressType; // address format used by the derivation path
   final bool sendMax; // deduct fee from amount
   final bool isTest;
   final String contractAddress; // empty = native transfer
@@ -52,6 +53,10 @@ class SendParams {
   /// binary floating point before a chain sender converts it to base units.
   final String? decimalAmountOverride;
 
+  /// Signing material captured before sender network requests begin.
+  /// This avoids reading a different account's mnemonic after an await.
+  final WalletSigningContext? signingContext;
+
   String get amountDecimalString => decimalAmountOverride ?? amount.toString();
 
   const SendParams({
@@ -61,6 +66,7 @@ class SendParams {
     required this.amount,
     required this.decimals,
     required this.path,
+    this.addressType = 'legacy',
     this.sendMax = false,
     this.isTest = false,
     this.contractAddress = '',
@@ -81,7 +87,59 @@ class SendParams {
     this.valueWeiOverride,
     this.tokenValueWeiOverride,
     this.decimalAmountOverride,
+    this.signingContext,
   });
+
+  SendParams withSigningContext(WalletSigningContext context) => SendParams(
+    coinType: coinType,
+    fromAddress: fromAddress,
+    toAddress: toAddress,
+    amount: amount,
+    decimals: decimals,
+    path: path,
+    addressType: addressType,
+    sendMax: sendMax,
+    isTest: isTest,
+    contractAddress: contractAddress,
+    tokenDecimals: tokenDecimals,
+    memo: memo,
+    calldata: calldata,
+    privateKey: privateKey ?? context.privateKey,
+    chainConfig: chainConfig,
+    destinationTag: destinationTag,
+    nftTokenId: nftTokenId,
+    nftStandard: nftStandard,
+    nftQuantity: nftQuantity,
+    btcFeeRate: btcFeeRate,
+    prebuiltUtxos: prebuiltUtxos,
+    nonceOverride: nonceOverride,
+    gasPriceOverride: gasPriceOverride,
+    tipOverride: tipOverride,
+    valueWeiOverride: valueWeiOverride,
+    tokenValueWeiOverride: tokenValueWeiOverride,
+    decimalAmountOverride: decimalAmountOverride,
+    signingContext: context,
+  );
+}
+
+/// Immutable signer snapshot associated with one transfer attempt.
+/// It intentionally has no diagnostic `toString` because [mnemonic] is secret.
+class WalletSigningContext {
+  final String? mnemonic;
+  final String? privateKey;
+  final bool addressVerified;
+
+  const WalletSigningContext({
+    this.mnemonic,
+    this.privateKey,
+    this.addressVerified = false,
+  });
+
+  WalletSigningContext verified() => WalletSigningContext(
+    mnemonic: mnemonic,
+    privateKey: privateKey,
+    addressVerified: true,
+  );
 }
 
 /// Result of a send operation.

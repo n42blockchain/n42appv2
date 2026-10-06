@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:n42_wallet/core/providers/core_providers.dart'
     show currentUserProvider;
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_execution_guard.dart';
@@ -547,6 +548,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           amount: 0.0,
           decimals: 18,
           path: path,
+          addressType: chainCoin?.addrType ?? 'legacy',
           isTest: chainCoin?.isTest ?? false,
           privateKey: chainCoin?.privateKey,
           chainConfig: chainCoin?.coin,
@@ -708,6 +710,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           amount: 0.0,
           decimals: 18,
           path: path,
+          addressType: chainCoin?.addrType ?? 'legacy',
           isTest: chainCoin?.isTest ?? false,
           privateKey: chainCoin?.privateKey,
           chainConfig: chainCoin?.coin,

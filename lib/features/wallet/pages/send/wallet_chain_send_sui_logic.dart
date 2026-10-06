@@ -113,9 +113,8 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   Future<void> getOwnerObjects() async {
     final List<dynamic> v =
         await (widget.ownedObjectsLoader?.call(widget.coinModel) ??
-            SuiApi(
-              isTest: widget.coinModel.isTest,
-            ).getOwnedObjects(widget.coinModel.address));
+            SuiApi(isTest: widget.coinModel.isTest)
+                .getOwnedObjects(widget.coinModel.address));
     if (!mounted) return;
     utxos = [
       for (final Map utxo in v)
@@ -385,6 +384,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
               amount: toEther(trModel.price.toString(), decimals).toDouble(),
               decimals: decimals,
               path: path,
+              addressType: widget.coinModel.addrType,
               sendMax: false,
               isTest: widget.coinModel.isTest,
               contractAddress: trModel.contract,

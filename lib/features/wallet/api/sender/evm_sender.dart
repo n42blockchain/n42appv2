@@ -39,16 +39,63 @@ class EvmSender implements ChainSender {
 
   @override
   Future<SendResult> send(SendParams params) {
+    final WalletSigningContext signingContext;
+    try {
+      signingContext = params.signingContext ?? _captureSigningContext(params);
+    } catch (_) {
+      return Future.value(const SendResult.fail('Wallet is not ready'));
+    }
+    final capturedParams = params.withSigningContext(signingContext);
+
     // 同一地址的发送串行化：nonce 从查询（pending tag）到广播之间没有
     // 互斥，快速双击/自动重试会拿到同一 nonce 各自签名广播（双花）。
     return TransferSerializer.run(
-      '${params.coinType}:${params.fromAddress}',
-      () => _sendSerialized(params),
+      '${capturedParams.coinType}:${capturedParams.fromAddress}',
+      () => _sendSerialized(capturedParams),
+    );
+  }
+
+  WalletSigningContext _captureSigningContext(SendParams params) {
+    if (params.privateKey != null) return const WalletSigningContext();
+    final wallet = globalWapAdapter.walletInfo;
+    return WalletSigningContext(
+      mnemonic: wallet.mnemonic ?? '',
+      privateKey: wallet.privateKey,
     );
   }
 
   Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
+    final signingContext = params.signingContext!;
+    var resolvedSigningContext = signingContext;
+    if (!signingContext.addressVerified) {
+      final privateKey = params.privateKey;
+      final mnemonic = signingContext.mnemonic;
+      if ((privateKey == null && (mnemonic == null || mnemonic.isEmpty)) ||
+          (privateKey != null && privateKey.isEmpty)) {
+        return const SendResult.fail('Signing key is unavailable');
+      }
+      final derived = await _trustdart.generateAddress(
+        coinType,
+        params.path,
+        params.addressType,
+        mnemonic: privateKey == null ? mnemonic! : '',
+        pk: privateKey ?? '',
+        isTest: params.isTest,
+      );
+      final derivedAddress = derived[params.addressType]?.toString() ?? '';
+      if (derivedAddress.isEmpty) {
+        return const SendResult.fail('Unable to verify signing address');
+      }
+      if (derivedAddress.toLowerCase() !=
+          params.fromAddress.trim().toLowerCase()) {
+        return const SendResult.fail(
+          'Signing key does not match sender address',
+        );
+      }
+      resolvedSigningContext = signingContext.verified();
+    }
+
     final chainConfig = params.chainConfig ?? _defaultChainConfig;
     // CoinModel stores baseInfo itself, while other callers may pass a full
     // registry entry. Normalize both shapes before reading RPC settings.
@@ -276,6 +323,7 @@ class EvmSender implements ChainSender {
       calldata: params.calldata,
       rpc: rpcOverride,
       nonceOverride: params.nonceOverride,
+      signingMnemonic: resolvedSigningContext.mnemonic,
     );
     if (signResult is SendResult) return signResult;
 
@@ -351,6 +399,7 @@ class EvmSender implements ChainSender {
     String? calldata,
     String? rpc,
     BigInt? nonceOverride,
+    String? signingMnemonic,
   }) async {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
@@ -415,7 +464,7 @@ class EvmSender implements ChainSender {
         coinType,
         path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: signingMnemonic ?? '',
       );
     } else {
       signStr = await _trustdart.signTransaction(

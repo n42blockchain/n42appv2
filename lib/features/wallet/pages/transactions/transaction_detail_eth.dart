@@ -33,12 +33,11 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 part 'transaction_detail_eth_sections.dart';
 
-typedef EthDetailLookupForTesting =
-    Future<MessageModel> Function(
-      String txHash, {
-      required String? coinType,
-      required bool isTest,
-    });
+typedef EthDetailLookupForTesting = Future<MessageModel> Function(
+  String txHash, {
+  required String? coinType,
+  required bool isTest,
+});
 
 typedef EthDetailRecordLoaderForTesting =
     Future<List<TransationRecordModel>> Function(String txHash, String address);
@@ -308,6 +307,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         amount: 0,
         decimals: decimals,
         path: path,
+        addressType: cm.addrType,
         isTest: cm.isTest,
         privateKey: cm.privateKey,
         chainConfig: cm.coin,
@@ -326,6 +326,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         amount: toEther(origValue.toString(), decimals).toDouble(),
         decimals: decimals,
         path: path,
+        addressType: cm.addrType,
         isTest: cm.isTest,
         privateKey: cm.privateKey,
         chainConfig: cm.coin,

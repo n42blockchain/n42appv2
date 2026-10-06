@@ -549,6 +549,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
               amount: toEther(trModel.price.toString(), _decimals).toDouble(),
               decimals: nativeDecimals,
               path: path,
+              addressType: coinModel.addrType,
               sendMax: false,
               isTest: coinModel.isTest,
               contractAddress: trModel.contract,

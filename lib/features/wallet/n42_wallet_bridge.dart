@@ -98,8 +98,10 @@ String? decodeAbiString(String raw) {
 /// N42 钱包桥接实现
 ///
 /// 将主应用的钱包功能桥接到 n42_chat 插件
-typedef WalletBridgeSenderResolver =
-    ChainSender Function(String coinType, {Map<String, dynamic>? chainConfig});
+typedef WalletBridgeSenderResolver = ChainSender Function(
+  String coinType, {
+  Map<String, dynamic>? chainConfig,
+});
 
 /// App-owned token metadata that is richer than the current Chat Git API.
 ///
@@ -473,6 +475,7 @@ class N42WalletBridge
               amount: value,
               decimals: decimals,
               path: path,
+              addressType: coinModel.addrType,
               isTest: coinModel.isTest,
               contractAddress: contractAddress,
               tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
@@ -557,9 +560,8 @@ class N42WalletBridge
       final context = AppGlobals.navigatorKey.currentContext;
       if (context == null || !context.mounted) return;
 
-      await Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => WalletReceiveQr(chainCoin!)));
+      await Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => WalletReceiveQr(chainCoin!)));
     } catch (e) {
       AppLogger.w('N42WalletBridge', 'showReceiveQRCode error: $e');
     }
@@ -934,6 +936,7 @@ class N42WalletBridge
           amount: 0.0,
           decimals: resolveWalletBridgeTokenDecimals(coinModel.coin),
           path: path,
+          addressType: coinModel.addrType,
           isTest: coinModel.isTest,
           contractAddress: contractAddress,
           nftTokenId: tokenId,

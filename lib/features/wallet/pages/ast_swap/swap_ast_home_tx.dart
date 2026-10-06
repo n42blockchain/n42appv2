@@ -218,6 +218,7 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
             amount: payAmount,
             decimals: decimals,
             path: path,
+            addressType: cm.addrType,
             isTest: cm.isTest,
             privateKey: cm.privateKey,
             contractAddress: contractAddress,

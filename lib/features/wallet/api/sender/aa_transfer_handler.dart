@@ -22,6 +22,8 @@ import 'package:n42_wallet/features/wallet/aa/account/smart_account_factory.dart
 import 'package:n42_wallet/features/wallet/aa/bundler/bundler_client.dart';
 import 'package:n42_wallet/features/wallet/aa/utils/user_op_hash.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
@@ -75,11 +77,17 @@ class AATransferParams extends TransferParams {
 /// - First-time account deployment
 class AATransferHandler extends BaseTransferHandler {
   final String _chainSymbol;
+  final Trustdart _signer;
+  final CoinModel? Function(String chainSymbol)? _coinModelReader;
   BundlerClient? _bundlerClient;
   String? _bundlerApiKey;
 
-  AATransferHandler(this._chainSymbol, {String? bundlerApiKey})
-    : _bundlerApiKey = bundlerApiKey;
+  AATransferHandler(
+    this._chainSymbol, {
+    this._bundlerApiKey,
+    Trustdart? signer,
+    this._coinModelReader,
+  }) : _signer = signer ?? Trustdart();
 
   @override
   String get chainSymbol => _chainSymbol;
@@ -127,6 +135,14 @@ class AATransferHandler extends BaseTransferHandler {
       if (chainConfig == null) {
         return createError('Chain configuration not found');
       }
+      if (params.smartAccount.chainId != chainConfig.chainId) {
+        return createError('Smart account belongs to a different chain');
+      }
+
+      final signerContext = await _captureAndVerifySigner(params);
+      if (signerContext == null) {
+        return createError('Signing key does not match smart account owner');
+      }
 
       final userOp = await _buildUserOperation(params, chainConfig);
 
@@ -140,6 +156,7 @@ class AATransferHandler extends BaseTransferHandler {
         userOpWithGas,
         params,
         chainConfig,
+        signerContext,
       );
       final userOpHash = await bundler.sendUserOperation(signedUserOp);
 
@@ -194,6 +211,70 @@ class AATransferHandler extends BaseTransferHandler {
       );
       return createError(e.toString());
     }
+  }
+
+  /// Resolve signer material and derivation details before any bundler/RPC
+  /// request. The smart account owner is the EOA that signs UserOperations;
+  /// `fromAddress` is the smart account contract and is checked separately.
+  Future<_AASignerContext?> _captureAndVerifySigner(
+    AATransferParams params,
+  ) async {
+    if (params.fromAddress.toLowerCase() !=
+        params.smartAccount.address.toLowerCase()) {
+      return null;
+    }
+
+    final coin =
+        _coinModelReader?.call(params.chainSymbol) ??
+        walletProvider.getCoinModelWithCoinType(params.chainSymbol);
+    final wallet = params.privateKey == null ? walletProvider.walletInfo : null;
+    final privateKey = params.privateKey?.trim().isNotEmpty == true
+        ? params.privateKey!.trim()
+        : (wallet?.privateKey?.trim().isNotEmpty == true
+              ? wallet!.privateKey!.trim()
+              : null);
+    final mnemonic = wallet?.mnemonic?.trim() ?? '';
+    if (privateKey == null && mnemonic.isEmpty) return null;
+
+    final addressType = coin?.addrType ?? 'legacy';
+    final chainMap = params.chainMap ?? getChainMap(params.chainSymbol);
+    final explicitPath = chainMap?['path'];
+    final String? path;
+    if (explicitPath is String && explicitPath.trim().isNotEmpty) {
+      path = explicitPath.trim();
+    } else {
+      final basePath = coin?.config.pathForAddrType(addressType);
+      path = basePath == null || basePath.isEmpty
+          ? null
+          : getPathWithIndex(basePath, coin!.pathIndex);
+    }
+    if (path == null || path.isEmpty) return null;
+
+    final Map derived;
+    try {
+      derived = await _signer.generateAddress(
+        params.chainSymbol,
+        path,
+        addressType,
+        mnemonic: privateKey == null ? mnemonic : '',
+        pk: privateKey ?? '',
+        isTest: coin?.isTest ?? params.isTest,
+      );
+    } catch (_) {
+      return null;
+    }
+    final signerAddress = derived[addressType]?.toString().trim() ?? '';
+    if (signerAddress.isEmpty ||
+        signerAddress.toLowerCase() !=
+            params.smartAccount.ownerAddress.toLowerCase()) {
+      return null;
+    }
+
+    return _AASignerContext(
+      path: path,
+      mnemonic: mnemonic,
+      privateKey: privateKey,
+    );
   }
 
   /// Build UserOperation for the transfer
@@ -279,6 +360,7 @@ class AATransferHandler extends BaseTransferHandler {
     UserOperation userOp,
     AATransferParams params,
     AAChainConfig chainConfig,
+    _AASignerContext signerContext,
   ) async {
     // Get the hash to sign
     final userOpHash = UserOpHasher.hash(
@@ -289,46 +371,13 @@ class AATransferHandler extends BaseTransferHandler {
 
     final hashHex = '0x${bytesToHex(userOpHash)}';
 
-    // Get chain map for signing
-    final chainMap = params.chainMap ?? getChainMap(params.chainSymbol);
-    if (chainMap == null) {
-      throw UserOperationBuildError('Chain map not found');
-    }
-
-    // 签名 path 必须与 owner 地址派生用同一 pathIndex/addrType。owner 来自
-    // walletProvider.getAddress(chainSymbol)(活跃钱包真实 pathIndex);此前 path
-    // 取 chainMap['path'](该键在 walletMap 是 Map 非 String,`as String?` 恒命中
-    // null)→ 硬编码 index-0,多账户(pathIndex>0)AA 会 signer≠owner 被 bundler
-    // 拒、资金锁死在该智能账户(第三轮 P1)。
-    String path = chainMap['path'] as String? ?? '';
-    if (path.isEmpty) {
-      final ownerCm = walletProvider.getCoinModelWithCoinType(
-        params.chainSymbol,
-      );
-      if (ownerCm != null) {
-        final base =
-            ownerCm.config.pathForAddrType(ownerCm.addrType) ??
-            "m/44'/60'/0'/0/0";
-        path = getPathWithIndex(base, ownerCm.pathIndex);
-      } else {
-        path = "m/44'/60'/0'/0/0";
-      }
-    }
-
-    // Sign using trustdart (prefer private key, fallback to mnemonic)
-    final signatureHex = params.privateKey != null
-        ? await trustdart.signMessage(
-            params.chainSymbol,
-            path,
-            hashHex,
-            pk: params.privateKey!,
-          )
-        : await trustdart.signMessage(
-            params.chainSymbol,
-            path,
-            hashHex,
-            mnemonic: walletProvider.walletInfo.mnemonic ?? '',
-          );
+    final signatureHex = await _signer.signMessage(
+      params.chainSymbol,
+      signerContext.path,
+      hashHex,
+      mnemonic: signerContext.privateKey == null ? signerContext.mnemonic : '',
+      pk: signerContext.privateKey ?? '',
+    );
 
     if (signatureHex.isEmpty) {
       throw SignatureError('Failed to sign UserOperation');
@@ -496,4 +545,16 @@ class AATransferHandler extends BaseTransferHandler {
     _bundlerClient?.dispose();
     _bundlerClient = null;
   }
+}
+
+class _AASignerContext {
+  const _AASignerContext({
+    required this.path,
+    required this.mnemonic,
+    required this.privateKey,
+  });
+
+  final String path;
+  final String mnemonic;
+  final String? privateKey;
 }

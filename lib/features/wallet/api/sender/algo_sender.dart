@@ -99,7 +99,10 @@ class AlgoSender implements ChainSender {
         CoinType.ALGO.name,
         params.path,
         txData,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic:
+            params.signingContext?.mnemonic ??
+            globalWapAdapter.walletInfo.mnemonic ??
+            '',
       );
     }
 
