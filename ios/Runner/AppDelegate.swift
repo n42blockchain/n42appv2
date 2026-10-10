@@ -44,6 +44,10 @@ private final class N42GeometryView: UIView {
 
   func geometry() -> [String: Any] {
     var regions: [[String: Any]] = []
+    // ReservedRegion only exists in the iOS 27.1 SDK; `#available` is a
+    // runtime check, so older toolchains (Xcode 26 / Swift 6.3) need a
+    // compile-time guard and simply report no reserved regions.
+    #if compiler(>=6.4)
     if #available(iOS 27.1, *) {
       for (kind, name) in [(UIView.ReservedRegion.Kind.division, "division"), (.occlusion, "occlusion")] {
         for region in reservedRegions(kind: kind) where region.isActive {
@@ -53,6 +57,7 @@ private final class N42GeometryView: UIView {
         }
       }
     }
+    #endif
     return ["width": bounds.width, "height": bounds.height, "regions": regions]
   }
 

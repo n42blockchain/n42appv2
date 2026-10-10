@@ -129,9 +129,9 @@ PODS:
     - Flutter
   - flutter_contacts (0.0.1):
     - Flutter
-  - flutter_edge_ai (2.0.0):
+  - flutter_edge_ai (2.1.1):
     - Flutter
-  - flutter_edge_ai_mediapipe (1.0.9):
+  - flutter_edge_ai_mediapipe (1.1.1):
     - Flutter
     - MediaPipeTasksGenAI (= 0.10.33)
     - MediaPipeTasksGenAIC (= 0.10.33)
@@ -798,8 +798,8 @@ SPEC CHECKSUMS:
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_callkit_incoming: b2eaad1ac106ac4c78b4b9827f7e181767438dea
   flutter_contacts: 2ec1d6b62ca2869c3bbb3871bd74d4e3ef157135
-  flutter_edge_ai: 0cefb8fda563f512fa9b26141d71d9cee993f8c8
-  flutter_edge_ai_mediapipe: 8d3dbd49ff4c734942b847217dca2c58816e96a4
+  flutter_edge_ai: 425f6921ae86e90a95cd690ecc36cc1510ba2a6a
+  flutter_edge_ai_mediapipe: 7c92191d04014f39b8b1590197f31bdfe27a2e5a
   flutter_facebook_auth: fe770ba7c3b26637a955662b84b33c4ab33d3a14
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
   flutter_mining: 56b545081a9941d0f9ef59d0d614184f392ea258
@@ -898,4 +898,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 6dac5200b240178ea27e2ee8bcdd851fc6ce359a
 
-COCOAPODS: 1.17.0
+COCOAPODS: 1.16.2
