@@ -954,7 +954,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Отозвать сеансовый ключ",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Ключ сеанса отозван",
+      "Локальная запись сеанса отозвана",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Отозван"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -997,7 +997,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не удалось создать ключ сессии",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Ключ сессии создан",
+      "Локальная запись сеанса сохранена",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "напр. Uniswap, Aave...",
@@ -1018,7 +1018,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Сессионные ключи",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Авторизуйте DApps с временным доступом к вашей смарт-учетной записи",
+      "Только локальные записи. Разрешения в блокчейне не меняются.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Доступ DApp",
@@ -1345,9 +1345,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Подключить кошелёк",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Похоже, на этом устройстве получены root-права или выполнен джейлбрейк. Использование кошелька на устройстве с нарушенной защитой повышает риск кражи ключей и несанкционированного доступа. Будьте осторожны.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Похоже, на этом устройстве получены root-права или выполнен джейлбрейк. Использование кошелька на устройстве с нарушенной защитой повышает риск кражи ключей и несанкционированного доступа. Будьте осторожны.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Предупреждение о безопасности устройства",
     ),

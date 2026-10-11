@@ -961,7 +961,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Revoca chiave di sessione",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Chiave di sessione revocata",
+      "Registrazione locale della sessione revocata",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Revocato"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -1004,7 +1004,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Creazione della chiave di sessione fallita",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Chiave di sessione creata",
+      "Registrazione locale della sessione salvata",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "es. Uniswap, Aave...",
@@ -1025,7 +1025,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chiavi di sessione",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Autorizza le DApp con accesso temporaneo al tuo account smart",
+      "Solo registrazioni locali. Le autorizzazioni sulla blockchain non cambiano.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Accesso DApp",
@@ -1356,9 +1356,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Collega Portafoglio",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Questo dispositivo sembra essere rootato o jailbroken. L\'uso di un portafoglio su un dispositivo compromesso aumenta il rischio di furto delle chiavi e di accesso non autorizzato. Procedi con cautela.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Questo dispositivo sembra essere rootato o jailbroken. L\'uso di un portafoglio su un dispositivo compromesso aumenta il rischio di furto delle chiavi e di accesso non autorizzato. Procedi con cautela.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Avviso Sicurezza Dispositivo",
     ),
@@ -2000,9 +2001,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Scansiona questo codice QR con il tuo dispositivo Keystone per firmare la transazione",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Punta la fotocamera verso il codice QR visualizzato sul tuo dispositivo Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Punta la fotocamera verso il codice QR visualizzato sul tuo dispositivo Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Scansiona la firma trapezoidale"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

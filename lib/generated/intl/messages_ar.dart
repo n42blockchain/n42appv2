@@ -904,7 +904,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "إبطال مفتاح الجلسة",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "تم إبطال مفتاح الجلسة",
+      "تم إلغاء سجل الجلسة المحلي",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "تم إبطاله",
@@ -949,7 +949,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "فشل في إنشاء مفتاح الجلسة",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "تم إنشاء مفتاح الجلسة",
+      "تم حفظ سجل الجلسة المحلي",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "على سبيل المثال يونيسواب، أفي...",
@@ -968,7 +968,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "مفاتيح الجلسة",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "قم بتفويض التطبيقات اللامركزية (DApps) بالوصول المؤقت إلى حسابك الذكي",
+      "سجلات محلية فقط. لا تتغير الأذونات على السلسلة.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "الوصول إلى التطبيقات اللامركزية",
@@ -1269,9 +1269,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "ربط المحفظة",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "يبدو أن هذا الجهاز مُعدّل بصلاحيات الجذر أو مكسور الحماية. استخدام المحفظة على جهاز مخترق يزيد خطر سرقة المفاتيح والوصول غير المصرّح به. توخّ الحذر.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "يبدو أن هذا الجهاز مُعدّل بصلاحيات الجذر أو مكسور الحماية. استخدام المحفظة على جهاز مخترق يزيد خطر سرقة المفاتيح والوصول غير المصرّح به. توخّ الحذر.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "تحذير أمان الجهاز",
     ),
@@ -1875,9 +1876,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "قم بمسح رمز الاستجابة السريعة هذا ضوئيًا باستخدام جهاز Keystone الخاص بك لتوقيع المعاملة",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "قم بتوجيه الكاميرا نحو رمز الاستجابة السريعة المعروض على جهاز Keystone الخاص بك",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "قم بتوجيه الكاميرا نحو رمز الاستجابة السريعة المعروض على جهاز Keystone الخاص بك",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("مسح توقيع كيستون"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

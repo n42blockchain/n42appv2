@@ -771,7 +771,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "이 세션 키를 취소하시겠습니까? 승인된 DApp은 더 이상 거래를 실행할 수 없습니다.",
     ),
     "g_key_aa_revoke_session": MessageLookupByLibrary.simpleMessage("세션 키 취소"),
-    "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage("세션 키가 취소되었습니다."),
+    "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage("로컬 세션 기록 취소됨"),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("취소됨"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
       "세션 키를 취소하는 중...",
@@ -809,7 +809,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "세션 키 생성 실패",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "세션 키가 생성되었습니다",
+      "로컬 세션 기록 저장됨",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "예: Uniswap, Aave...",
@@ -826,7 +826,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("세션 키"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "스마트 계정에 대한 임시 액세스로 DApp에 권한을 부여하세요.",
+      "로컬 기록만 관리합니다. 온체인 권한은 변경되지 않습니다.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp 접근",
@@ -1075,9 +1075,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "이 사이트는 지갑 주소를 확인하고 거래를 제안받는 것을 요청하고 있습니다. 사용자의 승인 없이는 자금을 이동할 수 없습니다.",
     ),
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage("지갑 연결"),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "이 기기는 루팅되었거나 탈옥된 것으로 보입니다. 보안이 손상된 기기에서 지갑을 사용하면 키 도난과 무단 접근의 위험이 커집니다. 주의하여 진행하세요.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "이 기기는 루팅되었거나 탈옥된 것으로 보입니다. 보안이 손상된 기기에서 지갑을 사용하면 키 도난과 무단 접근의 위험이 커집니다. 주의하여 진행하세요.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "기기 보안 경고",
     ),

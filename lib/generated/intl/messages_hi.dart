@@ -926,7 +926,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "सत्र कुंजी निरस्त करें",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "सत्र कुंजी निरस्त कर दी गई",
+      "स्थानीय सत्र रिकॉर्ड रद्द किया गया",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "निरस्त किया गया",
@@ -971,7 +971,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "सत्र कुंजी बनाने में विफल",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "सत्र कुंजी बनाई गई",
+      "स्थानीय सत्र रिकॉर्ड सहेजा गया",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "जैसे यूनिस्वैप, आवे...",
@@ -992,7 +992,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "सत्र कुंजियाँ",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "अपने स्मार्ट खाते तक अस्थायी पहुंच के साथ DApps को अधिकृत करें",
+      "केवल स्थानीय रिकॉर्ड। ऑन-चेन अनुमतियाँ नहीं बदलतीं।",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "डीएपी एक्सेस",
@@ -1305,9 +1305,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "बटुआ कनेक्ट करें",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "लगता है कि यह डिवाइस रूट या जेलब्रेक किया गया है। असुरक्षित डिवाइस पर वॉलेट का इस्तेमाल करने से निजी कुंजी की चोरी और अनधिकृत पहुँच का जोखिम बढ़ जाता है। सावधानी से आगे बढ़ें।",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "लगता है कि यह डिवाइस रूट या जेलब्रेक किया गया है। असुरक्षित डिवाइस पर वॉलेट का इस्तेमाल करने से निजी कुंजी की चोरी और अनधिकृत पहुँच का जोखिम बढ़ जाता है। सावधानी से आगे बढ़ें।",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "डिवाइस सुरक्षा चेतावनी",
     ),

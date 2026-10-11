@@ -944,7 +944,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Cabut Kunci Sesi",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Kunci sesi dicabut",
+      "Catatan sesi lokal dicabut",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Dicabut"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -987,7 +987,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gagal membuat kunci sesi",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Kunci sesi berhasil dibuat",
+      "Catatan sesi lokal disimpan",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "contoh: Uniswap, Aave...",
@@ -1006,7 +1006,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("Kunci Sesi"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Otorisasi DApps dengan akses sementara ke akun pintar Anda",
+      "Hanya catatan lokal. Izin di blockchain tidak berubah.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Akses DApp",
@@ -1321,9 +1321,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Hubungkan Dompet",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Perangkat ini tampaknya telah di-root atau di-jailbreak. Menggunakan dompet di perangkat yang telah dirusak meningkatkan risiko pencurian kunci dan akses tidak sah. Lanjutkan dengan hati-hati.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Perangkat ini tampaknya telah di-root atau di-jailbreak. Menggunakan dompet di perangkat yang telah dirusak meningkatkan risiko pencurian kunci dan akses tidak sah. Lanjutkan dengan hati-hati.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Peringatan Keamanan Perangkat",
     ),
@@ -1951,9 +1952,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Pindai kode QR ini dengan perangkat Keystone Anda untuk menandatangani transaksi",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Arahkan kamera Anda ke kode QR yang ditampilkan di perangkat Keystone Anda",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Arahkan kamera Anda ke kode QR yang ditampilkan di perangkat Keystone Anda",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Pindai Tanda Tangan Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

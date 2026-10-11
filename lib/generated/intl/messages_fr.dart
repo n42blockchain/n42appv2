@@ -977,7 +977,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Révoquer la clé de session",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Clé de session révoquée",
+      "Enregistrement local de session révoqué",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Révoqué"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -1020,7 +1020,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Échec de création de la clé de session",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Clé de session créée",
+      "Enregistrement local de session sauvegardé",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "ex. Uniswap, Aave...",
@@ -1041,7 +1041,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Clés de session",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Autorisez les DApps avec un accès temporaire à votre compte intelligent",
+      "Enregistrements locaux uniquement. Les autorisations sur la chaîne ne changent pas.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Accès DApp",
@@ -1370,9 +1370,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Connecter le portefeuille",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Cet appareil semble être rooté ou jailbreaké. Utiliser un portefeuille sur un appareil compromis augmente le risque de vol de clés et d\'accès non autorisé. Agissez avec précaution.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Cet appareil semble être rooté ou jailbreaké. Utiliser un portefeuille sur un appareil compromis augmente le risque de vol de clés et d\'accès non autorisé. Agissez avec précaution.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Avertissement de sécurité de l\'appareil",
     ),
@@ -2016,9 +2017,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Scannez ce code QR avec votre appareil Keystone pour signer la transaction",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Pointez votre appareil photo vers le code QR affiché sur votre appareil Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Pointez votre appareil photo vers le code QR affiché sur votre appareil Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Scanner la signature Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

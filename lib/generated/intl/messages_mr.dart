@@ -924,7 +924,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "सत्र की रद्द करा",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "सत्र की रद्द केली",
+      "स्थानिक सत्र नोंद रद्द केली",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "मागे घेतले",
@@ -969,7 +969,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "सत्र की तयार करण्यात अयशस्वी",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "सत्र की तयार केली",
+      "स्थानिक सत्र नोंद जतन केली",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "उदा. अस्वॅप, आवे...",
@@ -986,7 +986,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("सत्र की"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "तुमच्या स्मार्ट खात्यात तात्पुरत्या प्रवेशासह DApps अधिकृत करा",
+      "फक्त स्थानिक नोंदी. ऑन-चेन परवानग्या बदलत नाहीत.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp प्रवेश",
@@ -1311,9 +1311,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "पाकीट जोडा",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "हे डिव्हाइस रूट किंवा जेलब्रेक केलेले दिसते. सुरक्षा धोक्यात आलेल्या डिव्हाइसवर वॉलेट वापरल्याने गुप्त कीची चोरी आणि अनधिकृत प्रवेशाचा धोका वाढतो. सावधपणे पुढे जा.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "हे डिव्हाइस रूट किंवा जेलब्रेक केलेले दिसते. सुरक्षा धोक्यात आलेल्या डिव्हाइसवर वॉलेट वापरल्याने गुप्त कीची चोरी आणि अनधिकृत प्रवेशाचा धोका वाढतो. सावधपणे पुढे जा.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "उपकरण सुरक्षितता चेतावणी",
     ),
@@ -1917,9 +1918,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "व्यवहारावर स्वाक्षरी करण्यासाठी हा QR कोड तुमच्या कीस्टोन डिव्हाइसने स्कॅन करा",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "तुमचा कॅमेरा तुमच्या कीस्टोन डिव्हाइसवर प्रदर्शित होणाऱ्या QR कोडकडे निर्देशित करा",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "तुमचा कॅमेरा तुमच्या कीस्टोन डिव्हाइसवर प्रदर्शित होणाऱ्या QR कोडकडे निर्देशित करा",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("कीस्टोन स्वाक्षरी स्कॅन करा"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

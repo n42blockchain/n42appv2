@@ -947,7 +947,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Unieważnij klucz sesji",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Klucz sesji unieważniony",
+      "Lokalny wpis sesji odwołany",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "Unieważnione",
@@ -992,7 +992,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nie udało się utworzyć klucza sesji",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Klucz sesji utworzony",
+      "Lokalny wpis sesji zapisany",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "np. Uniswap, Aave...",
@@ -1013,7 +1013,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Klucze sesji",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Autoryzuj DApps z tymczasowym dostępem do Twojego inteligentnego konta",
+      "Tylko lokalne wpisy. Uprawnienia na blockchainie nie zmieniają się.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Dostęp DApp",
@@ -1332,9 +1332,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Połącz portfel",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "To urządzenie prawdopodobnie ma uprawnienia root lub jailbreak. Korzystanie z portfela na urządzeniu z naruszonymi zabezpieczeniami zwiększa ryzyko kradzieży kluczy i nieuprawnionego dostępu. Zachowaj ostrożność.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "To urządzenie prawdopodobnie ma uprawnienia root lub jailbreak. Korzystanie z portfela na urządzeniu z naruszonymi zabezpieczeniami zwiększa ryzyko kradzieży kluczy i nieuprawnionego dostępu. Zachowaj ostrożność.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Ostrzeżenie o bezpieczeństwie urządzenia",
     ),

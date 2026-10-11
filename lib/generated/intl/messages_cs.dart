@@ -934,7 +934,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Zrušit klíč relace",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Klíč relace byl odvolán",
+      "Místní záznam relace odvolán",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Odvoláno"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -977,7 +977,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nepodařilo se vytvořit klíč relace",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Klíč relace byl vytvořen",
+      "Místní záznam relace uložen",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "např. Uniswap, Aave...",
@@ -998,7 +998,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Klíče relace",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Autorizujte DApps s dočasným přístupem k vašemu chytrému účtu",
+      "Pouze místní záznamy. Oprávnění na blockchainu se nemění.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Přístup DApp",
@@ -1317,9 +1317,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Připojit peněženku",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Toto zařízení je pravděpodobně rootované nebo má jailbreak. Používání peněženky na zařízení s narušeným zabezpečením zvyšuje riziko krádeže klíčů a neoprávněného přístupu. Postupujte opatrně.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Toto zařízení je pravděpodobně rootované nebo má jailbreak. Používání peněženky na zařízení s narušeným zabezpečením zvyšuje riziko krádeže klíčů a neoprávněného přístupu. Postupujte opatrně.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Upozornění na bezpečnost zařízení",
     ),

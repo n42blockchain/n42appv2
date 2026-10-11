@@ -153,6 +153,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
         : null;
 
     return [
+      Text(S.of(context).g_key_aa_session_keys_desc),
+      SizedBox(height: AppSpacing.space4),
       _buildSectionHeader('1. ${S.of(context).g_key_aa_session_select_preset}'),
       SizedBox(height: AppSpacing.space4),
       SessionKeyPresetCards(
@@ -324,9 +326,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
             style: ElevatedButton.styleFrom(
               backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
               foregroundColor: Colors.white,
-              disabledBackgroundColor: AppColorTokens.of(
-                context,
-              ).textTertiary.withAlpha(50),
+              disabledBackgroundColor: AppColorTokens.of(context).textTertiary
+                  .withAlpha(50),
               padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),

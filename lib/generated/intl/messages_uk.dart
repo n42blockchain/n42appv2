@@ -953,7 +953,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Відкликати ключ сеансу",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Ключ сеансу анульовано",
+      "Локальний запис сеансу відкликано",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "Відкликано",
@@ -998,7 +998,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Не вдалося створити ключ сеансу",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Ключ сеансу створено",
+      "Локальний запис сеансу збережено",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "напр. Uniswap, Aave...",
@@ -1019,7 +1019,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ключі сесії",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Авторизуйте DApps з тимчасовим доступом до вашого смарт-облікового запису",
+      "Лише локальні записи. Дозволи в блокчейні не змінюються.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Доступ DApp",
@@ -1350,9 +1350,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Підключити гаманець",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Цей пристрій, схоже, має root-доступ або jailbreak. Використання гаманця на скомпрометованому пристрої збільшує ризик крадіжки ключів та несанкціонованого доступу. Дійте з обережністю.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Цей пристрій, схоже, має root-доступ або jailbreak. Використання гаманця на скомпрометованому пристрої збільшує ризик крадіжки ключів та несанкціонованого доступу. Дійте з обережністю.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Попередження безпеки пристрою",
     ),
@@ -1994,9 +1995,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Відскануйте цей QR-код за допомогою пристрою Keystone, щоб підписати транзакцію",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Наведіть камеру на QR-код, який відображається на вашому пристрої Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Наведіть камеру на QR-код, який відображається на вашому пристрої Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Сканування підпису Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

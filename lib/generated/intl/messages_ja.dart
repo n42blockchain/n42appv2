@@ -793,7 +793,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "セッションキーを取り消す",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "セッションキーが取り消されました",
+      "ローカルのセッション記録を取り消しました",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("取り消されました"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -832,7 +832,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "セッションキーの作成に失敗しました",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "セッションキーを作成しました",
+      "ローカルのセッション記録を保存しました",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "例：Uniswap、Aave...",
@@ -849,7 +849,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("セッションキー"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "スマート アカウントへの一時的なアクセスで DApps を承認する",
+      "ローカル記録のみです。オンチェーンの権限は変更されません。",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DAppアクセス",
@@ -1102,9 +1102,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "ウォレットを接続",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "このデバイスはルート化またはジャイルブレイクされているようです。信頼できないデバイス上でウォレットを使用すると、鍵の盗難や不正アクセスのリスクが高まります。注意して操作してください。",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "このデバイスはルート化またはジャイルブレイクされているようです。信頼できないデバイス上でウォレットを使用すると、鍵の盗難や不正アクセスのリスクが高まります。注意して操作してください。",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "デバイスセキュリティの警告",
     ),

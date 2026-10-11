@@ -1097,7 +1097,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ŗéṽöķé Šéššìöñ Ķéý ~~~~~~~~~#]",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "[# Šéššìöñ ķéý ŗéṽöķéð ~~~~~~~~~#]",
+      "[Local session record revoked]",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "[# Ŗéṽöķéð ~~~#]",
@@ -1152,7 +1152,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ƒàìĺéð ťö çŗéàťé šéššìöñ ķéý ~~~~~~~~~~~~~~#]",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "[# Šéššìöñ ķéý çŗéàťéð ~~~~~~~~~#]",
+      "[Local session record saved]",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "[# é.ĝ. Üñìšŵàƥ, Ààṽé... ~~~~~~~~~~#]",
@@ -1173,7 +1173,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Šéššìöñ Ķéýš ~~~~~~#]",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "[# Àüťĥöŗìžé ÐÀƥƥš ŵìťĥ ťéṁƥöŗàŗý àççéšš ťö ýöüŗ šṁàŗť àççöüñť ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+      "[Local records only. On-chain permissions are not changed.]",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "[# ÐÀƥƥ Àççéšš ~~~~~#]",
@@ -1542,9 +1542,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "[# Çöññéçť Ŵàĺĺéť ~~~~~~~#]",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "[# Ťĥìš ðéṽìçé àƥƥéàŗš ťö ƀé ŗööťéð öŗ ĵàìĺƀŗöķéñ. Üšìñĝ à ŵàĺĺéť öñ à çöṁƥŗöṁìšéð ðéṽìçé ìñçŗéàšéš ťĥé ŗìšķ öƒ ķéý ťĥéƒť àñð üñàüťĥöŗìžéð àççéšš. Ƥŗöçééð ŵìťĥ çàüťìöñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "[# Ťĥìš ðéṽìçé àƥƥéàŗš ťö ƀé ŗööťéð öŗ ĵàìĺƀŗöķéñ. Üšìñĝ à ŵàĺĺéť öñ à çöṁƥŗöṁìšéð ðéṽìçé ìñçŗéàšéš ťĥé ŗìšķ öƒ ķéý ťĥéƒť àñð üñàüťĥöŗìžéð àççéšš. Ƥŗöçééð ŵìťĥ çàüťìöñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "[# Ðéṽìçé Šéçüŗìťý Ŵàŗñìñĝ ~~~~~~~~~~~#]",
     ),
@@ -2256,9 +2257,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "[# Šçàñ ťĥìš ɊŖ çöðé ŵìťĥ ýöüŗ Ķéýšťöñé ðéṽìçé ťö šìĝñ ťĥé ťŗàñšàçťìöñ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "[# Ƥöìñť ýöüŗ çàṁéŗà àť ťĥé ɊŖ çöðé ðìšƥĺàýéð öñ ýöüŗ Ķéýšťöñé ðéṽìçé ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "[# Ƥöìñť ýöüŗ çàṁéŗà àť ťĥé ɊŖ çöðé ðìšƥĺàýéð öñ ýöüŗ Ķéýšťöñé ðéṽìçé ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage(
           "[# Šçàñ Ķéýšťöñé Šìĝñàťüŗé ~~~~~~~~~~~#]",

@@ -938,7 +938,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "সেশন কী প্রত্যাহার করুন",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "সেশন কী প্রত্যাহার করা হয়েছে৷",
+      "স্থানীয় সেশন রেকর্ড বাতিল করা হয়েছে",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "প্রত্যাহার করা হয়েছে",
@@ -983,7 +983,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "সেশন কী তৈরি করতে ব্যর্থ হয়েছে৷",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "সেশন কী তৈরি করা হয়েছে",
+      "স্থানীয় সেশন রেকর্ড সংরক্ষিত",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "যেমন অদলবদল, Aave...",
@@ -1002,7 +1002,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("সেশন কী"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "আপনার স্মার্ট অ্যাকাউন্টে অস্থায়ী অ্যাক্সেস সহ DApps অনুমোদন করুন",
+      "শুধু স্থানীয় রেকর্ড। অন-চেইন অনুমতি পরিবর্তিত হয় না।",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp অ্যাক্সেস",
@@ -1333,9 +1333,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেট সংযুক্ত করুন",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "এই ডিভাইসটি রুট করা বা জেলব্রেক করা হয়েছে বলে মনে হচ্ছে। নিরাপত্তা বিঘ্নিত ডিভাইসে ওয়ালেট ব্যবহার করলে গোপন কী চুরি এবং অননুমোদিত প্রবেশের ঝুঁকি বাড়ে। সতর্কতার সঙ্গে এগিয়ে যান।",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "এই ডিভাইসটি রুট করা বা জেলব্রেক করা হয়েছে বলে মনে হচ্ছে। নিরাপত্তা বিঘ্নিত ডিভাইসে ওয়ালেট ব্যবহার করলে গোপন কী চুরি এবং অননুমোদিত প্রবেশের ঝুঁকি বাড়ে। সতর্কতার সঙ্গে এগিয়ে যান।",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "ডিভাইস নিরাপত্তা সতর্কতা",
     ),
@@ -1957,9 +1958,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "লেনদেনে স্বাক্ষর করতে আপনার কীস্টোন ডিভাইস দিয়ে এই QR কোডটি স্ক্যান করুন",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "আপনার কীস্টোন ডিভাইসে প্রদর্শিত QR কোডের দিকে আপনার ক্যামেরাটি নির্দেশ করুন",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "আপনার কীস্টোন ডিভাইসে প্রদর্শিত QR কোডের দিকে আপনার ক্যামেরাটি নির্দেশ করুন",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("কীস্টোন স্বাক্ষর স্ক্যান করুন"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

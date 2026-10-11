@@ -968,7 +968,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sitzungsschlüssel widerrufen",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Sitzungsschlüssel widerrufen",
+      "Lokaler Sitzungseintrag widerrufen",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "Widerrufen",
@@ -1013,7 +1013,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sitzungsschlüssel konnte nicht erstellt werden",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Sitzungsschlüssel erstellt",
+      "Lokaler Sitzungseintrag gespeichert",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "z.B. Uniswap, Aave...",
@@ -1034,7 +1034,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sitzungsschlüssel",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Autorisieren Sie DApps mit temporärem Zugriff auf Ihr Smart-Konto",
+      "Nur lokale Einträge. Berechtigungen auf der Blockchain bleiben unverändert.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp-Zugriff",
@@ -1363,9 +1363,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Wallet verbinden",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Dieses Gerät scheint gerootet oder mit einem Jailbreak versehen zu sein. Die Wallet-Nutzung auf einem kompromittierten Gerät erhöht das Risiko von Schlüsseldiebstahl und unbefugtem Zugriff. Gehen Sie vorsichtig vor.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Dieses Gerät scheint gerootet oder mit einem Jailbreak versehen zu sein. Die Wallet-Nutzung auf einem kompromittierten Gerät erhöht das Risiko von Schlüsseldiebstahl und unbefugtem Zugriff. Gehen Sie vorsichtig vor.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Warnung zur Gerätesicherheit",
     ),
@@ -2001,9 +2002,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Scannen Sie diesen QR-Code mit Ihrem Keystone-Gerät, um die Transaktion zu signieren",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Richten Sie Ihre Kamera auf den QR-Code, der auf Ihrem Keystone-Gerät angezeigt wird",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Richten Sie Ihre Kamera auf den QR-Code, der auf Ihrem Keystone-Gerät angezeigt wird",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Keystone-Signatur scannen"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(

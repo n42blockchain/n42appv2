@@ -729,7 +729,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "您確定要撤銷此工作階段金鑰嗎？已授權的 DApp 將無法再執行交易。",
     ),
     "g_key_aa_revoke_session": MessageLookupByLibrary.simpleMessage("撤銷工作階段金鑰"),
-    "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage("工作階段金鑰已撤銷"),
+    "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage("已撤銷本機工作階段記錄"),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("已撤銷"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage("正在撤銷工作階段金鑰..."),
     "g_key_aa_safe_desc": MessageLookupByLibrary.simpleMessage(
@@ -763,7 +763,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "建立工作階段金鑰失敗",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "工作階段金鑰已建立",
+      "已儲存本機工作階段記錄",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "例如Uniswap、Aave...",
@@ -780,7 +780,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("工作階段金鑰"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "授權 DApp 暫時存取您的智慧帳戶",
+      "僅管理本機記錄，不會變更鏈上權限。",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp 訪問",

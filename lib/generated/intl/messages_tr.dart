@@ -929,7 +929,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Oturum Anahtarını İptal Et",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Oturum anahtarı iptal edildi",
+      "Yerel oturum kaydı iptal edildi",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "İptal edildi",
@@ -972,7 +972,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Oturum anahtarı oluşturulamadı",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Oturum anahtarı oluşturuldu",
+      "Yerel oturum kaydı kaydedildi",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "örn. Uniswap, Aave...",
@@ -993,7 +993,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Oturum Anahtarları",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Akıllı hesabınıza geçici erişimle DApp\'leri yetkilendirin",
+      "Yalnızca yerel kayıtlar. Zincir üzerindeki izinler değişmez.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp Erişimi",
@@ -1312,9 +1312,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Cüzdanı bağla",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Bu cihaz kök (root) veya jailbreak edilmiş görünüyor. Zarar görmüş bir cihazda cüzdan kullanmak anahtar çalınma ve yetkisiz erişim riskini artırır. Dikkatli olun.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Bu cihaz kök (root) veya jailbreak edilmiş görünüyor. Zarar görmüş bir cihazda cüzdan kullanmak anahtar çalınma ve yetkisiz erişim riskini artırır. Dikkatli olun.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Cihaz Güvenliği Uyarısı",
     ),

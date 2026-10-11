@@ -954,7 +954,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Revogar chave de sessão",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Chave de sessão revogada",
+      "Registo local da sessão revogado",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Revogado"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -997,7 +997,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Falha ao criar chave de sessão",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Chave de sessão criada",
+      "Registo local da sessão guardado",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "ex. Uniswap, Aave...",
@@ -1018,7 +1018,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chaves de sessão",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Autorize DApps com acesso temporário à sua conta inteligente",
+      "Apenas registos locais. As permissões na blockchain não são alteradas.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Acesso DApp",
@@ -1337,9 +1337,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Conectar Carteira",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Este dispositivo parece estar rootado ou jailbroken. Usar uma carteira em um dispositivo comprometido aumenta o risco de roubo de chaves e acesso não autorizado. Prossiga com cautela.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Este dispositivo parece estar rootado ou jailbroken. Usar uma carteira em um dispositivo comprometido aumenta o risco de roubo de chaves e acesso não autorizado. Prossiga com cautela.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Aviso de Segurança do Dispositivo",
     ),

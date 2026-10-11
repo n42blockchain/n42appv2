@@ -979,7 +979,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "సెషన్ కీని ఉపసంహరించుకోండి",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "సెషన్ కీ రద్దు చేయబడింది",
+      "స్థానిక సెషన్ రికార్డు రద్దు చేయబడింది",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "రద్దు చేయబడింది",
@@ -1026,7 +1026,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "సెషన్ కీని సృష్టించడం విఫలమైంది",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "సెషన్ కీ సృష్టించబడింది",
+      "స్థానిక సెషన్ రికార్డు సేవ్ చేయబడింది",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "ఉదా యూనిస్వాప్, ఆవే...",
@@ -1045,7 +1045,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("సెషన్ కీలు"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "మీ స్మార్ట్ ఖాతాకు తాత్కాలిక యాక్సెస్‌తో DAppsకి అధికారం ఇవ్వండి",
+      "స్థానిక రికార్డులు మాత్రమే. బ్లాక్‌చెయిన్ అనుమతులు మారవు.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp యాక్సెస్",
@@ -1382,9 +1382,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "వాలెట్ కనెక్ట్ చేయండి",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "ఈ పరికరం రూట్ చేయబడింది లేదా జైల్ బ్రేక్ చేయబడిందని తెలుస్తోంది. ప్రమాదం కలిగించిన పరికరంపై వాలెట్ ఉపయోగించడం కీ దొంగతనం మరియు అనధికారిక ప్రవేశానికి ప్రమాదాన్ని పెంచుతుంది. జాగ్రత్తగా కొనసాగండి.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "ఈ పరికరం రూట్ చేయబడింది లేదా జైల్ బ్రేక్ చేయబడిందని తెలుస్తోంది. ప్రమాదం కలిగించిన పరికరంపై వాలెట్ ఉపయోగించడం కీ దొంగతనం మరియు అనధికారిక ప్రవేశానికి ప్రమాదాన్ని పెంచుతుంది. జాగ్రత్తగా కొనసాగండి.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "పరికర సురక్షితం హెచ్చరిక",
     ),

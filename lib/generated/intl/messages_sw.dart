@@ -942,7 +942,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Batilisha Ufunguo wa Kipindi",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Ufunguo wa kipindi umebatilishwa",
+      "Rekodi ya ndani ya kipindi imebatilishwa",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "Imebatilishwa",
@@ -987,7 +987,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Imeshindwa kuunda ufunguo wa kipindi",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Ufunguo wa kipindi umeundwa",
+      "Rekodi ya ndani ya kipindi imehifadhiwa",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "k.m. Uniswap, Aave...",
@@ -1008,7 +1008,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vifunguo vya Kikao",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Idhinisha DApps na ufikiaji wa muda kwa akaunti yako mahiri",
+      "Rekodi za ndani pekee. Ruhusa kwenye blockchain hazibadiliki.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Ufikiaji wa DApp",
@@ -1331,9 +1331,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Unganisha pochi",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Kifaa hiki kinaonekana kuwa kimefanyiwa root au jailbreak. Kutumia pochi kwenye kifaa kisicho salama huongeza hatari ya kuibiwa kwa funguo na ufikiaji usioidhinishwa. Endelea kwa tahadhari.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Kifaa hiki kinaonekana kuwa kimefanyiwa root au jailbreak. Kutumia pochi kwenye kifaa kisicho salama huongeza hatari ya kuibiwa kwa funguo na ufikiaji usioidhinishwa. Endelea kwa tahadhari.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Onyo la usalama wa kifaa",
     ),
@@ -1991,9 +1992,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Changanua msimbo huu wa QR kwa kifaa chako cha Keystone ili kutia sahihi muamala",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Elekeza kamera yako kwenye msimbo wa QR unaoonyeshwa kwenye kifaa chako cha Keystone",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Elekeza kamera yako kwenye msimbo wa QR unaoonyeshwa kwenye kifaa chako cha Keystone",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage(
           "Changanua Sahihi ya Jiwe la Msingi",

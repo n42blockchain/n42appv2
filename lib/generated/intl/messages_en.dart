@@ -912,7 +912,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Revoke Session Key",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Session key revoked",
+      "Local session record revoked",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage("Revoked"),
     "g_key_aa_revoking": MessageLookupByLibrary.simpleMessage(
@@ -955,7 +955,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Failed to create session key",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Session key created",
+      "Local session record saved",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "e.g. Uniswap, Aave...",
@@ -976,7 +976,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Session Keys",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Authorize DApps with temporary access to your smart account",
+      "Local records only. On-chain permissions are not changed.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "DApp Access",
@@ -1291,9 +1291,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Connect Wallet",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Device Security Warning",
     ),

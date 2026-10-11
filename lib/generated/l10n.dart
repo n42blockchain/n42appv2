@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -7994,10 +7995,10 @@ class S {
     );
   }
 
-  /// `Authorize DApps with temporary access to your smart account`
+  /// `Local records only. On-chain permissions are not changed.`
   String get g_key_aa_session_keys_desc {
     return Intl.message(
-      'Authorize DApps with temporary access to your smart account',
+      'Local records only. On-chain permissions are not changed.',
       name: 'g_key_aa_session_keys_desc',
       desc: '',
       args: [],
@@ -8164,10 +8165,10 @@ class S {
     );
   }
 
-  /// `Session key created`
+  /// `Local session record saved`
   String get g_key_aa_session_create_success {
     return Intl.message(
-      'Session key created',
+      'Local session record saved',
       name: 'g_key_aa_session_create_success',
       desc: '',
       args: [],
@@ -8304,10 +8305,10 @@ class S {
     );
   }
 
-  /// `Session key revoked`
+  /// `Local session record revoked`
   String get g_key_aa_revoked {
     return Intl.message(
-      'Session key revoked',
+      'Local session record revoked',
       name: 'g_key_aa_revoked',
       desc: '',
       args: [],

@@ -915,7 +915,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Thu hồi khóa phiên",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "Khóa phiên đã bị thu hồi",
+      "Đã thu hồi bản ghi phiên cục bộ",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "Đã thu hồi",
@@ -958,7 +958,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Không thể tạo khóa phiên",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "Khóa phiên đã được tạo",
+      "Đã lưu bản ghi phiên cục bộ",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "ví dụ: Uniswap, Aave...",
@@ -977,7 +977,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_session_keys": MessageLookupByLibrary.simpleMessage("Khóa phiên"),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "Cho phép DApps có quyền truy cập tạm thời vào tài khoản thông minh của bạn",
+      "Chỉ quản lý bản ghi cục bộ. Quyền trên chuỗi không thay đổi.",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "Truy cập DApp",
@@ -1294,9 +1294,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
       "Kết nối Ví",
     ),
-    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
-      "Thiết bị này dường như đã được root hoặc jailbreak. Sử dụng ví trên thiết bị bị can thiệp sẽ làm tăng nguy cơ bị đánh cắp khóa và truy cập trái phép. Vui lòng cẩn trọng.",
-    ),
+    "g_key_device_security_warning_message":
+        MessageLookupByLibrary.simpleMessage(
+          "Thiết bị này dường như đã được root hoặc jailbreak. Sử dụng ví trên thiết bị bị can thiệp sẽ làm tăng nguy cơ bị đánh cắp khóa và truy cập trái phép. Vui lòng cẩn trọng.",
+        ),
     "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
       "Cảnh báo bảo mật thiết bị",
     ),
@@ -1930,9 +1931,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_hw_keystone_scan_request_hint": MessageLookupByLibrary.simpleMessage(
       "Quét mã QR này bằng thiết bị Keystone của bạn để ký giao dịch",
     ),
-    "g_key_hw_keystone_scan_response_hint": MessageLookupByLibrary.simpleMessage(
-      "Hướng máy ảnh của bạn vào mã QR được hiển thị trên thiết bị Keystone của bạn",
-    ),
+    "g_key_hw_keystone_scan_response_hint":
+        MessageLookupByLibrary.simpleMessage(
+          "Hướng máy ảnh của bạn vào mã QR được hiển thị trên thiết bị Keystone của bạn",
+        ),
     "g_key_hw_keystone_scan_response_title":
         MessageLookupByLibrary.simpleMessage("Quét chữ ký Keystone"),
     "g_key_hw_keystone_scan_xpub_hint": MessageLookupByLibrary.simpleMessage(
