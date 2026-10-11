@@ -52,6 +52,10 @@ class SendParams {
   /// binary floating point before a chain sender converts it to base units.
   final String? decimalAmountOverride;
 
+  /// EVM only: durably save the locally computed hash before any broadcast.
+  /// Throwing aborts submission. No private key or signed bytes are passed.
+  final Future<void> Function(String txHash)? beforeBroadcast;
+
   String get amountDecimalString => decimalAmountOverride ?? amount.toString();
 
   const SendParams({
@@ -81,6 +85,7 @@ class SendParams {
     this.valueWeiOverride,
     this.tokenValueWeiOverride,
     this.decimalAmountOverride,
+    this.beforeBroadcast,
   });
 }
 
@@ -98,6 +103,10 @@ class SendResult {
     : success = false,
       txHash = null,
       actualAmount = null;
+
+  /// Broadcast may have been accepted. Query this hash; do not sign again.
+  const SendResult.uncertain(this.txHash, this.error, {this.actualAmount})
+    : success = false;
 
   /// Convert to legacy MessageModel for compatibility.
   MessageModel toMessageModel() {

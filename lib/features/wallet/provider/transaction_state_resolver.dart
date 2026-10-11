@@ -84,15 +84,24 @@ class TransactionStateResolver {
       isTest: isTest,
       rpc: customRpc,
     );
-    if (mm.error) return 0;
-
-    if (customRpc != null) {
-      // eth_getTransactionReceipt 对 pending 交易返回 null，不是错误。
-      if (mm.data == null) return 0;
-      return _statusFromHex(mm.data['status']);
+    if (mm.error) return -1;
+    dynamic receipt = mm.data;
+    if (customRpc == null) {
+      if (receipt is! Map ||
+          receipt['error'] is! Map ||
+          receipt['error']['code'] != 0) {
+        return -1;
+      }
+      receipt = receipt['result'];
     }
-    if (mm.data['error']['code'] != 0) return -1;
-    return _statusFromHex(mm.data['result']['status']);
+    if (receipt == null) return 0;
+    if (receipt is! Map ||
+        (receipt['transactionHash'] != null &&
+            receipt['transactionHash'].toString().toLowerCase() !=
+                trm.txHash.toLowerCase())) {
+      return -1;
+    }
+    return _statusFromHex(receipt['status']);
   }
 
   Future<int> _resolveSolana(TransationRecordModel trm) async {
@@ -154,23 +163,8 @@ class TransactionStateResolver {
     return 1;
   }
 
-  Future<int> _resolveEvmCompatible(TransationRecordModel trm) async {
-    final bool isTest = trm.isTest != 0;
-    final String? customRpc = _receiptRpc(trm);
-    final MessageModel mm = await _tokenViewApi.getTransactionReceiptEth(
-      trm.coin['coinType'],
-      trm.txHash,
-      isTest: isTest,
-      rpc: customRpc,
-    );
-    if (mm.error) return 0;
-    if (customRpc != null) {
-      if (mm.data == null) return 0;
-      return _statusFromHex(mm.data['status']);
-    }
-    if (mm.data['error']['code'] != 0) return -1;
-    return _statusFromHex(mm.data['result']['status']);
-  }
+  Future<int> _resolveEvmCompatible(TransationRecordModel trm) =>
+      _resolveEth(trm);
 
   Future<int> _resolveZilliqa(TransationRecordModel trm) async {
     final ZilApi zilApi = ZilApi(isTest: trm.isTest != 0);
@@ -186,9 +180,9 @@ class TransactionStateResolver {
 
   /// 从 EVM status hex 字符串（"0x1" / "0x0"）转换为状态码
   int _statusFromHex(dynamic status) {
-    if (status == '0x1') return 1;
-    if (status == '0x0') return 2;
-    return 0;
+    if (status == '0x1' || status == 1 || status == true) return 1;
+    if (status == '0x0' || status == 0 || status == false) return 2;
+    return -1;
   }
 
   /// 返回 EVM 交易记录的链 RPC。与发送侧（EvmSender.resolveRpcOverride）保持

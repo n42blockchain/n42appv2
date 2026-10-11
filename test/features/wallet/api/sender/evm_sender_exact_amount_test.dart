@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -34,13 +35,16 @@ class _RpcFixture {
   BigInt nativeBalance = BigInt.one << 200;
   BigInt tokenBalance = BigInt.one << 200;
   BigInt gasEstimate = BigInt.from(21);
+  int chainId = 1;
+  String broadcastHash = '0xfixturehash';
+  bool dropBroadcastResponse = false;
 
   Future<void> start() async {
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     server.listen((request) async {
-      final body =
-          jsonDecode(await utf8.decoder.bind(request).join())
-              as Map<String, dynamic>;
+      final body = jsonDecode(
+        await utf8.decoder.bind(request).join(),
+      ) as Map<String, dynamic>;
       final method = body['method'] as String;
       methods.add(method);
       if (method == 'eth_estimateGas') {
@@ -49,12 +53,18 @@ class _RpcFixture {
         );
       }
 
+      if (method == 'eth_sendRawTransaction' && dropBroadcastResponse) {
+        final socket = await request.response.detachSocket(writeHeaders: false);
+        socket.destroy();
+        return;
+      }
       final result = switch (method) {
+        'eth_chainId' => _hex(BigInt.from(chainId)),
         'eth_getBalance' => _hex(nativeBalance),
         'eth_call' => '0x${tokenBalance.toRadixString(16).padLeft(64, '0')}',
         'eth_gasPrice' => '0x1',
         'eth_estimateGas' => _hex(gasEstimate),
-        'eth_sendRawTransaction' => '0xfixturehash',
+        'eth_sendRawTransaction' => broadcastHash,
         _ => '0x0',
       };
       request.response.headers.contentType = ContentType.json;
@@ -80,6 +90,7 @@ SendParams _params({
   BigInt? exactToken,
   bool sendMax = false,
   required String rpc,
+  Future<void> Function(String)? beforeBroadcast,
 }) => SendParams(
   coinType: 'ETH',
   fromAddress: '0x0000000000000000000000000000000000000001',
@@ -96,6 +107,7 @@ SendParams _params({
   valueWeiOverride: exact,
   tokenValueWeiOverride: exactToken,
   sendMax: sendMax,
+  beforeBroadcast: beforeBroadcast,
 );
 
 void main() {
@@ -205,6 +217,105 @@ void main() {
       expect(result.success, isTrue);
       expect(rpc.estimates.single['value'], '0x${requested.toRadixString(16)}');
       expect(signer.payloads.single['amount'], signed.toRadixString(16));
+    },
+  );
+
+  test('wrong RPC network is rejected before estimation or signing', () async {
+    rpc.chainId = 94;
+    final result = await sender.send(_params(rpc: rpc.url));
+    expect(result.success, isFalse);
+    expect(rpc.methods, ['eth_chainId']);
+    expect(signer.payloads, isEmpty);
+  });
+
+  test(
+    'explicit amount near balance cannot silently become send-max',
+    () async {
+      rpc.nativeBalance = BigInt.from(1000);
+      final result = await sender.send(
+        _params(exact: BigInt.from(970), rpc: rpc.url),
+      );
+      expect(result.success, isFalse);
+      expect(signer.payloads, isEmpty);
+      expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+    },
+  );
+
+  test('durable hash save completes before broadcast', () async {
+    final gate = Completer<void>();
+    String? savedHash;
+    final operation = sender.send(
+      _params(
+        rpc: rpc.url,
+        beforeBroadcast: (hash) async {
+          savedHash = hash;
+          rpc.broadcastHash = hash;
+          await gate.future;
+        },
+      ),
+    );
+    while (savedHash == null) {
+      await Future<void>.delayed(const Duration(milliseconds: 1));
+    }
+    expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+    expect(savedHash, matches(RegExp(r'^0x[a-f0-9]{64}$')));
+    gate.complete();
+    final result = await operation;
+    expect(result.success, isTrue);
+    expect(result.txHash, savedHash);
+  });
+
+  test('storage failure blocks broadcasting', () async {
+    final result = await sender.send(
+      _params(
+        rpc: rpc.url,
+        beforeBroadcast: (_) async {
+          throw StateError('fixture storage failed');
+        },
+      ),
+    );
+    expect(result.success, isFalse);
+    expect(result.txHash, isNull);
+    expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+  });
+
+  test(
+    'lost broadcast response retains the original saved hash without retry',
+    () async {
+      rpc.dropBroadcastResponse = true;
+      String? savedHash;
+      final result = await sender.send(
+        _params(
+          rpc: rpc.url,
+          beforeBroadcast: (hash) async {
+            savedHash = hash;
+          },
+        ),
+      );
+      expect(result.success, isFalse);
+      expect(result.txHash, savedHash);
+      expect(
+        rpc.methods.where((m) => m == 'eth_sendRawTransaction'),
+        hasLength(1),
+      );
+    },
+  );
+
+  test(
+    'foreign broadcast hash cannot replace the durable local hash',
+    () async {
+      String? savedHash;
+      final result = await sender.send(
+        _params(
+          rpc: rpc.url,
+          beforeBroadcast: (hash) async {
+            savedHash = hash;
+          },
+        ),
+      );
+      expect(result.success, isFalse);
+      expect(result.txHash, savedHash);
+      expect(result.error, 'Unexpected broadcast hash');
     },
   );
 

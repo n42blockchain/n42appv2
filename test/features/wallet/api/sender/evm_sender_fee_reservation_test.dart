@@ -23,9 +23,9 @@ void main() {
         final calls = <String>[];
         String? estimatedPrice;
         server.listen((request) async {
-          final body =
-              jsonDecode(await utf8.decoder.bind(request).join())
-                  as Map<String, dynamic>;
+          final body = jsonDecode(
+            await utf8.decoder.bind(request).join(),
+          ) as Map<String, dynamic>;
           final method = body['method'] as String;
           calls.add(method);
           if (method == 'eth_estimateGas') {
@@ -33,6 +33,7 @@ void main() {
                 (body['params'] as List).first['maxFeePerGas'] as String?;
           }
           final result = switch (method) {
+            'eth_chainId' => '0x1',
             'eth_getBalance' => '0x3e8',
             'eth_call' =>
               '0x${BigInt.from(1000).toRadixString(16).padLeft(64, '0')}',

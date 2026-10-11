@@ -8,6 +8,7 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/mev_protection.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -57,10 +58,12 @@ class EvmSender implements ChainSender {
       isTest: params.isTest,
     );
     // 测试网缺 chainId_test 时绝不能回退主网 chainId：签出的交易在主网合法。
-    if (params.isTest && resolvedChainId == null) {
-      return SendResult.fail('Missing testnet chain ID for $coinType');
+    if (resolvedChainId == null) {
+      return SendResult.fail(
+        'Missing ${params.isTest ? 'testnet' : 'mainnet'} chain ID for $coinType',
+      );
     }
-    final chainId = resolvedChainId ?? 1;
+    final chainId = resolvedChainId;
     final isContract = params.contractAddress.isNotEmpty;
     final invalidOverride = [
       params.valueWeiOverride,
@@ -107,6 +110,19 @@ class EvmSender implements ChainSender {
       chainConfig,
       isTest: params.isTest,
     );
+
+    if (rpcOverride != null) {
+      final remoteChain = await EthAPI.init(
+        null,
+        rpcOverride,
+        null,
+      ).getChainId();
+      if (remoteChain.error || remoteChain.data != BigInt.from(chainId)) {
+        return SendResult.fail(
+          'RPC chain ID does not match the selected network',
+        );
+      }
+    }
 
     // Get token balance if contract transfer
     BigInt balance = BigInt.zero;
@@ -220,16 +236,12 @@ class EvmSender implements ChainSender {
 
     if (!isContract) {
       valuePrice = requestedValue;
-      // Send-max reconciliation. The caller computes the max transferable
-      // amount with its own fee estimate, but this sender applies the ×1.2
-      // safety buffer, so the two disagree by 0.2×fee and the balance check
-      // below would reject a legitimate max send that the caller just offered
-      // the user. Whenever the requested value sits in [balance - fee,
-      // balance] the intent is "send as much as possible", so settle it
-      // against the fee actually being signed. A value above the balance is
-      // still a genuine shortfall and falls through to the failure below.
+      // Reconcile fees only for an explicit send-max request. A fixed amount
+      // must either be signed unchanged or fail; proximity to the balance is
+      // not permission to reduce the amount approved by the user.
       final maxSendable = chainBalance - totalGasPrice;
-      if (valuePrice <= chainBalance &&
+      if (params.sendMax &&
+          valuePrice <= chainBalance &&
           maxSendable > BigInt.zero &&
           valuePrice >= maxSendable) {
         valuePrice = maxSendable;
@@ -292,6 +304,20 @@ class EvmSender implements ChainSender {
       );
     }
 
+    final persist = params.beforeBroadcast;
+    final localHash = persist == null
+        ? null
+        : '0x${bytesToHex(keccak256(hexToBytes(signStr)))}';
+    if (persist != null) {
+      try {
+        await persist(localHash!);
+      } catch (_) {
+        return SendResult.fail(
+          'Could not save the transaction before broadcast',
+        );
+      }
+    }
+
     // MEV 保护：高风险交易（DEX swap/授权/大额转账）在支持的链（当前仅主网
     // ETH，见 MevProtectionService.supportedChains）上优先经 Flashbots
     // Protect 私有交易池广播，绕开公开 mempool 防三明治/抢跑攻击；失败
@@ -314,6 +340,13 @@ class EvmSender implements ChainSender {
       try {
         final txHash = await MevProtectionService.instance
             .sendProtectedTransaction(chainId: chainId, signedTx: signStr);
+        if (localHash != null && txHash.toLowerCase() != localHash) {
+          return SendResult.uncertain(
+            localHash,
+            'Unexpected broadcast hash',
+            actualAmount: adjustedValue,
+          );
+        }
         return SendResult.ok(txHash, actualAmount: adjustedValue);
       } catch (_) {
         // 落到下方普通 RPC 广播兜底。
@@ -330,7 +363,24 @@ class EvmSender implements ChainSender {
         ) ??
         _errMM();
 
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
+    if (sendMm.error) {
+      if (localHash != null) {
+        return SendResult.uncertain(
+          localHash,
+          sendMm.data?.toString(),
+          actualAmount: adjustedValue,
+        );
+      }
+      return SendResult.fail(sendMm.data?.toString());
+    }
+    if (localHash != null &&
+        sendMm.data?.toString().toLowerCase() != localHash) {
+      return SendResult.uncertain(
+        localHash,
+        'Unexpected broadcast hash',
+        actualAmount: adjustedValue,
+      );
+    }
     return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedValue);
   }
 
@@ -475,7 +525,7 @@ class EvmSender implements ChainSender {
     final baseInfo = _baseInfo(chainConfig);
 
     int read(dynamic value) {
-      if (value is num) return value.toInt();
+      if (value is int) return value;
       if (value is String) return int.tryParse(value) ?? 0;
       return 0;
     }

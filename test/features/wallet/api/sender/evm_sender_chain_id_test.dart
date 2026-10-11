@@ -1,7 +1,35 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 
 void main() {
+  test(
+    'missing or malformed mainnet configuration cannot reach signing',
+    () async {
+      for (final config in <Map<String, dynamic>?>[
+        null,
+        {},
+        {'chainId': 1.5},
+        {'chainId': 0},
+        {'chainId': -1},
+        {'chainId': 'invalid'},
+      ]) {
+        final result = await EvmSender().send(
+          SendParams(
+            coinType: 'N42',
+            fromAddress: '0x0000000000000000000000000000000000000001',
+            toAddress: '0x0000000000000000000000000000000000000002',
+            amount: 1,
+            decimals: 18,
+            path: '',
+            chainConfig: config,
+          ),
+        );
+        expect(result.success, isFalse);
+        expect(result.error, 'Missing mainnet chain ID for N42');
+      }
+    },
+  );
   const config = <String, dynamic>{
     'baseInfo': <String, dynamic>{'chainId': 94, 'chainId_test': 1142},
     'mainnetChainID': 94,

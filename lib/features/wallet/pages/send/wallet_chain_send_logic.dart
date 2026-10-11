@@ -293,6 +293,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         gaslimit: gaslimit,
       );
 
+      if (!mounted) return false;
       if (ethMessage.error == false) {
         gas = ethMessage.data;
         if (_coinType == CoinType.BOBA.name || _coinType == CoinType.OP.name) {
@@ -444,7 +445,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> sendTransaction() async {
-    if (load == Load.loading) {
+    if (load == Load.loading || gasLimitLoad == Load.loading) {
       ToastUtils.show('loading');
       return;
     }
@@ -455,12 +456,31 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
     setState(() => load = Load.loading);
 
-    final toAddr = await toAddressCheck(toTextEditingController.text.trim());
+    final requestedFrom = coinModel.address;
+    final requestedNetwork = coinModel.isTest;
+    final requestedCoinType = _coinType;
+    final requestedWallet = ref.read(wapBridgeProvider).walletIndex;
+    final requestedAddress = toTextEditingController.text.trim();
+    final requestedAmount = valueTextEditingController.text;
+    final requestedNote = noteTextEditingController.text.trim();
+    bool unchanged() =>
+        coinModel.address == requestedFrom &&
+        coinModel.isTest == requestedNetwork &&
+        _coinType == requestedCoinType &&
+        ref.read(wapBridgeProvider).walletIndex == requestedWallet &&
+        toTextEditingController.text.trim() == requestedAddress &&
+        valueTextEditingController.text == requestedAmount &&
+        noteTextEditingController.text.trim() == requestedNote;
+    final toAddr = await toAddressCheck(requestedAddress);
     if (!mounted) return;
+    if (!unchanged()) return setState(() => load = Load.finish);
     if (toAddr == null) return setState(() => load = Load.finish);
 
-    await estimateGasEthLocal(checkAddress: false);
+    final estimated = await estimateGasEthLocal(checkAddress: false);
     if (!mounted) return;
+    if (estimated != true || !unchanged()) {
+      return setState(() => load = Load.finish);
+    }
     if (errorMessage != '') return setState(() => load = Load.finish);
 
     // The asynchronous estimate can raise the fee after the initial amount
@@ -487,8 +507,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ),
     );
     if (!mounted) return;
-    if (check == true) {
-      signTx(trModel);
+    if (check == true && unchanged()) {
+      await signTx(trModel);
     } else {
       setState(() => load = Load.finish);
     }
@@ -520,12 +540,27 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   /// Implemented in host State to construct the confirmation screen.
   Widget buildWalletBaseSend(TransationRecordModel trModel, String chainUnit);
 
+  bool _signing = false;
+  String? _preparedHash;
+
+  Future<int> persistPreparedTransaction(TransationRecordModel record) =>
+      AppDatabase().insertTransationRecord(record);
+
+  Future<SendResult> submitWalletTransaction(SendParams params) => SenderFactory
+      .instance
+      .getSender(params.coinType, chainConfig: params.chainConfig)
+      .send(params);
+
   Future<void> signTx(TransationRecordModel trModel) async {
+    if (_signing || _preparedHash != null) {
+      return;
+    }
     if (!signTxCheck()) {
       if (mounted) setState(() => load = Load.finish);
       return;
     }
     bool completedWithExit = false;
+    _signing = true;
     try {
       final addrType = coinModel.addrType;
       final chainConfig = _isContract
@@ -539,53 +574,65 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
           ? ((chainModel?.coin['decimals'] as num?)?.toInt() ?? 18)
           : _decimals;
 
-      final result = await SenderFactory.instance
-          .getSender(_coinType, chainConfig: chainConfig)
-          .send(
-            SendParams(
-              coinType: _coinType,
-              fromAddress: trModel.from1,
-              toAddress: trModel.to1,
-              amount: toEther(trModel.price.toString(), _decimals).toDouble(),
-              decimals: nativeDecimals,
-              path: path,
-              sendMax: false,
-              isTest: coinModel.isTest,
-              contractAddress: trModel.contract,
-              tokenDecimals: _isContract ? _decimals : 0,
-              memo: trModel.message,
-              privateKey: coinModel.privateKey,
-              chainConfig: chainConfig,
-              // 精确 wei 透传:trModel.price 是精确 BigInt,amount 经 double 往返
-              // 会上浮、令 MAX 全额被误判余额不足(第三轮 P1)。native/合约分别走
-              // valueWeiOverride / tokenValueWeiOverride。
-              valueWeiOverride: _isContract ? null : trModel.price,
-              tokenValueWeiOverride: _isContract ? trModel.price : null,
-            ),
-          );
+      final result = await submitWalletTransaction(
+        SendParams(
+          coinType: _coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), _decimals).toDouble(),
+          decimals: nativeDecimals,
+          path: path,
+          sendMax: false,
+          isTest: coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: _isContract ? _decimals : 0,
+          memo: trModel.message,
+          privateKey: coinModel.privateKey,
+          chainConfig: chainConfig,
+          beforeBroadcast: _blockchainType == BlockchainType.Ethereum.name
+              ? (hash) async {
+                  trModel.txHash = hash;
+                  trModel.trId = await persistPreparedTransaction(trModel);
+                  if (trModel.trId <= 0) {
+                    throw StateError('Transaction was not saved');
+                  }
+                  _preparedHash = hash;
+                }
+              : null,
+          // 精确 wei 透传:trModel.price 是精确 BigInt,amount 经 double 往返
+          // 会上浮、令 MAX 全额被误判余额不足(第三轮 P1)。native/合约分别走
+          // valueWeiOverride / tokenValueWeiOverride。
+          valueWeiOverride: _isContract ? null : trModel.price,
+          tokenValueWeiOverride: _isContract ? trModel.price : null,
+        ),
+      );
 
-      if (!mounted) return;
-      if (result.success) {
+      if (result.success || (_preparedHash != null && result.txHash != null)) {
         trModel.txHash = result.txHash ?? '';
-        trModel.trId = await AppDatabase().insertTransationRecord(trModel);
+        if (trModel.trId == 0) {
+          trModel.trId = await persistPreparedTransaction(trModel);
+        }
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(
-          _coinType,
-          toTextEditingController.text.trim(),
-        );
+        await RecentAddressService.save(_coinType, trModel.to1);
         if (!mounted) return;
-        ToastUtils.show(S.current.g_key_nft_41);
+        ToastUtils.show(
+          result.success
+              ? S.current.g_key_nft_41
+              : S.current.g_key_bridge_tx_pending,
+        );
         completedWithExit = true;
         Navigator.pop(context);
       } else {
+        if (!mounted) return;
         errorMessage = result.error ?? '';
         ToastUtils.show(errorMessage);
       }
     } catch (e) {
       errorMessage = e.toString();
-      ToastUtils.show(e.toString());
+      if (mounted) ToastUtils.show(e.toString());
     } finally {
+      _signing = false;
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});
     }

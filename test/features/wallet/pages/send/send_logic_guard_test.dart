@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_logic.dart';
@@ -79,6 +80,25 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
   String? lastEstimateAmountOverride;
   bool? lastEstimateDismissKeyboard;
   TransationRecordModel? confirmationRecord;
+  bool realSigning = false;
+  int submissions = 0;
+  Completer<void>? submissionGate;
+  final savedRecords = <Map<String, dynamic>>[];
+
+  @override
+  Future<int> persistPreparedTransaction(TransationRecordModel record) async {
+    savedRecords.add(record.toMapDb());
+    return 7;
+  }
+
+  @override
+  Future<SendResult> submitWalletTransaction(SendParams params) async {
+    submissions++;
+    final hash = '0x${'a' * 64}';
+    await params.beforeBroadcast!(hash);
+    if (submissionGate != null) await submissionGate!.future;
+    return SendResult.uncertain(hash, 'fixture response lost');
+  }
 
   @override
   void initState() {
@@ -111,7 +131,13 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
   }
 
   @override
-  Future<void> signTx(TransationRecordModel trModel) async => signatures++;
+  Future<void> signTx(TransationRecordModel trModel) async {
+    if (realSigning) {
+      await super.signTx(trModel);
+    } else {
+      signatures++;
+    }
+  }
 
   @override
   Widget buildWalletBaseSend(TransationRecordModel trModel, String chainUnit) {
@@ -548,6 +574,77 @@ void main() {
       await operation;
       expect(state.estimates, 0);
       expect(state.signatures, 0);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final field in ['amount', 'address', 'note', 'network']) {
+    testWidgets('editing $field during gas lookup discards confirmation', (
+      tester,
+    ) async {
+      final state = await mount(tester);
+      state.estimateGate = Completer<bool>();
+      final operation = state.sendTransaction();
+      await tester.pump();
+      expect(state.estimates, 1);
+      switch (field) {
+        case 'amount':
+          state.valueTextEditingController.text = '2';
+        case 'address':
+          state.toTextEditingController.text = 'another-recipient';
+        case 'note':
+          state.noteTextEditingController.text = 'new-note';
+        case 'network':
+          state.coinModel.isTest = true;
+      }
+      state.estimateGate!.complete(true);
+      await operation;
+      await tester.pumpAndSettle();
+      expect(state.confirmationRecord, isNull);
+      expect(state.signatures, 0);
+      expect(state.load, Load.finish);
+    });
+  }
+
+  testWidgets('switching network during confirmation prevents signing', (
+    tester,
+  ) async {
+    final state = await mount(tester);
+    final operation = state.sendTransaction();
+    await tester.pumpAndSettle();
+    expect(find.text('Confirm ETH'), findsOneWidget);
+    state.coinModel.isTest = true;
+    await tester.tap(find.text('Approve'));
+    await tester.pumpAndSettle();
+    await operation;
+    expect(state.signatures, 0);
+    expect(state.load, Load.finish);
+  });
+
+  testWidgets(
+    'prepared transaction survives leaving and cannot be signed twice',
+    (tester) async {
+      final state = await mount(tester);
+      state.realSigning = true;
+      state.submissionGate = Completer<void>();
+      final record = TransationRecordModel()
+        ..from1 = state.coinModel.address
+        ..to1 = state.resolvedAddress!
+        ..coin = state.coinModel.coin
+        ..coinMiniName = 'ETH'
+        ..price = BigInt.one;
+      final first = state.signTx(record);
+      await tester.pump();
+      await state.signTx(record);
+      expect(state.submissions, 1);
+      expect(state.savedRecords, hasLength(1));
+      expect(state.savedRecords.single['txHash'], '0x${'a' * 64}');
+      await tester.pumpWidget(const SizedBox());
+      state.submissionGate!.complete();
+      await first;
+      await state.signTx(record);
+      expect(state.submissions, 1);
+      expect(record.trId, 7);
       expect(tester.takeException(), isNull);
     },
   );

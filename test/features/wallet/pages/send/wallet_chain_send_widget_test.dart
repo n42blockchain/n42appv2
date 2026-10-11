@@ -47,6 +47,24 @@ void main() {
     return state;
   }
 
+  testWidgets('send waits while a previous gas estimate is in flight', (
+    tester,
+  ) async {
+    final state = await mount(tester);
+    state.valueTextEditingController.text = '0.1';
+    state.toTextEditingController.text =
+        '0x2222222222222222222222222222222222222222';
+    state.amountCheck(value: '0.1');
+    state.gasLimitLoad = Load.loading;
+    await state.sendTransaction();
+    await tester.pump();
+    expect(state.load, Load.finish);
+    expect(state.gasLimitLoad, Load.loading);
+    expect(find.byType(WalletChainSend), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.pump(const Duration(seconds: 8));
+  });
+
   testWidgets('amount validation includes fee in the available balance', (
     tester,
   ) async {

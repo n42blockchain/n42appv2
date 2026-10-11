@@ -84,6 +84,9 @@ class EthAPI {
     );
   }
 
+  /// Verify the selected RPC network before signing.
+  Future<MessageModel> getChainId() => _rpcWithHexParse('eth_chainId', []);
+
   /// 获取 gasPrice
   Future<MessageModel> getGasPrice({
     bool isTest = false,
@@ -129,9 +132,9 @@ class EthAPI {
       };
     } else {
       final toAddress = strip0x(to);
-      final selector = bytesToHex(
-        keccakAscii('transfer(address,uint256)'),
-      ).substring(0, 8).toLowerCase();
+      final selector = bytesToHex(keccakAscii('transfer(address,uint256)'))
+          .substring(0, 8)
+          .toLowerCase();
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
       params = {
         'from': from,
