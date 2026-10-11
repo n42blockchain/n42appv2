@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-10",
+  "base_head": "070a2a2578da0caf2ca1590e9b7948b5eb36009b",
+  "tests_exit": 0,
+  "analyze_exit": 0,
+  "passed_tests": 468,
+  "toolchain": "Flutter 3.47.5 / Dart 3.13.4",
+  "scope": "local regression only",
+  "artifacts": {
+    "tests.log": {
+      "sha256": "3d7f7be3b3c7eebc16196ff70a807e654832901c55f84974bc1a3ad14b2e75ba",
+      "bytes": 103491
+    },
+    "analyze.log": {
+      "sha256": "b88d6fefa55f447eea53260e31bbabbae27d49d5978ac68bf4d35353ead0d609",
+      "bytes": 11129
+    },
+    "toolchain.txt": {
+      "sha256": "d6ac13e4d2654e525b6a590d99fcb6483126594f5b75599360fe602bbe2b6548",
+      "bytes": 319
+    },
+    "change.patch": {
+      "sha256": "1622fe6643e2271df53ce14eac1a5f8ef905e83e388176efcb972b4e08813e6c",
+      "bytes": 2747
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-10",
+  "base_head": "070a2a2578da0caf2ca1590e9b7948b5eb36009b",
+  "passed_tests": 514,
+  "tests_exit": 0,
+  "analyze_exit": 0,
+  "analyze_infos": 48,
+  "scope": "production Widget state machines with controlled async responses; local regression only",
+  "post_test_change": "Add braces to one existing integer-status branch; no behavior change; full analyzer rerun passed",
+  "artifacts": {
+    "tests.log": {
+      "sha256": "5594e6c3ba7ab488437b71c72426ce78949e887a5568a5c7bbe509f6e6fa6f93",
+      "bytes": 110855
+    },
+    "analyze.log": {
+      "sha256": "e0187f3af75bd187f506b5721db319f9172d92e83fe19f4b42d47dc1622f077d",
+      "bytes": 11129
+    },
+    "toolchain.txt": {
+      "sha256": "d6ac13e4d2654e525b6a590d99fcb6483126594f5b75599360fe602bbe2b6548",
+      "bytes": 319
+    },
+    "change.patch": {
+      "sha256": "1ba1d995ff54eb7109d48b7ae9f08dfc1310e4591a098da3e31f45dcc219e12b",
+      "bytes": 23661
+    }
+  }
+}

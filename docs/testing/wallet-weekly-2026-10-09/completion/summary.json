@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-10",
+  "tested_head": "4ab96f0626b63a8fdfca063d722138173988c1f1",
+  "tested_version": "2.5.1+73016",
+  "full_suite": {
+    "passed": 5474,
+    "failed": 0,
+    "exit": 0
+  },
+  "reliability_gate": {
+    "passed": 702,
+    "failed": 0,
+    "exit": 0
+  },
+  "analyzer": {
+    "exit": 0,
+    "infos": 48,
+    "warnings": 0,
+    "errors": 0
+  },
+  "first_full_suite": {
+    "passed": 5471,
+    "failed": 3,
+    "exit": 1,
+    "resolved_by": "1cd85a914"
+  },
+  "implementation_commits": [
+    "1cd85a914",
+    "7b18d560b",
+    "4ab96f062"
+  ],
+  "external_acceptance": "skipped by explicit user instruction",
+  "coverage_threshold": "not measured; no 70 percent coverage claim",
+  "artifacts": {
+    "account-repair.log.gz": {
+      "sha256_uncompressed": "871e6c499abff5440bddc8740051300d73d62fbf05f1041f936276b5e6fd9b15",
+      "bytes_uncompressed": 21438
+    },
+    "analyze.log.gz": {
+      "sha256_uncompressed": "a9c80b24d2ead46d99744e64824ee4022b337c0ed6192ea6d4a875352ca18d59",
+      "bytes_uncompressed": 11129
+    },
+    "first-full-suite.log.gz": {
+      "sha256_uncompressed": "8ee832666b1dd4cbd253bbf33f56ca8013becf88e8fe83ffed98612e88a3e478",
+      "bytes_uncompressed": 1154103
+    },
+    "full-suite.log.gz": {
+      "sha256_uncompressed": "c6987e2fb2c3c72fc41f0101f5d296d00a193c31bedf70a963b1be8cc1ac173f",
+      "bytes_uncompressed": 1139403
+    },
+    "implementation.patch.gz": {
+      "sha256_uncompressed": "86a232d0cc76c28e69ecdd32ce13b2b2776fbdea3a0823cb32faa2c929fcccf8",
+      "bytes_uncompressed": 196327
+    },
+    "source-sha256.json.gz": {
+      "sha256_uncompressed": "97e907c133d75041da665f638baa76a32483faae9d13c43e73dc179ebb3cfe96",
+      "bytes_uncompressed": 199855
+    },
+    "tests.log.gz": {
+      "sha256_uncompressed": "55e9ac1abd4eaa34fd7be8ff4a9dd47cd935349cc4da9f002a508356b4b607ef",
+      "bytes_uncompressed": 148588
+    },
+    "toolchain.txt.gz": {
+      "sha256_uncompressed": "d6ac13e4d2654e525b6a590d99fcb6483126594f5b75599360fe602bbe2b6548",
+      "bytes_uncompressed": 319
+    }
+  }
+}
