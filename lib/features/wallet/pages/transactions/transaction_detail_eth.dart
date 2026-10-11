@@ -33,25 +33,35 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 part 'transaction_detail_eth_sections.dart';
 
-typedef EthDetailLookupForTesting =
-    Future<MessageModel> Function(
-      String txHash, {
-      required String? coinType,
-      required bool isTest,
-    });
+typedef EthDetailLookupForTesting = Future<MessageModel> Function(
+  String txHash, {
+  required String? coinType,
+  required bool isTest,
+});
 
 typedef EthDetailRecordLoaderForTesting =
     Future<List<TransationRecordModel>> Function(String txHash, String address);
 
-bool _isReceiptSuccess(dynamic status) {
-  if (status == null) return false;
+bool? _isReceiptSuccess(dynamic status) {
+  if (status == null) return null;
   if (status is bool) return status;
-  if (status is int) return status == 1;
+  if (status is int) {
+    return status == 1
+        ? true
+        : status == 0
+        ? false
+        : null;
+  }
   final s = status.toString().toLowerCase().trim();
   if (s == '1' || s == 'true') return true;
+  if (s == '0' || s == 'false') return false;
   final hex = s.startsWith('0x') ? s.substring(2) : s;
   final n = int.tryParse(hex, radix: 16);
-  return n != null && n == 1;
+  return n == 1
+      ? true
+      : n == 0
+      ? false
+      : null;
 }
 
 bool shouldContinueEthReceiptPolling({
@@ -99,6 +109,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   TransationRecordModel trm = TransationRecordModel();
   late String _txHash;
   Timer? _pollingTimer;
+  int _requestGeneration = 0;
   late String _explorerUrl;
 
   @override
@@ -116,12 +127,14 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
 
   @override
   void dispose() {
+    _requestGeneration++;
     _pollingTimer?.cancel();
     searchEditingController.dispose();
     super.dispose();
   }
 
   Future<void> init() async {
+    final generation = ++_requestGeneration;
     _pollingTimer?.cancel();
     transactionInfo = null;
     transactionInfoReceipt = null;
@@ -167,19 +180,20 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
             widget.coinModel.address,
           )
         : await recordLoader(_txHash, widget.coinModel.address.toString());
+    if (!mounted || generation != _requestGeneration) return;
     if (trModelList.isNotEmpty) {
       trm = trModelList[0];
     } else {
       trm = buildFallbackTransactionRecord(widget.coinModel);
     }
     final success = await getTransactionByHash();
-    if (!mounted) return;
+    if (!mounted || generation != _requestGeneration) return;
     if (!success) {
       setState(() => load = Load.error);
       return;
     }
     await getTransactionReceipt();
-    if (!mounted) return;
+    if (!mounted || generation != _requestGeneration) return;
     setState(() => load = Load.finish);
   }
 
@@ -193,6 +207,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   bool owner = true; // 是否是自己的交易信息
 
   Future<bool> getTransactionByHash() async {
+    final generation = _requestGeneration;
     final lookup = widget.transactionLookupForTesting;
     final rData = lookup == null
         ? await fetchEvmTransactionByHash(
@@ -206,6 +221,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
             coinType: widget.coinModel.config.coinType,
             isTest: widget.coinModel.isTest,
           );
+    if (!mounted || generation != _requestGeneration) return false;
     if (rData.error != false) {
       errorMessage = rData.data.toString();
       owner = false;
@@ -216,7 +232,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       owner = false;
       return false;
     }
-    transactionInfo = rData.data;
+    transactionInfo = Map<String, dynamic>.from(rData.data as Map);
     errorMessage = "";
     trm.gas = hexToInt(transactionInfo!['gas'] ?? "0x0").toInt();
     trm.gasPriceValue = hexToInt(transactionInfo!['gasPrice'] ?? "0x0");
@@ -363,41 +379,64 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   }
 
   Future<void> getTransactionReceipt() async {
+    final generation = _requestGeneration;
+    final hash = _txHash;
     final lookup = widget.receiptLookupForTesting;
-    final rData = lookup == null
-        ? await fetchEvmTransactionReceipt(
-            ethAPI,
-            txHash: _txHash,
-            coinType: widget.coinModel.config.coinType,
-            isTest: widget.coinModel.isTest,
-          )
-        : await lookup(
-            _txHash,
-            coinType: widget.coinModel.config.coinType,
-            isTest: widget.coinModel.isTest,
-          );
-    final requestError = rData.error != false;
-    final receipt = rData.data as Map<String, dynamic>?;
-    transactionInfoReceipt = receipt;
-    if (!shouldContinueEthReceiptPolling(
-      requestError: requestError,
-      receipt: receipt,
-    )) {
-      errorMessage = "";
-      resultStr = _isReceiptSuccess(transactionInfoReceipt!['status'])
-          ? "Success"
-          : "Failed";
+    MessageModel rData;
+    try {
+      rData = lookup == null
+          ? await fetchEvmTransactionReceipt(
+              ethAPI,
+              txHash: hash,
+              coinType: widget.coinModel.config.coinType,
+              isTest: widget.coinModel.isTest,
+            )
+          : await lookup(
+              hash,
+              coinType: widget.coinModel.config.coinType,
+              isTest: widget.coinModel.isTest,
+            );
+    } catch (_) {
+      if (!mounted || generation != _requestGeneration) return;
+      errorMessage = 'Receipt lookup failed';
+      _startPolling(generation);
       return;
     }
-    errorMessage = requestError ? rData.data.toString() : "";
-    _startPolling();
+    if (!mounted || generation != _requestGeneration) return;
+    final data = rData.data;
+    // Transport failures are not evidence that a previously observed receipt
+    // disappeared. Only a successful null response returns it to pending.
+    if (rData.error != false) {
+      errorMessage = data.toString();
+    } else if (data == null) {
+      transactionInfoReceipt = null;
+      resultStr = 'Pending';
+      errorMessage = '';
+      transactionInfo?['blockHash'] = null;
+    } else if (data is Map<String, dynamic> &&
+        _isReceiptSuccess(data['status']) != null &&
+        (data['transactionHash'] == null || data['transactionHash'] == hash)) {
+      transactionInfoReceipt = data;
+      resultStr = _isReceiptSuccess(data['status'])! ? 'Success' : 'Failed';
+      errorMessage = '';
+      if (data['blockHash'] != null) {
+        transactionInfo?['blockHash'] = data['blockHash'];
+      }
+    } else {
+      errorMessage = 'Invalid transaction receipt';
+    }
+    // Continue observing while the detail page is open, including after the
+    // first receipt: inclusion is not a finality guarantee.
+    _startPolling(generation);
   }
 
-  void _startPolling() {
+  void _startPolling(int generation) {
+    if (!mounted || generation != _requestGeneration) return;
     _pollingTimer?.cancel();
-    _pollingTimer = Timer(const Duration(seconds: 3), () async {
+    final delay = transactionInfoReceipt == null ? 3 : 12;
+    _pollingTimer = Timer(Duration(seconds: delay), () async {
       await getTransactionReceipt();
-      if (mounted) setState(() {});
+      if (mounted && generation == _requestGeneration) setState(() {});
     });
   }
 
