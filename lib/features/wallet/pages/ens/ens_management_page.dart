@@ -227,7 +227,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     final successMessage = S.of(context).g_key_ens_subdomain_deleted;
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(S.of(ctx).g_key_ens_subdomain_delete),
         content: SingleChildScrollView(
           child: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm),
@@ -268,7 +268,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (ctx) => StatefulBuilder(
-          builder: (ctx, setDialogState) => AlertDialog(
+          builder: (ctx, setDialogState) => AlertDialog.adaptive(
             title: Text(S.of(ctx).g_key_ens_transfer),
             content: SingleChildScrollView(
               child: Column(

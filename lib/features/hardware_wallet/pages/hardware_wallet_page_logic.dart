@@ -120,7 +120,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         content: SingleChildScrollView(
           child: Row(
             children: [
@@ -158,7 +158,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
   ) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(s.g_key_hw_remove_device),
         content: SingleChildScrollView(
           child: Text(s.g_key_hw_remove_device_confirm(device.name)),

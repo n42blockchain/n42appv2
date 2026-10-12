@@ -12,7 +12,7 @@ Future<bool?> showGroupConfirmDialog(
   return await showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => AlertDialog(
+    builder: (_) => AlertDialog.adaptive(
       contentPadding: const EdgeInsets.all(0),
       insetPadding: EdgeInsets.all(AppSpacing.space8),
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),

@@ -175,7 +175,7 @@ class _AddressBookListState extends State<AddressBookList>
   Future<bool> _confirmDelete(AddressBookModel info) async {
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(S.of(ctx).g_key_113),
         content: SingleChildScrollView(
           child: Text(info.name ?? info.address ?? ''),

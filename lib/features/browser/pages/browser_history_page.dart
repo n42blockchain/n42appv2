@@ -94,7 +94,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     final s = S.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => AlertDialog.adaptive(
         title: Text(s.g_browser_key19),
         content: SingleChildScrollView(child: Text(s.g_browser_key20)),
         actions: [

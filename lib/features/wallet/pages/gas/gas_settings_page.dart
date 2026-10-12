@@ -286,7 +286,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               ),
             ),
           ),
-          Switch(
+          Switch.adaptive(
             value: _isCustomMode,
             onChanged: (value) => setState(() => _isCustomMode = value),
             activeTrackColor: blueColor.withValues(alpha: 0.5),

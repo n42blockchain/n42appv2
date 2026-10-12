@@ -272,7 +272,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext dialogContext) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             content: SingleChildScrollView(
               child: Text(
                 S.current.g_mining_key20,

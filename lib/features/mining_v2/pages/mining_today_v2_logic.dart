@@ -28,7 +28,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
+        return AlertDialog.adaptive(
           content: SingleChildScrollView(
             child: Text(
               S.current.g_mining_key20,

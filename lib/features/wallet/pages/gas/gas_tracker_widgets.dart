@@ -300,7 +300,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               style: AppTypography.body.copyWith(color: mainText),
             ),
           ),
-          Switch(
+          Switch.adaptive(
             value: _enabled,
             onChanged: _saving ? null : (v) => setState(() => _enabled = v),
             activeThumbColor: blueColor,

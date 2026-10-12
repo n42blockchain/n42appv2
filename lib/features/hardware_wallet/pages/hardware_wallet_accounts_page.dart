@@ -176,7 +176,7 @@ class _HardwareWalletAccountsPageState
   void _useAccount(BuildContext context, HardwareWalletAccount account) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
+      builder: (dialogContext) => AlertDialog.adaptive(
         title: Text(S.of(context).g_key_hw_add_account),
         content: SingleChildScrollView(
           child: Text(

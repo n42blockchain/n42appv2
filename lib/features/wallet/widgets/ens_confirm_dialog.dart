@@ -60,7 +60,7 @@ class EnsConfirmDialog extends StatelessWidget {
     final warningColor = AppColorTokens.of(context).warning;
     final successGreen = AppColorTokens.of(context).success;
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
       backgroundColor: bgColor,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       title: Row(
@@ -340,7 +340,7 @@ class EnsResolvingDialog extends StatelessWidget {
     final mainTextColor = AppColorTokens.of(context).textPrimary;
     final blueColor = AppColorTokens.of(context).brand;
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
       backgroundColor: bgColor,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       content: SingleChildScrollView(

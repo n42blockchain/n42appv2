@@ -145,7 +145,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                     ],
                   ),
                 ),
-                Switch(
+                Switch.adaptive(
                   value: _reminderEnabled,
                   activeThumbColor: AppColorTokens.of(context).brand,
                   onChanged: _reminderSaving ? null : _toggleReminder,

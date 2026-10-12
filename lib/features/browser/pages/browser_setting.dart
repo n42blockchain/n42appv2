@@ -62,7 +62,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    Switch(
+                    Switch.adaptive(
                       value: browser['connectDApp'] == true,
                       activeTrackColor: AppColorTokens.of(context).brand,
                       onChanged: (value) {

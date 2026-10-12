@@ -159,10 +159,10 @@ void main() {
     await draft(tester, symbol: 'ETH', chainId: '1');
     for (var attempt = 0; attempt < 2; attempt++) {
       await submit(tester);
-      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.bySubtype<AlertDialog>(), findsOneWidget);
       await tester.tap(find.text(S.current.g_key_79));
       await tester.pumpAndSettle();
-      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.bySubtype<AlertDialog>(), findsNothing);
       expect(find.byType(WalletChainAdd), findsOneWidget);
       expect(value(tester, 1), 'ETH');
     }

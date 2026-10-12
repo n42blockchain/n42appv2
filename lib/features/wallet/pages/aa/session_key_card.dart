@@ -350,7 +350,7 @@ class SessionKeyCard extends StatelessWidget {
   void _confirmRevoke(BuildContext context) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(S.of(ctx).g_key_aa_revoke_session),
         content: SingleChildScrollView(
           child: Text(S.of(ctx).g_key_aa_revoke_confirm),

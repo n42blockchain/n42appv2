@@ -28,7 +28,7 @@ class BatchConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final contentColor = AppColorTokens.of(context).textSecondary;
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
       backgroundColor: AppColorTokens.of(context).bgElevated,
       title: Text(
         S.of(context).g_key_batch_confirm_title,
@@ -256,7 +256,7 @@ class BatchHelpDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor = AppColorTokens.of(context).textSecondary;
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
       backgroundColor: AppColorTokens.of(context).bgElevated,
       title: Text(
         S.of(context).g_key_batch_help_title,

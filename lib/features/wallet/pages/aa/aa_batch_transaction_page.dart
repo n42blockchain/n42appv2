@@ -318,7 +318,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     try {
       final confirmed = await showDialog<bool>(
         context: context,
-        builder: (ctx) => AlertDialog(
+        builder: (ctx) => AlertDialog.adaptive(
           title: Text(S.of(ctx).g_key_aa_batch_save_template),
           content: SingleChildScrollView(
             child: TextField(

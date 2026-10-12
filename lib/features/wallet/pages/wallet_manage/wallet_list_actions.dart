@@ -46,7 +46,7 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
   Future<void> _onDelete(WalletInfo info) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(
           S.of(ctx).g_face_3,
           style: AppTypography.headline.copyWith(

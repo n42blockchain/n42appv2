@@ -128,7 +128,7 @@ class _MiningSettingsState extends State<MiningSettings> {
               maxLines: 1,
             ),
           ),
-          Switch(
+          Switch.adaptive(
             onChanged: (bool value) async {
               var connectivityResult = await (Connectivity()
                   .checkConnectivity());

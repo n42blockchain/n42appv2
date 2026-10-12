@@ -14,7 +14,7 @@ Future<bool> confirmDexApproval(
   final s = S.of(context);
   final consent = await showDialog<bool>(
     context: context,
-    builder: (context) => AlertDialog(
+    builder: (context) => AlertDialog.adaptive(
       title: Text(s.g_key_dex_approve_required(tokenSymbol)),
       content: SingleChildScrollView(
         child: Column(

@@ -135,7 +135,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
   void showBurnNftTip(BuildContext context) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         backgroundColor: AppColorTokens.of(context).bgElevated,
         title: Row(
           children: [

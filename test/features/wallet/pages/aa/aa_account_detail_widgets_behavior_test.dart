@@ -70,7 +70,7 @@ void main() {
     expect(find.text(l10n.g_key_aa_receive_address), findsOneWidget);
     expect(find.text(_accountAddress), findsWidgets);
     expect(find.byType(SelectableText), findsOneWidget);
-    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.bySubtype<AlertDialog>(), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

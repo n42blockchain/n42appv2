@@ -61,7 +61,7 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(results, [proceed]);
-          expect(find.byType(AlertDialog), findsNothing);
+          expect(find.bySubtype<AlertDialog>(), findsNothing);
           expect(find.text('Open warning'), findsOneWidget);
           expect(tester.takeException(), isNull);
         },
@@ -77,11 +77,11 @@ void main() {
       await tester.tapAt(const Offset(2, 2));
       await tester.pumpAndSettle();
       expect(results, isEmpty);
-      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.bySubtype<AlertDialog>(), findsOneWidget);
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(results, [null]);
-      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.bySubtype<AlertDialog>(), findsNothing);
     },
   );
 

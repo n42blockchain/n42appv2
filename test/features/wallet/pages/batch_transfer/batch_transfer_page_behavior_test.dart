@@ -116,7 +116,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.help_outline));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.bySubtype<AlertDialog>(), findsOneWidget);
     expect(
       find.text(
         'address,amount,memo\n0x123...,1.5,Note 1\n0xabc...,2.0,Note 2',

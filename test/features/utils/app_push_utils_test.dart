@@ -409,7 +409,7 @@ void main() {
 
     expect(messaging.notificationSettingsRequests, settingsRequests + 1);
     expect(messaging.permissionRequests, permissionRequests);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.bySubtype<AlertDialog>(), findsNothing);
   });
 
   testWidgets(
@@ -424,7 +424,7 @@ void main() {
       try {
         await tester.runAsync(AppPushUtils.checkAndPromptPermission);
         expect(messaging.permissionRequests, permissionRequests + 1);
-        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.bySubtype<AlertDialog>(), findsNothing);
         expect(app.globalProviderContainer.read(unreadCountProvider), 0);
       } finally {
         debugDefaultTargetPlatformOverride = previousPlatform;

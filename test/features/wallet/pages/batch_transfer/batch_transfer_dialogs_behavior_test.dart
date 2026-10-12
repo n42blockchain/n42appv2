@@ -82,7 +82,7 @@ void main() {
 
     await _openConfirmDialog(tester, provider, (value) => result = value);
 
-    final dialog = find.byType(AlertDialog);
+    final dialog = find.bySubtype<AlertDialog>();
     expect(find.textContaining('2'), findsWidgets);
     expect(find.textContaining('3.5 USDC'), findsOneWidget);
     expect(find.textContaining('750000000000000 wei'), findsOneWidget);
@@ -106,7 +106,7 @@ void main() {
     await _openConfirmDialog(tester, provider, (value) => result = value);
     await tester.tap(
       find.descendant(
-        of: find.byType(AlertDialog),
+        of: find.bySubtype<AlertDialog>(),
         matching: find.byType(ElevatedButton),
       ),
     );
@@ -148,7 +148,7 @@ void main() {
     expect(
       find.textContaining(
         S
-            .of(tester.element(find.byType(AlertDialog)))
+            .of(tester.element(find.bySubtype<AlertDialog>()))
             .g_key_batch_memo_optional,
       ),
       findsOneWidget,
@@ -156,13 +156,13 @@ void main() {
 
     await tester.tap(
       find.descendant(
-        of: find.byType(AlertDialog),
+        of: find.bySubtype<AlertDialog>(),
         matching: find.byType(TextButton),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.bySubtype<AlertDialog>(), findsNothing);
   });
 
   testWidgets('result sheet exports and closes with a transaction summary', (

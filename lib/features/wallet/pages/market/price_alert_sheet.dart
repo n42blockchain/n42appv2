@@ -340,7 +340,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         ),
                       ),
                       const Spacer(),
-                      Switch(
+                      Switch.adaptive(
                         value: _enabled,
                         onChanged: (v) => setState(() => _enabled = v),
                         activeTrackColor: accentColor,

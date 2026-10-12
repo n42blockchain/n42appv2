@@ -142,7 +142,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
     // 确认弹窗
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(S.of(ctx).g_key_nft_burn_title),
         content: SingleChildScrollView(
           child: Text(S.of(ctx).g_key_nft_burn_confirm),

@@ -77,7 +77,7 @@ void main() {
     await tester.tap(find.text(S.of(context).g_key_78));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.bySubtype<AlertDialog>(), findsNothing);
     expect(find.byType(MiningFullNodeV2), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
@@ -92,11 +92,11 @@ void main() {
     await tester.tap(find.text(S.of(context).g_key_78));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.bySubtype<AlertDialog>(), findsOneWidget);
     await tester.tap(find.text(S.of(context).g_key_79));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.bySubtype<AlertDialog>(), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -113,7 +113,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.tap(find.byType(FilledButton));
     await tester.pump();
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.bySubtype<AlertDialog>(), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

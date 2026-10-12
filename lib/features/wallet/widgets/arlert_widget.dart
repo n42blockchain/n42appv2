@@ -10,7 +10,7 @@ Future<void> alertWidget(BuildContext context) async {
     context: context,
     barrierDismissible: true, // user must tap button!
     builder: (BuildContext context) {
-      return AlertDialog(
+      return AlertDialog.adaptive(
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,

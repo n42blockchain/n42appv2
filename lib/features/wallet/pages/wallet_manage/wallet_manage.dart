@@ -133,7 +133,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
         );
         final actionStyle = AppTypography.body.copyWith(color: blueColor);
 
-        return AlertDialog(
+        return AlertDialog.adaptive(
           title: Text(
             s.g_face_3,
             style: AppTypography.headline.copyWith(color: mainText),

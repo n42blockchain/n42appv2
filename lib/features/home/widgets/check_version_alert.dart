@@ -60,7 +60,7 @@ class CheckVersionAlert extends StatelessWidget {
       onPopInvokedWithResult: (didPop, _) {
         // 强制更新时阻止返回键关闭弹窗
       },
-      child: AlertDialog(
+      child: AlertDialog.adaptive(
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
         backgroundColor: dialogBg,
         contentPadding: EdgeInsets.fromLTRB(

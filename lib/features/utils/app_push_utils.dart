@@ -658,7 +658,7 @@ class AppPushUtils {
       await showDialog<void>(
         context: ctx,
         barrierDismissible: false,
-        builder: (dialogCtx) => AlertDialog(
+        builder: (dialogCtx) => AlertDialog.adaptive(
           title: Text(s.push_permission_dialog_title),
           content: Text(s.push_permission_dialog_content),
           actionsAlignment: MainAxisAlignment.center,
@@ -728,7 +728,7 @@ class AppPushUtils {
       await showDialog<void>(
         context: ctx,
         barrierDismissible: false,
-        builder: (dialogCtx) => AlertDialog(
+        builder: (dialogCtx) => AlertDialog.adaptive(
           title: Text(s.push_bg_delivery_dialog_title),
           content: Text(s.push_bg_delivery_dialog_content),
           actionsAlignment: MainAxisAlignment.center,

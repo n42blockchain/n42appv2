@@ -98,7 +98,7 @@ extension on _SecuritySettingState {
               style: AppTypography.body.copyWith(color: titleColor),
             ),
           ),
-          Switch(
+          Switch.adaptive(
             key: switchKey,
             activeTrackColor: AppThemeUtils.getColorByKey(
               context,

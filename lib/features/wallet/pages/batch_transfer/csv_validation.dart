@@ -169,7 +169,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Row(
           children: [
             Icon(Icons.warning_amber, color: c.warning),

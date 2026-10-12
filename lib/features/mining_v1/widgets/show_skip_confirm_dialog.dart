@@ -10,7 +10,7 @@ Future<bool?> showSKipConfirmDialog(
   return await showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (_) => AlertDialog(
+    builder: (_) => AlertDialog.adaptive(
       contentPadding: const EdgeInsets.all(0),
       //这是宽度沾满宽度
       insetPadding: EdgeInsets.all(AppSpacing.space6),

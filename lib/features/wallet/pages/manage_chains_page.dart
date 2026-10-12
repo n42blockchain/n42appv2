@@ -97,7 +97,7 @@ class ManageChainsPage extends ConsumerWidget {
                 color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
-            trailing: Switch(
+            trailing: Switch.adaptive(
               value: cm.showList,
               activeThumbColor: AppColorTokens.of(context).brand,
               onChanged: (_) => wap.toggleChainVisibility(cm),

@@ -127,7 +127,7 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         content: Text(S.of(context).g_lock_key23),
         actions: [
           TextButton(
