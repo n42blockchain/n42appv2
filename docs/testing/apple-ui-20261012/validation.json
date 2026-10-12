@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-12",
+  "app_source_commit": "8a3449c3bb5cf20266c2844dc2f8f8935178d607",
+  "chat_source_commit": "d7ad37ada3bc0960517fbd83d469561be82d3b68",
+  "toolchain": {
+    "flutter": "3.47.5",
+    "dart": "3.13.4"
+  },
+  "app_tests": {
+    "passed": 5515,
+    "failed": 0,
+    "exit_code": 0,
+    "log": "/tmp/n42-apple-ui-accepted-full-tests.log"
+  },
+  "chat_ui_tests": {
+    "passed": 772,
+    "failed": 0,
+    "exit_code": 0,
+    "log": "/tmp/n42-chat-apple-ui-final-tests.log"
+  },
+  "app_analyze": {
+    "exit_code": 0,
+    "infos": 48,
+    "warnings": 0,
+    "errors": 0,
+    "log": "/tmp/n42-apple-ui-accepted-final-analyze.log"
+  },
+  "chat_analyze": {
+    "exit_code": 0,
+    "infos": 336,
+    "warnings": 0,
+    "errors": 0,
+    "log": "/tmp/n42-chat-apple-ui-final-analyze.log"
+  },
+  "shared_controls": {
+    "widths": [
+      320,
+      390,
+      768
+    ],
+    "text_scales": [
+      1,
+      1.6,
+      2,
+      3
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "test_platform": "iOS"
+  },
+  "wallet_resize": {
+    "sizes": [
+      [
+        800,
+        720
+      ],
+      [
+        720,
+        800
+      ],
+      [
+        320,
+        720
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "text_scales": [
+      1,
+      2,
+      3
+    ],
+    "state_preserved": true
+  },
+  "visual_review": {
+    "type": "Flutter widget rendering with locally loaded macOS SF font and iOS platform variant",
+    "locale": "English",
+    "native_device_capture": false,
+    "artifacts": [
+      {
+        "file": "controls-true-2.0.png",
+        "sha256": "8d8bbabe913b3d2db813280a05de6e83ef4b8b2161561219efae84c6b1cda1c3"
+      },
+      {
+        "file": "controls-true-1.0.png",
+        "sha256": "34d5cff027e733ea459bd9a208382b328f8efa628cfbd4726d1017488d079e6f"
+      },
+      {
+        "file": "controls-false-1.0.png",
+        "sha256": "f95cba27f9e35ea8ca5d3ee07f0417cfa34bb9b83acaa9b7a9b198c8843ef0f0"
+      },
+      {
+        "file": "controls-false-2.0.png",
+        "sha256": "23030e1679a86dbc908f761b0a7f30deb9ff00ca6107f92c7e134f6438faf9b7"
+      }
+    ]
+  },
+  "unverified": [
+    "physical iPhone Duo",
+    "VoiceOver hardware acceptance",
+    "native CJK font rendering on hardware",
+    "every authenticated business flow on hardware"
+  ]
+}

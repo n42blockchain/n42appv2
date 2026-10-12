@@ -4,19 +4,17 @@
 > 适用范围：主程序 `n42appv2`、聊天插件 `n42_chat`（独立 repo）、直播模块 `features/live`。
 > 配套工具：`/ui-review` skill（`.claude/skills/ui-review/`）按本规范审查任意页面并产出整改补丁。
 
-版本：v1.2（2026-06-08，品牌主色切靛蓝 `#5B6CFF`）· v1.1（深冷中性 + 提亮语义 + 标题负字距）· 维护：UI/UE 小组
+版本：v2.0（2026-10-12，Apple 默认字阶、系统配色与逻辑点控件）· 维护：UI/UE 小组
 
 ---
 
-## 0. 设计基调（Design Language）
+## 0. 设计基调
 
-**克制版「深色优先 · 现代加密钱包」。**
+默认使用 Apple 系统蓝、系统明暗中性色和语义颜色。保留菜单中全部旧配色预设、强调色选择和已保存的自定义选择；没有自定义选择时才使用新的 Apple 默认配色。明暗模式仍可分别选择。
 
-- **深色优先**：钱包/交易/DeFi/挖矿是 App 主体，行业惯例（Binance / OKX / MetaMask / Phantom）皆深色优先——突出数字、护眼、专业感；直播本就深色竖屏。**亮色主题必须保留**（已有双套），但设计先在深色下定稿。
-- **单一品牌强调**：全局 CTA / 链接 / 选中态统一用品牌靛蓝 `#5B6CFF`（AI-native 现代调；可被用户 accent 覆盖）。聊天气泡的微信绿仅作为**聊天语境专用语义色**保留，不外溢到钱包/直播。
-- **层级靠对比而非装饰**：用背景分层（base → surface → elevated）+ 字重/字号建立层级，少用边框和阴影。
-- **玻璃拟态/渐变克制**：仅用于浮层、直播间叠层、首页资产卡高光；列表/表单/详情页保持纯色，杜绝满屏渐变。
-- **动效服务于反馈**：默认 `fast 150ms / base 250ms`，仅用于状态切换、入场、点赞飘心；不做无意义循环动画。
+字体、字阶、间距、圆角和触控规范跨配色保持一致。iOS/macOS 使用系统 SF Text/Display，其他平台使用系统字体回退。字体不随屏幕宽度放大或缩小，文字缩放通过系统 TextScaler 生效。
+
+规范来源：[Apple Typography](https://developer.apple.com/design/human-interface-guidelines/typography)、[Buttons](https://developer.apple.com/design/human-interface-guidelines/buttons)、[Layout](https://developer.apple.com/design/human-interface-guidelines/layout)、[WWDC UI typography](https://developer.apple.com/videos/play/wwdc2020/10175/)。Flutter Cupertino 的系统字体别名和字距也作为实现参考。4pt 间距节奏、16pt 页边距和圆角档位是产品统一令牌；Apple HIG 没有规定所有页面必须使用同一个间距或圆角。
 
 ---
 
@@ -24,83 +22,60 @@
 
 令牌是规范的可执行载体。落地为 Dart 常量类，**禁止**在业务代码里再写裸 `Color(0x...)` / `fontSize: 28` / `EdgeInsets.all(16)`。
 
-> 单位说明：主程序用 `flutter_screenutil`，设计基准 **750×1334（=375 逻辑宽的 2×）**。故下表「token 值」是 `.w / .sp` 传入值（≈逻辑像素 ×2）；括号内为 375 基准下的等效 dp，便于和 chat（M3，逻辑像素）对齐。chat repo 直接用括号内的逻辑像素值。
+> 单位：以下字体、间距、圆角和触控范围均使用逻辑点，不经过 `.sp/.w`。旧插图、导出位图、部分业务几何仍可保留 ScreenUtil 的 750 设计坐标。
 
-### 1.1 颜色 · 语义令牌（跨 repo 统一）
+### 1.1 默认系统配色
 
-品牌与语义色统一一套，**两个 repo 数值必须一致**：
-
-| 语义 | Token | Light | Dark | 用途 |
-|---|---|---|---|---|
-| 品牌主色 | `brand` | `#5B6CFF` | `#5B6CFF` | 主 CTA、链接、选中、进度（经 colorScheme.primary，可被 accent 覆盖） |
-| 品牌弱 | `brandSubtle` | `#ECEDFF` | `#232A52` | 主色背景填充、选中底 |
-| 成功 | `success` | `#1FB67A` | `#2ED391` | 涨、成功、确认 |
-| 危险 | `danger` | `#F23D52` | `#FF5C6C` | 跌、失败、删除、风险 |
-| 警告 | `warning` | `#FF8A1F` | `#FFA53D` | 警示、待处理 |
-| 信息 | `info` | `#2E90FA` | `#52A6FF` | 中性提示 |
-| 聊天-自气泡 | `chatBubbleSelf` | `#95EC69` | `#3EB575` | **仅聊天**，勿外溢 |
-
-> 涨跌色遵循国内习惯（红涨绿跌）时，用 `danger`=涨、`success`=跌的语义映射在业务层切换，**不要新增色值**。
-
-### 1.2 颜色 · 中性分层（深色优先）
-
-| 角色 | Token | Dark | Light | 说明 |
-|---|---|---|---|---|
-| 背景底 | `bgBase` | `#0E0F13` | `#F5F6F8` | Scaffold 最底 |
-| 表面 | `bgSurface` | `#16181F` | `#FFFFFF` | 卡片、列表项 |
-| 浮起 | `bgElevated` | `#1E212B` | `#FFFFFF` | 弹窗、BottomSheet、菜单 |
-| 分隔线 | `border` | `#2A2D38` | `#E6E8EC` | 描边、分割 |
-| 文字主 | `textPrimary` | `#FFFFFF` | `#1A1C22` | 标题、关键数字 |
-| 文字次 | `textSecondary` | `#A4A9B5` | `#5B6270` | 副文本、说明 |
-| 文字弱 | `textTertiary` | `#6B7180` | `#9AA0AC` | 占位、时间戳、禁用 |
-| 反白覆盖 | `overlay` | `rgba(0,0,0,.55)` | 同 | 直播/图片上叠层 |
-
-> 主程序现有 `AppThemeKeys`/`lightMap`/`darkMap` 不推翻——把上表登记为**语义别名**映射到现有 key，新代码只引用语义名。chat 现有 `AppColors` 同理收口。
-
-### 1.3 字阶（Typography）
-
-字体族：跟随系统（iOS SF / Android Roboto），不内嵌字体。字重仅用 `w400 / w500 / w600`。
-**大标题紧排**：`displayLg/titleLg/title/headline` 带轻微负字距（-0.5 ~ -0.2），现代/AI 产品的紧致标题质感；正文及以下不加字距。
-
-| Token | size (.sp / dp) | weight | 行高 | 用途 |
-|---|---|---|---|---|
-| `displayLg` | 48 / 24 | 600 | 1.2 | 资产总额、开屏大数字 |
-| `titleLg` | 40 / 20 | 600 | 1.25 | 页面大标题 |
-| `title` | 36 / 18 | 600 | 1.3 | 卡片标题、AppBar |
-| `headline` | 32 / 16 | 600 | 1.3 | 小节标题、重要项 |
-| `body` | 28 / 14 | 400 | 1.4 | 正文（默认） |
-| `bodyStrong` | 28 / 14 | 600 | 1.4 | 正文强调、金额 |
-| `bodySm` | 26 / 13 | 400 | 1.4 | 次要正文 |
-| `caption` | 24 / 12 | 400 | 1.3 | 时间戳、辅助 |
-| `captionSm` | 20 / 10 | 500 | 1.2 | 标签、徽章 |
-
-> 收敛规则：现有散落的 `30/31` 一律就近归并到 `28` 或 `32`；`22/23` 归 `24`。
-
-### 1.4 间距（Spacing，8pt 网格）
-
-| Token | .w / dp | 典型用途 |
+| 角色 | Light | Dark |
 |---|---|---|
-| `space2` | 8 / 4 | 图标与文字、紧凑内距 |
-| `space4` | 16 / 8 | 元素间最小间距 |
-| `space6` | 24 / 12 | 卡片内距、行距 |
-| `space8` | 32 / 16 | **页面水平边距（标准）**、卡片间距 |
-| `space12` | 48 / 24 | 区块间距 |
-| `space16` | 64 / 32 | 大区块、空状态留白 |
+| 强调色 | 系统蓝 `#007AFF` | 系统蓝 `#0A84FF` |
+| 页面底 | systemGroupedBackground `#F2F2F7` | `#000000` |
+| 卡片/分组 | secondarySystemGroupedBackground `#FFFFFF` | `#1C1C1E` |
+| 主文字 | label | label |
+| 次文字 | secondaryLabel | secondaryLabel |
+| 弱文字 | tertiaryLabel | tertiaryLabel |
+| 分隔线 | separator | separator |
+| 成功/错误/警示 | systemGreen / systemRed / systemOrange | 对应深色系统色 |
 
-> 收敛规则：现有 `30→32`、`20→16 或 24`、`10→8`。页面统一左右 `space8`。
+### 1.2 自定义配色与固定语义
 
-### 1.5 圆角（Radius）
+`ThemeAdapter.defaultAccent` 表示 Apple 默认；旧靛蓝、翡翠、深空、暗夜紫等预设保留。自定义强调色经 ColorScheme 和主题令牌传播，保留旧中性色表。已保存的颜色不被覆盖，重置回 Apple 默认。聊天入口保留宿主主题，不再另行覆盖背景、字距和系统字号。
 
-| Token | .w / dp | 用途 |
-|---|---|---|
-| `radiusSm` | 8 / 4 | 标签、徽章、小输入 |
-| `radiusMd` | 16 / 8 | 二级卡片、图片 |
-| `radiusLg` | 24 / 12 | 弹窗内卡片 |
-| `radiusXl` | 32 / 16 | **主卡片 / 按钮（标准）** |
-| `radiusSheet` | 40 / 20 | BottomSheet / Dialog 顶部 |
-| `radiusPill` | 999 | 胶囊按钮、头像角标 |
+照片、视频和直播叠层继续使用固定白色文字/半透明黑底，保证内容上可读。币种标识、图表分类和插图颜色属于业务内容，不作为系统控件强调色。聊天默认自气泡使用系统蓝，独立聊天背景设置保留。
 
-> chat 消息气泡保留「三角 14dp + 一角 4dp」的微信特征，登记为 `radiusBubble`/`radiusBubbleTail`，不并入通用阶。
+### 1.3 字阶
+
+| Token | 字号 | 字重 | 行高 | 字距 |
+|---|---:|---:|---:|---:|
+| displayXl | 34 | 700 | 41 | 0.38 |
+| displayLg | 28 | 400 | 34 | 0.36 |
+| titleLg | 22 | 400 | 28 | 0.35 |
+| title | 20 | 400 | 25 | 0.38 |
+| headline | 17 | 600 | 22 | -0.41 |
+| body / bodyStrong | 17 | 400 / 600 | 22 | -0.41 |
+| bodySm / subheadline | 15 | 400 | 20 | -0.23 |
+| footnote | 13 | 400 | 18 | -0.08 |
+| caption | 12 | 400 | 16 | 0 |
+| captionSm | 11 | 400 | 13 | 0.07 |
+
+字号使用默认 Dynamic Type 字阶；系统缩放不被截断。字体与字距采用 Cupertino/Apple 系统指标，不再统一加负字距。OTP 数字分组和开屏品牌字标可保留功能性字距；普通正文、标题、金额沿用语义样式。
+
+### 1.4 间距
+
+| Token | 逻辑点 | 用途 |
+|---|---:|---|
+| space2 | 4 | 紧凑内距 |
+| space4 | 8 | 元素间距 |
+| space6 | 12 | 卡片内距 |
+| space8 | 16 | 页面水平边距、卡片间距 |
+| space12 | 24 | 区块间距 |
+| space16 | 32 | 大区块、空状态 |
+
+### 1.5 圆角与触控
+
+圆角档位为 4 / 8 / 12 / 16 / 20pt，使用现有 AppRadius 名称。共用主按钮使用 12pt，面板顶部使用 20pt。
+
+触控范围至少 44×44pt。按钮、输入和导航使用最小高度；大字可以增加高度，不能压缩字体来适应固定高度。短屏内容允许滚动。钱包筛选栏在窄屏或大字下改为多行，固定头部的高度与内容一致。
 
 ### 1.6 高度 / 阴影（Elevation）
 
@@ -125,14 +100,14 @@
 ## 2. 组件准则（Component Guidelines）
 
 ### 2.1 按钮
-- 三类：**Primary**（`brand` 填充，白字，`radiusXl`，高 ≈ 96.h/48dp）、**Secondary**（`border` 描边，`textPrimary`）、**Text/Ghost**（无底，`brand` 字）。
+- 三类：**Primary**（`brand` 填充，白字，`radiusLg`，最小 44pt、大字可增高）、**Secondary**（`border` 描边，`textPrimary`）、**Text/Ghost**（无底，`brand` 字）。
 - 危险操作用 Primary + `danger` 底。禁用态：`textTertiary` 字 + `bgSurface` 底，不可点。
 - **必须有按压态**（透明度或缩放 `durFast`）与 loading 态（替换文案为 spinner）。
 - 主程序 `button_widget.dart` 的 6 个 styleN 收敛映射到这三类，逐步弃用裸样式。
 
 ### 2.2 卡片 / 列表项
 - 统一 `AppCard`：`bgSurface` + `radiusXl` + 内距 `space6/space8` + `elevCard`。各 feature **禁止**再自造 card 容器。
-- 列表项最小可点高度 **≥ 48dp**；左右边距 `space8`；分隔线 `border` 1px，左缩进与内容对齐。
+- 列表项最小可点高度 **≥ 44pt**；左右边距 `space8`；分隔线 `border` 1px，左缩进与内容对齐。
 
 ### 2.3 输入框
 - 统一 `AppTextField`：`bgSurface`/描边 `border`，聚焦描边 `brand`，错误描边 `danger` + 下方 `caption` 红字。
@@ -150,7 +125,7 @@
 ### 2.6 无障碍 / 触控
 - 触控目标 ≥ 44×44 dp。正文与背景对比度 ≥ 4.5:1，大字 ≥ 3:1。
 - 不靠颜色单独传达状态（涨跌/成败需配图标或文字）。
-- 支持系统字号放大不溢出（`minTextAdapt` 已开，关键页验证 130%）。
+- 支持系统字号放大不溢出（共享控件验证 100% / 160% / 200% / 300%，系统缩放不截断）。
 
 ### 2.7 徽章 / 状态药丸
 - 统一 `AppBadge`：胶囊形（`radiusPill`），色调底（语义色 12% alpha）+ 同色文字（`captionSm`），可选前导**圆点** / **图标** / **自定义 leading**（承接「处理中」动画 spinner）。
@@ -173,7 +148,7 @@
 1. **建令牌层**（主程序 `core/design_system/` + chat 常量）——一次性，零行为变更。
 2. **收敛重复组件**：`AppDialog`、`AppCard`、`AppTextField`、按钮三类。
 3. **逐模块审查整改**：用 `/ui-review <feature>` 输出违规清单 + 补丁，按 feature 推进（建议序：直播 live → 钱包首页 wallet/home → 交易 swap/market → 挖矿 mining → 设置/个人 → chat）。
-4. **回归**：每模块 `flutter analyze` + 截图前后对比；关键页验证亮/暗双主题 + 130% 字号。
+4. **回归**：每模块 `flutter analyze` + 截图前后对比；关键页验证亮/暗双主题 + 100%～300% 字号。
 
 整改进度登记在 `docs/UI_POLISH_PROGRESS.md`（首次运行 /ui-review 时创建）。
 
