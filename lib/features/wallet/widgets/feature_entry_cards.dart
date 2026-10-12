@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -129,7 +131,12 @@ class FeatureEntryHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setWidth(128),
+      height: math.max(
+        64,
+        MediaQuery.textScalerOf(context).scale(12) * 16 / 12 +
+            MediaQuery.textScalerOf(context).scale(11) * 13 / 11 +
+            30,
+      ),
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: ListView(
         scrollDirection: Axis.horizontal,
@@ -144,7 +151,10 @@ class FeatureEntryHorizontal extends StatelessWidget {
             subtitle: ensName != null
                 ? S.of(context).g_key_ens_your_identity
                 : S.of(context).g_key_ens_register_now,
-            gradientColors: const [Color(0xFF5E97F6), Color(0xFF8B5CF6)],
+            gradientColors: [
+              AppColorTokens.of(context).brand,
+              AppColorTokens.of(context).brand,
+            ],
             onTap: onEnsTap,
             enabled: ensEnabled,
             showBadge: ensName != null,
@@ -163,7 +173,10 @@ class FeatureEntryHorizontal extends StatelessWidget {
                       ? S.of(context).g_key_aa_ready
                       : S.of(context).g_key_aa_pending)
                 : S.of(context).g_key_aa_gasless,
-            gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
+            gradientColors: [
+              AppColorTokens.of(context).brand,
+              AppColorTokens.of(context).brand,
+            ],
             onTap: onSmartAccountTap,
             enabled: smartAccountEnabled,
             showBadge: hasSmartAccount,
@@ -193,7 +206,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
       onTap: onTap,
       borderRadius: AppRadius.brMd,
       child: Container(
-        width: ScreenUtil().setWidth(320),
+        width: MediaQuery.textScalerOf(context).scale(12) > 18
+            ? (MediaQuery.sizeOf(context).width - 32).clamp(160.0, 420.0)
+            : 160,
         padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -262,26 +277,22 @@ class FeatureEntryHorizontal extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        title,
-                        style: AppTypography.caption.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                     SizedBox(height: AppSpacing.space2),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        subtitle,
-                        style: AppTypography.captionSm.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.captionSm.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                   ],

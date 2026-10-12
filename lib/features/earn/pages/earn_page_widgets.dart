@@ -274,7 +274,6 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                                 style: AppTypography.captionSm.copyWith(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
-                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ),

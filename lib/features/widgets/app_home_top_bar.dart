@@ -1,5 +1,4 @@
 import 'package:n42_wallet/core/providers/core_providers.dart';
-import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -37,12 +36,11 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
   @override
   Widget build(BuildContext context) {
     final userInfo = ref.watch(currentUserProvider);
-    final isWide = ResponsiveUtils.isTablet(context);
 
     return Container(
       color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: isWide ? 16.0 : 8.0),
-      height: isWide ? 56.0 : ScreenUtil().setWidth(110.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      constraints: const BoxConstraints(minHeight: 44),
       child: Row(
         children: [
           _buildLeftWidget(userInfo?.image),
@@ -78,17 +76,19 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
     if (widget.onLeftImageUri == null) {
       return GestureDetector(
         key: widget.leftActionKey,
+        behavior: HitTestBehavior.opaque,
         onTap: widget.onLeftImageClick,
-        child: Container(
-          width: ScreenUtil().setWidth(64.0),
-          height: ScreenUtil().setWidth(64.0),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32.0)),
-          ),
-          child: ImageNetWork(
-            imageUrl: userImage ?? '',
-            placeholder: "assets/img/person_def_1.png",
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Container(
+            width: 32,
+            height: 32,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+            child: ImageNetWork(
+              imageUrl: userImage ?? '',
+              placeholder: "assets/img/person_def_1.png",
+            ),
           ),
         ),
       );
@@ -98,9 +98,9 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
       behavior: HitTestBehavior.opaque,
       onTap: widget.onLeftImageClick,
       child: Container(
-        width: ScreenUtil().setWidth(80.0),
-        height: ScreenUtil().setWidth(80.0),
-        alignment: Alignment.centerLeft,
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
         child: Image.asset(
           widget.onLeftImageUri ?? "",
           width: ScreenUtil().setWidth(44),

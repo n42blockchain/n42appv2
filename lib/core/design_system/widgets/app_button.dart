@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../app_color_tokens.dart';
 import '../app_radius.dart';
 import '../app_spacing.dart';
+import '../app_typography.dart';
 
 /// 按钮类别。见 `docs/DESIGN_SYSTEM.md` §2.1。
 enum AppButtonVariant {
@@ -53,8 +54,8 @@ class AppButton extends StatelessWidget {
     final disabled = loading || onPressed == null;
     final onTap = disabled ? null : onPressed;
 
-    final shape = RoundedRectangleBorder(borderRadius: AppRadius.brXl);
-    final minSize = Size(expand ? double.infinity : 0, 48);
+    final shape = RoundedRectangleBorder(borderRadius: AppRadius.brLg);
+    final minSize = Size(expand ? double.infinity : 44, 44);
 
     final Widget child = loading
         ? const SizedBox(
@@ -67,7 +68,11 @@ class AppButton extends StatelessWidget {
     final button = switch (variant) {
       AppButtonVariant.primary => FilledButton(
         onPressed: onTap,
-        style: FilledButton.styleFrom(shape: shape, minimumSize: minSize),
+        style: FilledButton.styleFrom(
+          shape: shape,
+          minimumSize: minSize,
+          textStyle: AppTypography.headline,
+        ),
         child: child,
       ),
       AppButtonVariant.danger => FilledButton(
@@ -75,6 +80,7 @@ class AppButton extends StatelessWidget {
         style: FilledButton.styleFrom(
           shape: shape,
           minimumSize: minSize,
+          textStyle: AppTypography.headline,
           backgroundColor: c.danger,
           foregroundColor: Colors.white,
         ),
@@ -85,6 +91,7 @@ class AppButton extends StatelessWidget {
         style: FilledButton.styleFrom(
           shape: shape,
           minimumSize: minSize,
+          textStyle: AppTypography.headline,
           backgroundColor: c.warning,
           foregroundColor: Colors.white,
         ),
@@ -95,6 +102,7 @@ class AppButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           shape: shape,
           minimumSize: minSize,
+          textStyle: AppTypography.headline,
           side: BorderSide(color: c.border),
           foregroundColor: c.textPrimary,
         ),
@@ -102,12 +110,21 @@ class AppButton extends StatelessWidget {
       ),
       AppButtonVariant.text => TextButton(
         onPressed: onTap,
-        style: TextButton.styleFrom(shape: shape, minimumSize: minSize),
+        style: TextButton.styleFrom(
+          shape: shape,
+          minimumSize: minSize,
+          textStyle: AppTypography.headline,
+        ),
         child: child,
       ),
     };
 
-    return expand ? SizedBox(width: double.infinity, child: button) : button;
+    final result = expand
+        ? SizedBox(width: double.infinity, child: button)
+        : button;
+    return loading
+        ? Semantics(label: label, liveRegion: true, child: result)
+        : result;
   }
 
   Widget _label() {
@@ -117,7 +134,7 @@ class AppButton extends StatelessWidget {
       children: [
         Icon(icon, size: 18),
         SizedBox(width: AppSpacing.space2),
-        Text(label),
+        Flexible(child: Text(label, textAlign: TextAlign.center)),
       ],
     );
   }

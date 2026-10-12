@@ -176,7 +176,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Widget amountWidget() {
     final mainText = _tc(AppThemeKeys.mainTextColor.name);
     final itemBg = _tc(AppThemeKeys.itemBgColor.name);
-    final amountFontSize = ScreenUtil().setWidth(70.0);
+    final amountFontSize = AppTypography.displayXl.fontSize!;
 
     return Container(
       margin: _pageMargin,

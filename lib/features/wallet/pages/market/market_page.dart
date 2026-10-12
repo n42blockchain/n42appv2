@@ -486,10 +486,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
               children: [
                 Text(
                   S.of(context).g_home_market,
-                  style: AppTypography.headline.copyWith(
-                    color: textColor,
-                    letterSpacing: -0.5,
-                  ),
+                  style: AppTypography.headline.copyWith(color: textColor),
                 ),
                 if (_fearGreed != null)
                   Padding(
@@ -516,10 +513,9 @@ class _MarketPageState extends ConsumerState<MarketPage>
                     Text(
                       S.of(context).g_home_market,
                       style: TextStyle(
-                        fontSize: 32.sp,
+                        fontSize: AppTypography.headline.fontSize,
                         fontWeight: FontWeight.w600,
                         color: textColor,
-                        letterSpacing: -0.5,
                       ),
                     ),
                     if (_fearGreed != null)
@@ -545,7 +541,6 @@ class _MarketPageState extends ConsumerState<MarketPage>
           tabAlignment: TabAlignment.start,
           labelStyle: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
-            letterSpacing: 0.2,
           ),
           unselectedLabelStyle: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w400,

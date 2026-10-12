@@ -110,29 +110,31 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
                 ),
                 // NftImageNetWork(imageUrl: path,width: 28,height: 28,),
                 SizedBox(width: AppSpacing.space8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l,
-                      style: AppTypography.headline.copyWith(
-                        color: AppColorTokens.of(context).textPrimary,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l,
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
-                    ),
-                    Text(
-                      coinPath ?? '',
-                      style: AppTypography.body.copyWith(
-                        color: AppColorTokens.of(context).textPrimary,
+                      Text(
+                        coinPath ?? '',
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const Spacer(),
+                SizedBox(width: AppSpacing.space4),
                 isSelected
                     ? Icon(
                         Icons.check,
                         size: ScreenUtil().setWidth(48),
-                        color: Color(0xFF448BDF),
+                        color: AppColorTokens.of(context).brand,
                       )
                     : SizedBox(width: AppSpacing.space8),
               ],

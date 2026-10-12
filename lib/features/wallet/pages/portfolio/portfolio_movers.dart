@@ -83,14 +83,17 @@ class MoverRow extends StatelessWidget {
                         ),
                 ),
                 SizedBox(width: 16.w),
-                Text(
-                  r.symbol.toUpperCase(),
-                  style: AppTypography.bodySm.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
+                Expanded(
+                  child: Text(
+                    r.symbol.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
                   ),
                 ),
-                const Spacer(),
+                SizedBox(width: AppSpacing.space4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [

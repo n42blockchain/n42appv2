@@ -155,7 +155,6 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
             style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: _color(AppThemeKeys.itemSubtitleTextColor),
-              letterSpacing: 1.0,
             ),
           ),
         ),

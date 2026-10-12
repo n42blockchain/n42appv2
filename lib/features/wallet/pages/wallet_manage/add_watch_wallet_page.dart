@@ -94,15 +94,15 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
           child: TextField(
             controller: controller,
             maxLines: maxLines,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(fontSize),
+            style: AppTypography.body.copyWith(
+              fontSize: fontSize,
               color: textColor,
             ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(
+              hintStyle: AppTypography.body.copyWith(
                 color: hintColor,
-                fontSize: ScreenUtil().setSp(fontSize),
+                fontSize: fontSize,
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
@@ -168,7 +168,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               label: S.of(context).g_key_nft_2,
               controller: _nameCtrl,
               hint: s.g_key_watch_wallet,
-              fontSize: 28,
+              fontSize: AppTypography.body.fontSize!,
               textColor: mainText,
               hintColor: subText,
               bgColor: itemBg,
@@ -178,7 +178,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               label: S.of(context).g_key_address,
               controller: _addressCtrl,
               hint: s.g_key_watch_address_hint,
-              fontSize: 26,
+              fontSize: AppTypography.body.fontSize!,
               textColor: mainText,
               hintColor: subText,
               bgColor: itemBg,

@@ -41,7 +41,7 @@ class AddressEdit extends StatelessWidget {
                     child: Text(
                       S.of(context).copyAddress,
                       style: AppTypography.body.copyWith(
-                        color: Color(0xFF448BDF),
+                        color: AppColorTokens.of(context).brand,
                       ),
                     ),
                   ),
@@ -70,7 +70,7 @@ class AddressEdit extends StatelessWidget {
                     child: Text(
                       S.of(context).Edit,
                       style: AppTypography.body.copyWith(
-                        color: Color(0xFF448BDF),
+                        color: AppColorTokens.of(context).brand,
                       ),
                     ),
                   ),

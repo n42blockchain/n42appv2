@@ -49,7 +49,7 @@ void main() {
   }
 
   testWidgets('iOS drawer opens Earn from the Other section', (tester) async {
-    await tester.runOnIOS(() => pumpDrawer(tester));
+    await pumpDrawer(tester);
 
     final earnEntry = find.byKey(const ValueKey<String>('drawer_earn'));
     await tester.scrollUntilVisible(
@@ -57,12 +57,13 @@ void main() {
       250,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.pumpAndSettle();
     expect(earnEntry, findsOneWidget);
     await tester.tap(earnEntry);
     await tester.pumpAndSettle();
     expect(find.byType(EarnPage), findsOneWidget);
     expect(tester.takeException(), isNull);
-  });
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
   testWidgets('Android keeps Earn in the main navigation only', (tester) async {
     await tester.runOnAndroid(() => pumpDrawer(tester));

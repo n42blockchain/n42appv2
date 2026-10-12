@@ -41,6 +41,13 @@ abstract final class AppStylePresets {
 
   static const List<StylePreset> all = <StylePreset>[
     StylePreset(
+      id: 'apple',
+      name: 'Apple',
+      description: 'Apple system colors',
+      accent: Color(0xFF007AFF),
+      mode: ThemeMode.system,
+    ),
+    StylePreset(
       id: 'ai_indigo',
       name: 'AI 靛蓝',
       description: '默认 · AI-native 现代加密钱包基调',
@@ -98,7 +105,9 @@ abstract final class AppStylePresets {
   static StylePreset? match(Color accent, ThemeMode mode) {
     final argb = accent.toARGB32();
     for (final p in all) {
-      if (p.accent.toARGB32() == argb && p.mode == mode) return p;
+      if (p.accent.toARGB32() == argb && (p.mode == mode || p.id == 'apple')) {
+        return p;
+      }
     }
     return null;
   }

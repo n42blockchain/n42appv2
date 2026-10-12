@@ -276,8 +276,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // FittedBox should handle long text without errors
-      expect(find.byType(FittedBox), findsWidgets);
+      // Long names remain available without shrinking the semantic type size.
+      expect(tester.takeException(), isNull);
       expect(find.text('verylongensname.eth'), findsOneWidget);
     });
   });

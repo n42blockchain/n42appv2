@@ -68,7 +68,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
             style: EnsDisplayStyle.compact,
             showAvatar: true,
             showCopy: true,
-            fontSize: ScreenUtil().setSp(28.0),
+            fontSize: AppTypography.body.fontSize,
           ),
           _buildPublicKeyRow(),
           if (_hasMnemonic) ...[

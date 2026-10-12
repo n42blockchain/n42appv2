@@ -85,12 +85,13 @@ class AppDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
-    return AlertDialog(
+    return AlertDialog.adaptive(
+      scrollable: true,
       backgroundColor: c.bgElevated,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       title: Text(
         title,
-        style: AppTypography.title.copyWith(color: c.textPrimary),
+        style: AppTypography.headline.copyWith(color: c.textPrimary),
       ),
       content:
           content ??

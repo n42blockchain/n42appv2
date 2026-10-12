@@ -32,38 +32,42 @@ class _EmptyViewState extends State<EmptyView> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (widget.canRefresh)
-            IconButton(
-              onPressed: widget.onPressed,
-              icon: Icon(
-                Icons.wifi_protected_setup_outlined,
-                size: ScreenUtil().setSp(40),
-                color: AppColorTokens.of(context).brand,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (widget.canRefresh)
+              IconButton(
+                onPressed: widget.onPressed,
+                icon: Icon(
+                  Icons.wifi_protected_setup_outlined,
+                  size: ScreenUtil().setSp(40),
+                  color: AppColorTokens.of(context).brand,
+                ),
+              ),
+            SizedBox(height: AppSpacing.space6),
+            // 替换资源
+            Image.asset(
+              widget.type == EmptyType.noData
+                  ? 'assets/img/noData.png' //'assets/common/message_empty.png'
+                  : "assets/img/network_err.png",
+              width: 77,
+              fit: BoxFit.cover,
+              color: widget.type == EmptyType.noData
+                  ? null
+                  : AppColorTokens.of(context).textPrimary,
+            ),
+            SizedBox(height: AppSpacing.space8),
+            Text(
+              widget.title ?? S.of(context).g_key_132,
+              textAlign: TextAlign.center,
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-          SizedBox(height: AppSpacing.space6),
-          // 替换资源
-          Image.asset(
-            widget.type == EmptyType.noData
-                ? 'assets/img/noData.png' //'assets/common/message_empty.png'
-                : "assets/img/network_err.png",
-            width: 77,
-            fit: BoxFit.cover,
-            color: widget.type == EmptyType.noData
-                ? null
-                : AppColorTokens.of(context).textPrimary,
-          ),
-          SizedBox(height: AppSpacing.space8),
-          Text(
-            widget.title ?? S.of(context).g_key_132,
-            style: AppTypography.titleLg.copyWith(
-              color: AppColorTokens.of(context).textPrimary,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

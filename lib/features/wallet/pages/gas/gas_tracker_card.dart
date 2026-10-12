@@ -131,7 +131,9 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                 child: Text(
-                  S.of(context).g_key_106,
+                  _isLoading
+                      ? S.of(context).g_key_106
+                      : S.of(context).g_key_ens_unavailable,
                   style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ),

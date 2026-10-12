@@ -127,9 +127,9 @@ extension on _HomePageState {
   Widget buildBottomNavBar(BuildContext context) {
     final isWide = ResponsiveUtils.isTablet(context);
     // iPad 竖屏：使用固定高度，不依赖 ScreenUtil
-    final barHeight = isWide ? 64.0 : ScreenUtil().setWidth(116.0);
-    final iconSize = isWide ? 22.0 : ScreenUtil().setWidth(40.0);
-    final fontSize = isWide ? 11.0 : ScreenUtil().setSp(20.0);
+    final barHeight = 38 + MediaQuery.textScalerOf(context).scale(11) * 26 / 11;
+    const iconSize = 22.0;
+    const fontSize = 11.0;
     final borderWidth = isWide ? 0.5 : ScreenUtil().setWidth(0.8);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     List<Widget> bottomItems = [];
@@ -142,8 +142,8 @@ extension on _HomePageState {
           _tabTwo,
           5,
           automationKey: const ValueKey<String>('home_tab_wallet'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildBottomItem(
           S.of(context).g_home_key3,
@@ -152,8 +152,8 @@ extension on _HomePageState {
           _tabThree,
           5,
           automationKey: const ValueKey<String>('home_tab_mining'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildBottomItem(
           S.of(context).g_key_earn_title,
@@ -162,8 +162,8 @@ extension on _HomePageState {
           _tabFour,
           5,
           automationKey: const ValueKey<String>('home_tab_earn'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildBottomItem(
           S.of(context).g_home_market,
@@ -172,8 +172,8 @@ extension on _HomePageState {
           _tabSix,
           5,
           automationKey: const ValueKey<String>('home_tab_market'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildChatBottomItem(
           S.of(context).g_key_squad,
@@ -181,8 +181,8 @@ extension on _HomePageState {
           _tabFive,
           5,
           automationKey: const ValueKey<String>('home_tab_chat'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
       ];
     } else {
@@ -194,8 +194,8 @@ extension on _HomePageState {
           _tabTwo,
           4,
           automationKey: const ValueKey<String>('home_tab_wallet'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildBottomItem(
           S.of(context).g_home_key3,
@@ -204,8 +204,8 @@ extension on _HomePageState {
           _tabThree,
           4,
           automationKey: const ValueKey<String>('home_tab_mining'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildBottomItem(
           S.of(context).g_home_market,
@@ -214,8 +214,8 @@ extension on _HomePageState {
           _tabSix,
           4,
           automationKey: const ValueKey<String>('home_tab_market'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
         _buildChatBottomItem(
           S.of(context).g_key_squad,
@@ -223,8 +223,8 @@ extension on _HomePageState {
           _tabFive,
           4,
           automationKey: const ValueKey<String>('home_tab_chat'),
-          fixedIconSize: isWide ? iconSize : null,
-          fixedFontSize: isWide ? fontSize : null,
+          fixedIconSize: iconSize,
+          fixedFontSize: fontSize,
         ),
       ];
     }
@@ -271,8 +271,8 @@ extension on _HomePageState {
   }) {
     final media = MediaQuery.of(context);
     final width = (media.size.width - media.padding.horizontal) / pagesLength;
-    final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
-    final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
+    final iSize = fixedIconSize ?? 22;
+    final fSize = fixedFontSize ?? 11;
     final unselectedColor = AppColorTokens.of(context).textTertiary;
 
     // 底部导航是全 App 最高频交互——恢复按压反馈（§5 红线，此前被 transparent 关闭）
@@ -304,9 +304,11 @@ extension on _HomePageState {
             SizedBox(height: ScreenUtil().setWidth(1)),
             Text(
               title,
-              style: TextStyle(
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: AppTypography.captionSm.copyWith(
                 fontSize: fSize,
-                height: 1.2,
                 fontWeight: FontWeight.w400,
                 color: unselectedColor,
               ),
@@ -330,8 +332,8 @@ extension on _HomePageState {
     final media = MediaQuery.of(context);
     final width = (media.size.width - media.padding.horizontal) / pagesLength;
     final currentIndex = ref.watch(homeTabIndexProvider);
-    final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
-    final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
+    final iSize = fixedIconSize ?? 22;
+    final fSize = fixedFontSize ?? 11;
     final isSelected = currentIndex == index;
 
     final selectedColor = AppColorTokens.of(context).brand;
@@ -376,9 +378,11 @@ extension on _HomePageState {
             SizedBox(height: ScreenUtil().setWidth(1)),
             Text(
               title,
-              style: TextStyle(
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: AppTypography.captionSm.copyWith(
                 fontSize: fSize,
-                height: 1.2,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected ? selectedColor : unselectedColor,
               ),

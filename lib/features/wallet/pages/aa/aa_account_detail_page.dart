@@ -75,9 +75,8 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_aa_retry)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(S.of(context).g_key_aa_retry)));
     } finally {
       if (mounted) setState(() => _isDeploying = false);
     }
@@ -87,7 +86,7 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
     final address = widget.account.address;
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (_) => AlertDialog.adaptive(
         title: Text(S.of(context).g_key_aa_receive_address),
         content: SingleChildScrollView(
           child: Column(

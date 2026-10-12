@@ -66,7 +66,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
     final s = S.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: title != null ? Text(title) : null,
         content: SingleChildScrollView(child: Text(content)),
         actions: [
@@ -100,9 +100,8 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_175)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(S.of(context).g_key_175)));
       }
     } finally {
       if (mounted) setState(() => _disconnecting.remove(topic));
@@ -121,9 +120,8 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_175)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(S.of(context).g_key_175)));
       }
     } finally {
       if (mounted) setState(() => _disconnectingAll = false);
@@ -298,9 +296,8 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                             vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColorTokens.of(
-                              context,
-                            ).brand.withValues(alpha: 0.1),
+                            color: AppColorTokens.of(context).brand
+                                .withValues(alpha: 0.1),
                             borderRadius: AppRadius.brSm,
                           ),
                           child: Text(

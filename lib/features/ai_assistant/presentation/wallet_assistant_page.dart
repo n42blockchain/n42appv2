@@ -92,10 +92,7 @@ class _WalletAssistantPageState extends State<WalletAssistantPage> {
         foregroundColor: c.textPrimary,
         title: Text(
           S.of(context).g_ui_wallet_ai,
-          style: AppTypography.headline.copyWith(
-            color: c.textPrimary,
-            letterSpacing: 0,
-          ),
+          style: AppTypography.headline.copyWith(color: c.textPrimary),
         ),
       ),
       body: SafeArea(
@@ -175,10 +172,7 @@ class _SnapshotHeader extends StatelessWidget {
                   '\$${snapshot.totalUsd.toStringAsFixed(2)}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTypography.title.copyWith(
-                    color: c.textPrimary,
-                    letterSpacing: 0,
-                  ),
+                  style: AppTypography.title.copyWith(color: c.textPrimary),
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Text(
@@ -188,10 +182,7 @@ class _SnapshotHeader extends StatelessWidget {
                   ].whereType<String>().where((v) => v.isNotEmpty).join(' / '),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTypography.caption.copyWith(
-                    color: c.textSecondary,
-                    letterSpacing: 0,
-                  ),
+                  style: AppTypography.caption.copyWith(color: c.textSecondary),
                 ),
               ],
             ),
@@ -199,10 +190,7 @@ class _SnapshotHeader extends StatelessWidget {
           SizedBox(width: AppSpacing.space4),
           Text(
             S.of(context).g_ui_read_only,
-            style: AppTypography.captionSm.copyWith(
-              color: c.textTertiary,
-              letterSpacing: 0,
-            ),
+            style: AppTypography.captionSm.copyWith(color: c.textTertiary),
           ),
         ],
       ),
@@ -240,7 +228,6 @@ class _MessageBubble extends StatelessWidget {
             message.text,
             style: AppTypography.body.copyWith(
               color: isUser ? Colors.white : c.textPrimary,
-              letterSpacing: 0,
             ),
           ),
         ),
@@ -303,10 +290,7 @@ class _PromptRow extends StatelessWidget {
           return ActionChip(
             label: Text(
               prompt,
-              style: AppTypography.caption.copyWith(
-                color: c.textPrimary,
-                letterSpacing: 0,
-              ),
+              style: AppTypography.caption.copyWith(color: c.textPrimary),
             ),
             side: BorderSide(color: c.border),
             backgroundColor: c.bgSurface,
@@ -356,16 +340,10 @@ class _Composer extends StatelessWidget {
               maxLines: 4,
               textInputAction: TextInputAction.send,
               onSubmitted: onSubmitted,
-              style: AppTypography.body.copyWith(
-                color: c.textPrimary,
-                letterSpacing: 0,
-              ),
+              style: AppTypography.body.copyWith(color: c.textPrimary),
               decoration: InputDecoration(
                 hintText: S.of(context).g_ui_assistant_hint,
-                hintStyle: AppTypography.body.copyWith(
-                  color: c.textTertiary,
-                  letterSpacing: 0,
-                ),
+                hintStyle: AppTypography.body.copyWith(color: c.textTertiary),
                 filled: true,
                 fillColor: c.bgSurface,
                 contentPadding: EdgeInsets.symmetric(

@@ -25,6 +25,38 @@ class _ThemeSettingsSpUtil extends SPUtil {
 }
 
 void main() {
+  for (final width in [320.0, 390.0, 768.0]) {
+    for (final scale in [1.0, 2.0, 3.0]) {
+      testWidgets('theme menu fits width $width at text scale $scale', (
+        tester,
+      ) async {
+        tester.view.physicalSize = Size(width, 844);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final storage = _ThemeSettingsSpUtil();
+        await tester.pumpWidget(
+          wrapForTest(
+            const SettingTheme(),
+            overrides: [spUtilProvider.overrideWithValue(storage)],
+            adaptiveViewport: true,
+            textScaler: TextScaler.linear(scale),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const ValueKey('style_preset_apple')));
+        await tester.pumpAndSettle();
+        expect(storage.storedAccentColor, const Color(0xFF007AFF).toARGB32());
+        await tester.scrollUntilVisible(
+          find.text(S.current.g_theme_accent_color),
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('selecting a theme mode updates the selection and persistence', (

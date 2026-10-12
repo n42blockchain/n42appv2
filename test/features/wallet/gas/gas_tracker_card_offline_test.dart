@@ -65,8 +65,8 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Ethereum'), findsOneWidget);
     expect(find.text('BNB Chain'), findsOneWidget);
-    expect(find.text('...'), findsNWidgets(2));
-    expect(find.text('Loading '), findsNWidgets(2));
+    expect(find.text('...'), findsNWidgets(6));
+    expect(find.text(S.current.g_key_ens_unavailable), findsNWidgets(6));
   });
 
   testWidgets('pull to refresh returns to the same safe unavailable state', (
@@ -80,7 +80,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Ethereum'), findsOneWidget);
     expect(find.text('BNB Chain'), findsOneWidget);
-    expect(find.text('...'), findsNWidgets(2));
-    expect(find.text('Loading '), findsNWidgets(2));
+    expect(find.text('...'), findsNWidgets(6));
+    expect(find.text(S.current.g_key_ens_unavailable), findsNWidgets(6));
   });
 }

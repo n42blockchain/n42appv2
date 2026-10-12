@@ -68,21 +68,14 @@ class _WalletBoardState extends State<WalletBoard> {
         vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
-        // 资产卡专属品牌渐变（炫彩强调，豁免通用令牌）
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [const Color(0xFF0F1D38), const Color(0xFF1A0B3B)]
-              : [const Color(0xFF1565C0), const Color(0xFF7B1FA2)],
-          stops: const [0.0, 1.0],
-        ),
+        // Follow the system blue or the user's selected accent.
+        color: AppColorTokens.of(context).brand,
         borderRadius: AppRadius.brXl,
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? const Color(0xFF1565C0).withValues(alpha: 0.24)
-                : const Color(0xFF1565C0).withValues(alpha: 0.31),
+                ? AppColorTokens.of(context).brand.withValues(alpha: 0.24)
+                : AppColorTokens.of(context).brand.withValues(alpha: 0.31),
             blurRadius: 24,
             offset: const Offset(0, 8),
             spreadRadius: 0,
@@ -128,7 +121,6 @@ class _WalletBoardState extends State<WalletBoard> {
                   style: AppTypography.captionSm.copyWith(
                     color: AppColorTokens.onOverlaySecondary,
                     fontWeight: FontWeight.w400,
-                    letterSpacing: 0.5,
                   ),
                 ),
                 SizedBox(height: AppSpacing.space2),
@@ -137,8 +129,6 @@ class _WalletBoardState extends State<WalletBoard> {
                   _formatUsd(widget.accountPrice),
                   style: AppTypography.displayLg.copyWith(
                     color: AppColorTokens.onOverlayPrimary,
-                    letterSpacing: -0.5,
-                    height: 1.1,
                   ),
                 ),
                 SizedBox(height: AppSpacing.space2),

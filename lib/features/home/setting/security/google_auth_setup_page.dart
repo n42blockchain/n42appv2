@@ -143,7 +143,6 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                             _secret,
                             style: AppTypography.bodySm.copyWith(
                               color: mainText,
-                              letterSpacing: 2,
                               fontFamily: 'monospace',
                             ),
                           ),
@@ -178,7 +177,6 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   style: AppTypography.headline.copyWith(
                     color: mainText,
                     fontWeight: FontWeight.w400,
-                    letterSpacing: 6,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -187,7 +185,6 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                     hintStyle: AppTypography.headline.copyWith(
                       color: subtitleColor,
                       fontWeight: FontWeight.w400,
-                      letterSpacing: 6,
                     ),
                   ),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],

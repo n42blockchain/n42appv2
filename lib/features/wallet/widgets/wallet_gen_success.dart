@@ -1,55 +1,37 @@
-import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
-Widget successView(String title) {
-  return _statusView(
-    title: title,
-    icon: Icons.check_circle_outline,
-    iconColor: const Color(0xFF448BDF),
-  );
-}
+Widget successView(String title) => _statusView(title, error: false);
 
-Widget createWalletErrView(String title) {
-  return _statusView(
-    title: title,
-    icon: Icons.cancel_outlined,
-    iconColor: Colors.redAccent,
-  );
-}
+Widget createWalletErrView(String title) => _statusView(title, error: true);
 
-Widget _statusView({
-  required String title,
-  required IconData icon,
-  required Color iconColor,
-}) {
-  final ctx = AppGlobals.navigatorKey.currentContext;
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.0),
-      color: ctx != null
-          ? AppThemeUtils.getColorByKey(ctx, AppThemeKeys.itemBgColor.name)
-          : const Color(0xFFFFFFFF),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: iconColor, size: 36),
-        Text(
-          title,
-          style: AppTypography.headline.copyWith(
-            color: ctx != null
-                ? AppThemeUtils.getColorByKey(
-                    ctx,
-                    AppThemeKeys.mainTextColor.name,
-                  )
-                : const Color(0xFF000000),
-            fontWeight: FontWeight.w400,
+Widget _statusView(String title, {required bool error}) => Builder(
+  builder: (context) {
+    final colors = AppColorTokens.of(context);
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space12,
+        vertical: AppSpacing.space6,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: AppRadius.brLg,
+        color: colors.bgSurface,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            error ? Icons.cancel_outlined : Icons.check_circle_outline,
+            color: error ? colors.danger : colors.success,
+            size: 36,
           ),
-        ),
-      ],
-    ),
-  );
-}
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: AppTypography.body.copyWith(color: colors.textPrimary),
+          ),
+        ],
+      ),
+    );
+  },
+);

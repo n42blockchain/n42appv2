@@ -119,12 +119,10 @@ class _ShareMiningState extends State<ShareMining>
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(
                                         colors: [
-                                          const Color(
-                                            0xFFFFD700,
-                                          ).withValues(alpha: 0.2),
-                                          const Color(
-                                            0xFFFFA500,
-                                          ).withValues(alpha: 0.1),
+                                          const Color(0xFFFFD700)
+                                              .withValues(alpha: 0.2),
+                                          const Color(0xFFFFA500)
+                                              .withValues(alpha: 0.1),
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -132,9 +130,8 @@ class _ShareMiningState extends State<ShareMining>
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(
-                                            0xFFFFD700,
-                                          ).withValues(alpha: 0.3),
+                                          color: const Color(0xFFFFD700)
+                                              .withValues(alpha: 0.3),
                                           blurRadius: 30,
                                           spreadRadius: 5,
                                         ),
@@ -147,9 +144,8 @@ class _ShareMiningState extends State<ShareMining>
                                         fit: BoxFit.contain,
                                         color: isDark
                                             ? Colors.white
-                                            : AppColorTokens.of(
-                                                context,
-                                              ).textPrimary,
+                                            : AppColorTokens.of(context)
+                                                  .textPrimary,
                                       ),
                                     ),
                                   ),
@@ -165,7 +161,6 @@ class _ShareMiningState extends State<ShareMining>
                               style: AppTypography.titleLg.copyWith(
                                 color: AppColorTokens.of(context).textPrimary,
                                 fontWeight: FontWeight.w600,
-                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
@@ -187,9 +182,8 @@ class _ShareMiningState extends State<ShareMining>
                                 _generateTipsContent(),
                                 textAlign: TextAlign.center,
                                 style: AppTypography.body.copyWith(
-                                  color: AppColorTokens.of(
-                                    context,
-                                  ).textSubtitle,
+                                  color: AppColorTokens.of(context)
+                                      .textSubtitle,
                                   height: 1.5,
                                 ),
                               ),
@@ -213,14 +207,12 @@ class _ShareMiningState extends State<ShareMining>
                                   vertical: AppSpacing.space4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColorTokens.of(
-                                    context,
-                                  ).brand.withValues(alpha: 0.1),
+                                  color: AppColorTokens.of(context).brand
+                                      .withValues(alpha: 0.1),
                                   borderRadius: AppRadius.brXl,
                                   border: Border.all(
-                                    color: AppColorTokens.of(
-                                      context,
-                                    ).brand.withValues(alpha: 0.3),
+                                    color: AppColorTokens.of(context).brand
+                                        .withValues(alpha: 0.3),
                                     width: 1,
                                   ),
                                 ),
@@ -238,9 +230,8 @@ class _ShareMiningState extends State<ShareMining>
                                         S.of(context).g_mining_key61,
                                         overflow: TextOverflow.ellipsis,
                                         style: AppTypography.body.copyWith(
-                                          color: AppColorTokens.of(
-                                            context,
-                                          ).brand,
+                                          color: AppColorTokens.of(context)
+                                              .brand,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),

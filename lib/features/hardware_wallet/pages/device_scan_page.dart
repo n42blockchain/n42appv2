@@ -292,9 +292,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                           decoration: BoxDecoration(
                             color: index < device.signalStrength
                                 ? AppColorTokens.of(context).success
-                                : AppColorTokens.of(
-                                    context,
-                                  ).textTertiary.withAlpha(50),
+                                : AppColorTokens.of(context).textTertiary
+                                      .withAlpha(50),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         );
@@ -409,8 +408,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   void _showBluetoothDisabledDialog() {
     _showAlertDialog(
       title: 'Bluetooth Disabled',
-      content:
-          'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
+      content: 'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -427,7 +425,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   }) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => AlertDialog.adaptive(
         title: Text(title),
         content: SingleChildScrollView(child: Text(content)),
         actions: actions,

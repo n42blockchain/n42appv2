@@ -34,7 +34,6 @@ Widget changeEmailCodeField({
     style: AppTypography.caption.copyWith(
       fontWeight: FontWeight.w600,
       color: textColor,
-      letterSpacing: 8,
     ),
     decoration: changeEmailInputDeco(
       hint: '------',

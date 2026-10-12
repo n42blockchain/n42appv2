@@ -49,14 +49,14 @@ mixin _SectionsMixin on _WidgetsMixin {
             },
             S.of(context).g_key_wallet_c4,
             mpValue.depositsEnable == true
-                ? const Color(0xFFD1E4FE)
+                ? AppColorTokens.of(context).brandSubtle
                 : const Color(0xFFEDEFF2),
             mpValue.depositsEnable == true
-                ? const Color(0xFF1976F9)
+                ? AppColorTokens.of(context).brand
                 : const Color(0xFFBAC2CC),
             height: ScreenUtil().setWidth(55),
             borderRadius: ScreenUtil().setWidth(55),
-            fontSize: ScreenUtil().setSp(22),
+            fontSize: AppTypography.captionSm.fontSize!,
             paddingV: ScreenUtil().setWidth(12.0),
             paddingH: ScreenUtil().setWidth(32.0),
           ),

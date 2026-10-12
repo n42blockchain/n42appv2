@@ -97,19 +97,23 @@ void main() {
         },
       );
       final pageState = tester.state(find.byType(WalletPage));
-      for (final size in [
-        const Size(800, 720),
-        const Size(720, 800),
-        const Size(320, 720),
-        const Size(844, 390),
-        const Size(390, 844),
-      ]) {
-        tester.view.physicalSize = size;
-        await tester.pump();
-        await tester.pump();
-        expect(tester.state(find.byType(WalletPage)), same(pageState));
-        expect(find.byType(WalletBoard), findsOneWidget);
-        expect(tester.takeException(), isNull);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      for (final scale in [1.0, 2.0, 3.0]) {
+        tester.platformDispatcher.textScaleFactorTestValue = scale;
+        for (final size in [
+          const Size(800, 720),
+          const Size(720, 800),
+          const Size(320, 720),
+          const Size(844, 390),
+          const Size(390, 844),
+        ]) {
+          tester.view.physicalSize = size;
+          await tester.pump();
+          await tester.pump();
+          expect(tester.state(find.byType(WalletPage)), same(pageState));
+          expect(find.byType(WalletBoard), findsOneWidget);
+          expect(tester.takeException(), isNull);
+        }
       }
       await tester.pumpWidget(const SizedBox.shrink());
     },

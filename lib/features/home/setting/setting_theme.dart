@@ -60,6 +60,7 @@ const _presetAccents = [
   Color(0xFFC62828), // red
   Color(0xFFE91E63), // pink
   Color(0xFF303F9F), // indigo
+  ThemeAdapter.defaultAccent, // Apple system blue
 ];
 
 class SettingTheme extends ConsumerWidget {
@@ -134,15 +135,15 @@ class SettingTheme extends ConsumerWidget {
                     S.of(context).g_theme_accent_color,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.headline.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.color?.withAlpha(180),
+                      color: Theme.of(context).textTheme.bodyMedium?.color
+                          ?.withAlpha(180),
                     ),
                   ),
                 ),
                 if (!isDefault)
-                  InkWell(
-                    onTap: () => ref.read(accentColorProvider.notifier).reset(),
+                  TextButton(
+                    onPressed: () =>
+                        ref.read(accentColorProvider.notifier).reset(),
                     child: Text(
                       S.of(context).g_theme_accent_reset,
                       style: AppTypography.bodySm.copyWith(
@@ -171,8 +172,8 @@ class SettingTheme extends ConsumerWidget {
                     customBorder: const CircleBorder(),
                     child: AnimatedContainer(
                       duration: AppMotion.fast,
-                      width: ScreenUtil().setWidth(60),
-                      height: ScreenUtil().setWidth(60),
+                      width: 44,
+                      height: 44,
                       decoration: BoxDecoration(
                         color: color,
                         shape: BoxShape.circle,
@@ -230,10 +231,12 @@ class _SectionHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: AppTypography.headline.copyWith(
-              color: AppColorTokens.of(context).textPrimary,
+          Flexible(
+            child: Text(
+              title,
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
           if (subtitle != null)
@@ -278,6 +281,7 @@ class _StylePresetCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        key: ValueKey('style_preset_${preset.id}'),
         onTap: onTap,
         borderRadius: AppRadius.brLg,
         child: AnimatedContainer(
@@ -412,11 +416,12 @@ class _ThemeItem extends StatelessWidget {
                   color: option.textColor,
                 ),
                 SizedBox(width: AppSpacing.space8),
-                Text(
-                  option.labelBuilder(context),
-                  style: AppTypography.body.copyWith(color: option.textColor),
+                Expanded(
+                  child: Text(
+                    option.labelBuilder(context),
+                    style: AppTypography.body.copyWith(color: option.textColor),
+                  ),
                 ),
-                const Spacer(),
                 if (isSelected)
                   Icon(
                     Icons.check,

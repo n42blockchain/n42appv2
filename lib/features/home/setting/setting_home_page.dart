@@ -102,9 +102,8 @@ class SettingHomePage extends ConsumerWidget {
             action: S.of(context).g_browser_key11,
             imgColor: AppColorTokens.of(context).brand,
             callback: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => BrowserSetting()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => BrowserSetting()));
             },
           ),
         ),
@@ -150,7 +149,7 @@ class SettingHomePage extends ConsumerWidget {
               ],
             ),
           ),
-          Switch(
+          Switch.adaptive(
             value: useV2,
             onChanged: (v) =>
                 ref.read(miningUseV2Provider.notifier).setUseV2(v),

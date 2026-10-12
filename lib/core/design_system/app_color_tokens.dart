@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../presentation/themes/theme_adapter.dart';
 
@@ -33,28 +34,41 @@ class AppColorTokens {
   Color _key(AppThemeKeys k) => AppThemeUtils.getColorByKey(_context, k.name);
   Color _tone(Color light, Color dark) => _isDark ? dark : light;
 
+  bool get _apple {
+    final theme = Theme.of(_context);
+    final accent = theme.cupertinoOverrideTheme?.primaryColor;
+    return accent == CupertinoColors.systemBlue ||
+        (accent == null &&
+            theme.colorScheme.primary == ThemeAdapter.defaultAccent);
+  }
+
+  Color _system(Color color) => CupertinoDynamicColor.resolve(color, _context);
+
   // ════════ 随主题色（普通页 / 模态）════════
 
   // ── 品牌 ──
   // mainBlueColor 经 colorScheme.primary 解析，自动反映用户自定义 accent。
   Color get brand => _key(AppThemeKeys.mainBlueColor);
-  Color get brandSubtle =>
-      _tone(const Color(0xFFECEDFF), const Color(0xFF232A52));
+  Color get brandSubtle => brand.withValues(alpha: 0.12);
 
   // ── 语义（复用现有表，缺失者补常量）──
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677
   Color get danger => _key(AppThemeKeys.errorTextColor); // #F03450
   Color get warning => _key(AppThemeKeys.textColorOrange); // #FF6F16
-  Color get info => _tone(const Color(0xFF2E90FA), const Color(0xFF4FACFE));
+  Color get info => _apple
+      ? _system(CupertinoColors.systemBlue)
+      : _tone(const Color(0xFF2E90FA), const Color(0xFF4FACFE));
 
   /// 危险态背景填充（errorBgColor）——错误提示卡 / 横幅底。
-  Color get dangerBg => _key(AppThemeKeys.errorBgColor);
+  Color get dangerBg =>
+      _apple ? danger.withValues(alpha: 0.12) : _key(AppThemeKeys.errorBgColor);
 
   // ── 中性分层 ──
   Color get bgBase => _key(AppThemeKeys.backGroundColor);
   Color get bgSurface => _key(AppThemeKeys.itemBgColor);
-  Color get bgElevated =>
-      _tone(const Color(0xFFFFFFFF), const Color(0xFF222222));
+  Color get bgElevated => _apple
+      ? _system(CupertinoColors.secondarySystemGroupedBackground)
+      : _tone(const Color(0xFFFFFFFF), const Color(0xFF222222));
   Color get border => _key(AppThemeKeys.dividerColor);
   Color get textPrimary => _key(AppThemeKeys.mainTextColor);
   Color get textSecondary =>
@@ -69,7 +83,7 @@ class AppColorTokens {
 
   // ── 聊天专用（勿外溢到钱包 / 直播）──
   Color get chatBubbleSelf =>
-      _tone(const Color(0xFF95EC69), const Color(0xFF3EB575));
+      _apple ? brand : _tone(const Color(0xFF95EC69), const Color(0xFF3EB575));
 
   // ════════ 固定叠层色（直播 / 图片语境，不随主题）════════
 

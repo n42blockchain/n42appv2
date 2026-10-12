@@ -97,7 +97,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: ScreenUtil().setWidth(70.0),
+                  fontSize: AppTypography.displayXl.fontSize,
                   height: ScreenUtil().setWidth(120.0),
                   boxShadow: const BoxShadow(color: Color(0x00101828)),
                   borderRadius: BorderRadius.only(

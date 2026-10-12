@@ -14,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/platform/adaptive_viewport.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 /// Widget Test Wrapper
 ///
@@ -29,6 +30,7 @@ class WidgetTestWrapper extends StatelessWidget {
   final List<Override>? providerOverrides;
   final Size designSize;
   final bool adaptiveViewport;
+  final TextScaler? textScaler;
 
   const WidgetTestWrapper({
     super.key,
@@ -38,6 +40,7 @@ class WidgetTestWrapper extends StatelessWidget {
     this.providerOverrides,
     this.designSize = const Size(750, 1334),
     this.adaptiveViewport = false,
+    this.textScaler,
   });
 
   @override
@@ -53,8 +56,20 @@ class WidgetTestWrapper extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       themeMode: themeMode,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeAdapter.buildLight(
+        ThemeAdapter.defaultAccent,
+        textScaler: textScaler ?? MediaQuery.textScalerOf(context),
+      ),
+      darkTheme: ThemeAdapter.buildDark(
+        ThemeAdapter.defaultAccent,
+        textScaler: textScaler ?? MediaQuery.textScalerOf(context),
+      ),
+      builder: (context, child) => textScaler == null
+          ? child!
+          : MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+              child: child!,
+            ),
       home: Scaffold(body: this.child),
     );
     return ProviderScope(
@@ -82,12 +97,14 @@ Widget wrapForTest(
   Locale locale = const Locale('en'),
   List<Override>? overrides,
   bool adaptiveViewport = false,
+  TextScaler? textScaler,
 }) {
   return WidgetTestWrapper(
     themeMode: themeMode,
     locale: locale,
     providerOverrides: overrides,
     adaptiveViewport: adaptiveViewport,
+    textScaler: textScaler,
     child: child,
   );
 }
@@ -96,8 +113,8 @@ Widget wrapForTest(
 Widget wrapWithMaterial(Widget child, {ThemeMode themeMode = ThemeMode.light}) {
   return MaterialApp(
     themeMode: themeMode,
-    theme: ThemeData.light(),
-    darkTheme: ThemeData.dark(),
+    theme: ThemeAdapter.themeDataLight,
+    darkTheme: ThemeAdapter.themeDataDark,
     home: Scaffold(body: child),
   );
 }

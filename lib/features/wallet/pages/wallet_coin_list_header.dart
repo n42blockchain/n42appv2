@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -6,6 +8,16 @@ import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+
+double _headerControlHeight(BuildContext context) =>
+    math.max(44, MediaQuery.textScalerOf(context).scale(17) * 22 / 17 + 16);
+
+bool _stackHeaderControls(BuildContext context) =>
+    MediaQuery.sizeOf(context).width < 384 ||
+    MediaQuery.textScalerOf(context).scale(17) > 24;
+
+double _searchFieldHeight(BuildContext context) =>
+    math.max(44, MediaQuery.textScalerOf(context).scale(17) * 22 / 17 + 24);
 
 /// 固定在顶部的代币列表标题栏：包含网络选择、排序、小额过滤。
 class WalletCoinListHeader extends StatefulWidget {
@@ -48,8 +60,6 @@ class _WalletCoinListHeaderState extends State<WalletCoinListHeader>
     with SingleTickerProviderStateMixin {
   // 搜索展开时额外显示一行输入框；收起时保持两行紧凑布局。头部是 pinned 的，
   // 两个高度间必须插值，否则展开/收起时列表整体会突跳一段。
-  static const double _collapsedExtent = 192.0;
-  static const double _expandedExtent = 280.0;
 
   late final AnimationController _searchAnimController = AnimationController(
     vsync: this,
@@ -94,9 +104,11 @@ class _WalletCoinListHeaderState extends State<WalletCoinListHeader>
       animation: _searchAnim,
       builder: (context, _) {
         final t = _searchAnim.value.clamp(0.0, 1.0);
-        final extent = ScreenUtil().setWidth(
-          _collapsedExtent + (_expandedExtent - _collapsedExtent) * t,
-        );
+        final extent =
+            _headerControlHeight(context) *
+                (_stackHeaderControls(context) ? 3 : 2) +
+            AppSpacing.space2 * (_stackHeaderControls(context) ? 3 : 2) +
+            (_searchFieldHeight(context) + AppSpacing.space2) * t;
         return SliverPersistentHeader(
           pinned: true,
           floating: true,
@@ -200,28 +212,17 @@ class _TopRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final su = ScreenUtil();
-    final blueColor = AppColorTokens.of(context).brand;
-
-    return Row(
+    final colors = AppColorTokens.of(context);
+    final tools = Row(
       children: [
-        SizedBox(
-          // 保留标题的最小展示宽度，避免快捷入口和网络筛选把 Tokens 压成 Tok…
-          width: su.setWidth(124),
-          child: FittedBox(
-            alignment: Alignment.centerLeft,
-            fit: BoxFit.scaleDown,
-            child: Text(
-              S.of(context).g_token_m_key_11,
-              maxLines: 1,
-              style: AppTypography.headline.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColorTokens.of(context).textPrimary,
-              ),
-            ),
+        Expanded(
+          child: Text(
+            S.of(context).g_token_m_key_11,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.headline.copyWith(color: colors.textPrimary),
           ),
         ),
-        SizedBox(width: AppSpacing.space4),
         _HeaderIconButton(
           icon: isSearchVisible
               ? Icons.search_off_rounded
@@ -229,79 +230,63 @@ class _TopRow extends StatelessWidget {
           tooltip: S.of(context).g_token_m_key_12,
           onTap: () => onSearchVisibilityChanged(!isSearchVisible),
         ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onAddToken,
-            borderRadius: AppRadius.brMd,
-            child: SizedBox(
-              // >=88.w 命中区（44dp 触控红线），视觉 36.w 不变
-              width: su.setWidth(88),
-              height: su.setWidth(88),
-              child: Center(
-                child: Container(
-                  width: su.setWidth(36),
-                  height: su.setWidth(36),
-                  decoration: BoxDecoration(
-                    color: blueColor,
-                    borderRadius: AppRadius.brMd,
-                  ),
-                  child: Icon(
-                    Icons.add_rounded,
-                    color: Colors.white,
-                    size: su.setWidth(24),
-                  ),
-                ),
-              ),
-            ),
-          ),
+        _HeaderIconButton(
+          icon: Icons.add_rounded,
+          tooltip: S.of(context).g_token_m_key_3,
+          onTap: onAddToken,
         ),
         _MoreMenu(onMarketTap: onMarketTap, onPortfolioTap: onPortfolioTap),
-        const Spacer(),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onChangeNetwork,
-            borderRadius: AppRadius.brPill,
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: su.setWidth(88),
-                maxWidth: su.setWidth(190),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: blueColor.withValues(alpha: 0.1),
-                borderRadius: AppRadius.brPill,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        networkLabel,
-                        maxLines: 1,
-                        style: AppTypography.caption.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: blueColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: blueColor,
-                    size: su.setWidth(24),
-                  ),
-                ],
-              ),
+      ],
+    );
+    final network = TextButton(
+      onPressed: onChangeNetwork,
+      style: TextButton.styleFrom(
+        backgroundColor: colors.brandSubtle,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              networkLabel,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.bodySm.copyWith(color: colors.brand),
             ),
           ),
-        ),
-      ],
+          Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: colors.brand,
+            size: 20,
+          ),
+        ],
+      ),
+    );
+    if (_stackHeaderControls(context)) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: _headerControlHeight(context), child: tools),
+          SizedBox(height: AppSpacing.space2),
+          SizedBox(
+            height: _headerControlHeight(context),
+            width: double.infinity,
+            child: network,
+          ),
+        ],
+      );
+    }
+    return SizedBox(
+      height: _headerControlHeight(context),
+      child: Row(
+        children: [
+          Expanded(child: tools),
+          SizedBox(width: AppSpacing.space4),
+          SizedBox(width: 112, child: network),
+        ],
+      ),
     );
   }
 }
@@ -328,8 +313,8 @@ class _HeaderIconButton extends StatelessWidget {
           onTap: onTap,
           borderRadius: AppRadius.brMd,
           child: SizedBox(
-            width: su.setWidth(88),
-            height: su.setWidth(88),
+            width: 44,
+            height: _headerControlHeight(context),
             child: Icon(
               icon,
               size: su.setWidth(36),
@@ -352,8 +337,8 @@ class _MoreMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     return SizedBox(
-      width: su.setWidth(88),
-      height: su.setWidth(88),
+      width: 44,
+      height: _headerControlHeight(context),
       child: PopupMenuButton<int>(
         tooltip: S.of(context).g_key_m_7,
         icon: Icon(
@@ -408,7 +393,7 @@ class _TokenSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = AppColorTokens.of(context);
     return SizedBox(
-      height: ScreenUtil().setWidth(72),
+      height: _searchFieldHeight(context),
       child: TextField(
         controller: controller,
         focusNode: focusNode,
@@ -462,44 +447,33 @@ class _BottomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _SortButton(
-                  label: S.of(context).g_browser_key6,
-                  sortValue: waValue.walletInfo.coinSort['name'] ?? -1,
-                  onTap: () => waValue.setCoinSortAssets("name"),
-                ),
-                SizedBox(width: AppSpacing.space4),
-                _SortButton(
-                  label: S.of(context).g_key_198,
-                  sortValue: waValue.walletInfo.coinSort['assets'] ?? -1,
-                  onTap: () => waValue.setCoinSortAssets("assets"),
-                ),
-                SizedBox(width: AppSpacing.space4),
-                _SortButton(
-                  label: '24h%',
-                  sortValue: waValue.walletInfo.coinSort['change'] ?? -1,
-                  onTap: () => waValue.setCoinSortAssets("change"),
-                ),
-              ],
-            ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _SortButton(
+            label: S.of(context).g_key_198,
+            sortValue: waValue.walletInfo.coinSort['assets'] ?? -1,
+            onTap: () => waValue.setCoinSortAssets('assets'),
           ),
-        ),
-        _RefreshButton(
-          isRefreshing: waValue.load == Load.refresh,
-          onTap: onRefresh,
-        ),
-        _ThresholdButton(
-          threshold: smallAssetsThreshold,
-          thresholdCycle: _thresholdCycle,
-          onChanged: onThresholdChanged,
-        ),
-      ],
+          SizedBox(width: AppSpacing.space4),
+          _SortButton(
+            label: '24h%',
+            sortValue: waValue.walletInfo.coinSort['change'] ?? -1,
+            onTap: () => waValue.setCoinSortAssets('change'),
+          ),
+          SizedBox(width: AppSpacing.space4),
+          _RefreshButton(
+            isRefreshing: waValue.load == Load.refresh,
+            onTap: onRefresh,
+          ),
+          _ThresholdButton(
+            threshold: smallAssetsThreshold,
+            thresholdCycle: _thresholdCycle,
+            onChanged: onThresholdChanged,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -522,8 +496,8 @@ class _RefreshButton extends StatelessWidget {
           onTap: onTap,
           borderRadius: AppRadius.brMd,
           child: SizedBox(
-            width: su.setWidth(88),
-            height: su.setWidth(88),
+            width: 44,
+            height: _headerControlHeight(context),
             child: Center(
               child: isRefreshing
                   ? SizedBox(
@@ -567,7 +541,7 @@ class _SortButton extends StatelessWidget {
         borderRadius: AppRadius.brSm,
         child: Container(
           // >=88.w 命中高（44dp 触控红线）
-          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+          constraints: BoxConstraints(minHeight: _headerControlHeight(context)),
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
           alignment: Alignment.center,
           child: Row(
@@ -632,7 +606,7 @@ class _ThresholdButton extends StatelessWidget {
           )
           .toList(),
       child: Container(
-        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+        constraints: BoxConstraints(minHeight: _headerControlHeight(context)),
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space4,

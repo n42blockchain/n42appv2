@@ -154,7 +154,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: ScreenUtil().setWidth(70.0),
+                  fontSize: AppTypography.displayXl.fontSize,
                   height: ScreenUtil().setWidth(120.0),
                   boxShadow: const BoxShadow(color: Colors.transparent),
                   borderRadius: BorderRadius.only(

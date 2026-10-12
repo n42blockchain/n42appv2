@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wc_session_list_page.dart';
@@ -7,6 +8,7 @@ import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wc;
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../helpers/widget_test_helpers.dart';
 import '../../helpers/wallet_connect_session_fixture.dart';
 
@@ -136,7 +138,7 @@ void main() {
       action();
       action();
       await tester.pumpAndSettle();
-      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.bySubtype<AlertDialog>(), findsOneWidget);
       await confirm(tester, true);
       expect(provider.disconnected, ['First']);
       expect(tester.widget<IconButton>(one()).onPressed, isNull);

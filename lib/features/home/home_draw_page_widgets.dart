@@ -63,9 +63,8 @@ extension on _HomeDrawPageState {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColorTokens.of(
-                            context,
-                          ).brand.withValues(alpha: 0.2),
+                          color: AppColorTokens.of(context).brand
+                              .withValues(alpha: 0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -97,7 +96,6 @@ extension on _HomeDrawPageState {
                               overflow: TextOverflow.ellipsis,
                               style: AppTypography.headline.copyWith(
                                 color: AppColorTokens.of(context).textPrimary,
-                                letterSpacing: 0.3,
                               ),
                             ),
                           ),
@@ -109,9 +107,8 @@ extension on _HomeDrawPageState {
                                 vertical: AppSpacing.space2,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColorTokens.of(
-                                  context,
-                                ).brand.withValues(alpha: 0.12),
+                                color: AppColorTokens.of(context).brand
+                                    .withValues(alpha: 0.12),
                                 borderRadius: AppRadius.brPill,
                               ),
                               child: Text(

@@ -61,7 +61,6 @@ class MiningBoardWidget extends StatelessWidget {
               style: AppTypography.body.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
               ),
             ),
           ),
@@ -137,9 +136,8 @@ class MiningBoardWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.08)
-                      : AppColorTokens.of(
-                          context,
-                        ).brand.withValues(alpha: 0.08),
+                      : AppColorTokens.of(context).brand
+                            .withValues(alpha: 0.08),
                   borderRadius: AppRadius.brMd,
                 ),
                 child: Row(
@@ -302,9 +300,8 @@ class MiningBoardWidget extends StatelessWidget {
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),
                   decoration: BoxDecoration(
-                    color: AppColorTokens.of(
-                      context,
-                    ).success.withValues(alpha: 0.15),
+                    color: AppColorTokens.of(context).success
+                        .withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

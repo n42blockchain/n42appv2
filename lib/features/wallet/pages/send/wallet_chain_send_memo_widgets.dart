@@ -131,7 +131,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: su.setWidth(70.0),
+                  fontSize: AppTypography.displayXl.fontSize,
                   height: su.setWidth(120.0),
                   boxShadow: const BoxShadow(color: Colors.transparent),
                   borderRadius: BorderRadius.only(

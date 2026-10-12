@@ -127,7 +127,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             style: EnsDisplayStyle.full,
             showAvatar: true,
             showCopy: false,
-            fontSize: ScreenUtil().setSp(22.0),
+            fontSize: AppTypography.captionSm.fontSize,
           ),
           SizedBox(height: AppSpacing.space6),
 

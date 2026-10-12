@@ -17,6 +17,11 @@ Future<T?> showAppSheet<T>(
     isScrollControlled: isScrollControlled,
     backgroundColor: AppColorTokens.of(context).bgElevated,
     shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
-    builder: builder,
+    useSafeArea: true,
+    showDragHandle: true,
+    builder: (context) => Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: SafeArea(top: false, child: builder(context)),
+    ),
   );
 }

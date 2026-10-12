@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,7 +78,10 @@ class _WalletTitleButton extends StatelessWidget {
       borderRadius: AppRadius.brMd,
       child: SizedBox(
         // ≥88.w（44dp 触控红线）；Row 内容居中，视觉高度不变。
-        height: su.setWidth(88),
+        height: math.max(
+          44,
+          MediaQuery.textScalerOf(context).scale(17) * 22 / 17 + 16,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -196,8 +201,8 @@ class _WalletAssistantButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: AppRadius.brPill,
         child: SizedBox(
-          width: su.setWidth(88.0),
-          height: su.setWidth(88.0),
+          width: 44,
+          height: 44,
           child: Center(
             child: Icon(
               Icons.auto_awesome_rounded,
@@ -234,8 +239,8 @@ class _WalletConnectButton extends ConsumerWidget {
       onTap: onTap,
       borderRadius: AppRadius.brPill,
       child: SizedBox(
-        width: ScreenUtil().setWidth(88.0),
-        height: ScreenUtil().setWidth(88.0),
+        width: 44,
+        height: 44,
         child: Center(
           child: SizedBox(
             width: ScreenUtil().setWidth(60.0),

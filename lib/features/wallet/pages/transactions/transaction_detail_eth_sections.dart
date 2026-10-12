@@ -112,7 +112,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
     final s = S.of(context);
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog.adaptive(
         title: Text(isCancel ? s.g_key_79 : s.g_key_wallet_tx_speedup),
         content: Text(s.g_key_wallet_tx_replace_hint),
         actions: [
@@ -265,7 +265,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
         style: EnsDisplayStyle.full,
         showAvatar: true,
         showCopy: true,
-        fontSize: su.setSp(28),
+        fontSize: AppTypography.body.fontSize,
       ),
     );
   }

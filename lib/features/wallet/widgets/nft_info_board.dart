@@ -240,7 +240,7 @@ class NftInfoBoard extends StatelessWidget {
       style: EnsDisplayStyle.compact,
       showAvatar: true,
       showCopy: true,
-      fontSize: ScreenUtil().setSp(26),
+      fontSize: AppTypography.footnote.fontSize,
     );
   }
 

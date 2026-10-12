@@ -28,8 +28,10 @@ class _ViewPwdIconState extends State<ViewPwdIcon> {
       width: ScreenUtil().setWidth(34),
     );
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        height: ScreenUtil().setWidth(96),
+        height: 44,
+        width: 44,
         child: isPressed ? xianshi : yincang,
       ),
       onTap: () {

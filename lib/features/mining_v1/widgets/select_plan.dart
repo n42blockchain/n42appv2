@@ -25,11 +25,11 @@ class SelectPlan extends StatelessWidget {
       child: Container(
         height: ScreenUtil().setWidth(246),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             colors: <Color>[
-              Color(0xFF87A1FF),
-              Color(0xFF3C85FF),
-              Color(0xFF1976F9),
+              AppColorTokens.of(context).brand.withValues(alpha: 0.65),
+              AppColorTokens.of(context).brand.withValues(alpha: 0.85),
+              AppColorTokens.of(context).brand,
             ],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
@@ -83,7 +83,7 @@ class SelectPlan extends StatelessWidget {
                         context,
                         AppThemeKeys.mainButtonTextColor3.name,
                       ),
-                      fontSize: ScreenUtil().setSp(22),
+                      fontSize: AppTypography.captionSm.fontSize!,
                       borderRadius: ScreenUtil().setWidth(56),
                       height: ScreenUtil().setWidth(56),
                       paddingV: ScreenUtil().setWidth(12.0),

@@ -48,7 +48,7 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 // ============================================
 
 /// Accent color provider — persisted via SharedPreferences.
-/// Default is [ThemeAdapter.defaultAccent] (N42 brand blue).
+/// Default is [ThemeAdapter.defaultAccent] (Apple system blue).
 final accentColorProvider = StateNotifierProvider<AccentColorNotifier, Color>((
   ref,
 ) {

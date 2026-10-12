@@ -49,7 +49,6 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
       label,
       style: AppTypography.caption.copyWith(
         color: AppColorTokens.of(context).textSubtitle,
-        letterSpacing: 0.4,
       ),
     ),
   );
@@ -167,9 +166,8 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
                                 vertical: AppSpacing.space2,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColorTokens.of(
-                                  context,
-                                ).brand.withValues(alpha: 0.12),
+                                color: AppColorTokens.of(context).brand
+                                    .withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(

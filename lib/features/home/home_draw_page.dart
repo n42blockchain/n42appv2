@@ -297,9 +297,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                 width: ScreenUtil().setWidth(44),
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
-                  color: AppColorTokens.of(
-                    context,
-                  ).brand.withValues(alpha: 0.1),
+                  color: AppColorTokens.of(context).brand
+                      .withValues(alpha: 0.1),
                   borderRadius: AppRadius.brMd,
                 ),
                 alignment: Alignment.center,
@@ -349,7 +348,6 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
         style: AppTypography.captionSm.copyWith(
           color: AppColorTokens.of(context).textSubtitle,
           fontWeight: FontWeight.w600,
-          letterSpacing: 1.2,
         ),
       ),
     );

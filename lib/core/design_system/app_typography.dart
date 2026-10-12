@@ -1,74 +1,56 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
-/// 字阶令牌（.sp，750 设计基准）。见 `docs/DESIGN_SYSTEM.md` §1.3。
-///
-/// 业务代码禁止再写散落的 `TextStyle(fontSize: N)`；统一引用本类，
-/// 颜色按需 `.copyWith(color: AppColorTokens.of(context).textPrimary)`。
-/// 字重仅用 w400 / w500 / w600，字体族跟随系统。括号内为 375 基准等效 dp。
+/// Apple's default Dynamic Type scale in logical points. Screen width never
+/// changes type size; MediaQuery's TextScaler handles accessibility scaling.
 abstract final class AppTypography {
-  static TextStyle get displayXl => TextStyle(
-    fontSize: 72.sp, // ≈36dp 英雄数字 / 大 Logo（挖矿等级、节点数等强展示）
-    fontWeight: FontWeight.w600,
-    height: 1.0,
-    letterSpacing: -0.5,
+  static bool get _apple =>
+      defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.macOS;
+
+  static TextStyle _style(
+    double size,
+    double leading,
+    double tracking, [
+    FontWeight weight = FontWeight.w400,
+  ]) => TextStyle(
+    fontFamily: _apple
+        ? (size >= 20 ? 'CupertinoSystemDisplay' : 'CupertinoSystemText')
+        : null,
+    fontSize: size,
+    fontWeight: weight,
+    height: leading / size,
+    letterSpacing: tracking,
   );
 
-  static TextStyle get displayLg => TextStyle(
-    fontSize: 48.sp, // ≈24dp 资产总额、开屏大数字
-    fontWeight: FontWeight.w600,
-    height: 1.2,
-    letterSpacing: -0.5, // 大标题/数字紧排，现代质感
-  );
+  static TextStyle get displayXl => _style(34, 41, 0.38, FontWeight.w700);
+  static TextStyle get displayLg => _style(28, 34, 0.36);
+  static TextStyle get titleLg => _style(22, 28, 0.35);
+  static TextStyle get title => _style(20, 25, 0.38);
+  static TextStyle get headline => _style(17, 22, -0.41, FontWeight.w600);
+  static TextStyle get body => _style(17, 22, -0.41);
+  static TextStyle get bodyStrong => _style(17, 22, -0.41, FontWeight.w600);
+  static TextStyle get bodySm => _style(15, 20, -0.23);
+  static TextStyle get subheadline => _style(15, 20, -0.23);
+  static TextStyle get footnote => _style(13, 18, -0.08);
+  static TextStyle get caption => _style(12, 16, 0);
+  static TextStyle get captionSm => _style(11, 13, 0.07);
 
-  static TextStyle get titleLg => TextStyle(
-    fontSize: 40.sp, // ≈20dp 页面大标题
-    fontWeight: FontWeight.w600,
-    height: 1.25,
-    letterSpacing: -0.4,
-  );
-
-  static TextStyle get title => TextStyle(
-    fontSize: 36.sp, // ≈18dp 卡片标题、AppBar
-    fontWeight: FontWeight.w600,
-    height: 1.3,
-    letterSpacing: -0.3,
-  );
-
-  static TextStyle get headline => TextStyle(
-    fontSize: 32.sp, // ≈16dp 小节标题、重要项
-    fontWeight: FontWeight.w600,
-    height: 1.3,
-    letterSpacing: -0.2,
-  );
-
-  static TextStyle get body => TextStyle(
-    fontSize: 28.sp, // ≈14dp 正文（默认）
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-  );
-
-  static TextStyle get bodyStrong => TextStyle(
-    fontSize: 28.sp, // ≈14dp 正文强调、金额
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-  );
-
-  static TextStyle get bodySm => TextStyle(
-    fontSize: 26.sp, // ≈13dp 次要正文
-    fontWeight: FontWeight.w400,
-    height: 1.4,
-  );
-
-  static TextStyle get caption => TextStyle(
-    fontSize: 24.sp, // ≈12dp 时间戳、辅助
-    fontWeight: FontWeight.w400,
-    height: 1.3,
-  );
-
-  static TextStyle get captionSm => TextStyle(
-    fontSize: 20.sp, // ≈10dp 标签、徽章
-    fontWeight: FontWeight.w500,
-    height: 1.2,
+  static TextTheme get textTheme => TextTheme(
+    displayLarge: displayXl,
+    displayMedium: displayLg,
+    displaySmall: titleLg,
+    headlineLarge: displayLg,
+    headlineMedium: titleLg,
+    headlineSmall: title,
+    titleLarge: title,
+    titleMedium: headline,
+    titleSmall: subheadline,
+    bodyLarge: body,
+    bodyMedium: body,
+    bodySmall: footnote,
+    labelLarge: headline,
+    labelMedium: caption,
+    labelSmall: captionSm,
   );
 }

@@ -163,7 +163,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: ScreenUtil().setWidth(70.0),
+                  fontSize: AppTypography.displayXl.fontSize,
                   height: ScreenUtil().setWidth(120.0),
                   boxShadow: BoxShadow(
                     color: const Color(0xFF101828).withAlpha(0),

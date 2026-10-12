@@ -155,7 +155,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                     amountCheck();
                     FocusScope.of(context).requestFocus(toNode);
                   },
-                  fontSize: sw(70.0),
+                  fontSize: AppTypography.displayXl.fontSize,
                   height: sw(120.0),
                   boxShadow: const BoxShadow(color: Color(0x00000000)),
                   borderRadius: BorderRadius.only(

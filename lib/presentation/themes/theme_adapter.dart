@@ -5,7 +5,13 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../core/design_system/app_typography.dart';
+import '../../core/design_system/app_radius.dart';
 
 /// Theme Adapter
 ///
@@ -13,145 +19,336 @@ import 'package:flutter/material.dart';
 class ThemeAdapter {
   ThemeAdapter._();
 
-  /// Default accent color (N42 brand blue)
-  static const Color defaultAccent = Color(0xFF5B6CFF);
+  /// Default Apple system blue; saved custom accents remain unchanged.
+  static const Color defaultAccent = Color(0xFF007AFF);
 
   /// Build light ThemeData with the given [accent] color.
-  static ThemeData buildLight(Color accent) => ThemeData.light().copyWith(
-    scaffoldBackgroundColor:
-        AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
-    primaryColor: accent,
-    colorScheme: ColorScheme.light(primary: accent, secondary: accent),
+  static ThemeData buildLight(
+    Color accent, {
+    TextScaler textScaler = TextScaler.noScaling,
+  }) => _finish(
+    ThemeData.light().copyWith(
+      scaffoldBackgroundColor:
+          AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
+      primaryColor: accent,
+      colorScheme: ColorScheme.light(primary: accent, secondary: accent),
 
-    // AppBar Theme
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      titleTextStyle: TextStyle(color: Color(0xff222222)),
-      actionsIconTheme: IconThemeData(color: Color(0xff222222)),
-      toolbarTextStyle: TextStyle(color: Color(0xff222222)),
-      iconTheme: IconThemeData(color: Color(0xff222222)),
-    ),
-
-    // Bottom Navigation Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedIconTheme: IconThemeData(color: accent),
-      unselectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
-      selectedItemColor: accent,
-      unselectedItemColor: const Color(0xff222222),
-    ),
-
-    iconTheme: const IconThemeData(color: Color(0xff222222)),
-
-    // Input Decoration Theme
-    inputDecorationTheme: InputDecorationTheme(
-      hintStyle: const TextStyle(color: Color(0xFFBAC2CC), fontSize: 16),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: accent, style: BorderStyle.solid),
+      // AppBar Theme
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+        titleTextStyle: TextStyle(color: Color(0xff222222)),
+        actionsIconTheme: IconThemeData(color: Color(0xff222222)),
+        toolbarTextStyle: TextStyle(color: Color(0xff222222)),
+        iconTheme: IconThemeData(color: Color(0xff222222)),
       ),
-      border: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xffc6c6c6),
-          style: BorderStyle.solid,
+
+      // Bottom Navigation Theme
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedIconTheme: IconThemeData(color: accent),
+        unselectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+        selectedItemColor: accent,
+        unselectedItemColor: const Color(0xff222222),
+      ),
+
+      iconTheme: const IconThemeData(color: Color(0xff222222)),
+
+      // Input Decoration Theme
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: const TextStyle(color: Color(0xFFBAC2CC), fontSize: 16),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: accent, style: BorderStyle.solid),
+        ),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xffc6c6c6),
+            style: BorderStyle.solid,
+          ),
+        ),
+        errorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xffd9445a),
+            style: BorderStyle.solid,
+          ),
         ),
       ),
-      errorBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xffd9445a),
-          style: BorderStyle.solid,
-        ),
+
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: accent,
       ),
+
+      buttonTheme: _buttonTheme(accent),
+      progressIndicatorTheme: _progressTheme(accent),
+
+      // Divider Theme
+      dividerTheme: const DividerThemeData(
+        color: Color(0xffD9D9D9),
+        space: 0,
+        thickness: 1,
+        indent: 10,
+        endIndent: 10,
+      ),
+
+      textSelectionTheme: _textSelectionTheme(accent),
     ),
-
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: accent,
-    ),
-
-    buttonTheme: _buttonTheme(accent),
-    progressIndicatorTheme: _progressTheme(accent),
-
-    // Divider Theme
-    dividerTheme: const DividerThemeData(
-      color: Color(0xffD9D9D9),
-      space: 0,
-      thickness: 1,
-      indent: 10,
-      endIndent: 10,
-    ),
-
-    textSelectionTheme: _textSelectionTheme(accent),
+    accent,
+    textScaler,
   );
 
   /// Build dark ThemeData with the given [accent] color.
-  static ThemeData buildDark(Color accent) => ThemeData.dark().copyWith(
-    scaffoldBackgroundColor:
-        AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
-    primaryColor: accent,
-    colorScheme: ColorScheme.dark(primary: accent, secondary: accent),
+  static ThemeData buildDark(
+    Color accent, {
+    TextScaler textScaler = TextScaler.noScaling,
+  }) => _finish(
+    ThemeData.dark().copyWith(
+      scaffoldBackgroundColor:
+          AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
+      primaryColor: accent,
+      colorScheme: ColorScheme.dark(primary: accent, secondary: accent),
 
-    cardTheme: const CardThemeData(
-      shadowColor: Color(0xff444444),
-      color: Color(0xff2b2b2b),
-    ),
-
-    // AppBar Theme
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      titleTextStyle: TextStyle(color: Color(0xffffffff)),
-      toolbarTextStyle: TextStyle(color: Color(0xffffffff)),
-      actionsIconTheme: IconThemeData(color: Color(0xffffffff)),
-      iconTheme: IconThemeData(color: Color(0xffffffff)),
-    ),
-
-    // Bottom Navigation Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedIconTheme: IconThemeData(color: accent),
-      unselectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
-      selectedItemColor: accent,
-      unselectedItemColor: const Color(0xff888888),
-    ),
-
-    iconTheme: const IconThemeData(color: Color(0xffffffff)),
-
-    // Input Decoration Theme
-    inputDecorationTheme: InputDecorationTheme(
-      hintStyle: const TextStyle(color: Color(0xFFBEBEBE), fontSize: 16),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: accent, style: BorderStyle.solid),
+      cardTheme: const CardThemeData(
+        shadowColor: Color(0xff444444),
+        color: Color(0xff2b2b2b),
       ),
-      border: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xff545454),
-          style: BorderStyle.solid,
+
+      // AppBar Theme
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+        titleTextStyle: TextStyle(color: Color(0xffffffff)),
+        toolbarTextStyle: TextStyle(color: Color(0xffffffff)),
+        actionsIconTheme: IconThemeData(color: Color(0xffffffff)),
+        iconTheme: IconThemeData(color: Color(0xffffffff)),
+      ),
+
+      // Bottom Navigation Theme
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedIconTheme: IconThemeData(color: accent),
+        unselectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+        selectedItemColor: accent,
+        unselectedItemColor: const Color(0xff888888),
+      ),
+
+      iconTheme: const IconThemeData(color: Color(0xffffffff)),
+
+      // Input Decoration Theme
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: const TextStyle(color: Color(0xFFBEBEBE), fontSize: 16),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: accent, style: BorderStyle.solid),
+        ),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xff545454),
+            style: BorderStyle.solid,
+          ),
+        ),
+        errorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xffd9445a),
+            style: BorderStyle.solid,
+          ),
         ),
       ),
-      errorBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color(0xffd9445a),
-          style: BorderStyle.solid,
-        ),
+
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: accent.withValues(alpha: 0.5),
       ),
+
+      buttonTheme: _buttonTheme(accent),
+      progressIndicatorTheme: _progressTheme(accent),
+
+      // Divider Theme
+      dividerTheme: const DividerThemeData(
+        color: Color(0xff303239),
+        space: 0,
+        thickness: 1,
+        indent: 10,
+        endIndent: 10,
+      ),
+
+      textSelectionTheme: _textSelectionTheme(accent),
     ),
-
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: accent.withValues(alpha: 0.5),
-    ),
-
-    buttonTheme: _buttonTheme(accent),
-    progressIndicatorTheme: _progressTheme(accent),
-
-    // Divider Theme
-    dividerTheme: const DividerThemeData(
-      color: Color(0xff303239),
-      space: 0,
-      thickness: 1,
-      indent: 10,
-      endIndent: 10,
-    ),
-
-    textSelectionTheme: _textSelectionTheme(accent),
+    accent,
+    textScaler,
   );
+
+  static ThemeData _finish(
+    ThemeData base,
+    Color accent,
+    TextScaler textScaler,
+  ) {
+    final dark = base.brightness == Brightness.dark;
+    final apple = accent == defaultAccent;
+    Color resolve(Color color) => color is CupertinoDynamicColor
+        ? (dark ? color.darkColor : color.color)
+        : color;
+    final primary = apple ? resolve(CupertinoColors.systemBlue) : accent;
+    final colors = AppThemeUtils.palette(base.brightness, accent);
+    final foreground = colors[AppThemeKeys.mainTextColor.name]!;
+    final surface = colors[AppThemeKeys.itemBgColor.name]!;
+    final background = colors[AppThemeKeys.backGroundColor.name]!;
+    final border = colors[AppThemeKeys.dividerColor.name]!;
+    final text = AppTypography.textTheme.apply(
+      bodyColor: foreground,
+      displayColor: foreground,
+    );
+    final button = ButtonStyle(
+      minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+      padding: const WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      textStyle: WidgetStatePropertyAll(AppTypography.headline),
+      shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: AppRadius.brLg),
+      ),
+      visualDensity: VisualDensity.standard,
+      tapTargetSize: MaterialTapTargetSize.padded,
+    );
+    return base.copyWith(
+      textTheme: text,
+      primaryTextTheme: text,
+      visualDensity: VisualDensity.standard,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      scaffoldBackgroundColor: background,
+      cardColor: surface,
+      cardTheme: base.cardTheme.copyWith(color: surface),
+      dividerColor: border,
+      dividerTheme: base.dividerTheme.copyWith(color: border),
+      primaryColor: primary,
+      colorScheme: base.colorScheme.copyWith(
+        primary: primary,
+        secondary: primary,
+        surface: surface,
+        onSurface: foreground,
+        error: colors[AppThemeKeys.errorTextColor.name],
+        outline: border,
+      ),
+      cupertinoOverrideTheme: CupertinoThemeData(
+        brightness: base.brightness,
+        primaryColor: apple ? CupertinoColors.systemBlue : accent,
+        scaffoldBackgroundColor: background,
+        barBackgroundColor: surface,
+      ),
+      appBarTheme: base.appBarTheme.copyWith(
+        toolbarHeight: math.max(44, textScaler.scale(17) * 22 / 17 + 12),
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: background,
+        foregroundColor: foreground,
+        titleTextStyle: AppTypography.headline.copyWith(color: foreground),
+        iconTheme: IconThemeData(color: foreground, size: 22),
+        actionsIconTheme: IconThemeData(color: foreground, size: 22),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: button.copyWith(
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? primary.withValues(alpha: 0.3)
+                : primary,
+          ),
+          foregroundColor: const WidgetStatePropertyAll(Colors.white),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: button.copyWith(
+          backgroundColor: WidgetStatePropertyAll(primary),
+          foregroundColor: const WidgetStatePropertyAll(Colors.white),
+          elevation: const WidgetStatePropertyAll(0),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: button.copyWith(
+          foregroundColor: WidgetStatePropertyAll(primary),
+          side: WidgetStatePropertyAll(BorderSide(color: border)),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: button.copyWith(
+          foregroundColor: WidgetStatePropertyAll(primary),
+        ),
+      ),
+      iconButtonTheme: const IconButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: WidgetStatePropertyAll(Size(44, 44)),
+          iconSize: WidgetStatePropertyAll(22),
+          tapTargetSize: MaterialTapTargetSize.padded,
+        ),
+      ),
+      listTileTheme: ListTileThemeData(
+        minTileHeight: 44,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        titleTextStyle: AppTypography.body.copyWith(color: foreground),
+        subtitleTextStyle: AppTypography.footnote.copyWith(
+          color: colors[AppThemeKeys.mainTextColor6.name],
+        ),
+        iconColor: primary,
+      ),
+      inputDecorationTheme: base.inputDecorationTheme.copyWith(
+        hintStyle: AppTypography.body.copyWith(
+          color: colors[AppThemeKeys.textFieldHintColor.name],
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+        constraints: const BoxConstraints(minHeight: 44),
+        suffixIconConstraints: const BoxConstraints(
+          minWidth: 44,
+          minHeight: 44,
+        ),
+        prefixIconConstraints: const BoxConstraints(
+          minWidth: 44,
+          minHeight: 44,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: AppRadius.brMd,
+          borderSide: BorderSide(color: primary),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: AppRadius.brMd,
+          borderSide: BorderSide(
+            color: colors[AppThemeKeys.errorTextColor.name]!,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: AppRadius.brMd,
+          borderSide: BorderSide(
+            color: colors[AppThemeKeys.errorTextColor.name]!,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: AppRadius.brMd,
+          borderSide: BorderSide(color: border),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: apple
+            ? resolve(CupertinoColors.secondarySystemGroupedBackground)
+            : surface,
+        titleTextStyle: AppTypography.headline.copyWith(color: foreground),
+        contentTextStyle: AppTypography.body.copyWith(color: foreground),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: surface,
+        showDragHandle: true,
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brSheetTop),
+      ),
+      bottomNavigationBarTheme: base.bottomNavigationBarTheme.copyWith(
+        selectedItemColor: primary,
+        selectedIconTheme: IconThemeData(color: primary),
+        backgroundColor: surface,
+        selectedLabelStyle: AppTypography.captionSm,
+        unselectedLabelStyle: AppTypography.captionSm,
+      ),
+      floatingActionButtonTheme: base.floatingActionButtonTheme.copyWith(
+        backgroundColor: primary,
+      ),
+      progressIndicatorTheme: _progressTheme(primary),
+      textSelectionTheme: _textSelectionTheme(primary),
+    );
+  }
 
   // ── Shared theme components ─────────────────────────────────────────────
 
@@ -190,9 +387,91 @@ class AppThemeUtils {
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final colorMap = isDark ? darkMap : lightMap;
+    final theme = Theme.of(context);
+    final accent = theme.cupertinoOverrideTheme?.primaryColor;
+    final apple =
+        accent == CupertinoColors.systemBlue ||
+        (accent == null &&
+            theme.colorScheme.primary == ThemeAdapter.defaultAccent);
+    final colorMap = palette(
+      isDark ? Brightness.dark : Brightness.light,
+      apple
+          ? ThemeAdapter.defaultAccent
+          : (accent ?? theme.colorScheme.primary),
+    );
 
     return colorMap[key] ?? const Color(0xff000000);
+  }
+
+  /// Existing custom palette with Apple's semantic colors as the default.
+  static Map<String, Color> palette(Brightness brightness, Color accent) {
+    final dark = brightness == Brightness.dark;
+    final colors = {...(dark ? darkMap : lightMap)};
+    if (accent != ThemeAdapter.defaultAccent) {
+      for (final key in [
+        AppThemeKeys.mainBlueColor,
+        AppThemeKeys.mainButtonBgColor,
+        AppThemeKeys.mainButtonTextColor3,
+        AppThemeKeys.refreshBGColor,
+      ]) {
+        colors[key.name] = accent;
+      }
+      return colors;
+    }
+    Color resolve(Color color) => color is CupertinoDynamicColor
+        ? (dark ? color.darkColor : color.color)
+        : color;
+    void set(List<AppThemeKeys> keys, Color color) {
+      for (final key in keys) {
+        colors[key.name] = resolve(color);
+      }
+    }
+
+    set([
+      AppThemeKeys.backGroundColor,
+      AppThemeKeys.backGroundColor2,
+    ], CupertinoColors.systemGroupedBackground);
+    set([
+      AppThemeKeys.backGroundColor3,
+      AppThemeKeys.itemBgColor,
+      AppThemeKeys.itemBgColor4,
+    ], CupertinoColors.secondarySystemGroupedBackground);
+    set([
+      AppThemeKeys.itemBgColor2,
+      AppThemeKeys.itemBgColor5,
+      AppThemeKeys.itemBgColor6,
+    ], CupertinoColors.tertiarySystemGroupedBackground);
+    set([
+      AppThemeKeys.mainTextColor,
+      AppThemeKeys.itemTextColor,
+      AppThemeKeys.mainTextColor7,
+    ], CupertinoColors.label);
+    set([
+      AppThemeKeys.mainTextColor6,
+      AppThemeKeys.itemSubtitleTextColor,
+      AppThemeKeys.mainTextColor8,
+    ], CupertinoColors.secondaryLabel);
+    set([
+      AppThemeKeys.mainTextColor4,
+      AppThemeKeys.mainTextColor3,
+      AppThemeKeys.textFieldHintColor,
+      AppThemeKeys.hintTextColor,
+    ], CupertinoColors.tertiaryLabel);
+    set([
+      AppThemeKeys.dividerColor,
+      AppThemeKeys.itemBorderColor,
+      AppThemeKeys.itemLineColor,
+    ], CupertinoColors.separator);
+    set([
+      AppThemeKeys.mainBlueColor,
+      AppThemeKeys.mainButtonBgColor,
+      AppThemeKeys.mainButtonTextColor3,
+      AppThemeKeys.refreshBGColor,
+    ], CupertinoColors.systemBlue);
+    set([AppThemeKeys.rightTextColor], CupertinoColors.systemGreen);
+    set([AppThemeKeys.errorTextColor], CupertinoColors.systemRed);
+    set([AppThemeKeys.textColorOrange], CupertinoColors.systemOrange);
+    return colors;
   }
 
   /// Light theme colors

@@ -151,7 +151,6 @@ class _CoinTile extends StatelessWidget {
                           style: AppTypography.caption.copyWith(
                             fontWeight: FontWeight.w600,
                             color: textColor,
-                            letterSpacing: -0.2,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -164,7 +163,6 @@ class _CoinTile extends StatelessWidget {
                     style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w400,
                       color: subColor,
-                      letterSpacing: 0.3,
                     ),
                   ),
                 ],

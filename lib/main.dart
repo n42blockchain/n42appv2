@@ -403,7 +403,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   Widget build(BuildContext context) {
     return AdaptiveViewport(
       child: AdaptiveScreenUtil(
-        builder: (_, child) {
+        builder: (screenContext, child) {
           final locale = ref.watch(localeProvider);
           final themeMode = ref.watch(themeModeProvider);
           final accentColor = ref.watch(accentColorProvider);
@@ -433,8 +433,14 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
                 return const Locale('en');
               },
               themeMode: themeMode,
-              theme: ThemeAdapter.buildLight(accentColor),
-              darkTheme: ThemeAdapter.buildDark(accentColor),
+              theme: ThemeAdapter.buildLight(
+                accentColor,
+                textScaler: MediaQuery.textScalerOf(screenContext),
+              ),
+              darkTheme: ThemeAdapter.buildDark(
+                accentColor,
+                textScaler: MediaQuery.textScalerOf(screenContext),
+              ),
               title: 'N42Wallet',
               home: _widgetPage(),
               routes: _routes,

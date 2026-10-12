@@ -112,7 +112,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             style: EnsDisplayStyle.full,
             showAvatar: true,
             showCopy: true,
-            fontSize: ScreenUtil().setSp(28),
+            fontSize: AppTypography.body.fontSize,
           ),
           SizedBox(height: AppSpacing.space6),
           _divider(),

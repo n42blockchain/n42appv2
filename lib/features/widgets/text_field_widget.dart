@@ -127,7 +127,7 @@ Widget textFieldStyle2(
     borderColorOverride: borderColor,
     focusNode: focusNode,
   );
-  final defaultHeight = ScreenUtil().setWidth(88.0);
+  const defaultHeight = 44.0;
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,8 +156,7 @@ Widget textFieldStyle2(
               : Border.all(width: borderWidth, color: colors.borderColor),
         ),
         constraints: BoxConstraints(
-          maxHeight: height ?? defaultHeight,
-          minHeight: height ?? defaultHeight,
+          minHeight: (height ?? defaultHeight).clamp(44.0, double.infinity),
         ),
         alignment: Alignment.center,
         child: Row(
@@ -172,9 +171,9 @@ Widget textFieldStyle2(
                 readOnly: readOnly,
                 style:
                     style ??
-                    TextStyle(
+                    AppTypography.body.copyWith(
                       color: colors.textColor,
-                      fontSize: fontSize ?? ScreenUtil().setSp(32.0),
+                      fontSize: fontSize,
                     ),
                 textInputAction: textInputAction ?? TextInputAction.next,
                 keyboardType: keyboardType ?? TextInputType.text,
@@ -250,7 +249,7 @@ Widget textFieldStyle3(
     borderColorOverride: borderColor,
     focusNode: focusNode,
   );
-  final defaultHeight = ScreenUtil().setWidth(88.0);
+  const defaultHeight = 44.0;
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,8 +269,7 @@ Widget textFieldStyle3(
               : Border.all(width: borderWidth, color: colors.borderColor),
         ),
         constraints: BoxConstraints(
-          maxHeight: height ?? defaultHeight,
-          minHeight: height ?? defaultHeight,
+          minHeight: (height ?? defaultHeight).clamp(44.0, double.infinity),
         ),
         alignment: Alignment.center,
         child: Row(
@@ -285,9 +283,9 @@ Widget textFieldStyle3(
                 enabled: enabled,
                 style:
                     style ??
-                    TextStyle(
+                    AppTypography.body.copyWith(
                       color: colors.textColor,
-                      fontSize: fontSize ?? ScreenUtil().setSp(32.0),
+                      fontSize: fontSize,
                     ),
                 textInputAction: textInputAction ?? TextInputAction.next,
                 keyboardType: keyboardType ?? TextInputType.text,

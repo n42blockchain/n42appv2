@@ -379,7 +379,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
             style: EnsDisplayStyle.full,
             showAvatar: true,
             showCopy: true,
-            fontSize: su.setSp(28.0),
+            fontSize: AppTypography.body.fontSize,
           ),
         ],
       ),

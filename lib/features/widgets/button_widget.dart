@@ -19,7 +19,10 @@ Widget buttonStyle1(BuildContext context, VoidCallback onTap, String title) {
           ),
         ),
       ),
-      padding: ButtonStyleButton.allOrNull<EdgeInsets>(EdgeInsets.all(0)),
+      minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+      padding: const WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      ),
       alignment: Alignment.center,
     ),
     child: Padding(
@@ -50,7 +53,10 @@ Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
       shape: ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
         RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
-      padding: ButtonStyleButton.allOrNull<EdgeInsets>(EdgeInsets.all(0)),
+      minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+      padding: const WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      ),
       alignment: Alignment.center,
     ),
     child: Padding(
@@ -78,8 +84,8 @@ Widget buttonStyle3(
   String title,
   Color backgroundColor,
   Color textColor, {
-  double fontSize = 15,
-  double borderRadius = 4,
+  double fontSize = 17,
+  double borderRadius = 12,
   double height = 44,
   double paddingV = 6,
   double paddingH = 16,
@@ -87,7 +93,10 @@ Widget buttonStyle3(
   return InkWell(
     onTap: onTap,
     child: Container(
-      height: height,
+      constraints: BoxConstraints(
+        minWidth: 44,
+        minHeight: height < 44 ? 44 : height,
+      ),
       padding: EdgeInsets.symmetric(vertical: paddingV, horizontal: paddingH),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -104,7 +113,10 @@ Widget buttonStyle3(
       alignment: Alignment.center,
       child: Text(
         title,
-        style: TextStyle(fontSize: fontSize, color: textColor),
+        style: AppTypography.headline.copyWith(
+          fontSize: fontSize,
+          color: textColor,
+        ),
         textAlign: TextAlign.center,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
@@ -137,7 +149,10 @@ Widget buttonStyle5(
           ),
         ),
       ),
-      padding: ButtonStyleButton.allOrNull<EdgeInsets>(EdgeInsets.all(0)),
+      minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+      padding: const WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      ),
       alignment: Alignment.center,
     ),
     child: Padding(
@@ -163,7 +178,7 @@ Widget buttonStyle6(
   Color? borderColor,
 }) {
   return TextButton(
-    onPressed: onTap,
+    onPressed: load ? null : onTap,
     style: ButtonStyle(
       backgroundColor: ButtonStyleButton.allOrNull<Color>(backgroundColor),
       shape: ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
@@ -175,7 +190,10 @@ Widget buttonStyle6(
           ),
         ),
       ),
-      padding: ButtonStyleButton.allOrNull<EdgeInsets>(EdgeInsets.all(0)),
+      minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+      padding: const WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      ),
       alignment: Alignment.center,
     ),
     child: Padding(
