@@ -89,8 +89,7 @@ void main() {
     debugPrint(
       'HOME_GEOMETRY row=${row.height} board=${board.height} features=${features.height}',
     );
-    expect(row.height, inInclusiveRange(52, 57));
-    expect(row.height / 83.36, inInclusiveRange(0.63, 0.69));
+    expect(row.height, inInclusiveRange(64, 70));
     expect(board.height, lessThan(205));
     expect(features.height, lessThan(70));
     final pinSize = tester.getSize(find.byType(WalletPinIconButton));
@@ -102,11 +101,18 @@ void main() {
     );
     expect(find.text(r'$2,500'), findsOneWidget);
     expect(find.text('-1.24%'), findsOneWidget);
+    for (final label in ['ETH', r'$3,125.00']) {
+      final style = tester.widget<Text>(find.text(label)).style!;
+      expect(style.fontSize, 15);
+      expect(style.fontWeight, FontWeight.w400);
+    }
+    expect(tester.widget<Text>(find.text('1.25 ETH')).style!.fontSize, 13);
   });
 
-  testWidgets(
-    'loading skeleton matches compact row height and trailing space',
-    (tester) async {
+  for (final scale in [1.0, 2.0]) {
+    testWidgets('loading skeleton follows asset row scale at ${scale}x', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -122,16 +128,24 @@ void main() {
               const WalletSkeletonCoinRow(shimmerColor: Colors.grey),
             ],
           ),
+          textScaler: TextScaler.linear(scale),
         ),
       );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      expect(
-        tester.getSize(find.byType(WalletSkeletonCoinRow)).height,
-        closeTo(tester.getSize(find.byType(WalletCoinItem)).height, 0.1),
-      );
-    },
-  );
+      final skeletonHeight = tester
+          .getSize(find.byType(WalletSkeletonCoinRow))
+          .height;
+      final rowHeight = tester.getSize(find.byType(WalletCoinItem)).height;
+      if (scale == 1) {
+        expect(skeletonHeight, closeTo(rowHeight, 0.1));
+      } else {
+        // Real quote/change text may wrap beyond the placeholder's minimum.
+        expect(skeletonHeight, greaterThan(128));
+        expect(skeletonHeight, lessThanOrEqualTo(rowHeight));
+      }
+    });
+  }
 
   for (final theme in [ThemeMode.light, ThemeMode.dark]) {
     for (final scale in [1.0, 2.0]) {
@@ -150,9 +164,8 @@ void main() {
           wrapForTest(
             Builder(
               builder: (context) => MediaQuery(
-                data: MediaQuery.of(
-                  context,
-                ).copyWith(textScaler: TextScaler.linear(scale)),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: TextScaler.linear(scale)),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: WalletCoinItem(

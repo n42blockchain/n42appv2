@@ -133,6 +133,11 @@ class _WalletCoinListSkeletonState extends State<WalletCoinListSkeleton>
   }
 }
 
+bool walletAssetRowUsesStackedLayout(
+  BuildContext context,
+  double availableWidth,
+) => availableWidth < 200 || MediaQuery.textScalerOf(context).scale(15) > 22;
+
 class WalletSkeletonCoinRow extends StatelessWidget {
   const WalletSkeletonCoinRow({super.key, required this.shimmerColor});
   final Color shimmerColor;
@@ -157,13 +162,13 @@ class WalletSkeletonCoinRow extends StatelessWidget {
           ),
         ),
       ),
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: ScreenUtil().setWidth(64),
-            height: ScreenUtil().setWidth(64),
+            width: 36,
+            height: 36,
             margin: EdgeInsets.only(right: AppSpacing.space4),
             decoration: BoxDecoration(
               color: shimmerColor,
@@ -171,25 +176,38 @@ class WalletSkeletonCoinRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: WalletPinIconButton.touchExtent,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [_shimmerBox(80, 22), _shimmerBox(60, 22)],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final scaler = MediaQuery.textScalerOf(context);
+                final lineHeight = scaler.scale(20) + scaler.scale(18) + 2;
+                final stacked = walletAssetRowUsesStackedLayout(
+                  context,
+                  constraints.maxWidth,
+                );
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: max(
+                      WalletPinIconButton.touchExtent,
+                      stacked ? lineHeight * 2 + AppSpacing.space4 : lineHeight,
+                    ),
                   ),
-                  SizedBox(height: AppSpacing.space2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [_shimmerBox(100, 18), _shimmerBox(50, 18)],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [_shimmerBox(80, 22), _shimmerBox(60, 22)],
+                      ),
+                      SizedBox(height: AppSpacing.space2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [_shimmerBox(100, 18), _shimmerBox(50, 18)],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
           SizedBox.square(dimension: WalletPinIconButton.touchExtent),

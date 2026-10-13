@@ -140,7 +140,7 @@ class WalletCoinItem extends ConsumerWidget {
             onTap: () => _onTap(context),
             borderRadius: AppRadius.brMd,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 children: [
                   _CoinIcon(
@@ -189,8 +189,8 @@ class _CoinIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: ScreenUtil().setWidth(64),
-      height: ScreenUtil().setWidth(64),
+      width: 36,
+      height: 36,
       margin: EdgeInsets.only(right: AppSpacing.space4),
       decoration: BoxDecoration(
         borderRadius: AppRadius.brLg,
@@ -259,67 +259,84 @@ class _CoinInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = AppColorTokens.of(context);
-    // Two aligned columns: market data on the left, holdings on the right.
-    // Wrap the quote/change at large text sizes instead of shrinking the font.
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          flex: 5,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _CoinValueText(
-                text: coinInfo.config.miniName,
-                style: AppTypography.bodyStrong.copyWith(
-                  color: colors.textPrimary,
-                ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final stacked = walletAssetRowUsesStackedLayout(
+          context,
+          constraints.maxWidth,
+        );
+        final market = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _CoinValueText(
+              text: coinInfo.config.miniName,
+              wrap: stacked,
+              style: AppTypography.subheadline.copyWith(
+                color: colors.textPrimary,
               ),
-              SizedBox(height: AppSpacing.space2 / 2),
-              Wrap(
-                spacing: AppSpacing.space2,
-                runSpacing: AppSpacing.space2 / 2,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  _CoinValueText(
-                    text: "\$${coinInfo.coinPriceString()}",
-                    style: AppTypography.caption.copyWith(
-                      color: colors.textSubtitle,
-                    ),
+            ),
+            const SizedBox(height: 2),
+            Wrap(
+              spacing: AppSpacing.space2,
+              runSpacing: 2,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                _CoinValueText(
+                  text: "\$${coinInfo.coinPriceString()}",
+                  wrap: stacked,
+                  style: AppTypography.footnote.copyWith(
+                    color: colors.textSubtitle,
                   ),
-                  CoinPercentageBadge(percentage: coinInfo.percentage),
-                ],
+                ),
+                CoinPercentageBadge(percentage: coinInfo.percentage),
+              ],
+            ),
+          ],
+        );
+        final holdings = Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _CoinValueText(
+              text: balanceStr == '—' ? '—' : "\$$balanceStr",
+              wrap: stacked,
+              style: AppTypography.subheadline.copyWith(
+                color: colors.textPrimary,
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
-            ],
-          ),
-        ),
-        SizedBox(width: AppSpacing.space4),
-        Expanded(
-          flex: 4,
-          child: Column(
+              textAlign: TextAlign.right,
+            ),
+            const SizedBox(height: 2),
+            _CoinValueText(
+              text: '$tokenBalanceStr ${coinInfo.config.miniName}',
+              wrap: stacked,
+              style: AppTypography.footnote.copyWith(
+                color: colors.textSubtitle,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ],
+        );
+        if (stacked) {
+          return Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _CoinValueText(
-                text: balanceStr == '—' ? '—' : "\$$balanceStr",
-                style: AppTypography.bodyStrong.copyWith(
-                  color: colors.textPrimary,
-                ),
-                textAlign: TextAlign.right,
-              ),
-              SizedBox(height: AppSpacing.space2 / 2),
-              _CoinValueText(
-                text: '$tokenBalanceStr ${coinInfo.config.miniName}',
-                style: AppTypography.caption.copyWith(
-                  color: colors.textSubtitle,
-                ),
-                textAlign: TextAlign.right,
-              ),
+              market,
+              SizedBox(height: AppSpacing.space4),
+              holdings,
             ],
-          ),
-        ),
-      ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(flex: 5, child: market),
+            SizedBox(width: AppSpacing.space4),
+            Expanded(flex: 4, child: holdings),
+          ],
+        );
+      },
     );
   }
 }
@@ -330,11 +347,13 @@ class _CoinValueText extends StatelessWidget {
     required this.text,
     required this.style,
     this.textAlign = TextAlign.left,
+    this.wrap = false,
   });
 
   final String text;
   final TextStyle style;
   final TextAlign textAlign;
+  final bool wrap;
 
   @override
   Widget build(BuildContext context) => Tooltip(
@@ -342,8 +361,8 @@ class _CoinValueText extends StatelessWidget {
     excludeFromSemantics: true,
     child: Text(
       text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+      maxLines: wrap ? null : 1,
+      overflow: wrap ? TextOverflow.visible : TextOverflow.ellipsis,
       textAlign: textAlign,
       style: style,
     ),
@@ -367,9 +386,9 @@ class CoinPercentageBadge extends StatelessWidget {
       "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: AppTypography.caption.copyWith(
+      style: AppTypography.footnote.copyWith(
         color: color,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       ),
     );
   }
