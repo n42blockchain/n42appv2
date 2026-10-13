@@ -156,3 +156,7 @@
 -dontwarn javax.lang.model.type.TypeMirror
 -dontwarn javax.lang.model.type.TypeVisitor
 -dontwarn javax.lang.model.util.SimpleTypeVisitor8
+
+# SLF4J 1.x explicitly falls back to its NOP logger without this optional binding.
+# https://www.slf4j.org/codes.html#StaticLoggerBinder
+-dontwarn org.slf4j.impl.StaticLoggerBinder
