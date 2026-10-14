@@ -23,8 +23,19 @@ extension on _HomePageState {
         }
       },
       backgroundColor: AppColorTokens.of(context).bgSurface,
+      // M3 paints the indicator with colorScheme.secondaryContainer, which is
+      // brand blue in our theme and swallows the brand-tinted selected icon.
+      // Match the bottom bar's light brand tint instead.
+      indicatorColor: selectedColor.withAlpha(22),
       selectedIconTheme: IconThemeData(color: selectedColor),
       unselectedIconTheme: IconThemeData(color: unselectedColor),
+      selectedLabelTextStyle: AppTypography.captionSm.copyWith(
+        fontWeight: FontWeight.w600,
+        color: selectedColor,
+      ),
+      unselectedLabelTextStyle: AppTypography.captionSm.copyWith(
+        color: unselectedColor,
+      ),
       labelType: NavigationRailLabelType.all,
       leading: InkWell(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),

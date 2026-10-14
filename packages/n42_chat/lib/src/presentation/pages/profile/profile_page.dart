@@ -244,9 +244,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              // Fiat on/off-ramp is hidden on iOS: the app does not offer
-              // buying or selling crypto there (App Review Guideline 2.1).
-              if (!PlatformUtils.isIOS) ...[
+              // Fiat on/off-ramp is Android-only: Apple App Review rejects
+              // in-app crypto buying/selling flows on iOS/iPadOS.
+              if (PlatformUtils.isAndroid) ...[
                 _buildDivider(context),
                 _buildMenuItem(
                   context,

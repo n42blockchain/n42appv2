@@ -12,3 +12,6 @@ dependency_overrides:
   flutter_facebook_auth: 7.2.0
   # reown_core 1.5.1 caps package_info_plus below 10; its sole use is the unchanged PackageInfo.fromPlatform().packageName API.
   package_info_plus: ^10.2.2
+  # image 4.11.0 calls ZLibDecoder.decodeLazy, which no published archive
+  # release (<= 4.3.0) provides. Drop this pin once image ships a fix.
+  image: 4.10.1
