@@ -44,6 +44,14 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
+        if (scale >= 2) {
+          expect(
+            tester
+                .getSize(find.byKey(const ValueKey('style_preset_apple')))
+                .width,
+            greaterThan(width / 2),
+          );
+        }
         await tester.tap(find.byKey(const ValueKey('style_preset_apple')));
         await tester.pumpAndSettle();
         expect(storage.storedAccentColor, const Color(0xFF007AFF).toARGB32());

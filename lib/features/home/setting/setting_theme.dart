@@ -286,7 +286,9 @@ class _StylePresetCard extends StatelessWidget {
         borderRadius: AppRadius.brLg,
         child: AnimatedContainer(
           duration: AppMotion.fast,
-          width: ScreenUtil().setWidth(328),
+          width: MediaQuery.textScalerOf(context).scale(17) >= 25.5
+              ? MediaQuery.sizeOf(context).width - 2 * AppSpacing.space8
+              : ScreenUtil().setWidth(328),
           padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
             color: c.bgSurface,
@@ -364,8 +366,6 @@ class _StylePresetCard extends StatelessWidget {
               SizedBox(height: AppSpacing.space2),
               Text(
                 preset.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
                 style: AppTypography.captionSm.copyWith(color: c.textSubtitle),
               ),
             ],
