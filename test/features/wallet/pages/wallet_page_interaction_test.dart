@@ -162,6 +162,53 @@ void main() {
     },
   );
 
+  testWidgets(
+    'large backup reminder scrolls without covering the token header',
+    (tester) async {
+      final wallet = WalletInfo(
+        walletName: 'Synthetic wallet',
+        walletUuid: 'synthetic-reminder',
+        password: '',
+        coinInfo: <String, dynamic>{},
+      );
+      tester.platformDispatcher.textScaleFactorTestValue = 3;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      await pumpWalletPage(
+        tester,
+        adaptiveViewport: true,
+        initializeWalletForTest: (provider) async {
+          provider.walletInfoList.add(wallet);
+          provider.walletIndex = 0;
+          provider.walletMiningIndex = 0;
+          provider.buildwallet = false;
+          provider.refresh();
+        },
+      );
+      final reminder = find.text(S.current.g_key_wallet_c35);
+      await tester.scrollUntilVisible(
+        reminder,
+        150,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      final before = tester.getRect(reminder);
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -150));
+      await tester.pumpAndSettle();
+      final after = tester.getRect(reminder);
+      expect(after.top, lessThan(before.top));
+      await tester.scrollUntilVisible(
+        find.byTooltip(S.current.g_token_m_key_12),
+        150,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      final header = tester.getRect(find.byTooltip(S.current.g_token_m_key_12));
+      expect(tester.getRect(reminder).bottom, lessThanOrEqualTo(header.top));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   testWidgets('wallet home remains in loading state until a wallet is ready', (
     tester,
   ) async {

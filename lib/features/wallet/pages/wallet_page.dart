@@ -566,6 +566,16 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                     },
                                   ),
                                 ),
+                              if (waValue.walletInfo.password == "" &&
+                                  !_isTokenSearchVisible)
+                                SliverPadding(
+                                  padding: EdgeInsets.all(AppSpacing.space8),
+                                  sliver: SliverToBoxAdapter(
+                                    child: BackupReminderBanner(
+                                      waValue: waValue,
+                                    ),
+                                  ),
+                                ),
                               WalletCoinListHeader(
                                 waValue: waValue,
                                 smallAssetsThreshold: _smallAssetsThreshold,
@@ -650,18 +660,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                         onTap: () => showAddTokenSheet(context, ref),
                       ),
                     ),
-                  ),
-                ),
-                // 未备份提示条
-                Positioned(
-                  bottom: ScreenUtil().setWidth(120.0),
-                  left: AppSpacing.space8,
-                  right: AppSpacing.space8,
-                  child: Visibility(
-                    visible:
-                        waValue.walletInfo.password == "" &&
-                        !_isTokenSearchVisible,
-                    child: BackupReminderBanner(waValue: waValue),
                   ),
                 ),
               ],
