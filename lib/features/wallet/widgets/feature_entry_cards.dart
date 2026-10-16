@@ -130,11 +130,25 @@ class FeatureEntryHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double lineHeight(TextStyle style) {
+      final painter = TextPainter(
+        text: TextSpan(text: 'Ag', style: style),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+        maxLines: 1,
+      )..layout();
+      final height = painter.height.ceilToDouble();
+      painter.dispose();
+      return height;
+    }
+
     return Container(
       height: math.max(
         64,
-        MediaQuery.textScalerOf(context).scale(12) * 16 / 12 +
-            MediaQuery.textScalerOf(context).scale(11) * 13 / 11 +
+        lineHeight(
+              AppTypography.caption.copyWith(fontWeight: FontWeight.w600),
+            ) +
+            lineHeight(AppTypography.captionSm) +
             30,
       ),
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),

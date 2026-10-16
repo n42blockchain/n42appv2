@@ -31,6 +31,17 @@ Raw logs, screenshots and temporary QA project remain outside Git under `/tmp/n4
 - Maximum accessibility text exposed fixed narrow theme preset cards. Cards now use one column at large sizes, with complete descriptions. Twelve theme behavior tests passed and the corrected dark-theme screen was visually verified.
 - Half-open portrait with a keyboard exposed the backup overlay and balance cards hiding token search. Search mode now removes the floating overlays and collapses the balance/feature cards. The simulator screenshot confirms the search field and results remain in the top pane above the keyboard. Closing search restores the normal content and reminder.
 - Eight wallet interaction tests passed, including short-screen search geometry and restoring the backup reminder on exit. Eighteen compact wallet tests passed. Targeted analysis found no issues.
-- Remaining observed failures: maximum accessibility text still makes side-navigation labels wrap excessively and makes the floating backup reminder occupy too much home-list space outside search mode. These are not accepted.
+- The two observed failures at this checkpoint were excessive side-navigation label wrapping and a floating backup reminder covering home-list content. They were repaired and rechecked in the follow-up below.
 - The UI QA copy is still based on the recorded baseline plus the specific fixes above; later remote navigation/dependency changes are not independently accepted by these screenshots. All raw captures remain local.
 - Result: bounded UI checks completed, with outstanding failures. This is not full-app or physical Duo acceptance. No new TestFlight upload was made.
+
+## Follow-up: remaining UI defects repaired
+
+- Side navigation uses icons at large accessibility sizes, with localized tooltips and preserved semantic labels. The rail can scroll if its destinations exceed available height. Default-size labels are retained.
+- Maximum-accessibility-size Duo screenshots confirmed the broken vertical labels are gone. Accessibility state exposed all four destination names; Wallet -> Markets -> Wallet selection succeeded.
+- The backup reminder is now part of the wallet scroll content, before the token header. It no longer floats over asset rows. Search still hides it temporarily and restores it on exit.
+- A regression test verifies the large reminder moves upward when the wallet is scrolled and stays above the token header. Native pointer scrolling in Device Hub did not yield an observable scroll, so scroll motion has widget-test evidence, not a simulator gesture acceptance claim.
+- Recheck exposed a 0.588-pixel feature-card overflow with the iOS nonlinear accessibility scaler. Card height now uses measured line heights rounded up. The rebuilt simulator screen no longer displayed an overflow marker.
+- Final regression run: 32 tests passed (18 compact wallet, 9 wallet interactions, 5 adaptive viewport). Targeted analysis found no issues. Temporary arm64 simulator build succeeded.
+- Default-size simulator screenshot confirmed readable side labels and separate reminder/token-list regions. The simulator text size was restored to its default after checks.
+- This follow-up closes the specific observed UI defects. The MLKit-isolated QA-package limitation, authenticated Chat, camera/QR/calls and physical-device boundaries above remain. No new TestFlight upload.
