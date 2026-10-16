@@ -82,41 +82,42 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
 
     return Container(
       color: AppColorTokens.of(context).bgBase,
-      child: Stack(
+      child: Column(
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(child: WebViewWidget(controller: _webViewController)),
-              Container(
-                height: ScreenUtil().setWidth(88),
-                margin: EdgeInsets.all(AppSpacing.space8),
-                width: double.infinity,
-                child: AppButton(
-                  key: const ValueKey<String>('terms_agree'),
-                  label: S.of(context).g_chat_key_50,
-                  onPressed: _isBottom ? widget.agreeCallBack : null,
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            right: ScreenUtil().setWidth(30),
-            bottom: ScreenUtil().setWidth(180),
-            child: Column(
+          Expanded(
+            child: Stack(
               children: [
-                _buildScrollButton(
-                  isDark,
-                  Icons.keyboard_arrow_up,
-                  _scrollToTop,
+                Positioned.fill(
+                  child: WebViewWidget(controller: _webViewController),
                 ),
-                SizedBox(height: AppSpacing.space4),
-                _buildScrollButton(
-                  isDark,
-                  Icons.keyboard_arrow_down,
-                  _scrollToBottom,
+                Positioned(
+                  right: ScreenUtil().setWidth(30),
+                  bottom: AppSpacing.space8,
+                  child: Column(
+                    children: [
+                      _buildScrollButton(
+                        isDark,
+                        Icons.keyboard_arrow_up,
+                        _scrollToTop,
+                      ),
+                      SizedBox(height: AppSpacing.space4),
+                      _buildScrollButton(
+                        isDark,
+                        Icons.keyboard_arrow_down,
+                        _scrollToBottom,
+                      ),
+                    ],
+                  ),
                 ),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(AppSpacing.space8),
+            child: AppButton(
+              key: const ValueKey<String>('terms_agree'),
+              label: S.of(context).g_chat_key_50,
+              onPressed: _isBottom ? widget.agreeCallBack : null,
             ),
           ),
         ],
