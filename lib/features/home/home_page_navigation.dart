@@ -10,6 +10,7 @@ extension on _HomePageState {
 
     return NavigationRail(
       minWidth: 88,
+      scrollable: true,
       selectedIndex: currentIndex,
       onDestinationSelected: (index) {
         int indexState = 3;
@@ -36,7 +37,9 @@ extension on _HomePageState {
       unselectedLabelTextStyle: AppTypography.captionSm.copyWith(
         color: unselectedColor,
       ),
-      labelType: NavigationRailLabelType.all,
+      labelType: MediaQuery.textScalerOf(context).scale(13) >= 19.5
+          ? NavigationRailLabelType.none
+          : NavigationRailLabelType.all,
       leading: InkWell(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),
         customBorder: const CircleBorder(),
@@ -55,78 +58,108 @@ extension on _HomePageState {
       ),
       destinations: [
         NavigationRailDestination(
-          icon: Image.asset(
-            "assets/home/tabbar/wallet.png",
-            width: 22,
-            height: 22,
-            color: unselectedColor,
+          icon: Tooltip(
+            message: S.of(context).g_key_6,
+            child: Image.asset(
+              "assets/home/tabbar/wallet.png",
+              width: 22,
+              height: 22,
+              color: unselectedColor,
+            ),
           ),
-          selectedIcon: Image.asset(
-            "assets/home/tabbar/wallet.png",
-            width: 22,
-            height: 22,
-            color: selectedColor,
+          selectedIcon: Tooltip(
+            message: S.of(context).g_key_6,
+            child: Image.asset(
+              "assets/home/tabbar/wallet.png",
+              width: 22,
+              height: 22,
+              color: selectedColor,
+            ),
           ),
           label: Text(S.of(context).g_key_6),
         ),
         NavigationRailDestination(
-          icon: Image.asset(
-            "assets/home/setting/mining.png",
-            width: 22,
-            height: 22,
-            color: unselectedColor,
+          icon: Tooltip(
+            message: S.of(context).g_home_key3,
+            child: Image.asset(
+              "assets/home/setting/mining.png",
+              width: 22,
+              height: 22,
+              color: unselectedColor,
+            ),
           ),
-          selectedIcon: Image.asset(
-            "assets/home/setting/mining.png",
-            width: 22,
-            height: 22,
-            color: selectedColor,
+          selectedIcon: Tooltip(
+            message: S.of(context).g_home_key3,
+            child: Image.asset(
+              "assets/home/setting/mining.png",
+              width: 22,
+              height: 22,
+              color: selectedColor,
+            ),
           ),
           label: Text(S.of(context).g_home_key3),
         ),
         if (Platform.isAndroid)
           NavigationRailDestination(
-            icon: Image.asset(
-              "assets/home/tabbar/earn.png",
-              width: 22,
-              height: 22,
-              color: unselectedColor,
+            icon: Tooltip(
+              message: S.of(context).g_key_earn_title,
+              child: Image.asset(
+                "assets/home/tabbar/earn.png",
+                width: 22,
+                height: 22,
+                color: unselectedColor,
+              ),
             ),
-            selectedIcon: Image.asset(
-              "assets/home/tabbar/earn.png",
-              width: 22,
-              height: 22,
-              color: selectedColor,
+            selectedIcon: Tooltip(
+              message: S.of(context).g_key_earn_title,
+              child: Image.asset(
+                "assets/home/tabbar/earn.png",
+                width: 22,
+                height: 22,
+                color: selectedColor,
+              ),
             ),
             label: Text(S.of(context).g_key_earn_title),
           ),
         NavigationRailDestination(
-          icon: Image.asset(
-            "assets/home/tabbar/news.png",
-            width: 22,
-            height: 22,
-            color: unselectedColor,
+          icon: Tooltip(
+            message: S.of(context).g_home_market,
+            child: Image.asset(
+              "assets/home/tabbar/news.png",
+              width: 22,
+              height: 22,
+              color: unselectedColor,
+            ),
           ),
-          selectedIcon: Image.asset(
-            "assets/home/tabbar/news.png",
-            width: 22,
-            height: 22,
-            color: selectedColor,
+          selectedIcon: Tooltip(
+            message: S.of(context).g_home_market,
+            child: Image.asset(
+              "assets/home/tabbar/news.png",
+              width: 22,
+              height: 22,
+              color: selectedColor,
+            ),
           ),
           label: Text(S.of(context).g_home_market),
         ),
         NavigationRailDestination(
-          icon: Image.asset(
-            "assets/home/tabbar/chat.png",
-            width: 22,
-            height: 22,
-            color: unselectedColor,
+          icon: Tooltip(
+            message: S.of(context).g_key_squad,
+            child: Image.asset(
+              "assets/home/tabbar/chat.png",
+              width: 22,
+              height: 22,
+              color: unselectedColor,
+            ),
           ),
-          selectedIcon: Image.asset(
-            "assets/home/tabbar/chat.png",
-            width: 22,
-            height: 22,
-            color: selectedColor,
+          selectedIcon: Tooltip(
+            message: S.of(context).g_key_squad,
+            child: Image.asset(
+              "assets/home/tabbar/chat.png",
+              width: 22,
+              height: 22,
+              color: selectedColor,
+            ),
           ),
           label: Text(S.of(context).g_key_squad),
         ),
