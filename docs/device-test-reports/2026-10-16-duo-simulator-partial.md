@@ -18,8 +18,19 @@ Toolchain: Flutter 3.47.5 / Dart 3.13.4 / Xcode 27.1 RC.
 - The unmodified native build produced an x86_64 simulator executable because MLKit lacks an arm64 simulator slice. The installed Duo runtime supports arm64 only and rejected installation.
 - UI screenshots therefore use an isolated temporary app copy with five MLKit iOS plugin registrations and explicit MLKit pods omitted. Dart application screens otherwise use the source under review. This QA package is not a production build and must not be uploaded.
 - No production dependency or native build configuration was changed by this workaround. OCR, face detection, segmentation and translation are excluded.
-- First-run Terms of Use remains visible. The operator was asked to review and accept it locally; the agent did not accept or bypass it. Actual home, market, settings and authenticated Chat navigation remain pending.
-- Keyboard/draft continuity has widget-test proof only. Camera, QR, calls, capture protection, transactions and physical Duo behavior are unverified.
+- The operator completed first-run Terms of Use locally. The agent did not accept or bypass it. Home, market and settings navigation were subsequently exercised; authenticated Chat remains unverified.
+- Search text `btc` survived the observed fold/rotation sequence with the keyboard visible; widget tests additionally cover draft continuity. Camera, QR, calls, capture protection, transactions and physical Duo behavior are unverified.
 - This is partial simulator acceptance, not complete iPhone Duo support.
 
 Raw logs, screenshots and temporary QA project remain outside Git under `/tmp/n42-duo-acceptance-20261016`.
+
+## Follow-up after operator confirmation
+
+- Opened wallet home, BTC asset preview and full chart. Selected 1M, then changed from closed to open and partially open; the route and selected period survived and the chart fit one usable pane. Back navigation returned to the asset and home pages.
+- Opened Markets, Settings and Theme. Inspected Apple/default and optional custom styles, and light/dark presentation.
+- Maximum accessibility text exposed fixed narrow theme preset cards. Cards now use one column at large sizes, with complete descriptions. Twelve theme behavior tests passed and the corrected dark-theme screen was visually verified.
+- Half-open portrait with a keyboard exposed the backup overlay and balance cards hiding token search. Search mode now removes the floating overlays and collapses the balance/feature cards. The simulator screenshot confirms the search field and results remain in the top pane above the keyboard. Closing search restores the normal content and reminder.
+- Eight wallet interaction tests passed, including short-screen search geometry and restoring the backup reminder on exit. Eighteen compact wallet tests passed. Targeted analysis found no issues.
+- Remaining observed failures: maximum accessibility text still makes side-navigation labels wrap excessively and makes the floating backup reminder occupy too much home-list space outside search mode. These are not accepted.
+- The UI QA copy is still based on the recorded baseline plus the specific fixes above; later remote navigation/dependency changes are not independently accepted by these screenshots. All raw captures remain local.
+- Result: bounded UI checks completed, with outstanding failures. This is not full-app or physical Duo acceptance. No new TestFlight upload was made.

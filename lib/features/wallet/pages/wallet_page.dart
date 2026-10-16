@@ -462,106 +462,110 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                             shrinkWrap: false,
                             primary: false,
                             slivers: [
-                              SliverToBoxAdapter(
-                                child: WalletBoard(
-                                  accountPrice: waValue.balanceTotal,
-                                  usdToCnyRate: waValue.usdToCnyRate,
-                                  priceLastUpdated: waValue.priceLastUpdated,
-                                  hasPartialPrices: waValue.hasPartialPrices,
-                                  priceRefreshFailed:
-                                      waValue.priceRefreshFailed,
-                                  walletName: waValue.walletName,
-                                  sendTap: () => _onSendTap(waValue),
-                                  receiveTap: () => _onReceiveTap(waValue),
-                                  swapTap: () => _onSwapTap(waValue),
-                                  buyTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const IapPage(),
+                              if (!_isTokenSearchVisible)
+                                SliverToBoxAdapter(
+                                  child: WalletBoard(
+                                    accountPrice: waValue.balanceTotal,
+                                    usdToCnyRate: waValue.usdToCnyRate,
+                                    priceLastUpdated: waValue.priceLastUpdated,
+                                    hasPartialPrices: waValue.hasPartialPrices,
+                                    priceRefreshFailed:
+                                        waValue.priceRefreshFailed,
+                                    walletName: waValue.walletName,
+                                    sendTap: () => _onSendTap(waValue),
+                                    receiveTap: () => _onReceiveTap(waValue),
+                                    swapTap: () => _onSwapTap(waValue),
+                                    buyTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const IapPage(),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SliverToBoxAdapter(
-                                child: Builder(
-                                  builder: (context) {
-                                    final ethAddress =
-                                        waValue.getAddress(CoinType.ETH.name) ??
-                                        '';
-                                    final canOpenEvmFeatures =
-                                        FeatureAddressUtils.isValidEvmAddress(
-                                          ethAddress,
-                                        );
-                                    if (canOpenEvmFeatures) {
-                                      _loadEnsInfo(ethAddress);
-                                    } else if (_ensName != null) {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                            if (mounted) {
-                                              setState(() => _ensName = null);
-                                            }
-                                          });
-                                    }
-                                    final hasAA =
-                                        waValue.walletInfo.hasAAAccounts;
-                                    final primaryAccount = waValue.walletInfo
-                                        .getPrimarySmartAccount(1);
-                                    final isDeployed =
-                                        primaryAccount?.isDeployed ?? false;
+                              if (!_isTokenSearchVisible)
+                                SliverToBoxAdapter(
+                                  child: Builder(
+                                    builder: (context) {
+                                      final ethAddress =
+                                          waValue.getAddress(
+                                            CoinType.ETH.name,
+                                          ) ??
+                                          '';
+                                      final canOpenEvmFeatures =
+                                          FeatureAddressUtils.isValidEvmAddress(
+                                            ethAddress,
+                                          );
+                                      if (canOpenEvmFeatures) {
+                                        _loadEnsInfo(ethAddress);
+                                      } else if (_ensName != null) {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              if (mounted) {
+                                                setState(() => _ensName = null);
+                                              }
+                                            });
+                                      }
+                                      final hasAA =
+                                          waValue.walletInfo.hasAAAccounts;
+                                      final primaryAccount = waValue.walletInfo
+                                          .getPrimarySmartAccount(1);
+                                      final isDeployed =
+                                          primaryAccount?.isDeployed ?? false;
 
-                                    return FeatureEntryHorizontal(
-                                      ensName: _ensName,
-                                      hasSmartAccount: hasAA,
-                                      isSmartAccountDeployed: isDeployed,
-                                      ensEnabled: canOpenEvmFeatures,
-                                      smartAccountEnabled: canOpenEvmFeatures,
-                                      onEnsTap: () {
-                                        if (!canOpenEvmFeatures) {
-                                          _showEvmFeatureUnavailableToast();
-                                          return;
-                                        }
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => EnsHomePage(
-                                              walletAddress: ethAddress,
+                                      return FeatureEntryHorizontal(
+                                        ensName: _ensName,
+                                        hasSmartAccount: hasAA,
+                                        isSmartAccountDeployed: isDeployed,
+                                        ensEnabled: canOpenEvmFeatures,
+                                        smartAccountEnabled: canOpenEvmFeatures,
+                                        onEnsTap: () {
+                                          if (!canOpenEvmFeatures) {
+                                            _showEvmFeatureUnavailableToast();
+                                            return;
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => EnsHomePage(
+                                                walletAddress: ethAddress,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      onSmartAccountTap: () {
-                                        if (!canOpenEvmFeatures) {
-                                          _showEvmFeatureUnavailableToast();
-                                          return;
-                                        }
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => AAHomePage(
-                                              walletAddress: ethAddress,
-                                              accountInfo: waValue
-                                                  .walletInfo
-                                                  .aaAccountInfo,
-                                              onAccountCreated:
-                                                  (account) async {
-                                                    waValue.walletInfo
-                                                        .addSmartAccount(
-                                                          account,
-                                                        );
-                                                    await waValue
-                                                        .saveWalletInfo(
-                                                          waValue.walletInfo,
-                                                          waValue.walletIndex,
-                                                        );
-                                                  },
+                                          );
+                                        },
+                                        onSmartAccountTap: () {
+                                          if (!canOpenEvmFeatures) {
+                                            _showEvmFeatureUnavailableToast();
+                                            return;
+                                          }
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => AAHomePage(
+                                                walletAddress: ethAddress,
+                                                accountInfo: waValue
+                                                    .walletInfo
+                                                    .aaAccountInfo,
+                                                onAccountCreated:
+                                                    (account) async {
+                                                      waValue.walletInfo
+                                                          .addSmartAccount(
+                                                            account,
+                                                          );
+                                                      await waValue
+                                                          .saveWalletInfo(
+                                                            waValue.walletInfo,
+                                                            waValue.walletIndex,
+                                                          );
+                                                    },
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
                               WalletCoinListHeader(
                                 waValue: waValue,
                                 smallAssetsThreshold: _smallAssetsThreshold,
@@ -639,7 +643,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   right: 0,
                   height: ScreenUtil().setWidth(88.0),
                   child: Visibility(
-                    visible: _showAddTokenButton,
+                    visible: _showAddTokenButton && !_isTokenSearchVisible,
                     child: Container(
                       alignment: Alignment.center,
                       child: AddTokenFloatingIcon(
@@ -654,7 +658,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   left: AppSpacing.space8,
                   right: AppSpacing.space8,
                   child: Visibility(
-                    visible: waValue.walletInfo.password == "",
+                    visible:
+                        waValue.walletInfo.password == "" &&
+                        !_isTokenSearchVisible,
                     child: BackupReminderBanner(waValue: waValue),
                   ),
                 ),

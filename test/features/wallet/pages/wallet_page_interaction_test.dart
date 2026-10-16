@@ -119,6 +119,49 @@ void main() {
     },
   );
 
+  testWidgets(
+    'search remains clear of backup overlay and restores it on exit',
+    (tester) async {
+      final wallet = WalletInfo(
+        walletName: 'Synthetic wallet',
+        walletUuid: 'synthetic-search',
+        password: '',
+        coinInfo: <String, dynamic>{},
+      );
+      await pumpWalletPage(
+        tester,
+        adaptiveViewport: true,
+        initializeWalletForTest: (provider) async {
+          provider.walletInfoList.add(wallet);
+          provider.walletIndex = 0;
+          provider.walletMiningIndex = 0;
+          provider.buildwallet = false;
+          provider.refresh();
+        },
+      );
+      expect(find.text(S.current.g_key_wallet_c35), findsOneWidget);
+      await tester.tap(find.byTooltip(S.current.g_token_m_key_12));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'btc');
+      tester.view.physicalSize = const Size(720, 350);
+      tester.view.viewInsets = const FakeViewPadding(bottom: 120);
+      await tester.pumpAndSettle();
+      expect(find.text(S.current.g_key_wallet_c35), findsNothing);
+      expect(find.text('btc'), findsOneWidget);
+      expect(
+        tester.getRect(find.byType(TextField)).bottom,
+        lessThanOrEqualTo(230),
+      );
+      expect(find.byType(WalletBoard), findsNothing);
+      await tester.tap(find.byTooltip(S.current.g_key_79));
+      tester.view.resetViewInsets();
+      await tester.pumpAndSettle();
+      expect(find.text(S.current.g_key_wallet_c35), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   testWidgets('wallet home remains in loading state until a wallet is ready', (
     tester,
   ) async {
