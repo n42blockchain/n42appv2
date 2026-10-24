@@ -1,0 +1,76 @@
+{
+  "sourceCommit": "7f8e71225907cdd24f944cc1646caa79e9e6bfce",
+  "version": "2.5.3+73041",
+  "sourceTreeSha256": "aa2747d6b5b7e3d07dcafbd74a299dcd5287c7027fae28cc6c5d56e0b129eb38",
+  "fullSuite": {
+    "passed": 5615,
+    "failures": 0,
+    "exitCode": 0
+  },
+  "analyzer": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 53
+  },
+  "gasMatrix": {
+    "controlledRpcCases": 500,
+    "liveExecutions": 0
+  },
+  "pythonManifestTests": 3,
+  "android": {
+    "exitCode": 0,
+    "package": "ai.n42.www",
+    "version": "2.5.3",
+    "build": 73041,
+    "mode": "debug",
+    "signatureVerified": true,
+    "artifactVerified": true,
+    "sourceStable": true,
+    "sha256": "9ba47367f81f27b241f9720dc8116d50ed23e61526b9589973df26c6d71d9083"
+  },
+  "iosNewBuildUploaded": false,
+  "logs": {
+    "full": {
+      "path": "/tmp/n42-wallet-weekly-committed-full.log",
+      "sha256": "c3df336221f37c4900b8847b90aa5f869cd82b1a742ba6948f188f38ed7acb4a"
+    },
+    "analyze": {
+      "path": "/tmp/n42-wallet-weekly-committed-analyze.log",
+      "sha256": "9c4f05cb1c0e92259f88a2db38bf60612098650c9ebfea38da67ab5724021840"
+    },
+    "android": {
+      "path": "/tmp/n42-wallet-weekly-android.log",
+      "sha256": "fcf6208851a08e54ac6a630d9465c4c89131e6b0bb404539d9b07aef75360759"
+    },
+    "network": {
+      "path": "/tmp/n42-wallet-weekly-network-final.log",
+      "sha256": "dbce0362d0bc3e381437c84c554a6bed892001fb0792bf89fda9f6b8cca0cd57"
+    },
+    "risk": {
+      "path": "/tmp/n42-wallet-weekly-risk.log",
+      "sha256": "ba4d0aba3f341b67a11bbbd79b1dac913221b5b1d59784d988b97e060d68e512"
+    },
+    "ui": {
+      "path": "/tmp/n42-wallet-weekly-ui-final2.log",
+      "sha256": "b2458a7fec809cd3586634a92e9fe3215c5ebe03d3be2711045668790eeffedb"
+    },
+    "races": {
+      "path": "/tmp/n42-wallet-weekly-ui-races.log",
+      "sha256": "9907b8cfa99957661b0368e743c8d8494ec3f3d5504a2450b67f0f21327658eb"
+    },
+    "apkSignature": {
+      "path": "/tmp/n42-wallet-weekly-apk-signature.log",
+      "sha256": "57c0752cb058438f016c638dbaee8a518acaeded22a5788e15ea6b6664a8cfb4"
+    }
+  },
+  "boundaries": [
+    "No real funds sent",
+    "No 500 live-chain executions or Swift/Kotlin parity result",
+    "No production risk provider/registry issuer",
+    "No user study or device P95 result",
+    "New safety copy uses English",
+    "No fresh coverage result",
+    "Previous TestFlight 73037 does not include these changes"
+  ]
+}

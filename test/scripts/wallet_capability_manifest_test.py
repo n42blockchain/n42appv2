@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import plistlib
 from pathlib import Path
 import tempfile
 import unittest
@@ -15,6 +16,22 @@ class ManifestTest(unittest.TestCase):
         value = module.generate()
         self.assertFalse(value['artifactVerified'])
         self.assertFalse(value['declarations']['capabilities']['eip7702']['live_acceptance'])
+
+    def test_ipa_version_must_match_the_packaged_source(self):
+        version = module.generate()['sourceVersion']
+        name, build = version.split('+')
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'app.ipa'
+            for actual_build in ['0', build]:
+                with zipfile.ZipFile(path, 'w') as archive:
+                    archive.writestr('Payload/Runner.app/Info.plist', plistlib.dumps({
+                        'CFBundleShortVersionString': name, 'CFBundleVersion': actual_build,
+                    }))
+                    archive.writestr('Payload/Runner.app/Frameworks/App.framework/flutter_assets/assets/wallet_capabilities.json', (ROOT / module.ASSET).read_bytes())
+                if actual_build == build:
+                    self.assertEqual(module.generate(path)['artifactVersion'], version)
+                else:
+                    with self.assertRaises(ValueError): module.generate(path)
 
     def test_rejects_stale_or_missing_packaged_capabilities(self):
         with tempfile.TemporaryDirectory() as tmp:
