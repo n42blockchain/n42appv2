@@ -33,8 +33,16 @@ if [ "$TARGET" != ipa ] && [ ! -f android/key.properties ]; then
   echo "Android release signing requires android/key.properties" >&2; exit 1
 fi
 flutter pub get --enforce-lockfile
-build_apk() { flutter build apk --release ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}; }
-build_aab() { flutter build appbundle --release ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}; }
+mkdir -p build/release-evidence
+python3 scripts/release/wallet_capability_manifest.py --output build/release-evidence/wallet-source.json
+build_apk() {
+  flutter build apk --release ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
+  python3 scripts/release/wallet_capability_manifest.py --artifact build/app/outputs/flutter-apk/app-release.apk --require-source build/release-evidence/wallet-source.json --output build/release-evidence/wallet-apk.json
+}
+build_aab() {
+  flutter build appbundle --release ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
+  python3 scripts/release/wallet_capability_manifest.py --artifact build/app/outputs/bundle/release/app-release.aab --require-source build/release-evidence/wallet-source.json --output build/release-evidence/wallet-aab.json
+}
 build_ipa() {
   IPA_ARGS=(--no-bump)
   if [ -n "$CONFIG_FILE" ]; then IPA_ARGS+=(--dart-define-from-file "$CONFIG_FILE"); fi

@@ -93,6 +93,8 @@ echo "=== Building IPA: $CURRENT_BUILD_NAME ($CURRENT_BUILD_NUMBER) ==="
 echo ""
 
 echo "=== Building iOS archive ==="
+mkdir -p build/release-evidence
+python3 scripts/release/wallet_capability_manifest.py --output build/release-evidence/wallet-ipa-source.json
 flutter build ipa \
   --release \
   --export-options-plist=ios/ExportOptions-AppStore.plist \
@@ -184,6 +186,7 @@ xcodebuild -exportArchive \
   -quiet
 
 echo ""
+python3 scripts/release/wallet_capability_manifest.py --artifact build/ios/ipa/N42Wallet.ipa --require-source build/release-evidence/wallet-ipa-source.json --output build/release-evidence/wallet-ipa.json
 echo "=== Done ==="
 echo "App Store Version: $CURRENT_BUILD_NAME  Build: $CURRENT_BUILD_NUMBER"
 ls -lh build/ios/ipa/*.ipa

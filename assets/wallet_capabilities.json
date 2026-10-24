@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "scope": "Client implementation declarations; not deployment certification",
+  "capabilities": {
+    "rpc_https_authority_policy": {"implementation": "implemented", "deployment": "local"},
+    "custom_rpc_genesis_continuity": {"implementation": "wallet_sender", "trusted_external_anchor": false},
+    "walletconnect_exact_wrapper_hosts": {"implementation": "implemented", "hosts": ["walletconnect.com"]},
+    "signed_mini_app_launch": {"implementation": "chat_sdk", "issuer_configuration": "external"},
+    "signed_oem_wallet_execution": {"implementation": "unsupported"},
+    "evm_state_dependent_gas": {"implementation": "rpc_estimate_required", "live_fork_acceptance": false},
+    "eip2780_eip8038": {"activation": "not_asserted", "pricing": "rpc_defined"},
+    "eip7702": {"implementation": "local_encoding_and_account_code", "live_acceptance": false},
+    "erc4337": {"implementation": "bundler_and_account_code", "live_acceptance": false},
+    "gas_sponsorship": {"implementation": "paymaster_client", "provider_acceptance": false},
+    "native_multicall": {"implementation": "rpc_estimate_required", "live_acceptance": false},
+    "eoa_erc20_multicall": {"implementation": "blocked_invalid_sender_semantics"},
+    "asset_visibility": {"implementation": "wallet_scoped_reversible_preferences", "onchain_effect": false},
+    "risk_proofs": {"implementation": "ed25519_verifier", "provider_configured": false, "enforcement": "advisory"},
+    "swift_kotlin_sdk": {"acceptance": "not_verified_in_this_repository"}
+  }
+}
