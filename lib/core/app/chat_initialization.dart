@@ -13,6 +13,7 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/platform/chat_social_auth_config.dart';
+import 'package:n42_wallet/core/platform/chat_mini_app_security_config.dart';
 import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
@@ -182,6 +183,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
 
       await N42Chat.initialize(
         N42ChatConfig(
+          miniAppSecurity: resolveChatMiniAppSecurity(),
+          // Actual uploads are also capped by the homeserver media policy.
+          maxFileSize: 1024 * 1024 * 1024,
           defaultHomeserver: 'https://m.si46.world',
           enableEncryption: true,
           enablePushNotifications: true,

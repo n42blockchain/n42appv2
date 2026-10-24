@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-23",
+  "flutter": "3.47.5",
+  "dart": "3.13.4",
+  "hostBaseCommit": "2433dbd527b70014adbed44df95528d6f3a475db",
+  "chatCodeCommit": "61d32227b384601f576d4854f0d152b49550b327",
+  "chatDocumentationCommit": "06c1185047e4889b47a58be3d542872a54038507",
+  "resolvedChatPackage": "file:///Users/jieliu/.pub-cache/git/n42_chat-61d32227b384601f576d4854f0d152b49550b327/",
+  "chatTests": {
+    "passed": 7710,
+    "skipped": 4,
+    "failed": 0
+  },
+  "hostTests": {
+    "passed": 136,
+    "failed": 0
+  },
+  "analyze": {
+    "chat": {
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "infos": 306
+    },
+    "host": {
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "infos": 48
+    }
+  },
+  "builds": {
+    "iosSimulator": {
+      "exitCode": 0,
+      "path": "build/ios/iphonesimulator/Runner.app",
+      "version": "2.5.2",
+      "build": "73035",
+      "nfcDescription": "Read a service tag to open a contact, shop, or Mini App you choose.",
+      "kernelSha256": "b02fb7fced16b6619875d6e6f0ca3559a4bcf65794cecc2c3c08473722e4eb90",
+      "executableSha256": "015773650fbc5d03ae2f946404e7f002506f53bf312f7dcd75780dea36795c01",
+      "signedDeviceBuild": false
+    },
+    "androidDebug": {
+      "exitCode": 0,
+      "path": "build/app/outputs/flutter-apk/app-debug.apk",
+      "bytes": 716341920,
+      "sha256": "8bb0de799ff02a90f5f3a10b68620b633c3bc5b10a88f2377ce4aa2694295898",
+      "package": "package: name='ai.n42.www' versionCode='73035' versionName='2.5.2' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'",
+      "nfcPermission": true,
+      "nfcHardwareRequired": false,
+      "installedOnDevice": false
+    }
+  },
+  "logs": {
+    "pub_get": {
+      "path": "/tmp/n42-weekly-host-pub-delivery.log",
+      "sha256": "c07a8ac4cf3e6aaa1a777b69e8a9e8fc619ca5d96ff7a611636cde06f9c12b15"
+    },
+    "host_tests": {
+      "path": "/tmp/n42-weekly-host-tests-final.log",
+      "sha256": "89b0601619fb9b72e0a23f976ad840794ca1131fdd8bc9ff8dbbb8eae5b4e755"
+    },
+    "host_analyze": {
+      "path": "/tmp/n42-weekly-host-analyze-final.log",
+      "sha256": "95e2ad4e72b28e5286ae6a4c4e2e50eeb03d7e6cc9a357781431b4686eb8ffa7"
+    },
+    "chat_tests": {
+      "path": "/tmp/n42-weekly-delivery-full-final.log",
+      "sha256": "902c3be44cc9e8edddafe96c7343dd9ea6660e95269b10057a88b758103fd4f9"
+    },
+    "chat_analyze": {
+      "path": "/tmp/n42-weekly-delivery-analyze-final.log",
+      "sha256": "1bd38da493aac3dcc764d4b2cbd7098c6a5232ff728f0dd7d0ef16f9f51bad65"
+    },
+    "ios_build": {
+      "path": "/tmp/n42-weekly-host-ios-final.log",
+      "sha256": "ad12e9d838ff7e40b79bed26fffda5f08584e8d75e3930a712f97ab31c610fbb"
+    },
+    "android_build": {
+      "path": "/tmp/n42-weekly-host-android-final.log",
+      "sha256": "b2a09705a8eb09d54a7e15e29e3ba5d06fd83f8074da9cbf4032832fb26b1957"
+    },
+    "android_module_recovery": {
+      "path": "/tmp/n42-weekly-android-plugin-recheck-jdk21.log",
+      "sha256": "b39dc823de0d6099c0b2da3be4b4d332411253869f2ab8e3e05bad9d0c41abae"
+    }
+  },
+  "notValidated": [
+    "physical NFC tags",
+    "mobile large-file transfer and peak resource use",
+    "deployed Matrix 1 GiB quota",
+    "remote security policy deployment and revocation",
+    "merchant backend and field metrics",
+    "production release or TestFlight"
+  ]
+}
