@@ -81,9 +81,11 @@ class BaseHttp {
       ..createHttpClient = () {
         final client = HttpClient();
         // Use unified security configuration for SSL certificate verification
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) =>
-                SecurityConfig.verifySslCertificate(cert, host, port);
+        client.badCertificateCallback = (
+          X509Certificate cert,
+          String host,
+          int port,
+        ) => SecurityConfig.verifySslCertificate(cert, host, port);
         return client;
       };
   }
@@ -139,6 +141,9 @@ class BaseHttp {
     try {
       final options = Options(
         method: method,
+        // RPC identity and credentials are bound to the selected endpoint.
+        // Do not follow a redirect to a different network/provider.
+        followRedirects: data is Map && data['jsonrpc'] == '2.0' ? false : null,
         contentType: header?['content-type'] as String? ?? _contentTypeString,
         extra: enableRetry ? {RetryOptions.kRetryEnabled: true} : null,
         connectTimeout: timeout,

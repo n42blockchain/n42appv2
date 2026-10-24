@@ -118,14 +118,12 @@ class EthAPI {
     final gasPriceKey = get1559WithChainSymbol(coin ?? '')
         ? 'maxFeePerGas'
         : 'gasPrice';
-    final gasHex = '0x${gas.toRadixString(16)}';
 
     final Map<String, dynamic> params;
     if (contract.isEmpty) {
       params = {
         'from': from,
         'to': to,
-        'gas': gasHex,
         'value': '0x${value.toRadixString(16)}',
         gasPriceKey: gasPriceHex,
         if (data.isNotEmpty) 'data': data,
@@ -139,8 +137,9 @@ class EthAPI {
       params = {
         'from': from,
         'to': contract,
-        'gas': gasHex,
-        'data': '0x${selector}000000000000000000000000$toAddress$valueHex',
+        'data': data.isNotEmpty
+            ? data
+            : '0x${selector}000000000000000000000000$toAddress$valueHex',
         gasPriceKey: gasPriceHex,
       };
     }

@@ -69,6 +69,7 @@ class AAGasEstimator {
     return withDeploy.withBuffer(bufferMultiplier);
   }
 
+  /// Legacy display heuristic only; never substitutes for a bundler estimate.
   /// Calculate pre-verification gas based on UserOp calldata size.
   ///
   /// Implements EIP-2028 byte-cost differentiation:
@@ -121,8 +122,8 @@ class AAGasEstimator {
         value >= BigInt.from(min) && value <= BigInt.from(max);
 
     return inRange(estimate.verificationGasLimit, 50000, 10000000) &&
-        inRange(estimate.callGasLimit, 21000, 30000000) &&
-        inRange(estimate.preVerificationGas, 21000, 1000000);
+        inRange(estimate.callGasLimit, 1, 30000000) &&
+        inRange(estimate.preVerificationGas, 1, 1000000);
   }
 }
 

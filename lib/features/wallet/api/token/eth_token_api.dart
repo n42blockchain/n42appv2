@@ -173,7 +173,6 @@ mixin EthTokenApiMixin on TokenApiBase {
     final gasPriceKey = get1559WithChainSymbol(coinType)
         ? 'maxFeePerGas'
         : 'gasPrice';
-    final gasHex = '0x${gas.toRadixString(16)}';
     final netMode = _netMode(isTest);
 
     final Map<String, dynamic> params;
@@ -181,7 +180,7 @@ mixin EthTokenApiMixin on TokenApiBase {
       params = {
         'from': from,
         'to': to,
-        'gas': gasHex,
+        'value': '0x${value.toRadixString(16)}',
         gasPriceKey: gasPriceHex,
         'coin': coinType,
         'net_mode': netMode,
@@ -197,8 +196,9 @@ mixin EthTokenApiMixin on TokenApiBase {
       params = {
         'from': from,
         'to': contract,
-        'gas': gasHex,
-        'data': '0x${methodSig}000000000000000000000000$toAddress$valueHex',
+        'data': data.isNotEmpty
+            ? data
+            : '0x${methodSig}000000000000000000000000$toAddress$valueHex',
         gasPriceKey: gasPriceHex,
         'coin': coinType,
         'net_mode': netMode,

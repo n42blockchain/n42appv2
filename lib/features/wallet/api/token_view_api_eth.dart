@@ -180,13 +180,12 @@ extension TokenViewApiEth on TokenViewApi {
     final netMode = isTest ? 'test' : 'main';
     final use1559 = get1559WithChainSymbol(coinType);
     final gasPriceHex = _toHex(gasPrice);
-    final gasHex = _toHex(gas);
 
     // 构建基础参数（contract 为空/非空共享）
     final params = <String, dynamic>{
       'from': from,
       'to': contract.isEmpty ? to : contract,
-      'gas': gasHex,
+      'value': contract.isEmpty ? _toHex(value) : '0x0',
       'coin': coinType,
       'net_mode': netMode,
       'id': AppGlobals.nextId,
@@ -204,9 +203,9 @@ extension TokenViewApiEth on TokenViewApi {
     } else if (contract.isNotEmpty) {
       // 合约转账:构建 ERC20 transfer(address,uint256) calldata
       final toAddress = strip0x(to);
-      final methodId = bytesToHex(
-        keccakAscii('transfer(address,uint256)'),
-      ).substring(0, 8).toLowerCase();
+      final methodId = bytesToHex(keccakAscii('transfer(address,uint256)'))
+          .substring(0, 8)
+          .toLowerCase();
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
       params['data'] =
           '0x${methodId}000000000000000000000000$toAddress$valueHex';

@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/security/rpc_endpoint_policy.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/widgets/login_title.dart';
@@ -56,7 +57,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     final rpc = rpcController.text.trim();
     if (_probing ||
         chainIdController.text.trim().isNotEmpty ||
-        !rpc.toLowerCase().startsWith('https://')) {
+        !RpcEndpointPolicy.isValid(rpc)) {
       return;
     }
     _probing = true;
@@ -70,7 +71,10 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
       final id = hex.startsWith('0x')
           ? int.tryParse(hex.substring(2), radix: 16)
           : int.tryParse(hex);
-      if (mounted && id != null && chainIdController.text.trim().isEmpty) {
+      if (mounted &&
+          rpcController.text.trim() == rpc &&
+          id != null &&
+          chainIdController.text.trim().isEmpty) {
         setState(() => chainIdController.text = id.toString());
       }
     } catch (_) {
@@ -205,7 +209,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     }
     // 强制 https：http 明文 RPC 会让余额/nonce/gas 查询与已签名交易广播全程
     // 可被 MITM 篡改（配合假余额诱导或替换广播目标网络）。
-    if (!isURL(rpcStr) || !rpcStr.toLowerCase().startsWith('https://')) {
+    if (!RpcEndpointPolicy.isValid(rpcStr)) {
       return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
     }
     // 区块浏览器 URL 可选；填了就必须是 https URL。
@@ -235,6 +239,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
   }
 
   Future<void> addChain() async {
+    if (load == Load.loading) return;
     final mKey = symbolController.text.toUpperCase();
     final chainIdStr = chainIdController.text;
     final name = nameController.text.toUpperCase();
@@ -270,6 +275,15 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     }
     errorMessage = "";
 
+    final endpoint = RpcEndpointPolicy.parse(rpcStr);
+    if (RpcEndpointPolicy.needsHostnameWarning(endpoint)) {
+      final approved = await tipsDialog2(
+        context,
+        'Internationalized RPC hostname: ${endpoint.host}\n'
+        'This name may resemble another service. Verify the ASCII hostname independently.',
+      );
+      if (!mounted || approved != true) return;
+    }
     setState(() => load = Load.loading);
     // RPC 探活。
     final rmm = await EthAPI.init(null, rpcStr, null).getGasPrice();
@@ -318,11 +332,31 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
       return;
     }
 
+    String genesis;
+    try {
+      final result = await EthAPI.init(
+        null,
+        rpcStr,
+        null,
+      ).baseRPCEth('eth_getBlockByNumber', ['0x0', false], enableRetry: false);
+      genesis = RpcEndpointPolicy.genesisHash(result.valueOrNull);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        errorMessage =
+            'Cannot verify the RPC genesis block. Network was not added.';
+        load = Load.finish;
+      });
+      return;
+    }
+    if (!mounted) return;
+    // A fingerprint is continuity protection, not proof that the provider is honest.
     final baseInfo = ethMap['baseInfo'] as Map<String, dynamic>;
     final browserStr = browserController.text.trim();
     baseInfo
       ..['mKey'] = mKey
       ..['custom'] = true
+      ..['genesisHash'] = genesis
       ..['coinType'] = mKey
       ..['miniName'] = mKey
       ..['unit'] = mKey

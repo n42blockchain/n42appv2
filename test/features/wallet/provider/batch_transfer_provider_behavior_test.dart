@@ -52,7 +52,7 @@ void main() {
       addTearDown(provider.dispose);
       provider.addItem('0x${'b2' * 20}', BigInt.from(250));
       await provider.estimateGas();
-      expect(provider.gasEstimate, isNotNull);
+      expect(provider.gasEstimate, isNull);
       provider.setError('previous transfer failed');
       var notifications = 0;
       provider.addListener(() => notifications++);
@@ -88,7 +88,7 @@ void main() {
       addTearDown(provider.dispose);
       provider.addItem('0x${'b2' * 20}', BigInt.from(250));
       await provider.estimateGas();
-      expect(provider.gasEstimate, isNotNull);
+      expect(provider.gasEstimate, isNull);
       provider.setError('previous transfer failed');
 
       provider.reset();
@@ -200,15 +200,15 @@ void main() {
     expect(provider.errorMessage, isNull);
   });
 
-  test('item changes invalidate an offline gas estimate', () async {
+  test('offline failures never become executable gas estimates', () async {
     final provider = createProvider();
     addTearDown(provider.dispose);
     provider.addItem('0x${'b2' * 20}', BigInt.from(125));
 
     Future<void> estimateOffline() async {
       await provider.estimateGas();
-      expect(provider.state, BatchTransferState.gasEstimated);
-      expect(provider.gasEstimate, isNotNull);
+      expect(provider.state, BatchTransferState.error);
+      expect(provider.gasEstimate, isNull);
     }
 
     await estimateOffline();

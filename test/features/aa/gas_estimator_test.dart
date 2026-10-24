@@ -260,9 +260,9 @@ void _testGasDeviationDetector() {
     group('callGasHigh', () {
       test('fires when callGasLimit >= 500000', () {
         final estimate = _makeEstimate(call: 500000);
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-        ).where((w) => w.type == GasDeviationWarningType.callGasHigh).toList();
+        final warnings = GasDeviationDetector.analyze(estimate)
+            .where((w) => w.type == GasDeviationWarningType.callGasHigh)
+            .toList();
 
         expect(warnings, hasLength(1));
         expect(warnings.first.severity, GasDeviationSeverity.warning);
@@ -271,9 +271,9 @@ void _testGasDeviationDetector() {
 
       test('does not fire below threshold', () {
         final estimate = _makeEstimate(call: 499999);
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-        ).where((w) => w.type == GasDeviationWarningType.callGasHigh).toList();
+        final warnings = GasDeviationDetector.analyze(estimate)
+            .where((w) => w.type == GasDeviationWarningType.callGasHigh)
+            .toList();
         expect(warnings, isEmpty);
       });
     });
@@ -684,6 +684,15 @@ void _testValidateGasEstimates() {
       expect(AAGasEstimator.validateGasEstimates(estimate), isTrue);
     });
 
+    test('accepts bundler gas below legacy intrinsic transaction cost', () {
+      expect(
+        AAGasEstimator.validateGasEstimates(
+          _makeEstimate(call: 12000, preVerification: 12000),
+        ),
+        isTrue,
+      );
+    });
+
     test('returns false when verificationGasLimit too low', () {
       final estimate = _makeEstimate(verification: 49999);
       expect(AAGasEstimator.validateGasEstimates(estimate), isFalse);
@@ -695,7 +704,7 @@ void _testValidateGasEstimates() {
     });
 
     test('returns false when callGasLimit too low', () {
-      final estimate = _makeEstimate(call: 20999);
+      final estimate = _makeEstimate(call: 0);
       expect(AAGasEstimator.validateGasEstimates(estimate), isFalse);
     });
 
@@ -705,7 +714,7 @@ void _testValidateGasEstimates() {
     });
 
     test('returns false when preVerificationGas too low', () {
-      final estimate = _makeEstimate(preVerification: 20999);
+      final estimate = _makeEstimate(preVerification: 0);
       expect(AAGasEstimator.validateGasEstimates(estimate), isFalse);
     });
 

@@ -1,14 +1,26 @@
 const _walletConnectParamKeys = ['wcUri', 'uri'];
 
 Uri? parseWalletConnectUri(String value) {
-  final normalized = normalizeWalletConnectUriString(value);
+  String? normalized;
+  try {
+    normalized = normalizeWalletConnectUriString(value);
+  } catch (_) {
+    return null;
+  }
   if (normalized == null) return null;
 
   final uri = Uri.tryParse(normalized);
   if (uri == null || uri.scheme != 'wc') {
     return null;
   }
-  if (!uri.queryParameters.containsKey('relay-protocol') ||
+  if (uri.hasFragment ||
+      uri.queryParametersAll.values.any(
+        (v) =>
+            v.length != 1 ||
+            v.single.isEmpty ||
+            RegExp(r'[\x00-\x20\x7f]').hasMatch(v.single),
+      ) ||
+      !uri.queryParameters.containsKey('relay-protocol') ||
       !uri.queryParameters.containsKey('symKey')) {
     return null;
   }
@@ -20,10 +32,15 @@ String? normalizeWalletConnectUriString(String value, {int depthLevel = 0}) {
     return null; // prevent infinite recursion on malicious URIs
   }
   final trimmed = value.trim();
-  if (trimmed.isEmpty) return null;
+  if (trimmed.isEmpty ||
+      trimmed.length > 16384 ||
+      RegExp(r'[\x00-\x20\x7f\\]').hasMatch(trimmed))
+    return null;
 
   final candidates = <String>{trimmed};
-  final decoded = _safeDecode(trimmed);
+  final decoded = trimmed.toLowerCase().startsWith('wc%3a')
+      ? _safeDecode(trimmed)
+      : null;
   if (decoded != null && decoded.isNotEmpty) {
     candidates.add(decoded);
   }
@@ -48,7 +65,25 @@ String? _normalizeWalletConnectCandidate(String value, int depthLevel) {
   }
 
   final uri = Uri.tryParse(trimmed);
-  if (uri == null) return null;
+  if (uri == null ||
+      uri.userInfo.isNotEmpty ||
+      uri.hasPort ||
+      uri.queryParametersAll.values.any((v) => v.length != 1))
+    return null;
+  final rawAuthority = trimmed.contains('://')
+      ? trimmed.split('://')[1].split(RegExp(r'[/#?]')).first
+      : '';
+  if (rawAuthority.contains('%') || rawAuthority.contains(':')) return null;
+  final allowedWrapper =
+      (uri.scheme == 'https' &&
+          uri.host == 'walletconnect.com' &&
+          uri.path == '/wc') ||
+      ({'n42', 'n42app', 'n42wallet'}.contains(uri.scheme) &&
+          uri.host == 'connect' &&
+          (uri.path.isEmpty || uri.path == '/'));
+  if (!allowedWrapper || (uri.hasQuery && uri.hasFragment)) return null;
+  if (_walletConnectParamKeys.where(uri.queryParameters.containsKey).length > 1)
+    return null;
 
   for (final key in _walletConnectParamKeys) {
     final nested = uri.queryParameters[key];

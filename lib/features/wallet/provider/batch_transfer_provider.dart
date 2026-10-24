@@ -24,8 +24,11 @@ enum BatchTransferState {
 
 /// 批量转账 Provider
 class BatchTransferProvider extends ChangeNotifier {
-  final BatchTransferApi _api = BatchTransferApi();
+  BatchTransferProvider({BatchTransferApi? api})
+    : _api = api ?? BatchTransferApi();
+  final BatchTransferApi _api;
   bool _disposed = false;
+  int _quoteRevision = 0;
 
   @override
   void notifyListeners() {
@@ -82,6 +85,7 @@ class BatchTransferProvider extends ChangeNotifier {
     required String tokenSymbol,
     required int decimals,
   }) {
+    _quoteRevision++;
     _chainSymbol = chainSymbol;
     _rpcUrl = rpcUrl;
     _chainId = chainId;
@@ -101,6 +105,7 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 解析 CSV 内容
   Future<void> parseCsv(String csvContent) async {
+    _invalidateGasEstimate();
     _state = BatchTransferState.parsing;
     _errorMessage = null;
     notifyListeners();
@@ -189,21 +194,27 @@ class BatchTransferProvider extends ChangeNotifier {
       return;
     }
 
+    final revision = ++_quoteRevision;
+    _gasEstimate = null;
     _state = BatchTransferState.estimatingGas;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _gasEstimate = await _api.getGasEstimate(
+      final quote = await _api.getGasEstimate(
         rpcUrl: _rpcUrl,
         chainSymbol: _chainSymbol,
         fromAddress: _fromAddress,
         tokenAddress: _tokenAddress,
         items: _items,
       );
+      if (_disposed || revision != _quoteRevision) return;
+      _gasEstimate = quote;
       _state = BatchTransferState.gasEstimated;
     } catch (e) {
+      if (_disposed || revision != _quoteRevision) return;
       _state = BatchTransferState.error;
+      _gasEstimate = null;
       _errorMessage = 'Failed to estimate gas: $e';
     }
 
@@ -217,11 +228,15 @@ class BatchTransferProvider extends ChangeNotifier {
       if (_gasEstimate == null) return null;
     }
 
+    final revision = _quoteRevision;
     _state = BatchTransferState.confirming;
     notifyListeners();
 
     try {
       final nonce = await _api.getNonce(_rpcUrl, _fromAddress);
+      if (_disposed || revision != _quoteRevision || _gasEstimate == null) {
+        return null;
+      }
       final result = await _api.buildBatchTransaction(
         chainSymbol: _chainSymbol,
         fromAddress: _fromAddress,
@@ -235,6 +250,7 @@ class BatchTransferProvider extends ChangeNotifier {
         maxPriorityFeePerGas: _gasEstimate!.maxPriorityFeePerGas,
       );
 
+      if (_disposed || revision != _quoteRevision) return null;
       if (result.error) {
         _errorMessage =
             result.data?.toString() ?? 'Failed to build transaction';
@@ -383,6 +399,7 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// Shared state reset used by both [clearItems] and [reset].
   void _resetSharedState() {
+    _quoteRevision++;
     _items = [];
     _cachedTotalAmount = BigInt.zero;
     _parseErrors = [];
@@ -392,6 +409,7 @@ class BatchTransferProvider extends ChangeNotifier {
   }
 
   void _invalidateGasEstimate() {
+    _quoteRevision++;
     _gasEstimate = null;
   }
 

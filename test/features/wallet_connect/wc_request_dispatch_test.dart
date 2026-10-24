@@ -117,7 +117,7 @@ void main() {
   }
 
   test(
-    'add-chain acknowledgement does not insert a new configured wallet',
+    'remote add-chain is explicitly unsupported and cannot install an RPC',
     () async {
       await provider.setActionDataMap(
         sessionRequest('wallet_addEthereumChain', [
@@ -125,7 +125,7 @@ void main() {
         ]),
       );
       expect(provider.coinModels, hasLength(1));
-      expect(client.responses.single.$2.error, isNull);
+      expect(client.responses.single.$2.error?.code, 4200);
       expect(provider.initializedChains, isEmpty);
     },
   );

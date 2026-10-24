@@ -380,8 +380,8 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         _handleSwitchEthereumChain(eventData);
         return;
       case "wallet_addEthereumChain":
-        // Acknowledge without modifying the chain list.
-        _respondSuccess(eventData, null);
+        // Remote DApps cannot install RPC endpoints. Do not report a no-op as success.
+        _rejectUnsupportedMethod(eventData);
         return;
     }
 
@@ -718,8 +718,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
           id: eventData.id,
           error: wallet_connect.JsonRpcError(
             code: 4902,
-            message:
-                'Unrecognized chain ID. Try adding the chain using wallet_addEthereumChain.',
+            message: 'Unrecognized chain ID. Try adding the chain using wallet_addEthereumChain.',
           ),
         ),
       );

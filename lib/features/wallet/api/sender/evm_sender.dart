@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:n42_wallet/core/security/rpc_endpoint_policy.dart';
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -124,6 +126,27 @@ class EvmSender implements ChainSender {
       }
     }
 
+    final baseConfig = chainConfig?['baseInfo'] is Map
+        ? chainConfig!['baseInfo'] as Map
+        : chainConfig;
+    final pinnedGenesis =
+        baseConfig?[params.isTest ? 'genesisHash_test' : 'genesisHash'];
+    if (rpcOverride != null && pinnedGenesis != null) {
+      try {
+        RpcEndpointPolicy.parse(rpcOverride);
+        final block = await EthAPI.init(null, rpcOverride, null).baseRPCEth(
+          'eth_getBlockByNumber',
+          ['0x0', false],
+          enableRetry: false,
+        );
+        if (RpcEndpointPolicy.genesisHash(block.valueOrNull) != pinnedGenesis) {
+          return SendResult.fail('RPC genesis fingerprint changed');
+        }
+      } catch (_) {
+        return SendResult.fail('Cannot verify RPC network fingerprint');
+      }
+    }
+
     // Get token balance if contract transfer
     BigInt balance = BigInt.zero;
     if (isContract) {
@@ -209,16 +232,22 @@ class EvmSender implements ChainSender {
     );
     if (estimateMm.error) return SendResult.fail(estimateMm.data?.toString());
 
-    int gasLimit = (estimateMm.data as BigInt).toInt();
+    final estimatedGas = estimateMm.data;
+    if (estimatedGas is! BigInt ||
+        estimatedGas <= BigInt.zero ||
+        estimatedGas > BigInt.from(9007199254740991)) {
+      return SendResult.fail('Invalid RPC gas estimate');
+    }
+    int gasLimit = estimatedGas.toInt();
     if (coinType == CoinType.OP.name || coinType == CoinType.BOBA.name) {
-      gasLimit = (gasLimit * 1.5).toInt();
+      gasLimit = (gasLimit * 3 + 1) ~/ 2;
     }
     // Apply the safety buffer here (once) so the balance check below reserves
     // exactly what will be signed. Previously the ×1.2 buffer lived only in
     // _sign, so a MAX native send (value = balance - fee at 1.0×) signed a tx
     // whose fee ceiling was 1.2× fee and got rejected by the node for
     // insufficient funds.
-    gasLimit = (gasLimit * 1.2).ceil();
+    gasLimit = (gasLimit * 6 + 4) ~/ 5;
 
     final totalGasPrice = gasPrice * BigInt.from(gasLimit);
 

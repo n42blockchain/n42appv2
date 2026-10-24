@@ -126,6 +126,13 @@ class BatchTransferApi {
     required List<BatchTransferItem> items,
   }) async {
     try {
+      if (!supportsMulticall(chainSymbol)) {
+        return MessageModel.error()..data = 'Unsupported batch network';
+      }
+      if (tokenAddress != null && tokenAddress.isNotEmpty) {
+        return MessageModel.error()
+          ..data = 'ERC-20 batching requires a smart-account execution path';
+      }
       final multicallAddr = getMulticall3Address(chainSymbol);
       final params = _buildMulticallParams(
         tokenAddress: tokenAddress,
@@ -143,21 +150,21 @@ class BatchTransferApi {
         },
       ]);
 
-      if (response['result'] != null) {
-        final gasLimit = _hexToBigInt(response['result'].toString());
-        // 增加 30% 安全边际（批量交易更复杂）
-        final safeGasLimit = gasLimit * BigInt.from(130) ~/ BigInt.from(100);
-        return MessageModel()..data = safeGasLimit;
+      final result = response['result'];
+      if (response['error'] != null ||
+          result is! String ||
+          !RegExp(r'^0x[0-9a-fA-F]+$').hasMatch(result)) {
+        return MessageModel.error()..data = 'RPC gas estimation failed';
       }
-
-      // 默认估算：原生 ~21000/笔，ERC20 ~65000/笔
-      final isNative = tokenAddress == null || tokenAddress.isEmpty;
-      final defaultGas = isNative
-          ? BigInt.from(21000 * items.length + 50000)
-          : BigInt.from(65000 * items.length + 50000);
-      return MessageModel()..data = defaultGas;
-    } catch (e) {
-      return MessageModel()..data = BigInt.from(100000 * items.length);
+      final gasLimit = BigInt.parse(result.substring(2), radix: 16);
+      if (gasLimit <= BigInt.zero || gasLimit > BigInt.from(9007199254740991)) {
+        return MessageModel.error()..data = 'Invalid RPC gas estimate';
+      }
+      return MessageModel()
+        ..data =
+            (gasLimit * BigInt.from(120) + BigInt.from(99)) ~/ BigInt.from(100);
+    } catch (_) {
+      return MessageModel.error()..data = 'RPC gas estimation failed';
     }
   }
 
@@ -176,7 +183,10 @@ class BatchTransferApi {
       tokenAddress: tokenAddress,
       items: items,
     );
-    final gasLimit = gasLimitResult.data as BigInt? ?? BigInt.from(500000);
+    if (gasLimitResult.error || gasLimitResult.data is! BigInt) {
+      throw StateError('RPC gas estimation failed');
+    }
+    final gasLimit = gasLimitResult.data as BigInt;
 
     // 尝试 EIP-1559
     try {
@@ -226,14 +236,7 @@ class BatchTransferApi {
       // 使用默认值
     }
 
-    // 默认 5 Gwei
-    final defaultGasPrice = BigInt.from(5000000000);
-    return BatchGasEstimate(
-      gasLimit: gasLimit,
-      gasPrice: defaultGasPrice,
-      totalFee: gasLimit * defaultGasPrice,
-      isEip1559: false,
-    );
+    throw StateError('RPC fee quote unavailable');
   }
 
   /// 构建批量转账交易
@@ -250,6 +253,13 @@ class BatchTransferApi {
     BigInt? maxPriorityFeePerGas,
   }) async {
     try {
+      if (!supportsMulticall(chainSymbol)) {
+        return MessageModel.error()..data = 'Unsupported batch network';
+      }
+      if (tokenAddress != null && tokenAddress.isNotEmpty) {
+        return MessageModel.error()
+          ..data = 'ERC-20 batching requires a smart-account execution path';
+      }
       final multicallAddr = getMulticall3Address(chainSymbol);
       final params = _buildMulticallParams(
         tokenAddress: tokenAddress,
@@ -289,18 +299,21 @@ class BatchTransferApi {
 
   /// 获取 nonce
   Future<int> getNonce(String rpcUrl, String address) async {
-    try {
-      final response = await _rpcCall(rpcUrl, 'eth_getTransactionCount', [
-        address,
-        'pending',
-      ]);
-      if (response['result'] != null) {
-        return _hexToBigInt(response['result'].toString()).toInt();
-      }
-      return 0;
-    } catch (e) {
-      return 0;
+    final response = await _rpcCall(rpcUrl, 'eth_getTransactionCount', [
+      address,
+      'pending',
+    ]);
+    final value = response['result'];
+    if (response['error'] != null ||
+        value is! String ||
+        !RegExp(r'^0x[0-9a-fA-F]+$').hasMatch(value)) {
+      throw StateError('RPC nonce unavailable');
     }
+    final nonce = BigInt.parse(value.substring(2), radix: 16);
+    if (nonce > BigInt.from(9007199254740991)) {
+      throw StateError('Invalid RPC nonce');
+    }
+    return nonce.toInt();
   }
 
   /// 广播交易
