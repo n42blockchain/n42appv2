@@ -204,3 +204,18 @@ Android companion build: `bash build_release.sh apk` produces a signed APK;
 `bash scripts/prepare_android_release.sh` produces both AAB and APK. Verify the
 embedded version and signature with Android SDK `aapt`/`apksigner`, and record
 the checksum. Building Android does not establish device acceptance.
+
+## Verified IPA fallback when upload re-signing fails
+
+If archive/export and IPA signature verification passed, but background
+`xcodebuild -exportArchive` fails before transmission with
+`errSecInternalComponent`, use the already signed-in Transporter app to add
+the verified `build/ios/ipa/N42Wallet.ipa`. Check its version/build, then Deliver.
+Do not rebuild or retry a successful delivery. Record the green Delivered state
+and its timestamp separately from App processing and tester availability.
+This path succeeded for 2.5.3 (73037) on 2026-10-24. If desktop automation denies
+Terminal access, use an allowed app; do not work around that restriction.
+
+For NFC releases, check TAG in both the signed application entitlements and
+the embedded provisioning profile, plus NFCReaderUsageDescription. A source
+entitlements file alone does not prove the distributed capability.
