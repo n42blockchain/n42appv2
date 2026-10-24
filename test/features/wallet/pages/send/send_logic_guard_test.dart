@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -175,6 +177,7 @@ void main() {
   const toastChannel = MethodChannel('PonnamKarthik/fluttertoast');
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(toastChannel, (_) async => true);
   });

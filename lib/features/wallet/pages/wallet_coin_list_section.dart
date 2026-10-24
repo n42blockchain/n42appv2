@@ -88,11 +88,17 @@ class _CoinListBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     final bgColor = AppColorTokens.of(context).bgBase;
+    final visibleCoins = waValue.coinList
+        .where(
+          (coin) => !{
+            'hidden',
+            'quarantined',
+          }.contains(waValue.assetVisibilityState(coin)),
+        )
+        .toList();
     final thresholdList = smallAssetsThreshold > 0
-        ? waValue.coinList
-              .where((c) => c.value >= smallAssetsThreshold)
-              .toList()
-        : waValue.coinList;
+        ? visibleCoins.where((c) => c.value >= smallAssetsThreshold).toList()
+        : visibleCoins;
     final normalizedQuery = searchQuery.trim().toLowerCase();
     final displayList = normalizedQuery.isEmpty
         ? thresholdList
@@ -114,6 +120,66 @@ class _CoinListBody extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (waValue.assetVisibilityRecords.isNotEmpty)
+            TextButton.icon(
+              icon: const Icon(Icons.visibility_outlined),
+              label: const Text('Hidden and reviewed assets'),
+              onPressed: () {
+                final owner = waValue.walletInfo;
+                showDialog<void>(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: const Text('Asset display controls'),
+                    content: SizedBox(
+                      width: 360,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          const Text(
+                            'Local user choices only. On-chain balances and approvals are unchanged.',
+                          ),
+                          for (final entry in owner.assetVisibility.entries)
+                            if (entry.value is Map)
+                              ListTile(
+                                title: Text(
+                                  '${entry.value['name'] ?? entry.key} · ${entry.value['state']}',
+                                ),
+                                subtitle: Text(
+                                  '${entry.value['source']}\n${entry.value['updatedAt']}',
+                                ),
+                                trailing: TextButton(
+                                  child: const Text('Restore'),
+                                  onPressed: () async {
+                                    if (!identical(waValue.walletInfo, owner)) {
+                                      Navigator.pop(dialogContext);
+                                      return;
+                                    }
+                                    final saved = await waValue
+                                        .restoreAssetVisibility(entry.key);
+                                    if (!dialogContext.mounted) return;
+                                    if (!saved) {
+                                      ScaffoldMessenger.of(
+                                        dialogContext,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Could not restore asset display.',
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    Navigator.pop(dialogContext);
+                                  },
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           if (discoveredTokens.isNotEmpty)
             _DiscoveryBanner(
               count: discoveredTokens.length,

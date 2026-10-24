@@ -1,3 +1,5 @@
+import 'package:n42_wallet/core/security/address_similarity.dart';
+
 import 'dart:convert';
 
 import 'package:decimal/decimal.dart';
@@ -475,6 +477,40 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (!mounted) return;
     if (!unchanged()) return setState(() => load = Load.finish);
     if (toAddr == null) return setState(() => load = Load.finish);
+
+    if (_blockchainType == BlockchainType.Ethereum.name) {
+      final recent = await RecentAddressService.load(_coinType, maxCount: 10);
+      if (!mounted) return;
+      if (!unchanged()) return setState(() => load = Load.finish);
+      final similar = similarRecentEvmAddress(
+        toAddr,
+        recent.map((entry) => entry.address),
+      );
+      if (similar != null) {
+        final proceed = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Check the full recipient address'),
+            content: Text(
+              'This address resembles a recent recipient but is different.\n\nRecipient: $toAddr\n\nRecent: $similar\n\nSource: local send history, checked now. This is a similarity warning, not proof of fraud.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Continue'),
+              ),
+            ],
+          ),
+        );
+        if (!mounted) return;
+        if (proceed != true || !unchanged())
+          return setState(() => load = Load.finish);
+      }
+    }
 
     final estimated = await estimateGasEthLocal(checkAddress: false);
     if (!mounted) return;

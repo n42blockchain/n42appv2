@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:n42_wallet/core/security/secure_memory.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 
@@ -28,6 +29,9 @@ class WalletInfo {
   /// 用户手动置顶的代币标识集合
   /// 主链币：coinType（如 "ETH"），合约代币：coinType_miniName（如 "ETH_USDT"）
   List<String> pinnedCoins = [];
+
+  /// Local display preferences only; never revokes on-chain approvals.
+  Map<String, dynamic> assetVisibility = {};
 
   /// 用户自定义链显示顺序（coinType 字符串列表，按期望顺序排列）
   List<String> chainOrder = [];
@@ -100,6 +104,9 @@ class WalletInfo {
         ((json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? [])
             .take(200)
             .toList();
+    assetVisibility = Map<String, dynamic>.from(
+      json['assetVisibility'] as Map? ?? {},
+    );
     chainOrder = ((json['chainOrder'] as List<dynamic>?)?.cast<String>() ?? []);
     tags = ((json['tags'] as List<dynamic>?)?.cast<String>() ?? []);
     isMpc = (json['isMpc'] as bool?) ?? false;
@@ -136,6 +143,7 @@ class WalletInfo {
       "coinSort": coinSort,
       "networkIndex": networkIndex,
       "pinnedCoins": pinnedCoins,
+      "assetVisibility": assetVisibility,
       "chainOrder": chainOrder,
       "tags": tags,
       "isMpc": isMpc,
@@ -159,6 +167,7 @@ class WalletInfo {
       "coinSort": coinSort,
       "networkIndex": networkIndex,
       "pinnedCoins": pinnedCoins,
+      "assetVisibility": assetVisibility,
       "chainOrder": chainOrder,
       "tags": tags,
       "isMpc": isMpc,

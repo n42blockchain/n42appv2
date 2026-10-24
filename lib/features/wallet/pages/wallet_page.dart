@@ -629,6 +629,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                 coinItemBuilder: (coin, key, group) =>
                                     WalletCoinItem(
                                       coinInfo: coin,
+                                      visibilityState: waValue
+                                          .assetVisibilityState(coin),
                                       itemKey: key,
                                       group: group,
                                     ),

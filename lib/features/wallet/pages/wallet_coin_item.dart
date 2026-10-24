@@ -24,11 +24,13 @@ class WalletCoinItem extends ConsumerWidget {
     required this.coinInfo,
     required this.itemKey,
     required this.group,
+    this.visibilityState = 'visible',
   }) : super(key: ValueKey(itemKey));
 
   final CoinModel coinInfo;
   final String itemKey;
   final String group;
+  final String visibilityState;
 
   static final _oCcy = NumberFormat('#,##0.00', 'en_US');
   static final _regular = Regular();
@@ -45,6 +47,52 @@ class WalletCoinItem extends ConsumerWidget {
 
   String _formatTokenBalance(CoinModel coin) =>
       _abbreviate(coin.balanceDoubleAll(), fallback: coin.balanceString());
+
+  Future<void> _showAssetControls(BuildContext context, WidgetRef ref) async {
+    final wallet = ref.read(wapBridgeProvider);
+    if (!wallet.hasAssetVisibilityWallet) return;
+    final owner = wallet.walletInfo;
+    final record = wallet.assetVisibilityRecord(coinInfo);
+    final choice = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text('${coinInfo.config.miniName} · Asset controls'),
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'These controls only affect this wallet display. Hiding does not revoke approvals or change balances. Quarantine also disables opening this asset from the wallet list. DApp interactions are not blocked.',
+            ),
+          ),
+          if (record != null)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text('${record['source']} · ${record['updatedAt']}'),
+            ),
+          for (final entry in {
+            'visible': 'Restore normal display',
+            'warning': 'Mark for review',
+            'hidden': 'Hide from list',
+            'quarantined': 'Quarantine from list',
+          }.entries)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, entry.key),
+              child: Text(entry.value),
+            ),
+        ],
+      ),
+    );
+    if (choice != null && identical(wallet.walletInfo, owner)) {
+      final saved = await wallet.setAssetVisibility(coinInfo, choice);
+      if (!saved && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not save asset display preference.'),
+          ),
+        );
+      }
+    }
+  }
 
   void _onTap(BuildContext context) {
     if (coinInfo.coin['isAggregated'] == true) {
@@ -137,7 +185,17 @@ class WalletCoinItem extends ConsumerWidget {
           borderRadius: AppRadius.brMd,
           child: InkWell(
             key: ValueKey('wallet_coin_open_$itemKey'),
-            onTap: () => _onTap(context),
+            onLongPress: coinInfo is AggregatedCoinModel
+                ? null
+                : () => _showAssetControls(context, ref),
+            onTap: () {
+              if (aggregate == null &&
+                  ref.read(wapBridgeProvider).assetVisibilityState(coinInfo) ==
+                      'quarantined') {
+                return;
+              }
+              _onTap(context);
+            },
             borderRadius: AppRadius.brMd,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -146,7 +204,11 @@ class WalletCoinItem extends ConsumerWidget {
                   _CoinIcon(
                     image: image,
                     mainImage: mainImage,
+                    warningText: visibilityState == 'warning'
+                        ? 'Marked for review by you. Long press to review or restore.'
+                        : null,
                     showWarning:
+                        visibilityState == 'warning' ||
                         aggregate?.loadError == true ||
                         shouldShowBalanceLoadWarning(coinInfo),
                   ),
@@ -180,11 +242,13 @@ class _CoinIcon extends StatelessWidget {
     required this.image,
     this.mainImage,
     this.showWarning = false,
+    this.warningText,
   });
 
   final Widget image;
   final Widget? mainImage;
   final bool showWarning;
+  final String? warningText;
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +275,7 @@ class _CoinIcon extends StatelessWidget {
               right: -2,
               bottom: -2,
               child: Tooltip(
-                message: S.of(context).g_wallet_balance_warning,
+                message: warningText ?? S.of(context).g_wallet_balance_warning,
                 child: Icon(
                   Icons.error_rounded,
                   size: ScreenUtil().setWidth(28),

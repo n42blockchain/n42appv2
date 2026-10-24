@@ -81,6 +81,12 @@ class TxRiskBannerWidget extends StatelessWidget {
             ),
           ),
 
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: Text(
+              'Source: local transaction rules · Evaluated for this request. Warnings do not block execution or revoke approvals.',
+            ),
+          ),
           // ── Warning messages ─────────────────────────────────────────────
           if (analysis.warnings.isNotEmpty) ...[
             Divider(

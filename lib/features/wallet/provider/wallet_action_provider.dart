@@ -77,16 +77,19 @@ class WalletActionProvider extends ChangeNotifier
     MarketApi? marketApi,
     Future<dynamic> Function(String)? stablecoinPriceRequest,
     DateTime Function()? now,
+    Future<void> Function(WalletInfo, int)? assetVisibilityWriter,
   }) : _marketApi = marketApi ?? MarketApi(),
        _stablecoinPriceRequest =
            stablecoinPriceRequest ?? _requestStablecoinPrices,
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       _assetVisibilityWriter = assetVisibilityWriter;
 
   static Future<dynamic> _requestStablecoinPrices(String url) =>
       ExternalHttp.get(url);
   final MarketApi _marketApi;
   final Future<dynamic> Function(String) _stablecoinPriceRequest;
   final DateTime Function() _now;
+  final Future<void> Function(WalletInfo, int)? _assetVisibilityWriter;
   Future<void>? _priceRefreshInFlight;
   bool _priceRefreshFailed = false;
   bool get priceRefreshFailed => _priceRefreshFailed;
@@ -110,6 +113,76 @@ class WalletActionProvider extends ChangeNotifier
   /// 上次 _syncPinnedState 时的 fingerprint；格式：pinnedHash|coinListLength
   String _lastSyncFingerprint = '';
   String get userUUID => AppGlobals.walletStorageUuid;
+
+  String assetVisibilityKey(CoinModel coin) =>
+      '${coin.config.coinType}:${coin.isTest}:${coin.coin['chainId']}:${coin.coin['contract'] ?? ''}'
+          .toLowerCase();
+
+  bool get hasAssetVisibilityWallet =>
+      walletIndex >= 0 && walletIndex < walletInfoLsit.length;
+
+  Map<String, dynamic> get assetVisibilityRecords =>
+      hasAssetVisibilityWallet ? walletInfo.assetVisibility : const {};
+
+  Map? assetVisibilityRecord(CoinModel coin) =>
+      assetVisibilityRecords[assetVisibilityKey(coin)] is Map
+      ? assetVisibilityRecords[assetVisibilityKey(coin)] as Map
+      : null;
+
+  String assetVisibilityState(CoinModel coin) =>
+      assetVisibilityRecord(coin)?['state']?.toString() ?? 'visible';
+
+  bool _assetVisibilitySaving = false;
+
+  Future<bool> setAssetVisibility(CoinModel coin, String state) async {
+    if (!{'visible', 'warning', 'hidden', 'quarantined'}.contains(state)) {
+      throw ArgumentError.value(state);
+    }
+    return _saveAssetVisibility(
+      assetVisibilityKey(coin),
+      state == 'visible'
+          ? null
+          : {
+              'state': state,
+              'source': 'User choice',
+              'updatedAt': DateTime.now().toUtc().toIso8601String(),
+              'name': coin.config.miniName,
+            },
+    );
+  }
+
+  Future<bool> restoreAssetVisibility(String key) =>
+      _saveAssetVisibility(key, null);
+
+  Future<bool> _saveAssetVisibility(
+    String key,
+    Map<String, dynamic>? value,
+  ) async {
+    if (_assetVisibilitySaving || !hasAssetVisibilityWallet) return false;
+    _assetVisibilitySaving = true;
+    final owner = walletInfo;
+    final previous = Map<String, dynamic>.from(owner.assetVisibility);
+    if (value == null) {
+      owner.assetVisibility.remove(key);
+    } else {
+      owner.assetVisibility[key] = value;
+    }
+    try {
+      if (_assetVisibilityWriter != null) {
+        await _assetVisibilityWriter(owner, walletIndex);
+      } else {
+        await saveWalletInfoOrThrow(owner, walletIndex);
+      }
+      notifyListeners();
+      return true;
+    } catch (_) {
+      owner.assetVisibility = previous;
+      notifyListeners();
+      return false;
+    } finally {
+      _assetVisibilitySaving = false;
+    }
+  }
 
   late final TokenViewApi tokenViewApi = TokenViewApi();
   Load _load = Load.finish; //当前状态
