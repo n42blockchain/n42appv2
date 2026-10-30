@@ -25,6 +25,7 @@
 		690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
 		690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
 		691MLS012F90000100000002 /* N42Mls.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 691MLS012F90000100000001 /* N42Mls.xcframework */; };
+		F42000000000000000000512 /* N42Pq.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42000000000000000000511 /* N42Pq.xcframework */; };
 		691MLS022F90000100000002 /* N42MlsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691MLS022F90000100000001 /* N42MlsHandler.swift */; };
 		691SPH010000000000000002 /* ScreenProtectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691SPH010000000000000001 /* ScreenProtectionHandler.swift */; };
 		6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */; };
@@ -102,6 +103,7 @@
 		683A53A702C850643338E96D /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		691MLS002F90000100000001 /* n42_mls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = n42_mls.h; sourceTree = "<group>"; };
 		691MLS012F90000100000001 /* N42Mls.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = N42Mls.xcframework; sourceTree = "<group>"; };
+		F42000000000000000000511 /* N42Pq.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = N42Pq.xcframework; sourceTree = "<group>"; };
 		691MLS022F90000100000001 /* N42MlsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N42MlsHandler.swift; sourceTree = "<group>"; };
 		691SPH010000000000000001 /* ScreenProtectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenProtectionHandler.swift; sourceTree = "<group>"; };
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			files = (
 				69AC47A92F9B4A1D00DE4DA7 /* StoreKit.framework in Frameworks */,
 				691MLS012F90000100000002 /* N42Mls.xcframework in Frameworks */,
+				F42000000000000000000512 /* N42Pq.xcframework in Frameworks */,
 				690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */,
 				80DF6CA187EF2D544C26CFCA /* Pods_Runner.framework in Frameworks */,
 			);
@@ -194,6 +197,7 @@
 			children = (
 				69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */,
 				691MLS012F90000100000001 /* N42Mls.xcframework */,
+				F42000000000000000000511 /* N42Pq.xcframework */,
 				69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */,
 				69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */,
 				523BA9BB2D757CF7003C8E38 /* fluttertoast.framework */,
@@ -862,6 +866,9 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-u,_sqlite3_key",
+					"-Wl,-u,_n42_pq_keypair",
+					"-Wl,-u,_n42_pq_sign",
+					"-Wl,-u,_n42_pq_verify",
 					"-framework",
 					SQLCipher,
 					"-ObjC",
@@ -1391,6 +1398,9 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-u,_sqlite3_key",
+					"-Wl,-u,_n42_pq_keypair",
+					"-Wl,-u,_n42_pq_sign",
+					"-Wl,-u,_n42_pq_verify",
 					"-framework",
 					SQLCipher,
 					"-ObjC",
@@ -1629,6 +1639,9 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-Wl,-u,_sqlite3_key",
+					"-Wl,-u,_n42_pq_keypair",
+					"-Wl,-u,_n42_pq_sign",
+					"-Wl,-u,_n42_pq_verify",
 					"-framework",
 					SQLCipher,
 					"-ObjC",

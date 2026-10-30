@@ -753,7 +753,7 @@ packages:
     source: hosted
     version: "0.2.2"
   ffi:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: ffi
       sha256: "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45"
@@ -3297,7 +3297,7 @@ packages:
     source: hosted
     version: "1.7.0"
   wallet:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: wallet
       sha256: "20b6d8440039726841bd23b2bac64f888ec1ce1509edcc3ed2ad1753f613521e"
