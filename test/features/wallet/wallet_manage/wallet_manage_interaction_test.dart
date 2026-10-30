@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/features/wallet/falcon/falcon_page.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -52,6 +54,32 @@ void main() {
     );
     await tester.pumpAndSettle();
   }
+
+  testWidgets(
+    'Falcon route is scoped to its owner and unavailable to watch wallets',
+    (tester) async {
+      final owner = AppGlobals.walletStorageUuid;
+      final wallet = WalletInfo(
+        walletName: 'Falcon owner',
+        walletUuid: owner,
+        timestamp: 'test-falcon',
+      );
+      await open(tester, wallet);
+      await tester.ensureVisible(find.text('Falcon-512'));
+      await tester.tap(find.text('Falcon-512'));
+      await tester.pumpAndSettle();
+      final page = tester.widget<FalconPage>(find.byType(FalconPage));
+      expect(page.walletScope, '$owner:test-falcon');
+      expect(page.isOwnerCurrent(), true);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await open(
+        tester,
+        WalletInfo(walletName: 'Watch', walletUuid: owner, timestamp: 'watch')
+          ..watchOnly = true,
+      );
+      expect(find.text('Falcon-512'), findsNothing);
+    },
+  );
 
   testWidgets('offers main-wallet action only for a non-main N42 wallet', (
     tester,
