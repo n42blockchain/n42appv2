@@ -61,3 +61,7 @@ activates compatible chain configuration. See each client's
   rebuilt from the locked Rust crate. Full Android app/device QA is separate.
 - Go client verifies the Dart public fixture. Rust verifies both independently
   generated wallet and Go fixtures, with storage/pool/JSON roundtrips.
+- Wallet management route/owner/watch-only widget checks: 4 passed.
+- Android `:app:mergeDebugNativeLibs` with JDK 21: succeeded. Packaged Falcon
+  libraries match source SHA-256 hashes for arm64-v8a, armeabi-v7a, x86 and
+  x86_64. This verifies packaging, not Android device runtime acceptance.
