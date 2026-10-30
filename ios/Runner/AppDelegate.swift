@@ -1,3 +1,7 @@
+#if canImport(SuggestedActions)
+import SuggestedActions
+import SwiftUI
+#endif
 import EventKit
 import EventKitUI
 import Flutter
@@ -136,6 +140,22 @@ private final class N42GeometryView: UIView {
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     let registry = engineBridge.pluginRegistry
     GeneratedPluginRegistrant.register(with: registry)
+    let actionsChannel = FlutterMethodChannel(name: "n42.chat/suggested_actions",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger())
+    actionsChannel.setMethodCallHandler { call, result in
+      guard call.method == "isAvailable" else { result(FlutterMethodNotImplemented); return }
+      #if canImport(SuggestedActions)
+      if #available(iOS 27.0, *) { result(true) } else { result(false) }
+      #else
+      result(false)
+      #endif
+    }
+    #if canImport(SuggestedActions)
+    if #available(iOS 27.0, *), let registrar = registry.registrar(forPlugin: "N42SuggestedActions") {
+      registrar.register(N42SuggestedActionsFactory(), withId: "n42.chat/suggested_actions_view")
+    }
+    #endif
+
 
     if let registrar = registry.registrar(forPlugin: "TrustdartPlugin") {
       TrustdartPlugin.register(with: registrar)
@@ -550,3 +570,74 @@ private final class N42CalendarHandler: NSObject, EKEventEditViewDelegate, UIAda
     controller.dismiss(animated: true) { self.finish(action == .saved) }
   }
 }
+
+
+#if canImport(SuggestedActions)
+@available(iOS 27.0, *)
+@MainActor
+private final class N42SuggestedActionsFactory: NSObject, @preconcurrency FlutterPlatformViewFactory {
+  func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol { FlutterStandardMessageCodec.sharedInstance() }
+  func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
+    N42SuggestedActionsPlatformView(frame: frame, arguments: args)
+  }
+}
+
+@available(iOS 27.0, *)
+@MainActor
+private final class N42SuggestedActionsPlatformView: NSObject, @preconcurrency FlutterPlatformView {
+  private let container: N42SuggestedActionsContainer
+  private var controller: UIHostingController<AnyView>?
+  init(frame: CGRect, arguments: Any?) {
+    container = N42SuggestedActionsContainer(frame: frame)
+    super.init()
+    guard let args = arguments as? [String: Any], let body = args["body"] as? String,
+          !body.isEmpty, body.count <= 4096, let id = args["id"] as? String,
+          let timestamp = args["timestamp"] as? NSNumber else { return }
+    let senderIsUser = args["senderIsUser"] as? Bool ?? false
+    let message = SuggestedActionsMessage(id: id,
+      date: Date(timeIntervalSince1970: timestamp.doubleValue / 1000), subject: nil,
+      body: AttributedString(body),
+      sender: .init(name: senderIsUser ? "You" : "Sender", handle: "sender", isUser: senderIsUser),
+      recipients: [.init(name: senderIsUser ? "Recipient" : "You", handle: "recipient", isUser: !senderIsUser)])
+    // Only the explicitly confirmed message; no history, address book or wallet bridge.
+    let host = UIHostingController(rootView: AnyView(SuggestedActionsView(message: message)))
+    controller = host
+    container.host = host
+    host.view.backgroundColor = .clear
+    host.view.translatesAutoresizingMaskIntoConstraints = false
+    container.addSubview(host.view)
+    NSLayoutConstraint.activate([
+      host.view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+      host.view.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+      host.view.topAnchor.constraint(equalTo: container.topAnchor),
+      host.view.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+    ])
+  }
+  func view() -> UIView { container }
+}
+
+@available(iOS 27.0, *)
+@MainActor
+private final class N42SuggestedActionsContainer: UIView {
+  weak var host: UIViewController?
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    guard let host else { return }
+    if window == nil {
+      host.willMove(toParent: nil)
+      host.removeFromParent()
+      return
+    }
+    guard host.parent == nil else { return }
+    var responder: UIResponder? = superview
+    while let current = responder {
+      if let parent = current as? UIViewController {
+        parent.addChild(host)
+        host.didMove(toParent: parent)
+        break
+      }
+      responder = current.next
+    }
+  }
+}
+#endif

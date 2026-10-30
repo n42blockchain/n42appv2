@@ -1,0 +1,18 @@
+{
+  "build_exit_code": 0,
+  "flutter": "3.47.5",
+  "xcode": "27.1",
+  "app_version": "2.5.3",
+  "app_build": "73043",
+  "minimum_ios": "16.0",
+  "simulator_architectures": "x86_64",
+  "suggested_actions_link": "LC_LOAD_WEAK_DYLIB",
+  "suggested_actions_entitlement_declared": true,
+  "distribution_entitlement_verified": false,
+  "runtime": "iOS 27.1 / iPhone Duo / arm64",
+  "installation": "failed: x86_64 output cannot run in installed arm64 runtimes",
+  "installation_error": "IXUserPresentableErrorDomain code 4",
+  "startup_verified": false,
+  "test_simulator_cleanup": "shut down and deleted",
+  "physical_device_acceptance": "skipped at user request"
+}
