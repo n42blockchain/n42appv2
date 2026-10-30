@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.5.3+73044
+version: 2.5.3+73045
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -161,6 +161,7 @@ dependencies:
 
 # Keep v10 migration support for legacy encrypted wallet storage. v11 removes
 # legacy cipher/EncryptedSharedPreferences migration and requires compileSdk 37.
+  wallet: any
 dependency_overrides:
   # connectivity_plus 7.3.2 and Chat wakelock_plus 1.8.1 require dbus 0.8.
   dbus: ^0.8.0
