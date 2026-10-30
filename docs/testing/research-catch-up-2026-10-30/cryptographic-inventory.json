@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "production_migration_complete": false,
+  "items": [
+    {
+      "id": "wallet-eoa",
+      "plane": "account",
+      "algorithm": "chain-specific ECDSA/EdDSA",
+      "evidence": "lib/core/wallet_sdk/trustdart.dart",
+      "key_location": "local mnemonic/private key via host",
+      "signature_lifetime": "until account migration",
+      "upgrade_interface": "chain-native transfer to new account",
+      "hybrid_mode": "not implemented",
+      "revocation": "chain-specific; no universal key revocation"
+    },
+    {
+      "id": "wallet-passkey",
+      "plane": "account",
+      "algorithm": "WebAuthn P-256",
+      "evidence": "lib/core/passkey/passkey_service.dart",
+      "key_location": "platform authenticator/provider; sync policy external",
+      "signature_lifetime": "credential lifetime",
+      "upgrade_interface": "AA signer/provider change",
+      "hybrid_mode": "not implemented",
+      "revocation": "platform deletion plus on-chain owner update must be tested"
+    },
+    {
+      "id": "wallet-aa",
+      "plane": "account",
+      "algorithm": "EOA secp256k1 / Passkey P-256",
+      "evidence": "lib/features/wallet/aa/models/smart_account.dart",
+      "key_location": "host signer or authenticator",
+      "signature_lifetime": "account owner lifetime",
+      "upgrade_interface": "contract implementation / signer configuration",
+      "hybrid_mode": "not implemented",
+      "revocation": "contract-specific recovery"
+    },
+    {
+      "id": "wallet-storage",
+      "plane": "backup",
+      "algorithm": "platform Keychain / Android secure-storage cipher",
+      "evidence": "lib/core/security/secure_storage.dart",
+      "key_location": "device protected storage",
+      "signature_lifetime": "wallet lifetime",
+      "upgrade_interface": "storage version and migration",
+      "hybrid_mode": "not applicable to transaction signatures",
+      "revocation": "wipe plus backup recovery; offline copies cannot be revoked"
+    },
+    {
+      "id": "wallet-rpc",
+      "plane": "network",
+      "algorithm": "HTTPS/TLS negotiated by platform",
+      "evidence": "lib/core/security/rpc_endpoint_policy.dart",
+      "key_location": "OS trust store; server key external",
+      "signature_lifetime": "TLS certificate lifetime",
+      "upgrade_interface": "OS/network stack upgrade",
+      "hybrid_mode": "not verified",
+      "revocation": "CA revocation and endpoint rotation"
+    },
+    {
+      "id": "wallet-release",
+      "plane": "release",
+      "algorithm": "live signing algorithm not verified",
+      "evidence": "ios/Runner/Runner.entitlements",
+      "key_location": "external Apple/Android signing identities; not collected",
+      "signature_lifetime": "distribution certificate lifetime",
+      "upgrade_interface": "release tooling and platform policy",
+      "hybrid_mode": "not verified",
+      "revocation": "platform certificate revocation; owner required"
+    }
+  ]
+}
