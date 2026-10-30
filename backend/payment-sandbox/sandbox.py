@@ -130,6 +130,9 @@ class Sandbox:
         with self._transaction() as db:
             available = db.execute('SELECT COALESCE(SUM(amount),0) FROM balances WHERE asset=?', (asset,)).fetchone()[0]
             reserved = db.execute('SELECT COALESCE(SUM(remaining),0) FROM packets WHERE asset=?', (asset,)).fetchone()[0]
+            if db.execute("SELECT 1 FROM sqlite_master WHERE name='merchant_orders'").fetchone():
+                reserved += db.execute("SELECT COALESCE(SUM(amount),0) FROM merchant_orders WHERE asset=? AND status='authorized'", (asset,)).fetchone()[0]
+                reserved += db.execute("SELECT COALESCE(SUM(fee),0) FROM merchant_orders WHERE fee_asset=? AND status='authorized'", (asset,)).fetchone()[0]
             issued = -db.execute('SELECT COALESCE(SUM(delta),0) FROM ledger WHERE bucket=? AND asset=?', ('test-issuance', asset)).fetchone()[0]
             net = db.execute('SELECT COALESCE(SUM(delta),0) FROM ledger WHERE asset=?', (asset,)).fetchone()[0]
             return {'mode': MODE, 'available': available, 'reserved': reserved, 'issued': issued,
