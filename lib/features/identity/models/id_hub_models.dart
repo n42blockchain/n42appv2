@@ -48,7 +48,7 @@ class IdHubTokenResponse {
     final audiences = audience is List
         ? audience.whereType<String>().toList()
         : <String>[if (audience is String) audience];
-    if (issuer != 'did:web:id.n42.ai' ||
+    if (issuer != 'did:web:id.n42.world' ||
         subject is! String ||
         !subject.startsWith('did:') ||
         !audiences.contains(expectedAudience) ||

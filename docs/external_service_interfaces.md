@@ -46,21 +46,21 @@
 
 | 服务名称 | 生产环境 URL | 测试环境 URL | 用途 |
 |---------|-------------|-------------|------|
-| Wallet API | `https://api.n42.ai/wallet/` | `https://5.78.28.90:9492/` | 钱包/Token/ENS 查询 |
-| Market API | `https://api.n42.ai/market/v1` | `http://5.78.28.90:9398/v1` | 行情数据 |
-| NFT Market | `https://api.n42.ai/nft-market` | `https://5.78.28.90:9397` | NFT 交易 |
-| Activity API | `https://api.n42.ai/activity/v1` | `https://5.78.28.90:9390/v1` | 活动管理 |
-| Mining API | `https://api.n42.ai/activity` | `https://5.78.28.90:9390` | 挖矿活动 |
-| User Center | `https://api.n42.ai/user` | `https://5.78.28.90:9393` | 用户信息 |
-| Swap API | `https://api.n42.ai/swap` | `https://5.78.28.90:9391` | 交易兑换 |
-| Face API | `https://api.n42.ai/face` | — | 人脸识别 |
-| IPFS Host | `https://api.n42.ai` | — | IPFS 上传网关 |
-| Loyalty API | `https://api.n42.ai/loyalty/v1` | — | 积分系统 |
-| Airdrop API | `https://api.n42.ai/airdrop/v1` | — | 空投追踪 |
-| OTC API | `https://api.n42.ai/otc/r/onramper/url` | — | 法币通道 |
+| Wallet API | `https://api.n42.world/wallet/` | `https://5.78.28.90:9492/` | 钱包/Token/ENS 查询 |
+| Market API | `https://api.n42.world/market/v1` | `http://5.78.28.90:9398/v1` | 行情数据 |
+| NFT Market | `https://api.n42.world/nft-market` | `https://5.78.28.90:9397` | NFT 交易 |
+| Activity API | `https://api.n42.world/activity/v1` | `https://5.78.28.90:9390/v1` | 活动管理 |
+| Mining API | `https://api.n42.world/activity` | `https://5.78.28.90:9390` | 挖矿活动 |
+| User Center | `https://api.n42.world/user` | `https://5.78.28.90:9393` | 用户信息 |
+| Swap API | `https://api.n42.world/swap` | `https://5.78.28.90:9391` | 交易兑换 |
+| Face API | `https://api.n42.world/face` | — | 人脸识别 |
+| IPFS Host | `https://api.n42.world` | — | IPFS 上传网关 |
+| Loyalty API | `https://api.n42.world/loyalty/v1` | — | 积分系统 |
+| Airdrop API | `https://api.n42.world/airdrop/v1` | — | 空投追踪 |
+| OTC API | `https://api.n42.world/otc/r/onramper/url` | — | 法币通道 |
 | IM HTTP | `https://5.161.249.184:10001` | `https://5.78.28.90:9394` | 即时通讯 HTTP |
 | IM WebSocket | `ws://5.161.249.184:10002` | `ws://5.78.28.90:9395` | 即时通讯 WS |
-| BTC Staking | `https://staking.n42.ai` | `https://staking-test.n42.ai` | BTC 质押 |
+| BTC Staking | `https://staking.n42.world` | `https://staking-test.n42.world` | BTC 质押 |
 | Block Explorer | `https://mainnet.n42.world` | `https://testnet.n42.world` | 区块浏览器 |
 
 ### SSL Pinning 保护域名
@@ -68,7 +68,7 @@
 **文件**: `lib/core/security/security_config.dart` (行 62-67)
 
 ```
-api.n42.ai, api.n42.network, ipfs.n42.network,
+api.n42.world, api.n42.network, ipfs.n42.network,
 auth.n42.network, ws.n42.network, cdn.n42.network
 ```
 
@@ -229,7 +229,7 @@ stun:stun.stunprotocol.org:3478
 ### 5.1 ENS 解析接口
 
 **文件**: `lib/src/wallet/api/token_view_api.dart` (行 773-886)
-**基础 URL**: `https://api.n42.ai/wallet/`
+**基础 URL**: `https://api.n42.world/wallet/`
 
 | 端点 | 方法 | 参数 | 返回 | 用途 |
 |------|------|------|------|------|
@@ -435,7 +435,7 @@ stun:stun.stunprotocol.org:3478
 
 ### 9.1 N42 市场 API
 
-**基础 URL**: `https://api.n42.ai/market/v1`
+**基础 URL**: `https://api.n42.world/market/v1`
 **文件**: `lib/src/wallet/api/market_api.dart`
 
 | 端点 | 方法 | 参数 | 用途 |
@@ -476,7 +476,7 @@ stun:stun.stunprotocol.org:3478
 
 ### 10.2 N42 Swap API
 
-**基础 URL**: `https://api.n42.ai/swap`
+**基础 URL**: `https://api.n42.world/swap`
 
 ### 10.3 AST/NFT Swap
 
@@ -550,8 +550,8 @@ stun:stun.stunprotocol.org:3478
 
 | 环境 | URL |
 |-----|-----|
-| 生产 | `https://staking.n42.ai` |
-| 测试 | `https://staking-test.n42.ai` |
+| 生产 | `https://staking.n42.world` |
+| 测试 | `https://staking-test.n42.world` |
 
 ---
 
@@ -588,7 +588,7 @@ stun:stun.stunprotocol.org:3478
 
 ## 14. NFT 市场服务
 
-**基础 URL**: `https://api.n42.ai/nft-market` (生产) / `https://5.78.28.90:9397` (测试)
+**基础 URL**: `https://api.n42.world/nft-market` (生产) / `https://5.78.28.90:9397` (测试)
 
 **文件**: `lib/src/wallet/api/token_view_api.dart`
 
@@ -612,7 +612,7 @@ stun:stun.stunprotocol.org:3478
 
 | 配置 | 值 |
 |-----|---|
-| API 网关 | `https://api.n42.ai` |
+| API 网关 | `https://api.n42.world` |
 | 内容地址 | `https://ipfs.io/ipfs/` |
 | 认证方式 | Basic Auth (用户名: `n42`) |
 
@@ -686,7 +686,7 @@ stun:stun.stunprotocol.org:3478
 
 ### 18.1 人脸识别 API
 
-**基础 URL**: `https://api.n42.ai/face`
+**基础 URL**: `https://api.n42.world/face`
 **文件**: `lib/src/wallet/api/face_api.dart` (行 13-85)
 
 | 端点 | 方法 | 参数 | 用途 |
@@ -760,13 +760,13 @@ stun:stun.stunprotocol.org:3478
 
 | 配置项 | 值 |
 |-------|---|
-| API 端点 | `https://api.n42.ai/otc/r/onramper/url` |
+| API 端点 | `https://api.n42.world/otc/r/onramper/url` |
 
 ---
 
 ## 21. 积分与忠诚度系统
 
-**基础 URL**: `https://api.n42.ai/loyalty/v1`
+**基础 URL**: `https://api.n42.world/loyalty/v1`
 **文件**: `lib/src/loyalty/api/loyalty_api.dart` (行 10-564)
 
 | 端点 | 方法 | 用途 |
@@ -786,7 +786,7 @@ stun:stun.stunprotocol.org:3478
 
 ## 22. 空投追踪服务
 
-**基础 URL**: `https://api.n42.ai/airdrop/v1`
+**基础 URL**: `https://api.n42.world/airdrop/v1`
 **文件**: `lib/src/airdrop/api/airdrop_api.dart` (行 10-445)
 
 | 端点 | 方法 | 参数 | 用途 |
@@ -889,7 +889,7 @@ stun:stun.stunprotocol.org:3478
 
 受保护域名:
 ```
-api.n42.ai, api.n42.network, ipfs.n42.network,
+api.n42.world, api.n42.network, ipfs.n42.network,
 auth.n42.network, ws.n42.network, cdn.n42.network
 ```
 
@@ -968,7 +968,7 @@ android:networkSecurityConfig="@xml/network_security_config"
 | 配置项 | 值 |
 |-------|---|
 | Deep Link 协议 | `wc:` |
-| 应用图标 | `https://n42.ai/static/n42.png` |
+| 应用图标 | `https://n42.world/static/n42.png` |
 | Relay URL | WalletConnect 默认 relay |
 | 支持的 Scheme | `n42://`, `n42app://`, `astraapp://`, `wc://` |
 
@@ -978,7 +978,7 @@ android:networkSecurityConfig="@xml/network_security_config"
 |------|-----|
 | 服务条款 | `https://n42.world/terms` |
 | 隐私政策 | `https://n42.world/privacy` |
-| 官方网站 | `https://www.n42.ai` |
+| 官方网站 | `https://www.n42.world` |
 
 ---
 

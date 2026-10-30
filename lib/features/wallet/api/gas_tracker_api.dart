@@ -26,7 +26,7 @@ class GasTrackerApi {
   }
 
   // Dedicated Dio instance for direct RPC calls — isolated from the shared
-  // circuit breaker so ETH node failures don't trip api.n42.ai requests.
+  // circuit breaker so ETH node failures don't trip api.n42.world requests.
   static final Dio _rpcDio = Dio(
     BaseOptions(
       connectTimeout: const Duration(seconds: 15),

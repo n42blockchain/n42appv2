@@ -248,7 +248,7 @@ SIMPLE_HASH_API_KEY=your_key_here
 | 用途 | NFT 图片/元数据上传到 IPFS |
 
 **获取方式：**
-- 如果使用 N42 自建 IPFS 网关（`api.n42.ai`），联系后端团队获取凭证
+- 如果使用 N42 自建 IPFS 网关（`api.n42.world`），联系后端团队获取凭证
 - 如果使用 Infura IPFS（已停止新用户注册），考虑迁移到 Pinata 或 web3.storage
 
 ```

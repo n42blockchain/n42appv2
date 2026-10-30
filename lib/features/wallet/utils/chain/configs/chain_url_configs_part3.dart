@@ -550,7 +550,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ZIRCUIT",
-      "icon": "https://www.n42.ai/static/zircuit.png",
+      "icon": "https://www.n42.world/static/zircuit.png",
       "name": "Zircuit",
       "miniName": "ZRC",
       "unit": "ETH",
@@ -595,7 +595,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "KROMA",
-      "icon": "https://www.n42.ai/static/kroma.png",
+      "icon": "https://www.n42.world/static/kroma.png",
       "name": "Kroma",
       "miniName": "KRO",
       "unit": "ETH",
@@ -730,7 +730,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "INK",
-      "icon": "https://www.n42.ai/static/ink.png",
+      "icon": "https://www.n42.world/static/ink.png",
       "name": "Ink",
       "miniName": "INK",
       "unit": "ETH",
@@ -775,7 +775,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "BITLAYER",
-      "icon": "https://www.n42.ai/static/bitlayer.png",
+      "icon": "https://www.n42.world/static/bitlayer.png",
       "name": "Bitlayer",
       "miniName": "BTR",
       "unit": "BTC",
@@ -820,7 +820,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ZKLINK",
-      "icon": "https://www.n42.ai/static/zklink.png",
+      "icon": "https://www.n42.world/static/zklink.png",
       "name": "zkLink Nova",
       "miniName": "ZKL",
       "unit": "ETH",
@@ -865,7 +865,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "CYBER",
-      "icon": "https://www.n42.ai/static/cyber.png",
+      "icon": "https://www.n42.world/static/cyber.png",
       "name": "Cyber",
       "miniName": "CYBER",
       "unit": "ETH",
@@ -910,7 +910,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "MINT",
-      "icon": "https://www.n42.ai/static/mint.png",
+      "icon": "https://www.n42.world/static/mint.png",
       "name": "Mint",
       "miniName": "MINT",
       "unit": "ETH",
@@ -955,7 +955,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "GRAVITY",
-      "icon": "https://www.n42.ai/static/gravity.png",
+      "icon": "https://www.n42.world/static/gravity.png",
       "name": "Gravity",
       "miniName": "G",
       "unit": "G",
@@ -1000,7 +1000,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "HEMI",
-      "icon": "https://www.n42.ai/static/hemi.png",
+      "icon": "https://www.n42.world/static/hemi.png",
       "name": "Hemi",
       "miniName": "HEMI",
       "unit": "ETH",
@@ -1045,7 +1045,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "HSK",
-      "icon": "https://www.n42.ai/static/hashkey.png",
+      "icon": "https://www.n42.world/static/hashkey.png",
       "name": "HashKey Chain",
       "miniName": "HSK",
       "unit": "HSK",
@@ -1090,7 +1090,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "SWAN",
-      "icon": "https://www.n42.ai/static/swan.png",
+      "icon": "https://www.n42.world/static/swan.png",
       "name": "Swan Chain",
       "miniName": "SWAN",
       "unit": "ETH",
@@ -1135,7 +1135,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "XLAYER",
-      "icon": "https://www.n42.ai/static/xlayer.png",
+      "icon": "https://www.n42.world/static/xlayer.png",
       "name": "X Layer",
       "miniName": "OKB",
       "unit": "OKB",
@@ -1180,7 +1180,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ZKFAIR",
-      "icon": "https://www.n42.ai/static/zkfair.png",
+      "icon": "https://www.n42.world/static/zkfair.png",
       "name": "zkFair",
       "miniName": "ZKF",
       "unit": "USDC",
@@ -1225,7 +1225,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "REDSTONE",
-      "icon": "https://www.n42.ai/static/redstone.png",
+      "icon": "https://www.n42.world/static/redstone.png",
       "name": "Redstone",
       "miniName": "RED",
       "unit": "ETH",
@@ -1270,7 +1270,7 @@ final Map<String, dynamic> chainUrlConfigsPart3 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "MILKOMEDA",
-      "icon": "https://www.n42.ai/static/milkomeda.png",
+      "icon": "https://www.n42.world/static/milkomeda.png",
       "name": "Milkomeda C1",
       "miniName": "milkADA",
       "unit": "milkADA",

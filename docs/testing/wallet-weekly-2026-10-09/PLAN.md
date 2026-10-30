@@ -20,7 +20,7 @@
 | MPC / TEE / OEM | 本次未建立可用生产路径证据 | 若引入，先说明持钥方、导出格式、服务停止恢复、账户冻结和退出条件 | 不作为当前已支持模式宣传 |
 | MoonPay 入金 | 当前 Chat git pin `a3da656f92889ec2f6b1bc3de24694d66dffcb4f`，实际 package_config 指向 pub cache；FiatRampService 构建 URL，FiatRampPage 用 WebView 打开 | 第三方支付/KYC 与链上资产控制分开；可发布 key 由宿主注入。旧 `features/pay/moonpay` 文档不代表现有路径 | 已确认是 widget WebView，未集成 Headless；实际订单未验 |
 
-官方身份：本次读取的 [App Store 页面](https://apps.apple.com/us/app/n42-wallet/id6738644072) 显示发布者 SI46WORLD DIGITAL TECHNOLOGY INC.，开发者网站/隐私链接指向 si46.world，版权为 Tronizon Technology Inc.，描述提及 n42.ai。页面版本为 1.0.16；与本地开发版本不能等同。网页抓取可能有缓存。n42.ai 本次正文未解析，官网双向链接与 Google Play 发布身份仍未验。需发布负责人核对主体关系，在官网列出 app ID、Android package ID、商店链接及法律主体，并从商店反链。
+官方身份：本次读取的 [App Store 页面](https://apps.apple.com/us/app/n42-wallet/id6738644072) 显示发布者 SI46WORLD DIGITAL TECHNOLOGY INC.，开发者网站/隐私链接指向 si46.world，版权为 Tronizon Technology Inc.，描述提及 n42.world。页面版本为 1.0.16；与本地开发版本不能等同。网页抓取可能有缓存。n42.world 本次正文未解析，官网双向链接与 Google Play 发布身份仍未验。需发布负责人核对主体关系，在官网列出 app ID、Android package ID、商店链接及法律主体，并从商店反链。
 
 建议商店安全文案："助记词/私钥钱包由用户保管备份。丢失备份可能无法恢复资产。智能账户的恢复方式取决于已启用的恢复配置。法币购买由第三方提供，受地区、KYC、费用和服务可用性限制。" 删除无法解释算法与密钥用途的“384-bit”安全承诺；不以此宣称抗量子。本次没有发布外部文案。
 

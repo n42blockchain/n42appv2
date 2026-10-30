@@ -16,7 +16,7 @@
 
 `ProxyConfig` 使用 `String.fromEnvironment` 读取 `PROXY_AUTH_TOKEN`，默认空值。前一轮测试构建没有传入该参数；项目根目录 `.env` 虽然已有有效配置，但不会自动填充编译期常量。
 
-在 Mac 上对同一个 `https://api.n42.ai/proxy/v1/market/trending` 端点进行只读对照：
+在 Mac 上对同一个 `https://api.n42.world/proxy/v1/market/trending` 端点进行只读对照：
 
 | 请求 | HTTP 状态 | 返回记录 |
 |---|---|---|

@@ -31,12 +31,12 @@ void main() {
       test('parses all fields including id', () {
         final model = BrowserCollectionModel.fromJson({
           'id': 42,
-          'url': 'https://n42.ai',
+          'url': 'https://n42.world',
           'name': 'N42',
           'desc': 'Blockchain wallet',
         });
         expect(model.id, 42);
-        expect(model.url, 'https://n42.ai');
+        expect(model.url, 'https://n42.world');
         expect(model.name, 'N42');
         expect(model.desc, 'Blockchain wallet');
       });

@@ -91,7 +91,7 @@ Future<void> _exerciseColdDeepLink(WidgetTester tester) async {
   );
   final service = app.globalProviderContainer.read(deepLinkServiceProvider);
   final link = Uri.parse(
-    'n42id://bind?sid=00000000-0000-4000-8000-000000000000&hub=https://id.n42.ai',
+    'n42id://bind?sid=00000000-0000-4000-8000-000000000000&hub=https://id.n42.world',
   );
   service.handleUri(link);
   await _waitFor(
@@ -101,7 +101,7 @@ Future<void> _exerciseColdDeepLink(WidgetTester tester) async {
   );
   final page = tester.widget<IdHubSignPage>(find.byType(IdHubSignPage));
   expect(page.sessionId, '00000000-0000-4000-8000-000000000000');
-  expect(page.hubUrl, 'https://id.n42.ai');
+  expect(page.hubUrl, 'https://id.n42.world');
   expect(page.isLogin, isFalse);
   service.handleUri(link);
   await tester.pump(const Duration(milliseconds: 500));

@@ -54,14 +54,14 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     _termsRecognizer = TapGestureRecognizer()
       ..onTap = () async {
-        final url = Uri.parse('https://www.n42.ai/static/terms_of_use.html');
+        final url = Uri.parse('https://www.n42.world/static/terms_of_use.html');
         if (await canLaunchUrl(url)) {
           await launchUrl(url, mode: LaunchMode.externalApplication);
         }
       };
     _privacyRecognizer = TapGestureRecognizer()
       ..onTap = () async {
-        final url = Uri.parse('https://www.n42.ai/static/terms_of_use.html');
+        final url = Uri.parse('https://www.n42.world/static/terms_of_use.html');
         if (await canLaunchUrl(url)) {
           await launchUrl(url, mode: LaunchMode.externalApplication);
         }

@@ -1,6 +1,6 @@
 # N42 Swap 后端（Go / gin / PostgreSQL）
 
-App `exchangeHost`（`api.n42.ai/swap`）背后的服务。接口需求与请求/响应格式见
+App `exchangeHost`（`api.n42.world/swap`）背后的服务。接口需求与请求/响应格式见
 `../../docs/BACKEND_REQUIREMENTS.md`（§三 DEX Swap、§五 价格预警）。
 
 ## 模块
@@ -40,5 +40,5 @@ docker build -t n42-swap .   # 仓库根 backend/swap/Dockerfile
 ## 鉴权说明（诚实标注）
 
 当前所有接口按 `uuid` 归属校验、**无 token 鉴权**（与既有 dex 接口一致）。文档 §五
-请求里的 `token` 字段暂未校验——生产部署应在网关层（api.n42.ai 反代）统一鉴权，
+请求里的 `token` 字段暂未校验——生产部署应在网关层（api.n42.world 反代）统一鉴权，
 或后续在本服务加中间件对接 `userInfoHost` 的 token 校验。

@@ -17,8 +17,8 @@ void main() {
   group('SecurityConfig', () {
     for (final host in [
       'third-party.test',
-      'api.n42.ai',
-      'evilapi.n42.ai',
+      'api.n42.world',
+      'evilapi.n42.world',
       'localhost',
     ]) {
       test('production rejects a failed TLS validation for $host', () {

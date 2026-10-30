@@ -101,7 +101,7 @@ void main() {
 
       test('should allow proxy endpoint mode without apiKey', () {
         final ds = AiDatasource(
-          baseUrl: 'https://api.n42.ai/proxy/v1/ai/chat',
+          baseUrl: 'https://api.n42.world/proxy/v1/ai/chat',
           apiKey: '',
           useProxyEndpoint: true,
           dio: mockDio,
@@ -665,7 +665,7 @@ void main() {
 
       test('should post directly to proxy endpoint in proxy mode', () async {
         final ds = AiDatasource(
-          baseUrl: 'https://api.n42.ai/proxy/v1/ai/chat',
+          baseUrl: 'https://api.n42.world/proxy/v1/ai/chat',
           apiKey: '',
           useProxyEndpoint: true,
           dio: mockDio,
@@ -690,7 +690,7 @@ void main() {
             },
             statusCode: 200,
             requestOptions: RequestOptions(
-              path: 'https://api.n42.ai/proxy/v1/ai/chat',
+              path: 'https://api.n42.world/proxy/v1/ai/chat',
             ),
           ),
         );
@@ -702,7 +702,7 @@ void main() {
         expect(result.text, 'proxy-ok');
         verify(
           () => mockDio.post<Map<String, dynamic>>(
-            'https://api.n42.ai/proxy/v1/ai/chat',
+            'https://api.n42.world/proxy/v1/ai/chat',
             data: any(named: 'data'),
             options: any(named: 'options'),
           ),

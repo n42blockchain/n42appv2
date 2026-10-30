@@ -5,7 +5,7 @@
 > 代码基线：`master@72b4a2d0`
 >
 > 适用范围：N42 Wallet 主应用、vendored `packages/n42_chat`、仓内 Go 后端、
-> Matrix/RTC/推送及 `api.n42.ai` 生产网关。
+> Matrix/RTC/推送及 `api.n42.world` 生产网关。
 >
 > 本文不包含任何真实密钥；命令中的 `<...>` 必须从 Secret Manager 注入。
 
@@ -21,7 +21,7 @@ TURN、官方 MatrixRTC、N42 RPC 与 ID Hub 可达；下列项目尚未部署�
 |---|---|---|---|
 | 正式包构建配置 | iOS/TestFlight 脚本及 GitHub Release 双端均未传 `--dart-define` | Proxy、AI、GIF、翻译、语音、DeBank、部分社交登录等配置不会进入正式包 | 建立受控的 release define allowlist，并在构建前做缺项门禁；禁止直接把整个 `.env` 注入客户端 |
 | GitHub Release 流水线 | 固定 Flutter 3.41.9（Dart 3.11.5），但项目要求 Dart ≥3.12.2；引用的 `ios/ExportOptions.plist` 不存在 | tag 发布会在依赖解析或 iOS 导出阶段失败，不能视为可用的自动发布 | 与受控生产 Flutter 版本对齐，改用现有/生成的 ExportOptions，并做一次 dry-run |
-| Chat 社交登录 | `social-auth.n42.ai`、`api.n42.network` 均无 DNS | Google/Apple 等旧五家后端不可达；Discord/GitHub/Telegram 自建后端也不可达 | 部署 `backend/social-auth`，建立 DNS/TLS；决定旧五家迁移或恢复旧域名 |
+| Chat 社交登录 | `social-auth.n42.world`、`api.n42.network` 均无 DNS | Google/Apple 等旧五家后端不可达；Discord/GitHub/Telegram 自建后端也不可达 | 部署 `backend/social-auth`，建立 DNS/TLS；决定旧五家迁移或恢复旧域名 |
 | Matrix SSO | `/_matrix/client/v3/login` 仅返回 password/token/application_service，无 `m.login.sso` | App 虽开启 `enableSsoLogin`，生产 homeserver 实际不支持 SSO | 配置 Tuwunel OIDC/SSO 后再开放入口，或正式包关闭 SSO |
 | 直播发布权限 | `/livekit/jwt` POST 返回 301，尾斜杠路径 404；客户端会回退官方 `/sfu/get` | 直播可能能播放，但官方 MatrixRTC 无主播/观众发布权限区分，观众理论上可拿发布权 | 将 `backend/livekit-jwt` 精确部署到 `/livekit/jwt`，不得重定向、不得补尾斜杠 |
 | Swap Go 后端 | `GET /swap/v1/dex/tokens?chain=ETH` 返回 404 | 新 DEX 聚合、历史、限价单、价格预警不可用 | 部署 `backend/swap`，网关剥离 `/swap` 前缀；上线前补鉴权 |
@@ -34,7 +34,7 @@ TURN、官方 MatrixRTC、N42 RPC 与 ID Hub 可达；下列项目尚未部署�
 | 项目 | 实测 | 影响/动作 |
 |---|---|---|
 | Airdrop 聚合 | `/airdrop/v1/airdrops` 返回 404，仓内无对应后端 | 需要单独实现/部署，或隐藏入口 |
-| Activity/Mining API | 代表路由返回 502 | 检查 `api.n42.ai` upstream、端口与服务进程；恢复前应用会显示活动/挖矿网络错误 |
+| Activity/Mining API | 代表路由返回 502 | 检查 `api.n42.world` upstream、端口与服务进程；恢复前应用会显示活动/挖矿网络错误 |
 | Onramper | `/otc/r/onramper/url` 返回 502 | 法币购买入口不可用；修 upstream 或临时关闭入口 |
 | NFT Market | 代表路由 `/nft-market/v1/image/url` 返回 404 | 核对旧 NFT 服务是否下线、路径是否变更；不要把 404 当“空数据” |
 | 7 个 Chat mini-app | `swap/bridge/nft/shop/creator/portfolio/charts.n42.world` 全部无 DNS | 内置入口均为死链接；部署站点或从目录移除 |
@@ -58,7 +58,7 @@ TURN、官方 MatrixRTC、N42 RPC 与 ID Hub 可达；下列项目尚未部署�
 - API Proxy：未带令牌返回 401，说明网关路由在线；还需带生产令牌做功能验收。
 - Market、Wallet、User Center 代表接口均 HTTP 200；Face 代表 POST 空请求返回 400，
   说明路由存在。
-- ID Hub：`https://id.n42.ai/health` HTTP 200；challenge 空请求返回结构化 400。
+- ID Hub：`https://id.n42.world/health` HTTP 200；challenge 空请求返回结构化 400。
 - N42 RPC：主网 `eth_chainId=0x5e`（94），测试网 `0x476`（1142）。
 - 四个仓内 Go 服务均 `go test ./...` 通过，四个 Dockerfile 均可从零构建。
 
@@ -66,11 +66,11 @@ TURN、官方 MatrixRTC、N42 RPC 与 ID Hub 可达；下列项目尚未部署�
 
 ```text
 N42 Wallet / packages/n42_chat
-├─ api.n42.ai (Nginx/API Gateway)
+├─ api.n42.world (Nginx/API Gateway)
 │  ├─ 已有旧服务：market / wallet / user / face / proxy
 │  ├─ 待恢复：activity / otc / nft-market
 │  └─ 待部署：swap / loyalty / airdrop（airdrop 代码不在本仓）
-├─ id.n42.ai (独立 ID Hub；代码不在本仓)
+├─ id.n42.world (独立 ID Hub；代码不在本仓)
 └─ m.si46.world (Chat)
    ├─ Tuwunel homeserver + Matrix media
    ├─ Matrix push gateway → FCM / APNs
@@ -159,7 +159,7 @@ liveness，readiness 应另加 Matrix 与 LiveKit 配置检查。
 
 上线步骤：
 
-1. 创建 `social-auth.n42.ai` DNS 与 TLS。
+1. 创建 `social-auth.n42.world` DNS 与 TLS。
 2. 镜像以 commit SHA 标记并以非 root 用户运行；当前 scratch Dockerfile 未显式
    `USER`，部署层先强制 `runAsNonRoot`。
 3. 只开放 443；`/_synapse/admin/v1/register` 不应暴露给公网代理之外的任意调用方。
@@ -280,7 +280,7 @@ Secret Manager 临时生成 `android/app/google-services.json` 与
 flag 不足以证明端点已部署。上线必须完成注册 challenge、complete、login challenge、
 login、credentials 五条路径的真实凭据测试，并配置正确 RP ID/Origin；否则关闭入口。
 
-## 5. `api.n42.ai` 网关与旧服务
+## 5. `api.n42.world` 网关与旧服务
 
 ### 5.1 2026-08-24 无凭据探测结果
 
@@ -437,8 +437,8 @@ allowlist、隐私政策和健康检查。未部署的入口应从生产目录�
 - LiveKit/TURN join/ICE failure、JWT 401/403/502、观众意外获 publish grant。
 - Loyalty relayer Gas 低于阈值、合约 paused/operator 变化。
 
-本轮证书实测到期日均约为 2026-10-06（`m.si46.world`、`api.n42.ai`、
-`id.n42.ai`、N42 explorer/RPC 域名）。应确认自动续期与失败告警，不能等临近到期
+本轮证书实测到期日均约为 2026-10-06（`m.si46.world`、`api.n42.world`、
+`id.n42.world`、N42 explorer/RPC 域名）。应确认自动续期与失败告警，不能等临近到期
 人工处理。
 
 ### 10.3 备份
@@ -471,8 +471,8 @@ curl -fsS http://n42-loyalty:8080/healthz
 curl -fsS http://n42-social-auth:8090/health
 
 # 生产业务路由（部署后）
-curl -fsS 'https://api.n42.ai/swap/v1/dex/tokens?chain=ETH'
-curl -fsS 'https://api.n42.ai/airdrop/v1/airdrops?page=1&page_size=1'
+curl -fsS 'https://api.n42.world/swap/v1/dex/tokens?chain=ETH'
+curl -fsS 'https://api.n42.world/airdrop/v1/airdrops?page=1&page_size=1'
 
 # N42 chain ID
 curl -fsS https://rpc.n42.world -H 'Content-Type: application/json' \
@@ -486,7 +486,7 @@ curl -fsS https://rpc.n42.world -H 'Content-Type: application/json' \
 
 代码仓无法证明以下生产内部状态，运维上线时必须补齐到部署记录：
 
-- `api.n42.ai` 当前 Nginx upstream/服务版本、主机/集群、owner 与回滚镜像。
+- `api.n42.world` 当前 Nginx upstream/服务版本、主机/集群、owner 与回滚镜像。
 - Tuwunel 数据库/media 路径、备份最近成功时间与恢复演练结果。
 - Push Gateway 实现与版本、FCM/APNs credential 最近轮换日期、两个 app ID 映射。
 - LiveKit 与 TURN 的版本、拓扑、容量、region、录制/日志留存策略。
@@ -500,7 +500,7 @@ curl -fsS https://rpc.n42.world -H 'Content-Type: application/json' \
 
 本机 Docker 中旧 `n42-id-hub-app-1` 正在重启循环，原因是其 PostgreSQL/Redis
 容器已停止，应用报 `P1001 Can't reach database server at postgres:5432`；重启次数已
-超过 33,000。生产 `https://id.n42.ai/health` 当前仍为 200，因此这是本机残留开发栈，
+超过 33,000。生产 `https://id.n42.world/health` 当前仍为 200，因此这是本机残留开发栈，
 不是生产故障。应由本机维护者选择：完整启动依赖后修复，或停止该 compose 项，避免
 持续消耗 CPU/日志；不要删除 volume，除非已确认数据可丢弃或已有备份。
 

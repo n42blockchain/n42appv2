@@ -63,7 +63,7 @@ class PasskeySignatureBuilder {
 
     // Typical clientDataJSON
     final dummyClientData =
-        '{"type":"webauthn.get","challenge":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","origin":"https://n42.ai"}'
+        '{"type":"webauthn.get","challenge":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","origin":"https://n42.world"}'
             .codeUnits;
 
     return _abiEncode(

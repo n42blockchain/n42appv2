@@ -200,7 +200,7 @@ void main() {
 
     test('非 UR 内容 -> "Not a valid UR QR code"', () {
       expect(
-        service.validateScannedUr('https://n42.ai'),
+        service.validateScannedUr('https://n42.world'),
         contains('Not a valid UR'),
       );
     });

@@ -32,7 +32,7 @@ Prefer direct app access when most of these are true:
 | --- | --- | --- | --- | --- | --- |
 | MoonPay signature | Backend / proxy only | HMAC signing must never ship in client | none | critical | Keep on proxy/backend |
 | Proxy auth token | Backend / proxy only | Internal gateway credential, not vendor API data | none | critical | Keep on proxy/backend |
-| Wallet core asset / tx backend (`api.n42.ai/wallet`) | Backend monolith / wallet backend | Wallet normalization and business logic already live there | high | high | Keep server-side |
+| Wallet core asset / tx backend (`api.n42.world/wallet`) | Backend monolith / wallet backend | Wallet normalization and business logic already live there | high | high | Keep server-side |
 | TokenView enhanced gas / pending / creator | Proxy/backend | Same on-chain data for many users, strong cache benefit | high | medium | Keep on proxy |
 | Wallet market data (`simple_price`, `chart`, `ohlcv`, `trending`) | Proxy/backend for wallet UI | Highly shared data and cache-friendly | high | low-medium | Keep on proxy |
 | Lightweight chat price lookup | Direct app | Low business value, small requests, avoid central chat bottleneck | low-medium | low | Keep direct |

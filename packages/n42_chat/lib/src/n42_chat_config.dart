@@ -190,7 +190,7 @@ class N42ChatConfig {
   /// 需宿主 `IWalletBridge` 已接入且 `signMessage` 返回确定性签名。
   final bool enableWalletLogin;
 
-  /// 统一身份 N42 ID Hub 基址（如 https://id.n42.ai）。
+  /// 统一身份 N42 ID Hub 基址（如 https://id.n42.world）。
   ///
   /// 为空则所有 ID Hub 功能静默禁用，登录回退到现状（降级兜底开关）。
   final String? idHubUrl;
@@ -248,7 +248,7 @@ class N42ChatConfig {
   /// 自建社交登录后端基址（`backend/social-auth` 部署地址）
   ///
   /// Discord/GitHub/Telegram 三家的 `loginSocial` 走此后端；为空则三家登录不可用
-  /// （旧五家仍走默认 `api.n42.network`）。例如 `https://social-auth.n42.ai`。
+  /// （旧五家仍走默认 `api.n42.network`）。例如 `https://social-auth.n42.world`。
   final String? socialAuthBaseUrl;
 
   /// Matrix SSO 浏览器回调地址
@@ -335,7 +335,7 @@ class N42ChatConfig {
   /// Giphy API Base URL
   ///
   /// 直连模式默认使用 Giphy 官方地址。
-  /// 代理模式下可传入类似 `https://api.n42.ai/proxy/v1/giphy`。
+  /// 代理模式下可传入类似 `https://api.n42.world/proxy/v1/giphy`。
   final String giphyBaseUrl;
 
   /// 是否将 [giphyBaseUrl] 视为代理端点。
@@ -431,7 +431,7 @@ class N42ChatConfig {
   /// Market API 基础地址
   ///
   /// 直连模式默认使用 CoinGecko 公共 API。
-  /// 代理模式下可传入类似 `https://api.n42.ai/proxy/v1/market`。
+  /// 代理模式下可传入类似 `https://api.n42.world/proxy/v1/market`。
   final String marketBaseUrl;
 
   /// 是否将 [marketBaseUrl] 视为代理端点。
@@ -491,7 +491,7 @@ class N42ChatConfig {
   /// DeBank API 基础地址
   ///
   /// 直连模式默认使用 DeBank 官方地址。
-  /// 代理模式下可传入类似 `https://api.n42.ai/proxy/v1/debank`。
+  /// 代理模式下可传入类似 `https://api.n42.world/proxy/v1/debank`。
   final String debankBaseUrl;
 
   /// 是否将 [debankBaseUrl] 视为代理端点。
@@ -506,7 +506,7 @@ class N42ChatConfig {
   /// Alchemy API 基础地址
   ///
   /// 直连模式默认使用官方 `eth-mainnet` 端点。
-  /// 代理模式下可传入类似 `https://api.n42.ai/proxy/v1/alchemy/eth-mainnet`。
+  /// 代理模式下可传入类似 `https://api.n42.world/proxy/v1/alchemy/eth-mainnet`。
   final String alchemyBaseUrl;
 
   /// 是否将 [alchemyBaseUrl] 视为代理端点。
@@ -573,8 +573,8 @@ class N42ChatConfig {
     this.maxVoiceDuration = 60,
     this.enableDebugLogs = false,
     this.databaseName,
-    this.termsOfServiceUrl = 'https://www.n42.ai/static/terms_of_use.html',
-    this.privacyPolicyUrl = 'https://www.n42.ai/static/terms_of_use.html',
+    this.termsOfServiceUrl = 'https://www.n42.world/static/terms_of_use.html',
+    this.privacyPolicyUrl = 'https://www.n42.world/static/terms_of_use.html',
     this.giphyApiKey,
     this.giphyBaseUrl = 'https://api.giphy.com/v1/gifs',
     this.giphyUseProxyEndpoint = false,

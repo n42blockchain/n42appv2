@@ -412,17 +412,17 @@ void main() {
 
     test('parses n42id://bind into idHubBind with sid + hub', () async {
       service.handleUri(
-        Uri.parse('n42id://bind?sid=abc123&hub=https://id.n42.ai'),
+        Uri.parse('n42id://bind?sid=abc123&hub=https://id.n42.world'),
       );
       await Future.delayed(Duration.zero);
       expect(received.single.type, DeepLinkType.idHubBind);
       expect(received.single.params['sid'], 'abc123');
-      expect(received.single.params['hub'], 'https://id.n42.ai');
+      expect(received.single.params['hub'], 'https://id.n42.world');
     });
 
     test('parses n42id://auth into idHubAuth', () async {
       service.handleUri(
-        Uri.parse('n42id://auth?sid=xyz&hub=https://id.n42.ai'),
+        Uri.parse('n42id://auth?sid=xyz&hub=https://id.n42.world'),
       );
       await Future.delayed(Duration.zero);
       expect(received.single.type, DeepLinkType.idHubAuth);
@@ -437,7 +437,7 @@ void main() {
 
     test('redacts sid in the sanitized string form', () async {
       service.handleUri(
-        Uri.parse('n42id://bind?sid=secret123&hub=https://id.n42.ai'),
+        Uri.parse('n42id://bind?sid=secret123&hub=https://id.n42.world'),
       );
       await Future.delayed(Duration.zero);
       expect(received.single.toString(), isNot(contains('secret123')));

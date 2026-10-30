@@ -330,8 +330,8 @@ class DeepLinkService {
   }
 
   /// N42 ID Hub scan-to-sign links:
-  /// - n42id://bind?sid=...&hub=https://id.n42.ai (wallet binding)
-  /// - n42id://auth?sid=...&hub=https://id.n42.ai (cross-device login)
+  /// - n42id://bind?sid=...&hub=https://id.n42.world (wallet binding)
+  /// - n42id://auth?sid=...&hub=https://id.n42.world (cross-device login)
   ///
   /// Only sid + hub are carried; the message to sign is fetched from the hub
   /// later (never embedded here). The hub host is validated downstream against

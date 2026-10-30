@@ -48,14 +48,14 @@ void main() {
         expect(
           url,
           AppConfig.isOnline
-              ? 'https://api.n42.ai/market/v1'
+              ? 'https://api.n42.world/market/v1'
               : 'https://5.78.28.90:9398/v1',
         );
       });
 
       test('returns string for non-map entries', () {
         final url = AppConfig.getApiUrlOnline('ipfsHost');
-        expect(url, 'https://api.n42.ai');
+        expect(url, 'https://api.n42.world');
       });
 
       test('returns empty string for unknown key', () {

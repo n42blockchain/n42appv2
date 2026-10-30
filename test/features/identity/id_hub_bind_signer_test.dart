@@ -5,7 +5,7 @@ import 'package:n42_wallet/features/identity/models/id_hub_models.dart';
 import 'package:n42_wallet/features/identity/services/id_hub_bind_signer.dart';
 
 class _FakeApi extends IdHubApi {
-  _FakeApi() : super(baseUrl: 'https://id.n42.ai');
+  _FakeApi() : super(baseUrl: 'https://id.n42.world');
 
   String sessionStatus = 'pending';
   bool completed = false;
@@ -50,21 +50,21 @@ void main() {
     test(
       'accepts only exact allowlisted hosts over canonical https origins',
       () {
-        expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai'), isTrue);
-        expect(IdHubBindSigner.isHubAllowed('https://id-dev.n42.ai'), isTrue);
-        expect(IdHubBindSigner.isHubAllowed('https://a.id.n42.ai'), isFalse);
-        expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai/path'), isFalse);
-        expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai:8443'), isFalse);
+        expect(IdHubBindSigner.isHubAllowed('https://id.n42.world'), isTrue);
+        expect(IdHubBindSigner.isHubAllowed('https://id-dev.n42.world'), isTrue);
+        expect(IdHubBindSigner.isHubAllowed('https://a.id.n42.world'), isFalse);
+        expect(IdHubBindSigner.isHubAllowed('https://id.n42.world/path'), isFalse);
+        expect(IdHubBindSigner.isHubAllowed('https://id.n42.world:8443'), isFalse);
       },
     );
 
     test('rejects unknown hosts, http, and garbage', () {
       expect(IdHubBindSigner.isHubAllowed('https://evil.com'), isFalse);
       expect(
-        IdHubBindSigner.isHubAllowed('https://id.n42.ai.evil.com'),
+        IdHubBindSigner.isHubAllowed('https://id.n42.world.evil.com'),
         isFalse,
       );
-      expect(IdHubBindSigner.isHubAllowed('http://id.n42.ai'), isFalse);
+      expect(IdHubBindSigner.isHubAllowed('http://id.n42.world'), isFalse);
       expect(IdHubBindSigner.isHubAllowed('not a url'), isFalse);
     });
 
@@ -87,7 +87,7 @@ void main() {
       String? signed;
       final out = await signer.completeBind(
         sessionId: '11111111-1111-4111-8111-111111111111',
-        hubUrl: 'https://id.n42.ai',
+        hubUrl: 'https://id.n42.world',
         address: '0xABC',
         apiFactory: (_) => api,
         sign: (msg) async {
@@ -119,7 +119,7 @@ void main() {
       final api = _FakeApi()..sessionStatus = 'expired';
       final out = await IdHubBindSigner().completeBind(
         sessionId: '11111111-1111-4111-8111-111111111111',
-        hubUrl: 'https://id.n42.ai',
+        hubUrl: 'https://id.n42.world',
         address: '0xABC',
         apiFactory: (_) => api,
         sign: (_) async => '0xsig',
@@ -135,7 +135,7 @@ void main() {
         final api = _FakeApi();
         final out = await IdHubBindSigner().completeBind(
           sessionId: '11111111-1111-4111-8111-111111111111',
-          hubUrl: 'https://id.n42.ai',
+          hubUrl: 'https://id.n42.world',
           address: '0xABC',
           apiFactory: (_) => api,
           sign: (_) async => null,
@@ -157,7 +157,7 @@ void main() {
           );
         final out = await IdHubBindSigner().completeBind(
           sessionId: '11111111-1111-4111-8111-111111111111',
-          hubUrl: 'https://id.n42.ai',
+          hubUrl: 'https://id.n42.world',
           address: '0xABC',
           apiFactory: (_) => api,
           sign: (_) async => '0xsig',

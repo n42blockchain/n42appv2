@@ -94,7 +94,7 @@
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
                     android:scheme="n42app"
-                    android:host="n42.ai"/>
+                    android:host="n42.world"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

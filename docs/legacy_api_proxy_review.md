@@ -11,7 +11,7 @@ This note answers one question:
 
 It also separates three different historical sources of capability:
 
-1. Old monolithic backend at `api.n42.ai/...`
+1. Old monolithic backend at `api.n42.world/...`
 2. Old mobile client direct third-party calls
 3. Old Rust `n42-api-proxy`
 
@@ -40,8 +40,8 @@ The current workspace does not contain the old wallet API monolith source code.
 - `../N42` and `../N42-gov5` are chain/node codebases, not the old wallet API
   service.
 - The app clearly references deployed monolith endpoints such as
-  `https://api.n42.ai/wallet/`, `https://api.n42.ai/market/v1`,
-  `https://api.n42.ai/user`, and `https://api.n42.ai/swap`.
+  `https://api.n42.world/wallet/`, `https://api.n42.world/market/v1`,
+  `https://api.n42.world/user`, and `https://api.n42.world/swap`.
 
 Evidence:
 
@@ -63,11 +63,11 @@ The old app depended on N42-owned backend domains for most business data:
 
 | Area | Backend base URL | Evidence |
 | --- | --- | --- |
-| Wallet data | `https://api.n42.ai/wallet/` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L39) |
-| Market | `https://api.n42.ai/market/v1` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L12) |
-| User/account | `https://api.n42.ai/user` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L32) |
-| Swap | `https://api.n42.ai/swap` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L44) |
-| NFT market | `https://api.n42.ai/nft-market` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L17) |
+| Wallet data | `https://api.n42.world/wallet/` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L39) |
+| Market | `https://api.n42.world/market/v1` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L12) |
+| User/account | `https://api.n42.world/user` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L32) |
+| Swap | `https://api.n42.world/swap` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L44) |
+| NFT market | `https://api.n42.world/nft-market` | [old app_config.dart](/Users/jieliu/Documents/n42/n42app/lib/app_config.dart#L17) |
 
 That means old wallet behavior was never purely "app direct to vendors".
 

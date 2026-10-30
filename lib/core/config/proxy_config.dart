@@ -13,7 +13,7 @@ class ProxyConfig {
 
   static const String baseUrl = String.fromEnvironment(
     'PROXY_BASE_URL',
-    defaultValue: 'https://api.n42.ai/proxy',
+    defaultValue: 'https://api.n42.world/proxy',
   );
 
   static const String authToken = String.fromEnvironment(

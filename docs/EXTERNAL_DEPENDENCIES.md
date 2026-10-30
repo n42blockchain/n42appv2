@@ -27,7 +27,7 @@ flutter build apk --release \
 | `FIATRAMP_API_KEY` | 同上 | Chat §7 / 钱包 §11 法币入金（第三方 ramp widget）| 入口隐藏 |
 | `DEBANK_API_KEY` | 钱包 Portfolio | 钱包 §6 DeFi 头寸聚合展示 | 头寸区块显示配置提示 |
 | `ALCHEMY_API_KEY` | 钱包 NFT/RPC 增强 | NFT 元数据/增强 RPC | 走默认 RPC，功能弱化 |
-| `PROXY_BASE_URL` / `PROXY_AUTH_TOKEN` | `core/config/proxy_config.dart` | 行情/gas/explorer/bundler 代理（key 保护 + 缓存）| 默认指向 `api.n42.ai/proxy`；token 空则代理接口 401（T15 logcat 已见）|
+| `PROXY_BASE_URL` / `PROXY_AUTH_TOKEN` | `core/config/proxy_config.dart` | 行情/gas/explorer/bundler 代理（key 保护 + 缓存）| 默认指向 `api.n42.world/proxy`；token 空则代理接口 401（T15 logcat 已见）|
 | `IPFS_USERNAME` / `IPFS_PASSWORD` | IPFS 上传 | 去中心化存储上传 | 上传降级 |
 | `AIRDROP_API_BASE_URL` | `features/airdrop/services/airdrop_service.dart` | 结构化空投活动聚合列表 | 默认旧 N42 端点；不可用时如实报错，Sources 目录仍可用 |
 | `LOYALTY_API_BASE_URL` | `features/loyalty/services/loyalty_service.dart` | 主应用签到/任务/推荐/历史/排行/奖励 | 默认 N42 loyalty 路径；服务未部署时如实报错，不生成假积分 |

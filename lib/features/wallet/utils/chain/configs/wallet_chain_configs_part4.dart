@@ -399,7 +399,7 @@ Map<String, dynamic> walletChainConfigsPart4 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ONE",
-      "icon": "https://www.n42.ai/static/one.png",
+      "icon": "https://www.n42.world/static/one.png",
       "name": "Harmony",
       "miniName": "ONE",
       "unit": "one",
@@ -543,7 +543,7 @@ Map<String, dynamic> walletChainConfigsPart4 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "IOTX",
-      "icon": "https://www.n42.ai/static/iotx.png",
+      "icon": "https://www.n42.world/static/iotx.png",
       "name": "IoTeX",
       "miniName": "IOTX",
       "unit": "iotx",
@@ -639,7 +639,7 @@ Map<String, dynamic> walletChainConfigsPart4 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "Bitcoin",
       "coinType": "DASH",
-      "icon": "https://api.n42.ai/market/v1/r/coinImage/Dash.png",
+      "icon": "https://api.n42.world/market/v1/r/coinImage/Dash.png",
       "name": "Dash",
       "miniName": "DASH",
       "unit": "dash",

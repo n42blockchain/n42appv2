@@ -11,14 +11,14 @@ class PasskeyConfig {
   /// Relying Party ID — must match the domain serving
   /// `.well-known/assetlinks.json` (Android) and
   /// `apple-app-site-association` (iOS).
-  static const String rpId = 'n42.ai';
+  static const String rpId = 'n42.world';
 
   /// Relying Party display name shown in system Passkey prompts.
   static const String rpName = 'N42 Wallet';
 
   /// WebAuthn origin for web platform.
   /// Must be HTTPS and rpId must be a registrable suffix of this origin.
-  static const String webOrigin = 'https://wallet.n42.ai';
+  static const String webOrigin = 'https://wallet.n42.world';
 
   /// Timeout for WebAuthn operations in milliseconds.
   static const int timeout = 60000;

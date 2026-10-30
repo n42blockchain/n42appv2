@@ -159,7 +159,7 @@ mixin WalletConnectConnection on ChangeNotifier {
           name: AppConfig.apiUrl['walletName'],
           description: AppConfig.apiUrl['walletName'],
           url: AppConfig.apiUrl['n42Browser']!,
-          icons: ["https://n42.ai/static/n42.png"],
+          icons: ["https://n42.world/static/n42.png"],
         ),
       );
       coinModelInit();

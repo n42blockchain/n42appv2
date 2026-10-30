@@ -13,7 +13,7 @@ class AirdropService {
 
   static const configuredBaseUrl = String.fromEnvironment(
     'AIRDROP_API_BASE_URL',
-    defaultValue: 'https://api.n42.ai/airdrop/v1',
+    defaultValue: 'https://api.n42.world/airdrop/v1',
   );
 
   static final sources = <AirdropSource>[

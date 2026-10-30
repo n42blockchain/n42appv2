@@ -107,7 +107,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final String chainName = item['chain_name']?.toString() ?? '';
     final String fullname = item['fullname']?.toString() ?? sym;
     final String iconUrl =
-        'https://api.n42.ai/market/v1/r/coinImage/$fullname.png';
+        'https://api.n42.world/market/v1/r/coinImage/$fullname.png';
 
     final Color blueColor = AppColorTokens.of(context).brand;
     final Color mainText = AppColorTokens.of(context).textPrimary;
@@ -221,7 +221,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
       'LoveCoin' => rowValue['icon']?.toString() ?? '',
       'Base' =>
         "${AppConfig.apiUrl['n42Browser']}/static/${rowValue['coin_name']}.png",
-      _ => 'https://api.n42.ai/market/v1/r/coinImage/$fullname.png',
+      _ => 'https://api.n42.world/market/v1/r/coinImage/$fullname.png',
     };
 
     return Container(

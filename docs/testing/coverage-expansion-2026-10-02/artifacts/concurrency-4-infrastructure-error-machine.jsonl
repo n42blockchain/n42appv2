@@ -788,9 +788,9 @@
 {"group":{"id":336,"suiteID":304,"parentID":335,"name":"SecurityConfig","metadata":{"skip":false,"skipReason":null},"testCount":23,"line":17,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"group","time":25032}
 {"test":{"id":337,"name":"SecurityConfig production rejects a failed TLS validation for third-party.test","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25032}
 {"testID":337,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25044}
-{"test":{"id":338,"name":"SecurityConfig production rejects a failed TLS validation for api.n42.ai","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25044}
+{"test":{"id":338,"name":"SecurityConfig production rejects a failed TLS validation for api.n42.world","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25044}
 {"testID":338,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25045}
-{"test":{"id":339,"name":"SecurityConfig production rejects a failed TLS validation for evilapi.n42.ai","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25045}
+{"test":{"id":339,"name":"SecurityConfig production rejects a failed TLS validation for evilapi.n42.world","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25045}
 {"testID":339,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25046}
 {"test":{"id":340,"name":"SecurityConfig production rejects a failed TLS validation for localhost","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25046}
 {"testID":340,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25047}
@@ -6194,7 +6194,7 @@
 {"test":{"id":3058,"name":"refresh uses form encoding and revoke uses bearer authorization","suiteID":3041,"groupIDs":[3049],"metadata":{"skip":false,"skipReason":null},"line":229,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/identity/id_hub_api_test.dart"},"type":"testStart","time":115333}
 {"testID":3058,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":115337}
 {"test":{"id":3059,"name":"problem+json errors preserve status, stable code, and detail","suiteID":3041,"groupIDs":[3049],"metadata":{"skip":false,"skipReason":null},"line":266,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/identity/id_hub_api_test.dart"},"type":"testStart","time":115337}
-{"testID":3059,"messageType":"print","message":"[IdHubApi] WARN: https://id-test.n42.ai/v1/bind-sessions/11111111-1111-4111-8111-111111111111/prepare -> 409 binding-conflict Wallet already linked","type":"print","time":115345}
+{"testID":3059,"messageType":"print","message":"[IdHubApi] WARN: https://id-test.n42.world/v1/bind-sessions/11111111-1111-4111-8111-111111111111/prepare -> 409 binding-conflict Wallet already linked","type":"print","time":115345}
 {"testID":3059,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":115346}
 {"test":{"id":3060,"name":"unexpected non-object success response is rejected","suiteID":3041,"groupIDs":[3049],"metadata":{"skip":false,"skipReason":null},"line":292,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/identity/id_hub_api_test.dart"},"type":"testStart","time":115346}
 {"testID":3060,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":115348}
@@ -8552,10 +8552,10 @@
 {"testID":4295,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ARB: ClientException with SocketException: Network disabled in gas card tests, uri=https://arb1.arbitrum.io/rpc","type":"print","time":167799}
 {"testID":4295,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for OP: ClientException with SocketException: Network disabled in gas card tests, uri=https://mainnet.optimism.io","type":"print","time":167799}
 {"testID":4295,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas card tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":167799}
-{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167811}
-{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167811}
-{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167812}
-{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167812}
+{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167811}
+{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167811}
+{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167812}
+{"testID":4295,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167812}
 
 [{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:54624/XbVM_ebSzak=/"}}]
 {"testID":4295,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":167941}
@@ -8566,20 +8566,20 @@
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ARB: ClientException with SocketException: Network disabled in gas card tests, uri=https://arb1.arbitrum.io/rpc","type":"print","time":167971}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for OP: ClientException with SocketException: Network disabled in gas card tests, uri=https://mainnet.optimism.io","type":"print","time":167971}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas card tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":167971}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167972}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167972}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167972}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167972}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167972}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167972}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167972}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167972}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ETH: ClientException with SocketException: Network disabled in gas card tests, uri=https://ethereum-rpc.publicnode.com","type":"print","time":168053}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for BNB: ClientException with SocketException: Network disabled in gas card tests, uri=https://bsc-dataseed1.binance.org/","type":"print","time":168053}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for MATIC: ClientException with SocketException: Network disabled in gas card tests, uri=https://polygon-rpc.com","type":"print","time":168053}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ARB: ClientException with SocketException: Network disabled in gas card tests, uri=https://arb1.arbitrum.io/rpc","type":"print","time":168053}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for OP: ClientException with SocketException: Network disabled in gas card tests, uri=https://mainnet.optimism.io","type":"print","time":168053}
 {"testID":4296,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas card tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":168053}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168057}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168057}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168057}
-{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168057}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168057}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168057}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168057}
+{"testID":4296,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168057}
 {"testID":4296,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":168083}
 {"testID":4293,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":168301}
 {"group":{"id":4297,"suiteID":4292,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":168301}
@@ -8592,10 +8592,10 @@
 {"testID":4298,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ARB: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://arb1.arbitrum.io/rpc","type":"print","time":168783}
 {"testID":4298,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for OP: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://mainnet.optimism.io","type":"print","time":168783}
 {"testID":4298,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":168783}
-{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168796}
-{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168796}
-{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168797}
-{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168797}
+{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168796}
+{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168796}
+{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168797}
+{"testID":4298,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168797}
 {"testID":4298,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":168938}
 {"test":{"id":4301,"name":"overview opens network alert editor and validates threshold","suiteID":4292,"groupIDs":[4297],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":72,"root_column":3,"root_url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/wallet/gas/gas_tracker_interaction_test.dart"},"type":"testStart","time":168939}
 {"testID":4301,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ETH: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://ethereum-rpc.publicnode.com","type":"print","time":168970}
@@ -8604,10 +8604,10 @@
 {"testID":4301,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ARB: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://arb1.arbitrum.io/rpc","type":"print","time":168971}
 {"testID":4301,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for OP: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://mainnet.optimism.io","type":"print","time":168971}
 {"testID":4301,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":168971}
-{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168976}
-{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168980}
-{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168980}
-{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168980}
+{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168976}
+{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168980}
+{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168980}
+{"testID":4301,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168980}
 {"suite":{"id":4302,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_payment_asset_test.dart"},"type":"suite","time":169022}
 {"test":{"id":4303,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_payment_asset_test.dart","suiteID":4302,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":169022}
 
@@ -9126,8 +9126,8 @@
 {"testID":4570,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":186874}
 {"test":{"id":4571,"name":"walletHasBackupableMnemonic only returns true for real mnemonic words","suiteID":4536,"groupIDs":[4567],"metadata":{"skip":false,"skipReason":null},"line":20,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_backup/backup_flow_utils_test.dart"},"type":"testStart","time":186874}
 {"testID":4571,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":186876}
-{"testID":4552,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pending/tx?chain=%5Bredacted%5D&address=%5Bredacted%5D]: null","type":"print","time":187133}
-{"testID":4552,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pending/tx?chain=%5Bredacted%5D&address=%5Bredacted%5D]: null","type":"print","time":187234}
+{"testID":4552,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pending/tx?chain=%5Bredacted%5D&address=%5Bredacted%5D]: null","type":"print","time":187133}
+{"testID":4552,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pending/tx?chain=%5Bredacted%5D&address=%5Bredacted%5D]: null","type":"print","time":187234}
 {"testID":4552,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":187291}
 {"suite":{"id":4572,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_backup/backup_three_interaction_test.dart"},"type":"suite","time":187696}
 {"test":{"id":4573,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_backup/backup_three_interaction_test.dart","suiteID":4572,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":187696}

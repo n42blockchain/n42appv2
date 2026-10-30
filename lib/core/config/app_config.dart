@@ -68,12 +68,12 @@ class AppConfig {
   /// N42 ID Hub URL. Production builds use the deployed service by default.
   ///
   /// Device and development builds may override it, for example with
-  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.ai`. Supplying an empty value
+  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.world`. Supplying an empty value
   /// explicitly disables the feature and preserves the graceful-degradation
   /// path for incident response.
   static const String idHubUrl = String.fromEnvironment(
     'ID_HUB_URL',
-    defaultValue: 'https://id.n42.ai',
+    defaultValue: 'https://id.n42.world',
   );
 
   static const String idHubMainnetChainCaip2 = 'eip155:94';
@@ -91,8 +91,8 @@ class AppConfig {
   /// hard allowlist so a phishing QR cannot make the wallet POST a signature to
   /// an attacker-controlled server. Compared by exact host.
   static const List<String> idHubAllowedHosts = [
-    'id.n42.ai',
-    'id-dev.n42.ai',
+    'id.n42.world',
+    'id-dev.n42.world',
     if (idHubAllowedHost != '') idHubAllowedHost,
   ];
 
@@ -100,41 +100,41 @@ class AppConfig {
 
   static const Map<String, dynamic> apiUrl = {
     'walletName': 'N42Wallet',
-    'n42Browser': 'https://www.n42.ai',
+    'n42Browser': 'https://www.n42.world',
     // Onramper proxy. Upstream currently returns 502; tracked server-side.
-    'walletBuyHostV2': 'https://api.n42.ai/otc/r/onramper/url',
+    'walletBuyHostV2': 'https://api.n42.world/otc/r/onramper/url',
 
     // Market API
     'marketHost': {
-      'main': 'https://api.n42.ai/market/v1',
+      'main': 'https://api.n42.world/market/v1',
       'test':
           'https://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
     },
 
     // NFT API
     'nftHost': {
-      'main': 'https://api.n42.ai/nft-market',
+      'main': 'https://api.n42.world/nft-market',
       'test':
           'https://5.78.28.90:9397', // TODO(production): Replace with domain name
     },
 
     // Activity API
     'activiteHost': {
-      'main': 'https://api.n42.ai/activity/v1',
+      'main': 'https://api.n42.world/activity/v1',
       'test':
           'https://5.78.28.90:9390/v1', // TODO(production): Replace with domain name
     },
 
     // Mining API
     'groupMiningHost': {
-      'main': 'https://api.n42.ai/activity',
+      'main': 'https://api.n42.world/activity',
       'test':
           'https://5.78.28.90:9390', // TODO(production): Replace with domain name
     },
 
     // User Center API
     'userInfoHost': {
-      'main': 'https://api.n42.ai/user',
+      'main': 'https://api.n42.world/user',
       'test':
           'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
@@ -145,19 +145,19 @@ class AppConfig {
 
     // IPFS — uploads go through the n42 cluster, reads through the public
     // gateway (writable cluster doesn't expose a permissioned read path).
-    'ipfsHost': 'https://api.n42.ai',
+    'ipfsHost': 'https://api.n42.world',
     'ipfsAddress': 'https://ipfs.io/ipfs/',
 
     // Wallet/Token API
     'tokenViewUri': {
-      'main': 'https://api.n42.ai/wallet/',
+      'main': 'https://api.n42.world/wallet/',
       'test':
           'https://5.78.28.90:9492/', // TODO(production): Replace with domain name
     },
 
     // Exchange/Swap API
     'exchangeHost': {
-      'main': 'https://api.n42.ai/swap',
+      'main': 'https://api.n42.world/swap',
       'test':
           'https://5.78.28.90:9391', // TODO(production): Replace with domain name
     },
@@ -178,7 +178,7 @@ class AppConfig {
     },
 
     // Face API
-    'face': 'https://api.n42.ai/face',
+    'face': 'https://api.n42.world/face',
 
     // CoinGecko API (for stablecoin prices)
     'coinGeckoApi': 'https://api.coingecko.com/api/v3',

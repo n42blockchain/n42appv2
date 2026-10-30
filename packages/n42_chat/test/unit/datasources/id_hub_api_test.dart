@@ -27,7 +27,7 @@ void main() {
     'wallet challenge times out instead of blocking login fallback',
     () async {
       final api = IdHubApi(
-        baseUrl: 'https://id.n42.ai',
+        baseUrl: 'https://id.n42.world',
         client: _HangingClient(),
         requestTimeout: Duration.zero,
       );
@@ -50,7 +50,7 @@ void main() {
   test('plaintext Hub URL is rejected before an auth request is sent', () {
     final client = _FailingClient();
     expect(
-      () => IdHubApi(baseUrl: 'http://id.n42.ai', client: client),
+      () => IdHubApi(baseUrl: 'http://id.n42.world', client: client),
       throwsArgumentError,
     );
     expect(client.requested, isFalse);
@@ -61,7 +61,7 @@ void main() {
     () async {
       late http.Request request;
       final api = IdHubApi(
-        baseUrl: 'https://id.n42.ai',
+        baseUrl: 'https://id.n42.world',
         client: MockClient((received) async {
           request = received;
           return http.Response(

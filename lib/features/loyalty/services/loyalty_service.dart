@@ -13,7 +13,7 @@ class LoyaltyService {
 
   static const configuredBaseUrl = String.fromEnvironment(
     'LOYALTY_API_BASE_URL',
-    defaultValue: 'https://api.n42.ai/loyalty/v1',
+    defaultValue: 'https://api.n42.world/loyalty/v1',
   );
 
   final http.Client _client;

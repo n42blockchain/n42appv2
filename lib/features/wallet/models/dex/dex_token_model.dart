@@ -33,7 +33,7 @@ class DexTokenModel {
 class DexFallbackTokens {
   DexFallbackTokens._();
 
-  static const _logoBase = 'https://api.n42.ai/market/v1/r/coinImage';
+  static const _logoBase = 'https://api.n42.world/market/v1/r/coinImage';
 
   static List<DexTokenModel> forChain(String chain) {
     switch (chain.toUpperCase()) {
@@ -98,7 +98,7 @@ class DexFallbackTokens {
             address: 'So11111111111111111111111111111111111111112',
             symbol: 'SOL',
             name: 'Wrapped SOL',
-            logoUri: 'https://api.n42.ai/market/v1/r/coinImage/SOL.png',
+            logoUri: 'https://api.n42.world/market/v1/r/coinImage/SOL.png',
             decimals: 9,
             chain: 'SOL',
           ),
@@ -106,7 +106,7 @@ class DexFallbackTokens {
             address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
             symbol: 'USDC',
             name: 'USD Coin',
-            logoUri: 'https://api.n42.ai/market/v1/r/coinImage/USDC.png',
+            logoUri: 'https://api.n42.world/market/v1/r/coinImage/USDC.png',
             decimals: 6,
             chain: 'SOL',
           ),
@@ -114,7 +114,7 @@ class DexFallbackTokens {
             address: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
             symbol: 'USDT',
             name: 'Tether USD',
-            logoUri: 'https://api.n42.ai/market/v1/r/coinImage/USDT.png',
+            logoUri: 'https://api.n42.world/market/v1/r/coinImage/USDT.png',
             decimals: 6,
             chain: 'SOL',
           ),

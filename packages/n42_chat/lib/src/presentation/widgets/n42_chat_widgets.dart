@@ -146,11 +146,11 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
                       onBack: () => N42Chat.requestBackToHost(context),
                       onTermsOfService: () => _launchUrl(
                         N42Chat._config?.termsOfServiceUrl ??
-                            'https://www.n42.ai/static/terms_of_use.html',
+                            'https://www.n42.world/static/terms_of_use.html',
                       ),
                       onPrivacyPolicy: () => _launchUrl(
                         N42Chat._config?.privacyPolicyUrl ??
-                            'https://www.n42.ai/static/terms_of_use.html',
+                            'https://www.n42.world/static/terms_of_use.html',
                       ),
                     );
                   },
@@ -594,11 +594,11 @@ class _N42ProfileEntryWidgetState extends State<_N42ProfileEntryWidget> {
               onBack: () => N42Chat.requestBackToHost(context),
               onTermsOfService: () => _launchUrl(
                 N42Chat._config?.termsOfServiceUrl ??
-                    'https://www.n42.ai/static/terms_of_use.html',
+                    'https://www.n42.world/static/terms_of_use.html',
               ),
               onPrivacyPolicy: () => _launchUrl(
                 N42Chat._config?.privacyPolicyUrl ??
-                    'https://www.n42.ai/static/terms_of_use.html',
+                    'https://www.n42.world/static/terms_of_use.html',
               ),
             );
           },

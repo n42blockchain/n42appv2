@@ -40,8 +40,8 @@ void main() {
       'n42://user@chat/room',
       'n42://chat:12/room',
       'n42://auth/sso/extra?token=t',
-      'n42id://bind/extra?sid=$_session&hub=https://id.n42.ai',
-      'n42id://bind?sid=$_session&sid=other&hub=https://id.n42.ai',
+      'n42id://bind/extra?sid=$_session&hub=https://id.n42.world',
+      'n42id://bind?sid=$_session&sid=other&hub=https://id.n42.world',
       'n42://chat/room?ref=%00',
       'javascript://chat/room',
     ]) {
@@ -61,7 +61,7 @@ void main() {
 
     test('capability is not repaired into a valid session ID', () {
       service.handleUri(
-        Uri.parse('n42id://bind?sid=${_session}x%2Fy&hub=https://id.n42.ai'),
+        Uri.parse('n42id://bind?sid=${_session}x%2Fy&hub=https://id.n42.world'),
       );
       expect(service.lastDeepLink!.params['sid'], '${_session}x/y');
     });
@@ -442,10 +442,10 @@ void main() {
       test('$action accepts only exact session and trusted origin', () async {
         handler.startListening();
         for (final hub in [
-          'http://id.n42.ai',
-          'https://id.n42.ai.evil.org',
-          'https://id.n42.ai/path',
-          'https://id.n42.ai?redirect=evil',
+          'http://id.n42.world',
+          'https://id.n42.world.evil.org',
+          'https://id.n42.world/path',
+          'https://id.n42.world?redirect=evil',
         ]) {
           await emit(
             Uri(
@@ -456,10 +456,10 @@ void main() {
           );
         }
         await emit(
-          'n42id://$action?sid=${_session.substring(0, 10)}%2F${_session.substring(10)}&hub=https://id.n42.ai',
+          'n42id://$action?sid=${_session.substring(0, 10)}%2F${_session.substring(10)}&hub=https://id.n42.world',
         );
         expect(delivered, isEmpty);
-        await emit('n42id://$action?sid=$_session&hub=https://id.n42.ai');
+        await emit('n42id://$action?sid=$_session&hub=https://id.n42.world');
         expect(delivered.length, 1);
         expect(
           delivered.single.type,

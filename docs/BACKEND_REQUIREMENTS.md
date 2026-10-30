@@ -6,7 +6,7 @@
 > **2026-07-03 勘误**：本文档写于 2026-02-22，部分 ❌ 已过时——§三 DEX Swap 的
 > 3.1-3.4 四个接口已由**仓内 Go 服务 `backend/swap/`** 实现（`/v1/dex/tokens、quote、
 > commit、history`，另加限价单 `/v1/dex/limit` 三接口），App `dex_swap_api.dart` 已接通；
-> 其部署状态（是否已上 `api.n42.ai/swap`）以运维为准。§五 价格预警 5.1-5.4 已于 2026-07-03 在
+> 其部署状态（是否已上 `api.n42.world/swap`）以运维为准。§五 价格预警 5.1-5.4 已于 2026-07-03 在
 > `backend/swap` 实现（CRUD + 60s CoinGecko 监控 + webhook/轮询触达，见该目录 README）；
 > 此前的客户端本地补偿（前台定时器 + 本地通知）继续作为离线兜底并存。
 > 外部 key/自建服务类依赖另见 [`EXTERNAL_DEPENDENCIES.md`](EXTERNAL_DEPENDENCIES.md)。
@@ -17,21 +17,21 @@
 
 | 服务名 | Base URL (生产) | 用途 |
 |--------|----------------|------|
-| `userInfoHost` | `https://api.n42.ai/user` | 用户中心（登录/注册/邀请/账户） |
-| `exchangeHost` | `https://api.n42.ai/swap` | DEX Swap 兑换 |
-| `nftHost` | `https://api.n42.ai/nft-market` | NFT/AST 市场 |
-| `tokenViewUri` | `https://api.n42.ai/wallet/` | 钱包资产/交易记录 |
-| `marketHost` | `https://api.n42.ai/market/v1` | 行情数据（补充接口） |
-| `activiteHost` | `https://api.n42.ai/activity/v1` | 活动/积分 |
-| `groupMiningHost` | `https://api.n42.ai/activity` | 挖矿相关 |
-| `airdropHost` | `https://api.n42.ai/airdrop/v1`（可由 `AIRDROP_API_BASE_URL` 覆盖） | 结构化空投活动聚合 |
-| `loyaltyHost` | `https://api.n42.ai/loyalty/v1`（可由 `LOYALTY_API_BASE_URL` 覆盖） | 不可转让积分与官方 Gas 代付 |
+| `userInfoHost` | `https://api.n42.world/user` | 用户中心（登录/注册/邀请/账户） |
+| `exchangeHost` | `https://api.n42.world/swap` | DEX Swap 兑换 |
+| `nftHost` | `https://api.n42.world/nft-market` | NFT/AST 市场 |
+| `tokenViewUri` | `https://api.n42.world/wallet/` | 钱包资产/交易记录 |
+| `marketHost` | `https://api.n42.world/market/v1` | 行情数据（补充接口） |
+| `activiteHost` | `https://api.n42.world/activity/v1` | 活动/积分 |
+| `groupMiningHost` | `https://api.n42.world/activity` | 挖矿相关 |
+| `airdropHost` | `https://api.n42.world/airdrop/v1`（可由 `AIRDROP_API_BASE_URL` 覆盖） | 结构化空投活动聚合 |
+| `loyaltyHost` | `https://api.n42.world/loyalty/v1`（可由 `LOYALTY_API_BASE_URL` 覆盖） | 不可转让积分与官方 Gas 代付 |
 
 ---
 
 ## 二、邀请码 / Referral 模块
 
-**Base URL**: `userInfoHost` = `https://api.n42.ai/user`
+**Base URL**: `userInfoHost` = `https://api.n42.world/user`
 
 ### 2.1 获取设备上的邀请人码 ✅
 
@@ -143,7 +143,7 @@ Body: {
 
 ## 三、DEX Swap 模块
 
-**Base URL**: `exchangeHost` = `https://api.n42.ai/swap`
+**Base URL**: `exchangeHost` = `https://api.n42.world/swap`
 
 ### 3.1 查询可交换代币列表 ✅（仓内 `backend/swap` 已实现）
 
@@ -279,7 +279,7 @@ Response:
 
 > **2026-07-03 勘误（T19 真机+curl 复核）**：客户端页面/入口/三步 API 调用已全部接线
 > （`change_email_page.dart`/`change_email_api.dart`），但对当前线上网关的实测：
-> `POST api.n42.ai/user/v1/l/user/send/update/email/code` 及两种变体路径均返回
+> `POST api.n42.world/user/v1/l/user/send/update/email/code` 及两种变体路径均返回
 > **404 Not Found**（预期应为未登录 401）。原 ✅ 标注与线上现状不符——需后端确认
 > 该三步接口的真实 base URL/路径后客户端复测。
 

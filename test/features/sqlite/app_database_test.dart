@@ -338,7 +338,7 @@ void main() {
       final conn = await db.database;
 
       await conn.insert('browserHistory', {
-        'url': 'https://n42.ai',
+        'url': 'https://n42.world',
         'time': '1',
       });
       await conn.insert('browserHistory', {
@@ -355,7 +355,7 @@ void main() {
       );
 
       expect(rows, hasLength(1));
-      expect(rows.first['url'], 'https://n42.ai');
+      expect(rows.first['url'], 'https://n42.world');
     });
 
     test('LIKE query does not return non-matching URLs', () async {

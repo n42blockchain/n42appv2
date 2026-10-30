@@ -788,9 +788,9 @@
 {"group":{"id":336,"suiteID":304,"parentID":335,"name":"SecurityConfig","metadata":{"skip":false,"skipReason":null},"testCount":23,"line":17,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"group","time":25221}
 {"test":{"id":337,"name":"SecurityConfig production rejects a failed TLS validation for third-party.test","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25221}
 {"testID":337,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25233}
-{"test":{"id":338,"name":"SecurityConfig production rejects a failed TLS validation for api.n42.ai","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25234}
+{"test":{"id":338,"name":"SecurityConfig production rejects a failed TLS validation for api.n42.world","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25234}
 {"testID":338,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25235}
-{"test":{"id":339,"name":"SecurityConfig production rejects a failed TLS validation for evilapi.n42.ai","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25235}
+{"test":{"id":339,"name":"SecurityConfig production rejects a failed TLS validation for evilapi.n42.world","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25235}
 {"testID":339,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25236}
 {"test":{"id":340,"name":"SecurityConfig production rejects a failed TLS validation for localhost","suiteID":304,"groupIDs":[335,336],"metadata":{"skip":false,"skipReason":null},"line":24,"column":7,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/core/security/security_config_test.dart"},"type":"testStart","time":25236}
 {"testID":340,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25237}
@@ -6192,7 +6192,7 @@
 {"test":{"id":3059,"name":"refresh uses form encoding and revoke uses bearer authorization","suiteID":3041,"groupIDs":[3051],"metadata":{"skip":false,"skipReason":null},"line":229,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/identity/id_hub_api_test.dart"},"type":"testStart","time":116516}
 {"testID":3059,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":116521}
 {"test":{"id":3060,"name":"problem+json errors preserve status, stable code, and detail","suiteID":3041,"groupIDs":[3051],"metadata":{"skip":false,"skipReason":null},"line":266,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/identity/id_hub_api_test.dart"},"type":"testStart","time":116521}
-{"testID":3060,"messageType":"print","message":"[IdHubApi] WARN: https://id-test.n42.ai/v1/bind-sessions/11111111-1111-4111-8111-111111111111/prepare -> 409 binding-conflict Wallet already linked","type":"print","time":116528}
+{"testID":3060,"messageType":"print","message":"[IdHubApi] WARN: https://id-test.n42.world/v1/bind-sessions/11111111-1111-4111-8111-111111111111/prepare -> 409 binding-conflict Wallet already linked","type":"print","time":116528}
 {"testID":3060,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":116529}
 {"test":{"id":3061,"name":"unexpected non-object success response is rejected","suiteID":3041,"groupIDs":[3051],"metadata":{"skip":false,"skipReason":null},"line":292,"column":3,"url":"file:///Users/jieliu/Documents/n42/n42appv2/test/features/identity/id_hub_api_test.dart"},"type":"testStart","time":116529}
 {"testID":3061,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":116532}
@@ -8510,10 +8510,10 @@
 {"testID":4272,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":167889}
 {"suite":{"id":4275,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_payment_asset_test.dart"},"type":"suite","time":167902}
 {"test":{"id":4276,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_payment_asset_test.dart","suiteID":4275,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":167902}
-{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167903}
-{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167903}
-{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167903}
-{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167903}
+{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167903}
+{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167903}
+{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":167903}
+{"testID":4272,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":167903}
 {"suite":{"id":4277,"platform":"vm","path":"/Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_manage/watch_wallet_utils_test.dart"},"type":"suite","time":167987}
 {"test":{"id":4278,"name":"loading /Users/jieliu/Documents/n42/n42appv2/test/features/wallet/wallet_manage/watch_wallet_utils_test.dart","suiteID":4277,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":167987}
 {"testID":4272,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":168053}
@@ -8524,10 +8524,10 @@
 {"testID":4279,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for ARB: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://arb1.arbitrum.io/rpc","type":"print","time":168083}
 {"testID":4279,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for OP: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://mainnet.optimism.io","type":"print","time":168083}
 {"testID":4279,"messageType":"print","message":"[GasTracker] WARN: failed to fetch gas for AVAX: ClientException with SocketException: Network disabled in gas tracker tests, uri=https://api.avax.network/ext/bc/C/rpc","type":"print","time":168083}
-{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168085}
-{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168085}
-{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168085}
-{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.ai/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168085}
+{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168085}
+{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168085}
+{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/gas/nextblock?chain=%5Bredacted%5D]: null","type":"print","time":168085}
+{"testID":4279,"messageType":"print","message":"ExternalHttp.get error [https://api.n42.world/proxy/v1/tokenview/pendingstat?chain=%5Bredacted%5D]: null","type":"print","time":168085}
 
 [{"event":"test.startedProcess","params":{"vmServiceUri":"http://127.0.0.1:53062/1kurI0yvPJ0=/"}}]
 {"testID":4274,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":168493}

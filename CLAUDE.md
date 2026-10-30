@@ -136,7 +136,7 @@ Features communicate through:
 - `backend/swap/` — 仓内唯一后端（Go/gin/PostgreSQL，Dockerfile 部署）：DEX 聚合
   报价（1inch/Jupiter/Uniswap）、限价单存取（非托管架构**无执行引擎**——后端无私钥
   不能代签）、交易确认监视、**价格预警**（2026-07 新增：CRUD + 60s CoinGecko 监控 +
-  webhook/轮询触达）。Env 清单见 `backend/swap/README.md`。App 调用的 `api.n42.ai`
+  webhook/轮询触达）。Env 清单见 `backend/swap/README.md`。App 调用的 `api.n42.world`
   外部七服务接口需求见 `docs/BACKEND_REQUIREMENTS.md`；全部外部 key/自建服务依赖
   见 `docs/EXTERNAL_DEPENDENCIES.md`。
 

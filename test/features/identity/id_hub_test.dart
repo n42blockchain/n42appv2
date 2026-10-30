@@ -39,7 +39,7 @@ class _FakeIdHubApi extends IdHubApi {
   String? revokedAccessToken;
   String? revokedRefreshToken;
 
-  _FakeIdHubApi() : super(baseUrl: 'https://id-test.n42.ai');
+  _FakeIdHubApi() : super(baseUrl: 'https://id-test.n42.world');
 
   @override
   Future<IdHubTokenResponse> refresh(

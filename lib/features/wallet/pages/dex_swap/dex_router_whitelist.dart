@@ -1,7 +1,7 @@
 /// 客户端 DEX router 白名单。
 ///
 /// swap 报价里的 `routerAddr`（交易 `to` / approve 的 spender）来自后端
-/// `api.n42.ai/swap`。若后端被攻破或响应被中间人篡改，攻击者可把 router 换成
+/// `api.n42.world/swap`。若后端被攻破或响应被中间人篡改，攻击者可把 router 换成
 /// 恶意合约、把 calldata 换成掏空授权额度的调用——用户过一次密码即被导走资金。
 /// 因此在签名/广播前，必须由客户端独立校验 router 是否属于已知聚合器路由，
 /// 不能盲信后端返回值。

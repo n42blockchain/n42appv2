@@ -13,7 +13,7 @@ Map<String, dynamic> walletChainConfigsPart3 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "Cardano",
       "coinType": "ADA",
-      "icon": "https://www.n42.ai/static/ada.png",
+      "icon": "https://www.n42.world/static/ada.png",
       "name": "Cardano",
       "miniName": "ADA",
       "unit": "ada",
@@ -61,7 +61,7 @@ Map<String, dynamic> walletChainConfigsPart3 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "VeChain",
       "coinType": "VET",
-      "icon": "https://www.n42.ai/static/vet.png",
+      "icon": "https://www.n42.world/static/vet.png",
       "name": "VeChain",
       "miniName": "VET",
       "unit": "vet",
@@ -109,7 +109,7 @@ Map<String, dynamic> walletChainConfigsPart3 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "Stellar",
       "coinType": "XLM",
-      "icon": "https://www.n42.ai/static/xlm.png",
+      "icon": "https://www.n42.world/static/xlm.png",
       "name": "Stellar",
       "miniName": "XLM",
       "unit": "xlm",
@@ -205,7 +205,7 @@ Map<String, dynamic> walletChainConfigsPart3 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": "MultiversX",
       "coinType": "EGLD",
-      "icon": "https://www.n42.ai/static/egld.png",
+      "icon": "https://www.n42.world/static/egld.png",
       "name": "MultiversX",
       "miniName": "EGLD",
       "unit": "egld",

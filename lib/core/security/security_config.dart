@@ -35,7 +35,7 @@ class SecurityConfig {
 
   /// 允许的主机列表（用于 SSL Pinning）
   static const List<String> pinnedHosts = [
-    'api.n42.ai',
+    'api.n42.world',
     'api.n42.network',
     'ipfs.n42.network',
     'auth.n42.network',

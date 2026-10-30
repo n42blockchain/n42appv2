@@ -1094,7 +1094,7 @@ final Map<String, dynamic> chainUrlConfigsPart2 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "BEVM",
-      "icon": "https://www.n42.ai/static/bevm.png",
+      "icon": "https://www.n42.world/static/bevm.png",
       "name": "BEVM",
       "miniName": "BEVM",
       "unit": "BTC",

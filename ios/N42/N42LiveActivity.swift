@@ -46,7 +46,7 @@ struct N42LiveActivity: Widget {
             } minimal: {
                 Image("mining").resizable().scaledToFit()
             }
-            .widgetURL(URL(string: "n42app://n42.ai"))
+            .widgetURL(URL(string: "n42app://n42.world"))
             .keylineTint(Color.red)
         }
     }

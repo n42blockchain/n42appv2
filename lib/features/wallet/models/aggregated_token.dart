@@ -72,7 +72,7 @@ class AggregatedTokens {
   static const usdt = AggregatedToken(
     symbol: 'USDT',
     name: 'Tether USD',
-    icon: 'https://api.n42.ai/market/v1/r/coinImage/USDT.png',
+    icon: 'https://api.n42.world/market/v1/r/coinImage/USDT.png',
     chains: [
       // Ethereum
       ChainTokenConfig(
@@ -132,7 +132,7 @@ class AggregatedTokens {
   static const usdc = AggregatedToken(
     symbol: 'USDC',
     name: 'USD Coin',
-    icon: 'https://api.n42.ai/market/v1/r/coinImage/USDC.png',
+    icon: 'https://api.n42.world/market/v1/r/coinImage/USDC.png',
     chains: [
       // Ethereum
       ChainTokenConfig(

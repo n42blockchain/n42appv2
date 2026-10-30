@@ -13,7 +13,7 @@ String _hubToken({String aud = 'wallet-api', String sub = _did}) {
   String encode(Object value) =>
       base64Url.encode(utf8.encode(jsonEncode(value))).replaceAll('=', '');
   return '${encode({'alg': 'ES256', 'typ': 'JWT'})}.'
-      '${encode({'iss': 'did:web:id.n42.ai', 'sub': sub, 'aud': aud, 'exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900})}.signature';
+      '${encode({'iss': 'did:web:id.n42.world', 'sub': sub, 'aud': aud, 'exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900})}.signature';
 }
 
 class _QueuedResponse {
@@ -55,7 +55,7 @@ class _RecordingAdapter implements HttpClientAdapter {
 }
 
 ({IdHubApi api, _RecordingAdapter adapter}) _client({
-  String baseUrl = 'https://id-test.n42.ai/',
+  String baseUrl = 'https://id-test.n42.world/',
 }) {
   final dio = Dio();
   final adapter = _RecordingAdapter();
@@ -82,7 +82,7 @@ void main() {
   });
 
   test('client rejects a plaintext Hub URL before making a request', () async {
-    final (:api, :adapter) = _client(baseUrl: 'http://id-test.n42.ai');
+    final (:api, :adapter) = _client(baseUrl: 'http://id-test.n42.world');
 
     expect(api.isEnabled, isFalse);
     await expectLater(
@@ -104,12 +104,12 @@ void main() {
 
   test('client rejects non-canonical Hub URLs', () {
     for (final url in const [
-      'https://user:pw@id.n42.ai', // credentials smuggled into every request
-      'https://id.n42.ai:8443', // non-default port
-      'https://id.n42.ai/v2', // path prefix
-      'https://id.n42.ai?x=1', // query
-      'https://id.n42.ai#f', // fragment
-      'ftp://id.n42.ai',
+      'https://user:pw@id.n42.world', // credentials smuggled into every request
+      'https://id.n42.world:8443', // non-default port
+      'https://id.n42.world/v2', // path prefix
+      'https://id.n42.world?x=1', // query
+      'https://id.n42.world#f', // fragment
+      'ftp://id.n42.world',
       'not a url',
     ]) {
       expect(_client(baseUrl: url).api.isEnabled, isFalse, reason: url);
@@ -135,7 +135,7 @@ void main() {
       expect(result.message, 'N42 ID challenge');
       expect(
         adapter.requests.single.uri.toString(),
-        'https://id-test.n42.ai/v1/auth/wallet/challenge',
+        'https://id-test.n42.world/v1/auth/wallet/challenge',
       );
       expect(adapter.requests.single.data, {
         'address': '0xaabb',
@@ -268,7 +268,7 @@ void main() {
     () async {
       final (:api, :adapter) = _client();
       adapter.enqueue(409, {
-        'type': 'https://id.n42.ai/problems/binding-conflict',
+        'type': 'https://id.n42.world/problems/binding-conflict',
         'title': 'Conflict',
         'detail': 'Wallet already linked',
       });

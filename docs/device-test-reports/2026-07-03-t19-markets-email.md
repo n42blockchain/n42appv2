@@ -47,9 +47,9 @@ APK：`build/app/outputs/flutter-apk/app-debug.apk`
 
 发码接口进一步用 `curl` 复核当前线上网关，文档路径在当前环境返回 404：
 
-- `POST https://api.n42.ai/user/v1/l/user/send/update/email/code` -> `HTTP/1.1 404 Not Found`
-- `POST https://api.n42.ai/v1/l/user/send/update/email/code` -> `HTTP/1.1 404 Not Found`
-- `POST https://api.n42.ai/user/l/user/send/update/email/code` -> `HTTP/1.1 404 Not Found`
+- `POST https://api.n42.world/user/v1/l/user/send/update/email/code` -> `HTTP/1.1 404 Not Found`
+- `POST https://api.n42.world/v1/l/user/send/update/email/code` -> `HTTP/1.1 404 Not Found`
+- `POST https://api.n42.world/user/l/user/send/update/email/code` -> `HTTP/1.1 404 Not Found`
 
 结论：Change Email UI、入口和三步 API 调用已接线；当前验证失败点是线上 change_email 路由/网关路径不可达，未达到预期的未登录 `401`。需后端确认 `BACKEND_REQUIREMENTS` §4.1 的实际 base URL/path 后再复测验证码链路。
 
