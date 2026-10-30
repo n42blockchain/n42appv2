@@ -118,23 +118,15 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(
-              width: double.infinity,
-              height: ScreenUtil().setWidth(80.0),
-              child: AppButton(
-                label: S.of(context).g_mining_key62,
-                onPressed: () => Navigator.pop(context, true),
-              ),
+            AppButton(
+              label: S.of(context).g_mining_key62,
+              onPressed: () => Navigator.pop(context, true),
             ),
             SizedBox(height: AppSpacing.space8),
-            SizedBox(
-              width: double.infinity,
-              height: ScreenUtil().setWidth(80.0),
-              child: AppButton(
-                label: S.of(context).g_key_79,
-                variant: AppButtonVariant.secondary,
-                onPressed: () => Navigator.pop(context, false),
-              ),
+            AppButton(
+              label: S.of(context).g_key_79,
+              variant: AppButtonVariant.secondary,
+              onPressed: () => Navigator.pop(context, false),
             ),
           ],
         ),

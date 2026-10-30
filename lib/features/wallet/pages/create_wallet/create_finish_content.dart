@@ -82,7 +82,6 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
           children: [
             Divider(height: 1, indent: 0, endIndent: 0),
             Container(
-              height: ScreenUtil().setWidth(148.0),
               padding: EdgeInsets.all(AppSpacing.space8),
               width: double.infinity,
               color: _themeColor(AppThemeKeys.backGroundColor.name),

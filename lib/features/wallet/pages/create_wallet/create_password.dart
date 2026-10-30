@@ -249,7 +249,6 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                   children: [
                     const Divider(height: 1, indent: 0, endIndent: 0),
                     Container(
-                      height: ScreenUtil().setWidth(148.0),
                       padding: EdgeInsets.all(AppSpacing.space8),
                       width: double.infinity,
                       color: AppColorTokens.of(context).bgBase,

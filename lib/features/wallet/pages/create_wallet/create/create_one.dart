@@ -159,7 +159,6 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                       children: [
                         Expanded(
                           child: Container(
-                            height: ScreenUtil().setWidth(148.0),
                             padding: EdgeInsets.only(
                               left: ScreenUtil().setWidth(30.0),
                               top: ScreenUtil().setWidth(30.0),
@@ -175,7 +174,6 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                         SizedBox(width: AppSpacing.space8),
                         Expanded(
                           child: Container(
-                            height: ScreenUtil().setWidth(148.0),
                             padding: EdgeInsets.only(
                               right: ScreenUtil().setWidth(30.0),
                               top: ScreenUtil().setWidth(30.0),

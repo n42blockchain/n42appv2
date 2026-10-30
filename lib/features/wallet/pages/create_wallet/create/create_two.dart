@@ -73,10 +73,12 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
         actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
+      // The bottom bar sizes to its content (it grows with Dynamic Type), so
+      // it sits below the scroll view instead of floating over it.
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
-            Positioned.fill(
+            Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Column(
@@ -93,7 +95,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
                       topMargin: ScreenUtil().setWidth(40),
                     ),
                     _buildWarningRow(S.of(context).g_key_wallet_c42),
-                    SizedBox(height: ScreenUtil().setWidth(248.0)),
+                    SizedBox(height: AppSpacing.space8),
                   ],
                 ),
               ),
@@ -162,9 +164,10 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
 
   Widget _buildWordCountButton(int count) {
     final isSelected = mnemonicWordsCount == count;
+    // No fixed height: AppButton enforces its own 44pt minimum, and a smaller
+    // box clips the label.
     return SizedBox(
       width: ScreenUtil().setWidth(164.0),
-      height: ScreenUtil().setWidth(60.0),
       child: AppButton(
         label: "$count",
         variant: isSelected
@@ -204,15 +207,13 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   }
 
   Widget _buildBottomBar() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
+    return ColoredBox(
+      color: AppColorTokens.of(context).bgBase,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Divider(height: 1, indent: 0, endIndent: 0),
           Container(
-            height: ScreenUtil().setWidth(148.0),
             padding: EdgeInsets.all(AppSpacing.space8),
             width: double.infinity,
             color: AppColorTokens.of(context).bgBase,
@@ -232,8 +233,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
             ),
           ),
           Container(
-            height: ScreenUtil().setWidth(100.0),
-            padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.only(bottom: AppSpacing.space8),
             width: double.infinity,
             color: AppColorTokens.of(context).bgBase,
             child: TextButton(
