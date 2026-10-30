@@ -13,10 +13,6 @@ import 'package:n42_chat/src/presentation/widgets/chat/image_message_widget.dart
 import 'package:n42_chat/src/presentation/widgets/chat/poll_create_sheet.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/transfer_message_widget.dart';
 
-// Run the same SQL behavior contracts on the actual ARM64 device libraries.
-import '../packages/n42_chat/test/unit/datasources/storage_database_behavior_test.dart'
-    as storage_contracts;
-
 class _AuthRepository extends Mock implements IAuthRepository {}
 
 class _SecureStorage extends Mock implements SecureStorageDataSource {}
@@ -28,13 +24,6 @@ class _Policy extends Mock implements AutoDownloadPolicyService {}
 typedef DeviceCapture = Future<void> Function(WidgetTester tester, String name);
 
 void registerChatCoverageDeviceCases(DeviceCapture capture) {
-  storage_contracts.registerStorageDatabaseBehaviorTests(
-    registerCase: (description, body) =>
-        testWidgets(description, (tester) async {
-          await tester.runAsync(body);
-        }),
-  );
-
   Future<void> reveal(WidgetTester tester, Finder finder) async {
     if (finder.evaluate().isEmpty) {
       await tester.scrollUntilVisible(finder, 160);

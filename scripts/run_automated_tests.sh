@@ -63,16 +63,25 @@ run_full() {
   flutter test --no-pub --coverage --concurrency=1
   report_coverage
 
-  log "Running Chat package suite"
+  # Test the Chat revision the app actually builds (the Git dependency), copied
+  # out of the read-only pub cache, the same way CI does.
+  log "Running Chat package suite at the resolved Git revision"
   (
-    cd "$ROOT/packages/n42_chat"
-    flutter test --no-pub
-  )
-
-  log "Running JMT verification package suite"
-  (
-    cd "$ROOT/packages/n42_jmt_verify"
-    dart test
+    chat_src="$(python3 - "$ROOT" <<'PY'
+import json, pathlib, sys
+from urllib.parse import unquote, urljoin, urlparse
+config = pathlib.Path(sys.argv[1], '.dart_tool/package_config.json').resolve()
+chat = next(p for p in json.loads(config.read_text())['packages']
+            if p['name'] == 'n42_chat')
+print(unquote(urlparse(urljoin(config.as_uri(), chat['rootUri'])).path))
+PY
+)"
+    chat_tmp="$(mktemp -d)"
+    trap 'rm -rf "$chat_tmp"' EXIT
+    cp -R "$chat_src/." "$chat_tmp/"
+    cd "$chat_tmp"
+    flutter pub get
+    flutter test
   )
 
   log "Running mining plugin Dart suite"

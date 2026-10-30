@@ -128,7 +128,7 @@ void main() {
 
       expect(source, contains('./scripts/run_automated_tests.sh full'));
       expect(source, contains('flutter test --no-pub --coverage'));
-      expect(source, contains('packages/n42_chat'));
+      expect(source, contains('Git 依赖实际解析'));
       expect(source, contains('go test -count=1 ./...'));
       expect(source, contains('DEVICE_ID'));
       expect(source, contains('13.60%'));

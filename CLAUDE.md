@@ -118,16 +118,14 @@ Features communicate through:
 
 ### Local Dependencies
 
-- `packages/n42_jmt_verify/` — JMT verification package. **Standalone; NOT
-  referenced by the app** (absent from root pubspec.yaml, zero imports in
-  `lib/` as of 2026-07) — has its own tests only.
 - `packages/webview_flutter_wkwebview/` — Custom WebView fork (path dependency).
 - `plugins/flutter_mining/` — Native mining plugin v1 (path dependency).
-- `packages/n42_chat/` — **⚠️ vendored 构建源（2026-07 更正）**：
-  `pubspec_overrides.yaml` 把 `n42_chat` 覆盖为此本地路径，**实际编译的就是这份
-  副本**——改 chat 必须改这里才进构建；仅 bump `pubspec.yaml` 里的 git ref 无效。
-  同步回 n42_chat git repo 时基于 `fix/push-notification-dedup` 分支（非 main）。
-  审计 chat 现状也以此目录为准（git repo 的 commit 未必已同步进 vendored）。
+- **n42_chat 只来自 Git 依赖**（2026-10 更正）：`pubspec.yaml` 的 `n42_chat.git.ref`
+  （`pubspec.lock` 的 `resolved-ref`）就是 debug 与发布构建实际编译的版本；
+  `pubspec_overrides.yaml` 不覆盖它。曾存在的 vendored 副本 `packages/n42_chat/`
+  已删除（它早已不参与构建，在其中做的修改不会进 App）。改 chat：在 n42_chat 仓库
+  对应分支提交并推送 → 更新 ref → `flutter pub get` → `cd ios && pod install`。
+  审计 chat 现状以 `.dart_tool/package_config.json` 指向的 pub-cache 源码为准。
 - `chrome-extension/` — Independent Chrome MV3 extension (React/TypeScript,
   `npm run build`); not part of the Flutter build.
 
@@ -158,8 +156,8 @@ Features communicate through:
 - Commit style: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 - **English only**: commit messages (subject + body) and code comments are
   written in English. Conversations with the user stay in Chinese — this rule
-  covers what lands in the repository, not how we talk. Applies to
-  `packages/n42_chat` (vendored) and its upstream repo as well.
+  covers what lands in the repository, not how we talk. Applies to the
+  n42_chat repository as well.
   History before 2026-08-17 was rewritten to English subjects; bodies of
   commits older than that may still be Chinese (intentionally left as the
   original engineering record).

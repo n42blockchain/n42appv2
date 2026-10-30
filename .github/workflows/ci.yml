@@ -56,12 +56,6 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Resolve and analyze the standalone JMT verifier
-        working-directory: packages/n42_jmt_verify
-        run: |
-          dart pub get
-          dart analyze
-
       - name: Check wallet and chat localization integrity
         run: |
           python3 scripts/audit_localizations.py --mode all
@@ -138,12 +132,6 @@ jobs:
               assert actual == expected, (name, actual, expected)
               print(f'{name}: {actual}')
           PY_OVERRIDES
-
-      - name: Resolve and test the standalone JMT verifier
-        working-directory: packages/n42_jmt_verify
-        run: |
-          dart pub get
-          dart test
 
       - name: Test active local plugins
         run: |

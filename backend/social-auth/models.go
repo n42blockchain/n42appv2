@@ -1,8 +1,8 @@
 package main
 
-// LoginSocialRequest 是 POST /v1/user/loginSocial 的请求体。
-// 与 App 侧 packages/n42_chat/lib/src/data/datasources/remote/social_auth_api.dart
-// 的 _loginWithSocialToken / _loginWithCustomPayload 字段对齐。
+// LoginSocialRequest is the request body of POST /v1/user/loginSocial.
+// Its fields match _loginWithSocialToken / _loginWithCustomPayload in the
+// n42_chat repository: lib/src/data/datasources/remote/social_auth_api.dart.
 type LoginSocialRequest struct {
 	Provider string `json:"provider"`
 	// OAuth2 provider(discord/github)推荐传 code + redirect_uri,由后端用

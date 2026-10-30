@@ -63,12 +63,11 @@
 | 路径 | 类型 | 当前规模 | 主要覆盖 |
 |---|---|---:|---|
 | `test/` | Unit/Widget/Golden/集成式组件测试 | 208 个测试文件 | Core、Wallet、AA、WalletConnect、Markets、Mining、宿主 UI |
-| `packages/n42_chat/test/` | Chat Unit/Widget/Service | 30 个测试文件 | Push、消息工具、E2EE 工具、通话工具、无障碍、AI/贴纸 |
+| n42_chat 仓库 `test/`（Git 依赖实际解析的版本） | Chat Unit/Widget/Service | 以解析版本为准 | Push、消息工具、E2EE 工具、通话工具、无障碍、AI/贴纸 |
 | `integration_test/app_test.dart` | 真 App 设备 Smoke | 1 个真实用例 | 生产入口、Navigator/路由注册、前后台生命周期 |
 | `integration_test/device_full_flow_test.dart` | 真 App 设备点击 | 1 个生产入口用例 | Wallet、Market、Drawer、Chat 登录/搜索/主页签的安全点击与断言 |
 | `integration_test/flows/wallet_flow_test.dart` | 设备用例登记 | 13 个显式 `SKIP` | 钱包 fixture、RPC 和测试网资金建设清单 |
 | `test/quality/` | 自动化质量门禁 | 1 个文件 | 空断言、E2E 入口、SKIP 原因、测试文档完整性 |
-| `packages/n42_jmt_verify/test/` | Dart Unit | 1 个文件 | Blake3/JMT proof 基础逻辑 |
 | `plugins/flutter_mining/test/` | Flutter plugin Unit | 2 个文件 | Platform interface、MethodChannel |
 | `plugins/flutter_mining/android/src/test/` | Kotlin JUnit | 1 个文件 | Android plugin registration |
 | `backend/livekit-jwt/` | Go Unit/HTTP | 2 个测试文件 | JWT handler、Matrix 校验 |
@@ -78,7 +77,7 @@
 | `contracts/loyalty/` | Foundry | 1 个 Solidity 测试文件 | 普通不可转让积分、签到、任务、推荐、消费和暂停 |
 | `ios/RunnerTests/`、`macos/RunnerTests/` | XCTest | 各 1 个模板文件 | 当前仅模板，不计有效业务覆盖 |
 
-`n42_chat` 在 `pubspec.yaml` 中声明为 Git 依赖，但本工作区通过 `pubspec_overrides.yaml` 指向 `packages/n42_chat/`。本地 Chat 测试结果仅对该 mirror 当前内容有效；提交前必须核对 Git dependency ref 与发布构建实际来源。
+`n42_chat` 只来自 `pubspec.yaml` 中声明的 Git 依赖（`pubspec.lock` 的 `resolved-ref`），仓内不再保留 vendored 副本。Chat 测试一律针对 Git 依赖实际解析的版本执行：本地脚本与 CI 都从 `.dart_tool/package_config.json` 定位该源码，复制到临时目录后 `flutter pub get` 并测试。修改 Chat 必须提交到 n42_chat 仓库并更新 ref。
 
 ---
 
@@ -192,22 +191,16 @@ flutter test --no-pub --coverage --concurrency=1
 ### 7.4 Chat 套件
 
 ```bash
-(
-  cd packages/n42_chat
-  flutter test --no-pub
-)
+./scripts/run_automated_tests.sh full   # 内含 Chat 套件
 ```
+
+脚本按 Git 依赖实际解析的 n42_chat 版本运行 Chat 测试（复制出只读的 pub cache 后执行），与 CI 的 `Test the resolved Chat package` 步骤一致。
 
 重点检查 Push token/路由、Matrix 消息工具、E2EE/MLS 工具、通话参数、附件/贴纸、无障碍和 Widget 行为。真实 Matrix 房间、APNs/FCM、CallKit、LiveKit 和多设备密钥恢复仍需设备实弹。
 
 ### 7.5 本地 Dart 包与 Flutter 插件
 
 ```bash
-(
-  cd packages/n42_jmt_verify
-  dart test
-)
-
 (
   cd plugins/flutter_mining
   flutter test --no-pub
