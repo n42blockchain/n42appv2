@@ -1,3 +1,6 @@
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/features/wallet/falcon/falcon_page.dart';
+
 import 'dart:async';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -240,6 +243,24 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                               MaterialPageRoute(
                                 builder: (_) =>
                                     BackupOne(walletInfo!, widget.walletIndex),
+                              ),
+                            );
+                          }),
+                        if (!walletInfo!.watchOnly &&
+                            (walletInfo!.timestamp?.isNotEmpty ?? false) &&
+                            (walletInfo!.walletUuid?.isNotEmpty ?? false))
+                          _itemWidget('Falcon-512', () async {
+                            final ownerUuid = walletInfo!.walletUuid!;
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => FalconPage(
+                                  isOwnerCurrent: () =>
+                                      AppGlobals.walletStorageUuid == ownerUuid,
+
+                                  walletScope:
+                                      '${walletInfo!.walletUuid ?? ''}:${walletInfo!.timestamp}',
+                                ),
                               ),
                             );
                           }),
