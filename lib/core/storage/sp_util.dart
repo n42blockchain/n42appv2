@@ -9,6 +9,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/enums/mining_engine_kind.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -389,16 +390,40 @@ class SPUtil {
     await prefs?.setBool(SPkey.mainChainMining.name, value);
   }
 
-  /// 读取挖矿 UI 版本选择：true = V2（默认），false = V1
-  Future<bool> getMiningUseV2() async {
+  /// The selected mining engine. Falls back to the pre-v3 bool setting
+  /// (true = v2, false = v1), and to v2 when neither was ever stored.
+  Future<MiningEngineKind> getMiningEngine() async {
     await initPrefs();
-    return prefs?.getBool(SPkey.miningUiVersion.name) ?? true;
+    final stored = MiningEngineKind.fromName(
+      prefs?.getString(SPkey.miningEngine.name),
+    );
+    if (stored != null) return stored;
+    return MiningEngineKind.fromUseV2(
+      prefs?.getBool(SPkey.miningUiVersion.name) ?? true,
+    );
   }
 
-  /// 保存挖矿 UI 版本选择
-  Future<void> setMiningUseV2(bool useV2) async {
+  /// Stores the selected mining engine. The pre-v3 bool is kept in step
+  /// (false only for v1) so a downgraded app still opens v1 or v2.
+  Future<void> setMiningEngine(MiningEngineKind kind) async {
     await initPrefs();
-    await prefs?.setBool(SPkey.miningUiVersion.name, useV2);
+    await prefs?.setString(SPkey.miningEngine.name, kind.name);
+    await prefs?.setBool(
+      SPkey.miningUiVersion.name,
+      kind != MiningEngineKind.v1,
+    );
+  }
+
+  /// The v3 node's mobileverify base URL, or null when never set.
+  Future<String?> getMiningV3Endpoint() async {
+    await initPrefs();
+    final url = prefs?.getString(SPkey.miningV3Endpoint.name);
+    return (url == null || url.isEmpty) ? null : url;
+  }
+
+  Future<void> setMiningV3Endpoint(String url) async {
+    await initPrefs();
+    await prefs?.setString(SPkey.miningV3Endpoint.name, url);
   }
 
   // ==================== 通用方法 ====================
@@ -465,7 +490,9 @@ enum SPkey {
   miningV1NodeAddress, // V1 当前选中节点
   miningV1OpenMining, // V1 挖矿开关
   mainChainMining, // 是否使用主链挖矿
-  miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1
+  miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1（v3 起只作降级兼容，见 miningEngine）
+  miningEngine, // 挖矿引擎 MiningEngineKind.name：v1 / v2 / v3
+  miningV3Endpoint, // v3 mobileverify 节点地址（为空用编译期默认）
   marketWatchlist, // 行情自选列表，JSON List<String> 存 coin symbol（lowercase）
   coinPriceAlerts, // 币价到价提醒配置，JSON Map<coinId, CoinPriceAlertConfig>
   accentColor, // 自定义主色调，存 ARGB int（0 表示默认蓝色）

@@ -20,6 +20,7 @@ import 'package:n42_wallet/core/utils/theme_mode_utils.dart';
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/core/enums/mining_engine_kind.dart';
 import 'package:n42_chat/n42_chat.dart';
 
 part 'core_providers_ui.dart';

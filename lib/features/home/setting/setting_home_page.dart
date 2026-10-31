@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/home/setting/setting_sys_language.dart';
 import 'package:n42_wallet/features/home/setting/setting_theme.dart';
 import 'package:n42_wallet/features/home/widgets/nav_setting_item.dart';
 import 'package:n42_wallet/features/mining_v3/pages/mobileverify_debug_page.dart';
+import 'package:n42_wallet/core/enums/mining_engine_kind.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -132,7 +133,12 @@ class SettingHomePage extends ConsumerWidget {
   }
 
   Widget _buildMiningVersionToggle(BuildContext context, WidgetRef ref) {
-    final useV2 = ref.watch(miningUseV2Provider);
+    final engine = ref.watch(miningEngineKindProvider);
+    final kinds = [
+      MiningEngineKind.v1,
+      MiningEngineKind.v2,
+      if (miningV3Available) MiningEngineKind.v3,
+    ];
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space8,
@@ -158,24 +164,42 @@ class SettingHomePage extends ConsumerWidget {
                   ),
                 ),
                 Text(
-                  useV2
-                      ? S.of(context).g_setting_mining_v2_label
-                      : S.of(context).g_setting_mining_v1_label,
+                  _miningEngineLabel(context, engine),
                   style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
+                SizedBox(height: AppSpacing.space2),
+                SegmentedButton<MiningEngineKind>(
+                  segments: [
+                    for (final kind in kinds)
+                      ButtonSegment(
+                        value: kind,
+                        label: Text(kind.name.toUpperCase()),
+                      ),
+                  ],
+                  selected: {engine},
+                  showSelectedIcon: false,
+                  onSelectionChanged: (selected) => ref
+                      .read(miningEngineKindProvider.notifier)
+                      .select(selected.single),
+                ),
               ],
             ),
-          ),
-          Switch.adaptive(
-            value: useV2,
-            onChanged: (v) =>
-                ref.read(miningUseV2Provider.notifier).setUseV2(v),
-            activeThumbColor: AppColorTokens.of(context).brand,
           ),
         ],
       ),
     );
   }
+
+  static String _miningEngineLabel(
+    BuildContext context,
+    MiningEngineKind kind,
+  ) => switch (kind) {
+    MiningEngineKind.v1 => S.of(context).g_setting_mining_v1_label,
+    MiningEngineKind.v2 => S.of(context).g_setting_mining_v2_label,
+    // v3 is not offered to users yet (miningV3Available); localise it
+    // when it is.
+    MiningEngineKind.v3 => 'Mobile verification (V3)',
+  };
 }

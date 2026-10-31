@@ -11,27 +11,35 @@ part of 'core_providers.dart';
 // Mining UI Version Provider
 // ============================================
 
-/// Controls whether to use V2 (beacon-chain staking, default) or V1 (APOS mining) UI.
-/// true = V2, false = V1
-final miningUseV2Provider =
-    StateNotifierProvider<MiningUiVersionNotifier, bool>((ref) {
-      return MiningUiVersionNotifier(ref.read(spUtilProvider));
+/// The mining engine the mining tab runs: v1 (APOS), v2 (beacon-chain
+/// staking, default) or v3 (mobileverify). See [MiningEngineKind].
+final miningEngineKindProvider =
+    StateNotifierProvider<MiningEngineKindNotifier, MiningEngineKind>((ref) {
+      return MiningEngineKindNotifier(ref.read(spUtilProvider));
     });
 
-class MiningUiVersionNotifier extends StateNotifier<bool> {
-  final SPUtil _sp;
-
-  MiningUiVersionNotifier(this._sp) : super(true) {
+class MiningEngineKindNotifier extends StateNotifier<MiningEngineKind> {
+  MiningEngineKindNotifier(this._sp, {this.v3Available = miningV3Available})
+    : super(MiningEngineKind.v2) {
     _loadInitial();
   }
 
+  final SPUtil _sp;
+
+  /// Whether v3 may be selected; a stored v3 reads as v2 otherwise.
+  final bool v3Available;
+
+  MiningEngineKind _allowed(MiningEngineKind kind) =>
+      kind == MiningEngineKind.v3 && !v3Available ? MiningEngineKind.v2 : kind;
+
   Future<void> _loadInitial() async {
-    final useV2 = await _sp.getMiningUseV2();
-    if (mounted) state = useV2;
+    final kind = _allowed(await _sp.getMiningEngine());
+    if (mounted) state = kind;
   }
 
-  Future<void> setUseV2(bool useV2) async {
-    await _sp.setMiningUseV2(useV2);
-    state = useV2;
+  Future<void> select(MiningEngineKind kind) async {
+    kind = _allowed(kind);
+    await _sp.setMiningEngine(kind);
+    state = kind;
   }
 }

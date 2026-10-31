@@ -14,6 +14,8 @@ import 'package:n42_wallet/features/widgets/dialog_widget/device_login_dialog.da
 import 'package:n42_wallet/features/home/home_draw_page.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
+import 'package:n42_wallet/features/mining_v3/pages/mining_v3_page.dart';
+import 'package:n42_wallet/core/enums/mining_engine_kind.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
@@ -57,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage>
 
   /// Build pages list (不包含 Chat，Chat 作为独立页面跳转)
   List<Widget> _buildPages() {
-    final useV2 = ref.watch(miningUseV2Provider);
+    final engine = ref.watch(miningEngineKindProvider);
     return [
       const KeyedSubtree(
         key: ValueKey<String>('home_content_wallet'),
@@ -65,7 +67,11 @@ class _HomePageState extends ConsumerState<HomePage>
       ),
       KeyedSubtree(
         key: const ValueKey<String>('home_content_mining'),
-        child: useV2 ? const MiningTodayV2() : const MiningHomePage(),
+        child: switch (engine) {
+          MiningEngineKind.v1 => const MiningHomePage(),
+          MiningEngineKind.v2 => const MiningTodayV2(),
+          MiningEngineKind.v3 => const MiningV3Page(),
+        },
       ),
       if (defaultTargetPlatform == TargetPlatform.android)
         const KeyedSubtree(
