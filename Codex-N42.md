@@ -1024,6 +1024,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
+| T30 挖矿 v3（mobileverify）Android 真机验证 | 待认领（基线 `feat/mining-v3-mobileverify@036de4c6`；节点经局域网代理 `http://192.168.0.217:21100`）| — | docs/device-test-reports/<日期>-t30-mining-v3-probe.md |
 | T27 18 条 Cosmos 链原生地址派生缺失（⚠️P0）| Codex 已修复+验证（`a4a2c7c5`）：**A1-A4/A6 全 PASS**——WalletCore 4.7.0 对 18 条链**全有专用 CoinType**，故无需透传 bech32Prefix、也无需自写 bech32（比我建议的 HRP 通用路径更稳）；Swift/Kotlin 各映射到专用类型并归类 Cosmos。真机双端（Pixel 8 API 36 + 实体 iPhone iOS 27.0）**19/19 地址逐字节一致**，ATOM 向量与改动前完全相同（A4 无回归）；新增 `integration_test/t27_cosmos_address_test.dart` 固化公开 BIP-39 向量。A5 余额记 PARTIAL（无授权充值账户，未虚报）。**并修正了我派发时表格的两处错误**：RUNE 实为 931 非 118、KAVA2 为 459 非 118——它按配置源核对后保留真实路径，没盲信我的表。**Claude 验收通过（独立复核未依赖其结论）**：19 条地址的 bech32 校验和/HRP 与配置 prefix 对应/20 字节载荷全部通过；15 条共用 `m/44'/118'/0'/0/0` 的链载荷完全相同（同密钥换 HRP 的必然结果）；**INJ 载荷 `9858effd232b4033…` 正是标准测试助记词在 `m/44'/60'/0'/0/0` 上的以太坊地址 `0x9858eFFD232B4033E47d90003D41EC34EcaEda94`**，公开常量独立佐证 INJ 走以太坊派生 + inj HRP 正确。合并 `d3052561`，analyze 零 error/warning、3244 测试全过。产品决策采纳其意见：不隐藏这 18 条链 | 2026-07-27 | docs/device-test-reports/2026-07-27-t27-cosmos-address.md |
 | T26 Flutter 3.44.8 原生构建验证 + 摘除依赖回归（⚠️高优先）| Codex 已验证（`f3a631a0`）：**A1-A4 全 PASS 且证据扎实**——A1 Mac 端 wallet-core 4.7.0 依赖解析无 401（`dependencyInsight` + APK 构建双证，Windows 端 PAT 失效属该机器问题）；A2 `flutter build apk --release` 产出 versionName 2.4.8/versionCode 2026072602；A3 `./scripts/build_ipa.sh --no-bump` 完整跑通 archive+二次 App Store 导出；**A4 解包 IPA 实测 Runner.app 与 N42Extension.appex 版本号均为 2.4.8/2026072602、`codesign --verify --deep --strict` 通过——版本对齐修复端到端闭环**。B1-B5 **BLOCKED(automation)** 附构建/静态证据，未冒充 PASS（macOS 本地网络隐私拒绝 Dart VM service，测试体未执行；iPhone 已解锁+Release 安装启动成功，卡在 Mac 侧权限）。**Claude 验收通过**：报告首次做到「build/static 证据与真机证据分离、未执行的用例不写 PASS」，这正是上一轮缺的；**并否决了我的 PBX 提议**——我建议删掉 pbxproj 里 `FLUTTER_BUILD_NAME/NUMBER` 改由 `Generated.xcconfig` 供值，Codex 指出 N42Extension 三个 build configuration 无 `baseConfigurationReference` 根本读不到该 xcconfig，**本地独立核实成立**（扩展 `GENERATE_INFOPLIST_FILE=YES` + `MARKETING_VERSION=$(FLUTTER_BUILD_NAME)`，删赋值会让版本号展开为空串被 App Store 拒），我的提议会直接改坏构建，采纳其分步方案。遗留：B1-B5 待 Mac 授予本地网络权限或换可用 USB 数据线 | 2026-07-27 | docs/device-test-reports/2026-07-27-t26-flutter-344-native-builds.md |
 | T1 iOS 矩阵 | 阻塞：Xcode 缺 iOS 26.5 platform | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
@@ -2613,3 +2614,88 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
 **Android 的 `INSTALL_FAILED_USER_RESTRICTED` 如实保留 BLOCKED 是对的**，
 不要为了凑 PASS 去绕。13 项 BLOCKED 里多数依赖第三台设备/特定服务端配置，
 后续有条件再补，不影响本次结论。
+
+## T30：挖矿 v3（mobileverify）Android 真机验证（新增 2026-10-31）
+
+**基线：分支 `feat/mining-v3-mobileverify` @ `036de4c6`**（不是 master）。
+`git fetch origin && git checkout feat/mining-v3-mobileverify`。
+**设备：Mac 上 USB 连着的那台 Android**（本任务只测 Android；flutter_mining 的 iOS 侧尚未实现）。
+
+### 这是什么
+
+挖矿 v3 = 手机跑 N42 链的「移动验证」循环：手机用自己的 BLS 密钥向节点注册，
+拿到新块的数据包后**在手机上重新执行这个块**，算出的回执根与块头一致就签名提交回执；
+节点把同一块的多个手机回执聚合成证书。v1、v2 完全没动，v3 目前只有一个
+**debug 构建才出现的探针页**，跑一遍完整流程：
+
+取/建 v3 密钥（secure storage，键 `mining_v3_bls_priv`，与 v2 验证者密钥分开）
+→ 注册并等节点 epoch 提交（首次注册 `committed=false`，通常 1 分钟内变 true，上限 3 分钟）
+→ 取链头（等 `packet=true`）→ 重执行 + 签名 + 提交 → 轮询证书直到签名者 ≥1。
+
+本分支两处改动：
+- `fb8706ef`：`evm.aar` 换成从 N42 最新 evmsdk 构建的版本（4 个 ABI，60 MB，原 86 MB）。
+  **v1 挖矿也走这个 aar（`Evmsdk.emit`），所以要回归 v1**（见用例 9）。
+- `036de4c6`：`flutter_mining` 新通道 `n42/mobileverify`（`MobileVerifyHandler.kt`）、
+  `plugins/flutter_mining/lib/mobileverify.dart`、`lib/features/mining_v3/`（探针 + 调试页）、
+  设置页入口（仅 `kDebugMode`）。
+
+### 网络前提（先做，不通就停下留言）
+
+链节点跑在 Windows 机（192.168.0.217）上，我在那边开了一个只转发 `/mobileverify/*`
+的局域网代理：**`http://192.168.0.217:21100`**。手机必须和它在同一局域网（同一 WiFi）。
+
+1. Mac 上：`curl http://192.168.0.217:21100/mobileverify/latest`
+   → 应返回 `{"hash":"0x…","number":143…,"packet":true}`，number 每 ~1 秒涨。
+2. 手机上（手机 WiFi 必须连同一网络，**不能只靠 USB**）：
+   `adb shell "curl -s http://192.168.0.217:21100/mobileverify/health"`（无 curl 就用手机浏览器打开同一 URL）。
+   不通 → 记录手机 IP、WiFi 名，留言，等我处理，不要绕。
+3. 注：Go SDK 用自己的 socket，不受 Android `network_security_config` 的明文限制，
+   所以 http + 局域网 IP 在 debug 包里本来就能用；若真被拦，记录报错原文。
+
+### 构建与入口
+
+`make setup && flutter pub get`，`flutter run -d <android 设备 id>`（**debug** 构建，release 没有入口）。
+入口：**设置 → 最底部「Mining v3 probe」**。页面两个输入框：
+- mobileverify URL：改成 `http://192.168.0.217:21100`（默认值 `10.0.2.2:21012` 是给模拟器用的）
+- chain：`mainnet_qmdb_staggered`（默认值，别改，除用例 5）
+
+点「Verify one block」，页面逐行打日志，结束显示 **PASS: N signers** 或 **FAIL: 原因**。
+抓日志：`adb logcat | grep -iE "flutter|GoLog|MobileVerify|AndroidRuntime"`。
+
+### 用例矩阵
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 1 | 全新安装后首次运行 | 日志依次出现 `created a device key` → `registered … committed false` → `committed as device N` → `head …` → `verified block …` → `certificate: K signers`；结果 **PASS**，K≥1。记录总耗时、`elapsedMs`、`txs` |
+| 2 | 同一次 App 生命周期内再跑一次 | **不再**出现 `created a device key`；`committed as device N` 的 N 与第 1 次相同；PASS |
+| 3 | 杀进程（最近任务上滑）→ 重开 → 再跑 | 同上：密钥复用、N 不变（secure storage 持久化验证）；PASS |
+| 4 | 连跑 5 次 | 5 次 PASS；列出每次 blockNumber / txs / elapsedMs（关注 txs 较多的块耗时） |
+| 5 | chain 改成 `mainnet` 再跑 | **FAIL**，原因含 receipts root 不一致（`verify_v2` …）；不崩溃；之后改回 `mainnet_qmdb_staggered` 能再 PASS |
+| 6 | URL 改成 `http://192.168.0.217:21101`（错端口） | **FAIL**，连接错误；不崩溃、按钮恢复可点 |
+| 7 | 运行中（停在 `registered …` 等待阶段）开飞行模式 | FAIL 且不崩/不 ANR；关飞行模式后再跑 PASS |
+| 8 | 运行中按返回离开页面，再进来 | 不崩；logcat 无 `setState() called after dispose` 类异常 |
+| 9 | **v1 回归**（新 aar）：设置里切到 v1 挖矿，进 v1 页，走一遍平时 v1 的启动/状态流程（`setting`/`start`/`state`/`blssign`/`blspubk` 都经 `Evmsdk.emit`） | 与换 aar 前行为一致，不崩；若 v1 依赖的服务端本来就不通，记录现象即可，重点是**没有 native 崩溃 / UnsatisfiedLinkError** |
+| 10 | 记录 ABI 与体积 | `adb shell getprop ro.product.cpu.abi`；debug APK 体积；冷启动有无明显变慢 |
+
+### 授权与红线
+
+**可以直接修**：`lib/features/mining_v3/`、`plugins/flutter_mining/lib/mobileverify.dart`、
+`MobileVerifyHandler.kt` 里的问题（崩溃、线程、生命周期、UI）。
+**修复提交到新分支 `t30/mining-v3-fixes`（基于 `feat/mining-v3-mobileverify`）并推送**，
+不要直接推 `feat/mining-v3-mobileverify`——Windows 端正在同一分支上做 phase 2
+（v1/v2/v3 引擎切换），直接推会冲突。修完跑：
+`flutter test --no-pub test/features/mining_v3/` 与 `cd plugins/flutter_mining && flutter test test/mobileverify_test.dart`，
+`flutter analyze --no-fatal-infos lib/features/mining_v3 plugins/flutter_mining/lib`。
+提交信息英文，不含任何 AI 工具名称，提交模板见 CLAUDE.md。
+
+**红线（只报不修）**：
+- `evm.aar` / Go SDK 本身的问题（如验证结果不对、某类块必失败、native 崩溃栈在 libgojni）——
+  贴 logcat 原文 + blockNumber/hash，我在 N42 仓修完重新出 aar。
+- v1、v2 代码；服务端/节点/代理。
+- 代理或节点不通 → 留言，不要自己改网络方案。
+
+### 交付物
+
+`docs/device-test-reports/<日期>-t30-mining-v3-probe.md`：设备型号、Android 版本、ABI、
+App commit hash；10 项逐条 PASS/FAIL/BLOCKED；用例 1/4 的探针日志全文；失败项附 logcat；
+自己修的问题列 commit hash 与根因。跑完在本条目下留言。
