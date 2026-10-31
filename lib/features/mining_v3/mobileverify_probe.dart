@@ -6,10 +6,10 @@
 import 'package:flutter_mining/mobileverify.dart';
 
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
+import 'package:n42_wallet/features/mining_v3/device_key.dart';
 
-/// Where the v3 device key lives. Kept apart from the v2 validator key:
-/// the two engines are separate identities.
-const mobileVerifyKeyStorageKey = 'mining_v3_bls_priv';
+export 'package:n42_wallet/features/mining_v3/device_key.dart'
+    show mobileVerifyKeyStorageKey;
 
 class MobileVerifyProbeConfig {
   const MobileVerifyProbeConfig({
@@ -78,12 +78,8 @@ class MobileVerifyProbe {
     MobileVerifyProbeConfig config,
     void Function(String) log,
   ) async {
-    var priv = await _store.read(key: mobileVerifyKeyStorageKey);
-    if (priv == null || priv.isEmpty) {
-      priv = await _api.generateKey();
-      await _store.write(key: mobileVerifyKeyStorageKey, value: priv);
-      log('created a device key');
-    }
+    final (priv, created) = await loadOrCreateDeviceKey(_api, _store);
+    if (created) log('created a device key');
     final pub = await _api.open(
       baseUrl: config.baseUrl,
       privHex: priv,
