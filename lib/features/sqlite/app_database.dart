@@ -60,7 +60,7 @@ class AppDatabase {
     final path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 7, //v7: portfolio_trades for cost-basis P&L tracking
+      version: 8, // v8: account-scoped address book
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute(
@@ -119,8 +119,12 @@ class AppDatabase {
           "coinName text," //coin name
           "address text," //address
           "name text," //name
-          "desc text" //desc
+          "desc text," //desc
+          "userUuid text" // null keeps unattributed legacy rows isolated
           ")",
+        );
+        await db.execute(
+          'CREATE INDEX address_book_owner ON AddressBook(userUuid, coinName)',
         );
         //浏览器收藏表
         await db.execute(
@@ -280,6 +284,14 @@ class AppDatabase {
             )
           ''');
         }
+        if (oldVersion < 8) {
+          // Old rows have no trustworthy owner. Preserve them without exposing
+          // them to whichever account happens to log in first after upgrade.
+          await db.execute('ALTER TABLE AddressBook ADD COLUMN userUuid TEXT');
+        }
+        await db.execute(
+          'CREATE INDEX IF NOT EXISTS address_book_owner ON AddressBook(userUuid, coinName)',
+        );
       },
     );
   }

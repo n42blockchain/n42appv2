@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
@@ -31,6 +32,7 @@ class AddAddressPage extends ConsumerStatefulWidget {
 }
 
 class _AddAddressPageState extends ConsumerState<AddAddressPage> {
+  final _addressBook = AddressBookApi();
   final addressController = TextEditingController();
   final nameController = TextEditingController();
   final descController = TextEditingController();
@@ -116,6 +118,13 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(currentUserProvider);
+    if (!_addressBook.isOwnerCurrent) {
+      return Scaffold(
+        appBar: AppBarWidget(text: S.of(context).g_key_108),
+        body: const SizedBox.shrink(),
+      );
+    }
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_112,
@@ -368,7 +377,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     info.desc = desc;
 
     try {
-      final code = await AddressBookApi().saveAddressBookItem(info);
+      final code = await _addressBook.saveAddressBookItem(info);
       if (!mounted) return;
       if (code != 0) {
         Navigator.of(context).pop(true);

@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -21,15 +23,16 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class EditAddressPage extends StatefulWidget {
+class EditAddressPage extends ConsumerStatefulWidget {
   final AddressBookModel info;
   const EditAddressPage({required this.info, super.key});
 
   @override
-  State<EditAddressPage> createState() => _EditAddressPageState();
+  ConsumerState<EditAddressPage> createState() => _EditAddressPageState();
 }
 
-class _EditAddressPageState extends State<EditAddressPage> {
+class _EditAddressPageState extends ConsumerState<EditAddressPage> {
+  final _addressBook = AddressBookApi();
   final addressController = TextEditingController();
   final nameController = TextEditingController();
   final descController = TextEditingController();
@@ -105,6 +108,13 @@ class _EditAddressPageState extends State<EditAddressPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(currentUserProvider);
+    if (!_addressBook.isOwnerCurrent) {
+      return Scaffold(
+        appBar: AppBarWidget(text: S.of(context).g_key_108),
+        body: const SizedBox.shrink(),
+      );
+    }
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_key_address_4,
@@ -369,7 +379,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       ..desc = desc;
 
     try {
-      final code = await AddressBookApi().updateAddressBookItem(info);
+      final code = await _addressBook.updateAddressBookItem(info);
       if (!mounted) return;
       if (code != 0) {
         eventBus.fire(EventPublic(EventPublicType.refreshData));
@@ -383,7 +393,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
   Widget delete() {
     return GestureDetector(
       onTap: () async {
-        final data = await AddressBookApi().deleteAddressBookItem(info);
+        final data = await _addressBook.deleteAddressBookItem(info);
         if (!mounted) return;
         if (data != 0) {
           ToastUtils.show(S.of(context).g_key_address_5);

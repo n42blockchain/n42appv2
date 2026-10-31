@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -57,16 +59,16 @@ String _parseAddressFromQr(String qrData) {
   return rest.trim();
 }
 
-class AddressBookList extends StatefulWidget {
+class AddressBookList extends ConsumerStatefulWidget {
   final String coinName;
 
   const AddressBookList({this.coinName = '', super.key});
 
   @override
-  State<AddressBookList> createState() => _AddressBookListState();
+  ConsumerState<AddressBookList> createState() => _AddressBookListState();
 }
 
-class _AddressBookListState extends State<AddressBookList>
+class _AddressBookListState extends ConsumerState<AddressBookList>
     with _AddressBookListItemMixin {
   final _api = AddressBookApi();
   List<AddressBookModel> _allItems = [];
@@ -141,11 +143,12 @@ class _AddressBookListState extends State<AddressBookList>
   }
 
   Future<void> _scanToAdd() async {
+    if (!_api.isOwnerCurrent) return;
     final qrData = await Navigator.push<String>(
       context,
       MaterialPageRoute(builder: (_) => ScanPage()),
     );
-    if (!mounted || qrData == null) return;
+    if (!mounted || !_api.isOwnerCurrent || qrData == null) return;
     final address = _parseAddressFromQr(qrData);
     await Navigator.push(
       context,
@@ -157,6 +160,7 @@ class _AddressBookListState extends State<AddressBookList>
   }
 
   Future<void> _navigateToAdd() async {
+    if (!_api.isOwnerCurrent) return;
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const AddAddressPage()),
@@ -165,6 +169,7 @@ class _AddressBookListState extends State<AddressBookList>
   }
 
   Future<void> _navigateToEdit(AddressBookModel info) async {
+    if (!_api.isOwnerCurrent) return;
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => EditAddressPage(info: info)),
@@ -202,6 +207,7 @@ class _AddressBookListState extends State<AddressBookList>
   }
 
   Future<void> _deleteItem(AddressBookModel info) async {
+    if (!_api.isOwnerCurrent) return;
     try {
       await _api.deleteAddressBookItem(info);
       HapticFeedback.lightImpact();
@@ -213,6 +219,13 @@ class _AddressBookListState extends State<AddressBookList>
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(currentUserProvider);
+    if (!_api.isOwnerCurrent) {
+      return Scaffold(
+        appBar: AppBarWidget(text: S.of(context).g_key_108),
+        body: const SizedBox.shrink(),
+      );
+    }
     final blueColor = AppColorTokens.of(context).brand;
     final mainText = AppColorTokens.of(context).textPrimary;
     final itemBg = AppColorTokens.of(context).bgSurface;
