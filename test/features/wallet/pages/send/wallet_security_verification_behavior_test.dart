@@ -67,6 +67,7 @@ void main() {
     WidgetTester tester, {
     Map<String, dynamic> security = const {},
     String walletPassword = '',
+    WalletInfo? targetWallet,
   }) async {
     final results = <bool?>[];
     final walletProvider = WalletActionProvider();
@@ -95,7 +96,8 @@ void main() {
               results.add(
                 await Navigator.of(context).push<bool>(
                   MaterialPageRoute(
-                    builder: (_) => const WalletSecurityVerification(),
+                    builder: (_) =>
+                        WalletSecurityVerification(walletInfo: targetWallet),
                   ),
                 ),
               );
@@ -151,6 +153,42 @@ void main() {
       expect(results, [false]);
     },
   );
+
+  testWidgets(
+    'explicit backup wallet authenticates its own password, not the active wallet',
+    (tester) async {
+      final results = await openVerification(
+        tester,
+        walletPassword: 'active-password',
+        targetWallet: WalletInfo(password: 'backup-password'),
+      );
+      await tester.enterText(find.byType(TextField), 'active-password');
+      await hideKeyboard(tester);
+      await tester.tap(find.text(S.current.g_key_78));
+      await tester.pumpAndSettle();
+      expect(results, isEmpty);
+      await tester.enterText(find.byType(TextField), 'backup-password');
+      await hideKeyboard(tester);
+      await tester.tap(find.text(S.current.g_key_78));
+      await tester.pumpAndSettle();
+      expect(results, [true]);
+    },
+  );
+
+  testWidgets('null wallet password cannot authorize an empty password', (
+    tester,
+  ) async {
+    await openVerification(tester, targetWallet: WalletInfo());
+    expect(find.byType(TextField), findsNothing);
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.widgetWithText(FilledButton, S.current.g_key_78),
+          )
+          .onPressed,
+      isNull,
+    );
+  });
 
   testWidgets(
     'wallet password rejects a mismatch and accepts the stored password',

@@ -38,6 +38,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
   bool showPwd2 = true;
   bool showPwd = true;
   Load load = Load.finish;
+  bool get _hasPassword => (widget.walletInfo.password ?? '').isNotEmpty;
 
   @override
   void dispose() {
@@ -142,27 +143,30 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
     }
     setState(() => uPasswordConfirmErrorMessage = "");
 
-    if (lPassword.isEmpty) {
-      _setErrorAndToast('old', s.g_key_21);
-      return;
+    if (_hasPassword) {
+      if (lPassword.isEmpty) {
+        _setErrorAndToast('old', s.g_key_21);
+        return;
+      }
+      if (widget.walletInfo.password != lPassword) {
+        _setErrorAndToast('old', s.g_key_146);
+        return;
+      }
+      setState(() => lPasswordErrorMessage = "");
     }
-    if (widget.walletInfo.password != lPassword) {
-      _setErrorAndToast('old', s.g_key_146);
-      return;
-    }
-    setState(() => lPasswordErrorMessage = "");
-
+    final previousPassword = widget.walletInfo.password;
     try {
       setState(() => load = Load.loading);
       widget.walletInfo.password = password;
       final wap = ref.read(wapBridgeProvider);
       final successMessage = s.g_key_185;
-      await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
+      await wap.saveWalletInfoOrThrow(widget.walletInfo, widget.walletIndex);
       if (!mounted) return;
       setState(() => load = Load.finish);
       ToastUtils.show(successMessage);
       Navigator.pop(context, widget.walletInfo);
     } catch (err) {
+      widget.walletInfo.password = previousPassword;
       if (mounted) {
         setState(() => load = Load.finish);
       }
@@ -185,27 +189,29 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      LoginTitle(
-                        title: S.of(context).g_key_207,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor10.name,
+                      if (_hasPassword) ...[
+                        LoginTitle(
+                          title: S.of(context).g_key_207,
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainTextColor10.name,
+                          ),
+                          must: true,
                         ),
-                        must: true,
-                      ),
-                      _buildPasswordField(
-                        controller: _lPasswordController,
-                        focusNode: _lPasswordFocusNode,
-                        hintText: S.of(context).rest_Choose_password,
-                        keyboardType: TextInputType.text,
-                        obscure: showPwd,
-                        errorMessage: lPasswordErrorMessage,
-                        onToggleObscure: () =>
-                            setState(() => showPwd = !showPwd),
-                        onEditingComplete: () => FocusScope.of(
-                          context,
-                        ).requestFocus(_uPasswordFocusNode),
-                      ),
+                        _buildPasswordField(
+                          controller: _lPasswordController,
+                          focusNode: _lPasswordFocusNode,
+                          hintText: S.of(context).rest_Choose_password,
+                          keyboardType: TextInputType.text,
+                          obscure: showPwd,
+                          errorMessage: lPasswordErrorMessage,
+                          onToggleObscure: () =>
+                              setState(() => showPwd = !showPwd),
+                          onEditingComplete: () =>
+                              FocusScope.of(context)
+                                  .requestFocus(_uPasswordFocusNode),
+                        ),
+                      ],
                       LoginTitle(
                         title: S.of(context).login_password,
                         color: AppThemeUtils.getColorByKey(
@@ -222,9 +228,9 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                         errorMessage: uPasswordErrorMessage,
                         onToggleObscure: () =>
                             setState(() => showPwd1 = !showPwd1),
-                        onEditingComplete: () => FocusScope.of(
-                          context,
-                        ).requestFocus(_uPasswordConfirmFocusNode),
+                        onEditingComplete: () =>
+                            FocusScope.of(context)
+                                .requestFocus(_uPasswordConfirmFocusNode),
                       ),
                       LoginTitle(
                         title: S.of(context).rest_Confirm_password,

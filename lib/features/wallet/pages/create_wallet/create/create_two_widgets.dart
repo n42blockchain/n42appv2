@@ -55,13 +55,14 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
       onTap: () => setState(() => showMnemonic = true),
       child: Container(
         width: double.infinity,
-        height: ScreenUtil().setWidth(400),
+        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(400)),
         padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _itemBgColor(),
           borderRadius: AppRadius.brMd,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
@@ -98,6 +99,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
           maxHeight: ScreenUtil().setWidth(550.0),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(

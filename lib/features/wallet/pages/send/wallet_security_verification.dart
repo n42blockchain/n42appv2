@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../../models/wallet_info.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -23,7 +25,15 @@ part 'wallet_security_verification_widgets.dart';
 part 'wallet_security_verification_sections.dart';
 
 class WalletSecurityVerification extends ConsumerStatefulWidget {
-  const WalletSecurityVerification({super.key});
+  const WalletSecurityVerification({
+    super.key,
+    this.walletInfo,
+    this.walletIndex,
+    this.title,
+  });
+  final WalletInfo? walletInfo;
+  final int? walletIndex;
+  final String? title;
 
   @override
   ConsumerState<WalletSecurityVerification> createState() =>
@@ -35,6 +45,7 @@ class _WalletSecurityVerificationState
   final TextEditingController pwdTextEditingController =
       TextEditingController();
 
+  late final String _owner;
   bool obscure = true;
   String pwdErrorMessage = '';
   String faceErrorMessage = '';
@@ -57,6 +68,7 @@ class _WalletSecurityVerificationState
   @override
   void initState() {
     super.initState();
+    _owner = AppGlobals.walletStorageUuid;
     initSecurity();
   }
 
@@ -68,6 +80,7 @@ class _WalletSecurityVerificationState
 
   Future<void> initSecurity() async {
     final s = await SPUtil().getSecurity();
+    if (!mounted || _owner != AppGlobals.walletStorageUuid) return;
     final userMap = s?[AppGlobals.userInfo?.uuid ?? ''];
     if (userMap is Map<String, dynamic>) {
       securityMap['face'] = userMap['face'] ?? false;
@@ -77,14 +90,16 @@ class _WalletSecurityVerificationState
       securityMap['googleSecret'] = userMap['googleSecret'] ?? '';
     }
     if (!mounted) return;
-    showWalletPassword = ref.read(wapBridgeProvider).walletInfo.password != '';
+    showWalletPassword = (_wallet.password ?? '').isNotEmpty;
     setState(() {});
   }
 
+  WalletInfo get _wallet =>
+      widget.walletInfo ?? ref.read(wapBridgeProvider).walletInfo;
+
   bool checkPwd() {
     final String pwdStr = pwdTextEditingController.text;
-    final String oldPwdStr =
-        ref.read(wapBridgeProvider).walletInfo.password ?? '';
+    final String oldPwdStr = _wallet.password ?? '';
     final bool match = oldPwdStr == pwdStr;
     setState(() => pwdErrorMessage = match ? '' : S.of(context).g_key_t_34);
     return match;
@@ -169,12 +184,12 @@ class _WalletSecurityVerificationState
   }
 
   Future<void> pushEditWallet() async {
-    final int wIndex = ref.read(wapBridgeProvider).walletIndex;
+    final int wIndex =
+        widget.walletIndex ?? ref.read(wapBridgeProvider).walletIndex;
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            EditWalletPassword(ref.read(wapBridgeProvider).walletInfo, wIndex),
+        builder: (context) => EditWalletPassword(_wallet, wIndex),
       ),
     );
     if (!mounted) return;
@@ -231,7 +246,11 @@ class _WalletSecurityVerificationState
 
   Future<void> _onConfirm() async {
     closeKeyboard();
-    if (load == Load.loading || !_anySecurityEnabled) return;
+    if (load == Load.loading ||
+        !_anySecurityEnabled ||
+        _owner != AppGlobals.walletStorageUuid) {
+      return;
+    }
 
     if (securityMap['face'] == true) {
       if (faceCheck != 1) {
@@ -279,7 +298,7 @@ class _WalletSecurityVerificationState
       },
       child: Scaffold(
         appBar: AppBarWidget(
-          text: S.of(context).s_key_11,
+          text: widget.title ?? S.of(context).s_key_11,
           actions: [
             InkWell(
               onTap: pushSetting,

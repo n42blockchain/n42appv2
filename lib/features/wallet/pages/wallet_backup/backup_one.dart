@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_two.dart';
@@ -19,11 +20,13 @@ class BackupOne extends StatefulWidget {
 
 class _BackupOneState extends State<BackupOne> {
   bool showMnemonic = false;
+  late final String _owner;
   late final List<String> mnemonicWordsList;
 
   @override
   void initState() {
     super.initState();
+    _owner = AppGlobals.walletStorageUuid;
     mnemonicWordsList = parseBackupMnemonicWords(widget.walletInfo.mnemonic);
   }
 
@@ -31,11 +34,22 @@ class _BackupOneState extends State<BackupOne> {
   /// 与私钥、keystore 导出一致——助记词是最敏感的凭据，不能仅凭一个文案警告
   /// 就明文展示给任何拿到已解锁手机的人。
   Future<void> _revealMnemonic() async {
+    if (_owner != AppGlobals.walletStorageUuid) return;
     final verified = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(builder: (_) => const WalletSecurityVerification()),
+      MaterialPageRoute(
+        builder: (_) => WalletSecurityVerification(
+          walletInfo: widget.walletInfo,
+          walletIndex: widget.walletIndex,
+          title: S.of(context).g_key_wallet_c38,
+        ),
+      ),
     );
-    if (!mounted || verified != true) return;
+    if (!mounted ||
+        verified != true ||
+        _owner != AppGlobals.walletStorageUuid) {
+      return;
+    }
     setState(() => showMnemonic = true);
   }
 
@@ -198,13 +212,14 @@ class _BackupOneState extends State<BackupOne> {
       onTap: mnemonicWordsList.isEmpty ? null : _revealMnemonic,
       child: Container(
         width: double.infinity,
-        height: ScreenUtil().setWidth(400),
+        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(400)),
         padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
