@@ -2,10 +2,12 @@ import 'package:n42_wallet/features/browser/pages/browser_setting.dart';
 import 'package:n42_wallet/features/home/setting/setting_sys_language.dart';
 import 'package:n42_wallet/features/home/setting/setting_theme.dart';
 import 'package:n42_wallet/features/home/widgets/nav_setting_item.dart';
+import 'package:n42_wallet/features/mining_v3/pages/mobileverify_debug_page.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -108,6 +110,23 @@ class SettingHomePage extends ConsumerWidget {
           ),
         ),
         _settingCard(context, child: _buildMiningVersionToggle(context, ref)),
+        // Mining v3 (mobileverify) phase 1 probe; debug builds only.
+        if (kDebugMode)
+          _settingCard(
+            context,
+            child: NavSettingItem(
+              path: 'assets/home/setting/mining.png',
+              action: 'Mining v3 probe',
+              imgColor: AppColorTokens.of(context).brand,
+              callback: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const MobileVerifyDebugPage(),
+                  ),
+                );
+              },
+            ),
+          ),
       ],
     );
   }

@@ -19,9 +19,17 @@ class FlutterMiningPlugin :
     // when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
 
+    // Mining v3 (mobileverify) has its own channel; see MobileVerifyHandler.
+    private lateinit var mobileVerifyChannel: MethodChannel
+    private var mobileVerify: MobileVerifyHandler? = null
+
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_mining")
         channel.setMethodCallHandler(this)
+        val handler = MobileVerifyHandler()
+        mobileVerify = handler
+        mobileVerifyChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "n42/mobileverify")
+        mobileVerifyChannel.setMethodCallHandler(handler)
     }
 
     override fun onMethodCall(
@@ -124,5 +132,8 @@ class FlutterMiningPlugin :
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+        mobileVerifyChannel.setMethodCallHandler(null)
+        mobileVerify?.dispose()
+        mobileVerify = null
     }
 }
