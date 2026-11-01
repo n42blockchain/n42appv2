@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
 import 'package:n42_wallet/features/mining_v3/widgets/mining_v3_dashboard.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
-class MiningV3BlockSheet extends StatelessWidget {
+class MiningV3BlockSheet extends StatefulWidget {
   const MiningV3BlockSheet({
     super.key,
     required this.engine,
@@ -16,12 +16,21 @@ class MiningV3BlockSheet extends StatelessWidget {
   final MiningV3Block block;
 
   @override
+  State<MiningV3BlockSheet> createState() => _MiningV3BlockSheetState();
+}
+
+class _MiningV3BlockSheetState extends State<MiningV3BlockSheet> {
+  String? _copiedHash;
+
+  @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: engine,
+    listenable: widget.engine,
     builder: (context, _) {
       final current =
-          engine.blocks.where((b) => b.number == block.number).firstOrNull ??
-          block;
+          widget.engine.blocks
+              .where((b) => b.number == widget.block.number)
+              .firstOrNull ??
+          widget.block;
       final s = S.of(context);
       final c = AppColorTokens.of(context);
       return SingleChildScrollView(
@@ -73,16 +82,16 @@ class MiningV3BlockSheet extends StatelessWidget {
             if (current.hash != null) ...[
               SizedBox(height: AppSpacing.space8),
               AppButton(
-                label: s.miningV3CopyHash,
+                label: _copiedHash == current.hash
+                    ? s.miningV3Copied
+                    : s.miningV3CopyHash,
                 variant: AppButtonVariant.secondary,
-                icon: Icons.copy_rounded,
+                icon: _copiedHash == current.hash
+                    ? Icons.check_rounded
+                    : Icons.copy_rounded,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: current.hash!));
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(s.miningV3Copied)));
-                  }
+                  if (mounted) setState(() => _copiedHash = current.hash);
                 },
               ),
             ],

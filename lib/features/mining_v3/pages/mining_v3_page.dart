@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_activity.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_providers.dart';
@@ -86,6 +87,11 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
       engine: engine,
       endpoint: _endpoint,
       loading: _loading,
+      // The home navigation overlays the tab content on narrow screens.
+      bottomInset: ResponsiveUtils.useSideNavigation(context)
+          ? 0
+          : kBottomNavigationBarHeight +
+                MediaQuery.textScalerOf(context).scale(AppSpacing.space8),
       onToggle: _loading ? null : () => _toggle(engine),
       onSettings: () => _settings(engine),
       onBlock: (block) => _block(engine, block),

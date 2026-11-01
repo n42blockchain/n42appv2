@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mining/mobileverify.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -100,6 +101,7 @@ void main() {
                 listenable: engine,
                 builder: (context, _) => MiningV3Dashboard(
                   engine: engine,
+                  bottomInset: 80,
                   endpoint: '',
                   onToggle: () {},
                   onSettings: () {},
@@ -155,6 +157,42 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('copy feedback stays visible inside the block sheet', (
+    tester,
+  ) async {
+    native.status = _active;
+    await engine.refresh();
+    String? copied;
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'Clipboard.setData') {
+          copied = (call.arguments as Map)['text'] as String;
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
+    await mount(
+      tester,
+      child: Scaffold(
+        body: MiningV3BlockSheet(
+          engine: engine,
+          block: engine.blocks.firstWhere((b) => b.number == 1003),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Copy block hash'));
+    await tester.pumpAndSettle();
+    expect(copied, '0xabc');
+    expect(find.text('Block hash copied'), findsOneWidget);
+  });
 
   testWidgets('node validates credentials and keeps failed save open', (
     tester,
@@ -219,6 +257,19 @@ void main() {
             find.byKey(const ValueKey('mining_v3_block_1001')),
             250,
             maxScrolls: 30,
+          );
+          await tester.drag(
+            find.byType(CustomScrollView),
+            const Offset(0, -1000),
+          );
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .getBottomRight(
+                  find.byKey(const ValueKey('mining_v3_block_1001')),
+                )
+                .dy,
+            lessThanOrEqualTo(720),
           );
           expect(tester.takeException(), isNull);
         });
