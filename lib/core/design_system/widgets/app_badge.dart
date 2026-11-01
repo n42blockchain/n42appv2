@@ -65,7 +65,12 @@ class AppBadge extends StatelessWidget {
             ),
             SizedBox(width: AppSpacing.space2),
           ],
-          Text(label, style: AppTypography.captionSm.copyWith(color: fg)),
+          Flexible(
+            child: Text(
+              label,
+              style: AppTypography.captionSm.copyWith(color: fg),
+            ),
+          ),
         ],
       ),
     );
