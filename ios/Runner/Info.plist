@@ -115,6 +115,8 @@
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>N42 Wallet needs access to Apple Music to play audio content in chat messages.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>N42 connects to your selected local testnet node to verify blocks. You can enter a custom node in Mining settings.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>N42 Wallet needs camera access to scan QR codes for wallet addresses and WalletConnect, and to capture photos for your profile picture.</string>
 	<key>NSContactsUsageDescription</key>

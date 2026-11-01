@@ -8,10 +8,10 @@ import 'package:flutter_mining/mobileverify.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/features/mining_v3/mobileverify_probe.dart';
+import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
 
-/// The fleet's first node as the Android emulator sees the host.
-const _defaultBaseUrl = 'http://10.0.2.2:21012';
-const _defaultChain = 'mainnet_qmdb_staggered';
+const _defaultBaseUrl = miningV3DefaultEndpoint;
+const _defaultChain = miningV3DefaultChain;
 
 class MobileVerifyDebugPage extends StatefulWidget {
   const MobileVerifyDebugPage({super.key});

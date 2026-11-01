@@ -47,6 +47,7 @@ class _MiningV3ConnectionSheetState extends State<MiningV3ConnectionSheet> {
 
   Future<void> _save() async {
     if (widget.engine.running ||
+        widget.engine.pausedForBackground ||
         widget.engine.busy ||
         _saving ||
         !_form.currentState!.validate()) {
@@ -72,7 +73,10 @@ class _MiningV3ConnectionSheetState extends State<MiningV3ConnectionSheet> {
     builder: (context, _) {
       final s = S.of(context);
       final c = AppColorTokens.of(context);
-      final running = widget.engine.running || widget.engine.busy;
+      final running =
+          widget.engine.running ||
+          widget.engine.pausedForBackground ||
+          widget.engine.busy;
       return SingleChildScrollView(
         padding: EdgeInsets.all(AppSpacing.space8),
         child: Form(
@@ -87,7 +91,9 @@ class _MiningV3ConnectionSheetState extends State<MiningV3ConnectionSheet> {
               ),
               SizedBox(height: AppSpacing.space4),
               Text(
-                s.miningV3NodeHint,
+                miningV3DefaultEndpoint == miningV3LocalTestnetEndpoint
+                    ? s.miningV3LocalTestnetHint
+                    : s.miningV3NodeHint,
                 style: AppTypography.footnote.copyWith(color: c.textSecondary),
               ),
               SizedBox(height: AppSpacing.space8),
@@ -109,6 +115,20 @@ class _MiningV3ConnectionSheetState extends State<MiningV3ConnectionSheet> {
                     : null,
                 onFieldSubmitted: (_) => _save(),
               ),
+              if (miningV3DefaultEndpoint == miningV3LocalTestnetEndpoint) ...[
+                SizedBox(height: AppSpacing.space4),
+                AppButton(
+                  label: s.miningV3UseLocalTestnet,
+                  variant: AppButtonVariant.text,
+                  onPressed: running || _saving
+                      ? null
+                      : () {
+                          _endpoint.text = miningV3LocalTestnetEndpoint;
+                          _form.currentState?.validate();
+                          setState(() => _saveFailed = false);
+                        },
+                ),
+              ],
               if (running) ...[
                 SizedBox(height: AppSpacing.space4),
                 Text(

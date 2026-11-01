@@ -32,13 +32,9 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
   Future<void> _loadEndpoint() async {
     final stored = await ref.read(spUtilProvider).getMiningV3Endpoint();
     final running = ref.read(miningV3EngineProvider).endpoint;
-    // The emulator-only fallback is not a real node chosen by this user.
-    final configured = miningV3DefaultEndpoint == 'http://10.0.2.2:21012'
-        ? ''
-        : miningV3DefaultEndpoint;
     if (!mounted) return;
     setState(() {
-      _endpoint = stored ?? running ?? configured;
+      _endpoint = stored ?? running ?? miningV3DefaultEndpoint;
       _loading = false;
     });
   }
@@ -47,7 +43,7 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
     context,
     builder: (_) => MiningV3ConnectionSheet(
       engine: engine,
-      endpoint: engine.running ? engine.endpoint ?? _endpoint : _endpoint,
+      endpoint: engine.endpoint ?? _endpoint,
       onSave: (value) async {
         await ref.read(spUtilProvider).setMiningV3Endpoint(value);
         if (mounted) setState(() => _endpoint = value);
@@ -57,7 +53,7 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
 
   Future<void> _toggle(MiningV3Engine engine) async {
     if (engine.busy || _loading) return;
-    if (engine.running) {
+    if (engine.running || engine.pausedForBackground) {
       await engine.stop();
       return;
     }

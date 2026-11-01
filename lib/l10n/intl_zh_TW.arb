@@ -1887,5 +1887,10 @@
   "miningV3Copied": "已複製區塊雜湊",
   "miningV3ErrorDetails": "最近回報的問題",
   "miningV3SaveFailed": "無法儲存節點，請再試一次。",
-  "g_setting_mining_v3_label": "手機驗證（V3）"
+  "g_setting_mining_v3_label": "手機驗證（V3）",
+  "miningV3IOSForegroundHint": "iOS 會在背景暫停驗證，返回前景後自動繼續。時長僅計算實際運行時間。",
+  "miningV3BackgroundPaused": "已在背景暫停",
+  "miningV3LocalTestnet": "本地測試網",
+  "miningV3UseLocalTestnet": "使用本地測試網",
+  "miningV3LocalTestnetHint": "預設使用本地測試網節點，也可輸入自訂節點位址。"
 }

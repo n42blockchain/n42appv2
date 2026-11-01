@@ -24,7 +24,8 @@ enum MiningEngineKind {
   static MiningEngineKind fromUseV2(bool useV2) => useV2 ? v2 : v1;
 }
 
-/// The foreground-service V3 bridge is implemented on Android.
-/// Android offers it in settings in both debug and release builds.
+/// V3 has native bridges on Android and iOS in all build modes.
 bool get miningV3Available =>
-    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+    !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS);

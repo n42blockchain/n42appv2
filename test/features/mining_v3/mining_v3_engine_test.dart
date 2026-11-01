@@ -31,6 +31,7 @@ class _FakeNative implements MobileVerifyApi {
   int stops = 0;
   int statusReads = 0;
   int keys = 0;
+  Future<String>? pendingKey;
   Object? startFails;
   Future<MvMinerStatus>? delayedStatus;
   MvMinerStatus status = MvMinerStatus.idle;
@@ -38,7 +39,7 @@ class _FakeNative implements MobileVerifyApi {
   @override
   Future<String> generateKey() async {
     keys++;
-    return 'aa' * 32;
+    return pendingKey == null ? 'aa' * 32 : await pendingKey!;
   }
 
   @override
@@ -209,20 +210,23 @@ void main() {
     expect(native.statusReads, reads + 1);
   });
 
-  test('coalesces a manual refresh with a pending native status read', () async {
-    final pending = Completer<MvMinerStatus>();
-    native.delayedStatus = pending.future;
-    final e = engine();
-    final first = e.refresh();
-    final second = e.refresh();
-    expect(identical(first, second), isTrue);
-    expect(native.statusReads, 1);
-    pending.complete(_mining);
-    await Future.wait([first, second]);
-    expect(e.blocks.single.number, 42);
-    expect(e.verified, 12);
-    e.dispose();
-  });
+  test(
+    'coalesces a manual refresh with a pending native status read',
+    () async {
+      final pending = Completer<MvMinerStatus>();
+      native.delayedStatus = pending.future;
+      final e = engine();
+      final first = e.refresh();
+      final second = e.refresh();
+      expect(identical(first, second), isTrue);
+      expect(native.statusReads, 1);
+      pending.complete(_mining);
+      await Future.wait([first, second]);
+      expect(e.blocks.single.number, 42);
+      expect(e.verified, 12);
+      e.dispose();
+    },
+  );
 
   test('stop stops the miner', () async {
     native.status = _mining;
@@ -258,5 +262,42 @@ void main() {
     e.dispose();
     expect(native.stops, 0);
     expect(timers.timers.single.isActive, isFalse);
+  });
+  test(
+    'a background-paused iOS miner remains configured and can be stopped',
+    () async {
+      native.status = const MvMinerStatus(
+        running: false,
+        phase: 'idle',
+        endpoint: 'http://node',
+        pausedForBackground: true,
+        sessionId: 'ios',
+      );
+      final e = engine();
+      await e.refresh();
+      expect(e.running, isFalse);
+      expect(e.pausedForBackground, isTrue);
+      expect(e.endpoint, 'http://node');
+      await e.stop();
+      expect(native.stops, 1);
+      expect(e.pausedForBackground, isFalse);
+      e.dispose();
+    },
+  );
+  test('stop during key loading cancels the pending native start', () async {
+    final key = Completer<String>();
+    native.pendingKey = key.future;
+    final e = engine();
+    final starting = e.start('http://node');
+    await pumpEventQueue();
+    expect(e.busy, isTrue);
+    final stopping = e.stop();
+    key.complete('aa' * 32);
+    await Future.wait([starting, stopping]);
+    expect(native.starts, isEmpty);
+    expect(native.stops, 1);
+    expect(e.busy, isFalse);
+    expect(e.running, isFalse);
+    e.dispose();
   });
 }

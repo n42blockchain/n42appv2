@@ -64,6 +64,8 @@ class MiningV3Activity {
   DateTime? _startedAt;
   DateTime? _endedAt;
   bool _wasRunning = false;
+  Duration? _nativeDuration;
+  DateTime? _observedAt;
   int _verifiedCount = 0;
   int _failedCount = 0;
   List<MiningV3Block> blocks = const [];
@@ -71,6 +73,12 @@ class MiningV3Activity {
   DateTime? get startedAt => _startedAt;
 
   Duration? duration(DateTime now) {
+    if (_nativeDuration case final Duration duration) {
+      final delta = _wasRunning && _observedAt != null
+          ? now.difference(_observedAt!)
+          : Duration.zero;
+      return duration + (delta.isNegative ? Duration.zero : delta);
+    }
     final start = _startedAt;
     final end = _wasRunning ? now : _endedAt;
     if (start == null || end == null) return null;
@@ -79,21 +87,31 @@ class MiningV3Activity {
   }
 
   void update(MvMinerStatus status, DateTime observedAt) {
-    final session = '${status.startedAtMs}|${status.pubkey}|${status.endpoint}';
+    final session =
+        status.sessionId ??
+        '${status.startedAtMs}|${status.pubkey}|${status.endpoint}';
     if (_session != session ||
         status.verified < _verifiedCount ||
         status.failed < _failedCount) {
       _records.clear();
       _endedAt = null;
+      _startedAt = null;
       _wasRunning = false;
     }
     _session = session;
     _verifiedCount = status.verified;
     _failedCount = status.failed;
     final start = status.startedAtMs;
-    _startedAt = start != null && start > 0
-        ? DateTime.fromMillisecondsSinceEpoch(start)
+    if (status.sessionId == null || _startedAt == null) {
+      _startedAt = start != null && start > 0
+          ? DateTime.fromMillisecondsSinceEpoch(start)
+          : null;
+    }
+    final active = status.activeDurationMs;
+    _nativeDuration = active != null && active >= 0
+        ? Duration(milliseconds: active)
         : null;
+    _observedAt = observedAt;
     if (_wasRunning && !status.running) _endedAt = observedAt;
     _wasRunning = status.running;
 

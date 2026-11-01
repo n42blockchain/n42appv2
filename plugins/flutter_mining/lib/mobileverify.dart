@@ -111,6 +111,9 @@ class MvMinerStatus {
     this.lastSigners = 0,
     this.lastError,
     this.startedAtMs,
+    this.sessionId,
+    this.activeDurationMs,
+    this.pausedForBackground = false,
     this.log = const [],
   });
 
@@ -130,6 +133,9 @@ class MvMinerStatus {
     lastSigners: (json['lastSigners'] as num?)?.toInt() ?? 0,
     lastError: json['lastError'] as String?,
     startedAtMs: (json['startedAtMs'] as num?)?.toInt(),
+    sessionId: json['sessionId'] as String?,
+    activeDurationMs: (json['activeDurationMs'] as num?)?.toInt(),
+    pausedForBackground: json['pausedForBackground'] as bool? ?? false,
     log: [for (final l in json['log'] as List<dynamic>? ?? []) l as String],
   );
 
@@ -158,6 +164,11 @@ class MvMinerStatus {
   final int lastSigners;
   final String? lastError;
   final int? startedAtMs;
+
+  /// iOS keeps one user session across foreground/background transitions.
+  final String? sessionId;
+  final int? activeDurationMs;
+  final bool pausedForBackground;
 
   /// The newest lines, oldest first.
   final List<String> log;
@@ -199,9 +210,9 @@ abstract class MobileVerifyApi {
   /// Aborts the call in flight and ends the session.
   Future<void> close();
 
-  /// Starts the native miner in a foreground service (Android). It keeps
-  /// running when the app is in the background; starting it again with
-  /// the same arguments changes nothing.
+  /// Starts the native miner. Android uses a foreground service; iOS pauses
+  /// on backgrounding and resumes on activation while still requested.
+  /// Repeating the same start while requested is idempotent.
   Future<void> minerStart({
     required String baseUrl,
     required String privHex,

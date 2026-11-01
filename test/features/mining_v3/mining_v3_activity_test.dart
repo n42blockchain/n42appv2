@@ -166,4 +166,85 @@ void main() {
       Duration.zero,
     );
   });
+  test('iOS resume retains history and excludes time spent in background', () {
+    final activity = MiningV3Activity();
+    final now = DateTime(2026, 11, 1);
+    activity.update(
+      const MvMinerStatus(
+        running: true,
+        phase: 'mining',
+        sessionId: 'ios-1',
+        activeDurationMs: 5000,
+        startedAtMs: 1000,
+        verified: 1,
+        log: ['01:00:00 verified block 1 (2 txs, 3 ms)'],
+      ),
+      now,
+    );
+    final started = activity.startedAt;
+    expect(
+      activity.duration(now.add(const Duration(seconds: 2))),
+      const Duration(seconds: 7),
+    );
+    activity.update(
+      const MvMinerStatus(
+        running: false,
+        phase: 'idle',
+        pausedForBackground: true,
+        sessionId: 'ios-1',
+        activeDurationMs: 7000,
+        startedAtMs: 1000,
+        verified: 1,
+      ),
+      now.add(const Duration(seconds: 2)),
+    );
+    expect(
+      activity.duration(now.add(const Duration(hours: 1))),
+      const Duration(seconds: 7),
+    );
+    activity.update(
+      const MvMinerStatus(
+        running: true,
+        phase: 'mining',
+        sessionId: 'ios-1',
+        activeDurationMs: 7000,
+        startedAtMs: 3600000,
+        verified: 2,
+        log: ['02:00:00 verified block 2 (4 txs, 5 ms)'],
+      ),
+      now.add(const Duration(hours: 1)),
+    );
+    expect(activity.startedAt, started);
+    expect(activity.blocks.map((b) => b.number), [2, 1]);
+    expect(
+      activity.duration(now.add(const Duration(hours: 1, seconds: 3))),
+      const Duration(seconds: 10),
+    );
+    activity.update(
+      const MvMinerStatus(
+        running: false,
+        phase: 'idle',
+        sessionId: 'ios-1',
+        activeDurationMs: 10000,
+        startedAtMs: 3600000,
+        verified: 2,
+      ),
+      now.add(const Duration(hours: 1, seconds: 3)),
+    );
+    expect(
+      activity.duration(now.add(const Duration(hours: 2))),
+      const Duration(seconds: 10),
+    );
+    activity.update(
+      const MvMinerStatus(
+        running: true,
+        phase: 'mining',
+        sessionId: 'ios-2',
+        activeDurationMs: 0,
+        verified: 2,
+      ),
+      now.add(const Duration(hours: 3)),
+    );
+    expect(activity.blocks, isEmpty);
+  });
 }

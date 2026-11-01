@@ -1946,5 +1946,10 @@
   "miningV3Copied": "Block hash copied",
   "miningV3ErrorDetails": "Last reported issue",
   "miningV3SaveFailed": "Could not save the node. Please try again.",
-  "g_setting_mining_v3_label": "Mobile verification (V3)"
+  "g_setting_mining_v3_label": "Mobile verification (V3)",
+  "miningV3IOSForegroundHint": "On iOS, verification pauses in the background and resumes when you return. Only active time is counted.",
+  "miningV3BackgroundPaused": "Paused in background",
+  "miningV3LocalTestnet": "Local testnet",
+  "miningV3UseLocalTestnet": "Use local testnet",
+  "miningV3LocalTestnetHint": "The default node is on the local testnet. You can also enter a custom address."
 }

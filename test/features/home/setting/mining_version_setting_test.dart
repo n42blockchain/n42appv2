@@ -24,7 +24,10 @@ void main() {
     addTearDown(() => debugDefaultTargetPlatformOverride = null);
     for (final platform in TargetPlatform.values) {
       debugDefaultTargetPlatformOverride = platform;
-      expect(miningV3Available, platform == TargetPlatform.android);
+      expect(
+        miningV3Available,
+        platform == TargetPlatform.android || platform == TargetPlatform.iOS,
+      );
     }
   });
 
@@ -90,6 +93,26 @@ void main() {
     expect(control.selected, {MiningEngineKind.v3});
   }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
+  testWidgets('iOS offers V3 and restores its saved selection', (tester) async {
+    final storage = _MiningSettingsStore()..stored = MiningEngineKind.v3;
+    await tester.pumpWidget(
+      wrapForTest(
+        const SettingHomePage(),
+        overrides: [spUtilProvider.overrideWithValue(storage)],
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('V3'), findsOneWidget);
+    expect(
+      tester
+          .widget<SegmentedButton<MiningEngineKind>>(
+            find.byType(SegmentedButton<MiningEngineKind>),
+          )
+          .selected,
+      {MiningEngineKind.v3},
+    );
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
   testWidgets('unsupported platform falls back from saved V3 to V2', (
     tester,
   ) async {
@@ -106,5 +129,5 @@ void main() {
       find.byType(SegmentedButton<MiningEngineKind>),
     );
     expect(control.selected, {MiningEngineKind.v2});
-  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+  }, variant: TargetPlatformVariant.only(TargetPlatform.linux));
 }

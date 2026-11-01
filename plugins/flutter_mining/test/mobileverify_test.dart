@@ -146,4 +146,23 @@ void main() {
         });
     expect(api.verifyBlock('0x42'), throwsA(isA<PlatformException>()));
   });
+  test(
+    'decodes optional iOS lifecycle metadata and preserves Android defaults',
+    () {
+      final ios = MvMinerStatus.fromJson({
+        'running': false,
+        'phase': 'idle',
+        'sessionId': 'ios-run',
+        'activeDurationMs': 15000,
+        'pausedForBackground': true,
+      });
+      expect(ios.sessionId, 'ios-run');
+      expect(ios.activeDurationMs, 15000);
+      expect(ios.pausedForBackground, isTrue);
+      final android = MvMinerStatus.fromJson({'running': true});
+      expect(android.sessionId, isNull);
+      expect(android.activeDurationMs, isNull);
+      expect(android.pausedForBackground, isFalse);
+    },
+  );
 }

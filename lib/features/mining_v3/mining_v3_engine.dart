@@ -1,8 +1,7 @@
 // Mining v3 engine: the app side of the N42 mobile verification loop.
 //
 // The loop itself runs natively (evmsdk.MobileVerifyMiner in an Android
-// foreground service), so it keeps verifying blocks while the app is in
-// the background or this UI is gone. The engine starts and stops it and,
+// foreground service, or an iOS host that pauses in the background). The engine starts and stops it and,
 // while something listens, reads its status once a second; a rebuilt UI
 // picks up a miner that is already running.
 
@@ -21,11 +20,13 @@ const miningV3DefaultChain = String.fromEnvironment(
   defaultValue: 'mainnet_qmdb_staggered',
 );
 
-/// The node used until the user sets one: the build's MINING_V3_URL, or
-/// the host's first fleet node as the Android emulator sees it.
+/// Temporary LAN testnet, shared by physical phones and simulators.
+const miningV3LocalTestnetEndpoint = 'http://192.168.0.217:21100';
+
+/// An explicit saved node wins over this build-time/default address.
 const miningV3DefaultEndpoint = String.fromEnvironment(
   'MINING_V3_URL',
-  defaultValue: 'http://10.0.2.2:21012',
+  defaultValue: miningV3LocalTestnetEndpoint,
 );
 
 enum MiningV3Phase {
@@ -79,15 +80,20 @@ class MiningV3Engine extends ChangeNotifier {
   /// Why the last start or status read failed, if it did.
   String? startError;
   bool _busy = false;
+  bool _stopRequested = false;
+  Completer<void>? _transitionDone;
+  Future<void>? _stopping;
   Timer? _timer;
   bool _disposed = false;
 
   bool get running => status.running;
+  bool get pausedForBackground => status.pausedForBackground;
 
   /// Starting or stopping.
   bool get busy => _busy;
   MiningV3Phase get phase => MiningV3Phase.fromName(status.phase);
-  String? get endpoint => status.running ? status.endpoint : null;
+  String? get endpoint =>
+      status.running || status.pausedForBackground ? status.endpoint : null;
   int? get deviceIndex => status.deviceIndex;
   int get verified => status.verified;
   int get failed => status.failed;
@@ -104,24 +110,33 @@ class MiningV3Engine extends ChangeNotifier {
   /// Starts the miner against [baseUrl] with the device key, creating the
   /// key on first use.
   Future<void> start(String baseUrl) async {
-    if (_busy) return;
+    if (_busy || _stopRequested || _stopping != null) return;
     _busy = true;
+    final transition = _transitionDone = Completer<void>();
     startError = null;
     _notify();
     try {
       final (priv, _) = await loadOrCreateDeviceKey(_api, _store);
-      await _api.minerStart(baseUrl: baseUrl, privHex: priv, chain: chain);
+      if (!_stopRequested) {
+        await _api.minerStart(baseUrl: baseUrl, privHex: priv, chain: chain);
+      }
     } on Object catch (e) {
       startError = '$e';
     } finally {
       _busy = false;
+      transition.complete();
     }
     await refresh();
   }
 
-  Future<void> stop() async {
-    if (_busy) return;
+  Future<void> stop() =>
+      _stopping ??= _stop().whenComplete(() => _stopping = null);
+
+  Future<void> _stop() async {
+    _stopRequested = true;
+    if (_busy) await _transitionDone?.future;
     _busy = true;
+    final transition = _transitionDone = Completer<void>();
     _notify();
     try {
       await _api.minerStop();
@@ -129,6 +144,8 @@ class MiningV3Engine extends ChangeNotifier {
       startError = '$e';
     } finally {
       _busy = false;
+      _stopRequested = false;
+      transition.complete();
     }
     await refresh();
   }

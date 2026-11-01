@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -83,16 +84,18 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
     }
   }
 
-  String _phase(S s) => switch (widget.engine.phase) {
-    MiningV3Phase.idle =>
-      widget.engine.sessionStartedAt == null
-          ? s.miningV3Ready
-          : s.miningV3Paused,
-    MiningV3Phase.connecting => s.miningV3Connecting,
-    MiningV3Phase.registering => s.miningV3Registering,
-    MiningV3Phase.mining => s.miningV3Active,
-    MiningV3Phase.retrying => s.miningV3Retrying,
-  };
+  String _phase(S s) => widget.engine.pausedForBackground
+      ? s.miningV3BackgroundPaused
+      : switch (widget.engine.phase) {
+          MiningV3Phase.idle =>
+            widget.engine.sessionStartedAt == null
+                ? s.miningV3Ready
+                : s.miningV3Paused,
+          MiningV3Phase.connecting => s.miningV3Connecting,
+          MiningV3Phase.registering => s.miningV3Registering,
+          MiningV3Phase.mining => s.miningV3Active,
+          MiningV3Phase.retrying => s.miningV3Retrying,
+        };
 
   bool _matches(MiningV3Block block) => switch (_filter) {
     _BlockFilter.all => true,
@@ -163,7 +166,9 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
                     SizedBox(height: AppSpacing.space8),
                     _connection(context),
                     if (engine.phase == MiningV3Phase.retrying ||
-                        (!engine.running && engine.lastError != null)) ...[
+                        (!engine.running &&
+                            !engine.pausedForBackground &&
+                            engine.lastError != null)) ...[
                       SizedBox(height: AppSpacing.space8),
                       _connectionIssue(context),
                     ],
@@ -321,7 +326,7 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
             SizedBox(height: AppSpacing.space12),
             AppButton(
               key: const ValueKey('mining_v3_toggle'),
-              label: widget.engine.running
+              label: widget.engine.running || widget.engine.pausedForBackground
                   ? s.miningV3Pause
                   : widget.endpoint.isEmpty
                   ? s.miningV3Setup
@@ -332,6 +337,15 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
               loading: widget.loading || widget.engine.busy,
               onPressed: widget.onToggle,
             ),
+            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) ...[
+              SizedBox(height: AppSpacing.space4),
+              Text(
+                s.miningV3IOSForegroundHint,
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.onOverlaySecondary,
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -498,7 +512,7 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
   Widget _connection(BuildContext context) {
     final s = S.of(context);
     final c = AppColorTokens.of(context);
-    final url = widget.engine.running
+    final url = widget.engine.running || widget.engine.pausedForBackground
         ? widget.engine.endpoint ?? widget.endpoint
         : widget.endpoint;
     final uri = Uri.tryParse(url);
@@ -526,7 +540,9 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Text(
-                  s.miningV3Node,
+                  url == miningV3LocalTestnetEndpoint
+                      ? s.miningV3LocalTestnet
+                      : s.miningV3Node,
                   style: AppTypography.caption.copyWith(color: c.textSecondary),
                 ),
               ],

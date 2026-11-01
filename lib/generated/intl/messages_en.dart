@@ -3485,6 +3485,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Avg. verification",
     ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Paused in background",
+    ),
     "miningV3Block": m104,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Block hash"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage(
@@ -3517,11 +3520,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
       "No blocks match this filter.",
     ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "On iOS, verification pauses in the background and resumes when you return. Only active time is counted.",
+    ),
     "miningV3Latency": MessageLookupByLibrary.simpleMessage(
       "Verification time",
     ),
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Show more blocks",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Local testnet",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "The default node is on the local testnet. You can also enter a custom address.",
     ),
     "miningV3Milliseconds": m106,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Verification node"),
@@ -3591,6 +3603,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Not certified",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Use local testnet",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("Verified blocks"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),

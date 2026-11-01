@@ -15147,6 +15147,56 @@ class S {
       args: [],
     );
   }
+
+  /// `On iOS, verification pauses in the background and resumes when you return. Only active time is counted.`
+  String get miningV3IOSForegroundHint {
+    return Intl.message(
+      'On iOS, verification pauses in the background and resumes when you return. Only active time is counted.',
+      name: 'miningV3IOSForegroundHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paused in background`
+  String get miningV3BackgroundPaused {
+    return Intl.message(
+      'Paused in background',
+      name: 'miningV3BackgroundPaused',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local testnet`
+  String get miningV3LocalTestnet {
+    return Intl.message(
+      'Local testnet',
+      name: 'miningV3LocalTestnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use local testnet`
+  String get miningV3UseLocalTestnet {
+    return Intl.message(
+      'Use local testnet',
+      name: 'miningV3UseLocalTestnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The default node is on the local testnet. You can also enter a custom address.`
+  String get miningV3LocalTestnetHint {
+    return Intl.message(
+      'The default node is on the local testnet. You can also enter a custom address.',
+      name: 'miningV3LocalTestnetHint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
