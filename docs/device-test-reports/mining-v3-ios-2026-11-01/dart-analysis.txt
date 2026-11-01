@@ -1,0 +1,8 @@
+Analyzing 4 items...                                            
+
+   info • Use an initializing formal to assign a parameter to a field. Try using an initialing formal ('this._api') to initialize the field • lib/features/mining_v3/mining_v3_engine.dart:62:8 • prefer_initializing_formals
+   info • Use an initializing formal to assign a parameter to a field. Try using an initialing formal ('this._store') to initialize the field • lib/features/mining_v3/mining_v3_engine.dart:63:8 • prefer_initializing_formals
+   info • Use an initializing formal to assign a parameter to a field. Try using an initialing formal ('this._api') to initialize the field • lib/features/mining_v3/mobileverify_probe.dart:60:8 • prefer_initializing_formals
+   info • Use an initializing formal to assign a parameter to a field. Try using an initialing formal ('this._store') to initialize the field • lib/features/mining_v3/mobileverify_probe.dart:61:8 • prefer_initializing_formals
+
+4 issues found. (ran in 53.6s)

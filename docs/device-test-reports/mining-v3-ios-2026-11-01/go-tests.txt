@@ -1,0 +1,2 @@
+ok  	github.com/n42blockchain/N42/cmd/mobileverifyios	0.322s
+ok  	github.com/n42blockchain/N42/cmd/evmsdk	0.412s

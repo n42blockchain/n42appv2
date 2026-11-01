@@ -32,7 +32,7 @@
 
 ## 模拟器运行证据
 
-[完整公共结果](mining-v3-ios-2026-11-01/simulator-results.json) · [结束画面](mining-v3-ios-2026-11-01/simulator-passed.png) · [Swift 测试](mining-v3-ios-2026-11-01/swift-host-tests.log) · [Go 测试](mining-v3-ios-2026-11-01/go-tests.log) · [静态分析](mining-v3-ios-2026-11-01/dart-analysis.log)
+[完整公共结果](mining-v3-ios-2026-11-01/simulator-results.json) · [结束画面](mining-v3-ios-2026-11-01/simulator-passed.png) · [Swift 测试](mining-v3-ios-2026-11-01/swift-host-tests.txt) · [Go 测试](mining-v3-ios-2026-11-01/go-tests.txt) · [静态分析](mining-v3-ios-2026-11-01/dart-analysis.txt) · [主应用构建](mining-v3-ios-2026-11-01/main-build-result.txt)
 
 - 旧平台通道、缺少参数、没有会话和未知方法的处理均通过。
 - 新生成的临时身份注册为 device index `10`；测试前 registry 为 `10`，注册后为 `11`。私钥仅保存在测试进程内存，没有写入报告或日志。

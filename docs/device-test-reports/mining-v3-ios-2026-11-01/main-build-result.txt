@@ -1,0 +1,4 @@
+[        ] exiting with code 0
+** BUILD SUCCEEDED **
+[  +15 ms] ✓ Built build/ios/iphoneos/Runner.app
+[  +99 ms] exiting with code 0
