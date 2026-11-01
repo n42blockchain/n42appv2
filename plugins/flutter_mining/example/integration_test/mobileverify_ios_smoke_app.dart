@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mining/mobileverify.dart';
 
 const _enabled = bool.fromEnvironment('MINING_V3_IOS_SMOKE');
+const _soakSeconds = int.fromEnvironment('MINING_V3_IOS_SOAK_SECONDS');
 const _node = String.fromEnvironment(
   'MINING_V3_URL',
   defaultValue: 'http://192.168.0.217:21100',
@@ -81,6 +82,10 @@ class _SmokeState extends State<_SmokeApp> {
 
   Future<void> run() async {
     try {
+      for (final name in ['resume.request', 'stopped-resume.request']) {
+        final staleFlag = File('${directory.path}/$name');
+        if (await staleFlag.exists()) await staleFlag.delete();
+      }
       final uri = Uri.parse(_node);
       require(
         ['http', 'https'].contains(uri.scheme) &&
@@ -125,7 +130,20 @@ class _SmokeState extends State<_SmokeApp> {
         'The opened session used a different identity.',
       );
       checks.add('key-and-session-identity');
-      final health = await api.health();
+      // The first LAN connection may fail while iOS presents its permission
+      // prompt. Allow the normal grant flow to finish before failing the test.
+      await record('waiting-for-local-network');
+      final networkDeadline = DateTime.now().add(const Duration(seconds: 30));
+      Map<String, dynamic> health;
+      while (true) {
+        try {
+          health = await api.health();
+          break;
+        } on PlatformException {
+          if (!DateTime.now().isBefore(networkDeadline)) rethrow;
+          await Future<void>.delayed(const Duration(seconds: 1));
+        }
+      }
       values['registryBefore'] = health['registry'];
       checks.add('node-health');
       await record('registering');
@@ -180,6 +198,35 @@ class _SmokeState extends State<_SmokeApp> {
         'iOS miner metadata was missing.',
       );
       checks.add('native-miner-verification-and-certification');
+      if (_soakSeconds > 0) {
+        final clock = Stopwatch()..start();
+        final initialVerified = before.verified;
+        final initialCertified = before.certified;
+        await record('foreground-soak');
+        while (clock.elapsed.inSeconds < _soakSeconds) {
+          await Future<void>.delayed(const Duration(seconds: 2));
+          final current = await api.minerStatus();
+          require(
+            current.running &&
+                !current.pausedForBackground &&
+                current.sessionId == before.sessionId &&
+                current.verified >= before.verified,
+            'The foreground soak lost its running session or counters.',
+          );
+          before = current;
+          values['soakWallMs'] = clock.elapsedMilliseconds;
+          values['soakVerified'] = current.verified - initialVerified;
+          values['soakCertified'] = current.certified - initialCertified;
+          values['soakFailed'] = current.failed;
+          await record('foreground-soak');
+        }
+        require(
+          before.verified > initialVerified &&
+              before.certified > initialCertified,
+          'The foreground soak made no verification or certificate progress.',
+        );
+        checks.add('foreground-soak');
+      }
       values['verifiedBeforeBackground'] = before.verified;
       values['certifiedBeforeBackground'] = before.certified;
       final wallStart = DateTime.now();
