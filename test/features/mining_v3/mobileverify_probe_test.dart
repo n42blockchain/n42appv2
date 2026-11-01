@@ -93,6 +93,11 @@ class _FakeNode implements MobileVerifyApi {
 
   @override
   Future<void> close() async => closed = true;
+
+  // The probe drives the session only, never the miner.
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName}');
 }
 
 void main() {
@@ -196,4 +201,9 @@ class _ThrowingNode extends _FakeNode {
   @override
   Future<MvVerified> verifyBlock(String blockHash) =>
       Future.error(StateError('server 404: packet not in window'));
+
+  // The probe drives the session only, never the miner.
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError('${invocation.memberName}');
 }

@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
@@ -46,7 +47,10 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
     }
     final url = _endpoint.text.trim();
     await ref.read(spUtilProvider).setMiningV3Endpoint(url);
-    engine.start(url);
+    // The miner's foreground-service notification needs it on Android 13+;
+    // mining runs either way.
+    await Permission.notification.request();
+    await engine.start(url);
   }
 
   static String _phaseLabel(MiningV3Phase phase) => switch (phase) {
@@ -54,7 +58,7 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
     MiningV3Phase.connecting => 'Connecting',
     MiningV3Phase.registering => 'Waiting for registration',
     MiningV3Phase.mining => 'Verifying blocks',
-    MiningV3Phase.retrying => 'Retrying',
+    MiningV3Phase.retrying => 'Reconnecting',
   };
 
   @override
@@ -108,7 +112,8 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
                   ),
                 ],
                 if (engine.lastError != null &&
-                    engine.phase == MiningV3Phase.retrying) ...[
+                    (engine.phase == MiningV3Phase.retrying ||
+                        engine.startError != null)) ...[
                   SizedBox(height: AppSpacing.space2),
                   Text(
                     engine.lastError!,
@@ -151,7 +156,7 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
                 ),
                 SizedBox(height: AppSpacing.space4),
                 FilledButton(
-                  onPressed: () => _toggle(engine),
+                  onPressed: engine.busy ? null : () => _toggle(engine),
                   child: Text(engine.running ? 'Stop' : 'Start'),
                 ),
               ],

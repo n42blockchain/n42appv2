@@ -26,7 +26,7 @@ class FlutterMiningPlugin :
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_mining")
         channel.setMethodCallHandler(this)
-        val handler = MobileVerifyHandler()
+        val handler = MobileVerifyHandler(flutterPluginBinding.applicationContext)
         mobileVerify = handler
         mobileVerifyChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "n42/mobileverify")
         mobileVerifyChannel.setMethodCallHandler(handler)
