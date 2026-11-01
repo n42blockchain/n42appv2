@@ -1025,7 +1025,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
 | T30 挖矿 v3（mobileverify）Android 真机验证 | 本轮已执行：9 PASS / 1 FAIL；未关单（原 mainnet 负向预期未满足、SDK 敏感日志待修）。客户端注册 429 已修复并真机复验 | 2026-10-31（Mac/Android 执行补记） | [报告](https://github.com/n42blockchain/n42appv2/blob/t30/mining-v3-fixes/docs/device-test-reports/2026-10-31-t30-mining-v3-probe.md) |
-| T31 挖矿 v3（mobileverify）iOS 接入 + 真机验证 | 待认领（App 基线 GitHub `feat/mining-v3-mobileverify@24df062c`，SDK 基线 N42-gov5 `77eb962d`；分支 `t31/ios-mobileverify`）| — | docs/device-test-reports/<日期>-t31-mining-v3-ios.md |
+| T31 挖矿 v3（mobileverify）iOS 接入 + 真机验证 | 待认领（App 基线 GitHub `feat/mining-v3-mobileverify@95fac518`，SDK 基线 N42-gov5 `77eb962d`；分支 `t31/ios-mobileverify`）| — | docs/device-test-reports/<日期>-t31-mining-v3-ios.md |
 | T27 18 条 Cosmos 链原生地址派生缺失（⚠️P0）| Codex 已修复+验证（`a4a2c7c5`）：**A1-A4/A6 全 PASS**——WalletCore 4.7.0 对 18 条链**全有专用 CoinType**，故无需透传 bech32Prefix、也无需自写 bech32（比我建议的 HRP 通用路径更稳）；Swift/Kotlin 各映射到专用类型并归类 Cosmos。真机双端（Pixel 8 API 36 + 实体 iPhone iOS 27.0）**19/19 地址逐字节一致**，ATOM 向量与改动前完全相同（A4 无回归）；新增 `integration_test/t27_cosmos_address_test.dart` 固化公开 BIP-39 向量。A5 余额记 PARTIAL（无授权充值账户，未虚报）。**并修正了我派发时表格的两处错误**：RUNE 实为 931 非 118、KAVA2 为 459 非 118——它按配置源核对后保留真实路径，没盲信我的表。**Claude 验收通过（独立复核未依赖其结论）**：19 条地址的 bech32 校验和/HRP 与配置 prefix 对应/20 字节载荷全部通过；15 条共用 `m/44'/118'/0'/0/0` 的链载荷完全相同（同密钥换 HRP 的必然结果）；**INJ 载荷 `9858effd232b4033…` 正是标准测试助记词在 `m/44'/60'/0'/0/0` 上的以太坊地址 `0x9858eFFD232B4033E47d90003D41EC34EcaEda94`**，公开常量独立佐证 INJ 走以太坊派生 + inj HRP 正确。合并 `d3052561`，analyze 零 error/warning、3244 测试全过。产品决策采纳其意见：不隐藏这 18 条链 | 2026-07-27 | docs/device-test-reports/2026-07-27-t27-cosmos-address.md |
 | T26 Flutter 3.44.8 原生构建验证 + 摘除依赖回归（⚠️高优先）| Codex 已验证（`f3a631a0`）：**A1-A4 全 PASS 且证据扎实**——A1 Mac 端 wallet-core 4.7.0 依赖解析无 401（`dependencyInsight` + APK 构建双证，Windows 端 PAT 失效属该机器问题）；A2 `flutter build apk --release` 产出 versionName 2.4.8/versionCode 2026072602；A3 `./scripts/build_ipa.sh --no-bump` 完整跑通 archive+二次 App Store 导出；**A4 解包 IPA 实测 Runner.app 与 N42Extension.appex 版本号均为 2.4.8/2026072602、`codesign --verify --deep --strict` 通过——版本对齐修复端到端闭环**。B1-B5 **BLOCKED(automation)** 附构建/静态证据，未冒充 PASS（macOS 本地网络隐私拒绝 Dart VM service，测试体未执行；iPhone 已解锁+Release 安装启动成功，卡在 Mac 侧权限）。**Claude 验收通过**：报告首次做到「build/static 证据与真机证据分离、未执行的用例不写 PASS」，这正是上一轮缺的；**并否决了我的 PBX 提议**——我建议删掉 pbxproj 里 `FLUTTER_BUILD_NAME/NUMBER` 改由 `Generated.xcconfig` 供值，Codex 指出 N42Extension 三个 build configuration 无 `baseConfigurationReference` 根本读不到该 xcconfig，**本地独立核实成立**（扩展 `GENERATE_INFOPLIST_FILE=YES` + `MARKETING_VERSION=$(FLUTTER_BUILD_NAME)`，删赋值会让版本号展开为空串被 App Store 拒），我的提议会直接改坏构建，采纳其分步方案。遗留：B1-B5 待 Mac 授予本地网络权限或换可用 USB 数据线 | 2026-07-27 | docs/device-test-reports/2026-07-27-t26-flutter-344-native-builds.md |
 | T1 iOS 矩阵 | 阻塞：Xcode 缺 iOS 26.5 platform | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
@@ -2905,11 +2905,11 @@ Info.plist 里**没有** `NSLocalNetworkUsageDescription`。如果 iOS 14+ 访�
 
 1. **SDK 敏感日志已修**：N42 `815a0952`——`Emit` 只记请求类型和字段名（如 `fields=[msg,priv_key]`），
    不再记任何值；`setting`/`blssign`/`blspubk`/`decrypt`/`encrypt` 五类均有回归测试。
-   新 AAR 已进 `feat/mining-v3-mobileverify@24df062c`（基于 `662b3ea3`，含你的 T30 修复和 v3 UI）。
+   新 AAR 已进 `feat/mining-v3-mobileverify@95fac518`（基于 `662b3ea3`，含你的 T30 修复和 v3 UI）。
    **请复测**：装新包后走一遍用例 9（v1 `setting`），`adb logcat | grep GoLog` 确认只出现
    `emit: setting fields=[...]`，不再出现私钥原文；报告里记新 APK hash。
 2. **用例 5 撤销**：判断正确，前提不成立，不是 SDK 缺陷。已改为 Go 端测试（见用例矩阵第 5 行），
    T30 只剩上面的日志复测 + 可选的后台/锁屏项，复测通过即可关单。
 3. `bea818f0`（注册轮询 10 秒）与 v3 UI 三个提交已快进合入 `feat/mining-v3-mobileverify`，
    app 33 项 + 插件 10 项测试通过、analyze 无 error/warning。后续修复可直接基于该分支。
-4. T31（iOS）基线相应改为 `feat/mining-v3-mobileverify@24df062c`。
+4. T31（iOS）基线相应改为 `feat/mining-v3-mobileverify@95fac518`（2026-11-01 已把 `feat/mining-v3-ui@d350588f` 合入，含新 AAR）。
