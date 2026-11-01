@@ -24,7 +24,7 @@
 | 插件示例完整模拟器构建 | 通过，实际 CocoaPods 编译、链接与隐私资源打包 |
 | iOS 27.1 模拟器连接真实局域网测试节点 | 10 项验收检查通过，详见下文 |
 | 主应用未签名设备构建 | 通过，`flutter build ios --debug --no-codesign --no-pub`，产物 `build/ios/iphoneos/Runner.app` |
-| iPhone 真机运行 | 未验证；当前 `devicectl` 中的 iPhone 不可用 |
+| iPhone 真机运行 | 后续 USB iPhone 13 Pro Max / iOS 27.0.1 桥接 10 项通过，见 [真机补充报告](2026-11-01-mining-v3-ios-device.md) |
 
 环境：Flutter 3.47.5 / Dart 3.13.4，Go 1.26.8，Xcode 27.1 (27A9275)。模拟器为本任务新建的 iPhone Duo / iOS 27.1，未使用其他开发者的模拟器。
 
@@ -63,4 +63,4 @@ python3 integration_test/drive_mobileverify_ios_smoke.py "$SIMULATOR_UUID" \
 
 主应用首次构建因隔离工作区缺少忽略的 Firebase 配置失败，复用本机既有 `GoogleService-Info.plist` 后重跑成功；配置未提交。构建保留现有 Rust SDK 的最低 iOS 版本与若干搜索路径警告，这次未修改这些模块。
 
-仍需可用 iPhone 上验收首次局域网授权、锁屏/系统中断、长时运行、电量与发热，以及主应用完整 UI 流程。本报告的模拟器通过不等于真机通过。
+后续已补 USB iPhone 的桥接验收，详见 [真机补充报告](2026-11-01-mining-v3-ios-device.md)。多小时稳定性、系统中断及脱离 USB 充电的耗电评估仍需独立测量。
