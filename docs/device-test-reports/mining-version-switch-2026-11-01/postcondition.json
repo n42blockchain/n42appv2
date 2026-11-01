@@ -1,0 +1,14 @@
+{
+  "package": "ai.n42.www.t30",
+  "versionCode": 73068,
+  "mode": "profile",
+  "storedSelectionAfterColdStart": "v3",
+  "settingsVersions": [
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "debugProbeVisible": false,
+  "v3ForegroundServicePresent": false,
+  "restoredPointerLocation": "1"
+}
