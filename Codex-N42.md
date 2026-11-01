@@ -1024,7 +1024,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
-| T30 挖矿 v3（mobileverify）Android 真机验证 | 待认领（基线 GitHub `feat/mining-v3-mobileverify@71650b32`；节点经局域网代理 `http://192.168.0.217:21100`）| — | docs/device-test-reports/<日期>-t30-mining-v3-probe.md |
+| T30 挖矿 v3（mobileverify）Android 真机验证 | 待认领（基线 GitHub `feat/mining-v3-mobileverify@ad262088`；节点经局域网代理 `http://192.168.0.217:21100`）| — | docs/device-test-reports/<日期>-t30-mining-v3-probe.md |
 | T27 18 条 Cosmos 链原生地址派生缺失（⚠️P0）| Codex 已修复+验证（`a4a2c7c5`）：**A1-A4/A6 全 PASS**——WalletCore 4.7.0 对 18 条链**全有专用 CoinType**，故无需透传 bech32Prefix、也无需自写 bech32（比我建议的 HRP 通用路径更稳）；Swift/Kotlin 各映射到专用类型并归类 Cosmos。真机双端（Pixel 8 API 36 + 实体 iPhone iOS 27.0）**19/19 地址逐字节一致**，ATOM 向量与改动前完全相同（A4 无回归）；新增 `integration_test/t27_cosmos_address_test.dart` 固化公开 BIP-39 向量。A5 余额记 PARTIAL（无授权充值账户，未虚报）。**并修正了我派发时表格的两处错误**：RUNE 实为 931 非 118、KAVA2 为 459 非 118——它按配置源核对后保留真实路径，没盲信我的表。**Claude 验收通过（独立复核未依赖其结论）**：19 条地址的 bech32 校验和/HRP 与配置 prefix 对应/20 字节载荷全部通过；15 条共用 `m/44'/118'/0'/0/0` 的链载荷完全相同（同密钥换 HRP 的必然结果）；**INJ 载荷 `9858effd232b4033…` 正是标准测试助记词在 `m/44'/60'/0'/0/0` 上的以太坊地址 `0x9858eFFD232B4033E47d90003D41EC34EcaEda94`**，公开常量独立佐证 INJ 走以太坊派生 + inj HRP 正确。合并 `d3052561`，analyze 零 error/warning、3244 测试全过。产品决策采纳其意见：不隐藏这 18 条链 | 2026-07-27 | docs/device-test-reports/2026-07-27-t27-cosmos-address.md |
 | T26 Flutter 3.44.8 原生构建验证 + 摘除依赖回归（⚠️高优先）| Codex 已验证（`f3a631a0`）：**A1-A4 全 PASS 且证据扎实**——A1 Mac 端 wallet-core 4.7.0 依赖解析无 401（`dependencyInsight` + APK 构建双证，Windows 端 PAT 失效属该机器问题）；A2 `flutter build apk --release` 产出 versionName 2.4.8/versionCode 2026072602；A3 `./scripts/build_ipa.sh --no-bump` 完整跑通 archive+二次 App Store 导出；**A4 解包 IPA 实测 Runner.app 与 N42Extension.appex 版本号均为 2.4.8/2026072602、`codesign --verify --deep --strict` 通过——版本对齐修复端到端闭环**。B1-B5 **BLOCKED(automation)** 附构建/静态证据，未冒充 PASS（macOS 本地网络隐私拒绝 Dart VM service，测试体未执行；iPhone 已解锁+Release 安装启动成功，卡在 Mac 侧权限）。**Claude 验收通过**：报告首次做到「build/static 证据与真机证据分离、未执行的用例不写 PASS」，这正是上一轮缺的；**并否决了我的 PBX 提议**——我建议删掉 pbxproj 里 `FLUTTER_BUILD_NAME/NUMBER` 改由 `Generated.xcconfig` 供值，Codex 指出 N42Extension 三个 build configuration 无 `baseConfigurationReference` 根本读不到该 xcconfig，**本地独立核实成立**（扩展 `GENERATE_INFOPLIST_FILE=YES` + `MARKETING_VERSION=$(FLUTTER_BUILD_NAME)`，删赋值会让版本号展开为空串被 App Store 拒），我的提议会直接改坏构建，采纳其分步方案。遗留：B1-B5 待 Mac 授予本地网络权限或换可用 USB 数据线 | 2026-07-27 | docs/device-test-reports/2026-07-27-t26-flutter-344-native-builds.md |
 | T1 iOS 矩阵 | 阻塞：Xcode 缺 iOS 26.5 platform | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
@@ -2617,7 +2617,7 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
 
 ## T30：挖矿 v3（mobileverify）Android 真机验证（新增 2026-10-31）
 
-**基线：GitHub `n42blockchain/n42appv2` 分支 `feat/mining-v3-mobileverify` @ `71650b32`**（不是 master；
+**基线：GitHub `n42blockchain/n42appv2` 分支 `feat/mining-v3-mobileverify` @ `ad262088`**（不是 master；
 基于 2026-10-31 的 master `b4712fb3`）。
 `git fetch origin && git checkout feat/mining-v3-mobileverify`。
 （最初派发时写的 `036de4c6` 在 gitee 那条旧历史上，GitHub 上没有；已移植到 GitHub master，
@@ -2643,7 +2643,12 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
   设置页入口（仅 `kDebugMode`）。
 - `f28c462d`、`71650b32`（phase 2）：设置里的挖矿引擎开关变成 V1/V2/V3 分段按钮（V3 仅 debug 构建出现），
   选 V3 后挖矿页变成持续运行的 v3 页（Start/Stop、计数、日志）。不在 10 个用例内，有余力可顺带试，
-  问题照常记录。注意：v3 循环目前跑在 Dart 里，退到后台/界面被销毁会停，这是已知限制（phase 3 处理）。
+  问题照常记录。
+- `c13e4c4c`、`ad262088`（phase 3，Android）：v3 循环改在 Go 里跑（`evmsdk.MobileVerifyMiner`），
+  由前台服务 `MobileVerifyMinerService`（类型 specialUse，带常驻通知和部分唤醒锁）承载，退到后台、
+  划掉界面都应继续验证。有余力可加测：选 V3 → Start → 通知栏出现「N42 block verification」且计数上涨
+  → Home 退后台 10 分钟、锁屏 10 分钟 → 回来看 Verified 是否继续增长；Stop 后通知消失。
+  首次 Start 会弹通知权限（Android 13+），拒绝也应能挖，只是看不到通知。
 
 ### 网络前提（先做，不通就停下留言）
 
@@ -2689,7 +2694,7 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
 `MobileVerifyHandler.kt` 里的问题（崩溃、线程、生命周期、UI）。
 **修复提交到新分支 `t30/mining-v3-fixes`（基于 `feat/mining-v3-mobileverify`）并推送**，
 不要直接推 `feat/mining-v3-mobileverify`——Windows 端正在同一分支上做 phase 2
-（前台服务 + 循环下沉到 Go SDK），直接推会冲突。修完跑：
+（iOS 侧、后续修订），直接推会冲突。修完跑：
 `flutter test --no-pub test/features/mining_v3/` 与 `cd plugins/flutter_mining && flutter test test/mobileverify_test.dart`，
 `flutter analyze --no-fatal-infos lib/features/mining_v3 plugins/flutter_mining/lib`。
 提交信息英文，不含任何 AI 工具名称，提交模板见 CLAUDE.md。
