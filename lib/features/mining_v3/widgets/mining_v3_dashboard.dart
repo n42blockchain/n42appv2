@@ -47,6 +47,7 @@ class MiningV3Dashboard extends StatefulWidget {
     required this.onBlock,
     this.onMenu,
     this.loading = false,
+    this.bottomInset = 0,
   });
 
   final MiningV3Engine engine;
@@ -56,6 +57,7 @@ class MiningV3Dashboard extends StatefulWidget {
   final ValueChanged<MiningV3Block> onBlock;
   final VoidCallback? onMenu;
   final bool loading;
+  final double bottomInset;
 
   @override
   State<MiningV3Dashboard> createState() => _MiningV3DashboardState();
@@ -233,7 +235,9 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
                   ),
                 ),
               ),
-            SliverToBoxAdapter(child: SizedBox(height: AppSpacing.space16)),
+            SliverToBoxAdapter(
+              child: SizedBox(height: AppSpacing.space16 + widget.bottomInset),
+            ),
           ],
         ),
       ),

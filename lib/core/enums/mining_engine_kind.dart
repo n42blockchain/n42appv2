@@ -24,7 +24,7 @@ enum MiningEngineKind {
   static MiningEngineKind fromUseV2(bool useV2) => useV2 ? v2 : v1;
 }
 
-/// Whether v3 can be selected. It has no reward path and no public TLS
-/// endpoint yet, so release builds offer it only when built with
-/// `--dart-define=MINING_V3=true`.
-const bool miningV3Available = kDebugMode || bool.fromEnvironment('MINING_V3');
+/// The foreground-service V3 bridge is implemented on Android.
+/// Android offers it in settings in both debug and release builds.
+bool get miningV3Available =>
+    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;

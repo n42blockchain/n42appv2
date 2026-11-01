@@ -1,0 +1,11 @@
+{
+  "source": "f21e24f6fb8949efb0ae4b5a94aca434d5e8871a",
+  "version": "2.5.3+73068",
+  "package": "ai.n42.www.t30",
+  "buildMode": "profile",
+  "miningV3DefineProvided": false,
+  "sha256": "f790d37c27a73ea932231152fc431e6fe27e0be6b11c4fa33386e5d5369c3e0c",
+  "bytes": 634401852,
+  "entrypoint": "lib/main.dart",
+  "targetPlatform": "android-arm64"
+}

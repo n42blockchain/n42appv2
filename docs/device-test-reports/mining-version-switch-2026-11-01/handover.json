@@ -1,0 +1,7 @@
+{
+  "previous": "v3",
+  "next": "v2",
+  "v3ServicePresentAfterSwitch": false,
+  "package": "ai.n42.www.t30",
+  "versionCode": 73068
+}

@@ -1,0 +1,50 @@
+00:00 +0: loading /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart
+00:00 +0: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: stored mining engine defaults to v2 when nothing was ever stored
+00:00 +1: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: stored mining engine migrates the pre-v3 bool: true is v2, false is v1
+00:00 +2: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: stored mining engine the stored kind wins over the bool, and the bool follows it
+00:00 +3: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: stored mining engine an unknown stored name falls back to the bool
+00:00 +4: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: MiningEngineKindNotifier loads the stored kind
+00:00 +5: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: MiningEngineKindNotifier without v3 a stored or selected v3 reads as v2
+00:00 +6: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/providers/mining_engine_kind_test.dart: MiningEngineKindNotifier with v3 available, select persists v3
+00:00 +7: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: V3 availability uses the supported platform, not build mode
+00:00 +8: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +9: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +10: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +11: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +12: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +13: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +14: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +15: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +16: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +17: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +18: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +19: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +20: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:00 +21: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +22: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +23: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +24: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +25: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +26: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +27: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +28: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/en (variant: TargetPlatform.android)
+00:02 +29: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:03 +30: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:03 +31: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/home/setting/mining_version_setting_test.dart: Android settings selects all versions at 320/1.0/zh_TW (variant: TargetPlatform.android)
+00:03 +32: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: real activity filters, selects and displays certificate details
+00:03 +33: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: real activity filters, selects and displays certificate details
+00:03 +34: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: real activity filters, selects and displays certificate details
+00:03 +35: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: real activity filters, selects and displays certificate details
+00:04 +36: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: copy feedback stays visible inside the block sheet
+00:04 +37: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: node validates credentials and keeps failed save open
+00:04 +38: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: running node cannot be edited
+00:04 +39: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 en
+00:05 +40: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 zh_TW
+00:05 +41: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 en
+00:05 +42: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 zh_TW
+00:06 +43: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 1.0 en
+00:06 +44: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 1.0 zh_TW
+00:06 +45: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 en
+00:06 +46: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 zh_TW
+00:06 +47: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: endpoint normalization rejects unsupported or credentialed addresses
+00:07 +48: All tests passed!

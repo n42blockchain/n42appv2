@@ -1,0 +1,9 @@
+{
+  "source": "e07658289ef245b3520be805478d03bb850d3218",
+  "version": "2.5.3+73065",
+  "package": "ai.n42.www.t30",
+  "sha256": "657403786efb0e95453f6b6e55266378842493b3bfcc777823a50e18fbfe7381",
+  "bytes": 712316428,
+  "entrypoint": "lib/main.dart",
+  "configuration": "debug; applicationId and ignored Firebase client package changed locally only"
+}

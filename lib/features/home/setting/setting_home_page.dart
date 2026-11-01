@@ -198,8 +198,6 @@ class SettingHomePage extends ConsumerWidget {
   ) => switch (kind) {
     MiningEngineKind.v1 => S.of(context).g_setting_mining_v1_label,
     MiningEngineKind.v2 => S.of(context).g_setting_mining_v2_label,
-    // v3 is not offered to users yet (miningV3Available); localise it
-    // when it is.
-    MiningEngineKind.v3 => 'Mobile verification (V3)',
+    MiningEngineKind.v3 => S.of(context).g_setting_mining_v3_label,
   };
 }

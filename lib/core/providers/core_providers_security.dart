@@ -19,8 +19,9 @@ final miningEngineKindProvider =
     });
 
 class MiningEngineKindNotifier extends StateNotifier<MiningEngineKind> {
-  MiningEngineKindNotifier(this._sp, {this.v3Available = miningV3Available})
-    : super(MiningEngineKind.v2) {
+  MiningEngineKindNotifier(this._sp, {bool? v3Available})
+    : v3Available = v3Available ?? miningV3Available,
+      super(MiningEngineKind.v2) {
     _loadInitial();
   }
 
