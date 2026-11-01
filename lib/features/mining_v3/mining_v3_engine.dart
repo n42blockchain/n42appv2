@@ -13,6 +13,7 @@ import 'package:flutter_mining/mobileverify.dart';
 
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/features/mining_v3/device_key.dart';
+import 'package:n42_wallet/features/mining_v3/mining_v3_activity.dart';
 
 /// The chain the fleet runs; the miner re-executes blocks under it.
 const miningV3DefaultChain = String.fromEnvironment(
@@ -56,15 +57,20 @@ class MiningV3Engine extends ChangeNotifier {
     this.chain = miningV3DefaultChain,
     this.refreshEvery = const Duration(seconds: 1),
     PeriodicTimer? periodic,
+    DateTime Function()? now,
   }) : _api = api,
        _store = store,
-       _periodic = periodic ?? Timer.periodic {
+       _periodic = periodic ?? Timer.periodic,
+       _now = now ?? DateTime.now {
     unawaited(refresh());
   }
 
   final MobileVerifyApi _api;
   final SecureStore _store;
   final PeriodicTimer _periodic;
+  final DateTime Function() _now;
+  final _activity = MiningV3Activity();
+  Future<void>? _refreshing;
   final String chain;
   final Duration refreshEvery;
 
@@ -91,6 +97,9 @@ class MiningV3Engine extends ChangeNotifier {
   int get lastSigners => status.lastSigners;
   String? get lastError => startError ?? status.lastError;
   List<String> get log => status.log;
+  List<MiningV3Block> get blocks => _activity.blocks;
+  Duration? get sessionDuration => _activity.duration(_now());
+  DateTime? get sessionStartedAt => _activity.startedAt;
 
   /// Starts the miner against [baseUrl] with the device key, creating the
   /// key on first use.
@@ -125,9 +134,16 @@ class MiningV3Engine extends ChangeNotifier {
   }
 
   /// Reads the miner's status.
-  Future<void> refresh() async {
+  Future<void> refresh() => _refreshing ??= _readStatus().whenComplete(() {
+    _refreshing = null;
+  });
+
+  Future<void> _readStatus() async {
     try {
-      status = await _api.minerStatus();
+      final next = await _api.minerStatus();
+      if (_disposed) return;
+      _activity.update(next, _now());
+      status = next;
     } on Object catch (e) {
       startError ??= '$e';
     }

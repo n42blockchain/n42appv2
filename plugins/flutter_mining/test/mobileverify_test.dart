@@ -5,6 +5,19 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test(
+    'decodes the native start timestamp without inventing missing values',
+    () {
+      final status = MvMinerStatus.fromJson({
+        'running': true,
+        'phase': 'mining',
+        'startedAtMs': 1793440800000,
+      });
+      expect(status.startedAtMs, 1793440800000);
+      expect(MvMinerStatus.fromJson({}).startedAtMs, isNull);
+    },
+  );
+
   const channel = MethodChannel('n42/mobileverify');
   final api = MethodChannelMobileVerify();
   final calls = <MethodCall>[];

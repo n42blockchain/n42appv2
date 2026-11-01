@@ -110,6 +110,7 @@ class MvMinerStatus {
     this.lastBlock,
     this.lastSigners = 0,
     this.lastError,
+    this.startedAtMs,
     this.log = const [],
   });
 
@@ -128,6 +129,7 @@ class MvMinerStatus {
         : MvVerified.fromJson(json['lastBlock'] as Map<String, dynamic>),
     lastSigners: (json['lastSigners'] as num?)?.toInt() ?? 0,
     lastError: json['lastError'] as String?,
+    startedAtMs: (json['startedAtMs'] as num?)?.toInt(),
     log: [for (final l in json['log'] as List<dynamic>? ?? []) l as String],
   );
 
@@ -155,6 +157,7 @@ class MvMinerStatus {
   final MvVerified? lastBlock;
   final int lastSigners;
   final String? lastError;
+  final int? startedAtMs;
 
   /// The newest lines, oldest first.
   final List<String> log;

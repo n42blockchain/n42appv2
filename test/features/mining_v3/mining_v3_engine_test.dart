@@ -32,6 +32,7 @@ class _FakeNative implements MobileVerifyApi {
   int statusReads = 0;
   int keys = 0;
   Object? startFails;
+  Future<MvMinerStatus>? delayedStatus;
   MvMinerStatus status = MvMinerStatus.idle;
 
   @override
@@ -64,7 +65,7 @@ class _FakeNative implements MobileVerifyApi {
   @override
   Future<MvMinerStatus> minerStatus() async {
     statusReads++;
-    return status;
+    return delayedStatus == null ? status : await delayedStatus!;
   }
 
   @override
@@ -206,6 +207,21 @@ void main() {
     timers.fire();
     await pumpEventQueue();
     expect(native.statusReads, reads + 1);
+  });
+
+  test('coalesces a manual refresh with a pending native status read', () async {
+    final pending = Completer<MvMinerStatus>();
+    native.delayedStatus = pending.future;
+    final e = engine();
+    final first = e.refresh();
+    final second = e.refresh();
+    expect(identical(first, second), isTrue);
+    expect(native.statusReads, 1);
+    pending.complete(_mining);
+    await Future.wait([first, second]);
+    expect(e.blocks.single.number, 42);
+    expect(e.verified, 12);
+    e.dispose();
   });
 
   test('stop stops the miner', () async {
