@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-10-31T20:57:33.839954-04:00",
+  "commit": "71650b32e0a19b0846c5917c065df79ccb69b4bd",
+  "device": {
+    "ro.product.model": "25098RA98C",
+    "ro.product.manufacturer": "Xiaomi",
+    "ro.build.version.release": "16",
+    "ro.build.version.sdk": "36",
+    "ro.product.cpu.abi": "arm64-v8a",
+    "ro.build.version.security_patch": "2026-07-01"
+  },
+  "existingT30Package": ""
+}

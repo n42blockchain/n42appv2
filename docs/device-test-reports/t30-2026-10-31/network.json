@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-31T20:59:53.266411-04:00",
+  "endpoint": "http://192.168.0.217:21100",
+  "phoneIp": "192.168.0.26",
+  "wifi": "N42",
+  "macLatest": {
+    "hash": "0xeefca5fe2d7bdfde8a195cd281f54be6f31b6dfefbb670fcc5eaa197e5ec630c",
+    "number": 14379347,
+    "packet": true
+  },
+  "phoneHealth": {
+    "accumulator": "0x56dfd708912bcf37a72164cebc415684232940a706508577e1158b206a42e507",
+    "alarms": 0,
+    "certBlocks": 20,
+    "openWindows": 0,
+    "pending": 0,
+    "registry": 7
+  }
+}
