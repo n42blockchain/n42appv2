@@ -1,0 +1,13 @@
+{
+  "before": {
+    "CurrentCapacity": 100,
+    "ExternalConnected": true,
+    "IsCharging": false
+  },
+  "after": {
+    "CurrentCapacity": 100,
+    "ExternalConnected": true,
+    "IsCharging": false
+  },
+  "limitations": "USB connected, fully charged; not a battery-drain or temperature measurement."
+}

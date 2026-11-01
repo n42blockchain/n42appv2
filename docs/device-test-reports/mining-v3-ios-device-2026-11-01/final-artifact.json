@@ -1,0 +1,12 @@
+{
+  "bundleId": "ai.n42.www",
+  "version": "2.5.3",
+  "build": "73082",
+  "appCommit": "711bf01d3",
+  "sdkCommit": "537fed759c4d504ace2323119ed59190359f5d34",
+  "mode": "signed iOS Release, local install only",
+  "sha256": {
+    "Runner": "9471a1ae0de8d18cab84b3c6583b6b8865e659fa469b6932374cf9682d8a0375",
+    "Frameworks/App.framework/App": "69e4f999867d453c4b850cbd84e9d3058d741939b8b2ace5938c335209b4a3db"
+  }
+}

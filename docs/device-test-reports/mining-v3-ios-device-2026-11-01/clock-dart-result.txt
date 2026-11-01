@@ -1,0 +1,4 @@
+00:00 +0: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/test/features/mining_v3/mining_v3_activity_test.dart: UTC activity uses local time across midnight and DST 23:59:59
+00:00 +1: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/test/features/mining_v3/mining_v3_activity_test.dart: UTC activity uses local time across midnight and DST 23:59:59
+00:00 +3: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/test/features/mining_v3/mining_v3_activity_test.dart: UTC activity uses local time across midnight and DST 05:59:59
+01:02 +43: All tests passed!

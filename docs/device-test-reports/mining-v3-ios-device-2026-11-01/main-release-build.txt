@@ -1,0 +1,4 @@
+Xcode build done.                                           299.5s
+✓ Built build/ios/iphoneos/Runner.app (389.7MB)
+Version: 2.5.3+73078
+Build type: signed iOS release, local device install only

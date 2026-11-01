@@ -1,0 +1,13 @@
+00:00 +0: loading /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/flutter_mining_test.dart
+00:00 +0: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/flutter_mining_test.dart: MethodChannelFlutterMining is the default instance
+00:00 +1: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/flutter_mining_test.dart: MethodChannelFlutterMining is the default instance
+00:00 +2: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: decodes the native start timestamp without inventing missing values
+00:00 +3: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/flutter_mining_test.dart: getPlatformVersion
+00:00 +4: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: passes the arguments the native handler reads
+00:00 +5: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: decodes the session JSON
+00:00 +6: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: starts and stops the native miner with the arguments it reads
+00:00 +7: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: decodes the miner status
+00:00 +8: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: an empty certificate list is no certificate yet
+00:00 +9: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: a native failure surfaces as a PlatformException
+00:00 +10: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/plugins/flutter_mining/test/mobileverify_test.dart: decodes optional iOS lifecycle metadata and preserves Android defaults
+00:00 +11: All tests passed!

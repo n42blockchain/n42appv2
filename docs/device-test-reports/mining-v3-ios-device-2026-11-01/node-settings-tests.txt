@@ -1,0 +1,5 @@
+00:00 +0: loading /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-mining-v3-ios/test/features/mining_v3/mining_v3_node_settings_test.dart
+00:00 +0: node defaults preserve saved address null
+00:01 +1: node defaults preserve saved address https://custom.example:4242
+00:01 +2: iOS explains background pause and locks its pending-resume node (variant: TargetPlatform.iOS)
+00:01 +3: All tests passed!
