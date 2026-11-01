@@ -1,0 +1,2 @@
+No matching Flutter lifecycle exception, AndroidRuntime fatal exception, UnsatisfiedLinkError, fatal signal, or matching ANR was found in the captured logcat.
+UI-level MobileVerify failures are retained in the case JSON/XML/PNG files.

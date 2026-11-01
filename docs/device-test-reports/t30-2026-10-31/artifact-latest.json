@@ -1,0 +1,12 @@
+{
+  "applicationId": "ai.n42.www.t30",
+  "buildType": "debug",
+  "entrypoint": "lib/main.dart",
+  "sourceCommit": "e85201655050e6ebf5216780d8c81b901ebe0909",
+  "featureBaseline": "ad2620889",
+  "version": "2.5.3+73057",
+  "bytes": 788968846,
+  "sha256": "02c762c65ff8141ae79b845ce23681e0fd8c8b8b8792b49a872f15acebfe6ff8",
+  "evmAarBytes": 60758473,
+  "evmAarSha256": "06ad099064330caf72abc4325ef613fecaea11f6178bd5450d2d9a44dc12833d"
+}

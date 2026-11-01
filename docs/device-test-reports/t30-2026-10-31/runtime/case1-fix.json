@@ -1,0 +1,41 @@
+{
+  "case": "case1-fix",
+  "startedAt": "2026-10-31T21:24:58.010976-04:00",
+  "completedAt": "2026-10-31T21:25:41.621518-04:00",
+  "elapsedSeconds": 43.61,
+  "result": "PASS: 1 signers",
+  "lines": [
+    {
+      "seconds": 4.69,
+      "text": "created a device key"
+    },
+    {
+      "seconds": 4.69,
+      "text": "session open at http://192.168.0.217:21100 (mainnet_qmdb_staggered), pubkey 8658fb164323731d\u2026"
+    },
+    {
+      "seconds": 4.69,
+      "text": "registered: index 0, committed false"
+    },
+    {
+      "seconds": 34.59,
+      "text": "committed as device 8"
+    },
+    {
+      "seconds": 34.59,
+      "text": "head 14380114 0x757b51ce132be563e54e160b3b5acd2a70a6d5bb76c31ef79d26942f4743518b"
+    },
+    {
+      "seconds": 34.59,
+      "text": "verified block 14380114: 15 txs, root 0x10d3902d7b50b63d6712d9018f4fea439966713f90b3c5fff4a263974ed7e97a, 29 ms, accepted as device 8"
+    },
+    {
+      "seconds": 43.61,
+      "text": "PASS: 1 signers"
+    },
+    {
+      "seconds": 43.61,
+      "text": "certificate: 1 signers over our root"
+    }
+  ]
+}

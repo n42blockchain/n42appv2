@@ -1,0 +1,46 @@
+{
+  "case": "case7-flight",
+  "package": "ai.n42.www.t30native",
+  "config": [
+    "http://192.168.0.217:21100",
+    "mainnet_qmdb_staggered"
+  ],
+  "flight": {
+    "triggeredAt": "2026-10-31T21:43:59.708980-04:00",
+    "seconds": 3.83,
+    "airplaneBefore": "0",
+    "wifiBefore": "1",
+    "airplaneDuring": "1",
+    "wifiDuring": "Wifi is disabled",
+    "airplaneRestored": "0",
+    "wifiRestored": "Wifi is disabled"
+  },
+  "startedAt": "2026-10-31T21:43:55.875179-04:00",
+  "completedAt": "2026-10-31T21:44:10.142797-04:00",
+  "elapsedSeconds": 14.27,
+  "result": "FAIL: PlatformException(MobileVerify, Post \"http://192.168.0.217:21100/mobileverify/register\": dial tcp 192.168.0.217:21100: connect: network is unreachable, null, null)",
+  "buttonEnabledAtEnd": true,
+  "lines": [
+    {
+      "seconds": 3.83,
+      "text": "created a device key"
+    },
+    {
+      "seconds": 3.83,
+      "text": "session open at http://192.168.0.217:21100 (mainnet_qmdb_staggered), pubkey 9168f76fa0fdfca0\u2026"
+    },
+    {
+      "seconds": 3.83,
+      "text": "registered: index 0, committed false"
+    },
+    {
+      "seconds": 13.86,
+      "text": "FAIL: PlatformException(MobileVerify, Post \"http://192.168.0.217:21100/mobileverify/register\": dial tcp 192.168.0.217:21100: connect: network is unreachable, null, null)"
+    },
+    {
+      "seconds": 13.86,
+      "text": "failed: PlatformException(MobileVerify, Post \"http://192.168.0.217:21100/mobileverify/register\": dial tcp 192.168.0.217:21100: connect: network is unreachable, null, null)"
+    }
+  ],
+  "restorationObservation": "Immediate Wi-Fi status was sampled while re-enabling. Confirmed LAN reconnection is recorded in case7-network-restored.json."
+}

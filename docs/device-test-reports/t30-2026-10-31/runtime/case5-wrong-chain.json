@@ -1,0 +1,37 @@
+{
+  "case": "case5-wrong-chain",
+  "startedAt": "2026-10-31T21:35:14.750694-04:00",
+  "completedAt": "2026-10-31T21:35:27.548664-04:00",
+  "elapsedSeconds": 12.8,
+  "result": "PASS: 1 signers",
+  "lines": [
+    {
+      "seconds": 2.89,
+      "text": "session open at http://192.168.0.217:21100 (mainnet), pubkey 8658fb164323731d\u2026"
+    },
+    {
+      "seconds": 2.89,
+      "text": "registered: index 8, committed true"
+    },
+    {
+      "seconds": 2.89,
+      "text": "committed as device 8"
+    },
+    {
+      "seconds": 2.89,
+      "text": "head 14380408 0x9fab276417b9cffbf47672640e773e47ada4510df8ef177536de50d322ddd5c8"
+    },
+    {
+      "seconds": 2.89,
+      "text": "verified block 14380408: 14 txs, root 0x26a4060665e92e481889466d4f45561612aef608dc0d12cc2c8b4db49ef3b572, 14 ms, accepted as device 8"
+    },
+    {
+      "seconds": 12.8,
+      "text": "PASS: 1 signers"
+    },
+    {
+      "seconds": 12.8,
+      "text": "certificate: 1 signers over our root"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "applicationId": "ai.n42.www.t30native",
+  "buildType": "debug",
+  "entrypoint": "integration_test/t30_native_regression_app.dart",
+  "sourceCommit": "4264ec77c5dbfba4981499cd2af4a6fbf0d0508f",
+  "version": "2.5.3+73059",
+  "defines": {
+    "T30_NATIVE_SMOKE": true
+  },
+  "targetPlatformFlag": "android-arm64",
+  "bytes": 712284408,
+  "sha256": "9693c6386c3b0895642a44e767b4079a442c011eab7d057dd04ae0fbae481bb0",
+  "evmAarSha256": "06ad099064330caf72abc4325ef613fecaea11f6178bd5450d2d9a44dc12833d",
+  "probeSourceSha256": "19f9c9e806191b834db8ec6254c818c8349e3b84359ec4df9e5b34a45217795e",
+  "harnessSourceSha256": "55b2cf07839d922f3266bb253efb90afde589552cf77937b614c407d4403c43a",
+  "productionProbePageSha256": "ed89112d573b524c0e71414162e3323ff47b9ff10691b7e2d96afbacf04387e8"
+}

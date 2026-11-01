@@ -1,0 +1,28 @@
+{
+  "case": "case1",
+  "elapsedSeconds": 6.42,
+  "result": "FAIL: PlatformException(MobileVerify, mobileverify client: server 429: registration rate limit, null, null)",
+  "lines": [
+    {
+      "seconds": 6.42,
+      "text": "FAIL: PlatformException(MobileVerify, mobileverify client: server 429: registration rate limit, null, null)"
+    },
+    {
+      "seconds": 6.42,
+      "text": "created a device key"
+    },
+    {
+      "seconds": 6.42,
+      "text": "session open at http://192.168.0.217:21100 (mainnet_qmdb_staggered), pubkey 836860210522d85a\u2026"
+    },
+    {
+      "seconds": 6.42,
+      "text": "registered: index 0, committed false"
+    },
+    {
+      "seconds": 6.42,
+      "text": "failed: PlatformException(MobileVerify, mobileverify client: server 429: registration rate limit, null, null)"
+    }
+  ],
+  "timingScope": "Resumed UI observation only; not total probe duration."
+}

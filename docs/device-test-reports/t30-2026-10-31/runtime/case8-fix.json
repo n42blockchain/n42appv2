@@ -1,0 +1,44 @@
+{
+  "case": "case8-fix",
+  "package": "ai.n42.www.t30",
+  "config": [
+    "http://192.168.0.217:21100",
+    "mainnet_qmdb_staggered"
+  ],
+  "flight": null,
+  "startedAt": "2026-10-31T21:38:48.818249-04:00",
+  "completedAt": "2026-10-31T21:39:02.589365-04:00",
+  "elapsedSeconds": 13.77,
+  "result": "PASS: 1 signers",
+  "buttonEnabledAtEnd": true,
+  "lines": [
+    {
+      "seconds": 3.77,
+      "text": "session open at http://192.168.0.217:21100 (mainnet_qmdb_staggered), pubkey 8658fb164323731d\u2026"
+    },
+    {
+      "seconds": 3.77,
+      "text": "registered: index 8, committed true"
+    },
+    {
+      "seconds": 3.77,
+      "text": "committed as device 8"
+    },
+    {
+      "seconds": 3.77,
+      "text": "head 14380515 0x613d689b8735b91227763a9797c81917311e9d6cbc53c295ac846607168897eb"
+    },
+    {
+      "seconds": 3.77,
+      "text": "verified block 14380515: 2 txs, root 0xa1754e8e8306ad2e20596cd78809e08a4618f0a4ec1833719ac35a1610ffb769, 7 ms, accepted as device 8"
+    },
+    {
+      "seconds": 13.77,
+      "text": "PASS: 1 signers"
+    },
+    {
+      "seconds": 13.77,
+      "text": "certificate: 1 signers over our root"
+    }
+  ]
+}

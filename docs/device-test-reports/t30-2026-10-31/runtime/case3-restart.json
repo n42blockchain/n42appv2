@@ -1,0 +1,7 @@
+{
+  "at": "2026-10-31T21:27:16.256906-04:00",
+  "method": "am force-stop then cold relaunch; no data clear",
+  "pidBefore": "22336",
+  "pidAfter": "23455",
+  "launch": "Starting: Intent { cmp=ai.n42.www.t30/ai.n42.www.MainActivity }\nStatus: ok\nLaunchState: COLD\nActivity: ai.n42.www.t30/ai.n42.www.MainActivity\nTotalTime: 5970\nWaitTime: 5981\nComplete\n"
+}

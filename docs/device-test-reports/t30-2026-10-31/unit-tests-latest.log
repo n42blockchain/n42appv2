@@ -1,0 +1,14 @@
+00:00 +0: loading /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart
+00:00 +0: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart: registers, waits for the commit and the packet, verifies the head and sees it certified
+00:00 +1: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: starts the miner with the device key, created once
+00:00 +2: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart: reuses the stored device key
+00:00 +3: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: a new UI picks up a miner that is already running
+00:00 +4: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart: gives up when the registration is never committed
+00:00 +5: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: polls the status only while someone listens
+00:00 +6: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: polls the status only while someone listens
+00:00 +7: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: polls the status only while someone listens
+00:00 +8: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart: a native failure ends the probe and closes the session
+00:00 +9: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: stop stops the miner
+00:00 +10: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: a failed start is reported and nothing runs
+00:00 +11: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_engine_test.dart: disposing the UI side leaves the miner running
+00:00 +12: All tests passed!

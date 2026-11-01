@@ -1,0 +1,21 @@
+{
+  "case": "case6-wrong-port",
+  "startedAt": "2026-10-31T21:36:23.777771-04:00",
+  "completedAt": "2026-10-31T21:36:26.569402-04:00",
+  "elapsedSeconds": 2.79,
+  "result": "FAIL: PlatformException(MobileVerify, Post \"http://192.168.0.217:21101/mobileverify/register\": dial tcp 192.168.0.217:21101: connect: connection refused, null, null)",
+  "lines": [
+    {
+      "seconds": 2.79,
+      "text": "FAIL: PlatformException(MobileVerify, Post \"http://192.168.0.217:21101/mobileverify/register\": dial tcp 192.168.0.217:21101: connect: connection refused, null, null)"
+    },
+    {
+      "seconds": 2.79,
+      "text": "session open at http://192.168.0.217:21101 (mainnet_qmdb_staggered), pubkey 8658fb164323731d\u2026"
+    },
+    {
+      "seconds": 2.79,
+      "text": "failed: PlatformException(MobileVerify, Post \"http://192.168.0.217:21101/mobileverify/register\": dial tcp 192.168.0.217:21101: connect: connection refused, null, null)"
+    }
+  ]
+}

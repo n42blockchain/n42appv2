@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-31T21:44:30.577146-04:00",
+  "health": {
+    "accumulator": "0x8aad5a1447c0704d82e85a3fe1f8b70e7a65695ab5a8345273b97788bc696f7c",
+    "alarms": 0,
+    "certBlocks": 37,
+    "openWindows": 0,
+    "pending": 0,
+    "registry": 10
+  },
+  "wifi": [
+    "Wifi is enabled",
+    "Wifi scanning is always available",
+    "==== Primary ClientModeManager instance ===="
+  ],
+  "airplane": "0",
+  "confirmedSsid": "N42",
+  "phoneIp": "192.168.0.26"
+}

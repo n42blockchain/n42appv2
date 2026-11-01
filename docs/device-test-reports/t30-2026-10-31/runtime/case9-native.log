@@ -1,0 +1,11 @@
+10-31 21:42:40.186  1728  1728 I flutter : T30_V1 server wss://ws.n42.world
+10-31 21:42:40.490  1728  1728 I flutter : T30_V1 {"method":"stop-before","response":{"code":0,"message":"","data":null}}
+10-31 21:42:40.587  1728  1728 I flutter : T30_V1 {"method":"state-before","response":{"code":0,"message":"","data":"stopped"}}
+10-31 21:42:40.618  1728  1728 I flutter : T30_V1 {"method":"setting","response":{"code":0,"message":"","data":null}}
+10-31 21:42:40.621  1728  1728 I flutter : T30_V1 {"method":"blspubk","response":{"code":0,"message":"","data":"82ef2e206d8c9ac4c1d8c3860f13e47fe19f0ba257c466c0cbd78960d0bc79c6a96bb9942bcee5a79143b94196698a25"}}
+10-31 21:42:40.625  1728  1728 I flutter : T30_V1 {"method":"blssign","response":{"code":0,"message":"","data":"b533026b55796e9e25027836cfd3d1fae0237f33ff6dd23f38731617c59e849da79f0ab53c4751e247e8f9f00a91a618024aa00e3abb3fdba7f36d166daa643bb1dfde30278787fe48b7986e656a5b56d79348489a4fe55425fd802fd889af27"}}
+10-31 21:42:41.026  1728  1728 I flutter : T30_V1 {"method":"start","response":{"code":-32000,"message":"unauthed address: 0x0000000000000000000000000000000000000000","data":null}}
+10-31 21:42:43.032  1728  1728 I flutter : T30_V1 {"method":"state-after","response":{"code":0,"message":"","data":"stopped"}}
+10-31 21:42:43.033  1728  1728 I flutter : T30_V1 {"method":"stop-after","response":{"code":0,"message":"","data":null}}
+10-31 21:42:43.034  1728  1728 I flutter : T30_V1 {"method":"state-stopped","response":{"code":0,"message":"","data":"stopped"}}
+10-31 21:42:43.034  1728  1728 I flutter : T30_V1 PASS: v1 native bridge; no funded mining acceptance

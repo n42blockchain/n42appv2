@@ -1,0 +1,5 @@
+{
+  "buffer": "events",
+  "command": "adb logcat -d -b events -v threadtime; filter am_anr and test package prefix",
+  "matches": []
+}

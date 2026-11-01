@@ -1,0 +1,40 @@
+{
+  "case": "supplemental-ethereum-chain",
+  "package": "ai.n42.www.t30native",
+  "config": [
+    "http://192.168.0.217:21100",
+    "eth-mainnet"
+  ],
+  "flight": null,
+  "startedAt": "2026-10-31T21:50:34.927666-04:00",
+  "completedAt": "2026-10-31T21:50:37.681152-04:00",
+  "elapsedSeconds": 2.75,
+  "result": "FAIL: PlatformException(MobileVerify, verify_v2: block start: can't load code hash f57acd40259872606d76197ef052f3d35588dadf919ee1f0e3cb9b62d3f4b02c: stream_replay: missing bytecode for code hash f57acd40259872606d76197ef052f3d35588dadf919ee1f0e3cb9b62d3f4b02c, null, null)",
+  "buttonEnabledAtEnd": true,
+  "lines": [
+    {
+      "seconds": 2.75,
+      "text": "FAIL: PlatformException(MobileVerify, verify_v2: block start: can't load code hash f57acd40259872606d76197ef052f3d35588dadf919ee1f0e3cb9b62d3f4b02c: stream_replay: missing bytecode for code hash f57acd40259872606d76197ef052f3d35588dadf919ee1f0e3cb9b62d3f4b02c, null, null)"
+    },
+    {
+      "seconds": 2.75,
+      "text": "session open at http://192.168.0.217:21100 (eth-mainnet), pubkey 9168f76fa0fdfca0\u2026"
+    },
+    {
+      "seconds": 2.75,
+      "text": "registered: index 9, committed true"
+    },
+    {
+      "seconds": 2.75,
+      "text": "committed as device 9"
+    },
+    {
+      "seconds": 2.75,
+      "text": "head 14380868 0x9ab56badcafb67955ddfb684666a5238baa8334d218de3eaf9968b353af54108"
+    },
+    {
+      "seconds": 2.75,
+      "text": "failed: PlatformException(MobileVerify, verify_v2: block start: can't load code hash f57acd40259872606d76197ef052f3d35588dadf919ee1f0e3cb9b62d3f4b02c: stream_replay: missing bytecode for code hash f57acd40259872606d76197ef052f3d35588dadf919ee1f0e3cb9b62d3f4b02c, null, null)"
+    }
+  ]
+}

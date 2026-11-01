@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-31T21:59:26.327175-04:00",
+  "originalWalletPackage": "",
+  "fixedTestPackage": "versionCode=73058 minSdk=26 targetSdk=36\nversionName=2.5.3",
+  "fixedTestPackageStopped": true,
+  "auxiliaryUninstall": "Success",
+  "airplaneMode": "0",
+  "wifiSummary": [
+    "Wifi is enabled",
+    "Wifi is connected to \"N42\""
+  ]
+}

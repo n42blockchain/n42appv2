@@ -1,0 +1,11 @@
+{
+  "source": "ADB logcat capture during this session",
+  "filters": [
+    "setState() called after dispose",
+    "FATAL EXCEPTION",
+    "UnsatisfiedLinkError",
+    "Fatal signal",
+    "ANR in ai.n42.www.t30"
+  ],
+  "matches": []
+}

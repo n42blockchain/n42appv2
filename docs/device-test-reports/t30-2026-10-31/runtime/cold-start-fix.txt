@@ -1,0 +1,7 @@
+Starting: Intent { cmp=ai.n42.www.t30/ai.n42.www.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: ai.n42.www.t30/ai.n42.www.MainActivity
+TotalTime: 7184
+WaitTime: 7196
+Complete

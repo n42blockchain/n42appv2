@@ -1,0 +1,79 @@
+{
+  "package": "ai.n42.www.t30native",
+  "sourceCommit": "4264ec77c5dbfba4981499cd2af4a6fbf0d0508f",
+  "result": "PASS native bridge; full authorized mining not exercised",
+  "responses": [
+    {
+      "method": "stop-before",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": null
+      }
+    },
+    {
+      "method": "state-before",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": "stopped"
+      }
+    },
+    {
+      "method": "setting",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": null
+      }
+    },
+    {
+      "method": "blspubk",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": "82ef2e206d8c9ac4c1d8c3860f13e47fe19f0ba257c466c0cbd78960d0bc79c6a96bb9942bcee5a79143b94196698a25"
+      }
+    },
+    {
+      "method": "blssign",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": "b533026b55796e9e25027836cfd3d1fae0237f33ff6dd23f38731617c59e849da79f0ab53c4751e247e8f9f00a91a618024aa00e3abb3fdba7f36d166daa643bb1dfde30278787fe48b7986e656a5b56d79348489a4fe55425fd802fd889af27"
+      }
+    },
+    {
+      "method": "start",
+      "response": {
+        "code": -32000,
+        "message": "unauthed address: 0x0000000000000000000000000000000000000000",
+        "data": null
+      }
+    },
+    {
+      "method": "state-after",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": "stopped"
+      }
+    },
+    {
+      "method": "stop-after",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": null
+      }
+    },
+    {
+      "method": "state-stopped",
+      "response": {
+        "code": 0,
+        "message": "",
+        "data": "stopped"
+      }
+    }
+  ]
+}
