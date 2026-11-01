@@ -1802,5 +1802,89 @@
   "g_ui_coins_load_failed": "幣種載入失敗，請重試。",
   "g_ui_mpc_no_phrase": "無需助記詞",
   "g_ui_mpc_intro": "使用社群帳戶登入以建立安全的 MPC 錢包。您的私鑰會拆分為加密分片，無需保管助記詞。",
-  "g_ui_mpc_security": "採用 MPC-TSS 技術。您的私鑰會拆分為 3 份加密分片，分別存放於您的裝置、我們的伺服器及復原備份。"
+  "g_ui_mpc_security": "採用 MPC-TSS 技術。您的私鑰會拆分為 3 份加密分片，分別存放於您的裝置、我們的伺服器及復原備份。",
+  "miningV3Title": "挖礦",
+  "miningV3Duration": "本次運行時長",
+  "miningV3Ready": "準備就緒",
+  "miningV3Active": "正在驗證區塊",
+  "miningV3Connecting": "正在連線",
+  "miningV3Registering": "正在啟用裝置",
+  "miningV3Retrying": "正在重新連線",
+  "miningV3Paused": "挖礦已暫停",
+  "miningV3Start": "開始挖礦",
+  "miningV3Pause": "暫停挖礦",
+  "miningV3Setup": "設定挖礦",
+  "miningV3Verified": "已驗證區塊",
+  "miningV3Certified": "已認證區塊",
+  "miningV3CertifiedStatus": "已認證",
+  "miningV3SuccessRate": "驗證成功率",
+  "miningV3AverageTime": "近期平均驗證",
+  "miningV3Rewards": "挖礦收益",
+  "miningV3RewardsUnavailable": "暫無收益資料",
+  "miningV3RewardsHint": "目前沒有已確認的收益資料。",
+  "miningV3RewardsInfo": "此節點提供區塊驗證和認證資料，但未提供收益金額。已驗證區塊數不代表實際收益。",
+  "miningV3RecentBlocks": "近期區塊",
+  "miningV3RecentHint": "本次運行中近期觀測到的區塊",
+  "miningV3All": "全部",
+  "miningV3Pending": "等待認證",
+  "miningV3Uncertified": "未取得認證",
+  "miningV3Failed": "驗證失敗",
+  "miningV3Attention": "需要關注",
+  "miningV3EmptyTitle": "從第一個區塊開始",
+  "miningV3EmptyBody": "開始挖礦後，即可查看已驗證區塊和認證狀態。",
+  "miningV3FilterEmpty": "此分類暫無區塊。",
+  "miningV3LoadMore": "顯示更多區塊",
+  "miningV3Block": "區塊 #{number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} 筆交易",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} 毫秒",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "裝置 {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "驗證節點",
+  "miningV3Configure": "選擇節點",
+  "miningV3Settings": "挖礦設定",
+  "miningV3NodeAddress": "節點位址",
+  "miningV3NodeHint": "連線至節點後即可開始驗證區塊。",
+  "miningV3NodeInvalid": "請輸入 http:// 或 https:// 節點位址，不含帳密或查詢參數。",
+  "miningV3PauseForSettings": "請先暫停挖礦，再變更節點。",
+  "miningV3Save": "儲存節點",
+  "miningV3ConnectionIssue": "連線已中斷",
+  "miningV3RetryHint": "系統會自動嘗試重新連線。",
+  "miningV3StartIssueHint": "請檢查節點位址後再試。",
+  "miningV3Time": "記錄時間",
+  "miningV3TransactionsLabel": "交易數量",
+  "miningV3Latency": "驗證耗時",
+  "miningV3Signers": "認證簽署數",
+  "miningV3BlockHash": "區塊雜湊",
+  "miningV3ReceiptsRoot": "收據根",
+  "miningV3CopyHash": "複製區塊雜湊",
+  "miningV3Copied": "已複製區塊雜湊",
+  "miningV3ErrorDetails": "最近回報的問題",
+  "miningV3SaveFailed": "無法儲存節點，請再試一次。"
 }

@@ -237,6 +237,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value} 分鐘前更新";
 
+  static String m104(number) => "區塊 #${number}";
+
+  static String m105(index) => "裝置 ${index}";
+
+  static String m106(value) => "${value} 毫秒";
+
+  static String m107(count) => "${count} 筆交易";
+
   static String m103(value) => "0~${value} 個字符";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -2484,6 +2492,76 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("重要通知"),
     "login_email": MessageLookupByLibrary.simpleMessage("電子郵件"),
     "login_password": MessageLookupByLibrary.simpleMessage("密碼"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("正在驗證區塊"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("全部"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("需要關注"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("近期平均驗證"),
+    "miningV3Block": m104,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("區塊雜湊"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage("已認證區塊"),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("已認證"),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("選擇節點"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("正在連線"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage("連線已中斷"),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage("已複製區塊雜湊"),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("複製區塊雜湊"),
+    "miningV3Device": m105,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("本次運行時長"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "開始挖礦後，即可查看已驗證區塊和認證狀態。",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage("從第一個區塊開始"),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage("最近回報的問題"),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("驗證失敗"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage("此分類暫無區塊。"),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("驗證耗時"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("顯示更多區塊"),
+    "miningV3Milliseconds": m106,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("驗證節點"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("節點位址"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage("連線至節點後即可開始驗證區塊。"),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "請輸入 http:// 或 https:// 節點位址，不含帳密或查詢參數。",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("暫停挖礦"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "請先暫停挖礦，再變更節點。",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("挖礦已暫停"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage("等待認證"),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("準備就緒"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage("收據根"),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage("近期區塊"),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage("本次運行中近期觀測到的區塊"),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage("正在啟用裝置"),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage("系統會自動嘗試重新連線。"),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage("正在重新連線"),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("挖礦收益"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "目前沒有已確認的收益資料。",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "此節點提供區塊驗證和認證資料，但未提供收益金額。已驗證區塊數不代表實際收益。",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "暫無收益資料",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("儲存節點"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage("無法儲存節點，請再試一次。"),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("挖礦設定"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("設定挖礦"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage("認證簽署數"),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("開始挖礦"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "請檢查節點位址後再試。",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("驗證成功率"),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("記錄時間"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("挖礦"),
+    "miningV3Transactions": m107,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("交易數量"),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("未取得認證"),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("已驗證區塊"),
     "next": MessageLookupByLibrary.simpleMessage("下一個"),
     "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage("編輯個人資料"),

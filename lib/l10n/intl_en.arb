@@ -1861,5 +1861,89 @@
   "g_ui_coins_load_failed": "Failed to load coins. Please try again.",
   "g_ui_mpc_no_phrase": "No Seed Phrase Needed",
   "g_ui_mpc_intro": "Sign in with your social account to create a secure MPC wallet. Your private key is split into encrypted shares — no seed phrase to lose.",
-  "g_ui_mpc_security": "Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup."
+  "g_ui_mpc_security": "Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup.",
+  "miningV3Title": "Mining",
+  "miningV3Duration": "Session time",
+  "miningV3Ready": "Ready to mine",
+  "miningV3Active": "Verifying blocks",
+  "miningV3Connecting": "Connecting",
+  "miningV3Registering": "Activating device",
+  "miningV3Retrying": "Reconnecting",
+  "miningV3Paused": "Mining paused",
+  "miningV3Start": "Start mining",
+  "miningV3Pause": "Pause mining",
+  "miningV3Setup": "Set up mining",
+  "miningV3Verified": "Verified blocks",
+  "miningV3Certified": "Certified blocks",
+  "miningV3CertifiedStatus": "Certified",
+  "miningV3SuccessRate": "Verification success",
+  "miningV3AverageTime": "Avg. verification",
+  "miningV3Rewards": "Mining rewards",
+  "miningV3RewardsUnavailable": "Not reported",
+  "miningV3RewardsHint": "No confirmed reward data is available.",
+  "miningV3RewardsInfo": "This node reports block verification and certificates, but does not provide reward amounts. Verified block counts are not an earnings balance.",
+  "miningV3RecentBlocks": "Recent blocks",
+  "miningV3RecentHint": "Recent observed activity in this session",
+  "miningV3All": "All",
+  "miningV3Pending": "Awaiting certificate",
+  "miningV3Uncertified": "Not certified",
+  "miningV3Failed": "Verification failed",
+  "miningV3Attention": "Needs attention",
+  "miningV3EmptyTitle": "Your first block starts here",
+  "miningV3EmptyBody": "Start mining to see your verified blocks and certificates.",
+  "miningV3FilterEmpty": "No blocks match this filter.",
+  "miningV3LoadMore": "Show more blocks",
+  "miningV3Block": "Block #{number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} tx",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} ms",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "Device {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "Verification node",
+  "miningV3Configure": "Choose a node",
+  "miningV3Settings": "Mining settings",
+  "miningV3NodeAddress": "Node address",
+  "miningV3NodeHint": "Connect to a node to start verifying blocks.",
+  "miningV3NodeInvalid": "Enter an http:// or https:// node address without credentials or query parameters.",
+  "miningV3PauseForSettings": "Pause mining to change the node.",
+  "miningV3Save": "Save node",
+  "miningV3ConnectionIssue": "Connection interrupted",
+  "miningV3RetryHint": "Mining will reconnect automatically.",
+  "miningV3StartIssueHint": "Check the node address and try again.",
+  "miningV3Time": "Recorded time",
+  "miningV3TransactionsLabel": "Transactions",
+  "miningV3Latency": "Verification time",
+  "miningV3Signers": "Certificate signers",
+  "miningV3BlockHash": "Block hash",
+  "miningV3ReceiptsRoot": "Receipts root",
+  "miningV3CopyHash": "Copy block hash",
+  "miningV3Copied": "Block hash copied",
+  "miningV3ErrorDetails": "Last reported issue",
+  "miningV3SaveFailed": "Could not save the node. Please try again."
 }

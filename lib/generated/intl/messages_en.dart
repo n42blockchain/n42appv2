@@ -251,6 +251,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Updated ${value}m ago";
 
+  static String m104(number) => "Block #${number}";
+
+  static String m105(index) => "Device ${index}";
+
+  static String m106(value) => "${value} ms";
+
+  static String m107(count) => "${count} tx";
+
   static String m103(value) => "0~${value} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -3466,6 +3474,122 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("Important Notice"),
     "login_email": MessageLookupByLibrary.simpleMessage("Email"),
     "login_password": MessageLookupByLibrary.simpleMessage("Password"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("Verifying blocks"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("All"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "Needs attention",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Avg. verification",
+    ),
+    "miningV3Block": m104,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Block hash"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Certified blocks",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Certified",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Choose a node"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Connecting"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Connection interrupted",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage("Block hash copied"),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("Copy block hash"),
+    "miningV3Device": m105,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Session time"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Start mining to see your verified blocks and certificates.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Your first block starts here",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Last reported issue",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "Verification failed",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "No blocks match this filter.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage(
+      "Verification time",
+    ),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Show more blocks",
+    ),
+    "miningV3Milliseconds": m106,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Verification node"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Node address"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Connect to a node to start verifying blocks.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Enter an http:// or https:// node address without credentials or query parameters.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("Pause mining"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Pause mining to change the node.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("Mining paused"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Awaiting certificate",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Ready to mine"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Receipts root",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Recent blocks",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Recent observed activity in this session",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Activating device",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Mining will reconnect automatically.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage("Reconnecting"),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("Mining rewards"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "No confirmed reward data is available.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "This node reports block verification and certificates, but does not provide reward amounts. Verified block counts are not an earnings balance.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Not reported",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Save node"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not save the node. Please try again.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("Mining settings"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("Set up mining"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Certificate signers",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Start mining"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Check the node address and try again.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Verification success",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Recorded time"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Mining"),
+    "miningV3Transactions": m107,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Transactions",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Not certified",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("Verified blocks"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
     "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profile"),

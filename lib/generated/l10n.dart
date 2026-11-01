@@ -14592,6 +14592,551 @@ class S {
       args: [],
     );
   }
+
+  /// `Mining`
+  String get miningV3Title {
+    return Intl.message('Mining', name: 'miningV3Title', desc: '', args: []);
+  }
+
+  /// `Session time`
+  String get miningV3Duration {
+    return Intl.message(
+      'Session time',
+      name: 'miningV3Duration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ready to mine`
+  String get miningV3Ready {
+    return Intl.message(
+      'Ready to mine',
+      name: 'miningV3Ready',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verifying blocks`
+  String get miningV3Active {
+    return Intl.message(
+      'Verifying blocks',
+      name: 'miningV3Active',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connecting`
+  String get miningV3Connecting {
+    return Intl.message(
+      'Connecting',
+      name: 'miningV3Connecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activating device`
+  String get miningV3Registering {
+    return Intl.message(
+      'Activating device',
+      name: 'miningV3Registering',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reconnecting`
+  String get miningV3Retrying {
+    return Intl.message(
+      'Reconnecting',
+      name: 'miningV3Retrying',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mining paused`
+  String get miningV3Paused {
+    return Intl.message(
+      'Mining paused',
+      name: 'miningV3Paused',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start mining`
+  String get miningV3Start {
+    return Intl.message(
+      'Start mining',
+      name: 'miningV3Start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pause mining`
+  String get miningV3Pause {
+    return Intl.message(
+      'Pause mining',
+      name: 'miningV3Pause',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set up mining`
+  String get miningV3Setup {
+    return Intl.message(
+      'Set up mining',
+      name: 'miningV3Setup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verified blocks`
+  String get miningV3Verified {
+    return Intl.message(
+      'Verified blocks',
+      name: 'miningV3Verified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certified blocks`
+  String get miningV3Certified {
+    return Intl.message(
+      'Certified blocks',
+      name: 'miningV3Certified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certified`
+  String get miningV3CertifiedStatus {
+    return Intl.message(
+      'Certified',
+      name: 'miningV3CertifiedStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification success`
+  String get miningV3SuccessRate {
+    return Intl.message(
+      'Verification success',
+      name: 'miningV3SuccessRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avg. verification`
+  String get miningV3AverageTime {
+    return Intl.message(
+      'Avg. verification',
+      name: 'miningV3AverageTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mining rewards`
+  String get miningV3Rewards {
+    return Intl.message(
+      'Mining rewards',
+      name: 'miningV3Rewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not reported`
+  String get miningV3RewardsUnavailable {
+    return Intl.message(
+      'Not reported',
+      name: 'miningV3RewardsUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No confirmed reward data is available.`
+  String get miningV3RewardsHint {
+    return Intl.message(
+      'No confirmed reward data is available.',
+      name: 'miningV3RewardsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This node reports block verification and certificates, but does not provide reward amounts. Verified block counts are not an earnings balance.`
+  String get miningV3RewardsInfo {
+    return Intl.message(
+      'This node reports block verification and certificates, but does not provide reward amounts. Verified block counts are not an earnings balance.',
+      name: 'miningV3RewardsInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent blocks`
+  String get miningV3RecentBlocks {
+    return Intl.message(
+      'Recent blocks',
+      name: 'miningV3RecentBlocks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent observed activity in this session`
+  String get miningV3RecentHint {
+    return Intl.message(
+      'Recent observed activity in this session',
+      name: 'miningV3RecentHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get miningV3All {
+    return Intl.message('All', name: 'miningV3All', desc: '', args: []);
+  }
+
+  /// `Awaiting certificate`
+  String get miningV3Pending {
+    return Intl.message(
+      'Awaiting certificate',
+      name: 'miningV3Pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not certified`
+  String get miningV3Uncertified {
+    return Intl.message(
+      'Not certified',
+      name: 'miningV3Uncertified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification failed`
+  String get miningV3Failed {
+    return Intl.message(
+      'Verification failed',
+      name: 'miningV3Failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Needs attention`
+  String get miningV3Attention {
+    return Intl.message(
+      'Needs attention',
+      name: 'miningV3Attention',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your first block starts here`
+  String get miningV3EmptyTitle {
+    return Intl.message(
+      'Your first block starts here',
+      name: 'miningV3EmptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start mining to see your verified blocks and certificates.`
+  String get miningV3EmptyBody {
+    return Intl.message(
+      'Start mining to see your verified blocks and certificates.',
+      name: 'miningV3EmptyBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No blocks match this filter.`
+  String get miningV3FilterEmpty {
+    return Intl.message(
+      'No blocks match this filter.',
+      name: 'miningV3FilterEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show more blocks`
+  String get miningV3LoadMore {
+    return Intl.message(
+      'Show more blocks',
+      name: 'miningV3LoadMore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Block #{number}`
+  String miningV3Block(String number) {
+    return Intl.message(
+      'Block #$number',
+      name: 'miningV3Block',
+      desc: '',
+      args: [number],
+    );
+  }
+
+  /// `{count} tx`
+  String miningV3Transactions(String count) {
+    return Intl.message(
+      '$count tx',
+      name: 'miningV3Transactions',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{value} ms`
+  String miningV3Milliseconds(String value) {
+    return Intl.message(
+      '$value ms',
+      name: 'miningV3Milliseconds',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Device {index}`
+  String miningV3Device(String index) {
+    return Intl.message(
+      'Device $index',
+      name: 'miningV3Device',
+      desc: '',
+      args: [index],
+    );
+  }
+
+  /// `Verification node`
+  String get miningV3Node {
+    return Intl.message(
+      'Verification node',
+      name: 'miningV3Node',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a node`
+  String get miningV3Configure {
+    return Intl.message(
+      'Choose a node',
+      name: 'miningV3Configure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mining settings`
+  String get miningV3Settings {
+    return Intl.message(
+      'Mining settings',
+      name: 'miningV3Settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Node address`
+  String get miningV3NodeAddress {
+    return Intl.message(
+      'Node address',
+      name: 'miningV3NodeAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect to a node to start verifying blocks.`
+  String get miningV3NodeHint {
+    return Intl.message(
+      'Connect to a node to start verifying blocks.',
+      name: 'miningV3NodeHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter an http:// or https:// node address without credentials or query parameters.`
+  String get miningV3NodeInvalid {
+    return Intl.message(
+      'Enter an http:// or https:// node address without credentials or query parameters.',
+      name: 'miningV3NodeInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pause mining to change the node.`
+  String get miningV3PauseForSettings {
+    return Intl.message(
+      'Pause mining to change the node.',
+      name: 'miningV3PauseForSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save node`
+  String get miningV3Save {
+    return Intl.message('Save node', name: 'miningV3Save', desc: '', args: []);
+  }
+
+  /// `Connection interrupted`
+  String get miningV3ConnectionIssue {
+    return Intl.message(
+      'Connection interrupted',
+      name: 'miningV3ConnectionIssue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mining will reconnect automatically.`
+  String get miningV3RetryHint {
+    return Intl.message(
+      'Mining will reconnect automatically.',
+      name: 'miningV3RetryHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check the node address and try again.`
+  String get miningV3StartIssueHint {
+    return Intl.message(
+      'Check the node address and try again.',
+      name: 'miningV3StartIssueHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recorded time`
+  String get miningV3Time {
+    return Intl.message(
+      'Recorded time',
+      name: 'miningV3Time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transactions`
+  String get miningV3TransactionsLabel {
+    return Intl.message(
+      'Transactions',
+      name: 'miningV3TransactionsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification time`
+  String get miningV3Latency {
+    return Intl.message(
+      'Verification time',
+      name: 'miningV3Latency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate signers`
+  String get miningV3Signers {
+    return Intl.message(
+      'Certificate signers',
+      name: 'miningV3Signers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Block hash`
+  String get miningV3BlockHash {
+    return Intl.message(
+      'Block hash',
+      name: 'miningV3BlockHash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Receipts root`
+  String get miningV3ReceiptsRoot {
+    return Intl.message(
+      'Receipts root',
+      name: 'miningV3ReceiptsRoot',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy block hash`
+  String get miningV3CopyHash {
+    return Intl.message(
+      'Copy block hash',
+      name: 'miningV3CopyHash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Block hash copied`
+  String get miningV3Copied {
+    return Intl.message(
+      'Block hash copied',
+      name: 'miningV3Copied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last reported issue`
+  String get miningV3ErrorDetails {
+    return Intl.message(
+      'Last reported issue',
+      name: 'miningV3ErrorDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not save the node. Please try again.`
+  String get miningV3SaveFailed {
+    return Intl.message(
+      'Could not save the node. Please try again.',
+      name: 'miningV3SaveFailed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
