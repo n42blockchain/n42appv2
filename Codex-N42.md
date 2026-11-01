@@ -1025,6 +1025,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
 | T30 挖矿 v3（mobileverify）Android 真机验证 | 待认领（基线 GitHub `feat/mining-v3-mobileverify@ad262088`；节点经局域网代理 `http://192.168.0.217:21100`）| — | docs/device-test-reports/<日期>-t30-mining-v3-probe.md |
+| T31 挖矿 v3（mobileverify）iOS 接入 + 真机验证 | 待认领（App 基线 GitHub `feat/mining-v3-mobileverify@ad262088`，SDK 基线 N42-gov5 `77eb962d`；分支 `t31/ios-mobileverify`）| — | docs/device-test-reports/<日期>-t31-mining-v3-ios.md |
 | T27 18 条 Cosmos 链原生地址派生缺失（⚠️P0）| Codex 已修复+验证（`a4a2c7c5`）：**A1-A4/A6 全 PASS**——WalletCore 4.7.0 对 18 条链**全有专用 CoinType**，故无需透传 bech32Prefix、也无需自写 bech32（比我建议的 HRP 通用路径更稳）；Swift/Kotlin 各映射到专用类型并归类 Cosmos。真机双端（Pixel 8 API 36 + 实体 iPhone iOS 27.0）**19/19 地址逐字节一致**，ATOM 向量与改动前完全相同（A4 无回归）；新增 `integration_test/t27_cosmos_address_test.dart` 固化公开 BIP-39 向量。A5 余额记 PARTIAL（无授权充值账户，未虚报）。**并修正了我派发时表格的两处错误**：RUNE 实为 931 非 118、KAVA2 为 459 非 118——它按配置源核对后保留真实路径，没盲信我的表。**Claude 验收通过（独立复核未依赖其结论）**：19 条地址的 bech32 校验和/HRP 与配置 prefix 对应/20 字节载荷全部通过；15 条共用 `m/44'/118'/0'/0/0` 的链载荷完全相同（同密钥换 HRP 的必然结果）；**INJ 载荷 `9858effd232b4033…` 正是标准测试助记词在 `m/44'/60'/0'/0/0` 上的以太坊地址 `0x9858eFFD232B4033E47d90003D41EC34EcaEda94`**，公开常量独立佐证 INJ 走以太坊派生 + inj HRP 正确。合并 `d3052561`，analyze 零 error/warning、3244 测试全过。产品决策采纳其意见：不隐藏这 18 条链 | 2026-07-27 | docs/device-test-reports/2026-07-27-t27-cosmos-address.md |
 | T26 Flutter 3.44.8 原生构建验证 + 摘除依赖回归（⚠️高优先）| Codex 已验证（`f3a631a0`）：**A1-A4 全 PASS 且证据扎实**——A1 Mac 端 wallet-core 4.7.0 依赖解析无 401（`dependencyInsight` + APK 构建双证，Windows 端 PAT 失效属该机器问题）；A2 `flutter build apk --release` 产出 versionName 2.4.8/versionCode 2026072602；A3 `./scripts/build_ipa.sh --no-bump` 完整跑通 archive+二次 App Store 导出；**A4 解包 IPA 实测 Runner.app 与 N42Extension.appex 版本号均为 2.4.8/2026072602、`codesign --verify --deep --strict` 通过——版本对齐修复端到端闭环**。B1-B5 **BLOCKED(automation)** 附构建/静态证据，未冒充 PASS（macOS 本地网络隐私拒绝 Dart VM service，测试体未执行；iPhone 已解锁+Release 安装启动成功，卡在 Mac 侧权限）。**Claude 验收通过**：报告首次做到「build/static 证据与真机证据分离、未执行的用例不写 PASS」，这正是上一轮缺的；**并否决了我的 PBX 提议**——我建议删掉 pbxproj 里 `FLUTTER_BUILD_NAME/NUMBER` 改由 `Generated.xcconfig` 供值，Codex 指出 N42Extension 三个 build configuration 无 `baseConfigurationReference` 根本读不到该 xcconfig，**本地独立核实成立**（扩展 `GENERATE_INFOPLIST_FILE=YES` + `MARKETING_VERSION=$(FLUTTER_BUILD_NAME)`，删赋值会让版本号展开为空串被 App Store 拒），我的提议会直接改坏构建，采纳其分步方案。遗留：B1-B5 待 Mac 授予本地网络权限或换可用 USB 数据线 | 2026-07-27 | docs/device-test-reports/2026-07-27-t26-flutter-344-native-builds.md |
 | T1 iOS 矩阵 | 阻塞：Xcode 缺 iOS 26.5 platform | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
@@ -2732,3 +2733,115 @@ Debug APK 已成功构建（源版本 `2.5.3+73054`，788,854,350 bytes）；v3
 [完整报告](https://github.com/n42blockchain/n42appv2/blob/t30/mining-v3-fixes/docs/device-test-reports/2026-10-31-t30-mining-v3-probe.md)。
 本次提交均正常执行版本递增钩子，没有使用 `--no-verify`。待安装限制解除后继续全部 10 项；
 Windows 侧并行补丁按独立基线另记 APK hash 与复测结果，不把本轮自动化结果当真机验收。
+
+## T31：挖矿 v3（mobileverify）iOS 接入 + 真机验证（新增 2026-10-31）
+
+**目标**：让 v3 在 iOS 上跑起来，功能对齐 Android。Android 的做法是把验证循环放在 Go 里
+（`evmsdk.MobileVerifyMiner`），由前台服务承载。iOS 这边目前 **flutter_mining 插件没有
+`n42/mobileverify` 通道，App 也没有链接 evmsdk**：v3 页一按 Start 就会报 `MissingPluginException`。
+
+**基线**
+- App：GitHub `n42blockchain/n42appv2` 分支 `feat/mining-v3-mobileverify` @ `ad262088`。
+  在它上面开新分支 **`t31/ios-mobileverify`**，所有提交推到这个分支，不要推功能分支。
+- SDK：GitHub `n42blockchain/N42-gov5` `main` @ `77eb962d` 或更新的提交（`MobileVerifyMiner` 在 `524444d8` 引入）。
+- 与 T30 并行，互不依赖。T30 的安装限制只影响 Android 手机。
+
+### 要做的事
+
+**1. 构建 `Evmsdk.xcframework`（在 Mac 上）**
+
+```
+git clone https://github.com/n42blockchain/N42-gov5.git && cd N42-gov5
+make mobile-tools        # 安装 go.mod 钉住的 gomobile/gobind（x/mobile 8b95e45）
+make ios                 # → build/mobile/evmsdk.xcframework（ios/arm64 + iossimulator/arm64）
+```
+需要 Go 1.25+、Xcode 命令行工具、CGO。`make ios` **在 Windows 端从没跑过**（Android 端为了
+`make android` 修过 4 处：gobind 多返回值、`-checklinkname=0`、blst 的 `-Wno-error=int-conversion`、
+32 位 mmap，见 N42 `d2fae7b3`）。如果 iOS 构建报错：
+- 只改构建参数（Makefile 的 `ios` 目标、`MOBILE_GO_FLAGS`、CGO 标志）就能过的，可以直接改。改动提交到
+  N42-gov5 的新分支 `t31/ios-build` 并推送，**不要推 N42 的 main**；报告里写清楚改了什么、为什么。
+- 需要改 Go 源码才能过的，**停下来**，贴出完整报错留言，不要自己改 Go 代码。
+
+构建成功后记录：xcframework 总大小、每个切片里 `.a`（或 framework 二进制）的大小，以及
+`Headers/Evmsdk.objc.h` 里 `MobileVerifyMiner` 和 `MobileVerifySession` 的方法列表。
+
+**2. 把 xcframework 接进插件**
+- 放到 `plugins/flutter_mining/ios/Frameworks/Evmsdk.xcframework`，在 podspec 里加
+  `s.vendored_frameworks = 'Frameworks/Evmsdk.xcframework'`，按需加 `s.static_framework = true`
+  和 `s.libraries = 'resolv'`（Go 的 net 包要用）。
+- **体积红线**：GitHub 单个文件上限 100 MB。只要 xcframework 里有任何一个文件超过 **95 MB**，
+  就不要提交它（也不要用 LFS），停下来留言并贴出各文件大小，由 Windows 端决定分发方式。
+- **符号冲突风险**：Runner 已经静态链接 Rust 的 `MobileSdk.xcframework`、`N42Mls`、`N42Pq`，
+  Go 静态库里也带着 blst 等 C 代码。如果链接报 `duplicate symbol`，**不要靠改符号名或删库去绕**，
+  贴出完整的冲突符号列表留言。
+
+**3. Swift 通道 `MobileVerifyHandler.swift`（`plugins/flutter_mining/ios/Classes/`）**
+
+以 Android 的 `MobileVerifyHandler.kt` / `MobileVerifyMinerService.kt` 为规格逐项对齐，
+Dart 侧（`plugins/flutter_mining/lib/mobileverify.dart`）**不改**：
+- 通道名 `n42/mobileverify`，在 `FlutterMiningPlugin.register` 里注册。
+- 会阻塞的调用 `generateKey` `publicKey` `open` `register` `latest` `verifyBlock` `cert` `health`：
+  放在**一个串行 DispatchQueue** 上按顺序执行，结果回主线程。失败时返回
+  `FlutterError(code: "MobileVerify", message: <Go error 的 localizedDescription>)`。
+- `close` 立即执行（它会中止正在进行的调用）。
+- `minerStart(baseUrl, privHex, chain)`：进程内只保留一个 `EvmsdkMobileVerifyMiner`（static）。
+  如果已有 miner 在跑，且公钥、endpoint、chain 都相同，就不做任何事；否则先停掉旧的，再新建并 `start`。
+  `stop` 会等循环结束，必须放在后台队列里调用。
+- `minerStop`：停掉 miner。`minerStatus`：返回 `miner.status()` 的 JSON；没有 miner 时返回
+  `{"running":false,"phase":"idle","log":[]}`，如果上次启动失败，再加上 `"lastError"`。
+- gomobile 生成的 ObjC 名大致是 `EvmsdkNewMobileVerifyMiner(_:_:_:_:)`、
+  `EvmsdkGenerateMobileBLSKey(_:)`、`EvmsdkMobileBLSPublicKey(_:_:)`。**以第 1 步生成的头文件为准**。
+
+**4. 后台行为（iOS 与 Android 的差异，按这个做）**
+
+iOS 不允许持续运行的后台循环：
+- App 在前台时，miner 一直运行。
+- 退到后台时，用 `UIApplication.beginBackgroundTask` 申请收尾时间（约 30 秒），让正在验证的块
+  跑完。之后系统会挂起进程，Go 循环随之暂停。
+- 回到前台后，循环自行恢复。挂起期间正在进行的调用失败，会被记为一次失败块或触发重连，这符合预期。
+- **红线**：不准靠 `UIBackgroundModes` 的 audio、voip、location 等模式保活（App Store 会拒审），
+  也不在本任务里加 `BGProcessingTask`。
+- `lib/features/mining_v3/pages/mining_v3_page.dart` 在 Start 前会请求通知权限。这只是为了 Android
+  前台服务的通知，iOS 不需要。可以改成只在 Android 上请求（属于可修范围）。
+
+**5. 网络**
+节点代理是 `http://192.168.0.217:21100`（明文 HTTP，Info.plist 里已经有 `NSAllowsArbitraryLoads`）。
+Info.plist 里**没有** `NSLocalNetworkUsageDescription`。如果 iOS 14+ 访问局域网失败，或者没有弹出
+本地网络授权，可以在 `ios/Runner/Info.plist` 补上这个键，文案用英文，例如
+"N42 connects to block verification nodes on your local network."。
+手机必须和 192.168.0.217 在同一个 WiFi。
+
+### 用例矩阵（真机 iPhone 优先；只能用模拟器的，标注出来）
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 1 | debug 构建安装后，设置 → 挖矿引擎选 **V3** → 挖矿页填 `http://192.168.0.217:21100` → Start | 状态依次为 Connecting/Waiting for registration → **Verifying blocks**；Verified 持续上涨；约 20 秒后 Certified 开始上涨，Signers ≥ 1。记录首块耗时、`Last time` |
+| 2 | 连续挖 10 分钟 | 记录 Verified、Certified、Failed、Uncertified；Failed 和 Uncertified 应接近 0。贴出日志末尾 20 行 |
+| 3 | Stop 后再 Start | 设备号不变（复用同一个密钥）；会新建一个 miner，计数从 0 重新开始（与 Android 一致）；Verified 每秒最多加 1，不会出现两个循环同时跑 |
+| 4 | 杀进程后重开 → 选 V3 → Start | 设备号不变（Keychain 持久化） |
+| 5 | 挖矿中切到后台 2 分钟再回来 | 不崩溃；回来后几秒内状态恢复为 Verifying blocks，Verified 继续增长。记录后台期间是否还在涨（预期在约 30 秒内停止） |
+| 6 | 挖矿中锁屏 2 分钟再解锁 | 同 5 |
+| 7 | 地址改成错误端口 `:21101` 后 Start | 显示 Reconnecting 和错误信息，每 10 秒重试，不崩溃；Stop 能停下来 |
+| 8 | 挖矿中打开飞行模式 1 分钟，再关闭 | 显示 Reconnecting，关闭飞行模式后自动恢复挖矿，不需要手动操作 |
+| 9 | 在调试页（设置 → Mining v3 probe）跑一次探针 | PASS（走的是 session 通道，和 Android T30 的用例 1 一致） |
+| 10 | 切回 V2 和 V1 挖矿页 | 不崩溃；v1、v2 的行为与切换前一致。切走后 miner 停止（回到 V3 页状态是 Stopped） |
+| 11 | 记录体积和启动 | 接入 xcframework 前后 App 体积（Release 或 Archive 的 .ipa，或 debug .app 大小）；冷启动有没有明显变慢 |
+
+### 授权与红线
+- **可以改**：`plugins/flutter_mining/ios/`（Swift、podspec、Frameworks）、`ios/Runner/Info.plist`
+  （只限上面第 5 条的键）、`lib/features/mining_v3/`（只限 iOS 适配和真机暴露出的 bug）、
+  `ios/Podfile`（只在接入必须时改，改了要在报告里说明）。
+- **不准改**：Go 源码、Android 侧、v1/v2 代码、节点和代理；不准 `--no-verify`；不准绕过 App Store 规则保活；
+  超过 95 MB 的二进制文件不准入库。
+- **测试**：`flutter test --no-pub test/features/mining_v3/`、
+  `cd plugins/flutter_mining && flutter test --no-pub test/`、
+  `flutter analyze --no-fatal-infos lib/features/mining_v3 plugins/flutter_mining/lib`
+  （需要 Flutter ≥ 3.47）。
+- 提交信息用英文，不含任何 AI 工具名称，提交模板见 CLAUDE.md。
+- **报告**：`docs/device-test-reports/<日期>-t31-mining-v3-ios.md`，推到 `t31/ios-mobileverify`，内容包括：
+  - 构建记录：命令、Go/Xcode 版本、xcframework 体积；
+  - 接入方式；
+  - 11 项结果（PASS/FAIL/BLOCKED + 证据）；
+  - 发现的问题；
+  - 每个提交的 SHA。
+  做完在本文件末尾留言，并在认领表更新状态。
