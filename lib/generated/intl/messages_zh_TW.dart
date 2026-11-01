@@ -2154,6 +2154,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "經典挖礦（V1）",
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage("採礦（V2）"),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "手機驗證（V3）",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage("挖礦介面"),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("分享"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("推薦"),

@@ -15137,6 +15137,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Mobile verification (V3)`
+  String get g_setting_mining_v3_label {
+    return Intl.message(
+      'Mobile verification (V3)',
+      name: 'g_setting_mining_v3_label',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

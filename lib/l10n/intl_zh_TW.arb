@@ -1886,5 +1886,6 @@
   "miningV3CopyHash": "複製區塊雜湊",
   "miningV3Copied": "已複製區塊雜湊",
   "miningV3ErrorDetails": "最近回報的問題",
-  "miningV3SaveFailed": "無法儲存節點，請再試一次。"
+  "miningV3SaveFailed": "無法儲存節點，請再試一次。",
+  "g_setting_mining_v3_label": "手機驗證（V3）"
 }

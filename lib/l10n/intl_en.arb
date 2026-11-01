@@ -1945,5 +1945,6 @@
   "miningV3CopyHash": "Copy block hash",
   "miningV3Copied": "Block hash copied",
   "miningV3ErrorDetails": "Last reported issue",
-  "miningV3SaveFailed": "Could not save the node. Please try again."
+  "miningV3SaveFailed": "Could not save the node. Please try again.",
+  "g_setting_mining_v3_label": "Mobile verification (V3)"
 }

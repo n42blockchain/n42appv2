@@ -2994,6 +2994,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Mining (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Mobile verification (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Mining Interface",
     ),
