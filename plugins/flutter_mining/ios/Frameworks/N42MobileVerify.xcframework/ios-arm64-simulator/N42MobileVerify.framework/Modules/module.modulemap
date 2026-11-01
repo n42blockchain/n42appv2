@@ -1,0 +1,8 @@
+framework module "N42MobileVerify" {
+	header "ref.h"
+    header "Mobileverify.objc.h"
+    header "Universe.objc.h"
+    header "N42MobileVerify.h"
+
+    export *
+}
