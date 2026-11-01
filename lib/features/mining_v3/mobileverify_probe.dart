@@ -16,6 +16,7 @@ class MobileVerifyProbeConfig {
     required this.baseUrl,
     required this.chain,
     this.poll = const Duration(seconds: 2),
+    this.registerPoll = const Duration(seconds: 10),
     this.registerTimeout = const Duration(minutes: 3),
     this.headTimeout = const Duration(minutes: 1),
     this.certTimeout = const Duration(minutes: 2),
@@ -24,6 +25,10 @@ class MobileVerifyProbeConfig {
   final String baseUrl;
   final String chain;
   final Duration poll;
+
+  /// Registrations are limited to ten per minute per IP by the node.
+  /// Keep commit polling below that limit; other reads can poll faster.
+  final Duration registerPoll;
 
   /// The node commits registrations on its epoch timer.
   final Duration registerTimeout;
@@ -91,7 +96,7 @@ class MobileVerifyProbe {
 
     var reg = await _api.register();
     log('registered: index ${reg.index}, committed ${reg.committed}');
-    final regTries = _tries(config.registerTimeout, config.poll);
+    final regTries = _tries(config.registerTimeout, config.registerPoll);
     for (var i = 0; !reg.committed; i++) {
       if (i >= regTries) {
         return _fail(
@@ -99,7 +104,7 @@ class MobileVerifyProbe {
           'registration not committed within ${config.registerTimeout}',
         );
       }
-      await _sleep(config.poll);
+      await _sleep(config.registerPoll);
       reg = await _api.register();
     }
     log('committed as device ${reg.index}');

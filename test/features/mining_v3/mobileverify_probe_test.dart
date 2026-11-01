@@ -105,6 +105,7 @@ void main() {
     baseUrl: 'http://10.0.2.2:21012',
     chain: 'mainnet_qmdb_staggered',
     poll: Duration(seconds: 1),
+    registerPoll: Duration(seconds: 1),
     registerTimeout: Duration(seconds: 5),
     headTimeout: Duration(seconds: 5),
     certTimeout: Duration(seconds: 5),
@@ -145,6 +146,26 @@ void main() {
     ).run(config, (_) {});
     expect(node.keys, 0);
     expect(node.opened.single, contains('cc' * 32));
+  });
+
+  test('can wait a full epoch within the registration rate limit', () async {
+    final node = _RateLimitedNode();
+    final result =
+        await MobileVerifyProbe(
+          api: node,
+          store: _MemoryStore(),
+          sleep: (delay) async => node.elapsed += delay,
+        ).run(
+          const MobileVerifyProbeConfig(
+            baseUrl: 'http://node',
+            chain: 'mainnet_qmdb_staggered',
+          ),
+          (_) {},
+        );
+
+    expect(result.passed, isTrue, reason: result.failure);
+    expect(node.elapsed, greaterThanOrEqualTo(const Duration(minutes: 1)));
+    expect(node.verified, ['0xhead']);
   });
 
   test('gives up when the registration is never committed', () async {
@@ -193,6 +214,26 @@ void main() {
     expect(result.failure, contains('packet not in window'));
     expect(node.closed, isTrue);
   });
+}
+
+class _RateLimitedNode extends _FakeNode {
+  Duration elapsed = Duration.zero;
+  final registrations = <Duration>[];
+
+  @override
+  Future<MvRegistration> register() async {
+    final recent = registrations.where(
+      (at) => elapsed - at < const Duration(minutes: 1),
+    );
+    if (recent.length >= 10) {
+      throw StateError('server 429: registration rate limit');
+    }
+    registrations.add(elapsed);
+    return MvRegistration(
+      index: 3,
+      committed: elapsed >= const Duration(minutes: 1),
+    );
+  }
 }
 
 class _ThrowingNode extends _FakeNode {
