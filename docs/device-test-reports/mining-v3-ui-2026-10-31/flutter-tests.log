@@ -1,0 +1,69 @@
+00:00 +0: loading /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart
+00:00 +0: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mobileverify_probe_test.dart: registers, waits for the commit and the packet, verifies the head and sees it certified
+00:00 +1: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +2: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +3: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +4: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +5: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +6: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +7: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: backfills blocks between polls and associates certificates by number
+00:00 +8: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: repeated or rolled logs do not duplicate or downgrade certified blocks
+00:00 +9: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: failure text cannot impersonate a verification or certificate event
+00:00 +10: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: history is bounded and starts afresh for another native session
+00:00 +11: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: duration uses native start time, survives UI attach, and freezes on stop
+00:00 +12: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_activity_test.dart: missing start or stop timestamps are not fabricated
+00:00 +13: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +14: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +15: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +16: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +17: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +18: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +19: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +20: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +21: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +22: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +23: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: idle shows setup, unknown rewards and honest empty activity
+00:00 +24: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 320.0 at scale 1.0 dark=false (variant: TargetPlatform.iOS)
+00:01 +25: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 320.0 at scale 1.0 dark=false (variant: TargetPlatform.iOS)
+00:01 +26: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: copy feedback stays visible inside the block sheet
+00:01 +27: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 320.0 at scale 1.0 dark=true (variant: TargetPlatform.iOS)
+00:01 +28: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: node validates credentials and keeps failed save open
+00:01 +29: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: node validates credentials and keeps failed save open
+00:01 +30: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: node validates credentials and keeps failed save open
+00:01 +31: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: node validates credentials and keeps failed save open
+00:01 +32: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: node validates credentials and keeps failed save open
+00:01 +33: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 320.0 at scale 3.0 dark=false (variant: TargetPlatform.iOS)
+00:01 +34: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 320.0 at scale 3.0 dark=false (variant: TargetPlatform.iOS)
+00:01 +35: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 en
+00:01 +36: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 en
+00:01 +37: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 en
+00:01 +38: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 390.0 at scale 1.0 dark=true (variant: TargetPlatform.iOS)
+00:01 +39: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 zh_TW
+00:01 +40: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 zh_TW
+00:01 +41: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 1.0 zh_TW
+00:01 +42: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 390.0 at scale 2.0 dark=false (variant: TargetPlatform.iOS)
+00:01 +43: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 en
+00:01 +44: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 en
+00:01 +45: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 en
+00:01 +46: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 en
+00:01 +47: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 768.0 at scale 1.0 dark=false (variant: TargetPlatform.iOS)
+00:01 +48: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 zh_TW
+00:01 +49: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 zh_TW
+00:01 +50: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout light 2.0 zh_TW
+00:01 +51: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 768.0 at scale 1.6 dark=true (variant: TargetPlatform.iOS)
+00:02 +52: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 1.0 en
+00:02 +53: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 1.0 en
+00:02 +54: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 768.0 at scale 2.0 dark=true (variant: TargetPlatform.iOS)
+00:02 +55: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 1.0 zh_TW
+00:02 +56: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 1.0 zh_TW
+00:02 +57: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: controls fit 768.0 at scale 3.0 dark=true (variant: TargetPlatform.iOS)
+00:02 +58: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 en
+00:02 +59: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 en
+00:02 +60: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 en
+00:02 +61: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: legacy inputs grow and accept text: 768.0 / 1.0 (variant: TargetPlatform.iOS)
+00:02 +62: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 zh_TW
+00:02 +63: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/features/mining_v3/mining_v3_dashboard_test.dart: layout dark 2.0 zh_TW
+00:02 +64: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: long confirmation remains reachable with large text (variant: TargetPlatform.iOS)
+00:02 +65: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: long confirmation remains reachable with large text (variant: TargetPlatform.iOS)
+00:02 +66: /Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-t30/test/core/design_system/apple_ui_test.dart: (tearDownAll)
+00:02 +66: All tests passed!
