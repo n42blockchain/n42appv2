@@ -3,6 +3,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_activity.dart';
 
 void main() {
+  for (final entry in [
+    (
+      observed: DateTime.utc(2026, 11, 2, 0, 0, 2),
+      event: DateTime.utc(2026, 11, 1, 23, 59, 59),
+      clock: '23:59:59',
+    ),
+    (
+      observed: DateTime.utc(2026, 11, 1, 6, 0, 2),
+      event: DateTime.utc(2026, 11, 1, 5, 59, 59),
+      clock: '05:59:59',
+    ),
+  ]) {
+    test(
+      'UTC activity uses local time across midnight and DST ${entry.clock}',
+      () {
+        final activity = MiningV3Activity();
+        activity.update(
+          MvMinerStatus(
+            running: true,
+            phase: 'mining',
+            logTimeUtc: true,
+            log: ['${entry.clock} verified block 42 (3 txs, 15 ms)'],
+          ),
+          entry.observed,
+        );
+        final local = entry.event.toLocal();
+        final expected = [
+          local.hour,
+          local.minute,
+          local.second,
+        ].map((part) => part.toString().padLeft(2, '0')).join(':');
+        expect(activity.blocks.single.time, expected);
+        expect(activity.blocks.single.transactions, 3);
+      },
+    );
+  }
+
   final start = DateTime.utc(2026, 10, 31, 10);
   MvMinerStatus status({
     bool running = true,

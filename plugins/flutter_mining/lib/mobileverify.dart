@@ -114,6 +114,7 @@ class MvMinerStatus {
     this.sessionId,
     this.activeDurationMs,
     this.pausedForBackground = false,
+    this.logTimeUtc = false,
     this.log = const [],
   });
 
@@ -136,6 +137,7 @@ class MvMinerStatus {
     sessionId: json['sessionId'] as String?,
     activeDurationMs: (json['activeDurationMs'] as num?)?.toInt(),
     pausedForBackground: json['pausedForBackground'] as bool? ?? false,
+    logTimeUtc: json['logTimeUtc'] as bool? ?? false,
     log: [for (final l in json['log'] as List<dynamic>? ?? []) l as String],
   );
 
@@ -169,6 +171,9 @@ class MvMinerStatus {
   final String? sessionId;
   final int? activeDurationMs;
   final bool pausedForBackground;
+
+  /// New SDK logs use UTC; older SDKs retain their original clock display.
+  final bool logTimeUtc;
 
   /// The newest lines, oldest first.
   final List<String> log;

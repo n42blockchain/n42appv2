@@ -155,14 +155,17 @@ void main() {
         'sessionId': 'ios-run',
         'activeDurationMs': 15000,
         'pausedForBackground': true,
+        'logTimeUtc': true,
       });
       expect(ios.sessionId, 'ios-run');
       expect(ios.activeDurationMs, 15000);
       expect(ios.pausedForBackground, isTrue);
+      expect(ios.logTimeUtc, isTrue);
       final android = MvMinerStatus.fromJson({'running': true});
       expect(android.sessionId, isNull);
       expect(android.activeDurationMs, isNull);
       expect(android.pausedForBackground, isFalse);
+      expect(android.logTimeUtc, isFalse);
     },
   );
 }

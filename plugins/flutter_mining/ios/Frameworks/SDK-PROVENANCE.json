@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/n42blockchain/N42-gov5",
-  "sourceCommit": "0b318959291726da0d192ab185bebffd9692bed2",
+  "sourceCommit": "537fed759c4d504ace2323119ed59190359f5d34",
   "package": "cmd/mobileverifyios",
   "buildCommand": "make ios-mobileverify",
   "goVersion": "go1.26.8",
@@ -11,21 +11,21 @@
     "ios-arm64_x86_64-simulator"
   ],
   "sha256": {
-    "N42MobileVerify.xcframework/Info.plist": "1ccd9c2f29753765782946b6dbfe67560e6f9e69dfd75f7d1f314678a7eb26b8",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/N42MobileVerify": "105bbf92c63620e18830746ec0b1045bcd8343c33a6428d13c134060a03320c9",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Info.plist": "972e5e65f1f5d19b55411f69f9a0e94a41e4423c04b69dd7cf0ff15dbcf176b1",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/Mobileverify.objc.h": "d5f0f9ca86617d7a8f53ef1090e0285401e961ce80a1556ab37c647d4934872c",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/ref.h": "d76b969941e61d61551ae1e6b7ddc674ac898d422f28cb5dbf8d640ba2ae8df6",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/Universe.objc.h": "61b1a0cd75801d2d8d1d82ef2accda4477966c691795473d696e45de05fcbc7b",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/N42MobileVerify.h": "2af4a1ccc3231e060dd06589eccf0bb73341f02f69fbb51450ae6635ff512737",
-    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Modules/module.modulemap": "47d9390e3020bb79da4d0586ec7a3d0cdd738ca0995b788ea12958c00f555134",
-    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/N42MobileVerify": "b2c73371f0b46aba43ebaed0bc1889dfc27ab86ee21bbaf5af2f861e20c8bbfb",
-    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Info.plist": "972e5e65f1f5d19b55411f69f9a0e94a41e4423c04b69dd7cf0ff15dbcf176b1",
+    "N42MobileVerify.xcframework/Info.plist": "663ae6356ef47bb184b0da15854ba80456eb829f9e5fbd87319537f8b907f66a",
     "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Headers/Mobileverify.objc.h": "d5f0f9ca86617d7a8f53ef1090e0285401e961ce80a1556ab37c647d4934872c",
-    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Headers/ref.h": "d76b969941e61d61551ae1e6b7ddc674ac898d422f28cb5dbf8d640ba2ae8df6",
-    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Headers/Universe.objc.h": "61b1a0cd75801d2d8d1d82ef2accda4477966c691795473d696e45de05fcbc7b",
     "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Headers/N42MobileVerify.h": "2af4a1ccc3231e060dd06589eccf0bb73341f02f69fbb51450ae6635ff512737",
-    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Modules/module.modulemap": "47d9390e3020bb79da4d0586ec7a3d0cdd738ca0995b788ea12958c00f555134"
+    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Headers/Universe.objc.h": "61b1a0cd75801d2d8d1d82ef2accda4477966c691795473d696e45de05fcbc7b",
+    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Headers/ref.h": "d76b969941e61d61551ae1e6b7ddc674ac898d422f28cb5dbf8d640ba2ae8df6",
+    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Info.plist": "a3909d955456d165fb3c2d2ac950ef29cd0398d90ab8506e72784b2e2cefd6a4",
+    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/Modules/module.modulemap": "47d9390e3020bb79da4d0586ec7a3d0cdd738ca0995b788ea12958c00f555134",
+    "N42MobileVerify.xcframework/ios-arm64/N42MobileVerify.framework/N42MobileVerify": "632df0de807fe5d20beb5ab19315267104d64e794426aa493642b7ccd2675d97",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/Mobileverify.objc.h": "d5f0f9ca86617d7a8f53ef1090e0285401e961ce80a1556ab37c647d4934872c",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/N42MobileVerify.h": "2af4a1ccc3231e060dd06589eccf0bb73341f02f69fbb51450ae6635ff512737",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/Universe.objc.h": "61b1a0cd75801d2d8d1d82ef2accda4477966c691795473d696e45de05fcbc7b",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Headers/ref.h": "d76b969941e61d61551ae1e6b7ddc674ac898d422f28cb5dbf8d640ba2ae8df6",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Info.plist": "a3909d955456d165fb3c2d2ac950ef29cd0398d90ab8506e72784b2e2cefd6a4",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/Modules/module.modulemap": "47d9390e3020bb79da4d0586ec7a3d0cdd738ca0995b788ea12958c00f555134",
+    "N42MobileVerify.xcframework/ios-arm64_x86_64-simulator/N42MobileVerify.framework/N42MobileVerify": "94476914c3b9729245ddc1b97e43908b35af1579a843a74c030e84a4aa446abf"
   },
   "architectures": {
     "ios-arm64": [

@@ -59,6 +59,28 @@ class MiningV3Activity {
   static final _failed = RegExp(r'^block (\d+) failed: (.+)$');
   static final _time = RegExp(r'^(\d{2}:\d{2}:\d{2}) ');
 
+  static String _localLogTime(String clock, DateTime observedAt) {
+    final parts = clock.split(':').map(int.parse).toList();
+    if (parts[0] > 23 || parts[1] > 59 || parts[2] > 59) return clock;
+    final now = observedAt.toUtc();
+    var event = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+      parts[0],
+      parts[1],
+      parts[2],
+    );
+    // The bounded log can include events just before UTC midnight.
+    if (event.isAfter(now)) event = event.subtract(const Duration(days: 1));
+    final local = event.toLocal();
+    return [
+      local.hour,
+      local.minute,
+      local.second,
+    ].map((part) => part.toString().padLeft(2, '0')).join(':');
+  }
+
   final _records = <int, MiningV3Block>{};
   String? _session;
   DateTime? _startedAt;
@@ -117,8 +139,11 @@ class MiningV3Activity {
 
     // The native log also contains blocks between consecutive status polls.
     for (final line in status.log) {
-      final time = _time.firstMatch(line)?.group(1);
-      final message = time == null ? line : line.substring(time.length + 1);
+      final clock = _time.firstMatch(line)?.group(1);
+      final time = clock != null && status.logTimeUtc
+          ? _localLogTime(clock, observedAt)
+          : clock;
+      final message = clock == null ? line : line.substring(clock.length + 1);
       final verified = _verified.firstMatch(message);
       final certified = _certified.firstMatch(message);
       final uncertified = _uncertified.firstMatch(message);
