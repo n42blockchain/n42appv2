@@ -1,0 +1,70 @@
+{
+  "exactPackage": "ai.n42.www",
+  "matchingAvailableEvents": [
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:12.728  2981 29006 D PreStartingCapture: Remove bitmap after load, pkg: ai.n42.www  mBitmapDrawableCache: {}"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.038  2981 11258 D PackageManager: Uninstall pkg: ai.n42.www u0 flags:4 from u10135/11510 of com.miui.home"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.040  2981  3160 I ActivityManager: Force stopping ai.n42.www appid=10428 user=0: deletePackageX"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.048  2981  3160 I ActivityManager: Killing 27386:ai.n42.www/u0a428 (adj 0): stop ai.n42.www due to deletePackageX"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.168  2981  3217 W PackageFreezer: Freeze package ai.n42.www about 0.129 seconds for reason: deletePackageX"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.366  2981  8718 D BackgroundInstallControlService: handlePackageRemove: removing ai.n42.www from 0"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.554  2981  3217 I ActivityManager: Force stopping ai.n42.www appid=10428 user=0: pkg removed"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.617  2981  3217 I ActivityTaskManager: removetask notifyTaskRemoved Task{75c563 #2094 type=standard I=ai.n42.www/.MainActivity}, call from com.android.server.wm.ActivityTaskSupervisor.removeTask:1984 com.android.server.wm.ActivityTaskSupervisor.removeTask:1929 com.android.server.wm.RecentTasks.removeTasksByPackageName:819 com.android.server.wm.ActivityTaskManagerService$LocalService.removeRecentTasksByPackageName:8056 com.android.server.am.BroadcastController.broadcastIntentLockedTraced:1277 com.android.server.am.BroadcastController.broadcastIntentLocked:857 com.android.server.am.ActivityManagerService$LocalService.broadcastIntent:18876 com.android.server.am.ActivityManagerService$LocalService.broadcastIntentWithCallback:18899 "
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.623  2981  3217 I ActivityTaskManager: removetask notifyTaskRemoved Task{38636e0 #2096 type=standard I=ai.n42.www/.MainActivity}, call from com.android.server.wm.ActivityTaskSupervisor.removeTask:1984 com.android.server.wm.ActivityTaskSupervisor.removeTask:1929 com.android.server.wm.RecentTasks.removeTasksByPackageName:819 com.android.server.wm.ActivityTaskManagerService$LocalService.removeRecentTasksByPackageName:8056 com.android.server.am.BroadcastController.broadcastIntentLockedTraced:1277 com.android.server.am.BroadcastController.broadcastIntentLocked:857 com.android.server.am.ActivityManagerService$LocalService.broadcastIntent:18876 com.android.server.am.ActivityManagerService$LocalService.broadcastIntentWithCallback:18899 "
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.785  2981  8717 D LauncherAppsService: onPackageRemoved: triggering onPackageRemoved for user=UserHandle{0}, packageName=ai.n42.www"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.807  2981  5360 I RollbackManager: broadcast=ACTION_PACKAGE_FULLY_REMOVED pkg=ai.n42.www"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.814  2981  8717 D LauncherAppsService: onPackageRemoved: triggering onPackageRemoved for user=UserHandle{0}, packageName=ai.n42.www"
+    },
+    {
+      "buffer": "system",
+      "line": "10-31 21:04:15.822  2981  8717 D LauncherAppsService: onPackageRemoved: triggering onPackageRemoved for user=UserHandle{0}, packageName=ai.n42.www"
+    },
+    {
+      "buffer": "events",
+      "line": "10-31 21:04:15.038  2981 11258 I pm_critical_info: Uninstall pkg: ai.n42.www u0 flags:4 from u10135/11510 of com.miui.home"
+    },
+    {
+      "buffer": "events",
+      "line": "10-31 21:04:15.041  2981  3160 I wm_task_removed: [2096,2096,0,removeChild, last child = ActivityRecord{224820498 u0 ai.n42.www/.MainActivity t-1 f}} in Task{38636e0 #2096 type=standard I=ai.n42.www/.MainActivity}]"
+    },
+    {
+      "buffer": "events",
+      "line": "10-31 21:04:15.055  2981  3160 I am_kill : [0,27386,ai.n42.www,0,stop ai.n42.www due to deletePackageX,154932]"
+    }
+  ],
+  "note": "Available buffers may not cover the whole session; no cause is inferred from an empty result."
+}
