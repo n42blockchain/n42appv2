@@ -20,6 +20,11 @@ void main() {
         '[{"blockNumber":42,"receiptsRoot":"0xr","signers":5,"aggregateSig":"00"}]',
     'health': '{"registry":12}',
     'close': null,
+    'minerStart': null,
+    'minerStop': null,
+    // As evmsdk.MobileVerifyMiner.Status reports it.
+    'minerStatus':
+        '{"running":true,"phase":"mining","endpoint":"http://node","pubkey":"ab","deviceIndex":7,"verified":12,"failed":1,"certified":10,"uncertified":1,"lastBlock":{"blockNumber":42,"blockHash":"0x42","receiptsRoot":"0xr","txs":3,"index":7,"elapsedMs":120},"lastSigners":4,"lastError":"boom","startedAtMs":1,"log":["a","b"]}',
   };
 
   setUp(() {
@@ -66,6 +71,51 @@ void main() {
     final certs = await api.cert('0x42');
     expect(certs.single.signers, 5);
     expect((await api.health())['registry'], 12);
+  });
+
+  test(
+    'starts and stops the native miner with the arguments it reads',
+    () async {
+      await api.minerStart(
+        baseUrl: 'http://node',
+        privHex: 'aa',
+        chain: 'mainnet_qmdb_staggered',
+      );
+      await api.minerStop();
+      expect(calls.map((c) => c.method), ['minerStart', 'minerStop']);
+      expect(calls.first.arguments, {
+        'baseUrl': 'http://node',
+        'privHex': 'aa',
+        'chain': 'mainnet_qmdb_staggered',
+      });
+    },
+  );
+
+  test('decodes the miner status', () async {
+    final st = await api.minerStatus();
+    expect(st.running, isTrue);
+    expect(st.phase, 'mining');
+    expect(
+      [st.deviceIndex, st.verified, st.failed, st.certified, st.uncertified],
+      [7, 12, 1, 10, 1],
+    );
+    expect([st.lastBlock?.blockNumber, st.lastSigners], [42, 4]);
+    expect(
+      [st.lastError, st.log],
+      [
+        'boom',
+        ['a', 'b'],
+      ],
+    );
+
+    // The service's answer while no miner runs.
+    answers['minerStatus'] = '{"running":false,"phase":"idle","log":[]}';
+    final idle = await api.minerStatus();
+    expect([idle.running, idle.phase, idle.verified], [false, 'idle', 0]);
+    expect(
+      [idle.deviceIndex, idle.lastBlock, idle.lastError],
+      [null, null, null],
+    );
   });
 
   test('an empty certificate list is no certificate yet', () async {

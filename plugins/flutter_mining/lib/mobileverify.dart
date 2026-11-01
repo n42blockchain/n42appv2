@@ -94,9 +94,78 @@ class MvCert {
   final int signers;
 }
 
+/// The state of the native miner (evmsdk.MobileVerifyMiner), the
+/// continuous loop the app runs in a foreground service.
+class MvMinerStatus {
+  const MvMinerStatus({
+    required this.running,
+    required this.phase,
+    this.endpoint,
+    this.pubkey,
+    this.deviceIndex,
+    this.verified = 0,
+    this.failed = 0,
+    this.certified = 0,
+    this.uncertified = 0,
+    this.lastBlock,
+    this.lastSigners = 0,
+    this.lastError,
+    this.log = const [],
+  });
+
+  factory MvMinerStatus.fromJson(Map<String, dynamic> json) => MvMinerStatus(
+    running: json['running'] as bool? ?? false,
+    phase: json['phase'] as String? ?? 'idle',
+    endpoint: json['endpoint'] as String?,
+    pubkey: json['pubkey'] as String?,
+    deviceIndex: (json['deviceIndex'] as num?)?.toInt(),
+    verified: (json['verified'] as num?)?.toInt() ?? 0,
+    failed: (json['failed'] as num?)?.toInt() ?? 0,
+    certified: (json['certified'] as num?)?.toInt() ?? 0,
+    uncertified: (json['uncertified'] as num?)?.toInt() ?? 0,
+    lastBlock: json['lastBlock'] == null
+        ? null
+        : MvVerified.fromJson(json['lastBlock'] as Map<String, dynamic>),
+    lastSigners: (json['lastSigners'] as num?)?.toInt() ?? 0,
+    lastError: json['lastError'] as String?,
+    log: [for (final l in json['log'] as List<dynamic>? ?? []) l as String],
+  );
+
+  static const idle = MvMinerStatus(running: false, phase: 'idle');
+
+  final bool running;
+
+  /// idle, connecting, registering, mining or retrying.
+  final String phase;
+  final String? endpoint;
+  final String? pubkey;
+  final int? deviceIndex;
+
+  /// Blocks re-executed, attested and accepted by the node.
+  final int verified;
+
+  /// Blocks whose verification or submission failed.
+  final int failed;
+
+  /// Verified blocks whose certificate counts this device's root.
+  final int certified;
+
+  /// Verified blocks with no certificate over this device's root in time.
+  final int uncertified;
+  final MvVerified? lastBlock;
+  final int lastSigners;
+  final String? lastError;
+
+  /// The newest lines, oldest first.
+  final List<String> log;
+}
+
 /// The calls of one mobileverify session. Every call but [close] blocks
 /// natively and runs off the UI thread; a failure surfaces as a
 /// [PlatformException] carrying the SDK's message.
+///
+/// [minerStart], [minerStop] and [minerStatus] drive the native miner
+/// instead, which runs the whole loop without the app's UI.
 abstract class MobileVerifyApi {
   /// Creates a device key and returns its secret hex: persist it in
   /// secure storage, it is the device's identity.
@@ -126,6 +195,19 @@ abstract class MobileVerifyApi {
 
   /// Aborts the call in flight and ends the session.
   Future<void> close();
+
+  /// Starts the native miner in a foreground service (Android). It keeps
+  /// running when the app is in the background; starting it again with
+  /// the same arguments changes nothing.
+  Future<void> minerStart({
+    required String baseUrl,
+    required String privHex,
+    required String chain,
+  });
+
+  Future<void> minerStop();
+
+  Future<MvMinerStatus> minerStatus();
 }
 
 class MethodChannelMobileVerify implements MobileVerifyApi {
@@ -189,4 +271,22 @@ class MethodChannelMobileVerify implements MobileVerifyApi {
 
   @override
   Future<void> close() => _channel.invokeMethod<void>('close');
+
+  @override
+  Future<void> minerStart({
+    required String baseUrl,
+    required String privHex,
+    required String chain,
+  }) => _channel.invokeMethod<void>('minerStart', {
+    'baseUrl': baseUrl,
+    'privHex': privHex,
+    'chain': chain,
+  });
+
+  @override
+  Future<void> minerStop() => _channel.invokeMethod<void>('minerStop');
+
+  @override
+  Future<MvMinerStatus> minerStatus() async =>
+      MvMinerStatus.fromJson(await _object('minerStatus'));
 }

@@ -1,5 +1,6 @@
 package mining.ai.n42.www.flutter_mining
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import evmsdk.Evmsdk
@@ -17,8 +18,12 @@ import java.util.concurrent.Executors
  * The session's calls block (HTTP and block re-execution), so they run
  * in order on one background thread and answer on the main thread.
  * "close" runs at once: it aborts the call in flight.
+ *
+ * The continuous loop does not run here: "minerStart" / "minerStop"
+ * start and stop MobileVerifyMinerService, which runs it in Go, and
+ * "minerStatus" reads its status.
  */
-class MobileVerifyHandler : MethodChannel.MethodCallHandler {
+class MobileVerifyHandler(private val context: Context) : MethodChannel.MethodCallHandler {
     private val worker: ExecutorService = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
 
@@ -32,6 +37,25 @@ class MobileVerifyHandler : MethodChannel.MethodCallHandler {
                 session = null
                 result.success(null)
             }
+            "minerStart" -> {
+                val started = runCatching {
+                    MobileVerifyMinerService.start(
+                        context,
+                        call.require("baseUrl"),
+                        call.require("privHex"),
+                        call.require("chain"),
+                    )
+                }
+                started.fold(
+                    onSuccess = { result.success(null) },
+                    onFailure = { result.error("MobileVerify", it.message, null) },
+                )
+            }
+            "minerStop" -> {
+                MobileVerifyMinerService.stop(context)
+                result.success(null)
+            }
+            "minerStatus" -> result.success(MobileVerifyMinerService.status())
             in BLOCKING -> worker.execute {
                 val outcome = runCatching { dispatch(call) }
                 main.post {
