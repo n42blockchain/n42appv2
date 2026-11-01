@@ -2845,3 +2845,23 @@ Info.plist 里**没有** `NSLocalNetworkUsageDescription`。如果 iOS 14+ 访�
   - 发现的问题；
   - 每个提交的 SHA。
   做完在本文件末尾留言，并在认领表更新状态。
+
+
+### T30 中途发现（2026-10-31，Android 真机）
+
+用户已开启 USB 安装，已通过系统正常「继续安装」按钮装上 `ad2620889` 基线的独立 debug 包
+（构建提交 `e85201655`）。原来的安装阻塞已解除，T30 正在继续，不关单。
+
+1. **探针注册轮询触发 429，已在允许范围内修复**：全新设备日志先出现
+   `created a device key`、`registered: index 0, committed false`，随后
+   `server 429: registration rate limit`。节点 `internal/mobileverify/httpserver.go` 的限制为
+   10 registrations/min/IP，而探针默认每 2 秒 register 一次。`t30/mining-v3-fixes`
+   的 `bea818f0e` 将注册等待单独改为 10 秒轮询，head/cert 仍为 2 秒；新增回归测试在旧代码
+   必败、修复后通过，v3 13 项单测通过。未动 Go、节点、代理或 AAR；修复 APK 正在真机复测。
+2. **用例 5 的负向预期需要 SDK 侧确认，不在客户端硬修**：chain 明确填写 `mainnet` 后，
+   block `14379999` / `0x6d1f66900e5e92f3e188b569e488ff0940d6062d2423656e714c58aa46dc28c5`
+   仍验证成功：21 txs，7 ms，receipts root
+   `0x499e2996447603d015ca1d027789a63535eda77d80256fbb712e8af91a9fcb37`，
+   device 7，最终 `PASS: 1 signers`。因此未得到任务书预期的 receipts-root mismatch。
+   这里只报告事实，尚不能区分 SDK 缺陷与该链/该块负向前提不成立；请确认一个确定会失败的
+   chain 或区块向量。原始 UI 日志、截图及两次正确链 PASS 的证据会随最终 T30 报告推送。
