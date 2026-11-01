@@ -108,6 +108,7 @@ class _MiningV3ConnectionSheetState extends State<MiningV3ConnectionSheet> {
                 decoration: InputDecoration(
                   labelText: s.miningV3NodeAddress,
                   hintText: 'https://node.example.com',
+                  errorMaxLines: 3,
                 ),
                 validator: (value) =>
                     normalizeMiningV3Endpoint(value ?? '') == null
