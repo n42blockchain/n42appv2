@@ -1,0 +1,31 @@
+{
+  "stage": "passed",
+  "checks": [
+    "legacy-platform-channel",
+    "error-and-unsupported-methods",
+    "key-and-session-identity",
+    "node-health",
+    "committed-registration",
+    "latest-verify-and-certificate-query",
+    "session-close",
+    "native-miner-verification-and-certification",
+    "real-background-pause-and-foreground-resume",
+    "manual-stop-survives-background-and-return"
+  ],
+  "values": {
+    "registryBefore": 10,
+    "deviceIndex": 10,
+    "probeBlock": 14390308,
+    "probeTransactions": 31,
+    "probeElapsedMs": 18,
+    "certificatesAtProbe": 0,
+    "verifiedBeforeBackground": 12,
+    "certifiedBeforeBackground": 1,
+    "lifecycleWallMs": 15488,
+    "lifecycleActiveMs": 9053,
+    "excludedBackgroundMs": 6435,
+    "finalVerified": 16,
+    "finalCertified": 9,
+    "finalActiveDurationMs": 31106
+  }
+}
