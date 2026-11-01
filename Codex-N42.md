@@ -2705,3 +2705,25 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
 `docs/device-test-reports/<日期>-t30-mining-v3-probe.md`：设备型号、Android 版本、ABI、
 App commit hash；10 项逐条 PASS/FAIL/BLOCKED；用例 1/4 的探针日志全文；失败项附 logcat；
 自己修的问题列 commit hash 与根因。跑完在本条目下留言。
+
+
+### T30 执行留言（2026-10-31，Mac / Android）
+
+**状态：BLOCKED，尚未开始真机用例，不关单。** 已按更正后的 GitHub 基线
+`71650b32e` 在独立工作区执行。Mac `/mobileverify/latest` 与手机
+`/mobileverify/health` 都通；手机为 Xiaomi `25098RA98C` / Android 16 /
+`arm64-v8a`，连 `N42` Wi-Fi，IP `192.168.0.26`。
+
+Debug APK 已成功构建（源版本 `2.5.3+73054`，788,854,350 bytes）；v3
+14 项单测、通道 4 项单测均通过，目标静态分析无 error/warning（4 条既有 info）。
+为满足全新安装且保留已有钱包数据，只在本地构建时使用独立包名 `ai.n42.www.t30`，
+该打包改动已还原，未提交。手机拒绝正常 `adb install`：
+`INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`。遵守任务要求未绕过限制，
+未卸载或清空已有钱包，已请用户在手机允许 USB 安装和正常安装提示。
+
+10 项真机矩阵目前 **0 PASS / 0 FAIL / 10 BLOCKED**；ABI/体积已记录，但冷启动
+及 v1 native 回归均未验证。无产品代码修复；没有修改功能分支、v1/v2、AAR、节点或代理。
+报告与证据已推至 `t30/mining-v3-fixes`（报告 `a93f66b32`，原始日志 `29dc77642`）：
+[完整报告](https://github.com/n42blockchain/n42appv2/blob/t30/mining-v3-fixes/docs/device-test-reports/2026-10-31-t30-mining-v3-probe.md)。
+本次提交均正常执行版本递增钩子，没有使用 `--no-verify`。待安装限制解除后继续全部 10 项；
+Windows 侧并行补丁按独立基线另记 APK hash 与复测结果，不把本轮自动化结果当真机验收。
