@@ -95,6 +95,9 @@ class _SmokeState extends State<_SmokeApp> {
             !uri.hasFragment,
         'Invalid smoke node.',
       );
+      values['node'] = _node;
+      values['chain'] = _chain;
+      values['startedAtUtc'] = DateTime.now().toUtc().toIso8601String();
       await record('starting');
       final platform = await const MethodChannel(
         'flutter_mining',
@@ -206,6 +209,15 @@ class _SmokeState extends State<_SmokeApp> {
         while (clock.elapsed.inSeconds < _soakSeconds) {
           await Future<void>.delayed(const Duration(seconds: 2));
           final current = await api.minerStatus();
+          values['soakFailed'] = current.failed;
+          values['minerLastError'] = current.lastError;
+          values['minerLog'] = current.log;
+          values['lastVerifiedBlock'] = current.lastBlock?.blockNumber;
+          values['lastVerifiedTransactions'] = current.lastBlock?.txs;
+          require(
+            current.failed == 0,
+            'The foreground soak failed block verification: ${current.lastError}',
+          );
           require(
             current.running &&
                 !current.pausedForBackground &&
@@ -264,6 +276,13 @@ class _SmokeState extends State<_SmokeApp> {
       await waitForFlag('stopped-resume.request');
       await Future<void>.delayed(const Duration(seconds: 1));
       final finalStatus = await api.minerStatus();
+      values['finalFailed'] = finalStatus.failed;
+      values['minerLastError'] = finalStatus.lastError;
+      values['minerLog'] = finalStatus.log;
+      require(
+        finalStatus.failed == 0,
+        'Block verification failed during the lifecycle checks: ${finalStatus.lastError}',
+      );
       require(
         !finalStatus.running &&
             !finalStatus.pausedForBackground &&

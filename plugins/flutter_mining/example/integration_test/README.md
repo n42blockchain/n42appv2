@@ -21,11 +21,21 @@ The build needs valid local development signing. `MINING_V3_URL` and
 `MINING_V3_CHAIN` can override the LAN test defaults. Without the smoke opt-in,
 the app does not start the test. Without the soak parameter, it skips the soak.
 
+The SDK chain must match the node's execution rules, including its fork
+schedule. A local `mainnet_qmdb_staggered` genesis with Shanghai/Cancun moved
+to block 1 does not match that SDK preset. Empty blocks can hide this
+mismatch; include transaction traffic. For an isolated Rust fleet using the
+SDK's `mainnet_qmdb` rules, set `MINING_V3_CHAIN=mainnet_qmdb` explicitly.
+Do not use that preset for a node with a different fork schedule.
+
 Grant the expected local-network permission on the phone. The test gives the
 first connection 30 seconds for that flow. It then checks registration, block
 verification, certificate queries, and native mining. The optional soak checks
 that the session remains active, counters do not decrease, and verification
-and certificate counts both advance.
+and certificate counts both advance. Any block verification failure fails the
+healthy soak and lifecycle checks. Public results include the node, chain,
+start time and native error log so earlier successful empty blocks cannot
+hide a failed transaction block.
 
 Read only the public result file:
 
