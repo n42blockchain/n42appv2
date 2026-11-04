@@ -414,7 +414,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     // Assign actionData BEFORE dispatching so UI reads the correct event
     actionData = eventData;
     final initOk = await web3clientInitFromChainId(eventData.chainId);
-    if (!initOk) return;
+    if (!initOk || !identical(actionData, eventData)) return;
 
     final networkName = coinModels[coinModelsIndex].config.name;
 

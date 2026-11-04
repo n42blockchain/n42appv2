@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -57,6 +59,7 @@ class _Provider extends WalletConnectProvider {
   static final _key = web3.EthPrivateKey.fromInt(BigInt.one);
   int keyReads = 0;
   int chainInitializations = 0;
+  Future<bool> Function()? initialize;
 
   @override
   web3.EthPrivateKey get privateKey {
@@ -67,6 +70,7 @@ class _Provider extends WalletConnectProvider {
   @override
   Future<bool> web3clientInitFromChainId(String chainStr) async {
     chainInitializations++;
+    if (initialize != null) return initialize!();
     return true;
   }
 
@@ -110,6 +114,39 @@ void main() {
     provider.dispose();
   });
 
+  for (final fail in [false, true]) {
+    test(
+      'superseded transaction initialization ${fail ? 'failure' : 'success'} cannot sign or overwrite the new request',
+      () async {
+        final pending = Completer<bool>();
+        provider.initialize = () => pending.future;
+        provider.actionData = _request('eth_signTransaction', [
+          {
+            'from': _Provider._key.address.with0x,
+            'to': '0x2222222222222222222222222222222222222222',
+          },
+        ]);
+        final signing = provider.transactionSignTap();
+        provider.actionData = _request('personal_sign', [
+          'new request',
+          _Provider._key.address.with0x,
+        ]);
+        provider.walletConnectState = WalletConnectState.messageSignOK;
+        if (fail) {
+          pending.completeError(StateError('old initialization failed'));
+        } else {
+          pending.complete(true);
+        }
+        await signing;
+        expect(provider.keyReads, 0);
+        expect(rpc.signedTransaction, isNull);
+        expect(rpc.sentTransaction, isNull);
+        expect(client.responses, isEmpty);
+        expect(provider.walletConnectState, WalletConnectState.messageSignOK);
+        expect(provider.errorMessage, isEmpty);
+      },
+    );
+  }
   test('transaction sender case differences remain accepted', () async {
     provider.actionData = _request('eth_signTransaction', [
       {

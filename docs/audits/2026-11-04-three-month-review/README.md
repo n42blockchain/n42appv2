@@ -131,3 +131,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Corrected existing positive fixtures to use their deterministic key's address, rather than unrelated placeholder senders. Added a case-difference success regression; malformed gas still fails before key access.
 - Final WalletConnect signing/EVM suites: 42 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch13-before-tests.log, /tmp/n42-audit-batch13-final-tests.log, /tmp/n42-audit-batch13-analyze.log.
 - This is sender/key identity checking; full session namespace permissions, request ownership across awaits and unknown-outcome recovery for WalletConnect broadcast remain open. No device or release acceptance implied.
+
+## Batch 14 — superseded WalletConnect initialization
+
+- Reproduced before fixing: transaction initialization completed after actionData was replaced and still signed the old transaction; an old initialization exception overwrote the newer request state. Both new regressions failed before the change.
+- Capture the request before notifying listeners, check request identity before/after chain initialization, and stop if signing state has been replaced. Stale transaction errors do not overwrite another request or a disconnected state.
+- Preview dispatch also checks identity after initialization, so an older request cannot overwrite a newer preview. Added delayed-preview regression.
+- All five WalletConnect Provider suites: 51 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch14-before-tests.log, /tmp/n42-audit-batch14-final-tests.log, /tmp/n42-audit-batch14-final-analyze.log.
+- This guards the initialization boundary, not every later SDK/native/RPC await. Connection-level initialization may still require generation fencing for shared client/key mutation. Full session permissions, post-signing response ownership and device tests remain open. No release uploaded.

@@ -231,12 +231,18 @@ mixin WalletConnectSigning
   }
 
   Future<void> transactionSignTap() async {
+    final requestSnapshot = actionData;
     try {
       if (walletConnectState == WalletConnectState.transaction) return;
+      final eventData = requestSnapshot as wallet_connect.SessionRequestEvent;
       viewStateDeal(WalletConnectState.transaction);
-      final eventData = actionData as wallet_connect.SessionRequestEvent;
+      if (!identical(actionData, eventData)) return;
       final initOk = await web3clientInitFromChainId(eventData.chainId);
-      if (!initOk) return;
+      if (!initOk ||
+          !identical(actionData, eventData) ||
+          walletConnectState != WalletConnectState.transaction) {
+        return;
+      }
 
       if (eventData.method == "tron_signTransaction") {
         await _handleTronTransaction(eventData);
@@ -269,6 +275,10 @@ mixin WalletConnectSigning
 
       await _handleEthTransaction(eventData);
     } catch (e) {
+      if (!identical(actionData, requestSnapshot) ||
+          walletConnectState == WalletConnectState.disconnect) {
+        return;
+      }
       viewStateDeal(WalletConnectState.error, params: e.toString());
     }
   }
