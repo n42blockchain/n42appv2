@@ -486,21 +486,30 @@ mixin WalletConnectSigning
     _completeSigningRequest(eventData);
   }
 
-  /// Parse a hex (0x-prefixed) or decimal string to BigInt.
-  /// DApps send values as hex per JSON-RPC spec (e.g. "0xde0b6b3a7640000").
-  static BigInt _parseHexOrDecBigInt(String s) {
-    if (s.startsWith('0x') || s.startsWith('0X')) {
-      return BigInt.tryParse(s.substring(2), radix: 16) ?? BigInt.zero;
+  /// Preserve legacy decimal inputs, but never replace malformed quantities
+  /// with zero. Transaction amounts and fees are unsigned 256-bit integers.
+  static BigInt _parseHexOrDecBigInt(String value) {
+    final hex = value.startsWith('0x') || value.startsWith('0X');
+    final digits = hex ? value.substring(2) : value;
+    final pattern = hex ? RegExp(r'^[0-9a-fA-F]+$') : RegExp(r'^[0-9]+$');
+    if (value.length > 1024 || !pattern.hasMatch(digits)) {
+      throw const FormatException('Invalid transaction quantity');
     }
-    return BigInt.tryParse(s) ?? BigInt.zero;
+    final parsed = BigInt.parse(digits, radix: hex ? 16 : 10);
+    if (parsed.bitLength > 256) {
+      throw const FormatException('Transaction quantity exceeds uint256');
+    }
+    return parsed;
   }
 
-  /// Parse a hex (0x-prefixed) or decimal string to int.
-  static int? _parseHexOrDecInt(String s) {
-    if (s.startsWith('0x') || s.startsWith('0X')) {
-      return int.tryParse(s.substring(2), radix: 16);
+  /// web3dart represents nonce as int. Use the same exact, cross-platform
+  /// integer bound as the gas-limit adapter instead of rounding on the web.
+  static int _parseHexOrDecInt(String value) {
+    final parsed = _parseHexOrDecBigInt(value);
+    if (parsed > BigInt.from(9007199254740991)) {
+      throw const FormatException('Nonce exceeds the supported integer range');
     }
-    return int.tryParse(s);
+    return parsed.toInt();
   }
 
   static final RegExp _hexRegExp = RegExp(r'^[0-9a-fA-F]+$');

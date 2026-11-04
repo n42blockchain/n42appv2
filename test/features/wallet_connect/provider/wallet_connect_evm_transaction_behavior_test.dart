@@ -305,6 +305,109 @@ void main() {
     },
   );
 
+  for (final method in ['eth_signTransaction', 'eth_sendTransaction']) {
+    for (final field in [
+      'value',
+      'gasPrice',
+      'maxFeePerGas',
+      'maxPriorityFeePerGas',
+      'nonce',
+    ]) {
+      for (final invalid in [
+        '',
+        '0x',
+        '0xZZ',
+        '-1',
+        '0x-1',
+        '1.5',
+        ' 1',
+        '1 ',
+        '0x1${'0' * 64}',
+      ]) {
+        test(
+          '$method rejects malformed $field=$invalid before key access',
+          () async {
+            provider.actionData = _request(method, [
+              {
+                'from': _Provider._key.address.with0x,
+                'to': '0x2222222222222222222222222222222222222222',
+                field: invalid,
+              },
+            ]);
+            await provider.transactionSignTap();
+            expect(provider.keyReads, 0);
+            expect(rpc.signedTransaction, isNull);
+            expect(rpc.sentTransaction, isNull);
+            expect(client.responses, isEmpty);
+            expect(provider.walletConnectState, WalletConnectState.error);
+          },
+        );
+      }
+    }
+  }
+
+  for (final method in ['eth_signTransaction', 'eth_sendTransaction']) {
+    for (final zero in ['0', '0x0', '0X0']) {
+      test(
+        '$method preserves explicit zero value, fee and nonce ($zero)',
+        () async {
+          provider.actionData = _request(method, [
+            {
+              'from': _Provider._key.address.with0x,
+              'value': zero,
+              'gasPrice': zero,
+              'nonce': zero,
+            },
+          ]);
+          await provider.transactionSignTap();
+          final tx = rpc.signedTransaction ?? rpc.sentTransaction;
+          expect(tx, isNotNull);
+          expect(tx!.value!.getInWei, BigInt.zero);
+          expect(tx.gasPrice!.getInWei, BigInt.zero);
+          expect(tx.nonce, 0);
+          expect(client.responses.single.$2.error, isNull);
+        },
+      );
+    }
+    test(
+      '$method preserves decimal EIP-1559 values and uint256 precision',
+      () async {
+        final maximum = (BigInt.one << 256) - BigInt.one;
+        provider.actionData = _request(method, [
+          {
+            'from': _Provider._key.address.with0x,
+            'value': maximum.toString(),
+            'maxFeePerGas': '2000000000',
+            'maxPriorityFeePerGas': '1000000000',
+            'nonce': '42',
+          },
+        ]);
+        await provider.transactionSignTap();
+        final tx = rpc.signedTransaction ?? rpc.sentTransaction;
+        expect(tx, isNotNull);
+        expect(tx!.value!.getInWei, maximum);
+        expect(tx.maxFeePerGas!.getInWei, BigInt.from(2000000000));
+        expect(tx.maxPriorityFeePerGas!.getInWei, BigInt.from(1000000000));
+        expect(tx.nonce, 42);
+        expect(client.responses.single.$2.error, isNull);
+      },
+    );
+    test(
+      '$method rejects a nonce outside the exact SDK integer range',
+      () async {
+        provider.actionData = _request(method, [
+          {'from': _Provider._key.address.with0x, 'nonce': '9007199254740992'},
+        ]);
+        await provider.transactionSignTap();
+        expect(provider.keyReads, 0);
+        expect(rpc.signedTransaction, isNull);
+        expect(rpc.sentTransaction, isNull);
+        expect(client.responses, isEmpty);
+        expect(provider.walletConnectState, WalletConnectState.error);
+      },
+    );
+  }
+
   test('malformed gas cap stops before the signer is called', () async {
     provider.actionData = _request('eth_signTransaction', [
       {'from': _Provider._key.address.with0x, 'gas': '0xZZ'},
