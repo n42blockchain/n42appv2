@@ -37,6 +37,7 @@ class WalletConnectProvider
 
   @override
   void setCoinModelsIndex(int value) {
+    if (coinModelsIndex != value) invalidateSigningInitialization();
     coinModelsIndex = value;
     notifyListeners();
   }
@@ -52,6 +53,7 @@ class WalletConnectProvider
 
   @override
   void dispose() {
+    invalidateSigningInitialization();
     WidgetsBinding.instance.removeObserver(this);
     cancelReconnectTimer();
     web3client?.dispose();
@@ -128,6 +130,7 @@ class WalletConnectProvider
           viewStateDeal(WalletConnectState.disconnect);
         }
       case WalletConnectState.disconnect:
+        invalidateSigningInitialization();
         cleanData();
       case WalletConnectState.transactionOK:
       case WalletConnectState.messageSignOK:

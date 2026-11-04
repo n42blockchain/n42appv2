@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -29,9 +30,10 @@ mixin WalletConnectConnection on ChangeNotifier {
   web3.Web3Client? web3client;
   String? dAppTopic;
   web3.EthPrivateKey? _privateKey;
+  bool Function()? _keyContextCurrent;
   web3.EthPrivateKey get privateKey {
     final key = _privateKey;
-    if (key == null) {
+    if (key == null || _keyContextCurrent?.call() != true) {
       throw StateError(
         'Private key not initialized. Call web3clientInit first.',
       );
@@ -226,78 +228,92 @@ mixin WalletConnectConnection on ChangeNotifier {
     }
   }
 
+  int _initializationGeneration = 0;
+  void invalidateSigningInitialization() {
+    _initializationGeneration++;
+    _privateKey = null;
+    _keyContextCurrent = null;
+  }
+
+  int get signingWalletIndex {
+    final index = globalProviderContainer.read(selectedWalletIndexProvider);
+    return index >= 0 ? index : 0;
+  }
+
+  String get signingWalletOwner => AppGlobals.walletStorageUuid;
+
+  Future<String?> loadSigningKey(int index, CoinModel cm) async {
+    final service = globalProviderContainer.read(walletServiceProvider);
+    if (service == null) throw StateError('Wallet service not available');
+    var key = await service.getPrivateKeyForWallet(index);
+    if (key == null) {
+      final mnemonic = await service.getMnemonicForWallet(index);
+      if (mnemonic != null) {
+        key = await trustdart.getPrivateKey(
+          mnemonic,
+          cm.config.coinType,
+          getPathWithIndex(cm.config.pathForAddrType('legacy')!, cm.pathIndex),
+        );
+      }
+    }
+    return key;
+  }
+
   Future<bool> web3clientInit() async {
+    final generation = ++_initializationGeneration;
+    _privateKey = null;
+    web3.Web3Client? candidate;
+    var committed = false;
+    bool Function() current = () => generation == _initializationGeneration;
     try {
       final cm = coinModels[coinModelsIndex];
-      web3client = web3.Web3Client(
-        cm.isTest ? cm.config.serviceTest : cm.config.service,
-        Client(),
-      );
-
-      final walletService = globalProviderContainer.read(walletServiceProvider);
-      if (walletService == null) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: "Wallet service not available",
-        );
-        return false;
-      }
-
-      // 私钥必须来自与对外广播地址同一账户。WC 广播/展示地址用 cm.address
-      // (=活跃钱包 selectedWalletIndex);此前却用 miningWalletIndex 取私钥——
-      // 用户切换过挖矿钱包(miningIndex≠selectedIndex)时会用挖矿账户私钥签、
-      // 资产从非预期账户流出(第三轮 P0-1,与已修的 DApp handler 同病)。
-      final selectedIndex = globalProviderContainer.read(
-        selectedWalletIndexProvider,
-      );
-      final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
-      String? pKey = await walletService.getPrivateKeyForWallet(currentIndex);
-
-      if (pKey == null) {
-        final mnemonic = await walletService.getMnemonicForWallet(currentIndex);
-        if (mnemonic != null) {
-          pKey = await trustdart.getPrivateKey(
-            mnemonic,
-            cm.config.coinType,
-            getPathWithIndex(
-              cm.config.pathForAddrType('legacy')!,
-              cm.pathIndex,
-            ),
-          );
-        }
-      }
-
-      if (pKey == null) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: "Could not get private key",
-        );
-        return false;
-      }
-
-      final Uint8List decodedKey;
+      final index = signingWalletIndex;
+      final owner = signingWalletOwner;
+      final address = cm.address;
+      final pathIndex = cm.pathIndex;
+      final test = cm.isTest;
+      final endpoint = test ? cm.config.serviceTest : cm.config.service;
+      current = () =>
+          generation == _initializationGeneration &&
+          signingWalletIndex == index &&
+          signingWalletOwner == owner &&
+          coinModelsIndex >= 0 &&
+          coinModelsIndex < coinModels.length &&
+          identical(coinModels[coinModelsIndex], cm) &&
+          cm.address == address &&
+          cm.pathIndex == pathIndex &&
+          cm.isTest == test &&
+          (test ? cm.config.serviceTest : cm.config.service) == endpoint;
+      candidate = web3.Web3Client(endpoint, Client());
+      final encoded = await loadSigningKey(index, cm);
+      if (!current()) return false;
+      if (encoded == null) throw StateError('Could not get private key');
+      final decoded = base64Decode(encoded);
       try {
-        decodedKey = base64Decode(pKey);
-      } on FormatException catch (e) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'Invalid private key encoding: ${e.message}',
-        );
-        return false;
+        if (decoded.length != 32) {
+          throw StateError('Invalid private key length');
+        }
+        final key = web3.EthPrivateKey(Uint8List.fromList(decoded));
+        if (!current()) return false;
+        final previous = web3client;
+        web3client = candidate;
+        _privateKey = key;
+        _keyContextCurrent = current;
+        committed = true;
+        if (previous != null && !identical(previous, candidate)) {
+          unawaited(previous.dispose());
+        }
+        return true;
+      } finally {
+        SecureStorage.secureWipeBytes(decoded);
       }
-      if (decodedKey.length != 32) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'Invalid private key length: expected 32 bytes',
-        );
-        return false;
-      }
-      _privateKey = web3.EthPrivateKey(Uint8List.fromList(decodedKey));
-      SecureStorage.secureWipeBytes(decodedKey);
-      return true;
     } catch (e) {
-      viewStateDeal(WalletConnectState.error, params: e.toString());
+      if (current()) {
+        viewStateDeal(WalletConnectState.error, params: e.toString());
+      }
       return false;
+    } finally {
+      if (!committed && candidate != null) await candidate.dispose();
     }
   }
 
@@ -398,7 +414,11 @@ mixin WalletConnectConnection on ChangeNotifier {
       viewStateDeal(WalletConnectState.error, params: 'Error');
       return false;
     }
-    final needsReinit = coinModelsIndex != chainIndex || web3client == null;
+    final needsReinit =
+        coinModelsIndex != chainIndex ||
+        web3client == null ||
+        _privateKey == null ||
+        _keyContextCurrent?.call() != true;
     if (coinModelsIndex != chainIndex) setCoinModelsIndex(chainIndex);
     return needsReinit ? await web3clientInit() : true;
   }

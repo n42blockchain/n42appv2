@@ -147,3 +147,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Added delayed success/failure response regressions for personal_sign, eth_signTransaction and eth_sendTransaction. Existing normal message, EVM and non-EVM flows remain covered. Previously completed request results are still returned to their original topic/id; only stale global UI writes are suppressed.
 - All five WalletConnect Provider suites: 57 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch15-before-final-tests.log, /tmp/n42-audit-batch15-final-tests.log, /tmp/n42-audit-batch15-final-analyze.log.
 - This protects UI writeback after response awaits, not cancellation of an already signed/broadcast transaction. Native signing credential ownership and connection-level shared state mutation across awaits still require review. No device or release acceptance implied.
+
+## Batch 16 — connection initialization and cached-key ownership
+
+- Source review found web3client was replaced before asynchronous key loading, and late completions could overwrite a newer signing key. A cached key could also survive an account change when the chain index remained unchanged.
+- Prepare a candidate client/key locally; publish them together only when the initialization generation, wallet index/storage owner, coin identity/address/path/testnet/RPC endpoint still match. Dispose abandoned candidates and superseded clients. Wipe decoded temporary key bytes in finally.
+- Chain changes, disconnect and provider disposal invalidate pending initialization. Cached-key access rechecks the captured context; same-chain initialization reloads expired keys rather than silently reusing the previous account.
+- Added controlled key-loading hooks for deterministic tests while retaining the production WalletService/mnemonic fallback. Normal latest initialization and post-account-switch reinitialization remain usable.
+- All six WalletConnect Provider suites: 64 passed. Scoped analyze: no issues. Tests cover out-of-order success/failure, wallet/storage-owner switches, disconnect, disposal and cached-key reload. Logs: /tmp/n42-audit-batch16-final-tests.log and /tmp/n42-audit-batch16-final-analyze.log.
+- Automated tests inject delayed key loading; real-device storage/credential loading, reconnect and in-flight broadcast acceptance remain unverified. Session namespace enforcement and native signing awaits remain separate open items. No release uploaded.
