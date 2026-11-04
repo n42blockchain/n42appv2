@@ -63,10 +63,11 @@ class BatchTransferItem {
   }
 
   static BigInt _parseAmount(String amountStr, int decimals) {
+    if (amountStr.startsWith('+')) amountStr = amountStr.substring(1);
     if (decimals < 0 ||
         decimals > 255 ||
         amountStr.length > 512 ||
-        !RegExp(r'^[0-9]+(?:\.[0-9]+)?$').hasMatch(amountStr)) {
+        !RegExp(r'^(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)$').hasMatch(amountStr)) {
       throw const FormatException('Invalid decimal amount');
     }
     final parts = amountStr.split('.');
@@ -77,7 +78,8 @@ class BatchTransferItem {
       throw const FormatException('Amount exceeds token precision');
     }
     final amount =
-        BigInt.parse(parts[0]) * BigInt.from(10).pow(decimals) +
+        BigInt.parse(parts[0].isEmpty ? '0' : parts[0]) *
+            BigInt.from(10).pow(decimals) +
         (fraction.isEmpty
             ? BigInt.zero
             : BigInt.parse(fraction.padRight(decimals, '0')));

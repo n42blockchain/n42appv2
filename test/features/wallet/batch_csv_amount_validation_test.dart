@@ -39,11 +39,27 @@ void main() {
       expect(result.error, isTrue);
     });
   }
-  for (final text in ['1.2345678', '1.2.3', '1e3', '+1', '-1', '1 2', '.5']) {
+  for (final text in ['1.2345678', '1.2.3', '1e3', '-1', '1 2']) {
     test('CSV rejects ambiguous or inexact amount $text', () {
       expect(
         () => BatchTransferItem.fromCsvRow('$address,$text', 0, 6),
         throwsFormatException,
+      );
+    });
+  }
+  for (final amount in ['.5', '0.5', '000.5000', '+.5']) {
+    test('preserves conventional decimal input $amount', () {
+      expect(
+        BatchTransferItem.fromCsvRow('$address,$amount', 0, 6).amount,
+        BigInt.from(500000),
+      );
+    });
+  }
+  for (final amount in ['1.', '+1']) {
+    test('preserves integer input $amount', () {
+      expect(
+        BatchTransferItem.fromCsvRow('$address,$amount', 0, 6).amount,
+        BigInt.from(1000000),
       );
     });
   }
