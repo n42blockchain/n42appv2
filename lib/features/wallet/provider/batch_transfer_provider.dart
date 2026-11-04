@@ -261,6 +261,7 @@ class BatchTransferProvider extends ChangeNotifier {
 
       return result.data as Map<String, dynamic>?;
     } catch (e) {
+      if (_disposed || revision != _quoteRevision) return null;
       _errorMessage = e.toString();
       _state = BatchTransferState.error;
       notifyListeners();
@@ -270,12 +271,18 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 广播交易
   Future<bool> broadcastTransaction(String signedTx) async {
+    final revision = _quoteRevision;
+    final rpcUrl = _rpcUrl;
+    bool current() => !_disposed && revision == _quoteRevision;
+    if (!current()) return false;
     _state = BatchTransferState.broadcasting;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final result = await _api.broadcastTransaction(_rpcUrl, signedTx);
+      if (!current()) return false;
+      final result = await _api.broadcastTransaction(rpcUrl, signedTx);
+      if (!current()) return false;
 
       if (result.error) {
         _errorMessage = result.data?.toString() ?? 'Transaction failed';
@@ -284,11 +291,14 @@ class BatchTransferProvider extends ChangeNotifier {
         return false;
       }
 
-      _txHash = result.data.toString();
+      final hash = result.data.toString();
+      _txHash = hash;
       _state = BatchTransferState.awaitingConfirmation;
       notifyListeners();
 
-      final receipt = await BatchTransferApi.waitForReceipt(_rpcUrl, _txHash!);
+      if (!current()) return false;
+      final receipt = await BatchTransferApi.waitForReceipt(rpcUrl, hash);
+      if (!current()) return false;
 
       if (receipt != null && receipt['status'] == '0x1') {
         // 交易成功上链
@@ -310,6 +320,7 @@ class BatchTransferProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
+      if (!current()) return false;
       _errorMessage = e.toString();
       _state = BatchTransferState.error;
       notifyListeners();

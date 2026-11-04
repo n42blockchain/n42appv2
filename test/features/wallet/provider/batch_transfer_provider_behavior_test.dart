@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'dart:io';
+
+import 'package:n42_wallet/features/wallet/api/batch_transfer_api.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +18,13 @@ class _BlockedHttpClient implements HttpClient {
 class _BlockedHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) => _BlockedHttpClient();
+}
+
+class _DeferredBroadcastApi extends BatchTransferApi {
+  final result = Completer<MessageModel>();
+  @override
+  Future<MessageModel> broadcastTransaction(String rpcUrl, String signedTx) =>
+      result.future;
 }
 
 void main() {
@@ -54,6 +65,56 @@ void main() {
       expect(() => provider.items.clear(), throwsUnsupportedError);
       expect(provider.recipientCount, 1);
       expect(provider.totalAmount, BigInt.from(250));
+    },
+  );
+
+  test(
+    'a previous account broadcast failure cannot overwrite a new account',
+    () async {
+      final api = _DeferredBroadcastApi();
+      final provider = BatchTransferProvider(api: api);
+      addTearDown(provider.dispose);
+      void initialize(String address) => provider.initialize(
+        chainSymbol: 'ETH',
+        rpcUrl: 'https://rpc.invalid',
+        chainId: 1,
+        fromAddress: address,
+        tokenSymbol: 'ETH',
+        decimals: 18,
+      );
+      initialize('0x${'a1' * 20}');
+      final sending = provider.broadcastTransaction('signed');
+      initialize('0x${'b2' * 20}');
+      api.result.completeError(StateError('old account request failed'));
+      expect(await sending, isFalse);
+      expect(provider.state, BatchTransferState.initial);
+      expect(provider.errorMessage, isNull);
+      expect(provider.txHash, isNull);
+    },
+  );
+
+  test(
+    'a stale successful broadcast cannot attach its hash to a new account',
+    () async {
+      final api = _DeferredBroadcastApi();
+      final provider = BatchTransferProvider(api: api);
+      addTearDown(provider.dispose);
+      void initialize(String address) => provider.initialize(
+        chainSymbol: 'ETH',
+        rpcUrl: 'https://rpc.invalid',
+        chainId: 1,
+        fromAddress: address,
+        tokenSymbol: 'ETH',
+        decimals: 18,
+      );
+      initialize('0x${'a1' * 20}');
+      final sending = provider.broadcastTransaction('signed');
+      initialize('0x${'b2' * 20}');
+      api.result.complete(MessageModel()..data = '0x${'ab' * 32}');
+      expect(await sending, isFalse);
+      expect(provider.state, BatchTransferState.initial);
+      expect(provider.txHash, isNull);
+      expect(provider.errorMessage, isNull);
     },
   );
 
