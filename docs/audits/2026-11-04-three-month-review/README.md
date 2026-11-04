@@ -102,3 +102,24 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Reproduced before fixing: eth_signTransaction omitted chainId and web3dart defaults to 1. Explicitly pass the selected coin's mainnet/testnet chain ID, matching the existing sendTransaction path.
 - Four new regressions failed before the change. Final WalletConnect signing/EVM suites: 36 passed, including prior transaction creation/fee mapping and non-EVM handlers. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch11-before-tests.log, /tmp/n42-audit-batch11-final-tests.log, /tmp/n42-audit-batch11-analyze.log.
 - This fixes byte/chain propagation, not the full authorization model. Session-approved address matching, mutable request ownership across awaits and EIP-712 domain/chain consistency remain for subsequent review. No hardware/device or production acceptance, no release upload.
+
+## Remaining scope ledger after batch 12
+
+These are changed-file inventory counts, not counts of remaining defects or semantically reviewed files. No completion percentage is justified yet. All eight areas remain open; native, chat dependency and device acceptance are separate boundaries.
+
+| Area | Changed files | Current status / next checks |
+| --- | ---: | --- |
+| Wallet | 297 | Partial: batch/Falcon reviewed; AA, hardware, other chains, key recovery remain |
+| DApp / WalletConnect | 24 | Partial: message bytes/chain/signing address; session namespace and async request ownership remain |
+| Core security / infrastructure | 73 | Partial: RPC policy regressions; authentication, storage, networking/deep links remain |
+| Native iOS / Android | 42 | Signer contracts inspected; native runtime, lifecycle and release acceptance remain |
+| Mining / plugins | 118 | Deep code review remains; prior device evidence is not a substitute |
+| Chat host | 3 | Host review remains; git chat dependency has separate scope not counted here |
+| Scripts / releases | 18 | Artifact identity, version and environment checks remain |
+| Other features / UI | 176 | Recovery, navigation, account isolation and regressions remain |
+
+## Batch 12 — bind EVM message signing to the requested address
+
+- personal_sign and EIP-712 signing accepted a requested signer address but did not compare it to the actual active key. Require the requested address to match the key address, case-insensitively, before cryptographic signing.
+- Existing successful fixtures used unrelated placeholder addresses; corrected them to the actual deterministic test key. Positive signing behavior remains covered. New mismatched-address tests verify no signature response; case-difference positive case preserves valid input.
+- Final WalletConnect suites: 39 passed. Evidence: /tmp/n42-audit-batch12-final-tests.log and /tmp/n42-audit-batch12-analyze.log. Scoped analyze: no issues. This is signer/request identity checking, not complete WalletConnect session-namespace authorization. No device or release acceptance implied.

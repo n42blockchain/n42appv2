@@ -43,14 +43,18 @@ mixin WalletConnectSigning
         final encodedMessage = rawData.startsWith('0x') && _isValidHex(stripped)
             ? web3.hexToBytes(stripped)
             : Uint8List.fromList(utf8.encode(rawData));
-        final signedData = privateKey.signPersonalMessageToUint8List(
+        final signingKey = privateKey;
+        _requireMessageSigner(requestParams[1], signingKey);
+        final signedData = signingKey.signPersonalMessageToUint8List(
           encodedMessage,
         );
         signedDataHex = bytesToHex(signedData, include0x: true);
       } else if (_typedDataVersions.containsKey(eventData.method)) {
         final requestParams = (eventData.params! as List).cast<String>();
+        final signingKey = privateKey;
+        _requireMessageSigner(requestParams[0], signingKey);
         signedDataHex = _signTypedData(
-          privateKey: privateKey,
+          privateKey: signingKey,
           jsonData: requestParams[1],
           version: _typedDataVersions[eventData.method]!,
         );
@@ -669,6 +673,13 @@ mixin WalletConnectSigning
       );
     }
     viewStateDeal(WalletConnectState.connect);
+  }
+
+  void _requireMessageSigner(String requested, web3.EthPrivateKey key) {
+    if (!RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(requested) ||
+        requested.toLowerCase() != key.address.with0x.toLowerCase()) {
+      throw StateError('Requested signer does not match the active wallet');
+    }
   }
 
   /// Returns true if [s] contains only hex characters (0-9, a-f, A-F).

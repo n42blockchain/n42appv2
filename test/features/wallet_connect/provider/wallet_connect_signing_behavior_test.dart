@@ -66,6 +66,38 @@ void main() {
     provider.dispose();
   });
 
+  test(
+    'personal_sign accepts the active account with case differences',
+    () async {
+      provider.actionData = _request('personal_sign', [
+        'fixture',
+        '0x${_testKey.address.with0x.substring(2).toUpperCase()}',
+      ]);
+      await provider.messageSignTap();
+      expect(walletKit.responses.single.$2.error, isNull);
+      expect(provider.walletConnectState, WalletConnectState.connect);
+    },
+  );
+  test('personal_sign rejects a different requested account', () async {
+    provider.actionData = _request('personal_sign', [
+      'fixture',
+      '0x1111111111111111111111111111111111111111',
+    ]);
+    await provider.messageSignTap();
+    expect(walletKit.responses, isEmpty);
+    expect(provider.walletConnectState, WalletConnectState.error);
+    expect(provider.errorMessage, contains('Requested signer'));
+  });
+  test('typed-data rejects a different requested account before parsing or signing', () async {
+    provider.actionData = _request('eth_signTypedData_v4', [
+      '0x1111111111111111111111111111111111111111',
+      '{}',
+    ]);
+    await provider.messageSignTap();
+    expect(walletKit.responses, isEmpty);
+    expect(provider.walletConnectState, WalletConnectState.error);
+    expect(provider.errorMessage, contains('Requested signer'));
+  });
   for (final message in ['deadbeef', 'cafe', '1234']) {
     test('personal_sign preserves unprefixed text $message', () async {
       provider.actionData = _request('personal_sign', [
@@ -173,7 +205,10 @@ void main() {
 
   test('WalletKit response failure is surfaced as a signing error', () async {
     walletKit.responseFailure = StateError('session response failed');
-    provider.actionData = _request('personal_sign', ['fixture']);
+    provider.actionData = _request('personal_sign', [
+      'fixture',
+      _testKey.address.with0x,
+    ]);
 
     await provider.messageSignTap();
 

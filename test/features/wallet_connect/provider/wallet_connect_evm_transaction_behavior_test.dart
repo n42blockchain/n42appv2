@@ -225,7 +225,7 @@ void main() {
     const message = 'Sign this WalletConnect message';
     provider.actionData = _request('personal_sign', [
       message,
-      '0x1111111111111111111111111111111111111111',
+      _Provider._key.address.with0x,
     ]);
 
     await provider.messageSignTap();
@@ -244,7 +244,7 @@ void main() {
   test('personal_sign decodes hex message bytes before signing', () async {
     provider.actionData = _request('personal_sign', [
       '0x48656c6c6f',
-      '0x1111111111111111111111111111111111111111',
+      _Provider._key.address.with0x,
     ]);
 
     await provider.messageSignTap();
@@ -278,7 +278,7 @@ void main() {
 
   test('typed-data requests sign a 65-byte EIP-712 signature', () async {
     provider.actionData = _request('eth_signTypedData_v4', [
-      '0x1111111111111111111111111111111111111111',
+      _Provider._key.address.with0x,
       '{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"}],"Mail":[{"name":"contents","type":"string"}]},"primaryType":"Mail","domain":{"name":"N42","version":"1","chainId":1},"message":{"contents":"hello"}}',
     ]);
 
