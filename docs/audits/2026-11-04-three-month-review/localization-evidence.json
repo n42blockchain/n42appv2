@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-04",
+  "applicationCommit": "7d3a4f011",
+  "formatCommit": "43e37a472",
+  "chatCommit": "7e7106f1c3163256624be7decbca2e849d5430fb",
+  "translations": {
+    "walletAdded": 1488,
+    "walletUpdated": 84,
+    "chatAdded": 1359,
+    "chatUpdated": 710,
+    "authorship": "model authored; parallel language review; no native-speaker acceptance"
+  },
+  "tests": {
+    "passed": 5803,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "coverage": {
+    "hit": 99844,
+    "found": 138092,
+    "percent": 72.30252295571069,
+    "threshold": 70,
+    "passed": true
+  },
+  "chatFocusedTests": 16,
+  "auditScriptTests": 8,
+  "analysis": {
+    "wallet": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 59
+    },
+    "chat": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 305
+    }
+  },
+  "localizationAudit": {
+    "missing": 0,
+    "extra": 0,
+    "empty": 0,
+    "invalidPlaceholders": 0,
+    "baselineRefreshed": false,
+    "resolvedGitDependency": true
+  },
+  "format": {
+    "filesChecked": 1618,
+    "changed": 0
+  },
+  "boundaries": [
+    "Chat QA-006 direct UI literal backlog is separate from resource parity.",
+    "No native-speaker, physical-device or release acceptance."
+  ],
+  "evidence": {
+    "/tmp/n42-l10n-full-tests.jsonl": {
+      "sha256": "c0b860e48594e9e60d873912460f6bd24daaa5842d19ed40b3a6d90e8b2b063d"
+    },
+    "/tmp/n42-l10n-resolved-analyze.log": {
+      "sha256": "2bc1641e1f89d22570e6cc0f79b29d1da3308533f472224ee153363323493a4a"
+    },
+    "/tmp/n42-l10n-audit-final.log": {
+      "sha256": "04b8276fc76477b19ac6f95d44e138ad30819d30a97fbcc0628ca5a61ee4013e"
+    },
+    "/tmp/n42-l10n-format-final.log": {
+      "sha256": "5f326331a220aa0d688c3a40175ad57764f97e07c58f3c7d1a4050effbd7e08f"
+    },
+    "/tmp/n42-chat-l10n-tests-final.log": {
+      "sha256": "b271cd5d70f645cf50b8f892d6f7afe00308aa762fe7379d07dbe5c5e5078d68"
+    },
+    "/tmp/n42-chat-l10n-analyze-final.log": {
+      "sha256": "c5a0a46e323a45301dd30f38d1bbd9bc1200651f2f6159607d3515d2f9d1512b"
+    }
+  }
+}

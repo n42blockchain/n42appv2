@@ -1,5 +1,7 @@
 # Three-month code audit — batch 1
 
+2026-11-04 本地化与格式后续结果：[localization-closeout.md](localization-closeout.md)。原缺失词条与格式检查问题已修复。
+
 本轮统一验证与收尾结果见 [closeout.md](closeout.md)：5,802 项全量测试通过，覆盖率 71.97%；全 CI 和人工/真机审计边界单独列明。
 
 Scope: N42 wallet, 2026-08-04 through 2026-11-04. Baseline `6a9bc5a11`.
