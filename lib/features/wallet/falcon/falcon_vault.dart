@@ -51,14 +51,15 @@ final class FalconVault {
   }
 
   Future<Uint8List> sign(Uint8List digest) async {
+    final signingDigest = Uint8List.fromList(digest);
     final record = await _read();
     if (record == null) throw StateError('No Falcon account');
     final secret = base64Decode(record['secret'] as String);
     try {
-      final signature = crypto.sign(secret, digest);
+      final signature = crypto.sign(secret, signingDigest);
       if (!crypto.verify(
         base64Decode(record['public'] as String),
-        digest,
+        signingDigest,
         signature,
       )) {
         throw StateError('Falcon signature verification failed');

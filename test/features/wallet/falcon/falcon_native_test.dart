@@ -23,6 +23,22 @@ void main() {
   }
   final crypto = FalconCrypto(DynamicLibrary.open(path));
   setUp(() => FlutterSecureStorage.setMockInitialValues({}));
+  test(
+    'vault binds signing to the digest supplied before storage awaits',
+    () async {
+      final vault = FalconVault(crypto, 'audit-digest-snapshot');
+      await vault.create();
+      final public = (await vault.publicKey())!;
+      final digest = Uint8List(32)..[0] = 1;
+      final expected = Uint8List.fromList(digest);
+      final signing = vault.sign(digest);
+      digest[0] = 2;
+      final signature = await signing;
+      expect(crypto.verify(public, expected, signature), isTrue);
+      expect(crypto.verify(public, digest, signature), isFalse);
+    },
+  );
+
   test('real signatures reject changed message and wrong public key', () {
     final a = crypto.generate(), b = crypto.generate();
     final msg = Uint8List(32)..[0] = 1;
