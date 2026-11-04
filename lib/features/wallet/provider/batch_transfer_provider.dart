@@ -28,6 +28,11 @@ class BatchTransferProvider extends ChangeNotifier {
     : _api = api ?? BatchTransferApi();
   final BatchTransferApi _api;
   bool _disposed = false;
+
+  int get transactionRevision => _quoteRevision;
+  bool isTransactionCurrent(int revision) =>
+      !_disposed && revision == _quoteRevision;
+
   int _quoteRevision = 0;
 
   @override

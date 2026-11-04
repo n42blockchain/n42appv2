@@ -18,6 +18,23 @@ class _Api extends BatchTransferApi {
 }
 
 void main() {
+  test(
+    'a captured confirmation revision expires on edit, reset and disposal',
+    () {
+      final provider = BatchTransferProvider();
+      final original = provider.transactionRevision;
+      expect(provider.isTransactionCurrent(original), isTrue);
+      provider.addItem('0x${'22' * 20}', BigInt.one);
+      expect(provider.isTransactionCurrent(original), isFalse);
+      final edited = provider.transactionRevision;
+      provider.reset();
+      expect(provider.isTransactionCurrent(edited), isFalse);
+      final reset = provider.transactionRevision;
+      provider.dispose();
+      expect(provider.isTransactionCurrent(reset), isFalse);
+    },
+  );
+
   for (final fail in [false, true]) {
     test(
       'stale ${fail ? 'failure' : 'quote'} cannot mutate a changed batch',

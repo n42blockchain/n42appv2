@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +54,9 @@ class BatchTransferPage extends ConsumerStatefulWidget {
 }
 
 class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
+  bool Function() _ownerCurrent = () => false;
+  bool _transferInProgress = false;
+
   final _addressController = TextEditingController();
   final _amountController = TextEditingController();
   final _memoController = TextEditingController();
@@ -60,6 +64,17 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   @override
   void initState() {
     super.initState();
+    final wallet = ref.read(wapBridgeProvider);
+    if (wallet.isWalletReady) {
+      final owner = wallet.walletInfo;
+      final ownerUuid = wallet.walletDataOwnerUuid;
+      _ownerCurrent = () =>
+          mounted &&
+          wallet.isWalletReady &&
+          wallet.userUUID == ownerUuid &&
+          wallet.walletDataOwnerUuid == ownerUuid &&
+          identical(wallet.walletInfo, owner);
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       widget.batchTransferProvider.initialize(
@@ -180,9 +195,8 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   void _showSnackBar(String message, {Color? bg}) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: bg));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message), backgroundColor: bg));
   }
 
   BigInt _parseAmount(String amountStr) {
@@ -225,28 +239,36 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
   }
 
   Future<void> _proceedToConfirm() async {
+    if (_transferInProgress || !_ownerCurrent()) return;
+    _transferInProgress = true;
     final provider = widget.batchTransferProvider;
-
-    await provider.estimateGas();
-
-    if (!mounted) return;
-    if (provider.gasEstimate == null) return;
-
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => BatchConfirmDialog(
-        provider: provider,
-        tokenSymbol: widget.tokenSymbol,
-        formatGasFee: _formatGasFee,
-      ),
-    );
-
-    if (confirmed == true) {
-      _executeTransfer();
+    try {
+      await provider.estimateGas();
+      if (!mounted || !_ownerCurrent() || provider.gasEstimate == null) return;
+      final revision = provider.transactionRevision;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => BatchConfirmDialog(
+          provider: provider,
+          tokenSymbol: widget.tokenSymbol,
+          formatGasFee: _formatGasFee,
+        ),
+      );
+      if (confirmed == true &&
+          _ownerCurrent() &&
+          provider.isTransactionCurrent(revision)) {
+        await _executeTransfer(revision);
+      }
+    } finally {
+      _transferInProgress = false;
     }
   }
 
-  Future<void> _executeTransfer() async {
+  Future<void> _executeTransfer(int revision) async {
+    if (!_ownerCurrent() ||
+        !widget.batchTransferProvider.isTransactionCurrent(revision)) {
+      return;
+    }
     final provider = widget.batchTransferProvider;
     final walletProvider = ref.read(wapBridgeProvider);
 
@@ -263,7 +285,11 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     }
 
     final txData = await provider.buildTransaction();
-    if (txData == null) return;
+    if (txData == null ||
+        !_ownerCurrent() ||
+        !provider.isTransactionCurrent(revision)) {
+      return;
+    }
 
     provider.setSigningState();
 
@@ -290,6 +316,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         pk: privateKey,
       );
 
+      if (!_ownerCurrent() || !provider.isTransactionCurrent(revision)) return;
       if (signedTx.isEmpty) {
         provider.setError(l10n.g_key_175);
         return;
@@ -297,7 +324,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
 
       final success = await provider.broadcastTransaction(signedTx);
 
-      if (success && mounted) {
+      if (success && mounted && _ownerCurrent()) {
         messenger.showSnackBar(
           SnackBar(
             content: Text(l10n.g_key_140),
@@ -309,6 +336,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         if (mounted) Navigator.pop(context, true);
       }
     } catch (e) {
+      if (!_ownerCurrent() || !provider.isTransactionCurrent(revision)) return;
       provider.setError(e.toString());
     }
   }

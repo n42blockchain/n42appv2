@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_page.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
@@ -32,6 +34,9 @@ Future<BatchTransferProvider> _mountPage(
         balance: balance ?? BigInt.from(10000000),
         batchTransferProvider: provider,
       ),
+      overrides: [
+        wapBridgeProvider.overrideWith((ref) => WalletActionProvider()),
+      ],
     ),
   );
   await tester.pump();
