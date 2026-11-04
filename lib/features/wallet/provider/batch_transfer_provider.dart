@@ -268,7 +268,11 @@ class BatchTransferProvider extends ChangeNotifier {
         return null;
       }
 
-      return result.data as Map<String, dynamic>?;
+      final payload = result.data;
+      if (payload is! Map || payload['txData'] is! Map) {
+        throw StateError('Invalid batch signing payload');
+      }
+      return Map<String, dynamic>.from(payload['txData'] as Map);
     } catch (e) {
       if (_disposed || revision != _quoteRevision) return null;
       _errorMessage = e.toString();

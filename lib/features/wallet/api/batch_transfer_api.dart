@@ -278,23 +278,34 @@ class BatchTransferApi {
         items: items,
       );
 
-      final txData = <String, String>{
-        'chainId': '0x${chainId.toRadixString(16)}',
-        'nonce': '0x${nonce.toRadixString(16)}',
-        'to': multicallAddr,
-        'value': '0x${params.totalValue.toRadixString(16)}',
-        'data': params.data,
-        'gasLimit': '0x${gasLimit.toRadixString(16)}',
-      };
-
-      if (maxFeePerGas != null && maxPriorityFeePerGas != null) {
-        txData['maxFeePerGas'] = '0x${maxFeePerGas.toRadixString(16)}';
-        txData['maxPriorityFeePerGas'] =
-            '0x${maxPriorityFeePerGas.toRadixString(16)}';
-        txData['type'] = '0x2';
-      } else if (gasPrice != null) {
-        txData['gasPrice'] = '0x${gasPrice.toRadixString(16)}';
+      final is1559 = maxFeePerGas != null && maxPriorityFeePerGas != null;
+      final fee = is1559 ? maxFeePerGas : gasPrice;
+      final tip = is1559 ? maxPriorityFeePerGas : BigInt.zero;
+      if (chainId <= 0 ||
+          nonce < 0 ||
+          gasLimit <= BigInt.zero ||
+          fee == null ||
+          fee < BigInt.zero ||
+          tip < BigInt.zero ||
+          (is1559 && tip > fee) ||
+          ((maxFeePerGas == null) != (maxPriorityFeePerGas == null))) {
+        return MessageModel.error()..data = 'Invalid batch signing parameters';
       }
+      // Match the shared iOS/Android signTransaction EVM bridge contract.
+      // Integers and calldata are hex without 0x, addresses retain 0x.
+      final txData = <String, String>{
+        'chainId': chainId.toRadixString(16),
+        'nonce': nonce.toRadixString(16),
+        'toAddress': multicallAddr,
+        'amount': params.totalValue.toRadixString(16),
+        'msgData': params.data.substring(2),
+        'gasLimit': gasLimit.toRadixString(16),
+        'gasPrice': fee.toRadixString(16),
+        'gasPrice2': tip.toRadixString(16),
+        'is1559': is1559.toString(),
+        'contract': '',
+        'erc721Or1155': '',
+      };
 
       return MessageModel()
         ..data = {
