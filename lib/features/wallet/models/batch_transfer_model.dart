@@ -63,31 +63,28 @@ class BatchTransferItem {
   }
 
   static BigInt _parseAmount(String amountStr, int decimals) {
-    try {
-      // 移除可能的空格和逗号
-      amountStr = amountStr.replaceAll(' ', '').replaceAll(',', '');
-
-      // 处理小数点
-      if (amountStr.contains('.')) {
-        final parts = amountStr.split('.');
-        final intPart = parts[0];
-        var decPart = parts[1];
-
-        // 填充或截断小数部分
-        if (decPart.length > decimals) {
-          decPart = decPart.substring(0, decimals);
-        } else {
-          decPart = decPart.padRight(decimals, '0');
-        }
-
-        return BigInt.parse('$intPart$decPart');
-      } else {
-        // 整数，需要乘以 10^decimals
-        return BigInt.parse(amountStr) * BigInt.from(10).pow(decimals);
-      }
-    } catch (e) {
-      return BigInt.zero;
+    if (decimals < 0 ||
+        decimals > 255 ||
+        amountStr.length > 512 ||
+        !RegExp(r'^[0-9]+(?:\.[0-9]+)?$').hasMatch(amountStr)) {
+      throw const FormatException('Invalid decimal amount');
     }
+    final parts = amountStr.split('.');
+    final fraction = parts.length == 2
+        ? parts[1].replaceFirst(RegExp(r'0+$'), '')
+        : '';
+    if (fraction.length > decimals) {
+      throw const FormatException('Amount exceeds token precision');
+    }
+    final amount =
+        BigInt.parse(parts[0]) * BigInt.from(10).pow(decimals) +
+        (fraction.isEmpty
+            ? BigInt.zero
+            : BigInt.parse(fraction.padRight(decimals, '0')));
+    if (amount >= (BigInt.one << 256)) {
+      throw const FormatException('Amount exceeds uint256');
+    }
+    return amount;
   }
 
   Map<String, dynamic> toJson() => {

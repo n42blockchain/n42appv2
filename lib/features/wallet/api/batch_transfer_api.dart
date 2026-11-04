@@ -57,6 +57,18 @@ class BatchTransferApi {
     required String? tokenAddress,
     required List<BatchTransferItem> items,
   }) {
+    final max = (BigInt.one << 256) - BigInt.one;
+    final address = RegExp(r'^0x[0-9a-fA-F]{40}$');
+    if (items.isEmpty ||
+        items.any(
+          (item) =>
+              !address.hasMatch(item.toAddress) ||
+              item.amount <= BigInt.zero ||
+              item.amount > max,
+        ) ||
+        items.fold(BigInt.zero, (sum, item) => sum + item.amount) > max) {
+      throw const FormatException('Invalid batch recipients or uint256 amount');
+    }
     final isNative = tokenAddress == null || tokenAddress.isEmpty;
     final data = isNative
         ? _buildNativeMulticallData(items)
