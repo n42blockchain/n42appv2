@@ -274,7 +274,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "[# Üƥðàťéð ${value}ṁ àĝö ~~~~~~#]";
 
-  static String m103(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
+  static String m103(number) => "[# Ɓĺöçķ #${number} ~~~#]";
+
+  static String m104(index) => "[# Ðéṽìçé ${index} ~~~#]";
+
+  static String m105(value) => "[# ${value} ṁš ~#]";
+
+  static String m106(count) => "[# ${count} ťẋ ~#]";
+
+  static String m107(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1097,7 +1105,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ŗéṽöķé Šéššìöñ Ķéý ~~~~~~~~~#]",
     ),
     "g_key_aa_revoked": MessageLookupByLibrary.simpleMessage(
-      "[Local session record revoked]",
+      "[# Ĺöçàĺ šéššìöñ ŗéçöŗð ŗéṽöķéð ~~~~~~~~~~~~~~#]",
     ),
     "g_key_aa_revoked_status": MessageLookupByLibrary.simpleMessage(
       "[# Ŗéṽöķéð ~~~#]",
@@ -1152,7 +1160,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ƒàìĺéð ťö çŗéàťé šéššìöñ ķéý ~~~~~~~~~~~~~~#]",
     ),
     "g_key_aa_session_create_success": MessageLookupByLibrary.simpleMessage(
-      "[Local session record saved]",
+      "[# Ĺöçàĺ šéššìöñ ŗéçöŗð šàṽéð ~~~~~~~~~~~~~#]",
     ),
     "g_key_aa_session_dapp_hint": MessageLookupByLibrary.simpleMessage(
       "[# é.ĝ. Üñìšŵàƥ, Ààṽé... ~~~~~~~~~~#]",
@@ -1173,7 +1181,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Šéššìöñ Ķéýš ~~~~~~#]",
     ),
     "g_key_aa_session_keys_desc": MessageLookupByLibrary.simpleMessage(
-      "[Local records only. On-chain permissions are not changed.]",
+      "[# Ĺöçàĺ ŗéçöŗðš öñĺý. Öñ-çĥàìñ ƥéŗṁìššìöñš àŗé ñöť çĥàñĝéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
     "g_key_aa_session_preset_contract": MessageLookupByLibrary.simpleMessage(
       "[# ÐÀƥƥ Àççéšš ~~~~~#]",
@@ -2741,7 +2749,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
       "[# Ýöü ŵìĺĺ ŗéçéìṽé ~~~~~~~~#]",
     ),
-    "g_key_t_1": MessageLookupByLibrary.simpleMessage("[# Çöṁƥĺéťé ~~~~#]"),
+    "g_key_t_1": MessageLookupByLibrary.simpleMessage("[# Çöṁƥĺéťéð ~~~~#]"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("[# Ĝàš ƥŗìçé ~~~~#]"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage(
       "[# Ṁàẋ ĝàš ƒéé ~~~~~#]",
@@ -3683,6 +3691,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "[# Ṁìñìñĝ (Ṽ2) ~~~~~#]",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁöƀìĺé ṽéŗìƒìçàťìöñ (Ṽ3) ~~~~~~~~~~~~#]",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "[# Ṁìñìñĝ Ìñťéŗƒàçé ~~~~~~~~#]",
     ),
@@ -4206,7 +4217,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ɓàĺàñçé çöüĺð ñöť ƀé ŗéƒŗéšĥéð ~~~~~~~~~~~~~~~#]",
     ),
     "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
-      "[# Ťöťàĺ Ṽàĺüé ~~~~~#]",
+      "[# Ťöťàĺ ṽàĺüé ~~~~~#]",
     ),
     "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage(
       "[# Ƥŗìçé ~~#]",
@@ -4289,8 +4300,177 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_password": MessageLookupByLibrary.simpleMessage(
       "[# Ƥàššŵöŗð ~~~~#]",
     ),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒýìñĝ ƀĺöçķš ~~~~~~~~#]",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("[# Àĺĺ ~#]"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "[# Ñééðš àťťéñťìöñ ~~~~~~~#]",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "[# Àṽĝ. ṽéŗìƒìçàťìöñ ~~~~~~~~#]",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥàüšéð ìñ ƀàçķĝŗöüñð ~~~~~~~~~~#]",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓĺöçķ ĥàšĥ ~~~~~#]",
+    ),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "[# Çéŗťìƒìéð ƀĺöçķš ~~~~~~~~#]",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "[# Çéŗťìƒìéð ~~~~#]",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage(
+      "[# Çĥööšé à ñöðé ~~~~~~#]",
+    ),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage(
+      "[# Çöññéçťìñĝ ~~~~~#]",
+    ),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "[# Çöññéçťìöñ ìñťéŗŗüƥťéð ~~~~~~~~~~~#]",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓĺöçķ ĥàšĥ çöƥìéð ~~~~~~~~#]",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "[# Çöƥý ƀĺöçķ ĥàšĥ ~~~~~~~#]",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage(
+      "[# Šéššìöñ ťìṁé ~~~~~~#]",
+    ),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "[# Šťàŗť ṁìñìñĝ ťö šéé ýöüŗ ṽéŗìƒìéð ƀĺöçķš àñð çéŗťìƒìçàťéš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "[# Ýöüŗ ƒìŗšť ƀĺöçķ šťàŗťš ĥéŗé ~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺàšť ŗéƥöŗťéð ìššüé ~~~~~~~~~#]",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒìçàťìöñ ƒàìĺéð ~~~~~~~~~#]",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ƀĺöçķš ṁàťçĥ ťĥìš ƒìĺťéŗ. ~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "[# Öñ ìÖŠ, ṽéŗìƒìçàťìöñ ƥàüšéš ìñ ťĥé ƀàçķĝŗöüñð àñð ŗéšüṁéš ŵĥéñ ýöü ŗéťüŗñ. Öñĺý àçťìṽé ťìṁé ìš çöüñťéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒìçàťìöñ ťìṁé ~~~~~~~~#]",
+    ),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "[# Šĥöŵ ṁöŗé ƀĺöçķš ~~~~~~~~#]",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺöçàĺ ťéšťñéť ~~~~~~#]",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥé ðéƒàüĺť ñöðé ìš öñ ťĥé ĺöçàĺ ťéšťñéť. Ýöü çàñ àĺšö éñťéŗ à çüšťöṁ àððŗéšš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒìçàťìöñ ñöðé ~~~~~~~~#]",
+    ),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
+      "[# Ñöðé àððŗéšš ~~~~~~#]",
+    ),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "[# Çöññéçť ťö à ñöðé ťö šťàŗť ṽéŗìƒýìñĝ ƀĺöçķš. ~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "[# Éñťéŗ àñ ĥťťƥ:// öŗ ĥťťƥš:// ñöðé àððŗéšš ŵìťĥöüť çŗéðéñťìàĺš öŗ ɋüéŗý ƥàŗàṁéťéŗš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥàüšé ṁìñìñĝ ~~~~~~#]",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥàüšé ṁìñìñĝ ťö çĥàñĝé ťĥé ñöðé. ~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁìñìñĝ ƥàüšéð ~~~~~~#]",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "[# Àŵàìťìñĝ çéŗťìƒìçàťé ~~~~~~~~~~#]",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéàðý ťö ṁìñé ~~~~~~#]",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéçéìƥťš ŗööť ~~~~~~#]",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéçéñť ƀĺöçķš ~~~~~~#]",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéçéñť öƀšéŗṽéð àçťìṽìťý ìñ ťĥìš šéššìöñ ~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "[# Àçťìṽàťìñĝ ðéṽìçé ~~~~~~~~#]",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁìñìñĝ ŵìĺĺ ŗéçöññéçť àüťöṁàťìçàĺĺý. ~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéçöññéçťìñĝ ~~~~~~#]",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁìñìñĝ ŗéŵàŗðš ~~~~~~~#]",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö çöñƒìŗṁéð ŗéŵàŗð ðàťà ìš àṽàìĺàƀĺé. ~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥìš ñöðé ŗéƥöŗťš ƀĺöçķ ṽéŗìƒìçàťìöñ àñð çéŗťìƒìçàťéš, ƀüť ðöéš ñöť ƥŗöṽìðé ŗéŵàŗð àṁöüñťš. Ṽéŗìƒìéð ƀĺöçķ çöüñťš àŗé ñöť àñ éàŗñìñĝš ƀàĺàñçé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "[# Ñöť ŗéƥöŗťéð ~~~~~~#]",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("[# Šàṽé ñöðé ~~~~#]"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "[# Çöüĺð ñöť šàṽé ťĥé ñöðé. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁìñìñĝ šéťťìñĝš ~~~~~~~#]",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "[# Šéť üƥ ṁìñìñĝ ~~~~~~#]",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "[# Çéŗťìƒìçàťé šìĝñéŗš ~~~~~~~~~#]",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage(
+      "[# Šťàŗť ṁìñìñĝ ~~~~~~#]",
+    ),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "[# Çĥéçķ ťĥé ñöðé àððŗéšš àñð ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒìçàťìöñ šüççéšš ~~~~~~~~~~#]",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéçöŗðéð ťìṁé ~~~~~~#]",
+    ),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("[# Ṁìñìñĝ ~~~#]"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "[# Ťŗàñšàçťìöñš ~~~~~~#]",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "[# Ñöť çéŗťìƒìéð ~~~~~~#]",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "[# Üšé ĺöçàĺ ťéšťñéť ~~~~~~~~#]",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒìéð ƀĺöçķš ~~~~~~~#]",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("[# Ñéẋť ~~#]"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "[# Éðìť Ƥŗöƒìĺé ~~~~~~#]",
     ),

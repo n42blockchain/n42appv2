@@ -49,8 +49,8 @@
   "g_key_135": "Kiasi kikubwa kuliko {value}.",
   "g_key_140": "Muamala umefaulu",
   "g_key_146": "Nenosiri si sahihi",
-  "g_key_147": "Testnet",
-  "g_key_148": "Mainnet",
+  "g_key_147": "Mtandao wa majaribio",
+  "g_key_148": "Mtandao mkuu",
   "g_key_149": "Lugha ya mfumo",
   "g_key_155": "Anwani ya Wallet",
   "g_key_156": "Changanua ili kunakili anwani",
@@ -66,7 +66,7 @@
   "g_key_193": "Inayotumika",
   "g_key_195": "Hakuna ruhusa ya kufikia kamera.",
   "g_key_196": "Mchunguzi",
-  "g_key_197": "Max",
+  "g_key_197": "Kiwango cha juu",
   "g_key_198": "Mali",
   "g_key_202": "Muhtasari wa Muamala",
   "g_key_203": "hitilafu ya kiungo, changanua Msimbo wa QR tena.",
@@ -433,7 +433,7 @@
   "g_key_ex_keystore_19": "Hamisha Ufunguo wa Kibinafsi",
   "g_key_keystore_19": "Mkoba wa sasa wa sarafu tayari upo.",
   "g_key_keystore_21": "Haikuweza kusoma Keystore",
-  "g_key_keystore_22": "Keystore",
+  "g_key_keystore_22": "Hifadhi ya funguo",
   "g_key_nft_2": "Jina",
   "g_key_nft_41": "Muamala umewasilishwa",
   "g_key_nft_141": "Jumla",
@@ -539,7 +539,7 @@
   "g_key_bridge_recommended": "Imependekezwa",
   "g_key_bridge_fastest": "Haraka zaidi",
   "g_key_bridge_cheapest": "Nafuu zaidi",
-  "g_key_stake_title": "Staking",
+  "g_key_stake_title": "Kuweka dhamana",
   "g_key_stake_stake": "Wadau",
   "g_key_stake_unstake": "Ondoa hisa",
   "g_key_stake_apy": "APY",
@@ -584,7 +584,7 @@
   "g_key_btc_stake_how_it_works": "Jinsi Inavyofanya Kazi",
   "g_key_btc_stake_step1_title": "Funga BTC yako",
   "g_key_btc_stake_step1_desc": "BTC yako imefungwa katika anwani 2 kati ya 2 nyingi na kifunga saa (CLTV), kinacholindwa na ufunguo wako na ufunguo wa canister wa N42.",
-  "g_key_btc_stake_step2_title": "Mint vBTC",
+  "g_key_btc_stake_step2_title": "Tengeneza vBTC",
   "g_key_btc_stake_step2_desc": "Baada ya uthibitishaji wa mnyororo, vBTC inawekwa kwenye pochi yako kwa uwiano wa 1:1.",
   "g_key_btc_stake_step3_title": "Pata Zawadi",
   "g_key_btc_stake_step3_desc": "Shikilia vBTC ili upate zawadi nyingi. vBTC pia inaweza kutumika katika itifaki za DeFi.",
@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "Uhamisho wa mnyororo",
   "g_key_earn_stake_eth_lido": "Shiriki ETH na Lido",
   "g_key_earn_native_sol": "Mzaliwa wa Solana akishangaa",
-  "g_key_earn_ledger": "Leja",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "Gesi",
   "g_key_earn_batch": "Kundi",
   "g_key_earn_burn": "Kuchoma moto",
@@ -716,7 +716,7 @@
   "g_key_ens_new_expiry": "Muda Mpya wa Muda",
   "g_key_ens_days_left": "siku zimebaki",
   "g_key_ens_text_records": "Rekodi za maandishi",
-  "g_key_ens_advanced": "Advanced",
+  "g_key_ens_advanced": "Mipangilio ya kina",
   "g_key_ens_transfer_desc": "Hamisha umiliki kwa anwani nyingine",
   "g_key_ens_commit_failed": "Ahadi imeshindwa",
   "g_key_ens_commitment_expired_msg": "Ahadi ya usajili imekwisha. Tafadhali anza mchakato wa usajili tena.",
@@ -859,7 +859,7 @@
   "g_key_ens_manage_your_identity": "Dhibiti utambulisho wako wa Web3",
   "g_key_ens_your_identity": "Utambulisho Wako",
   "g_key_aa_gasless_transactions": "Shughuli zisizo na gesi na shughuli za kundi",
-  "g_key_aa_smart_wallet": "Smart Wallet",
+  "g_key_aa_smart_wallet": "Pochi mahiri",
   "g_key_aa_gasless": "Bila gesi",
   "g_key_aa_ready": "Tayari",
   "g_key_aa_pending": "Inasubiri",
@@ -1099,8 +1099,8 @@
   "g_mining_key_58": "Siku 7 Zilizopita",
   "g_mining_key_59": "Zawadi Zilizokusanywa",
   "g_mining_key_60": "Zawadi Zimepokelewa",
-  "g_mining_key_61": "Advanced",
-  "g_mining_key_63": "Pro",
+  "g_mining_key_61": "Mipangilio ya kina",
+  "g_mining_key_63": "Kitaalamu",
   "g_mining_key_64": "NODE KAMILI",
   "g_mining_key_65": "DAKIKA/SIKU",
   "g_mining_key33": "Mipangilio ya Uthibitishaji",
@@ -1169,7 +1169,7 @@
   "g_portfolio_24h": "24h Badilisha",
   "g_portfolio_allocation": "Ugawaji wa Mali",
   "g_portfolio_others": "Wengine",
-  "g_portfolio_movers": "24h Movers",
+  "g_portfolio_movers": "Mabadiliko makubwa ndani ya saa 24",
   "g_portfolio_gainers": "Washindi wa Juu",
   "g_theme_accent_color": "Rangi ya lafudhi",
   "g_theme_accent_reset": "Weka upya kwa chaguomsingi",
@@ -1725,5 +1725,95 @@
   "g_wallet_coin_total_value": "Jumla ya Thamani",
   "g_wallet_coin_unit_price": "Bei",
   "g_wallet_receiver_address": "Anwani ya mpokeaji",
-  "g_wallet_sender_address": "Anwani ya mtumaji"
+  "g_wallet_sender_address": "Anwani ya mtumaji",
+  "miningV3Title": "Uchimbaji",
+  "miningV3Duration": "Muda wa kipindi",
+  "miningV3Ready": "Tayari kuchimba",
+  "miningV3Active": "Inathibitisha bloku",
+  "miningV3Connecting": "Inaunganisha",
+  "miningV3Registering": "Inawezesha kifaa",
+  "miningV3Retrying": "Inaunganisha tena",
+  "miningV3Paused": "Uchimbaji umesitishwa",
+  "miningV3Start": "Anza uchimbaji",
+  "miningV3Pause": "Sitisha uchimbaji",
+  "miningV3Setup": "Sanidi uchimbaji",
+  "miningV3Verified": "Bloku zilizothibitishwa",
+  "miningV3Certified": "Bloku zenye cheti",
+  "miningV3CertifiedStatus": "Ina cheti",
+  "miningV3SuccessRate": "Uthibitishaji uliofaulu",
+  "miningV3AverageTime": "Wastani wa uthibitishaji",
+  "miningV3Rewards": "Zawadi za uchimbaji",
+  "miningV3RewardsUnavailable": "Haijaripotiwa",
+  "miningV3RewardsHint": "Hakuna data iliyothibitishwa ya zawadi.",
+  "miningV3RewardsInfo": "Nodi hii huripoti uthibitishaji wa bloku na vyeti, lakini haitoi kiasi cha zawadi. Idadi ya bloku zilizothibitishwa si salio la mapato.",
+  "miningV3RecentBlocks": "Bloku za hivi karibuni",
+  "miningV3RecentHint": "Shughuli za karibuni zilizoonekana katika kipindi hiki",
+  "miningV3All": "Zote",
+  "miningV3Pending": "Inasubiri cheti",
+  "miningV3Uncertified": "Haina cheti",
+  "miningV3Failed": "Uthibitishaji umeshindwa",
+  "miningV3Attention": "Inahitaji kuangaliwa",
+  "miningV3EmptyTitle": "Bloku yako ya kwanza itaanzia hapa",
+  "miningV3EmptyBody": "Anza uchimbaji ili kuona bloku zako zilizothibitishwa na vyeti.",
+  "miningV3FilterEmpty": "Hakuna bloku zinazolingana na kichujio hiki.",
+  "miningV3LoadMore": "Onyesha bloku zaidi",
+  "miningV3Block": "Bloku #{number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "Miamala {count}",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} ms",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "Kifaa {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "Nodi ya uthibitishaji",
+  "miningV3Configure": "Chagua nodi",
+  "miningV3Settings": "Mipangilio ya uchimbaji",
+  "miningV3NodeAddress": "Anwani ya nodi",
+  "miningV3NodeHint": "Unganisha kwenye nodi ili kuanza kuthibitisha bloku.",
+  "miningV3NodeInvalid": "Ingiza anwani ya nodi ya http:// au https:// bila taarifa za kuingia au vigezo vya hoja.",
+  "miningV3PauseForSettings": "Sitisha uchimbaji ili kubadilisha nodi.",
+  "miningV3Save": "Hifadhi nodi",
+  "miningV3ConnectionIssue": "Muunganisho umekatizwa",
+  "miningV3RetryHint": "Uchimbaji utaunganisha tena kiotomatiki.",
+  "miningV3StartIssueHint": "Angalia anwani ya nodi na ujaribu tena.",
+  "miningV3Time": "Muda uliorekodiwa",
+  "miningV3TransactionsLabel": "Miamala",
+  "miningV3Latency": "Muda wa uthibitishaji",
+  "miningV3Signers": "Watia saini wa cheti",
+  "miningV3BlockHash": "Hashi ya bloku",
+  "miningV3ReceiptsRoot": "Mzizi wa risiti",
+  "miningV3CopyHash": "Nakili hashi ya bloku",
+  "miningV3Copied": "Hashi ya bloku imenakiliwa",
+  "miningV3ErrorDetails": "Tatizo lililoripotiwa mwisho",
+  "miningV3SaveFailed": "Imeshindwa kuhifadhi nodi. Jaribu tena.",
+  "g_setting_mining_v3_label": "Uthibitishaji wa simu (V3)",
+  "miningV3IOSForegroundHint": "Kwenye iOS, uthibitishaji husitishwa programu ikiwa chinichini na kuendelea unaporudi. Muda wa shughuli pekee ndio huhesabiwa.",
+  "miningV3BackgroundPaused": "Imesitishwa chinichini",
+  "miningV3LocalTestnet": "Mtandao wa majaribio wa ndani",
+  "miningV3UseLocalTestnet": "Tumia mtandao wa majaribio wa ndani",
+  "miningV3LocalTestnetHint": "Nodi chaguomsingi iko kwenye mtandao wa majaribio wa ndani. Unaweza pia kuingiza anwani yako mwenyewe."
 }

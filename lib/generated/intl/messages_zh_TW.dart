@@ -237,15 +237,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value} 分鐘前更新";
 
-  static String m104(number) => "區塊 #${number}";
+  static String m103(number) => "區塊 #${number}";
 
-  static String m105(index) => "裝置 ${index}";
+  static String m104(index) => "裝置 ${index}";
 
-  static String m106(value) => "${value} 毫秒";
+  static String m105(value) => "${value} 毫秒";
 
-  static String m107(count) => "${count} 筆交易";
+  static String m106(count) => "${count} 筆交易";
 
-  static String m103(value) => "0~${value} 個字符";
+  static String m107(value) => "0~${value} 個字符";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1082,7 +1082,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX 互換"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("氣體"),
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage("開始質押"),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("分類帳"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage("載入APY..."),
     "g_key_earn_mining": MessageLookupByLibrary.simpleMessage("礦業"),
     "g_key_earn_more": MessageLookupByLibrary.simpleMessage("賺取更多"),
@@ -2500,7 +2500,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("需要關注"),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("近期平均驗證"),
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage("已在背景暫停"),
-    "miningV3Block": m104,
+    "miningV3Block": m103,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("區塊雜湊"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage("已認證區塊"),
     "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("已認證"),
@@ -2509,7 +2509,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage("連線已中斷"),
     "miningV3Copied": MessageLookupByLibrary.simpleMessage("已複製區塊雜湊"),
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("複製區塊雜湊"),
-    "miningV3Device": m105,
+    "miningV3Device": m104,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage("本次運行時長"),
     "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
       "開始挖礦後，即可查看已驗證區塊和認證狀態。",
@@ -2527,7 +2527,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "預設使用本地測試網節點，也可輸入自訂節點位址。",
     ),
-    "miningV3Milliseconds": m106,
+    "miningV3Milliseconds": m105,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("驗證節點"),
     "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("節點位址"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage("連線至節點後即可開始驗證區塊。"),
@@ -2569,13 +2569,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("驗證成功率"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("記錄時間"),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("挖礦"),
-    "miningV3Transactions": m107,
+    "miningV3Transactions": m106,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("交易數量"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("未取得認證"),
     "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage("使用本地測試網"),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("已驗證區塊"),
     "next": MessageLookupByLibrary.simpleMessage("下一個"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage("編輯個人資料"),
     "photograph": MessageLookupByLibrary.simpleMessage("照片"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("請輸入地址"),

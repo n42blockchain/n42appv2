@@ -257,7 +257,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Ilisasishwa dakika ${value} zilizopita";
 
-  static String m103(value) => "0~${value} herufi";
+  static String m103(number) => "Bloku #${number}";
+
+  static String m104(index) => "Kifaa ${index}";
+
+  static String m105(value) => "${value} ms";
+
+  static String m106(count) => "Miamala ${count}";
+
+  static String m107(value) => "0~${value} herufi";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -615,8 +623,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_14": MessageLookupByLibrary.simpleMessage("Mkoba Mkuu"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("Muamala umefaulu"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("Nenosiri si sahihi"),
-    "g_key_147": MessageLookupByLibrary.simpleMessage("Testnet"),
-    "g_key_148": MessageLookupByLibrary.simpleMessage("Mainnet"),
+    "g_key_147": MessageLookupByLibrary.simpleMessage("Mtandao wa majaribio"),
+    "g_key_148": MessageLookupByLibrary.simpleMessage("Mtandao mkuu"),
     "g_key_149": MessageLookupByLibrary.simpleMessage("Lugha ya mfumo"),
     "g_key_15": MessageLookupByLibrary.simpleMessage("Weka kama Wallet Kuu"),
     "g_key_155": MessageLookupByLibrary.simpleMessage("Anwani ya Wallet"),
@@ -645,7 +653,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Hakuna ruhusa ya kufikia kamera.",
     ),
     "g_key_196": MessageLookupByLibrary.simpleMessage("Mchunguzi"),
-    "g_key_197": MessageLookupByLibrary.simpleMessage("Max"),
+    "g_key_197": MessageLookupByLibrary.simpleMessage("Kiwango cha juu"),
     "g_key_198": MessageLookupByLibrary.simpleMessage("Mali"),
     "g_key_2": MessageLookupByLibrary.simpleMessage("Leja ni tupu!"),
     "g_key_202": MessageLookupByLibrary.simpleMessage("Muhtasari wa Muamala"),
@@ -1044,7 +1052,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Akaunti za Smart",
     ),
     "g_key_aa_smart_wallet": MessageLookupByLibrary.simpleMessage(
-      "Smart Wallet",
+      "Pochi mahiri",
     ),
     "g_key_aa_spending_limit": MessageLookupByLibrary.simpleMessage(
       "Kikomo cha Matumizi",
@@ -1270,7 +1278,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Baada ya uthibitishaji wa mnyororo, vBTC inawekwa kwenye pochi yako kwa uwiano wa 1:1.",
     ),
     "g_key_btc_stake_step2_title": MessageLookupByLibrary.simpleMessage(
-      "Mint vBTC",
+      "Tengeneza vBTC",
     ),
     "g_key_btc_stake_step3_desc": MessageLookupByLibrary.simpleMessage(
       "Shikilia vBTC ili upate zawadi nyingi. vBTC pia inaweza kutumika katika itifaki za DeFi.",
@@ -1450,7 +1458,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Anza Staking",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Leja"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Inapakia APY...",
     ),
@@ -1504,7 +1512,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_ens_address_updated": MessageLookupByLibrary.simpleMessage(
       "Anwani iliyotatuliwa imesasishwa",
     ),
-    "g_key_ens_advanced": MessageLookupByLibrary.simpleMessage("Advanced"),
+    "g_key_ens_advanced": MessageLookupByLibrary.simpleMessage(
+      "Mipangilio ya kina",
+    ),
     "g_key_ens_annual_fee": MessageLookupByLibrary.simpleMessage(
       "Ada ya Mwaka",
     ),
@@ -2067,7 +2077,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_keystore_21": MessageLookupByLibrary.simpleMessage(
       "Haikuweza kusoma Keystore",
     ),
-    "g_key_keystore_22": MessageLookupByLibrary.simpleMessage("Keystore"),
+    "g_key_keystore_22": MessageLookupByLibrary.simpleMessage(
+      "Hifadhi ya funguo",
+    ),
     "g_key_login": MessageLookupByLibrary.simpleMessage("Ingia"),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("Toka nje"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
@@ -2386,7 +2398,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
       "Muamala wa staking umetumwa",
     ),
-    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Staking"),
+    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Kuweka dhamana"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "Muamala umeandaliwa",
     ),
@@ -2934,9 +2946,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_60": MessageLookupByLibrary.simpleMessage(
       "Zawadi Zimepokelewa",
     ),
-    "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Advanced"),
+    "g_mining_key_61": MessageLookupByLibrary.simpleMessage(
+      "Mipangilio ya kina",
+    ),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Kuingia"),
-    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Kitaalamu"),
     "g_mining_key_64": MessageLookupByLibrary.simpleMessage("NODE KAMILI"),
     "g_mining_key_65": MessageLookupByLibrary.simpleMessage("DAKIKA/SIKU"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Njia ya Juu"),
@@ -3095,7 +3109,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_losers": MessageLookupByLibrary.simpleMessage(
       "Waliopotea Juu",
     ),
-    "g_portfolio_movers": MessageLookupByLibrary.simpleMessage("24h Movers"),
+    "g_portfolio_movers": MessageLookupByLibrary.simpleMessage(
+      "Mabadiliko makubwa ndani ya saa 24",
+    ),
     "g_portfolio_no_assets": MessageLookupByLibrary.simpleMessage(
       "Hakuna mali iliyopatikana",
     ),
@@ -3197,6 +3213,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Uchimbaji madini (V2)",
+    ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Uthibitishaji wa simu (V3)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Kiolesura cha Madini",
@@ -3722,8 +3741,155 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("Ilani Muhimu"),
     "login_email": MessageLookupByLibrary.simpleMessage("Barua pepe"),
     "login_password": MessageLookupByLibrary.simpleMessage("Nenosiri"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "Inathibitisha bloku",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Zote"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "Inahitaji kuangaliwa",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Wastani wa uthibitishaji",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Imesitishwa chinichini",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Hashi ya bloku"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Bloku zenye cheti",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Ina cheti",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Chagua nodi"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Inaunganisha"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Muunganisho umekatizwa",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Hashi ya bloku imenakiliwa",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Nakili hashi ya bloku",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Muda wa kipindi"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Anza uchimbaji ili kuona bloku zako zilizothibitishwa na vyeti.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Bloku yako ya kwanza itaanzia hapa",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Tatizo lililoripotiwa mwisho",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "Uthibitishaji umeshindwa",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Hakuna bloku zinazolingana na kichujio hiki.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "Kwenye iOS, uthibitishaji husitishwa programu ikiwa chinichini na kuendelea unaporudi. Muda wa shughuli pekee ndio huhesabiwa.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage(
+      "Muda wa uthibitishaji",
+    ),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Onyesha bloku zaidi",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Mtandao wa majaribio wa ndani",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Nodi chaguomsingi iko kwenye mtandao wa majaribio wa ndani. Unaweza pia kuingiza anwani yako mwenyewe.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage(
+      "Nodi ya uthibitishaji",
+    ),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
+      "Anwani ya nodi",
+    ),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Unganisha kwenye nodi ili kuanza kuthibitisha bloku.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Ingiza anwani ya nodi ya http:// au https:// bila taarifa za kuingia au vigezo vya hoja.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("Sitisha uchimbaji"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Sitisha uchimbaji ili kubadilisha nodi.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Uchimbaji umesitishwa",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage("Inasubiri cheti"),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Tayari kuchimba"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Mzizi wa risiti",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Bloku za hivi karibuni",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Shughuli za karibuni zilizoonekana katika kipindi hiki",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Inawezesha kifaa",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Uchimbaji utaunganisha tena kiotomatiki.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Inaunganisha tena",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Zawadi za uchimbaji",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Hakuna data iliyothibitishwa ya zawadi.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Nodi hii huripoti uthibitishaji wa bloku na vyeti, lakini haitoi kiasi cha zawadi. Idadi ya bloku zilizothibitishwa si salio la mapato.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Haijaripotiwa",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Hifadhi nodi"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Imeshindwa kuhifadhi nodi. Jaribu tena.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Mipangilio ya uchimbaji",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("Sanidi uchimbaji"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Watia saini wa cheti",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Anza uchimbaji"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Angalia anwani ya nodi na ujaribu tena.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Uthibitishaji uliofaulu",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Muda uliorekodiwa"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Uchimbaji"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Miamala",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("Haina cheti"),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Tumia mtandao wa majaribio wa ndani",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Bloku zilizothibitishwa",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Inayofuata"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Badilisha Wasifu",
     ),

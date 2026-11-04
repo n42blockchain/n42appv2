@@ -253,7 +253,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Diperbarui ${value} menit lalu";
 
-  static String m103(value) => "0~${value} karakter";
+  static String m103(number) => "Blok #${number}";
+
+  static String m104(index) => "Perangkat ${index}";
+
+  static String m105(value) => "${value} milidetik";
+
+  static String m106(count) => "${count} transaksi";
+
+  static String m107(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1434,7 +1442,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Mulai Staking",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("buku besar"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Memuat APY...",
     ),
@@ -3112,6 +3120,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Penambangan (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Verifikasi seluler (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Antarmuka Pertambangan",
     ),
@@ -3306,7 +3317,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "Beli N melalui protokol N42",
     ),
-    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Data panggilan (heksadesimal)",
+    ),
     "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
       "Izin kamera diperlukan untuk memindai kode.",
     ),
@@ -3612,8 +3625,149 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("Surel"),
     "login_password": MessageLookupByLibrary.simpleMessage("Kata Sandi"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "Memverifikasi blok",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Semua"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "Perlu perhatian",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Rata-rata waktu verifikasi",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Dijeda di latar belakang",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Hash blok"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Blok bersertifikat",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Bersertifikat",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Pilih node"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Menghubungkan"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Koneksi terputus",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage("Hash blok disalin"),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("Salin hash blok"),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Waktu sesi"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Mulai menambang untuk melihat blok terverifikasi dan sertifikat Anda.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Blok pertama Anda dimulai di sini",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Masalah terakhir yang dilaporkan",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("Verifikasi gagal"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Tidak ada blok yang cocok dengan filter ini.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "Di iOS, verifikasi dijeda di latar belakang dan dilanjutkan saat Anda kembali. Hanya waktu aktif yang dihitung.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("Waktu verifikasi"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Tampilkan lebih banyak blok",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Jaringan uji lokal",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Node bawaan berada di jaringan uji lokal. Anda juga dapat memasukkan alamat khusus.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Node verifikasi"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Alamat node"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Hubungkan ke node untuk mulai memverifikasi blok.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Masukkan alamat node http:// atau https:// tanpa kredensial atau parameter kueri.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("Jeda penambangan"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Jeda penambangan untuk mengganti node.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Penambangan dijeda",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Menunggu sertifikat",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Siap menambang"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Akar tanda terima",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Blok terbaru",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Aktivitas yang baru diamati dalam sesi ini",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Mengaktifkan perangkat",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Penambangan akan terhubung kembali secara otomatis.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Menghubungkan kembali",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Imbalan penambangan",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Data imbalan yang telah dikonfirmasi belum tersedia.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Node ini melaporkan verifikasi blok dan sertifikat, tetapi tidak menyediakan jumlah imbalan. Jumlah blok terverifikasi bukan saldo pendapatan.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Tidak dilaporkan",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Simpan node"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Tidak dapat menyimpan node. Silakan coba lagi.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Pengaturan penambangan",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "Siapkan penambangan",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Penanda tangan sertifikat",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Mulai menambang"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Periksa alamat node, lalu coba lagi.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Keberhasilan verifikasi",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Waktu pencatatan"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Penambangan"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Transaksi",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Belum bersertifikat",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Gunakan jaringan uji lokal",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Blok terverifikasi",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Selanjutnya"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profil"),
     "photograph": MessageLookupByLibrary.simpleMessage("Foto"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

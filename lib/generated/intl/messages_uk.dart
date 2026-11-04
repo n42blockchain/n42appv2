@@ -256,7 +256,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Оновлено ${value}хв тому";
 
-  static String m103(value) => "0~${value} символів";
+  static String m103(number) => "Блок № ${number}";
+
+  static String m104(index) => "Пристрій ${index}";
+
+  static String m105(value) => "${value} мс";
+
+  static String m106(count) => "Транзакцій: ${count}";
+
+  static String m107(value) => "0~${value} символів";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -628,7 +636,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_14": MessageLookupByLibrary.simpleMessage("Основний гаманець"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("Трансакція успішна"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("Невірний пароль"),
-    "g_key_147": MessageLookupByLibrary.simpleMessage("Testnet"),
+    "g_key_147": MessageLookupByLibrary.simpleMessage("Тестова мережа"),
     "g_key_148": MessageLookupByLibrary.simpleMessage("Основна мережа"),
     "g_key_149": MessageLookupByLibrary.simpleMessage("Системна мова"),
     "g_key_15": MessageLookupByLibrary.simpleMessage(
@@ -818,7 +826,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Створити ключ сеансу",
     ),
     "g_key_aa_created": MessageLookupByLibrary.simpleMessage("Створено"),
-    "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Custom"),
+    "g_key_aa_custom": MessageLookupByLibrary.simpleMessage("Власний"),
     "g_key_aa_deploy_auto_note": MessageLookupByLibrary.simpleMessage(
       "Обліковий запис буде розгорнуто автоматично під час вашої першої транзакції",
     ),
@@ -1467,7 +1475,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Почніть робити ставки",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Леджер"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Завантаження APY...",
     ),
@@ -1916,7 +1924,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_gas_auto_refresh": m19,
     "g_key_gas_base_fee": MessageLookupByLibrary.simpleMessage("Базовий збір"),
-    "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("Custom"),
+    "g_key_gas_custom": MessageLookupByLibrary.simpleMessage("Власний"),
     "g_key_gas_fast": MessageLookupByLibrary.simpleMessage("швидко"),
     "g_key_gas_footer": MessageLookupByLibrary.simpleMessage(
       "Ціни на газ коливаються залежно від попиту в мережі. Менший газ = повільніше підтвердження, більший газ = швидше підтвердження.",
@@ -2657,7 +2665,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
       "Гаманець лише для перегляду не може надсилати або підписувати транзакції",
     ),
-    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage("Watch Wallet"),
+    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage(
+      "Гаманець для спостереження",
+    ),
     "g_key_watch_wallet_desc": MessageLookupByLibrary.simpleMessage(
       "Відстежуйте будь-яку адресу EVM без закритого ключа",
     ),
@@ -2921,12 +2931,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Просунутий"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Вхід"),
-    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Професійний"),
     "g_mining_key_64": MessageLookupByLibrary.simpleMessage("ПОВНИЙ ВУЗОЛ"),
     "g_mining_key_65": MessageLookupByLibrary.simpleMessage("ХВ/ДЕНЬ"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Розширений вузол"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("Вузол входу"),
-    "g_mining_key_68": MessageLookupByLibrary.simpleMessage("Pro Node"),
+    "g_mining_key_68": MessageLookupByLibrary.simpleMessage(
+      "Професійний вузол",
+    ),
     "g_mining_key_69": MessageLookupByLibrary.simpleMessage(
       "500 блоків/день ~ 70 хв",
     ),
@@ -3012,7 +3024,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_node_key2": MessageLookupByLibrary.simpleMessage(
       "Ідентифікатор вузла",
     ),
-    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS Connected"),
+    "g_mining_node_key3": MessageLookupByLibrary.simpleMessage("WS підключено"),
     "g_mining_node_key4": MessageLookupByLibrary.simpleMessage("WS Відключено"),
     "g_mining_node_key5": MessageLookupByLibrary.simpleMessage(
       "WS Повторне підключення",
@@ -3170,6 +3182,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Майнінг (V2)",
+    ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Мобільна перевірка (V3)",
     ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Інтерфейс майнінгу",
@@ -3703,8 +3718,151 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("Електронна пошта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("Перевірка блоків"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Усі"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("Потребує уваги"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Середній час перевірки",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Призупинено у фоновому режимі",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Хеш блока"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Блоки із сертифікатом",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Сертифікат отримано",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Вибрати вузол"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Підключення"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "З’єднання перервано",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Хеш блока скопійовано",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Копіювати хеш блока",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Час сеансу"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Почніть майнінг, щоб побачити перевірені блоки та сертифікати.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Тут з’явиться ваш перший блок",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Остання повідомлена проблема",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("Помилка перевірки"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Немає блоків, що відповідають фільтру.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "В iOS перевірка призупиняється у фоновому режимі та відновлюється після повернення. Ураховується лише активний час.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("Час перевірки"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Показати ще блоки",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Локальна тестова мережа",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Типовий вузол розташований у локальній тестовій мережі. Ви також можете ввести власну адресу.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Вузол перевірки"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Адреса вузла"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Підключіться до вузла, щоб почати перевірку блоків.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Введіть адресу вузла http:// або https:// без облікових даних і параметрів запиту.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "Призупинити майнінг",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Призупиніть майнінг, щоб змінити вузол.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Майнінг призупинено",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Очікування сертифіката",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Готово до майнінгу"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Корінь квитанцій",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Останні блоки",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Останні спостережувані події цього сеансу",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Активація пристрою",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Майнінг автоматично відновить з’єднання.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Повторне підключення",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Винагороди за майнінг",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Підтверджені дані про винагороди відсутні.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Цей вузол повідомляє про перевірку блоків і сертифікати, але не надає суми винагород. Кількість перевірених блоків не є балансом заробітку.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Немає даних",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Зберегти вузол"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Не вдалося зберегти вузол. Повторіть спробу.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Налаштування майнінгу",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "Налаштувати майнінг",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Підписанти сертифіката",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Почати майнінг"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Перевірте адресу вузла й повторіть спробу.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Успішні перевірки",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Час запису"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Майнінг"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Транзакції",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Без сертифіката",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Використовувати локальну тестову мережу",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Перевірені блоки",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Далі"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редагувати профіль",
     ),

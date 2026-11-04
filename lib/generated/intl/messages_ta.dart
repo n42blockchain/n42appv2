@@ -261,7 +261,15 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m102(value) =>
       "${value} நிமிடங்களுக்கு முன்பு புதுப்பிக்கப்பட்டது";
 
-  static String m103(value) => "0~${value} எழுத்துகள்";
+  static String m103(number) => "பிளாக் எண் ${number}";
+
+  static String m104(index) => "சாதனம் ${index}";
+
+  static String m105(value) => "${value} மில்லிவிநாடி";
+
+  static String m106(count) => "${count} பரிவர்த்தனைகள்";
+
+  static String m107(value) => "0~${value} எழுத்துகள்";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1522,7 +1530,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "ஸ்டாக்கிங்கைத் தொடங்குங்கள்",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("லெட்ஜர்"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY ஐ ஏற்றுகிறது...",
     ),
@@ -3294,6 +3302,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "சுரங்கம் (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "மொபைல் சரிபார்ப்பு (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "சுரங்க இடைமுகம்",
     ),
@@ -3836,8 +3847,163 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("மின்னஞ்சல்"),
     "login_password": MessageLookupByLibrary.simpleMessage("கடவுச்சொல்"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "பிளாக்குகள் சரிபார்க்கப்படுகின்றன",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("அனைத்தும்"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("கவனம் தேவை"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "சராசரி சரிபார்ப்பு நேரம்",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "பின்னணியில் இடைநிறுத்தப்பட்டது",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("பிளாக் ஹாஷ்"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "சான்றிதழ் பெற்ற பிளாக்குகள்",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "சான்றளிக்கப்பட்டது",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage(
+      "நோட்டைத் தேர்ந்தெடு",
+    ),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage(
+      "இணைக்கப்படுகிறது",
+    ),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "இணைப்பு துண்டிக்கப்பட்டது",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "பிளாக் ஹாஷ் நகலெடுக்கப்பட்டது",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "பிளாக் ஹாஷை நகலெடு",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("அமர்வு நேரம்"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "சரிபார்க்கப்பட்ட பிளாக்குகளையும் சான்றிதழ்களையும் காண மைனிங்கைத் தொடங்குங்கள்.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "உங்கள் முதல் பிளாக் இங்கே தோன்றும்",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "கடைசியாக அறிவிக்கப்பட்ட சிக்கல்",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "சரிபார்ப்பு தோல்வி",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "இந்த வடிகட்டிக்குப் பொருந்தும் பிளாக்குகள் இல்லை.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOS இல், பின்னணியில் சரிபார்ப்பு இடைநிறுத்தப்பட்டு, நீங்கள் திரும்பியதும் தொடரும். செயலிலுள்ள நேரம் மட்டுமே கணக்கிடப்படும்.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage(
+      "சரிபார்ப்பு நேரம்",
+    ),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "மேலும் பிளாக்குகளைக் காட்டு",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "உள்ளூர் சோதனை வலைப்பின்னல்",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "இயல்புநிலை நோட் உள்ளூர் சோதனை வலைப்பின்னலில் உள்ளது. தனிப்பயன் முகவரியையும் உள்ளிடலாம்.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("சரிபார்ப்பு நோட்"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("நோட் முகவரி"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "பிளாக்குகளைச் சரிபார்க்கத் தொடங்க ஒரு நோட்டுடன் இணையுங்கள்.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "உள்நுழைவுத் தகவல்கள் அல்லது வினவல் அளவுருக்கள் இல்லாத http:// அல்லது https:// நோட் முகவரியை உள்ளிடுங்கள்.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "மைனிங்கை இடைநிறுத்து",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "நோட்டை மாற்ற மைனிங்கை இடைநிறுத்துங்கள்.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "மைனிங் இடைநிறுத்தப்பட்டது",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "சான்றிதழுக்காகக் காத்திருக்கிறது",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "மைனிங்கிற்குத் தயார்",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "ரசீதுகளின் ரூட்",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "சமீபத்திய பிளாக்குகள்",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "இந்த அமர்வில் சமீபத்தில் காணப்பட்ட செயல்பாடுகள்",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "சாதனம் செயல்படுத்தப்படுகிறது",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "மைனிங் தானாக மீண்டும் இணையும்.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "மீண்டும் இணைக்கப்படுகிறது",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "மைனிங் வெகுமதிகள்",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "உறுதிசெய்யப்பட்ட வெகுமதி விவரங்கள் இல்லை.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "இந்த நோட் பிளாக் சரிபார்ப்பையும் சான்றிதழ்களையும் தெரிவிக்கிறது; ஆனால் வெகுமதித் தொகைகளை வழங்காது. சரிபார்க்கப்பட்ட பிளாக்குகளின் எண்ணிக்கை வருமான இருப்பு அல்ல.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "தகவல் இல்லை",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("நோட்டைச் சேமி"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "நோட்டைச் சேமிக்க முடியவில்லை. மீண்டும் முயலுங்கள்.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "மைனிங் அமைப்புகள்",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("மைனிங்கை அமை"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "சான்றிதழில் கையொப்பமிட்டவர்கள்",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("மைனிங்கைத் தொடங்கு"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "நோட் முகவரியைச் சரிபார்த்து மீண்டும் முயலுங்கள்.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "சரிபார்ப்பு வெற்றி",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage(
+      "பதிவுசெய்யப்பட்ட நேரம்",
+    ),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("மைனிங்"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "பரிவர்த்தனைகள்",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "சான்றளிக்கப்படவில்லை",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "உள்ளூர் சோதனை வலைப்பின்னலைப் பயன்படுத்து",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "சரிபார்க்கப்பட்ட பிளாக்குகள்",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("அடுத்து"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "சுயவிவரத்தைத் திருத்து",
     ),

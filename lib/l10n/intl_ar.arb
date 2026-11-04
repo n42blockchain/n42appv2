@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "نقل عبر السلسلة",
   "g_key_earn_stake_eth_lido": "حصة ETH مع Lido",
   "g_key_earn_native_sol": "التوقيع المساحي لسولانا الأصلية",
-  "g_key_earn_ledger": "دفتر الأستاذ",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "الغاز",
   "g_key_earn_batch": "دفعة",
   "g_key_earn_burn": "حرق",
@@ -1725,5 +1725,95 @@
   "g_wallet_coin_total_value": "القيمة الإجمالية",
   "g_wallet_coin_unit_price": "السعر",
   "g_wallet_receiver_address": "عنوان المستلم",
-  "g_wallet_sender_address": "عنوان المرسل"
+  "g_wallet_sender_address": "عنوان المرسل",
+  "miningV3Title": "التعدين",
+  "miningV3Duration": "مدة الجلسة",
+  "miningV3Ready": "جاهز للتعدين",
+  "miningV3Active": "جارٍ التحقق من الكتل",
+  "miningV3Connecting": "جارٍ الاتصال",
+  "miningV3Registering": "جارٍ تفعيل الجهاز",
+  "miningV3Retrying": "جارٍ إعادة الاتصال",
+  "miningV3Paused": "التعدين متوقف مؤقتًا",
+  "miningV3Start": "بدء التعدين",
+  "miningV3Pause": "إيقاف التعدين مؤقتًا",
+  "miningV3Setup": "إعداد التعدين",
+  "miningV3Verified": "الكتل التي تم التحقق منها",
+  "miningV3Certified": "الكتل الحاصلة على شهادة",
+  "miningV3CertifiedStatus": "حاصل على شهادة",
+  "miningV3SuccessRate": "نجاح التحقق",
+  "miningV3AverageTime": "متوسط مدة التحقق",
+  "miningV3Rewards": "مكافآت التعدين",
+  "miningV3RewardsUnavailable": "لم يُبلَّغ عنها",
+  "miningV3RewardsHint": "لا تتوفر بيانات مؤكدة عن المكافآت.",
+  "miningV3RewardsInfo": "تُبلغ هذه العقدة عن التحقق من الكتل والشهادات، لكنها لا توفر مبالغ المكافآت. عدد الكتل التي تم التحقق منها ليس رصيد أرباح.",
+  "miningV3RecentBlocks": "الكتل الأخيرة",
+  "miningV3RecentHint": "آخر الأنشطة المرصودة في هذه الجلسة",
+  "miningV3All": "الكل",
+  "miningV3Pending": "في انتظار الشهادة",
+  "miningV3Uncertified": "بلا شهادة",
+  "miningV3Failed": "فشل التحقق",
+  "miningV3Attention": "يتطلب الانتباه",
+  "miningV3EmptyTitle": "ستظهر كتلتك الأولى هنا",
+  "miningV3EmptyBody": "ابدأ التعدين لعرض الكتل التي تم التحقق منها وشهاداتك.",
+  "miningV3FilterEmpty": "لا توجد كتل تطابق هذا المرشح.",
+  "miningV3LoadMore": "عرض المزيد من الكتل",
+  "miningV3Block": "الكتلة رقم {number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} معاملة",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} مللي ثانية",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "الجهاز {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "عقدة التحقق",
+  "miningV3Configure": "اختيار عقدة",
+  "miningV3Settings": "إعدادات التعدين",
+  "miningV3NodeAddress": "عنوان العقدة",
+  "miningV3NodeHint": "اتصل بعقدة لبدء التحقق من الكتل.",
+  "miningV3NodeInvalid": "أدخل عنوان عقدة يبدأ بـ http:// أو https:// دون بيانات اعتماد أو معلمات استعلام.",
+  "miningV3PauseForSettings": "أوقف التعدين مؤقتًا لتغيير العقدة.",
+  "miningV3Save": "حفظ العقدة",
+  "miningV3ConnectionIssue": "انقطع الاتصال",
+  "miningV3RetryHint": "سيُعاد الاتصال بالتعدين تلقائيًا.",
+  "miningV3StartIssueHint": "تحقق من عنوان العقدة وحاول مجددًا.",
+  "miningV3Time": "الوقت المسجَّل",
+  "miningV3TransactionsLabel": "المعاملات",
+  "miningV3Latency": "مدة التحقق",
+  "miningV3Signers": "موقِّعو الشهادة",
+  "miningV3BlockHash": "تجزئة الكتلة",
+  "miningV3ReceiptsRoot": "جذر الإيصالات",
+  "miningV3CopyHash": "نسخ تجزئة الكتلة",
+  "miningV3Copied": "تم نسخ تجزئة الكتلة",
+  "miningV3ErrorDetails": "آخر مشكلة تم الإبلاغ عنها",
+  "miningV3SaveFailed": "تعذر حفظ العقدة. حاول مجددًا.",
+  "g_setting_mining_v3_label": "التحقق عبر الهاتف (V3)",
+  "miningV3IOSForegroundHint": "في iOS، يتوقف التحقق مؤقتًا في الخلفية ويُستأنف عند العودة. يُحتسب وقت النشاط فقط.",
+  "miningV3BackgroundPaused": "متوقف مؤقتًا في الخلفية",
+  "miningV3LocalTestnet": "شبكة الاختبار المحلية",
+  "miningV3UseLocalTestnet": "استخدام شبكة الاختبار المحلية",
+  "miningV3LocalTestnetHint": "العقدة الافتراضية موجودة على شبكة الاختبار المحلية. يمكنك أيضًا إدخال عنوان مخصص."
 }

@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "குறுக்கு சங்கிலி பரிமாற்றம்",
   "g_key_earn_stake_eth_lido": "லிடோவுடன் பங்கு ETH",
   "g_key_earn_native_sol": "பூர்வீக சொலனா ஸ்டேக்கிங்",
-  "g_key_earn_ledger": "லெட்ஜர்",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "வாயு",
   "g_key_earn_batch": "தொகுதி",
   "g_key_earn_burn": "எரிக்கவும்",
@@ -1725,5 +1725,95 @@
   "g_wallet_coin_total_value": "மொத்த மதிப்பு",
   "g_wallet_coin_unit_price": "விலை",
   "g_wallet_receiver_address": "பெறுநரின் முகவரி",
-  "g_wallet_sender_address": "அனுப்புநரின் முகவரி"
+  "g_wallet_sender_address": "அனுப்புநரின் முகவரி",
+  "miningV3Title": "மைனிங்",
+  "miningV3Duration": "அமர்வு நேரம்",
+  "miningV3Ready": "மைனிங்கிற்குத் தயார்",
+  "miningV3Active": "பிளாக்குகள் சரிபார்க்கப்படுகின்றன",
+  "miningV3Connecting": "இணைக்கப்படுகிறது",
+  "miningV3Registering": "சாதனம் செயல்படுத்தப்படுகிறது",
+  "miningV3Retrying": "மீண்டும் இணைக்கப்படுகிறது",
+  "miningV3Paused": "மைனிங் இடைநிறுத்தப்பட்டது",
+  "miningV3Start": "மைனிங்கைத் தொடங்கு",
+  "miningV3Pause": "மைனிங்கை இடைநிறுத்து",
+  "miningV3Setup": "மைனிங்கை அமை",
+  "miningV3Verified": "சரிபார்க்கப்பட்ட பிளாக்குகள்",
+  "miningV3Certified": "சான்றிதழ் பெற்ற பிளாக்குகள்",
+  "miningV3CertifiedStatus": "சான்றளிக்கப்பட்டது",
+  "miningV3SuccessRate": "சரிபார்ப்பு வெற்றி",
+  "miningV3AverageTime": "சராசரி சரிபார்ப்பு நேரம்",
+  "miningV3Rewards": "மைனிங் வெகுமதிகள்",
+  "miningV3RewardsUnavailable": "தகவல் இல்லை",
+  "miningV3RewardsHint": "உறுதிசெய்யப்பட்ட வெகுமதி விவரங்கள் இல்லை.",
+  "miningV3RewardsInfo": "இந்த நோட் பிளாக் சரிபார்ப்பையும் சான்றிதழ்களையும் தெரிவிக்கிறது; ஆனால் வெகுமதித் தொகைகளை வழங்காது. சரிபார்க்கப்பட்ட பிளாக்குகளின் எண்ணிக்கை வருமான இருப்பு அல்ல.",
+  "miningV3RecentBlocks": "சமீபத்திய பிளாக்குகள்",
+  "miningV3RecentHint": "இந்த அமர்வில் சமீபத்தில் காணப்பட்ட செயல்பாடுகள்",
+  "miningV3All": "அனைத்தும்",
+  "miningV3Pending": "சான்றிதழுக்காகக் காத்திருக்கிறது",
+  "miningV3Uncertified": "சான்றளிக்கப்படவில்லை",
+  "miningV3Failed": "சரிபார்ப்பு தோல்வி",
+  "miningV3Attention": "கவனம் தேவை",
+  "miningV3EmptyTitle": "உங்கள் முதல் பிளாக் இங்கே தோன்றும்",
+  "miningV3EmptyBody": "சரிபார்க்கப்பட்ட பிளாக்குகளையும் சான்றிதழ்களையும் காண மைனிங்கைத் தொடங்குங்கள்.",
+  "miningV3FilterEmpty": "இந்த வடிகட்டிக்குப் பொருந்தும் பிளாக்குகள் இல்லை.",
+  "miningV3LoadMore": "மேலும் பிளாக்குகளைக் காட்டு",
+  "miningV3Block": "பிளாக் எண் {number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} பரிவர்த்தனைகள்",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} மில்லிவிநாடி",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "சாதனம் {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "சரிபார்ப்பு நோட்",
+  "miningV3Configure": "நோட்டைத் தேர்ந்தெடு",
+  "miningV3Settings": "மைனிங் அமைப்புகள்",
+  "miningV3NodeAddress": "நோட் முகவரி",
+  "miningV3NodeHint": "பிளாக்குகளைச் சரிபார்க்கத் தொடங்க ஒரு நோட்டுடன் இணையுங்கள்.",
+  "miningV3NodeInvalid": "உள்நுழைவுத் தகவல்கள் அல்லது வினவல் அளவுருக்கள் இல்லாத http:// அல்லது https:// நோட் முகவரியை உள்ளிடுங்கள்.",
+  "miningV3PauseForSettings": "நோட்டை மாற்ற மைனிங்கை இடைநிறுத்துங்கள்.",
+  "miningV3Save": "நோட்டைச் சேமி",
+  "miningV3ConnectionIssue": "இணைப்பு துண்டிக்கப்பட்டது",
+  "miningV3RetryHint": "மைனிங் தானாக மீண்டும் இணையும்.",
+  "miningV3StartIssueHint": "நோட் முகவரியைச் சரிபார்த்து மீண்டும் முயலுங்கள்.",
+  "miningV3Time": "பதிவுசெய்யப்பட்ட நேரம்",
+  "miningV3TransactionsLabel": "பரிவர்த்தனைகள்",
+  "miningV3Latency": "சரிபார்ப்பு நேரம்",
+  "miningV3Signers": "சான்றிதழில் கையொப்பமிட்டவர்கள்",
+  "miningV3BlockHash": "பிளாக் ஹாஷ்",
+  "miningV3ReceiptsRoot": "ரசீதுகளின் ரூட்",
+  "miningV3CopyHash": "பிளாக் ஹாஷை நகலெடு",
+  "miningV3Copied": "பிளாக் ஹாஷ் நகலெடுக்கப்பட்டது",
+  "miningV3ErrorDetails": "கடைசியாக அறிவிக்கப்பட்ட சிக்கல்",
+  "miningV3SaveFailed": "நோட்டைச் சேமிக்க முடியவில்லை. மீண்டும் முயலுங்கள்.",
+  "g_setting_mining_v3_label": "மொபைல் சரிபார்ப்பு (V3)",
+  "miningV3IOSForegroundHint": "iOS இல், பின்னணியில் சரிபார்ப்பு இடைநிறுத்தப்பட்டு, நீங்கள் திரும்பியதும் தொடரும். செயலிலுள்ள நேரம் மட்டுமே கணக்கிடப்படும்.",
+  "miningV3BackgroundPaused": "பின்னணியில் இடைநிறுத்தப்பட்டது",
+  "miningV3LocalTestnet": "உள்ளூர் சோதனை வலைப்பின்னல்",
+  "miningV3UseLocalTestnet": "உள்ளூர் சோதனை வலைப்பின்னலைப் பயன்படுத்து",
+  "miningV3LocalTestnetHint": "இயல்புநிலை நோட் உள்ளூர் சோதனை வலைப்பின்னலில் உள்ளது. தனிப்பயன் முகவரியையும் உள்ளிடலாம்."
 }

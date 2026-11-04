@@ -174,7 +174,7 @@
   "g_key_tran_7": "మొత్తాన్ని ఖర్చు చేయండి",
   "g_key_tran_8": "మొత్తాన్ని పొందండి",
   "g_token_m_key_1": "గరిష్ట {value} అక్షరాలు",
-  "g_token_m_key_2": "0~18 uint",
+  "g_token_m_key_2": "0–18 పూర్ణాంకం",
   "g_token_m_key_3": "టోకెన్లను దిగుమతి చేయండి",
   "g_token_m_key_4": "అన్ని నెట్‌వర్క్‌లు",
   "g_token_m_key_5": "అనుకూల టోకెన్",
@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "క్రాస్ చైన్ బదిలీ",
   "g_key_earn_stake_eth_lido": "లిడోతో ETH వాటా",
   "g_key_earn_native_sol": "స్థానిక సోలానా స్టాకింగ్",
-  "g_key_earn_ledger": "లెడ్జర్",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "గ్యాస్",
   "g_key_earn_batch": "బ్యాచ్",
   "g_key_earn_burn": "కాల్చండి",
@@ -1102,7 +1102,7 @@
   "g_mining_key_61": "అధునాతనమైనది",
   "g_mining_key_63": "ప్రో",
   "g_mining_key_64": "పూర్తి నోడ్",
-  "g_mining_key_65": "MINS/DAY",
+  "g_mining_key_65": "నిమి/రోజు",
   "g_mining_key33": "ధృవీకరణ సెట్టింగ్‌లు",
   "g_mining_key34": "నేపథ్య ధృవీకరణ సంగీతం",
   "g_mining_key35": "డిఫాల్ట్",
@@ -1725,5 +1725,95 @@
   "g_wallet_coin_total_value": "మొత్తం విలువ",
   "g_wallet_coin_unit_price": "ధర",
   "g_wallet_receiver_address": "గ్రహీత చిరునామా",
-  "g_wallet_sender_address": "పంపినవారి చిరునామా"
+  "g_wallet_sender_address": "పంపినవారి చిరునామా",
+  "miningV3Title": "మైనింగ్",
+  "miningV3Duration": "సెషన్ సమయం",
+  "miningV3Ready": "మైనింగ్‌కు సిద్ధంగా ఉంది",
+  "miningV3Active": "బ్లాక్‌లు ధృవీకరించబడుతున్నాయి",
+  "miningV3Connecting": "కనెక్ట్ అవుతోంది",
+  "miningV3Registering": "పరికరం సక్రియం అవుతోంది",
+  "miningV3Retrying": "మళ్లీ కనెక్ట్ అవుతోంది",
+  "miningV3Paused": "మైనింగ్ పాజ్ చేయబడింది",
+  "miningV3Start": "మైనింగ్ ప్రారంభించండి",
+  "miningV3Pause": "మైనింగ్ పాజ్ చేయండి",
+  "miningV3Setup": "మైనింగ్ సెటప్ చేయండి",
+  "miningV3Verified": "ధృవీకరించిన బ్లాక్‌లు",
+  "miningV3Certified": "సర్టిఫికెట్ పొందిన బ్లాక్‌లు",
+  "miningV3CertifiedStatus": "సర్టిఫికెట్ పొందింది",
+  "miningV3SuccessRate": "ధృవీకరణ విజయం",
+  "miningV3AverageTime": "సగటు ధృవీకరణ సమయం",
+  "miningV3Rewards": "మైనింగ్ రివార్డులు",
+  "miningV3RewardsUnavailable": "సమాచారం లేదు",
+  "miningV3RewardsHint": "నిర్ధారించిన రివార్డు సమాచారం అందుబాటులో లేదు.",
+  "miningV3RewardsInfo": "ఈ నోడ్ బ్లాక్ ధృవీకరణ మరియు సర్టిఫికెట్లను నివేదిస్తుంది, కానీ రివార్డు మొత్తాలను అందించదు. ధృవీకరించిన బ్లాక్‌ల సంఖ్య ఆదాయ బ్యాలెన్స్ కాదు.",
+  "miningV3RecentBlocks": "ఇటీవలి బ్లాక్‌లు",
+  "miningV3RecentHint": "ఈ సెషన్‌లో ఇటీవల గమనించిన కార్యకలాపాలు",
+  "miningV3All": "అన్నీ",
+  "miningV3Pending": "సర్టిఫికెట్ కోసం వేచి ఉంది",
+  "miningV3Uncertified": "సర్టిఫికెట్ లేదు",
+  "miningV3Failed": "ధృవీకరణ విఫలమైంది",
+  "miningV3Attention": "శ్రద్ధ అవసరం",
+  "miningV3EmptyTitle": "మీ మొదటి బ్లాక్ ఇక్కడ కనిపిస్తుంది",
+  "miningV3EmptyBody": "ధృవీకరించిన బ్లాక్‌లు, సర్టిఫికెట్లను చూడటానికి మైనింగ్ ప్రారంభించండి.",
+  "miningV3FilterEmpty": "ఈ ఫిల్టర్‌కు సరిపోయే బ్లాక్‌లు లేవు.",
+  "miningV3LoadMore": "మరిన్ని బ్లాక్‌లను చూపండి",
+  "miningV3Block": "బ్లాక్ సంఖ్య {number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} లావాదేవీలు",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} మిల్లీసెకన్లు",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "పరికరం {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "ధృవీకరణ నోడ్",
+  "miningV3Configure": "నోడ్‌ను ఎంచుకోండి",
+  "miningV3Settings": "మైనింగ్ సెట్టింగ్‌లు",
+  "miningV3NodeAddress": "నోడ్ చిరునామా",
+  "miningV3NodeHint": "బ్లాక్‌ల ధృవీకరణ ప్రారంభించడానికి నోడ్‌కు కనెక్ట్ అవ్వండి.",
+  "miningV3NodeInvalid": "లాగిన్ వివరాలు లేదా క్వెరీ పరామితులు లేని http:// లేదా https:// నోడ్ చిరునామాను నమోదు చేయండి.",
+  "miningV3PauseForSettings": "నోడ్ మార్చడానికి మైనింగ్ పాజ్ చేయండి.",
+  "miningV3Save": "నోడ్‌ను సేవ్ చేయండి",
+  "miningV3ConnectionIssue": "కనెక్షన్ అంతరాయం కలిగింది",
+  "miningV3RetryHint": "మైనింగ్ స్వయంచాలకంగా మళ్లీ కనెక్ట్ అవుతుంది.",
+  "miningV3StartIssueHint": "నోడ్ చిరునామాను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.",
+  "miningV3Time": "నమోదైన సమయం",
+  "miningV3TransactionsLabel": "లావాదేవీలు",
+  "miningV3Latency": "ధృవీకరణ సమయం",
+  "miningV3Signers": "సర్టిఫికెట్‌పై సంతకం చేసినవారు",
+  "miningV3BlockHash": "బ్లాక్ హాష్",
+  "miningV3ReceiptsRoot": "రసీదుల రూట్",
+  "miningV3CopyHash": "బ్లాక్ హాష్‌ను కాపీ చేయండి",
+  "miningV3Copied": "బ్లాక్ హాష్ కాపీ అయింది",
+  "miningV3ErrorDetails": "చివరిగా నివేదించిన సమస్య",
+  "miningV3SaveFailed": "నోడ్‌ను సేవ్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.",
+  "g_setting_mining_v3_label": "మొబైల్ ధృవీకరణ (V3)",
+  "miningV3IOSForegroundHint": "iOSలో ధృవీకరణ నేపథ్యంలో పాజ్ అవుతుంది; మీరు తిరిగి వచ్చినప్పుడు కొనసాగుతుంది. సక్రియ సమయం మాత్రమే లెక్కించబడుతుంది.",
+  "miningV3BackgroundPaused": "నేపథ్యంలో పాజ్ చేయబడింది",
+  "miningV3LocalTestnet": "స్థానిక టెస్ట్‌నెట్",
+  "miningV3UseLocalTestnet": "స్థానిక టెస్ట్‌నెట్ ఉపయోగించండి",
+  "miningV3LocalTestnetHint": "డిఫాల్ట్ నోడ్ స్థానిక టెస్ట్‌నెట్‌లో ఉంది. మీరు అనుకూల చిరునామాను కూడా నమోదు చేయవచ్చు."
 }

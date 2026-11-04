@@ -254,7 +254,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value} dakika önce güncellendi";
 
-  static String m103(value) => "0~${value} karakter";
+  static String m103(number) => "Blok #${number}";
+
+  static String m104(index) => "Cihaz ${index}";
+
+  static String m105(value) => "${value} ms";
+
+  static String m106(count) => "${count} işlem";
+
+  static String m107(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1425,7 +1433,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Staking\'e Başla",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Defter"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY yükleniyor...",
     ),
@@ -2313,7 +2321,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
       "Staking işlemi gönderildi",
     ),
-    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Staking"),
+    "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Stake etme"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "İşlem başarıyla hazırlandı",
     ),
@@ -3057,6 +3065,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Madencilik (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Mobil doğrulama (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Madencilik Arayüzü",
     ),
@@ -3251,7 +3262,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "N42 protokolüyle N satın alın",
     ),
-    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Çağrı verisi (hex)",
+    ),
     "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
       "Bir kodu taramak için kamera izni gereklidir.",
     ),
@@ -3346,7 +3359,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_ui_markets_count": m89,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("Not"),
-    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("İşlem havuzu"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("Mesaj"),
     "g_ui_min_balance_value": m90,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
@@ -3557,8 +3570,149 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("Önemli Bildirim"),
     "login_email": MessageLookupByLibrary.simpleMessage("E-posta"),
     "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "Bloklar doğrulanıyor",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Tümü"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "İlgilenilmesi gerekiyor",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Ortalama doğrulama",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Arka planda duraklatıldı",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Blok özeti"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Sertifikalı bloklar",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Sertifikalı",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Düğüm seç"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Bağlanıyor"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Bağlantı kesildi",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Blok özeti kopyalandı",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Blok özetini kopyala",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Oturum süresi"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Doğrulanan bloklarınızı ve sertifikalarınızı görmek için madenciliği başlatın.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "İlk bloğunuz burada görünecek",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Son bildirilen sorun",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "Doğrulama başarısız",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Bu filtreye uyan blok yok.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOS\'te doğrulama arka planda duraklatılır ve geri döndüğünüzde devam eder. Yalnızca etkin süre sayılır.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("Doğrulama süresi"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Daha fazla blok göster",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Yerel test ağı",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Varsayılan düğüm yerel test ağındadır. Özel bir adres de girebilirsiniz.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Doğrulama düğümü"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Düğüm adresi"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Blokları doğrulamaya başlamak için bir düğüme bağlanın.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Kimlik bilgileri veya sorgu parametreleri içermeyen bir http:// ya da https:// düğüm adresi girin.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "Madenciliği duraklat",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Düğümü değiştirmek için madenciliği duraklatın.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Madencilik duraklatıldı",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Sertifika bekleniyor",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Madenciliğe hazır"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage("Makbuz kökü"),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage("Son bloklar"),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Bu oturumda son gözlemlenen etkinlikler",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Cihaz etkinleştiriliyor",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Madencilik otomatik olarak yeniden bağlanacak.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Yeniden bağlanıyor",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Madencilik ödülleri",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Doğrulanmış ödül verisi yok.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Bu düğüm blok doğrulamalarını ve sertifikaları bildirir, ancak ödül tutarlarını sağlamaz. Doğrulanan blok sayısı kazanç bakiyesi değildir.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Bildirilmedi",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Düğümü kaydet"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Düğüm kaydedilemedi. Tekrar deneyin.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Madencilik ayarları",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("Madenciliği ayarla"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Sertifikayı imzalayanlar",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Madenciliği başlat"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Düğüm adresini kontrol edip tekrar deneyin.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Doğrulama başarısı",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Kayıt zamanı"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Madencilik"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "İşlemler",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("Sertifikasız"),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Yerel test ağını kullan",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Doğrulanan bloklar",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Profili Düzenle",
     ),

@@ -240,7 +240,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value}分前に更新";
 
-  static String m103(value) => "0〜${value}文字";
+  static String m103(number) => "ブロック #${number}";
+
+  static String m104(index) => "デバイス ${index}";
+
+  static String m105(value) => "${value} ミリ秒";
+
+  static String m106(count) => "${count} 件の取引";
+
+  static String m107(value) => "0〜${value}文字";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1179,7 +1187,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEXスワップ"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("ガス"),
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage("ステーキング開始"),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("レジャー"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY読み込み中...",
     ),
@@ -2465,6 +2473,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "マイニング (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "モバイル検証（V3）",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage("マイニング画面"),
     "g_share_v2_key_5": MessageLookupByLibrary.simpleMessage("共有"),
     "g_share_v3_key_2": MessageLookupByLibrary.simpleMessage("紹介"),
@@ -2879,8 +2890,101 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("重要なお知らせ"),
     "login_email": MessageLookupByLibrary.simpleMessage("メールアドレス"),
     "login_password": MessageLookupByLibrary.simpleMessage("パスワード"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("ブロックを検証中"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("すべて"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("確認が必要"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("平均検証時間"),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "バックグラウンドで一時停止中",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("ブロックハッシュ"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage("証明書取得済みブロック"),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("証明書取得済み"),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("ノードを選択"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("接続中"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "接続が中断されました",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage("ブロックハッシュをコピーしました"),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("ブロックハッシュをコピー"),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("セッション時間"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "マイニングを開始すると、検証済みブロックと証明書が表示されます。",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage("最初のブロックはここから"),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage("最後に報告された問題"),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("検証失敗"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "このフィルターに一致するブロックはありません。",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOS ではバックグラウンドで検証を一時停止し、アプリに戻ると再開します。動作中の時間のみを計上します。",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("検証時間"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("さらにブロックを表示"),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage("ローカルテストネット"),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "既定のノードはローカルテストネット上にあります。独自のアドレスも入力できます。",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("検証ノード"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("ノードアドレス"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "ノードに接続してブロックの検証を開始します。",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "認証情報やクエリパラメーターを含まない http:// または https:// のノードアドレスを入力してください。",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("マイニングを一時停止"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "ノードを変更するにはマイニングを一時停止してください。",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("マイニング一時停止中"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage("証明書待ち"),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("マイニング準備完了"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage("レシートルート"),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage("最近のブロック"),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "このセッションで最近観測された動作",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage("デバイスを有効化中"),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "マイニングは自動的に再接続します。",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage("再接続中"),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("マイニング報酬"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "確定した報酬データはありません。",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "このノードはブロックの検証結果と証明書を報告しますが、報酬額は提供しません。検証済みブロック数は報酬残高ではありません。",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage("報告なし"),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("ノードを保存"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "ノードを保存できませんでした。もう一度お試しください。",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("マイニング設定"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("マイニングを設定"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage("証明書の署名者"),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("マイニング開始"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "ノードアドレスを確認して、もう一度お試しください。",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("検証成功率"),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("記録時刻"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("マイニング"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("取引"),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("証明書未取得"),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "ローカルテストネットを使用",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("検証済みブロック"),
     "next": MessageLookupByLibrary.simpleMessage("次へ"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
     "photograph": MessageLookupByLibrary.simpleMessage("撮影"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

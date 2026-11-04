@@ -539,7 +539,7 @@
   "g_key_bridge_recommended": "Önerilen",
   "g_key_bridge_fastest": "En Hızlı",
   "g_key_bridge_cheapest": "En Ucuz",
-  "g_key_stake_title": "Staking",
+  "g_key_stake_title": "Stake etme",
   "g_key_stake_stake": "Stake Et",
   "g_key_stake_unstake": "Stake Çıkar",
   "g_key_stake_apy": "APY",
@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "Çapraz zincir transferi",
   "g_key_earn_stake_eth_lido": "ETH'yi Lido ile Stake Edin",
   "g_key_earn_native_sol": "Yerli Solana stake etme",
-  "g_key_earn_ledger": "Defter",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "Gaz",
   "g_key_earn_batch": "Toplu Transfer",
   "g_key_earn_burn": "Yak",
@@ -1641,7 +1641,7 @@
   "g_ui_token_manual": "Token listesinde bulunamadı — simge ve ondalık değerleri manuel olarak doldurun",
   "g_ui_token_found": "Token bulundu: {value}",
   "g_ui_gas_prediction": "Bir sonraki Blok Gas Tahmini",
-  "g_ui_mempool": "Mempool",
+  "g_ui_mempool": "İşlem havuzu",
   "g_ui_base_fee_value": "Temel Ücret: {value} Gwei",
   "g_ui_pending_mempool": "Bekleniyor (Mempool)",
   "g_ui_checking_approval": "Onay kontrol ediliyor…",
@@ -1650,7 +1650,7 @@
   "g_ui_save_failed": "Kaydetme başarısız. Lütfen tekrar deneyin.",
   "g_ui_destination_tag": "Hedef Etiketi",
   "g_ui_token_contract_hint": "Token Sözleşmesi (0x...)",
-  "g_ui_calldata_hex": "Calldata (hex)",
+  "g_ui_calldata_hex": "Çağrı verisi (hex)",
   "g_ui_wallet_ai": "Cüzdan AI",
   "g_ui_read_only": "Sadece Okunabilir",
   "g_ui_assistant_hint": "Bakiye, portföy, gas hakkında soru sorun",
@@ -1732,5 +1732,95 @@
   "g_wallet_coin_total_value": "Toplam Değer",
   "g_wallet_coin_unit_price": "Fiyat",
   "g_wallet_receiver_address": "Alıcı adresi",
-  "g_wallet_sender_address": "Gönderen adresi"
+  "g_wallet_sender_address": "Gönderen adresi",
+  "miningV3Title": "Madencilik",
+  "miningV3Duration": "Oturum süresi",
+  "miningV3Ready": "Madenciliğe hazır",
+  "miningV3Active": "Bloklar doğrulanıyor",
+  "miningV3Connecting": "Bağlanıyor",
+  "miningV3Registering": "Cihaz etkinleştiriliyor",
+  "miningV3Retrying": "Yeniden bağlanıyor",
+  "miningV3Paused": "Madencilik duraklatıldı",
+  "miningV3Start": "Madenciliği başlat",
+  "miningV3Pause": "Madenciliği duraklat",
+  "miningV3Setup": "Madenciliği ayarla",
+  "miningV3Verified": "Doğrulanan bloklar",
+  "miningV3Certified": "Sertifikalı bloklar",
+  "miningV3CertifiedStatus": "Sertifikalı",
+  "miningV3SuccessRate": "Doğrulama başarısı",
+  "miningV3AverageTime": "Ortalama doğrulama",
+  "miningV3Rewards": "Madencilik ödülleri",
+  "miningV3RewardsUnavailable": "Bildirilmedi",
+  "miningV3RewardsHint": "Doğrulanmış ödül verisi yok.",
+  "miningV3RewardsInfo": "Bu düğüm blok doğrulamalarını ve sertifikaları bildirir, ancak ödül tutarlarını sağlamaz. Doğrulanan blok sayısı kazanç bakiyesi değildir.",
+  "miningV3RecentBlocks": "Son bloklar",
+  "miningV3RecentHint": "Bu oturumda son gözlemlenen etkinlikler",
+  "miningV3All": "Tümü",
+  "miningV3Pending": "Sertifika bekleniyor",
+  "miningV3Uncertified": "Sertifikasız",
+  "miningV3Failed": "Doğrulama başarısız",
+  "miningV3Attention": "İlgilenilmesi gerekiyor",
+  "miningV3EmptyTitle": "İlk bloğunuz burada görünecek",
+  "miningV3EmptyBody": "Doğrulanan bloklarınızı ve sertifikalarınızı görmek için madenciliği başlatın.",
+  "miningV3FilterEmpty": "Bu filtreye uyan blok yok.",
+  "miningV3LoadMore": "Daha fazla blok göster",
+  "miningV3Block": "Blok #{number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} işlem",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} ms",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "Cihaz {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "Doğrulama düğümü",
+  "miningV3Configure": "Düğüm seç",
+  "miningV3Settings": "Madencilik ayarları",
+  "miningV3NodeAddress": "Düğüm adresi",
+  "miningV3NodeHint": "Blokları doğrulamaya başlamak için bir düğüme bağlanın.",
+  "miningV3NodeInvalid": "Kimlik bilgileri veya sorgu parametreleri içermeyen bir http:// ya da https:// düğüm adresi girin.",
+  "miningV3PauseForSettings": "Düğümü değiştirmek için madenciliği duraklatın.",
+  "miningV3Save": "Düğümü kaydet",
+  "miningV3ConnectionIssue": "Bağlantı kesildi",
+  "miningV3RetryHint": "Madencilik otomatik olarak yeniden bağlanacak.",
+  "miningV3StartIssueHint": "Düğüm adresini kontrol edip tekrar deneyin.",
+  "miningV3Time": "Kayıt zamanı",
+  "miningV3TransactionsLabel": "İşlemler",
+  "miningV3Latency": "Doğrulama süresi",
+  "miningV3Signers": "Sertifikayı imzalayanlar",
+  "miningV3BlockHash": "Blok özeti",
+  "miningV3ReceiptsRoot": "Makbuz kökü",
+  "miningV3CopyHash": "Blok özetini kopyala",
+  "miningV3Copied": "Blok özeti kopyalandı",
+  "miningV3ErrorDetails": "Son bildirilen sorun",
+  "miningV3SaveFailed": "Düğüm kaydedilemedi. Tekrar deneyin.",
+  "g_setting_mining_v3_label": "Mobil doğrulama (V3)",
+  "miningV3IOSForegroundHint": "iOS'te doğrulama arka planda duraklatılır ve geri döndüğünüzde devam eder. Yalnızca etkin süre sayılır.",
+  "miningV3BackgroundPaused": "Arka planda duraklatıldı",
+  "miningV3LocalTestnet": "Yerel test ağı",
+  "miningV3UseLocalTestnet": "Yerel test ağını kullan",
+  "miningV3LocalTestnetHint": "Varsayılan düğüm yerel test ağındadır. Özel bir adres de girebilirsiniz."
 }

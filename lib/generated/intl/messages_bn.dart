@@ -255,7 +255,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value}m আগে আপডেট করা হয়েছে";
 
-  static String m103(value) => "0~${value} অক্ষর";
+  static String m103(number) => "ব্লক #${number}";
+
+  static String m104(index) => "ডিভাইস ${index}";
+
+  static String m105(value) => "${value} মিলিসেকেন্ড";
+
+  static String m106(count) => "${count}টি লেনদেন";
+
+  static String m107(value) => "0~${value} অক্ষর";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1444,7 +1452,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "স্টেকিং শুরু করুন",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("খাতা"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY লোড হচ্ছে...",
     ),
@@ -3112,6 +3120,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "মাইনিং (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "মোবাইল যাচাই (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "মাইনিং ইন্টারফেস",
     ),
@@ -3191,7 +3202,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_19": MessageLookupByLibrary.simpleMessage(
       "কাস্টম চেইন যোগ করুন",
     ),
-    "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
+    "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0–18 পূর্ণসংখ্যা"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("টোকেন যোগ করুন"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("বিন্যাস ত্রুটি!"),
     "g_token_m_key_22": m72,
@@ -3628,8 +3639,139 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("ইমেইল"),
     "login_password": MessageLookupByLibrary.simpleMessage("পাসওয়ার্ড"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "ব্লক যাচাই করা হচ্ছে",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("সব"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "মনোযোগ প্রয়োজন",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "গড় যাচাইয়ের সময়",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "ব্যাকগ্রাউন্ডে বিরত",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("ব্লক হ্যাশ"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "সনদপ্রাপ্ত ব্লক",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "সনদপ্রাপ্ত",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("একটি নোড বাছুন"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("সংযোগ হচ্ছে"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "সংযোগ বিচ্ছিন্ন হয়েছে",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "ব্লক হ্যাশ কপি হয়েছে",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "ব্লক হ্যাশ কপি করুন",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("সেশনের সময়"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "আপনার যাচাইকৃত ব্লক ও সনদ দেখতে মাইনিং শুরু করুন।",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "আপনার প্রথম ব্লক এখান থেকেই শুরু",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "সর্বশেষ রিপোর্ট করা সমস্যা",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("যাচাই ব্যর্থ"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "এই ফিল্টারের সঙ্গে মেলে এমন কোনো ব্লক নেই।",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOS-এ ব্যাকগ্রাউন্ডে যাচাই বিরত থাকে এবং আপনি ফিরে এলে আবার চলে। শুধু সক্রিয় সময় গণনা করা হয়।",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("যাচাইয়ের সময়"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("আরও ব্লক দেখান"),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "স্থানীয় টেস্টনেট",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "ডিফল্ট নোডটি স্থানীয় টেস্টনেটে রয়েছে। আপনি নিজস্ব ঠিকানাও লিখতে পারেন।",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("যাচাই নোড"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("নোডের ঠিকানা"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "ব্লক যাচাই শুরু করতে একটি নোডের সঙ্গে সংযোগ করুন।",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "লগইন তথ্য বা কোয়েরি প্যারামিটার ছাড়া http:// অথবা https:// নোডের ঠিকানা লিখুন।",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("মাইনিং বিরতি দিন"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "নোড বদলাতে মাইনিং বিরতি দিন।",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("মাইনিং বিরত আছে"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage("সনদের অপেক্ষায়"),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "মাইনিংয়ের জন্য প্রস্তুত",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "রসিদের মূল হ্যাশ",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "সাম্প্রতিক ব্লক",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "এই সেশনে সম্প্রতি দেখা কার্যকলাপ",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "ডিভাইস সক্রিয় করা হচ্ছে",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "মাইনিং স্বয়ংক্রিয়ভাবে আবার সংযোগ করবে।",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "আবার সংযোগ হচ্ছে",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("মাইনিং পুরস্কার"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "নিশ্চিত পুরস্কারের তথ্য পাওয়া যায়নি।",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "এই নোড ব্লক যাচাই ও সনদের তথ্য জানায়, কিন্তু পুরস্কারের পরিমাণ জানায় না। যাচাইকৃত ব্লকের সংখ্যা আয়ের ব্যালেন্স নয়।",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "রিপোর্ট করা হয়নি",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("নোড সংরক্ষণ করুন"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "নোড সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("মাইনিং সেটিংস"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("মাইনিং সেট আপ করুন"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "সনদে স্বাক্ষরকারীরা",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("মাইনিং শুরু করুন"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "নোডের ঠিকানা যাচাই করে আবার চেষ্টা করুন।",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "যাচাই সফলতার হার",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("নথিভুক্ত সময়"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("মাইনিং"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("লেনদেন"),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "সনদপ্রাপ্ত নয়",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "স্থানীয় টেস্টনেট ব্যবহার করুন",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("যাচাইকৃত ব্লক"),
     "next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "প্রোফাইল সম্পাদনা করুন",
     ),

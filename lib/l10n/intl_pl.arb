@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "Transfer międzyłańcuchowy",
   "g_key_earn_stake_eth_lido": "Postaw ETH z Lido",
   "g_key_earn_native_sol": "Rodzime stakowanie Solany",
-  "g_key_earn_ledger": "Księga",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "Gaz",
   "g_key_earn_batch": "Transfer zbiorczy",
   "g_key_earn_burn": "Spalić",
@@ -1616,7 +1616,7 @@
   "g_ui_limit_value": "Limit {value}",
   "g_ui_volume_interest": "Objętość: {volume} · OI: {interest}",
   "g_ui_optional": "Opcjonalne",
-  "g_ui_memo": "Memo",
+  "g_ui_memo": "Notatka",
   "g_ui_account_email": "Adres e-mail konta",
   "g_ui_new_email": "Nowy adres e-mail",
   "g_ui_verification_code": "Kod weryfikacyjny",
@@ -1641,7 +1641,7 @@
   "g_ui_token_manual": "Token nie został znaleziony na liście — wprowadź symbol i liczbę miejsc dziesiętnych ręcznie",
   "g_ui_token_found": "Znaleziono token: {value}",
   "g_ui_gas_prediction": "Prognoza opłat za blok",
-  "g_ui_mempool": "Mempool",
+  "g_ui_mempool": "Pula transakcji",
   "g_ui_base_fee_value": "Podstawowa opłata: {value} Gwei",
   "g_ui_pending_mempool": "Oczekujące (Mempool)",
   "g_ui_checking_approval": "Sprawdzanie zezwolenia…",
@@ -1732,5 +1732,95 @@
   "g_wallet_coin_total_value": "Całkowita wartość",
   "g_wallet_coin_unit_price": "Cena",
   "g_wallet_receiver_address": "Adres odbiorcy",
-  "g_wallet_sender_address": "Adres nadawcy"
+  "g_wallet_sender_address": "Adres nadawcy",
+  "miningV3Title": "Wydobywanie",
+  "miningV3Duration": "Czas sesji",
+  "miningV3Ready": "Gotowe do wydobywania",
+  "miningV3Active": "Weryfikowanie bloków",
+  "miningV3Connecting": "Łączenie",
+  "miningV3Registering": "Aktywowanie urządzenia",
+  "miningV3Retrying": "Ponowne łączenie",
+  "miningV3Paused": "Wydobywanie wstrzymane",
+  "miningV3Start": "Rozpocznij wydobywanie",
+  "miningV3Pause": "Wstrzymaj wydobywanie",
+  "miningV3Setup": "Skonfiguruj wydobywanie",
+  "miningV3Verified": "Zweryfikowane bloki",
+  "miningV3Certified": "Bloki z certyfikatem",
+  "miningV3CertifiedStatus": "Certyfikowany",
+  "miningV3SuccessRate": "Udane weryfikacje",
+  "miningV3AverageTime": "Średni czas weryfikacji",
+  "miningV3Rewards": "Nagrody za wydobywanie",
+  "miningV3RewardsUnavailable": "Brak danych",
+  "miningV3RewardsHint": "Brak potwierdzonych danych o nagrodach.",
+  "miningV3RewardsInfo": "Ten węzeł raportuje weryfikację bloków i certyfikaty, ale nie udostępnia kwot nagród. Liczba zweryfikowanych bloków nie jest saldem zarobków.",
+  "miningV3RecentBlocks": "Ostatnie bloki",
+  "miningV3RecentHint": "Ostatnie zaobserwowane zdarzenia w tej sesji",
+  "miningV3All": "Wszystkie",
+  "miningV3Pending": "Oczekiwanie na certyfikat",
+  "miningV3Uncertified": "Bez certyfikatu",
+  "miningV3Failed": "Weryfikacja nie powiodła się",
+  "miningV3Attention": "Wymaga uwagi",
+  "miningV3EmptyTitle": "Tutaj pojawi się Twój pierwszy blok",
+  "miningV3EmptyBody": "Rozpocznij wydobywanie, aby zobaczyć zweryfikowane bloki i certyfikaty.",
+  "miningV3FilterEmpty": "Żaden blok nie pasuje do filtra.",
+  "miningV3LoadMore": "Pokaż więcej bloków",
+  "miningV3Block": "Blok nr {number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "Transakcje: {count}",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} ms",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "Urządzenie {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "Węzeł weryfikacji",
+  "miningV3Configure": "Wybierz węzeł",
+  "miningV3Settings": "Ustawienia wydobywania",
+  "miningV3NodeAddress": "Adres węzła",
+  "miningV3NodeHint": "Połącz się z węzłem, aby rozpocząć weryfikację bloków.",
+  "miningV3NodeInvalid": "Wpisz adres węzła http:// lub https:// bez danych logowania i parametrów zapytania.",
+  "miningV3PauseForSettings": "Wstrzymaj wydobywanie, aby zmienić węzeł.",
+  "miningV3Save": "Zapisz węzeł",
+  "miningV3ConnectionIssue": "Połączenie przerwane",
+  "miningV3RetryHint": "Wydobywanie automatycznie wznowi połączenie.",
+  "miningV3StartIssueHint": "Sprawdź adres węzła i spróbuj ponownie.",
+  "miningV3Time": "Czas rejestracji",
+  "miningV3TransactionsLabel": "Transakcje",
+  "miningV3Latency": "Czas weryfikacji",
+  "miningV3Signers": "Sygnatariusze certyfikatu",
+  "miningV3BlockHash": "Skrót bloku",
+  "miningV3ReceiptsRoot": "Korzeń potwierdzeń",
+  "miningV3CopyHash": "Kopiuj skrót bloku",
+  "miningV3Copied": "Skopiowano skrót bloku",
+  "miningV3ErrorDetails": "Ostatnio zgłoszony problem",
+  "miningV3SaveFailed": "Nie udało się zapisać węzła. Spróbuj ponownie.",
+  "g_setting_mining_v3_label": "Weryfikacja mobilna (V3)",
+  "miningV3IOSForegroundHint": "W iOS weryfikacja jest wstrzymywana w tle i wznawiana po powrocie. Liczony jest tylko czas aktywności.",
+  "miningV3BackgroundPaused": "Wstrzymano w tle",
+  "miningV3LocalTestnet": "Lokalna sieć testowa",
+  "miningV3UseLocalTestnet": "Użyj lokalnej sieci testowej",
+  "miningV3LocalTestnetHint": "Domyślny węzeł działa w lokalnej sieci testowej. Możesz też podać własny adres."
 }

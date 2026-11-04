@@ -1951,5 +1951,8 @@
   "miningV3BackgroundPaused": "Paused in background",
   "miningV3LocalTestnet": "Local testnet",
   "miningV3UseLocalTestnet": "Use local testnet",
-  "miningV3LocalTestnetHint": "The default node is on the local testnet. You can also enter a custom address."
+  "miningV3LocalTestnetHint": "The default node is on the local testnet. You can also enter a custom address.",
+  "@g_key_earn_ledger": {
+    "description": "Ledger brand. This Earn shortcut opens hardware-wallet management; do not translate as an accounting ledger."
+  }
 }

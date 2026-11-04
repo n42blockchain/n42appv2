@@ -24,6 +24,7 @@ GENERIC_ALLOWED_PATTERNS = (
     re.compile(r'^≈ \{amount\}(?:\{token\}| USDT)$'),
     re.compile(r'^\{current\} / \{total\}$'),
     re.compile(r'^\{month\}/\{day\}$'),
+    re.compile(r'^\{value\} ms$'),  # SI unit, not English fallback.
     re.compile(r'^\{value\}d unbond$'),
     re.compile(r'^N42 ID: \{id\}$'),
     re.compile(r'^Option \{index\}$'),
@@ -33,6 +34,32 @@ GENERIC_ALLOWED_PATTERNS = (
     re.compile(r'^Error: \{message\}$'),
     re.compile(r'^poked \{name\}\{suffix\}$'),
 )
+
+
+# Reviewed native homographs/loanwords. Exact scope/locale/key/value only:
+# do not accept English sentences or arbitrary keys via this registry.
+REVIEWED_SHARED_TERMS = {
+    'wallet': {
+        '*': {'g_key_earn_ledger': 'Ledger'},  # Hardware brand, not accounting.
+        'de': {'miningV3Title': 'Mining', 'miningV3Block': 'Block #{number}'},
+        'it': {'miningV3Title': 'Mining'},
+        'fr': {'miningV3TransactionsLabel': 'Transactions'},
+    },
+    'chat': {
+        'de': {'qrcodeAlbum': 'Album'},
+        'it': {'qrcodeAlbum': 'Album'},
+        'id': {'qrcodeAlbum': 'Album'},
+        'vi': {'qrcodeAlbum': 'Album'},
+        'cs': {'qrcodeAlbum': 'Album'},
+        'pl': {'qrcodeAlbum': 'Album'},
+        'fr': {
+            'qrcodeAlbum': 'Album',
+            'chatCatchUpMentions': 'Mentions',
+            'chatHistoryMessages': 'messages',
+            'contactPhotoCount': '{count} photos',
+        },
+    },
+}
 
 
 @dataclass(frozen=True)
@@ -195,6 +222,8 @@ def audit_spec(spec: AuditSpec) -> dict[str, dict[str, dict[str, str]]]:
             key: value
             for key, value in data.items()
             if value == base.get(key) and is_unexpected_identical(value)
+            and REVIEWED_SHARED_TERMS.get(spec.name, {}).get(locale, {}).get(key) != value
+            and REVIEWED_SHARED_TERMS.get(spec.name, {}).get('*', {}).get(key) != value
         }
 
         if missing_keys:

@@ -257,7 +257,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Обновлено ${value} минут назад";
 
-  static String m103(value) => "0~${value} символов";
+  static String m103(number) => "Блок № ${number}";
+
+  static String m104(index) => "Устройство ${index}";
+
+  static String m105(value) => "${value} мс";
+
+  static String m106(count) => "Транзакций: ${count}";
+
+  static String m107(value) => "0~${value} символов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1466,7 +1474,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Начать стейкинг",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Леджер"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Загрузка APY...",
     ),
@@ -3183,6 +3191,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Майнинг (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Мобильная проверка (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Интерфейс майнинга",
     ),
@@ -3705,8 +3716,153 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("Проверка блоков"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Все"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "Требует внимания",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Среднее время проверки",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Приостановлено в фоновом режиме",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Хеш блока"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Блоки с сертификатом",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Сертификат получен",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Выбрать узел"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Подключение"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Соединение прервано",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Хеш блока скопирован",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Скопировать хеш блока",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Время сеанса"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Начните майнинг, чтобы увидеть проверенные блоки и сертификаты.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Здесь появится ваш первый блок",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Последняя сообщённая проблема",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "Проверка не удалась",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Нет блоков, соответствующих фильтру.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "В iOS проверка приостанавливается в фоновом режиме и возобновляется при возвращении. Учитывается только активное время.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("Время проверки"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Показать ещё блоки",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Локальная тестовая сеть",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Узел по умолчанию находится в локальной тестовой сети. Вы также можете ввести свой адрес.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Узел проверки"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Адрес узла"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Подключитесь к узлу, чтобы начать проверку блоков.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Введите адрес узла http:// или https:// без учётных данных и параметров запроса.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "Приостановить майнинг",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Приостановите майнинг, чтобы сменить узел.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Майнинг приостановлен",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Ожидание сертификата",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Готово к майнингу"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Корень квитанций",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Последние блоки",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Последние наблюдаемые события этого сеанса",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Активация устройства",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Майнинг автоматически восстановит соединение.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Повторное подключение",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Награды за майнинг",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Подтверждённые данные о наградах отсутствуют.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Этот узел сообщает о проверках блоков и сертификатах, но не предоставляет суммы наград. Число проверенных блоков не является балансом заработка.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Нет данных",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Сохранить узел"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось сохранить узел. Повторите попытку.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Настройки майнинга",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("Настроить майнинг"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Подписанты сертификата",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Начать майнинг"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Проверьте адрес узла и повторите попытку.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Успешные проверки",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Время записи"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Майнинг"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Транзакции",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Без сертификата",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Использовать локальную тестовую сеть",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Проверенные блоки",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Далее"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редактировать профиль",
     ),

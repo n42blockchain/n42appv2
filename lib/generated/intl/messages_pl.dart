@@ -256,7 +256,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Zaktualizowane ${value} min temu";
 
-  static String m103(value) => "0~${value} znaków";
+  static String m103(number) => "Blok nr ${number}";
+
+  static String m104(index) => "Urządzenie ${index}";
+
+  static String m105(value) => "${value} ms";
+
+  static String m106(count) => "Transakcje: ${count}";
+
+  static String m107(value) => "0~${value} znaków";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1451,7 +1459,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Rozpocznij staking",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Księga"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Ładowanie APY...",
     ),
@@ -3147,6 +3155,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Górnictwo (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Weryfikacja mobilna (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Interfejs Górniczy",
     ),
@@ -3449,8 +3460,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Wykorzystanie",
     ),
     "g_ui_markets_count": m89,
-    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Memo"),
-    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Notatka"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Pula transakcji"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("Wiadomość"),
     "g_ui_min_balance_value": m90,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
@@ -3669,8 +3680,159 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("Ważna informacja"),
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Hasło"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "Weryfikowanie bloków",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Wszystkie"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("Wymaga uwagi"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Średni czas weryfikacji",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Wstrzymano w tle",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Skrót bloku"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Bloki z certyfikatem",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Certyfikowany",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Wybierz węzeł"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Łączenie"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Połączenie przerwane",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Skopiowano skrót bloku",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Kopiuj skrót bloku",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Czas sesji"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Rozpocznij wydobywanie, aby zobaczyć zweryfikowane bloki i certyfikaty.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Tutaj pojawi się Twój pierwszy blok",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Ostatnio zgłoszony problem",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "Weryfikacja nie powiodła się",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Żaden blok nie pasuje do filtra.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "W iOS weryfikacja jest wstrzymywana w tle i wznawiana po powrocie. Liczony jest tylko czas aktywności.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("Czas weryfikacji"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Pokaż więcej bloków",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Lokalna sieć testowa",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Domyślny węzeł działa w lokalnej sieci testowej. Możesz też podać własny adres.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Węzeł weryfikacji"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Adres węzła"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Połącz się z węzłem, aby rozpocząć weryfikację bloków.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Wpisz adres węzła http:// lub https:// bez danych logowania i parametrów zapytania.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "Wstrzymaj wydobywanie",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Wstrzymaj wydobywanie, aby zmienić węzeł.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Wydobywanie wstrzymane",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Oczekiwanie na certyfikat",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "Gotowe do wydobywania",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Korzeń potwierdzeń",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Ostatnie bloki",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Ostatnie zaobserwowane zdarzenia w tej sesji",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Aktywowanie urządzenia",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Wydobywanie automatycznie wznowi połączenie.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Ponowne łączenie",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Nagrody za wydobywanie",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Brak potwierdzonych danych o nagrodach.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Ten węzeł raportuje weryfikację bloków i certyfikaty, ale nie udostępnia kwot nagród. Liczba zweryfikowanych bloków nie jest saldem zarobków.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Brak danych",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Zapisz węzeł"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Nie udało się zapisać węzła. Spróbuj ponownie.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Ustawienia wydobywania",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "Skonfiguruj wydobywanie",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Sygnatariusze certyfikatu",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage(
+      "Rozpocznij wydobywanie",
+    ),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Sprawdź adres węzła i spróbuj ponownie.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Udane weryfikacje",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Czas rejestracji"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Wydobywanie"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Transakcje",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Bez certyfikatu",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Użyj lokalnej sieci testowej",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Zweryfikowane bloki",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Dalej"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Edytuj profil",
     ),

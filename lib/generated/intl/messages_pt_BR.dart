@@ -249,7 +249,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m98(value) => "… e mais ${value} problemas";
 
-  static String m99(volume, interest) => "Vol: ${volume} · OI: ${interest}";
+  static String m99(volume, interest) =>
+      "Vol.: ${volume} · Posições em aberto: ${interest}";
 
   static String m100(value) => "Carteira ${value}";
 
@@ -257,7 +258,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Atualizado há ${value}m";
 
-  static String m103(value) => "0~${value} caracteres";
+  static String m103(number) => "Bloco nº ${number}";
+
+  static String m104(index) => "Dispositivo ${index}";
+
+  static String m105(value) => "${value} ms";
+
+  static String m106(count) => "${count} transações";
+
+  static String m107(value) => "0~${value} caracteres";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1450,7 +1459,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Iniciar staking",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Razão"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Carregando APY...",
     ),
@@ -3183,6 +3192,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Mineração (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Verificação móvel (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Interface de Mineração",
     ),
@@ -3393,7 +3405,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "Comprar N por meio do protocolo N42",
     ),
-    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Dados da chamada (hex)",
+    ),
     "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
       "É necessário permitir o uso da câmera para escanear um código.",
     ),
@@ -3487,7 +3501,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Utilização",
     ),
     "g_ui_markets_count": m89,
-    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Memo"),
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Nota"),
     "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("Mensagem"),
     "g_ui_min_balance_value": m90,
@@ -3709,8 +3723,155 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("Aviso Importante"),
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Senha"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "Verificando blocos",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Todos"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("Requer atenção"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Verificação média",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Pausado em segundo plano",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Hash do bloco"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Blocos certificados",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Certificado",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Escolher um nó"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Conectando"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Conexão interrompida",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Hash do bloco copiado",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Copiar hash do bloco",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Tempo da sessão"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Inicie a mineração para ver seus blocos verificados e certificados.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Seu primeiro bloco começa aqui",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Último problema informado",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage(
+      "Falha na verificação",
+    ),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Nenhum bloco corresponde a este filtro.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "No iOS, a verificação é pausada em segundo plano e retomada quando você retorna. Apenas o tempo ativo é contado.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage(
+      "Tempo de verificação",
+    ),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Mostrar mais blocos",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Rede de testes local",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "O nó padrão está na rede de testes local. Também é possível inserir um endereço personalizado.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Nó de verificação"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
+      "Endereço do nó",
+    ),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Conecte-se a um nó para começar a verificar blocos.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Insira um endereço de nó http:// ou https:// sem credenciais nem parâmetros de consulta.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("Pausar mineração"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Pause a mineração para alterar o nó.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("Mineração pausada"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Aguardando certificado",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "Pronto para minerar",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Raiz dos recibos",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Blocos recentes",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Atividade observada recentemente nesta sessão",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Ativando dispositivo",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "A conexão de mineração será restabelecida automaticamente.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage("Reconectando"),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Recompensas de mineração",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Não há dados de recompensas confirmadas disponíveis.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Este nó informa verificações de blocos e certificados, mas não fornece os valores das recompensas. A contagem de blocos verificados não é um saldo de ganhos.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Não informado",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Salvar nó"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Não foi possível salvar o nó. Tente novamente.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Configurações de mineração",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "Configurar mineração",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Signatários do certificado",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Iniciar mineração"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Verifique o endereço do nó e tente novamente.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Verificações bem-sucedidas",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Horário registrado"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Mineração"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Transações",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Não certificado",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Usar rede de testes local",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Blocos verificados",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Próximo"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Editar Perfil",
     ),

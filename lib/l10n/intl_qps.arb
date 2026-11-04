@@ -220,7 +220,7 @@
   "g_key_m_17": "[# Ðìšçöŗð ~~~#]",
   "g_key_m_18": "[# Ýöüťüƀé ~~~#]",
   "g_key_m_19": "[# Ìñšťàĝŗàṁ ~~~~#]",
-  "g_key_t_1": "[# Çöṁƥĺéťé ~~~~#]",
+  "g_key_t_1": "[# Çöṁƥĺéťéð ~~~~#]",
   "g_key_t_2": "[# Ƥéñðìñĝ ~~~#]",
   "g_key_t_3": "[# Ƒàìĺüŗé ~~~#]",
   "g_key_t_4": "[# Ťŗàñšƒéŗ öüť ~~~~~~#]",
@@ -909,7 +909,7 @@
   "g_key_aa_ready": "[# Ŗéàðý ~~#]",
   "g_key_aa_pending": "[# Ƥéñðìñĝ ~~~#]",
   "g_key_aa_session_keys": "[# Šéššìöñ Ķéýš ~~~~~~#]",
-  "g_key_aa_session_keys_desc": "[Local records only. On-chain permissions are not changed.]",
+  "g_key_aa_session_keys_desc": "[# Ĺöçàĺ ŗéçöŗðš öñĺý. Öñ-çĥàìñ ƥéŗṁìššìöñš àŗé ñöť çĥàñĝéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
   "g_key_aa_session_select_preset": "[# Çĥööšé Ƥéŗṁìššìöñ Ĺéṽéĺ ~~~~~~~~~~~#]",
   "g_key_aa_session_preset_transfer": "[# Šéñð Öñĺý ~~~~#]",
   "g_key_aa_session_preset_contract": "[# ÐÀƥƥ Àççéšš ~~~~~#]",
@@ -926,7 +926,7 @@
   "g_key_aa_session_dapp_hint": "[# é.ĝ. Üñìšŵàƥ, Ààṽé... ~~~~~~~~~~#]",
   "g_key_aa_session_amount_limit": "[# Ṁàẋ Àṁöüñť ~~~~~#]",
   "g_key_aa_session_amount_hint": "[# é.ĝ. 100.00 ~~~~~#]",
-  "g_key_aa_session_create_success": "[Local session record saved]",
+  "g_key_aa_session_create_success": "[# Ĺöçàĺ šéššìöñ ŗéçöŗð šàṽéð ~~~~~~~~~~~~~#]",
   "g_key_aa_session_create_failed": "[# Ƒàìĺéð ťö çŗéàťé šéššìöñ ķéý ~~~~~~~~~~~~~~#]",
   "g_key_aa_session_confirm_risk": "[# Ì üñðéŗšťàñð ťĥìš ķéý'š ƥéŗṁìššìöñš ~~~~~~~~~~~~~~~~~#]",
   "g_key_aa_session_risk_warning": "[# Ŗéṽìéŵ ƥéŗṁìššìöñš ƀéƒöŗé çöñƒìŗṁìñĝ ~~~~~~~~~~~~~~~~~~#]",
@@ -941,7 +941,7 @@
   "g_key_aa_revoke_confirm": "[# Àŗé ýöü šüŗé ýöü ŵàñť ťö ŗéṽöķé ťĥìš šéššìöñ ķéý? Ťĥé àüťĥöŗìžéð ÐÀƥƥ ŵìĺĺ ñö ĺöñĝéŗ ƀé àƀĺé ťö éẋéçüťé ťŗàñšàçťìöñš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
   "g_key_aa_revoke": "[# Ŗéṽöķé ~~~#]",
   "g_key_aa_revoking": "[# Ŗéṽöķìñĝ šéššìöñ ķéý... ~~~~~~~~~~~#]",
-  "g_key_aa_revoked": "[Local session record revoked]",
+  "g_key_aa_revoked": "[# Ĺöçàĺ šéššìöñ ŗéçöŗð ŗéṽöķéð ~~~~~~~~~~~~~~#]",
   "g_key_aa_create_session": "[# Çŗéàťé Šéššìöñ Ķéý ~~~~~~~~~#]",
   "g_key_aa_details": "[# Ðéťàìĺš ~~~#]",
   "g_key_aa_spending_limit": "[# Šƥéñðìñĝ Ĺìṁìť ~~~~~~~#]",
@@ -1624,6 +1624,10 @@
   "g_dex_history_record_failed": "[# Šŵàƥ šüƀṁìťťéð, ƀüť ĥìšťöŗý çöüĺð ñöť ƀé üƥðàťéð. Ðö ñöť šüƀṁìť ìť àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
   "g_wallet_prices_unavailable": "[# Ƥŗìçéš üñàṽàìĺàƀĺé ~~~~~~~~~#]",
   "g_wallet_prices_cached": "[# Šàṽéð ƥŗìçéš ~~~~~~#]",
+  "g_wallet_coin_unit_price": "[# Ƥŗìçé ~~#]",
+  "g_wallet_coin_total_value": "[# Ťöťàĺ ṽàĺüé ~~~~~#]",
+  "g_wallet_sender_address": "[# Ƒŗöṁ àððŗéšš ~~~~~~#]",
+  "g_wallet_receiver_address": "[# Ťö àððŗéšš ~~~~~#]",
   "g_wallet_prices_just_updated": "[# Üƥðàťéð ñöŵ ~~~~~#]",
   "g_wallet_prices_minutes": "[# Üƥðàťéð {value}ṁ àĝö ~~~~~~#]",
   "@g_wallet_prices_minutes": {
@@ -1858,8 +1862,97 @@
   "g_ui_mpc_no_phrase": "[# Ñö Šééð Ƥĥŗàšé Ñééðéð ~~~~~~~~~~#]",
   "g_ui_mpc_intro": "[# Šìĝñ ìñ ŵìťĥ ýöüŗ šöçìàĺ àççöüñť ťö çŗéàťé à šéçüŗé ṀƤÇ ŵàĺĺéť. Ýöüŗ ƥŗìṽàťé ķéý ìš šƥĺìť ìñťö éñçŗýƥťéð šĥàŗéš — ñö šééð ƥĥŗàšé ťö ĺöšé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
   "g_ui_mpc_security": "[# Ƥöŵéŗéð ƀý ṀƤÇ-ŤŠŠ. Ýöüŗ ķéý ìš šƥĺìť ìñťö 3 éñçŗýƥťéð šĥàŗéš àçŗöšš ýöüŗ ðéṽìçé, öüŗ šéŗṽéŗš, àñð à ŗéçöṽéŗý ƀàçķüƥ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
-  "g_wallet_coin_total_value": "[# Ťöťàĺ Ṽàĺüé ~~~~~#]",
-  "g_wallet_coin_unit_price": "[# Ƥŗìçé ~~#]",
-  "g_wallet_receiver_address": "[# Ťö àððŗéšš ~~~~~#]",
-  "g_wallet_sender_address": "[# Ƒŗöṁ àððŗéšš ~~~~~~#]"
+  "miningV3Title": "[# Ṁìñìñĝ ~~~#]",
+  "miningV3Duration": "[# Šéššìöñ ťìṁé ~~~~~~#]",
+  "miningV3Ready": "[# Ŗéàðý ťö ṁìñé ~~~~~~#]",
+  "miningV3Active": "[# Ṽéŗìƒýìñĝ ƀĺöçķš ~~~~~~~~#]",
+  "miningV3Connecting": "[# Çöññéçťìñĝ ~~~~~#]",
+  "miningV3Registering": "[# Àçťìṽàťìñĝ ðéṽìçé ~~~~~~~~#]",
+  "miningV3Retrying": "[# Ŗéçöññéçťìñĝ ~~~~~~#]",
+  "miningV3Paused": "[# Ṁìñìñĝ ƥàüšéð ~~~~~~#]",
+  "miningV3Start": "[# Šťàŗť ṁìñìñĝ ~~~~~~#]",
+  "miningV3Pause": "[# Ƥàüšé ṁìñìñĝ ~~~~~~#]",
+  "miningV3Setup": "[# Šéť üƥ ṁìñìñĝ ~~~~~~#]",
+  "miningV3Verified": "[# Ṽéŗìƒìéð ƀĺöçķš ~~~~~~~#]",
+  "miningV3Certified": "[# Çéŗťìƒìéð ƀĺöçķš ~~~~~~~~#]",
+  "miningV3CertifiedStatus": "[# Çéŗťìƒìéð ~~~~#]",
+  "miningV3SuccessRate": "[# Ṽéŗìƒìçàťìöñ šüççéšš ~~~~~~~~~~#]",
+  "miningV3AverageTime": "[# Àṽĝ. ṽéŗìƒìçàťìöñ ~~~~~~~~#]",
+  "miningV3Rewards": "[# Ṁìñìñĝ ŗéŵàŗðš ~~~~~~~#]",
+  "miningV3RewardsUnavailable": "[# Ñöť ŗéƥöŗťéð ~~~~~~#]",
+  "miningV3RewardsHint": "[# Ñö çöñƒìŗṁéð ŗéŵàŗð ðàťà ìš àṽàìĺàƀĺé. ~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3RewardsInfo": "[# Ťĥìš ñöðé ŗéƥöŗťš ƀĺöçķ ṽéŗìƒìçàťìöñ àñð çéŗťìƒìçàťéš, ƀüť ðöéš ñöť ƥŗöṽìðé ŗéŵàŗð àṁöüñťš. Ṽéŗìƒìéð ƀĺöçķ çöüñťš àŗé ñöť àñ éàŗñìñĝš ƀàĺàñçé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3RecentBlocks": "[# Ŗéçéñť ƀĺöçķš ~~~~~~#]",
+  "miningV3RecentHint": "[# Ŗéçéñť öƀšéŗṽéð àçťìṽìťý ìñ ťĥìš šéššìöñ ~~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3All": "[# Àĺĺ ~#]",
+  "miningV3Pending": "[# Àŵàìťìñĝ çéŗťìƒìçàťé ~~~~~~~~~~#]",
+  "miningV3Uncertified": "[# Ñöť çéŗťìƒìéð ~~~~~~#]",
+  "miningV3Failed": "[# Ṽéŗìƒìçàťìöñ ƒàìĺéð ~~~~~~~~~#]",
+  "miningV3Attention": "[# Ñééðš àťťéñťìöñ ~~~~~~~#]",
+  "miningV3EmptyTitle": "[# Ýöüŗ ƒìŗšť ƀĺöçķ šťàŗťš ĥéŗé ~~~~~~~~~~~~~~#]",
+  "miningV3EmptyBody": "[# Šťàŗť ṁìñìñĝ ťö šéé ýöüŗ ṽéŗìƒìéð ƀĺöçķš àñð çéŗťìƒìçàťéš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3FilterEmpty": "[# Ñö ƀĺöçķš ṁàťçĥ ťĥìš ƒìĺťéŗ. ~~~~~~~~~~~~~~#]",
+  "miningV3LoadMore": "[# Šĥöŵ ṁöŗé ƀĺöçķš ~~~~~~~~#]",
+  "miningV3Block": "[# Ɓĺöçķ #{number} ~~~#]",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "[# {count} ťẋ ~#]",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "[# {value} ṁš ~#]",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "[# Ðéṽìçé {index} ~~~#]",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "[# Ṽéŗìƒìçàťìöñ ñöðé ~~~~~~~~#]",
+  "miningV3Configure": "[# Çĥööšé à ñöðé ~~~~~~#]",
+  "miningV3Settings": "[# Ṁìñìñĝ šéťťìñĝš ~~~~~~~#]",
+  "miningV3NodeAddress": "[# Ñöðé àððŗéšš ~~~~~~#]",
+  "miningV3NodeHint": "[# Çöññéçť ťö à ñöðé ťö šťàŗť ṽéŗìƒýìñĝ ƀĺöçķš. ~~~~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3NodeInvalid": "[# Éñťéŗ àñ ĥťťƥ:// öŗ ĥťťƥš:// ñöðé àððŗéšš ŵìťĥöüť çŗéðéñťìàĺš öŗ ɋüéŗý ƥàŗàṁéťéŗš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3PauseForSettings": "[# Ƥàüšé ṁìñìñĝ ťö çĥàñĝé ťĥé ñöðé. ~~~~~~~~~~~~~~~~#]",
+  "miningV3Save": "[# Šàṽé ñöðé ~~~~#]",
+  "miningV3ConnectionIssue": "[# Çöññéçťìöñ ìñťéŗŗüƥťéð ~~~~~~~~~~~#]",
+  "miningV3RetryHint": "[# Ṁìñìñĝ ŵìĺĺ ŗéçöññéçť àüťöṁàťìçàĺĺý. ~~~~~~~~~~~~~~~~~~#]",
+  "miningV3StartIssueHint": "[# Çĥéçķ ťĥé ñöðé àððŗéšš àñð ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~#]",
+  "miningV3Time": "[# Ŗéçöŗðéð ťìṁé ~~~~~~#]",
+  "miningV3TransactionsLabel": "[# Ťŗàñšàçťìöñš ~~~~~~#]",
+  "miningV3Latency": "[# Ṽéŗìƒìçàťìöñ ťìṁé ~~~~~~~~#]",
+  "miningV3Signers": "[# Çéŗťìƒìçàťé šìĝñéŗš ~~~~~~~~~#]",
+  "miningV3BlockHash": "[# Ɓĺöçķ ĥàšĥ ~~~~~#]",
+  "miningV3ReceiptsRoot": "[# Ŗéçéìƥťš ŗööť ~~~~~~#]",
+  "miningV3CopyHash": "[# Çöƥý ƀĺöçķ ĥàšĥ ~~~~~~~#]",
+  "miningV3Copied": "[# Ɓĺöçķ ĥàšĥ çöƥìéð ~~~~~~~~#]",
+  "miningV3ErrorDetails": "[# Ĺàšť ŗéƥöŗťéð ìššüé ~~~~~~~~~#]",
+  "miningV3SaveFailed": "[# Çöüĺð ñöť šàṽé ťĥé ñöðé. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~#]",
+  "g_setting_mining_v3_label": "[# Ṁöƀìĺé ṽéŗìƒìçàťìöñ (Ṽ3) ~~~~~~~~~~~~#]",
+  "miningV3IOSForegroundHint": "[# Öñ ìÖŠ, ṽéŗìƒìçàťìöñ ƥàüšéš ìñ ťĥé ƀàçķĝŗöüñð àñð ŗéšüṁéš ŵĥéñ ýöü ŗéťüŗñ. Öñĺý àçťìṽé ťìṁé ìš çöüñťéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+  "miningV3BackgroundPaused": "[# Ƥàüšéð ìñ ƀàçķĝŗöüñð ~~~~~~~~~~#]",
+  "miningV3LocalTestnet": "[# Ĺöçàĺ ťéšťñéť ~~~~~~#]",
+  "miningV3UseLocalTestnet": "[# Üšé ĺöçàĺ ťéšťñéť ~~~~~~~~#]",
+  "miningV3LocalTestnetHint": "[# Ťĥé ðéƒàüĺť ñöðé ìš öñ ťĥé ĺöçàĺ ťéšťñéť. Ýöü çàñ àĺšö éñťéŗ à çüšťöṁ àððŗéšš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+  "@g_key_earn_ledger": {
+    "description": "Ledger brand. This Earn shortcut opens hardware-wallet management; do not translate as an accounting ledger."
+  }
 }

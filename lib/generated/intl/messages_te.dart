@@ -258,7 +258,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value} నిమిషాల క్రితం అప్డేట్ చేయబడింది";
 
-  static String m103(value) => "0~${value} అక్షరాలు";
+  static String m103(number) => "బ్లాక్ సంఖ్య ${number}";
+
+  static String m104(index) => "పరికరం ${index}";
+
+  static String m105(value) => "${value} మిల్లీసెకన్లు";
+
+  static String m106(count) => "${count} లావాదేవీలు";
+
+  static String m107(value) => "0~${value} అక్షరాలు";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1499,7 +1507,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "స్టాకింగ్ ప్రారంభించండి",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("లెడ్జర్"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY లోడ్ అవుతోంది...",
     ),
@@ -2972,7 +2980,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("ప్రవేశం"),
     "g_mining_key_63": MessageLookupByLibrary.simpleMessage("ప్రో"),
     "g_mining_key_64": MessageLookupByLibrary.simpleMessage("పూర్తి నోడ్"),
-    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINS/DAY"),
+    "g_mining_key_65": MessageLookupByLibrary.simpleMessage("నిమి/రోజు"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("అధునాతన నోడ్"),
     "g_mining_key_67": MessageLookupByLibrary.simpleMessage("ఎంట్రీ నోడ్"),
     "g_mining_key_68": MessageLookupByLibrary.simpleMessage("ప్రో నోడ్"),
@@ -3220,6 +3228,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "మైనింగ్ (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "మొబైల్ ధృవీకరణ (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "మైనింగ్ ఇంటర్ఫేస్",
     ),
@@ -3295,7 +3306,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_19": MessageLookupByLibrary.simpleMessage(
       "అనుకూల గొలుసును జోడించండి",
     ),
-    "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
+    "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0–18 పూర్ణాంకం"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage(
       "టోకెన్లను జోడించండి",
     ),
@@ -3748,8 +3759,161 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("ముఖ్యమైన నోటీసు"),
     "login_email": MessageLookupByLibrary.simpleMessage("ఇమెయిల్"),
     "login_password": MessageLookupByLibrary.simpleMessage("పాస్వర్డ్"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "బ్లాక్‌లు ధృవీకరించబడుతున్నాయి",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("అన్నీ"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("శ్రద్ధ అవసరం"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "సగటు ధృవీకరణ సమయం",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "నేపథ్యంలో పాజ్ చేయబడింది",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("బ్లాక్ హాష్"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "సర్టిఫికెట్ పొందిన బ్లాక్‌లు",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "సర్టిఫికెట్ పొందింది",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage(
+      "నోడ్‌ను ఎంచుకోండి",
+    ),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage(
+      "కనెక్ట్ అవుతోంది",
+    ),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "కనెక్షన్ అంతరాయం కలిగింది",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "బ్లాక్ హాష్ కాపీ అయింది",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "బ్లాక్ హాష్‌ను కాపీ చేయండి",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("సెషన్ సమయం"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "ధృవీకరించిన బ్లాక్‌లు, సర్టిఫికెట్లను చూడటానికి మైనింగ్ ప్రారంభించండి.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "మీ మొదటి బ్లాక్ ఇక్కడ కనిపిస్తుంది",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "చివరిగా నివేదించిన సమస్య",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("ధృవీకరణ విఫలమైంది"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "ఈ ఫిల్టర్‌కు సరిపోయే బ్లాక్‌లు లేవు.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOSలో ధృవీకరణ నేపథ్యంలో పాజ్ అవుతుంది; మీరు తిరిగి వచ్చినప్పుడు కొనసాగుతుంది. సక్రియ సమయం మాత్రమే లెక్కించబడుతుంది.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("ధృవీకరణ సమయం"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "మరిన్ని బ్లాక్‌లను చూపండి",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "స్థానిక టెస్ట్‌నెట్",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "డిఫాల్ట్ నోడ్ స్థానిక టెస్ట్‌నెట్‌లో ఉంది. మీరు అనుకూల చిరునామాను కూడా నమోదు చేయవచ్చు.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("ధృవీకరణ నోడ్"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
+      "నోడ్ చిరునామా",
+    ),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "బ్లాక్‌ల ధృవీకరణ ప్రారంభించడానికి నోడ్‌కు కనెక్ట్ అవ్వండి.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "లాగిన్ వివరాలు లేదా క్వెరీ పరామితులు లేని http:// లేదా https:// నోడ్ చిరునామాను నమోదు చేయండి.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ పాజ్ చేయండి",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "నోడ్ మార్చడానికి మైనింగ్ పాజ్ చేయండి.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ పాజ్ చేయబడింది",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "సర్టిఫికెట్ కోసం వేచి ఉంది",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్‌కు సిద్ధంగా ఉంది",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage("రసీదుల రూట్"),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "ఇటీవలి బ్లాక్‌లు",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "ఈ సెషన్‌లో ఇటీవల గమనించిన కార్యకలాపాలు",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "పరికరం సక్రియం అవుతోంది",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ స్వయంచాలకంగా మళ్లీ కనెక్ట్ అవుతుంది.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "మళ్లీ కనెక్ట్ అవుతోంది",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ రివార్డులు",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "నిర్ధారించిన రివార్డు సమాచారం అందుబాటులో లేదు.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "ఈ నోడ్ బ్లాక్ ధృవీకరణ మరియు సర్టిఫికెట్లను నివేదిస్తుంది, కానీ రివార్డు మొత్తాలను అందించదు. ధృవీకరించిన బ్లాక్‌ల సంఖ్య ఆదాయ బ్యాలెన్స్ కాదు.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "సమాచారం లేదు",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("నోడ్‌ను సేవ్ చేయండి"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "నోడ్‌ను సేవ్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ సెట్టింగ్‌లు",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ సెటప్ చేయండి",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "సర్టిఫికెట్‌పై సంతకం చేసినవారు",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage(
+      "మైనింగ్ ప్రారంభించండి",
+    ),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "నోడ్ చిరునామాను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "ధృవీకరణ విజయం",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("నమోదైన సమయం"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("మైనింగ్"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "లావాదేవీలు",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "సర్టిఫికెట్ లేదు",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "స్థానిక టెస్ట్‌నెట్ ఉపయోగించండి",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "ధృవీకరించిన బ్లాక్‌లు",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("తదుపరి"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "ప్రొఫైల్‌ని సవరించండి",
     ),

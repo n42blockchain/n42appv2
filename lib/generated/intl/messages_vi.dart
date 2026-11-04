@@ -252,7 +252,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Cập nhật ${value} phút trước";
 
-  static String m103(value) => "0~${value} ký tự";
+  static String m103(number) => "Khối #${number}";
+
+  static String m104(index) => "Thiết bị ${index}";
+
+  static String m105(value) => "${value} mili giây";
+
+  static String m106(count) => "${count} giao dịch";
+
+  static String m107(value) => "0~${value} ký tự";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1413,7 +1421,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "Bắt đầu Staking",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Sổ cái"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "Đang tải APY...",
     ),
@@ -3061,6 +3069,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Khai thác (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Xác minh trên thiết bị di động (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Giao diện khai thác",
     ),
@@ -3255,7 +3266,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "Mua N thông qua giao thức N42",
     ),
-    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Dữ liệu lời gọi (hex)",
+    ),
     "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
       "Cần cấp quyền máy ảnh để quét mã.",
     ),
@@ -3557,8 +3570,153 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "Đang xác minh khối",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Tất cả"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("Cần chú ý"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Thời gian xác minh trung bình",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Đã tạm dừng khi chạy nền",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Hàm băm khối"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Khối đã có chứng nhận",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Đã chứng nhận",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Chọn nút"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Đang kết nối"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Kết nối bị gián đoạn",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Đã sao chép hàm băm khối",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Sao chép hàm băm khối",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Thời gian phiên"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Bắt đầu khai thác để xem các khối đã xác minh và chứng nhận của bạn.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Khối đầu tiên của bạn bắt đầu từ đây",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Vấn đề được báo cáo gần nhất",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("Xác minh thất bại"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Không có khối nào khớp với bộ lọc này.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "Trên iOS, việc xác minh tạm dừng khi chạy nền và tiếp tục khi bạn quay lại. Chỉ tính thời gian hoạt động.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage(
+      "Thời gian xác minh",
+    ),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Hiển thị thêm khối",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Mạng thử nghiệm cục bộ",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Nút mặc định nằm trên mạng thử nghiệm cục bộ. Bạn cũng có thể nhập địa chỉ tùy chỉnh.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Nút xác minh"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Địa chỉ nút"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Kết nối với một nút để bắt đầu xác minh khối.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Nhập địa chỉ nút http:// hoặc https:// không có thông tin xác thực hay tham số truy vấn.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("Tạm dừng khai thác"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Tạm dừng khai thác để thay đổi nút.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "Đã tạm dừng khai thác",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Đang chờ chứng nhận",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Sẵn sàng khai thác"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Gốc biên nhận",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Khối gần đây",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Hoạt động mới quan sát được trong phiên này",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Đang kích hoạt thiết bị",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Quá trình khai thác sẽ tự động kết nối lại.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Đang kết nối lại",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage(
+      "Phần thưởng khai thác",
+    ),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Chưa có dữ liệu phần thưởng đã xác nhận.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Nút này báo cáo việc xác minh khối và chứng nhận nhưng không cung cấp số tiền thưởng. Số khối đã xác minh không phải số dư thu nhập.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Chưa được báo cáo",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Lưu nút"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Không thể lưu nút. Vui lòng thử lại.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage(
+      "Cài đặt khai thác",
+    ),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage(
+      "Thiết lập khai thác",
+    ),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Bên ký chứng nhận",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Bắt đầu khai thác"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Kiểm tra địa chỉ nút rồi thử lại.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Tỷ lệ xác minh thành công",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Thời điểm ghi nhận"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Khai thác"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Giao dịch",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Chưa có chứng nhận",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Dùng mạng thử nghiệm cục bộ",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "Khối đã xác minh",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Chỉnh sửa hồ sơ",
     ),

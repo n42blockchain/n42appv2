@@ -5765,7 +5765,7 @@ class S {
     return Intl.message(
       'Ledger',
       name: 'g_key_earn_ledger',
-      desc: '',
+      desc: 'Ledger brand. This Earn shortcut opens hardware-wallet management; do not translate as an accounting ledger.',
       args: [],
     );
   }

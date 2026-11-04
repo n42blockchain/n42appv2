@@ -241,7 +241,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value}분 전 업데이트됨";
 
-  static String m103(value) => "0~${value}자";
+  static String m103(number) => "블록 #${number}";
+
+  static String m104(index) => "기기 ${index}";
+
+  static String m105(value) => "${value}밀리초";
+
+  static String m106(count) => "거래 ${count}건";
+
+  static String m107(value) => "0~${value}자";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1150,7 +1158,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX 스왑"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("가스"),
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage("스테이킹 시작"),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("레저"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY 로딩 중...",
     ),
@@ -2388,6 +2396,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "채굴 (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "모바일 검증(V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "채굴 인터페이스",
     ),
@@ -2780,8 +2791,105 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("중요 공지"),
     "login_email": MessageLookupByLibrary.simpleMessage("이메일"),
     "login_password": MessageLookupByLibrary.simpleMessage("비밀번호"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("블록 검증 중"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("전체"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("확인 필요"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("평균 검증 시간"),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "백그라운드에서 일시 중지됨",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("블록 해시"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage("인증서가 발급된 블록"),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("인증됨"),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("노드 선택"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("연결 중"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage("연결 중단됨"),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage("블록 해시 복사됨"),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("블록 해시 복사"),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("세션 시간"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "채굴을 시작하면 검증된 블록과 인증서가 표시됩니다.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "첫 블록은 여기서 시작됩니다",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "마지막으로 보고된 문제",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("검증 실패"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "이 필터에 해당하는 블록이 없습니다.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOS에서는 백그라운드에서 검증을 일시 중지하고 앱으로 돌아오면 재개합니다. 활성 시간만 계산됩니다.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("검증 시간"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("블록 더 보기"),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage("로컬 테스트넷"),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "기본 노드는 로컬 테스트넷에 있습니다. 사용자 지정 주소도 입력할 수 있습니다.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("검증 노드"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("노드 주소"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "노드에 연결하여 블록 검증을 시작하세요.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "인증 정보나 쿼리 매개변수가 없는 http:// 또는 https:// 노드 주소를 입력하세요.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("채굴 일시 중지"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "노드를 변경하려면 채굴을 일시 중지하세요.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("채굴 일시 중지됨"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage("인증서 대기 중"),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("채굴 준비 완료"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage("영수증 루트"),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage("최근 블록"),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "이 세션에서 최근 관찰된 활동",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage("기기 활성화 중"),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "채굴이 자동으로 다시 연결됩니다.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage("다시 연결 중"),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("채굴 보상"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "확정된 보상 데이터가 없습니다.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "이 노드는 블록 검증과 인증서를 보고하지만 보상 금액은 제공하지 않습니다. 검증된 블록 수는 수익 잔액이 아닙니다.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "보고되지 않음",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("노드 저장"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "노드를 저장하지 못했습니다. 다시 시도하세요.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("채굴 설정"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("채굴 설정"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage("인증서 서명자"),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("채굴 시작"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "노드 주소를 확인한 후 다시 시도하세요.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("검증 성공률"),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("기록 시각"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("채굴"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("거래"),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("미인증"),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "로컬 테스트넷 사용",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("검증된 블록"),
     "next": MessageLookupByLibrary.simpleMessage("다음"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage("프로필 편집"),
     "photograph": MessageLookupByLibrary.simpleMessage("사진 촬영"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("주소를 입력하세요"),

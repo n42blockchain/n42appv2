@@ -251,15 +251,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Updated ${value}m ago";
 
-  static String m104(number) => "Block #${number}";
+  static String m103(number) => "Block #${number}";
 
-  static String m105(index) => "Device ${index}";
+  static String m104(index) => "Device ${index}";
 
-  static String m106(value) => "${value} ms";
+  static String m105(value) => "${value} ms";
 
-  static String m107(count) => "${count} tx";
+  static String m106(count) => "${count} tx";
 
-  static String m103(value) => "0~${value} characters";
+  static String m107(value) => "0~${value} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -3488,7 +3488,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "Paused in background",
     ),
-    "miningV3Block": m104,
+    "miningV3Block": m103,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Block hash"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage(
       "Certified blocks",
@@ -3503,7 +3503,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Copied": MessageLookupByLibrary.simpleMessage("Block hash copied"),
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("Copy block hash"),
-    "miningV3Device": m105,
+    "miningV3Device": m104,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage("Session time"),
     "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
       "Start mining to see your verified blocks and certificates.",
@@ -3535,7 +3535,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "The default node is on the local testnet. You can also enter a custom address.",
     ),
-    "miningV3Milliseconds": m106,
+    "miningV3Milliseconds": m105,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Verification node"),
     "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Node address"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
@@ -3597,7 +3597,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("Recorded time"),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("Mining"),
-    "miningV3Transactions": m107,
+    "miningV3Transactions": m106,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
       "Transactions",
     ),
@@ -3609,7 +3609,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("Verified blocks"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "photograph": MessageLookupByLibrary.simpleMessage("Photograph"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

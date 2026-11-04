@@ -253,7 +253,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "${value} मिनट पहले अपडेट किया गया";
 
-  static String m103(value) => "0~${value} अक्षर";
+  static String m103(number) => "ब्लॉक #${number}";
+
+  static String m104(index) => "डिवाइस ${index}";
+
+  static String m105(value) => "${value} मिलीसेकंड";
+
+  static String m106(count) => "${count} लेनदेन";
+
+  static String m107(value) => "0~${value} अक्षर";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1418,7 +1426,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "दांव लगाना शुरू करें",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("बही"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "APY लोड हो रहा है...",
     ),
@@ -3061,6 +3069,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "खनन (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "मोबाइल सत्यापन (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "खनन इंटरफ़ेस",
     ),
@@ -3559,8 +3570,143 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("महत्वपूर्ण सूचना"),
     "login_email": MessageLookupByLibrary.simpleMessage("ईमेल"),
     "login_password": MessageLookupByLibrary.simpleMessage("पासवर्ड"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "ब्लॉक सत्यापित किए जा रहे हैं",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("सभी"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "ध्यान देने की ज़रूरत",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "औसत सत्यापन समय",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "बैकग्राउंड में रुका हुआ",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("ब्लॉक हैश"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "प्रमाणपत्र प्राप्त ब्लॉक",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("प्रमाणित"),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("नोड चुनें"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage(
+      "कनेक्ट हो रहा है",
+    ),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "कनेक्शन बाधित हुआ",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "ब्लॉक हैश कॉपी हो गया",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "ब्लॉक हैश कॉपी करें",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("सत्र का समय"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "अपने सत्यापित ब्लॉक और प्रमाणपत्र देखने के लिए माइनिंग शुरू करें।",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "आपका पहला ब्लॉक यहाँ से शुरू होता है",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "आखिरी रिपोर्ट की गई समस्या",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("सत्यापन विफल"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "इस फ़िल्टर से मेल खाने वाला कोई ब्लॉक नहीं है।",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "iOS पर बैकग्राउंड में सत्यापन रुकता है और आपके वापस आने पर जारी होता है। केवल सक्रिय समय गिना जाता है।",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("सत्यापन का समय"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("और ब्लॉक दिखाएँ"),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "स्थानीय टेस्टनेट",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "डिफ़ॉल्ट नोड स्थानीय टेस्टनेट पर है। आप अपना पता भी दर्ज कर सकते हैं।",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("सत्यापन नोड"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("नोड का पता"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "ब्लॉक सत्यापन शुरू करने के लिए किसी नोड से कनेक्ट करें।",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "बिना क्रेडेंशियल या क्वेरी पैरामीटर वाला http:// या https:// नोड पता दर्ज करें।",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("माइनिंग रोकें"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "नोड बदलने के लिए माइनिंग रोकें।",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "माइनिंग रुकी हुई है",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "प्रमाणपत्र की प्रतीक्षा",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage(
+      "माइनिंग के लिए तैयार",
+    ),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "रसीदों का मूल हैश",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "हाल के ब्लॉक",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "इस सत्र में हाल में देखी गई गतिविधि",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "डिवाइस सक्रिय किया जा रहा है",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "माइनिंग अपने आप दोबारा कनेक्ट होगी।",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "दोबारा कनेक्ट हो रहा है",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("माइनिंग पुरस्कार"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "पुष्टि किए गए पुरस्कार का डेटा उपलब्ध नहीं है।",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "यह नोड ब्लॉक सत्यापन और प्रमाणपत्रों की जानकारी देता है, लेकिन पुरस्कार राशि नहीं देता। सत्यापित ब्लॉक की संख्या कमाई का शेष नहीं है।",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "रिपोर्ट नहीं किया गया",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("नोड सहेजें"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "नोड सहेजा नहीं जा सका। फिर कोशिश करें।",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("माइनिंग सेटिंग"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("माइनिंग सेट करें"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "प्रमाणपत्र पर हस्ताक्षर करने वाले",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("माइनिंग शुरू करें"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "नोड का पता जाँचें और फिर कोशिश करें।",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "सत्यापन सफलता दर",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("दर्ज किया गया समय"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("माइनिंग"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("लेनदेन"),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "प्रमाणित नहीं",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "स्थानीय टेस्टनेट का उपयोग करें",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("सत्यापित ब्लॉक"),
     "next": MessageLookupByLibrary.simpleMessage("अगला"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "प्रोफ़ाइल संपादित करें",
     ),

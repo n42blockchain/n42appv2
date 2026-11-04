@@ -25,6 +25,19 @@ class LocalizationAuditTest(unittest.TestCase):
         self.base.write_text(json.dumps(base))
         self.target.write_text(json.dumps(target))
 
+    def test_reviewed_homographs_do_not_allow_other_english_fallbacks(self):
+        self.target = self.root / 'intl_fr.arb'
+        self.write(
+            {'miningV3TransactionsLabel': 'Transactions', 'security': 'Security'},
+            {'miningV3TransactionsLabel': 'Transactions', 'security': 'Security'},
+        )
+        report = audit.audit_spec(audit.AuditSpec('wallet', self.base, 'intl_*.arb'))
+        self.assertEqual(report['identical']['fr'], {'security': 'Security'})
+        # The same English term is not permitted on arbitrary keys or locales.
+        self.write({'other': 'Transactions'}, {'other': 'Transactions'})
+        report = audit.audit_spec(audit.AuditSpec('wallet', self.base, 'intl_*.arb'))
+        self.assertIn('other', report['identical']['fr'])
+
     def test_chat_audit_resolves_the_installed_dependency(self):
         config = self.root / '.dart_tool' / 'package_config.json'
         config.parent.mkdir()

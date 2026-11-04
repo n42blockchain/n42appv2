@@ -253,7 +253,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "تم التحديث قبل ${value} د";
 
-  static String m103(value) => "0~${value} أحرف";
+  static String m103(number) => "الكتلة رقم ${number}";
+
+  static String m104(index) => "الجهاز ${index}";
+
+  static String m105(value) => "${value} مللي ثانية";
+
+  static String m106(count) => "${count} معاملة";
+
+  static String m107(value) => "0~${value} أحرف";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -1378,7 +1386,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage(
       "ابدأ التوقيع المساحي",
     ),
-    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("دفتر الأستاذ"),
+    "g_key_earn_ledger": MessageLookupByLibrary.simpleMessage("Ledger"),
     "g_key_earn_loading_apy": MessageLookupByLibrary.simpleMessage(
       "جارٍ تحميل APY...",
     ),
@@ -2988,6 +2996,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "التعدين (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "التحقق عبر الهاتف (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "واجهة التعدين",
     ),
@@ -3500,8 +3511,141 @@ class MessageLookup extends MessageLookupByLibrary {
     "importantNotice": MessageLookupByLibrary.simpleMessage("ملاحظة هامة"),
     "login_email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
     "login_password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage(
+      "جارٍ التحقق من الكتل",
+    ),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("الكل"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage("يتطلب الانتباه"),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "متوسط مدة التحقق",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "متوقف مؤقتًا في الخلفية",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("تجزئة الكتلة"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "الكتل الحاصلة على شهادة",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "حاصل على شهادة",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("اختيار عقدة"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("جارٍ الاتصال"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "انقطع الاتصال",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "تم نسخ تجزئة الكتلة",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "نسخ تجزئة الكتلة",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("مدة الجلسة"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "ابدأ التعدين لعرض الكتل التي تم التحقق منها وشهاداتك.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "ستظهر كتلتك الأولى هنا",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "آخر مشكلة تم الإبلاغ عنها",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("فشل التحقق"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "لا توجد كتل تطابق هذا المرشح.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "في iOS، يتوقف التحقق مؤقتًا في الخلفية ويُستأنف عند العودة. يُحتسب وقت النشاط فقط.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("مدة التحقق"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "عرض المزيد من الكتل",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "شبكة الاختبار المحلية",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "العقدة الافتراضية موجودة على شبكة الاختبار المحلية. يمكنك أيضًا إدخال عنوان مخصص.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("عقدة التحقق"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("عنوان العقدة"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "اتصل بعقدة لبدء التحقق من الكتل.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "أدخل عنوان عقدة يبدأ بـ http:// أو https:// دون بيانات اعتماد أو معلمات استعلام.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage(
+      "إيقاف التعدين مؤقتًا",
+    ),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "أوقف التعدين مؤقتًا لتغيير العقدة.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage(
+      "التعدين متوقف مؤقتًا",
+    ),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "في انتظار الشهادة",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("جاهز للتعدين"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "جذر الإيصالات",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "الكتل الأخيرة",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "آخر الأنشطة المرصودة في هذه الجلسة",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "جارٍ تفعيل الجهاز",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "سيُعاد الاتصال بالتعدين تلقائيًا.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "جارٍ إعادة الاتصال",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("مكافآت التعدين"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "لا تتوفر بيانات مؤكدة عن المكافآت.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "تُبلغ هذه العقدة عن التحقق من الكتل والشهادات، لكنها لا توفر مبالغ المكافآت. عدد الكتل التي تم التحقق منها ليس رصيد أرباح.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "لم يُبلَّغ عنها",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("حفظ العقدة"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "تعذر حفظ العقدة. حاول مجددًا.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("إعدادات التعدين"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("إعداد التعدين"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage("موقِّعو الشهادة"),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("بدء التعدين"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "تحقق من عنوان العقدة وحاول مجددًا.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("نجاح التحقق"),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("الوقت المسجَّل"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("التعدين"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "المعاملات",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("بلا شهادة"),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "استخدام شبكة الاختبار المحلية",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage(
+      "الكتل التي تم التحقق منها",
+    ),
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "تحرير الملف الشخصي",
     ),

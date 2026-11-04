@@ -253,7 +253,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m102(value) => "Aktualizováno před ${value}m";
 
-  static String m103(value) => "0~${value} znaků";
+  static String m103(number) => "Blok č. ${number}";
+
+  static String m104(index) => "Zařízení ${index}";
+
+  static String m105(value) => "${value} ms";
+
+  static String m106(count) => "Transakce: ${count}";
+
+  static String m107(value) => "0~${value} znaků";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -391,7 +399,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Hardwarová peněženka",
     ),
     "g_audit_load_more": MessageLookupByLibrary.simpleMessage("Načíst více"),
-    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Mainnet"),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Hlavní síť"),
     "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
       "Spravujte svou peněženku a nastavení",
     ),
@@ -427,7 +435,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Uložené adresy příjemců",
     ),
     "g_audit_show_less": MessageLookupByLibrary.simpleMessage("Zobrazit méně"),
-    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Testnet"),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Testovací síť"),
     "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
       "Vzhled a režim zobrazení",
     ),
@@ -613,8 +621,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_14": MessageLookupByLibrary.simpleMessage("Hlavní peněženka"),
     "g_key_140": MessageLookupByLibrary.simpleMessage("Transakce úspěšná"),
     "g_key_146": MessageLookupByLibrary.simpleMessage("Nesprávné heslo"),
-    "g_key_147": MessageLookupByLibrary.simpleMessage("Testnet"),
-    "g_key_148": MessageLookupByLibrary.simpleMessage("Mainnet"),
+    "g_key_147": MessageLookupByLibrary.simpleMessage("Testovací síť"),
+    "g_key_148": MessageLookupByLibrary.simpleMessage("Hlavní síť"),
     "g_key_149": MessageLookupByLibrary.simpleMessage("Jazyk systému"),
     "g_key_15": MessageLookupByLibrary.simpleMessage(
       "Nastavit jako hlavní peněženku",
@@ -1111,7 +1119,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Dávkový přenos podporuje pouze řetězce EVM",
     ),
     "g_key_batch_export_csv": MessageLookupByLibrary.simpleMessage(
-      "Export CSV",
+      "Exportovat CSV",
     ),
     "g_key_batch_help_title": MessageLookupByLibrary.simpleMessage(
       "Nápověda k dávkovému přenosu",
@@ -1260,7 +1268,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Po potvrzení na řetězci je vBTC vyražen do vaší peněženky v poměru 1:1.",
     ),
     "g_key_btc_stake_step2_title": MessageLookupByLibrary.simpleMessage(
-      "Mint vBTC",
+      "Vytvořit vBTC",
     ),
     "g_key_btc_stake_step3_desc": MessageLookupByLibrary.simpleMessage(
       "Držte vBTC, abyste získali odměny za sázky. vBTC je také použitelný v protokolech DeFi.",
@@ -1828,7 +1836,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Zadejte informace o úložišti klíčů.",
     ),
     "g_key_ex_keystore_19": MessageLookupByLibrary.simpleMessage(
-      "Export PrivateKey",
+      "Exportovat soukromý klíč",
     ),
     "g_key_ex_keystore_2": MessageLookupByLibrary.simpleMessage(
       "Získání úložiště klíčů a hesla poskytne držiteli plnou kontrolu nad aktivy peněženky.",
@@ -1938,7 +1946,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vzduchová mezera s Keystone (QR)",
     ),
     "g_key_hw_connect_new_ledger": MessageLookupByLibrary.simpleMessage(
-      "Connect Ledger (Bluetooth)",
+      "Připojit Ledger (Bluetooth)",
     ),
     "g_key_hw_connect_new_trezor": MessageLookupByLibrary.simpleMessage(
       "Připojte Trezor (USB)",
@@ -2287,7 +2295,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Přejděte na Swap",
     ),
     "g_key_stake_liquid_staking_label": MessageLookupByLibrary.simpleMessage(
-      "Liquid Staking",
+      "Likvidní staking",
     ),
     "g_key_stake_liquid_tag": MessageLookupByLibrary.simpleMessage("Tekutý"),
     "g_key_stake_liquid_unstake_desc": MessageLookupByLibrary.simpleMessage(
@@ -2600,7 +2608,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_watch_only_cant_send": MessageLookupByLibrary.simpleMessage(
       "Peněženka pouze pro sledování nemůže odesílat ani podepisovat transakce",
     ),
-    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage("Watch Wallet"),
+    "g_key_watch_wallet": MessageLookupByLibrary.simpleMessage(
+      "Sledovaná peněženka",
+    ),
     "g_key_watch_wallet_desc": MessageLookupByLibrary.simpleMessage(
       "Sledujte jakoukoli adresu EVM bez soukromého klíče",
     ),
@@ -2836,7 +2846,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_60": MessageLookupByLibrary.simpleMessage("Přijaté odměny"),
     "g_mining_key_61": MessageLookupByLibrary.simpleMessage("Pokročilé"),
     "g_mining_key_62": MessageLookupByLibrary.simpleMessage("Vstup"),
-    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pro"),
+    "g_mining_key_63": MessageLookupByLibrary.simpleMessage("Pokročilý"),
     "g_mining_key_64": MessageLookupByLibrary.simpleMessage("PLNÝ UZEL"),
     "g_mining_key_65": MessageLookupByLibrary.simpleMessage("MINUTY/DEN"),
     "g_mining_key_66": MessageLookupByLibrary.simpleMessage("Pokročilý uzel"),
@@ -3082,6 +3092,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_setting_mining_v2_label": MessageLookupByLibrary.simpleMessage(
       "Těžba (V2)",
     ),
+    "g_setting_mining_v3_label": MessageLookupByLibrary.simpleMessage(
+      "Mobilní ověřování (V3)",
+    ),
     "g_setting_mining_version": MessageLookupByLibrary.simpleMessage(
       "Těžební rozhraní",
     ),
@@ -3155,7 +3168,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_19": MessageLookupByLibrary.simpleMessage(
       "Přidejte vlastní řetěz",
     ),
-    "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
+    "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("Celé číslo 0–18"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Přidat tokeny"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Chyba formátu!"),
     "g_token_m_key_22": m72,
@@ -3272,7 +3285,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "Koupě N prostřednictvím protokolu N42",
     ),
-    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Data volání (hex)",
+    ),
     "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
       "Pro skenování kódu je vyžadováno oprávnění ke kameře.",
     ),
@@ -3367,7 +3382,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("Využití"),
     "g_ui_markets_count": m89,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("Poznámka"),
-    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage(
+      "Fond nepotvrzených transakcí",
+    ),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("Zpráva"),
     "g_ui_min_balance_value": m90,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
@@ -3584,8 +3601,141 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Heslo"),
+    "miningV3Active": MessageLookupByLibrary.simpleMessage("Ověřování bloků"),
+    "miningV3All": MessageLookupByLibrary.simpleMessage("Všechny"),
+    "miningV3Attention": MessageLookupByLibrary.simpleMessage(
+      "Vyžaduje pozornost",
+    ),
+    "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
+      "Průměrná doba ověření",
+    ),
+    "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
+      "Pozastaveno na pozadí",
+    ),
+    "miningV3Block": m103,
+    "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("Hash bloku"),
+    "miningV3Certified": MessageLookupByLibrary.simpleMessage(
+      "Bloky s certifikátem",
+    ),
+    "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage(
+      "Certifikováno",
+    ),
+    "miningV3Configure": MessageLookupByLibrary.simpleMessage("Vybrat uzel"),
+    "miningV3Connecting": MessageLookupByLibrary.simpleMessage("Připojování"),
+    "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage(
+      "Spojení přerušeno",
+    ),
+    "miningV3Copied": MessageLookupByLibrary.simpleMessage(
+      "Hash bloku zkopírován",
+    ),
+    "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
+      "Kopírovat hash bloku",
+    ),
+    "miningV3Device": m104,
+    "miningV3Duration": MessageLookupByLibrary.simpleMessage("Doba relace"),
+    "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
+      "Spusťte těžbu a zobrazte si ověřené bloky a certifikáty.",
+    ),
+    "miningV3EmptyTitle": MessageLookupByLibrary.simpleMessage(
+      "Zde se objeví váš první blok",
+    ),
+    "miningV3ErrorDetails": MessageLookupByLibrary.simpleMessage(
+      "Poslední nahlášený problém",
+    ),
+    "miningV3Failed": MessageLookupByLibrary.simpleMessage("Ověření selhalo"),
+    "miningV3FilterEmpty": MessageLookupByLibrary.simpleMessage(
+      "Filtru neodpovídají žádné bloky.",
+    ),
+    "miningV3IOSForegroundHint": MessageLookupByLibrary.simpleMessage(
+      "V iOS se ověřování na pozadí pozastaví a po návratu se obnoví. Počítá se pouze aktivní čas.",
+    ),
+    "miningV3Latency": MessageLookupByLibrary.simpleMessage("Doba ověření"),
+    "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
+      "Zobrazit další bloky",
+    ),
+    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Místní testovací síť",
+    ),
+    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
+      "Výchozí uzel je v místní testovací síti. Můžete také zadat vlastní adresu.",
+    ),
+    "miningV3Milliseconds": m105,
+    "miningV3Node": MessageLookupByLibrary.simpleMessage("Ověřovací uzel"),
+    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Adresa uzlu"),
+    "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
+      "Připojte se k uzlu a začněte ověřovat bloky.",
+    ),
+    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
+      "Zadejte adresu uzlu http:// nebo https:// bez přihlašovacích údajů a parametrů dotazu.",
+    ),
+    "miningV3Pause": MessageLookupByLibrary.simpleMessage("Pozastavit těžbu"),
+    "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
+      "Před změnou uzlu pozastavte těžbu.",
+    ),
+    "miningV3Paused": MessageLookupByLibrary.simpleMessage("Těžba pozastavena"),
+    "miningV3Pending": MessageLookupByLibrary.simpleMessage(
+      "Čeká na certifikát",
+    ),
+    "miningV3Ready": MessageLookupByLibrary.simpleMessage("Připraveno k těžbě"),
+    "miningV3ReceiptsRoot": MessageLookupByLibrary.simpleMessage(
+      "Kořen potvrzení",
+    ),
+    "miningV3RecentBlocks": MessageLookupByLibrary.simpleMessage(
+      "Poslední bloky",
+    ),
+    "miningV3RecentHint": MessageLookupByLibrary.simpleMessage(
+      "Poslední pozorovaná aktivita v této relaci",
+    ),
+    "miningV3Registering": MessageLookupByLibrary.simpleMessage(
+      "Aktivace zařízení",
+    ),
+    "miningV3RetryHint": MessageLookupByLibrary.simpleMessage(
+      "Těžba automaticky obnoví připojení.",
+    ),
+    "miningV3Retrying": MessageLookupByLibrary.simpleMessage(
+      "Opětovné připojování",
+    ),
+    "miningV3Rewards": MessageLookupByLibrary.simpleMessage("Odměny za těžbu"),
+    "miningV3RewardsHint": MessageLookupByLibrary.simpleMessage(
+      "Nejsou k dispozici potvrzené údaje o odměnách.",
+    ),
+    "miningV3RewardsInfo": MessageLookupByLibrary.simpleMessage(
+      "Tento uzel hlásí ověřování bloků a certifikáty, ale neposkytuje částky odměn. Počet ověřených bloků není zůstatkem výdělků.",
+    ),
+    "miningV3RewardsUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Údaje nejsou k dispozici",
+    ),
+    "miningV3Save": MessageLookupByLibrary.simpleMessage("Uložit uzel"),
+    "miningV3SaveFailed": MessageLookupByLibrary.simpleMessage(
+      "Uzel se nepodařilo uložit. Zkuste to znovu.",
+    ),
+    "miningV3Settings": MessageLookupByLibrary.simpleMessage("Nastavení těžby"),
+    "miningV3Setup": MessageLookupByLibrary.simpleMessage("Nastavit těžbu"),
+    "miningV3Signers": MessageLookupByLibrary.simpleMessage(
+      "Podepisující certifikátu",
+    ),
+    "miningV3Start": MessageLookupByLibrary.simpleMessage("Spustit těžbu"),
+    "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
+      "Zkontrolujte adresu uzlu a zkuste to znovu.",
+    ),
+    "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
+      "Úspěšná ověření",
+    ),
+    "miningV3Time": MessageLookupByLibrary.simpleMessage("Čas záznamu"),
+    "miningV3Title": MessageLookupByLibrary.simpleMessage("Těžba"),
+    "miningV3Transactions": m106,
+    "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
+      "Transakce",
+    ),
+    "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
+      "Bez certifikátu",
+    ),
+    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
+      "Použít místní testovací síť",
+    ),
+    "miningV3Verified": MessageLookupByLibrary.simpleMessage("Ověřené bloky"),
     "next": MessageLookupByLibrary.simpleMessage("Další"),
-    "nicknameMessage": m103,
+    "nicknameMessage": m107,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Upravit profil",
     ),

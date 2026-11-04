@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "کراس چین ٹرانسفر",
   "g_key_earn_stake_eth_lido": "Lido کے ساتھ ETH کو داؤ پر لگا دیں۔",
   "g_key_earn_native_sol": "مقامی سولانا سٹاکنگ",
-  "g_key_earn_ledger": "لیجر",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "گیس",
   "g_key_earn_batch": "بیچ",
   "g_key_earn_burn": "جلنا",
@@ -1725,5 +1725,95 @@
   "g_wallet_coin_total_value": "کل قدر",
   "g_wallet_coin_unit_price": "قیمت",
   "g_wallet_receiver_address": "وصول کنندہ کا پتہ",
-  "g_wallet_sender_address": "بھیجنے والے کا پتہ"
+  "g_wallet_sender_address": "بھیجنے والے کا پتہ",
+  "miningV3Title": "مائننگ",
+  "miningV3Duration": "سیشن کا دورانیہ",
+  "miningV3Ready": "مائننگ کے لیے تیار",
+  "miningV3Active": "بلاکس کی تصدیق جاری ہے",
+  "miningV3Connecting": "کنکشن قائم ہو رہا ہے",
+  "miningV3Registering": "آلہ فعال کیا جا رہا ہے",
+  "miningV3Retrying": "دوبارہ کنکشن قائم ہو رہا ہے",
+  "miningV3Paused": "مائننگ موقوف ہے",
+  "miningV3Start": "مائننگ شروع کریں",
+  "miningV3Pause": "مائننگ موقوف کریں",
+  "miningV3Setup": "مائننگ ترتیب دیں",
+  "miningV3Verified": "تصدیق شدہ بلاکس",
+  "miningV3Certified": "سرٹیفکیٹ والے بلاکس",
+  "miningV3CertifiedStatus": "سرٹیفکیٹ یافتہ",
+  "miningV3SuccessRate": "کامیاب تصدیق",
+  "miningV3AverageTime": "تصدیق کا اوسط وقت",
+  "miningV3Rewards": "مائننگ کے انعامات",
+  "miningV3RewardsUnavailable": "اطلاع دستیاب نہیں",
+  "miningV3RewardsHint": "انعامات کا تصدیق شدہ ڈیٹا دستیاب نہیں ہے۔",
+  "miningV3RewardsInfo": "یہ نوڈ بلاکس کی تصدیق اور سرٹیفکیٹس کی اطلاع دیتا ہے، مگر انعامات کی رقم فراہم نہیں کرتا۔ تصدیق شدہ بلاکس کی تعداد کمائی کا بیلنس نہیں ہے۔",
+  "miningV3RecentBlocks": "حالیہ بلاکس",
+  "miningV3RecentHint": "اس سیشن میں حال ہی میں دیکھی گئی سرگرمی",
+  "miningV3All": "سب",
+  "miningV3Pending": "سرٹیفکیٹ کا انتظار ہے",
+  "miningV3Uncertified": "سرٹیفکیٹ موجود نہیں",
+  "miningV3Failed": "تصدیق ناکام",
+  "miningV3Attention": "توجہ درکار ہے",
+  "miningV3EmptyTitle": "آپ کا پہلا بلاک یہاں ظاہر ہوگا",
+  "miningV3EmptyBody": "اپنے تصدیق شدہ بلاکس اور سرٹیفکیٹس دیکھنے کے لیے مائننگ شروع کریں۔",
+  "miningV3FilterEmpty": "اس فلٹر سے کوئی بلاک مطابقت نہیں رکھتا۔",
+  "miningV3LoadMore": "مزید بلاکس دکھائیں",
+  "miningV3Block": "بلاک نمبر {number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "{count} ٹرانزیکشنز",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} ملی سیکنڈ",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "آلہ {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "تصدیقی نوڈ",
+  "miningV3Configure": "نوڈ منتخب کریں",
+  "miningV3Settings": "مائننگ کی ترتیبات",
+  "miningV3NodeAddress": "نوڈ کا پتہ",
+  "miningV3NodeHint": "بلاکس کی تصدیق شروع کرنے کے لیے نوڈ سے جڑیں۔",
+  "miningV3NodeInvalid": "بغیر لاگ ان کی معلومات یا استفساری پیرامیٹرز کے http:// یا https:// نوڈ کا پتہ درج کریں۔",
+  "miningV3PauseForSettings": "نوڈ تبدیل کرنے کے لیے مائننگ موقوف کریں۔",
+  "miningV3Save": "نوڈ محفوظ کریں",
+  "miningV3ConnectionIssue": "کنکشن منقطع ہوگیا",
+  "miningV3RetryHint": "مائننگ خودکار طور پر دوبارہ جڑ جائے گی۔",
+  "miningV3StartIssueHint": "نوڈ کا پتہ چیک کریں اور دوبارہ کوشش کریں۔",
+  "miningV3Time": "ریکارڈ شدہ وقت",
+  "miningV3TransactionsLabel": "ٹرانزیکشنز",
+  "miningV3Latency": "تصدیق کا وقت",
+  "miningV3Signers": "سرٹیفکیٹ پر دستخط کرنے والے",
+  "miningV3BlockHash": "بلاک ہیش",
+  "miningV3ReceiptsRoot": "رسیدوں کی روٹ",
+  "miningV3CopyHash": "بلاک ہیش کاپی کریں",
+  "miningV3Copied": "بلاک ہیش کاپی ہوگیا",
+  "miningV3ErrorDetails": "آخری رپورٹ کردہ مسئلہ",
+  "miningV3SaveFailed": "نوڈ محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+  "g_setting_mining_v3_label": "موبائل تصدیق (V3)",
+  "miningV3IOSForegroundHint": "iOS پر تصدیق پس منظر میں موقوف ہوتی ہے اور واپس آنے پر دوبارہ شروع ہوتی ہے۔ صرف فعال وقت شمار ہوتا ہے۔",
+  "miningV3BackgroundPaused": "پس منظر میں موقوف",
+  "miningV3LocalTestnet": "مقامی ٹیسٹ نیٹ",
+  "miningV3UseLocalTestnet": "مقامی ٹیسٹ نیٹ استعمال کریں",
+  "miningV3LocalTestnetHint": "ڈیفالٹ نوڈ مقامی ٹیسٹ نیٹ پر ہے۔ آپ اپنی مرضی کا پتہ بھی درج کر سکتے ہیں۔"
 }

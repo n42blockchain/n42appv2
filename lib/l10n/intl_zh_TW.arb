@@ -671,7 +671,7 @@
   "g_key_earn_cross_chain": "跨鏈轉帳",
   "g_key_earn_stake_eth_lido": "用 Lido 質押 ETH",
   "g_key_earn_native_sol": "原生 Solana 質押",
-  "g_key_earn_ledger": "分類帳",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "氣體",
   "g_key_earn_batch": "批次",
   "g_key_earn_burn": "燒傷",

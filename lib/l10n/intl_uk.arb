@@ -49,7 +49,7 @@
   "g_key_135": "Сума більша за {value}.",
   "g_key_140": "Трансакція успішна",
   "g_key_146": "Невірний пароль",
-  "g_key_147": "Testnet",
+  "g_key_147": "Тестова мережа",
   "g_key_148": "Основна мережа",
   "g_key_149": "Системна мова",
   "g_key_155": "Адреса гаманця",
@@ -277,7 +277,7 @@
   "g_mining_key_62": "Вхід",
   "g_mining_key_66": "Розширений вузол",
   "g_mining_key_67": "Вузол входу",
-  "g_mining_key_68": "Pro Node",
+  "g_mining_key_68": "Професійний вузол",
   "g_mining_key_69": "500 блоків/день ~ 70 хв",
   "g_mining_key_70": "100 блоків/день ~ 15 хв",
   "g_mining_key_71": "{value} N кожні здобуті блоки {value1}",
@@ -519,7 +519,7 @@
   "g_key_gas_base_fee": "Базовий збір",
   "g_key_gas_priority_fee": "Плата за пріоритет",
   "g_key_gas_max_fee": "Максимальна комісія",
-  "g_key_gas_custom": "Custom",
+  "g_key_gas_custom": "Власний",
   "g_key_gas_network_busy": "Мережа зайнята",
   "g_key_gas_network_normal": "Мережа нормальна",
   "g_key_gas_network_idle": "Мережа неактивна",
@@ -630,7 +630,7 @@
   "g_key_earn_cross_chain": "Перехресна передача",
   "g_key_earn_stake_eth_lido": "Ставте ETH з Lido",
   "g_key_earn_native_sol": "Рідна ставка Солана",
-  "g_key_earn_ledger": "Леджер",
+  "g_key_earn_ledger": "Ledger",
   "g_key_earn_gas": "газ",
   "g_key_earn_batch": "партія",
   "g_key_earn_burn": "спалити",
@@ -841,7 +841,7 @@
   "g_key_aa_batch_submitting": "Подання...",
   "g_key_aa_batch_operations": "Пакетні операції",
   "g_key_aa_approve": "Затвердити",
-  "g_key_aa_custom": "Custom",
+  "g_key_aa_custom": "Власний",
   "g_key_aa_error": "Помилка",
   "g_key_aa_by": "за",
   "g_key_aa_saved": "збережено",
@@ -1100,7 +1100,7 @@
   "g_mining_key_59": "Накопичені винагороди",
   "g_mining_key_60": "Нагороди отримано",
   "g_mining_key_61": "Просунутий",
-  "g_mining_key_63": "Pro",
+  "g_mining_key_63": "Професійний",
   "g_mining_key_64": "ПОВНИЙ ВУЗОЛ",
   "g_mining_key_65": "ХВ/ДЕНЬ",
   "g_mining_key33": "Налаштування перевірки",
@@ -1118,7 +1118,7 @@
   "g_setting_mining_v1_label": "Класичний майнінг (V1)",
   "g_mining_node_key1": "Повна деталь вузла",
   "g_mining_node_key2": "Ідентифікатор вузла",
-  "g_mining_node_key3": "WS Connected",
+  "g_mining_node_key3": "WS підключено",
   "g_mining_node_key4": "WS Відключено",
   "g_mining_node_key5": "WS Повторне підключення",
   "g_mining_node_key6": "Термін дії",
@@ -1285,7 +1285,7 @@
   "g_key_token_discovery_added": "Маркер додано",
   "g_key_token_discovery_empty": "Нові маркери не знайдено",
   "g_key_manage_chains": "Керуйте ланцюгами",
-  "g_key_watch_wallet": "Watch Wallet",
+  "g_key_watch_wallet": "Гаманець для спостереження",
   "g_key_watch_wallet_desc": "Відстежуйте будь-яку адресу EVM без закритого ключа",
   "g_key_watch_address_hint": "Введіть адресу Ethereum (0x...)",
   "g_key_watch_only_cant_send": "Гаманець лише для перегляду не може надсилати або підписувати транзакції",
@@ -1725,5 +1725,95 @@
   "g_wallet_coin_total_value": "Загальна вартість",
   "g_wallet_coin_unit_price": "Ціна",
   "g_wallet_receiver_address": "Адреса одержувача",
-  "g_wallet_sender_address": "Адреса відправника"
+  "g_wallet_sender_address": "Адреса відправника",
+  "miningV3Title": "Майнінг",
+  "miningV3Duration": "Час сеансу",
+  "miningV3Ready": "Готово до майнінгу",
+  "miningV3Active": "Перевірка блоків",
+  "miningV3Connecting": "Підключення",
+  "miningV3Registering": "Активація пристрою",
+  "miningV3Retrying": "Повторне підключення",
+  "miningV3Paused": "Майнінг призупинено",
+  "miningV3Start": "Почати майнінг",
+  "miningV3Pause": "Призупинити майнінг",
+  "miningV3Setup": "Налаштувати майнінг",
+  "miningV3Verified": "Перевірені блоки",
+  "miningV3Certified": "Блоки із сертифікатом",
+  "miningV3CertifiedStatus": "Сертифікат отримано",
+  "miningV3SuccessRate": "Успішні перевірки",
+  "miningV3AverageTime": "Середній час перевірки",
+  "miningV3Rewards": "Винагороди за майнінг",
+  "miningV3RewardsUnavailable": "Немає даних",
+  "miningV3RewardsHint": "Підтверджені дані про винагороди відсутні.",
+  "miningV3RewardsInfo": "Цей вузол повідомляє про перевірку блоків і сертифікати, але не надає суми винагород. Кількість перевірених блоків не є балансом заробітку.",
+  "miningV3RecentBlocks": "Останні блоки",
+  "miningV3RecentHint": "Останні спостережувані події цього сеансу",
+  "miningV3All": "Усі",
+  "miningV3Pending": "Очікування сертифіката",
+  "miningV3Uncertified": "Без сертифіката",
+  "miningV3Failed": "Помилка перевірки",
+  "miningV3Attention": "Потребує уваги",
+  "miningV3EmptyTitle": "Тут з’явиться ваш перший блок",
+  "miningV3EmptyBody": "Почніть майнінг, щоб побачити перевірені блоки та сертифікати.",
+  "miningV3FilterEmpty": "Немає блоків, що відповідають фільтру.",
+  "miningV3LoadMore": "Показати ще блоки",
+  "miningV3Block": "Блок № {number}",
+  "@miningV3Block": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Transactions": "Транзакцій: {count}",
+  "@miningV3Transactions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Milliseconds": "{value} мс",
+  "@miningV3Milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Device": "Пристрій {index}",
+  "@miningV3Device": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "miningV3Node": "Вузол перевірки",
+  "miningV3Configure": "Вибрати вузол",
+  "miningV3Settings": "Налаштування майнінгу",
+  "miningV3NodeAddress": "Адреса вузла",
+  "miningV3NodeHint": "Підключіться до вузла, щоб почати перевірку блоків.",
+  "miningV3NodeInvalid": "Введіть адресу вузла http:// або https:// без облікових даних і параметрів запиту.",
+  "miningV3PauseForSettings": "Призупиніть майнінг, щоб змінити вузол.",
+  "miningV3Save": "Зберегти вузол",
+  "miningV3ConnectionIssue": "З’єднання перервано",
+  "miningV3RetryHint": "Майнінг автоматично відновить з’єднання.",
+  "miningV3StartIssueHint": "Перевірте адресу вузла й повторіть спробу.",
+  "miningV3Time": "Час запису",
+  "miningV3TransactionsLabel": "Транзакції",
+  "miningV3Latency": "Час перевірки",
+  "miningV3Signers": "Підписанти сертифіката",
+  "miningV3BlockHash": "Хеш блока",
+  "miningV3ReceiptsRoot": "Корінь квитанцій",
+  "miningV3CopyHash": "Копіювати хеш блока",
+  "miningV3Copied": "Хеш блока скопійовано",
+  "miningV3ErrorDetails": "Остання повідомлена проблема",
+  "miningV3SaveFailed": "Не вдалося зберегти вузол. Повторіть спробу.",
+  "g_setting_mining_v3_label": "Мобільна перевірка (V3)",
+  "miningV3IOSForegroundHint": "В iOS перевірка призупиняється у фоновому режимі та відновлюється після повернення. Ураховується лише активний час.",
+  "miningV3BackgroundPaused": "Призупинено у фоновому режимі",
+  "miningV3LocalTestnet": "Локальна тестова мережа",
+  "miningV3UseLocalTestnet": "Використовувати локальну тестову мережу",
+  "miningV3LocalTestnetHint": "Типовий вузол розташований у локальній тестовій мережі. Ви також можете ввести власну адресу."
 }
