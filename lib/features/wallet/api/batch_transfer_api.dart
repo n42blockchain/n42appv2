@@ -338,6 +338,9 @@ class BatchTransferApi {
     }
   }
 
+  Future<Map<String, dynamic>?> pollReceipt(String rpcUrl, String txHash) =>
+      waitForReceipt(rpcUrl, txHash);
+
   /// 轮询 tx receipt，最多 [maxAttempts] 次，每次间隔 [intervalMs] ms。
   /// 返回 null 表示超时；receipt['status'] == '0x1' 表示成功。
   static Future<Map<String, dynamic>?> waitForReceipt(

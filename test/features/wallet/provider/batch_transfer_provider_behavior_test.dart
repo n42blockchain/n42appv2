@@ -27,6 +27,27 @@ class _DeferredBroadcastApi extends BatchTransferApi {
       result.future;
 }
 
+class _UnknownSubmissionApi extends BatchTransferApi {
+  _UnknownSubmissionApi({this.fail = false});
+  final bool fail;
+  int sends = 0;
+  @override
+  Future<MessageModel> broadcastTransaction(
+    String rpcUrl,
+    String signedTx,
+  ) async {
+    sends++;
+    if (fail) throw TimeoutException('unknown broadcast outcome');
+    return MessageModel()..data = '0x${'ab' * 32}';
+  }
+
+  @override
+  Future<Map<String, dynamic>?> pollReceipt(
+    String rpcUrl,
+    String txHash,
+  ) async => null;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final previousHttpOverrides = HttpOverrides.current;
@@ -117,6 +138,31 @@ void main() {
       expect(provider.errorMessage, isNull);
     },
   );
+
+  for (final fail in [false, true]) {
+    test(
+      'unknown ${fail ? 'broadcast' : 'receipt'} is pending and cannot be submitted twice',
+      () async {
+        final api = _UnknownSubmissionApi(fail: fail);
+        final provider = BatchTransferProvider(api: api);
+        addTearDown(provider.dispose);
+        provider.initialize(
+          chainSymbol: 'ETH',
+          rpcUrl: 'https://rpc.invalid',
+          chainId: 1,
+          fromAddress: '0x${'a1' * 20}',
+          tokenSymbol: 'ETH',
+          decimals: 18,
+        );
+        provider.addItem('0x${'b2' * 20}', BigInt.one);
+        expect(await provider.broadcastTransaction('signed'), isFalse);
+        expect(provider.state, BatchTransferState.awaitingConfirmation);
+        expect(provider.items.single.status.name, 'pending');
+        expect(await provider.broadcastTransaction('signed'), isFalse);
+        expect(api.sends, 1);
+      },
+    );
+  }
 
   test(
     'initialize resets prior items, cached totals, errors, and gas quote',

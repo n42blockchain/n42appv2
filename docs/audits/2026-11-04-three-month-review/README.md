@@ -40,3 +40,11 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Validate JSON-RPC envelope, matching transaction hash, mined block hash/number, and status 0/1. HTTP/RPC errors and malformed receipts remain unknown. Each attempt has a 10-second timeout. Internally created HTTP clients close after polling; injected test clients remain caller-owned.
 - Eight receipt tests plus eleven batch provider tests: 19 passed. Logs: /tmp/n42-audit-batch4-tests.log and /tmp/n42-audit-batch4-analyze-final.log.
 - This validates receipt shape and identity, not canonical inclusion/finality. Persistent pending records, preventing repeated broadcast after unknown outcomes, chain identity and canonical block confirmation remain open. No production or device acceptance is implied.
+
+## Batch 5 — unknown outcomes must not show success
+
+- Receipt timeout previously set BatchTransferState.success and returned true, producing a success notification and closing the page despite pending item statuses. It now stays awaitingConfirmation and returns false.
+- Broadcast errors/exceptions remain awaitingConfirmation because a transport failure does not prove rejection. Calls in broadcasting/awaitingConfirmation are blocked, and the bottom bar disables continue/clear in those states.
+- Added an overridable API receipt polling entry for deterministic tests. Broadcast-timeout and receipt-timeout cases assert pending state, no success return, and only one send across an immediate retry.
+- Provider plus receipt validation suites: 21 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch5-tests.log and /tmp/n42-audit-batch5-analyze-final.log.
+- Important remaining boundary: the pending guard is state-local, not durable. Reinitializing/editing a provider or reopening/restarting can invalidate it. No persistent intent journal, restart reconciliation UI or canonical confirmation logic has been implemented in this batch. Do not claim restart-safe duplicate protection.

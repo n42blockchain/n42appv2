@@ -276,6 +276,10 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// 广播交易
   Future<bool> broadcastTransaction(String signedTx) async {
+    if (_state == BatchTransferState.broadcasting ||
+        _state == BatchTransferState.awaitingConfirmation) {
+      return false;
+    }
     final revision = _quoteRevision;
     final rpcUrl = _rpcUrl;
     bool current() => !_disposed && revision == _quoteRevision;
@@ -291,7 +295,7 @@ class BatchTransferProvider extends ChangeNotifier {
 
       if (result.error) {
         _errorMessage = result.data?.toString() ?? 'Transaction failed';
-        _state = BatchTransferState.error;
+        _state = BatchTransferState.awaitingConfirmation;
         notifyListeners();
         return false;
       }
@@ -302,7 +306,7 @@ class BatchTransferProvider extends ChangeNotifier {
       notifyListeners();
 
       if (!current()) return false;
-      final receipt = await BatchTransferApi.waitForReceipt(rpcUrl, hash);
+      final receipt = await _api.pollReceipt(rpcUrl, hash);
       if (!current()) return false;
 
       if (receipt != null && receipt['status'] == '0x1') {
@@ -317,9 +321,11 @@ class BatchTransferProvider extends ChangeNotifier {
         notifyListeners();
         return false;
       } else {
-        // 超时：交易已广播但确认超时，标记为 pending
-        _state = BatchTransferState.success;
+        // A timeout is not confirmation and must not produce a success UI.
+        _state = BatchTransferState.awaitingConfirmation;
         _updateItemStatuses(BatchTransferStatus.pending);
+        notifyListeners();
+        return false;
       }
 
       notifyListeners();
@@ -327,7 +333,7 @@ class BatchTransferProvider extends ChangeNotifier {
     } catch (e) {
       if (!current()) return false;
       _errorMessage = e.toString();
-      _state = BatchTransferState.error;
+      _state = BatchTransferState.awaitingConfirmation;
       notifyListeners();
       return false;
     }

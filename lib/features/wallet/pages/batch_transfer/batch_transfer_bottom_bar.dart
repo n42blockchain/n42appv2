@@ -93,7 +93,12 @@ class BatchBottomBar extends StatelessWidget {
                 if (provider.items.isNotEmpty) ...[
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: provider.clearItems,
+                      onPressed:
+                          provider.state == BatchTransferState.broadcasting ||
+                              provider.state ==
+                                  BatchTransferState.awaitingConfirmation
+                          ? null
+                          : provider.clearItems,
                       child: Text(S.of(context).g_key_batch_clear_all),
                     ),
                   ),
@@ -102,7 +107,13 @@ class BatchBottomBar extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
-                    onPressed: provider.items.isEmpty ? null : onProceed,
+                    onPressed:
+                        provider.items.isEmpty ||
+                            provider.state == BatchTransferState.broadcasting ||
+                            provider.state ==
+                                BatchTransferState.awaitingConfirmation
+                        ? null
+                        : onProceed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColorTokens.of(context).brand,
                       foregroundColor: Colors.white,
