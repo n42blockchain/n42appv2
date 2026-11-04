@@ -55,6 +55,28 @@ class _UnknownSubmissionApi extends BatchTransferApi {
   ) async => null;
 }
 
+class _ConfirmedSubmissionApi extends _UnknownSubmissionApi {
+  _ConfirmedSubmissionApi(this.status);
+  final String status;
+  @override
+  Future<Map<String, dynamic>?> pollReceipt(
+    String rpcUrl,
+    String txHash,
+  ) async => {
+    'transactionHash': txHash,
+    'blockHash': '0x${'ab' * 32}',
+    'blockNumber': '0x1',
+    'status': status,
+  };
+  @override
+  Future<bool> isReceiptFinal(
+    String rpcUrl,
+    int chainId,
+    Map<String, dynamic> receipt, {
+    Future<dynamic> Function(String method, List<dynamic> params)? rpc,
+  }) async => true;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final previousHttpOverrides = HttpOverrides.current;
@@ -149,6 +171,68 @@ void main() {
     },
   );
 
+  test('owner change during durable preparation cancels without blocking a new batch', () async {
+    final api = _ConfirmedSubmissionApi('0x1');
+    BatchTransferProvider create() {
+      final provider = BatchTransferProvider(api: api);
+      provider.initialize(
+        chainSymbol: 'ETH',
+        rpcUrl: 'https://rpc.invalid',
+        chainId: 1,
+        fromAddress: '0x${'a1' * 20}',
+        tokenSymbol: 'ETH',
+        decimals: 18,
+      );
+      addTearDown(provider.dispose);
+      return provider;
+    }
+
+    var owner = true;
+    final first = create();
+    final attempt = first.broadcastTransaction(
+      '0x01',
+      isOwnerCurrent: () => owner,
+    );
+    owner = false;
+    expect(await attempt, isFalse);
+    expect(api.sends, 0);
+    expect(await create().broadcastTransaction('0x02'), isTrue);
+    expect(api.sends, 1);
+  });
+
+  for (final status in ['0x1', '0x0']) {
+    test(
+      'finalized $status releases the journal for a subsequent transfer',
+      () async {
+        final api = _ConfirmedSubmissionApi(status);
+        BatchTransferProvider create() {
+          final provider = BatchTransferProvider(api: api);
+          provider.initialize(
+            chainSymbol: 'ETH',
+            rpcUrl: 'https://rpc.invalid',
+            chainId: 1,
+            fromAddress: '0x${'a1' * 20}',
+            tokenSymbol: 'ETH',
+            decimals: 18,
+          );
+          addTearDown(provider.dispose);
+          return provider;
+        }
+
+        final first = create();
+        expect(await first.broadcastTransaction('0x01'), status == '0x1');
+        expect(
+          first.state,
+          status == '0x1'
+              ? BatchTransferState.success
+              : BatchTransferState.error,
+        );
+        final next = create();
+        expect(await next.broadcastTransaction('0x02'), status == '0x1');
+        expect(api.sends, 2);
+      },
+    );
+  }
   for (final fail in [false, true]) {
     test(
       'unknown ${fail ? 'broadcast' : 'receipt'} is pending and cannot be submitted twice',

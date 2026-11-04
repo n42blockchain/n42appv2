@@ -315,14 +315,20 @@ class BatchTransferProvider extends ChangeNotifier {
   }
 
   /// 广播交易
-  Future<bool> broadcastTransaction(String signedTx) async {
+  Future<bool> broadcastTransaction(
+    String signedTx, {
+    bool Function()? isOwnerCurrent,
+  }) async {
     if (_state == BatchTransferState.broadcasting ||
         _state == BatchTransferState.awaitingConfirmation) {
       return false;
     }
     final revision = _quoteRevision;
     final rpcUrl = _rpcUrl;
-    bool current() => !_disposed && revision == _quoteRevision;
+    bool current() =>
+        !_disposed &&
+        revision == _quoteRevision &&
+        (isOwnerCurrent == null || isOwnerCurrent());
     if (!current()) return false;
     _state = BatchTransferState.broadcasting;
     _errorMessage = null;
@@ -336,8 +342,8 @@ class BatchTransferProvider extends ChangeNotifier {
         chainId: chainId,
         sender: sender,
         signedTx: signedTx,
+        isCurrent: current,
         send: (hash) async {
-          if (!current()) throw StateError('Batch changed before broadcast');
           _txHash = hash;
           final response = await _api.broadcastTransaction(rpcUrl, signedTx);
           if (response.error ||

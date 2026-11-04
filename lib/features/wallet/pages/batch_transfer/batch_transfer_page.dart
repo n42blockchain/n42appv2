@@ -326,7 +326,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         return;
       }
 
-      final success = await provider.broadcastTransaction(signedTx);
+      final success = await provider.broadcastTransaction(
+        signedTx,
+        isOwnerCurrent: _ownerCurrent,
+      );
 
       if (success && mounted && _ownerCurrent()) {
         messenger.showSnackBar(

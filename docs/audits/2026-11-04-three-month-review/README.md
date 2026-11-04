@@ -64,3 +64,12 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Validate batch recipients before ABI encoding: non-empty list, exact EVM address format, positive uint256 amounts and uint256 aggregate total. Estimation and construction share this check.
 - Final amount/API/provider/page suites: 35 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch7-final-tests.log and /tmp/n42-audit-batch7-analyze.log.
 - ERC-20 EOA batch transfers were already rejected by the existing code because Multicall transfer calls spend the contract's balance, not the EOA's. This batch preserves that guard. Signer payload mapping, fee fields, chain contract mapping and AA execution remain separate review items. No on-chain acceptance or release upload.
+
+## Functional preservation review — batches 1 through 7
+
+- Re-ran 13 relevant suites against final review code: 144 tests passed, including the real native Falcon library, account isolation, WalletConnect, recipient serialization/RPC policy, CSV, batch provider/page, receipts and pending journal.
+- Corrected a batch-7 compatibility regression: conventional `.5`, `1.`, leading zeros and an explicit positive sign remain accepted. Significant precision loss, ambiguous multiple separators and uint256 overflow remain rejected.
+- Corrected batch-6 cancellation behavior: when a prepared intent is invalidated before any network dispatch, delete that unsent intent so it cannot permanently block future transfers. The page owner predicate is rechecked after durable preparation, closing the extra await introduced by persistence. No record is deleted on unknown network outcomes.
+- Added positive regressions for finalized success and finalized revert: both release the journal and permit a subsequent transfer. Added owner-change-before-dispatch case proving zero sends and a usable subsequent transfer. Cancellation is tested separately from unknown broadcast timeout.
+- Final scoped analyze: no issues. Logs: /tmp/n42-audit-function-review-final-tests.log and /tmp/n42-audit-function-review-final-analyze.log.
+- This is bounded automated regression review, not proof of every product feature. No feature entry was removed. Pre-existing ERC-20 EOA batching restrictions remain; replacement/cancellation of already-broadcast dropped transactions and real-device end-to-end acceptance remain open. No new release uploaded.

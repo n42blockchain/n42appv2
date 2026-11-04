@@ -50,6 +50,7 @@ class BatchSubmissionJournal {
     required String sender,
     required String signedTx,
     required Future<void> Function(String hash) send,
+    bool Function()? isCurrent,
   }) => TransferSerializer.run(_key(chainId, sender), () async {
     final existing = await pendingHash(chainId, sender);
     if (existing != null) throw BatchSubmissionPending(existing);
@@ -65,6 +66,11 @@ class BatchSubmissionJournal {
         'hash': hash,
       }),
     );
+    if (isCurrent != null && !isCurrent()) {
+      // No network call occurred; this intent can safely be discarded.
+      await _storage.delete(key: _key(chainId, sender));
+      throw BatchSubmissionCancelled();
+    }
     // Storage must complete before the only allowed network submission.
     await send(hash);
     return hash;
@@ -75,4 +81,8 @@ class BatchSubmissionPending extends StateError {
   BatchSubmissionPending(this.hash)
     : super('Reconcile the original batch transaction');
   final String hash;
+}
+
+class BatchSubmissionCancelled extends StateError {
+  BatchSubmissionCancelled() : super('Batch changed before broadcast');
 }

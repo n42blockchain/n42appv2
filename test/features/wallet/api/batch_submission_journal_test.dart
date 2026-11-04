@@ -20,6 +20,33 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   const sender = '0x1111111111111111111111111111111111111111';
   setUp(() => FlutterSecureStorage.setMockInitialValues({}));
+  test('cancellation before dispatch releases the intent and permits a new transfer', () async {
+    final journal = BatchSubmissionJournal();
+    var sends = 0;
+    await expectLater(
+      journal.broadcast(
+        chainId: 1,
+        sender: sender,
+        signedTx: '0x01',
+        isCurrent: () => false,
+        send: (_) async {
+          sends++;
+        },
+      ),
+      throwsA(isA<BatchSubmissionCancelled>()),
+    );
+    expect(sends, 0);
+    expect(await journal.pendingHash(1, sender), isNull);
+    await journal.broadcast(
+      chainId: 1,
+      sender: sender,
+      signedTx: '0x02',
+      send: (_) async {
+        sends++;
+      },
+    );
+    expect(sends, 1);
+  });
   test('storage failure prevents the network call', () async {
     final journal = BatchSubmissionJournal(storage: _FailingStorage());
     var sent = false;
