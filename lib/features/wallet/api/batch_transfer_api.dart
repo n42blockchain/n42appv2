@@ -338,6 +338,36 @@ class BatchTransferApi {
     }
   }
 
+  Future<bool> isReceiptFinal(
+    String rpcUrl,
+    int chainId,
+    Map<String, dynamic> receipt, {
+    Future<dynamic> Function(String method, List<dynamic> params)? rpc,
+  }) async {
+    final call =
+        rpc ??
+        (String method, List<dynamic> params) =>
+            _rpcCall(rpcUrl, method, params);
+    final chain = await call('eth_chainId', []);
+    final head = await call('eth_blockNumber', []);
+    final block = await call('eth_getBlockByNumber', [
+      receipt['blockNumber'],
+      false,
+    ]);
+    BigInt? quantity(dynamic value) =>
+        value is String && RegExp(r'^0x[0-9a-fA-F]+$').hasMatch(value)
+        ? BigInt.tryParse(value.substring(2), radix: 16)
+        : null;
+    final number = quantity(receipt['blockNumber']);
+    final latest = quantity(head['result']);
+    return quantity(chain['result']) == BigInt.from(chainId) &&
+        number != null &&
+        latest != null &&
+        latest >= number + BigInt.from(11) &&
+        block['result'] is Map &&
+        block['result']['hash'] == receipt['blockHash'];
+  }
+
   Future<Map<String, dynamic>?> pollReceipt(String rpcUrl, String txHash) =>
       waitForReceipt(rpcUrl, txHash);
 

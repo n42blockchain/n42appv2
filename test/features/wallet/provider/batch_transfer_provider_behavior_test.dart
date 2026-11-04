@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:web3dart/web3dart.dart' show bytesToHex, keccak256, hexToBytes;
+
 import 'package:n42_wallet/features/wallet/api/batch_transfer_api.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
@@ -22,9 +25,12 @@ class _BlockedHttpOverrides extends HttpOverrides {
 
 class _DeferredBroadcastApi extends BatchTransferApi {
   final result = Completer<MessageModel>();
+  final entered = Completer<void>();
   @override
-  Future<MessageModel> broadcastTransaction(String rpcUrl, String signedTx) =>
-      result.future;
+  Future<MessageModel> broadcastTransaction(String rpcUrl, String signedTx) {
+    entered.complete();
+    return result.future;
+  }
 }
 
 class _UnknownSubmissionApi extends BatchTransferApi {
@@ -38,7 +44,8 @@ class _UnknownSubmissionApi extends BatchTransferApi {
   ) async {
     sends++;
     if (fail) throw TimeoutException('unknown broadcast outcome');
-    return MessageModel()..data = '0x${'ab' * 32}';
+    return MessageModel()
+      ..data = bytesToHex(keccak256(hexToBytes(signedTx)), include0x: true);
   }
 
   @override
@@ -57,6 +64,7 @@ void main() {
   });
 
   setUp(() {
+    FlutterSecureStorage.setMockInitialValues({});
     HttpOverrides.global = _BlockedHttpOverrides();
   });
 
@@ -104,7 +112,8 @@ void main() {
         decimals: 18,
       );
       initialize('0x${'a1' * 20}');
-      final sending = provider.broadcastTransaction('signed');
+      final sending = provider.broadcastTransaction('0x01');
+      await api.entered.future;
       initialize('0x${'b2' * 20}');
       api.result.completeError(StateError('old account request failed'));
       expect(await sending, isFalse);
@@ -129,7 +138,8 @@ void main() {
         decimals: 18,
       );
       initialize('0x${'a1' * 20}');
-      final sending = provider.broadcastTransaction('signed');
+      final sending = provider.broadcastTransaction('0x01');
+      await api.entered.future;
       initialize('0x${'b2' * 20}');
       api.result.complete(MessageModel()..data = '0x${'ab' * 32}');
       expect(await sending, isFalse);
@@ -155,10 +165,10 @@ void main() {
           decimals: 18,
         );
         provider.addItem('0x${'b2' * 20}', BigInt.one);
-        expect(await provider.broadcastTransaction('signed'), isFalse);
+        expect(await provider.broadcastTransaction('0x01'), isFalse);
         expect(provider.state, BatchTransferState.awaitingConfirmation);
         expect(provider.items.single.status.name, 'pending');
-        expect(await provider.broadcastTransaction('signed'), isFalse);
+        expect(await provider.broadcastTransaction('0x01'), isFalse);
         expect(api.sends, 1);
       },
     );

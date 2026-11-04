@@ -4,6 +4,9 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+
+import '../services/batch_submission_journal.dart';
+
 import 'package:n42_wallet/features/wallet/api/batch_transfer_api.dart';
 import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 
@@ -27,6 +30,7 @@ class BatchTransferProvider extends ChangeNotifier {
   BatchTransferProvider({BatchTransferApi? api})
     : _api = api ?? BatchTransferApi();
   final BatchTransferApi _api;
+  final _journal = BatchSubmissionJournal();
   bool _disposed = false;
 
   int get transactionRevision => _quoteRevision;
@@ -274,6 +278,42 @@ class BatchTransferProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> recoverPending() async {
+    final revision = _quoteRevision;
+    final chainId = _chainId;
+    final sender = _fromAddress;
+    final rpcUrl = _rpcUrl;
+    try {
+      final hash = await _journal.pendingHash(chainId, sender);
+      if (!isTransactionCurrent(revision) || hash == null) return;
+      _txHash = hash;
+      _state = BatchTransferState.awaitingConfirmation;
+      notifyListeners();
+      final receipt = await _api.pollReceipt(rpcUrl, hash);
+      if (!isTransactionCurrent(revision)) return;
+      final resolved =
+          receipt != null &&
+          await _journal.resolve(
+            chainId,
+            sender,
+            hash,
+            () => _api.isReceiptFinal(rpcUrl, chainId, receipt),
+          );
+      if (!isTransactionCurrent(revision)) return;
+      if (resolved) {
+        _state = receipt['status'] == '0x1'
+            ? BatchTransferState.success
+            : BatchTransferState.error;
+      }
+      notifyListeners();
+    } catch (e) {
+      if (!isTransactionCurrent(revision)) return;
+      _state = BatchTransferState.awaitingConfirmation;
+      _errorMessage = e.toString();
+      notifyListeners();
+    }
+  }
+
   /// 广播交易
   Future<bool> broadcastTransaction(String signedTx) async {
     if (_state == BatchTransferState.broadcasting ||
@@ -290,17 +330,28 @@ class BatchTransferProvider extends ChangeNotifier {
 
     try {
       if (!current()) return false;
-      final result = await _api.broadcastTransaction(rpcUrl, signedTx);
+      final chainId = _chainId;
+      final sender = _fromAddress;
+      final localHash = await _journal.broadcast(
+        chainId: chainId,
+        sender: sender,
+        signedTx: signedTx,
+        send: (hash) async {
+          if (!current()) throw StateError('Batch changed before broadcast');
+          _txHash = hash;
+          final response = await _api.broadcastTransaction(rpcUrl, signedTx);
+          if (response.error ||
+              response.data is! String ||
+              (response.data as String).toLowerCase() != hash) {
+            throw StateError(
+              'Submission outcome unknown; reconcile original hash',
+            );
+          }
+        },
+      );
       if (!current()) return false;
 
-      if (result.error) {
-        _errorMessage = result.data?.toString() ?? 'Transaction failed';
-        _state = BatchTransferState.awaitingConfirmation;
-        notifyListeners();
-        return false;
-      }
-
-      final hash = result.data.toString();
+      final hash = localHash;
       _txHash = hash;
       _state = BatchTransferState.awaitingConfirmation;
       notifyListeners();
@@ -309,11 +360,20 @@ class BatchTransferProvider extends ChangeNotifier {
       final receipt = await _api.pollReceipt(rpcUrl, hash);
       if (!current()) return false;
 
-      if (receipt != null && receipt['status'] == '0x1') {
+      final finalized =
+          receipt != null &&
+          await _journal.resolve(
+            chainId,
+            sender,
+            hash,
+            () => _api.isReceiptFinal(rpcUrl, chainId, receipt),
+          );
+      if (!current()) return false;
+      if (finalized && receipt['status'] == '0x1') {
         // 交易成功上链
         _state = BatchTransferState.success;
         _updateItemStatuses(BatchTransferStatus.success);
-      } else if (receipt != null) {
+      } else if (finalized) {
         // 交易已上链但 reverted
         _errorMessage = 'Transaction reverted on-chain';
         _state = BatchTransferState.error;
@@ -332,6 +392,7 @@ class BatchTransferProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       if (!current()) return false;
+      if (e is BatchSubmissionPending) _txHash = e.hash;
       _errorMessage = e.toString();
       _state = BatchTransferState.awaitingConfirmation;
       notifyListeners();

@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,6 +87,9 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         tokenSymbol: widget.tokenSymbol,
         decimals: widget.decimals,
       );
+      if (_ownerCurrent()) {
+        unawaited(widget.batchTransferProvider.recoverPending());
+      }
     });
   }
 

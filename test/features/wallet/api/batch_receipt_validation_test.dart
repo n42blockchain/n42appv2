@@ -13,6 +13,28 @@ void main() {
     'blockNumber': '0x1',
     'status': '0x1',
   };
+  for (final scenario in ['final', 'wrongChain', 'shallow', 'fork']) {
+    test('finality check: $scenario', () async {
+      final result = await BatchTransferApi().isReceiptFinal(
+        'https://rpc.invalid',
+        1,
+        receipt(),
+        rpc: (method, params) async => {
+          'result': switch (method) {
+            'eth_chainId' => scenario == 'wrongChain' ? '0x2' : '0x1',
+            'eth_blockNumber' => scenario == 'shallow' ? '0xb' : '0xc',
+            'eth_getBlockByNumber' => {
+              'hash': scenario == 'fork'
+                  ? '0x${'00' * 32}'
+                  : receipt()['blockHash'],
+            },
+            _ => throw StateError(method),
+          },
+        },
+      );
+      expect(result, scenario == 'final');
+    });
+  }
   for (final status in ['0x0', '0x1']) {
     test('returns a matching mined receipt with status $status', () async {
       final result = await BatchTransferApi.waitForReceipt(

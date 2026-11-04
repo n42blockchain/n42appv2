@@ -88,6 +88,15 @@ class BatchBottomBar extends StatelessWidget {
               SizedBox(height: AppSpacing.space4),
             ],
 
+            if (provider.state == BatchTransferState.awaitingConfirmation) ...[
+              Text(S.of(context).g_key_bridge_tx_pending),
+              if (provider.txHash != null) SelectableText(provider.txHash!),
+              TextButton.icon(
+                onPressed: () => provider.recoverPending(),
+                icon: const Icon(Icons.refresh),
+                label: Text(S.of(context).g_key_bridge_refresh),
+              ),
+            ],
             Row(
               children: [
                 if (provider.items.isNotEmpty) ...[
