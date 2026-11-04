@@ -46,6 +46,18 @@ void main() {
   }
 
   test(
+    'callers cannot change recipients without invalidating provider state',
+    () {
+      final provider = createProvider();
+      addTearDown(provider.dispose);
+      provider.addItem('0x${'b2' * 20}', BigInt.from(250));
+      expect(() => provider.items.clear(), throwsUnsupportedError);
+      expect(provider.recipientCount, 1);
+      expect(provider.totalAmount, BigInt.from(250));
+    },
+  );
+
+  test(
     'initialize resets prior items, cached totals, errors, and gas quote',
     () async {
       final provider = createProvider();
@@ -162,28 +174,25 @@ void main() {
     },
   );
 
-  test(
-    'invalid item indexes leave items, totals, state, and notifications unchanged',
-    () {
-      final provider = createProvider();
-      addTearDown(provider.dispose);
-      provider.addItem('0x${'b2' * 20}', BigInt.from(125));
-      final originalItem = provider.items.single;
-      var notifications = 0;
-      provider.addListener(() => notifications++);
+  test('invalid item indexes leave items, totals, state, and notifications unchanged', () {
+    final provider = createProvider();
+    addTearDown(provider.dispose);
+    provider.addItem('0x${'b2' * 20}', BigInt.from(125));
+    final originalItem = provider.items.single;
+    var notifications = 0;
+    provider.addListener(() => notifications++);
 
-      provider.removeItem(-1);
-      provider.removeItem(1);
-      provider.updateItemAmount(-1, BigInt.from(999));
-      provider.updateItemAmount(1, BigInt.from(999));
+    provider.removeItem(-1);
+    provider.removeItem(1);
+    provider.updateItemAmount(-1, BigInt.from(999));
+    provider.updateItemAmount(1, BigInt.from(999));
 
-      expect(identical(provider.items.single, originalItem), isTrue);
-      expect(provider.state, BatchTransferState.ready);
-      expect(provider.recipientCount, 1);
-      expect(provider.totalAmount, BigInt.from(125));
-      expect(notifications, 0);
-    },
-  );
+    expect(identical(provider.items.single, originalItem), isTrue);
+    expect(provider.state, BatchTransferState.ready);
+    expect(provider.recipientCount, 1);
+    expect(provider.totalAmount, BigInt.from(125));
+    expect(notifications, 0);
+  });
 
   test('clearItems empties recipients, cached total, and error state', () {
     final provider = createProvider();

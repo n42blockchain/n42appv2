@@ -40,7 +40,7 @@ class BatchTransferProvider extends ChangeNotifier {
   BatchTransferState get state => _state;
 
   List<BatchTransferItem> _items = [];
-  List<BatchTransferItem> get items => _items;
+  List<BatchTransferItem> get items => List.unmodifiable(_items);
 
   List<String> _parseErrors = [];
   List<String> get parseErrors => _parseErrors;
