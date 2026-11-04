@@ -386,9 +386,8 @@ class _HistoryList extends StatelessWidget {
           subtitle: item.createdAt == null
               ? null
               : Text(
-                  MaterialLocalizations.of(
-                    context,
-                  ).formatMediumDate(item.createdAt!),
+                  MaterialLocalizations.of(context)
+                      .formatMediumDate(item.createdAt!),
                 ),
           trailing: Text('${positive ? '+' : ''}${item.points}'),
         );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:wallet/wallet.dart';

@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../helpers/widget_test_helpers.dart';
 
 class _Api extends DexSwapApi {

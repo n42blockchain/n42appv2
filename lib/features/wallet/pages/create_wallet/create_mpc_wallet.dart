@@ -179,9 +179,8 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                 Container(
                   padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
-                    color: AppColorTokens.of(
-                      context,
-                    ).danger.withValues(alpha: 0.1),
+                    color: AppColorTokens.of(context).danger
+                        .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(

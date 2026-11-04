@@ -216,9 +216,8 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                           vertical: su.setWidth(2),
                         ),
                         decoration: BoxDecoration(
-                          color: AppColorTokens.of(
-                            context,
-                          ).warning.withAlpha(30),
+                          color: AppColorTokens.of(context).warning
+                              .withAlpha(30),
                           borderRadius: BorderRadius.circular(su.setWidth(8)),
                         ),
                         child: Text(

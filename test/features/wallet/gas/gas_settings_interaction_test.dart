@@ -58,9 +58,8 @@ void main() {
           builder: (context) => TextButton(
             onPressed: () async {
               result(
-                await Navigator.of(
-                  context,
-                ).push<Object?>(MaterialPageRoute(builder: (_) => page)),
+                await Navigator.of(context)
+                    .push<Object?>(MaterialPageRoute(builder: (_) => page)),
               );
             },
             child: const Text('Open fee settings'),

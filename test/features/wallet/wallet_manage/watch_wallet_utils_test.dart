@@ -17,29 +17,26 @@ void main() {
     });
   });
 
-  test(
-    'findExistingWatchWallet matches normalized addresses only for watch wallets',
-    () {
-      final watchWallet = WalletInfo(walletName: 'Watch 1')
-        ..watchOnly = true
-        ..watchAddress = '0x1234567890ABCDEF1234567890ABCDEF12345678';
-      final regularWallet = WalletInfo(walletName: 'Regular')
-        ..watchOnly = false
-        ..watchAddress = '0x1234567890abcdef1234567890abcdef12345678';
+  test('findExistingWatchWallet matches normalized addresses only for watch wallets', () {
+    final watchWallet = WalletInfo(walletName: 'Watch 1')
+      ..watchOnly = true
+      ..watchAddress = '0x1234567890ABCDEF1234567890ABCDEF12345678';
+    final regularWallet = WalletInfo(walletName: 'Regular')
+      ..watchOnly = false
+      ..watchAddress = '0x1234567890abcdef1234567890abcdef12345678';
 
-      expect(
-        findExistingWatchWallet([
-          watchWallet,
-          regularWallet,
-        ], ' 0x1234567890abcdef1234567890abcdef12345678 '),
-        same(watchWallet),
-      );
-      expect(
-        findExistingWatchWallet([
-          regularWallet,
-        ], '0x1234567890abcdef1234567890abcdef12345678'),
-        isNull,
-      );
-    },
-  );
+    expect(
+      findExistingWatchWallet([
+        watchWallet,
+        regularWallet,
+      ], ' 0x1234567890abcdef1234567890abcdef12345678 '),
+      same(watchWallet),
+    );
+    expect(
+      findExistingWatchWallet([
+        regularWallet,
+      ], '0x1234567890abcdef1234567890abcdef12345678'),
+      isNull,
+    );
+  });
 }

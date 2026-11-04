@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
@@ -22,6 +23,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+
 // #enddocregion platform_imports
 
 typedef ConnectDAPP = void Function(String url);
@@ -46,12 +48,11 @@ class _BrowserTab {
 /// Callback to show a DApp signing/transaction confirmation sheet.
 /// Returns `true` if the user approved, `false` if rejected.
 /// Set by [BrowserPage]; funnels to the shared [DAppSigningSheet].
-typedef DAppSigningApproval =
-    Future<bool> Function({
-      required String origin,
-      required String method,
-      required Map<String, dynamic> details,
-    });
+typedef DAppSigningApproval = Future<bool> Function({
+  required String origin,
+  required String method,
+  required Map<String, dynamic> details,
+});
 
 /// Callback invoked when a navigation is blocked as phishing.
 ///

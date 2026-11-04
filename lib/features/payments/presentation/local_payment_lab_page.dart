@@ -327,8 +327,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
       final receipt = result.receipt;
       if (receipt == null) {
         setState(
-          () => _error =
-              'Original result is still unknown. Keep the original request key.',
+          () => _error = 'Original result is still unknown. Keep the original request key.',
         );
         return;
       }
@@ -385,8 +384,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
           'The synthetic account, asset or recipient was not found.',
         'invalid_response' =>
           'The local service returned an invalid simulation response.',
-        _ =>
-          'The local service could not complete the request. Retry with the same inputs.',
+        _ => 'The local service could not complete the request. Retry with the same inputs.',
       };
     }
     return 'The local request failed. Retry with the same inputs.';

@@ -104,9 +104,8 @@ class TokenViewEnhancedApi {
       if (raw == null || raw is! Map) return null;
       final data = raw['data'];
       if (data == null || data is! Map) return null;
-      return Map<String, dynamic>.from(
-        data,
-      ).map((key, value) => MapEntry(key, toIntSafe(value) ?? 0));
+      return Map<String, dynamic>.from(data)
+          .map((key, value) => MapEntry(key, toIntSafe(value) ?? 0));
     } catch (e) {
       AppLogger.w('TokenViewEnhanced', 'getChainHeights error: $e');
       return null;

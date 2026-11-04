@@ -258,9 +258,8 @@ class BtcSender implements ChainSender {
       final u = item as Map<String, dynamic>;
       if (isTest) {
         if (u['hex'] == null) {
-          final utxoTx = await BtcApi(
-            test: true,
-          ).getUTXOTxid(u['txid'] as String);
+          final utxoTx = await BtcApi(test: true)
+              .getUTXOTxid(u['txid'] as String);
           if (!utxoTx.error) {
             u['hex'] =
                 (utxoTx.data as Map)['vout']?[u['vout']]?['scriptpubkey'];

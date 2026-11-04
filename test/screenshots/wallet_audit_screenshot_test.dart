@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:n42_wallet/features/wallet/data/transaction_history_repository.dart';
 import 'package:n42_wallet/features/wallet/data/transaction_history_query.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -25,6 +26,7 @@ import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_order_form.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_orders_page.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
+
 import '../helpers/test_current_user.dart';
 
 Future<void> loadFont() async {
@@ -154,9 +156,8 @@ void main() {
           final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
           final output = Directory('test/screenshots/out/wallet-audit');
           output.createSync(recursive: true);
-          File(
-            '${output.path}/$screen-${dark ? 'dark' : 'light'}.png',
-          ).writeAsBytesSync(bytes!.buffer.asUint8List());
+          File('${output.path}/$screen-${dark ? 'dark' : 'light'}.png')
+              .writeAsBytesSync(bytes!.buffer.asUint8List());
           image.dispose();
         });
         await tester.pumpWidget(const SizedBox.shrink());

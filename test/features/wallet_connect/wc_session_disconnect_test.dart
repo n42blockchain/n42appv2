@@ -58,20 +58,17 @@ void main() {
     },
   );
 
-  test(
-    'disconnect uses the selected topic and standard reason, retaining other sessions',
-    () async {
-      await provider.disconnectSessionByTopic('one');
-      expect(client.requests.single.$1, 'one');
-      expect(
-        client.requests.single.$2.code,
-        wc.Errors.getSdkError(wc.Errors.USER_DISCONNECTED).toSignError().code,
-      );
-      expect(provider.getActiveSessions().keys, ['two']);
-      expect(provider.dAppTopic, isNull);
-      expect(notifications, 1);
-    },
-  );
+  test('disconnect uses the selected topic and standard reason, retaining other sessions', () async {
+    await provider.disconnectSessionByTopic('one');
+    expect(client.requests.single.$1, 'one');
+    expect(
+      client.requests.single.$2.code,
+      wc.Errors.getSdkError(wc.Errors.USER_DISCONNECTED).toSignError().code,
+    );
+    expect(provider.getActiveSessions().keys, ['two']);
+    expect(provider.dAppTopic, isNull);
+    expect(notifications, 1);
+  });
 
   test(
     'disconnecting another session preserves the selected session',
@@ -102,39 +99,33 @@ void main() {
     },
   );
 
-  test(
-    'disconnect-all attempts every session, reports partial failure and permits retry',
-    () async {
-      client.disconnect = (topic) async {
-        if (topic == 'one') throw StateError('relay offline');
-      };
-      await expectLater(provider.disconnectAllSessions(), throwsStateError);
-      expect(client.requests.map((r) => r.$1), ['one', 'two']);
-      expect(provider.dAppTopic, 'one');
-      expect(provider.getActiveSessions().keys, ['one']);
-      client.disconnect = (_) async {};
-      await provider.disconnectAllSessions();
-      expect(provider.getActiveSessions(), isEmpty);
-      expect(provider.dAppTopic, isNull);
-    },
-  );
+  test('disconnect-all attempts every session, reports partial failure and permits retry', () async {
+    client.disconnect = (topic) async {
+      if (topic == 'one') throw StateError('relay offline');
+    };
+    await expectLater(provider.disconnectAllSessions(), throwsStateError);
+    expect(client.requests.map((r) => r.$1), ['one', 'two']);
+    expect(provider.dAppTopic, 'one');
+    expect(provider.getActiveSessions().keys, ['one']);
+    client.disconnect = (_) async {};
+    await provider.disconnectAllSessions();
+    expect(provider.getActiveSessions(), isEmpty);
+    expect(provider.dAppTopic, isNull);
+  });
 
-  test(
-    'disconnect-all retains sessions established while its snapshot is in flight',
-    () async {
-      final pending = Completer<void>();
-      client.disconnect = (_) => pending.future;
-      final action = provider.disconnectAllSessions();
-      client.activeSessions['new'] = session('new');
-      provider.setActiveSession(client.activeSessions['new']!);
-      pending.complete();
-      await action;
-      expect(client.requests.map((r) => r.$1), ['one', 'two']);
-      expect(provider.getActiveSessions().keys, ['new']);
-      expect(provider.dAppTopic, 'new');
-      expect(provider.walletConnectState, WalletConnectState.connect);
-    },
-  );
+  test('disconnect-all retains sessions established while its snapshot is in flight', () async {
+    final pending = Completer<void>();
+    client.disconnect = (_) => pending.future;
+    final action = provider.disconnectAllSessions();
+    client.activeSessions['new'] = session('new');
+    provider.setActiveSession(client.activeSessions['new']!);
+    pending.complete();
+    await action;
+    expect(client.requests.map((r) => r.$1), ['one', 'two']);
+    expect(provider.getActiveSessions().keys, ['new']);
+    expect(provider.dAppTopic, 'new');
+    expect(provider.walletConnectState, WalletConnectState.connect);
+  });
 
   test(
     'disconnect-all reports session-store failure instead of claiming success',

@@ -65,9 +65,8 @@ mixin _MiningTodayV2WidgetsMixin
         SizedBox(width: AppSpacing.space2),
         InkWell(
           onTap: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => const MiningSetting()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const MiningSetting()));
           },
           child: Image.asset(
             "assets/mining/set.png",

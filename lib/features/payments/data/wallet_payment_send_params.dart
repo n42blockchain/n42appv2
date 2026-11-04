@@ -303,9 +303,9 @@ final class WalletPaymentSendParamsAdapter {
     if (value.isEmpty || value.trim() != value) return false;
     // Uri normalizes an empty user-info delimiter away; inspect the original
     // authority so even https://@host cannot bypass the no-credentials rule.
-    final authority = RegExp(
-      r'^[a-zA-Z][a-zA-Z0-9+.-]*://([^/?#]*)',
-    ).firstMatch(value)?.group(1);
+    final authority = RegExp(r'^[a-zA-Z][a-zA-Z0-9+.-]*://([^/?#]*)')
+        .firstMatch(value)
+        ?.group(1);
     if (authority == null || authority.contains('@')) return false;
     final uri = Uri.tryParse(value);
     if (uri == null ||

@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_quote_validity.dar
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_action_buttons.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_confirm.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_quote_card.dart';
+
 import '../../helpers/widget_test_helpers.dart';
 
 DexQuoteModel quote(String output) => DexQuoteModel(

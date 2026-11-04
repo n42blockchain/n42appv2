@@ -7,25 +7,22 @@ void main() {
     expect(marketCoinMatchesSymbol({'coin': 'btc'}, 'eth'), isFalse);
   });
 
-  test(
-    'mergeMarketCoinSnapshot preserves missing stable fields from existing snapshot',
-    () {
-      final merged = mergeMarketCoinSnapshot(
-        {
-          'coin': 'eth',
-          'coin_gecko_id': 'ethereum',
-          'name': 'Ethereum',
-          'image': 'https://example.com/eth.png',
-        },
-        {'coin': 'eth', 'price': 3200.0},
-      );
+  test('mergeMarketCoinSnapshot preserves missing stable fields from existing snapshot', () {
+    final merged = mergeMarketCoinSnapshot(
+      {
+        'coin': 'eth',
+        'coin_gecko_id': 'ethereum',
+        'name': 'Ethereum',
+        'image': 'https://example.com/eth.png',
+      },
+      {'coin': 'eth', 'price': 3200.0},
+    );
 
-      expect(merged['coin_gecko_id'], 'ethereum');
-      expect(merged['name'], 'Ethereum');
-      expect(merged['image'], 'https://example.com/eth.png');
-      expect(merged['price'], 3200.0);
-    },
-  );
+    expect(merged['coin_gecko_id'], 'ethereum');
+    expect(merged['name'], 'Ethereum');
+    expect(merged['image'], 'https://example.com/eth.png');
+    expect(merged['price'], 3200.0);
+  });
 
   test('extractPrimaryWebsite prefers homepage over forum-style urls', () {
     final website = extractPrimaryWebsite({

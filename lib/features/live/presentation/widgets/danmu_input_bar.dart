@@ -57,9 +57,8 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
       _controller.clear();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('发送失败，请重试')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('发送失败，请重试')));
       }
     } finally {
       if (mounted) setState(() => _sending = false);

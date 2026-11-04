@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_approval_confirmation.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
+
 import '../../helpers/widget_test_helpers.dart';
 
 void main() {

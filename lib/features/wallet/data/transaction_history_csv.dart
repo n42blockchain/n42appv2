@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.d
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show toEther;
+
 import 'transaction_history_query.dart';
 
 bool historyIsOutgoing(Object record, TransactionHistoryScope scope) =>

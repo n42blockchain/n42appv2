@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:n42_wallet/features/mining/services/mining_channel.dart';
 
 class MiningBackground {

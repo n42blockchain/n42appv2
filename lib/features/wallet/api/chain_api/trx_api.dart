@@ -96,9 +96,9 @@ class TrxApi {
       };
     } else {
       contract = getAddressTron(contract);
-      final selector = bytesToHex(
-        keccakAscii('transfer(address,uint256)'),
-      ).substring(0, 8).toLowerCase();
+      final selector = bytesToHex(keccakAscii('transfer(address,uint256)'))
+          .substring(0, 8)
+          .toLowerCase();
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
       params = {
         'from': '0x$from',

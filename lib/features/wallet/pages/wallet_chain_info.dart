@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_aggregate_detail_page.dart';
+
 import 'dart:async';
 
 import 'package:n42_wallet/shared/utils/in_app_browser.dart';

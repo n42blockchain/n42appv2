@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/foundation.dart';
+
 import '../models/coin_price.dart';
 import '../datasources/coinpaprika_datasource.dart';
 import '../datasources/coinlore_datasource.dart';

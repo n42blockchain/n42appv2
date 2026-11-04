@@ -1,4 +1,5 @@
 import 'package:n42_wallet/generated/l10n.dart';
+
 import 'dart:convert';
 import 'dart:io';
 

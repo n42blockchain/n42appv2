@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/pages/perps/hyperliquid_service.dart';
 import 'package:n42_wallet/features/wallet/pages/perps/perp_market_details_sheet.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 
 void main() {

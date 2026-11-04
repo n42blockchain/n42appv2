@@ -253,26 +253,20 @@ void main() {
       expect(v07Config.simple7702AccountFactory, isNull);
     });
 
-    test(
-      'getBundlerUrlWithKey returns bundlerUrl regardless of key (deprecated: key via Authorization header)',
-      () {
-        final config = AAChainConfig(
-          chainId: 1,
-          bundlerUrl: 'https://example.com/bundler',
-          entryPoint: AAConfig.entryPointV08,
-          simpleAccountFactory: AAConfig.simpleAccountFactoryV08,
-        );
+    test('getBundlerUrlWithKey returns bundlerUrl regardless of key (deprecated: key via Authorization header)', () {
+      final config = AAChainConfig(
+        chainId: 1,
+        bundlerUrl: 'https://example.com/bundler',
+        entryPoint: AAConfig.entryPointV08,
+        simpleAccountFactory: AAConfig.simpleAccountFactoryV08,
+      );
 
-        expect(
-          config.getBundlerUrlWithKey(null),
-          'https://example.com/bundler',
-        );
-        expect(config.getBundlerUrlWithKey(''), 'https://example.com/bundler');
-        expect(
-          config.getBundlerUrlWithKey('myapikey'),
-          'https://example.com/bundler',
-        );
-      },
-    );
+      expect(config.getBundlerUrlWithKey(null), 'https://example.com/bundler');
+      expect(config.getBundlerUrlWithKey(''), 'https://example.com/bundler');
+      expect(
+        config.getBundlerUrlWithKey('myapikey'),
+        'https://example.com/bundler',
+      );
+    });
   });
 }

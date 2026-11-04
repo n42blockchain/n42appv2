@@ -301,16 +301,13 @@ void main() {
       provider.dispose();
     });
 
-    test(
-      'didChangeAppLifecycleState with resumed does not crash when signClient is null',
-      () {
-        // signClient == null → _onAppResumed returns immediately
-        expect(
-          () => provider.didChangeAppLifecycleState(AppLifecycleState.resumed),
-          returnsNormally,
-        );
-      },
-    );
+    test('didChangeAppLifecycleState with resumed does not crash when signClient is null', () {
+      // signClient == null → _onAppResumed returns immediately
+      expect(
+        () => provider.didChangeAppLifecycleState(AppLifecycleState.resumed),
+        returnsNormally,
+      );
+    });
 
     test('didChangeAppLifecycleState with paused is a no-op', () {
       expect(
@@ -328,49 +325,46 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  group('WalletConnectProvider — transactionOK/messageSignOK without pageOpen', () {
-    late WalletConnectProvider provider;
+  group(
+    'WalletConnectProvider — transactionOK/messageSignOK without pageOpen',
+    () {
+      late WalletConnectProvider provider;
 
-    setUp(() {
-      provider = WalletConnectProvider();
-    });
+      setUp(() {
+        provider = WalletConnectProvider();
+      });
 
-    tearDown(() {
-      provider.dispose();
-    });
+      tearDown(() {
+        provider.dispose();
+      });
 
-    test(
-      'transactionOK when pageOpen=false tries showAlertWidget (graceful null context)',
-      () async {
+      test('transactionOK when pageOpen=false tries showAlertWidget (graceful null context)', () async {
         // AppGlobals.navigatorKey.currentContext is null in tests → showAlertWidget
         // should not crash due to null-check we added
         provider.pageOpen = false;
         await provider.viewStateDeal(WalletConnectState.transactionOK);
         expect(provider.walletConnectState, WalletConnectState.transactionOK);
-      },
-    );
+      });
 
-    test(
-      'messageSignOK when pageOpen=false tries showAlertWidget (graceful null context)',
-      () async {
+      test('messageSignOK when pageOpen=false tries showAlertWidget (graceful null context)', () async {
         provider.pageOpen = false;
         await provider.viewStateDeal(WalletConnectState.messageSignOK);
         expect(provider.walletConnectState, WalletConnectState.messageSignOK);
-      },
-    );
+      });
 
-    test('transactionOK when pageOpen=true skips showAlertWidget', () async {
-      provider.pageOpen = true;
-      await provider.viewStateDeal(WalletConnectState.transactionOK);
-      expect(provider.walletConnectState, WalletConnectState.transactionOK);
-    });
+      test('transactionOK when pageOpen=true skips showAlertWidget', () async {
+        provider.pageOpen = true;
+        await provider.viewStateDeal(WalletConnectState.transactionOK);
+        expect(provider.walletConnectState, WalletConnectState.transactionOK);
+      });
 
-    test('messageSignOK when pageOpen=true skips showAlertWidget', () async {
-      provider.pageOpen = true;
-      await provider.viewStateDeal(WalletConnectState.messageSignOK);
-      expect(provider.walletConnectState, WalletConnectState.messageSignOK);
-    });
-  });
+      test('messageSignOK when pageOpen=true skips showAlertWidget', () async {
+        provider.pageOpen = true;
+        await provider.viewStateDeal(WalletConnectState.messageSignOK);
+        expect(provider.walletConnectState, WalletConnectState.messageSignOK);
+      });
+    },
+  );
 
   // ---------------------------------------------------------------------------
   group('WalletConnectProvider — selectChain state', () {

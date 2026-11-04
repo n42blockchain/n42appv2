@@ -46,12 +46,10 @@ mixin _WidgetsMixin on _LogicMixin {
                         padding: EdgeInsets.all(AppSpacing.space2),
                         decoration: BoxDecoration(
                           color: isActive
-                              ? AppColorTokens.of(
-                                  context,
-                                ).success.withValues(alpha: 0.2)
-                              : AppColorTokens.of(
-                                  context,
-                                ).danger.withValues(alpha: 0.2),
+                              ? AppColorTokens.of(context).success
+                                    .withValues(alpha: 0.2)
+                              : AppColorTokens.of(context).danger
+                                    .withValues(alpha: 0.2),
                           borderRadius: AppRadius.brMd,
                         ),
                         child: Container(

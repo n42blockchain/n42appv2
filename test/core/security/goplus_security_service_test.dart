@@ -105,36 +105,33 @@ void main() {
     },
   );
 
-  test(
-    'malformed, unsuccessful and empty responses remain unknown and are not cached',
-    () async {
-      for (final payload in <dynamic>[
-        null,
-        [],
-        'offline',
-        {'code': 0},
-        {'code': '1'},
-        {'code': 1},
-        {'code': 1, 'result': []},
-        {'code': 1, 'result': {}},
-        {
-          'code': 1,
-          'result': {address(1): []},
-        },
-        {
-          'code': 1,
-          'result': {address(1): <String, dynamic>{}},
-        },
-      ]) {
-        request = (_, _) async => payload;
-        expect(await client.checkToken('ETH', address(1)), isNull);
-      }
-      expect(requests, hasLength(10));
-      request = (_, token) async => response(token);
-      expect(await client.checkToken('ETH', address(1)), isNotNull);
-      expect(requests, hasLength(11));
-    },
-  );
+  test('malformed, unsuccessful and empty responses remain unknown and are not cached', () async {
+    for (final payload in <dynamic>[
+      null,
+      [],
+      'offline',
+      {'code': 0},
+      {'code': '1'},
+      {'code': 1},
+      {'code': 1, 'result': []},
+      {'code': 1, 'result': {}},
+      {
+        'code': 1,
+        'result': {address(1): []},
+      },
+      {
+        'code': 1,
+        'result': {address(1): <String, dynamic>{}},
+      },
+    ]) {
+      request = (_, _) async => payload;
+      expect(await client.checkToken('ETH', address(1)), isNull);
+    }
+    expect(requests, hasLength(10));
+    request = (_, token) async => response(token);
+    expect(await client.checkToken('ETH', address(1)), isNotNull);
+    expect(requests, hasLength(11));
+  });
 
   test(
     'a single unrelated contract cannot supply or poison this token risk cache',
@@ -150,31 +147,28 @@ void main() {
     },
   );
 
-  test(
-    'mixed-case matching ignores unrelated entries and rejects ambiguous duplicates',
-    () async {
-      final token = address(0xabcdef);
-      request = (_, _) async => {
-        'code': 1,
-        'result': {
-          address(2): {'is_honeypot': '0'},
-          token.toUpperCase(): {'is_honeypot': '1'},
-        },
-      };
-      expect(
-        (await client.checkToken('ETH', token))!.overallLevel,
-        GoplusRiskLevel.danger,
-      );
-      request = (_, _) async => {
-        'code': 1,
-        'result': {
-          token: {'is_honeypot': '0'},
-          token.toUpperCase(): {'is_honeypot': '1'},
-        },
-      };
-      expect(await client.checkToken('BSC', token), isNull);
-    },
-  );
+  test('mixed-case matching ignores unrelated entries and rejects ambiguous duplicates', () async {
+    final token = address(0xabcdef);
+    request = (_, _) async => {
+      'code': 1,
+      'result': {
+        address(2): {'is_honeypot': '0'},
+        token.toUpperCase(): {'is_honeypot': '1'},
+      },
+    };
+    expect(
+      (await client.checkToken('ETH', token))!.overallLevel,
+      GoplusRiskLevel.danger,
+    );
+    request = (_, _) async => {
+      'code': 1,
+      'result': {
+        token: {'is_honeypot': '0'},
+        token.toUpperCase(): {'is_honeypot': '1'},
+      },
+    };
+    expect(await client.checkToken('BSC', token), isNull);
+  });
 
   test(
     'transport exceptions remain unknown and a subsequent request can recover',
@@ -229,21 +223,18 @@ void main() {
     },
   );
 
-  test(
-    'capacity eviction removes the oldest quarter while retaining recent results',
-    () async {
-      for (var i = 1; i <= 201; i++) {
-        await client.checkToken('ETH', address(i));
-      }
-      expect(requests, hasLength(201));
-      await client.checkToken('ETH', address(200));
-      expect(requests, hasLength(201));
-      await client.checkToken('ETH', address(1));
-      expect(requests, hasLength(202));
-      await client.checkToken('ETH', address(51));
-      expect(requests, hasLength(202));
-    },
-  );
+  test('capacity eviction removes the oldest quarter while retaining recent results', () async {
+    for (var i = 1; i <= 201; i++) {
+      await client.checkToken('ETH', address(i));
+    }
+    expect(requests, hasLength(201));
+    await client.checkToken('ETH', address(200));
+    expect(requests, hasLength(201));
+    await client.checkToken('ETH', address(1));
+    expect(requests, hasLength(202));
+    await client.checkToken('ETH', address(51));
+    expect(requests, hasLength(202));
+  });
 
   test('expired entries are purged before capacity eviction', () async {
     for (var i = 1; i <= 200; i++) {

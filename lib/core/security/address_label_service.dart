@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 
 /// 已知地址标签服务 — 从本地 asset 加载，同步查询，无网络请求。

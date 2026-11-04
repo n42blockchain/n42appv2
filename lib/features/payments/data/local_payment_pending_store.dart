@@ -34,9 +34,8 @@ final class LocalPaymentPendingScope {
         endpoint.hasQuery ||
         endpoint.hasFragment ||
         (endpoint.path.isNotEmpty && endpoint.path != '/') ||
-        !RegExp(
-          r'^synthetic-test-[A-Za-z0-9_-]{8,128}$',
-        ).hasMatch(syntheticToken)) {
+        !RegExp(r'^synthetic-test-[A-Za-z0-9_-]{8,128}$')
+            .hasMatch(syntheticToken)) {
       throw const LocalPaymentPendingStoreException('invalid_scope');
     }
     return LocalPaymentPendingScope._(

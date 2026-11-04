@@ -403,9 +403,8 @@ void main() {
 
     test('returns true for URL with query params', () {
       expect(
-        withAnimation(
-          'https://cdn.example.com/video.mp4?v=1&token=abc',
-        ).hasVideo,
+        withAnimation('https://cdn.example.com/video.mp4?v=1&token=abc')
+            .hasVideo,
         isTrue,
       );
     });

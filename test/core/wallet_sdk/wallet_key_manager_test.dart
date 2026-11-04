@@ -49,9 +49,8 @@ void main() {
       });
 
       await expectLater(
-        WalletKeyManager(
-          Trustdart(),
-        ).getKeyPair(coin: 'ETH', path: "m/44'/60'/0'/0/0"),
+        WalletKeyManager(Trustdart())
+            .getKeyPair(coin: 'ETH', path: "m/44'/60'/0'/0/0"),
         throwsA(
           isA<WalletException>().having(
             (e) => e.code,

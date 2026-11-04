@@ -135,39 +135,35 @@ void main() {
     expect(TotpUtil.verify(generated, code, at: time(59)), isTrue);
   });
 
-  test(
-    'otpauth URI preserves reserved characters without query or fragment injection',
-    () {
-      const issuer = 'N42 / 钱包 #1? &+';
-      const account = '用户+one/?#&=example@test.invalid';
-      final uri = Uri.parse(
-        TotpUtil.buildOtpAuthUri(
-          secret: 'mzxw6===',
-          account: account,
-          issuer: issuer,
-        ),
-      );
-      expect(uri.scheme, 'otpauth');
-      expect(uri.host, 'totp');
-      expect(uri.pathSegments, ['$issuer:$account']);
-      expect(uri.fragment, isEmpty);
-      expect(uri.queryParameters, {
-        'secret': 'MZXW6',
-        'issuer': issuer,
-        'algorithm': 'SHA1',
-        'digits': '6',
-        'period': '30',
-      });
-      expect(
-        () => TotpUtil.buildOtpAuthUri(secret: '', account: 'user'),
-        throwsFormatException,
-      );
-      expect(
-        Uri.parse(
-          TotpUtil.buildOtpAuthUri(secret: secret, account: 'user'),
-        ).queryParameters['issuer'],
-        'N42 Wallet',
-      );
-    },
-  );
+  test('otpauth URI preserves reserved characters without query or fragment injection', () {
+    const issuer = 'N42 / 钱包 #1? &+';
+    const account = '用户+one/?#&=example@test.invalid';
+    final uri = Uri.parse(
+      TotpUtil.buildOtpAuthUri(
+        secret: 'mzxw6===',
+        account: account,
+        issuer: issuer,
+      ),
+    );
+    expect(uri.scheme, 'otpauth');
+    expect(uri.host, 'totp');
+    expect(uri.pathSegments, ['$issuer:$account']);
+    expect(uri.fragment, isEmpty);
+    expect(uri.queryParameters, {
+      'secret': 'MZXW6',
+      'issuer': issuer,
+      'algorithm': 'SHA1',
+      'digits': '6',
+      'period': '30',
+    });
+    expect(
+      () => TotpUtil.buildOtpAuthUri(secret: '', account: 'user'),
+      throwsFormatException,
+    );
+    expect(
+      Uri.parse(TotpUtil.buildOtpAuthUri(secret: secret, account: 'user'))
+          .queryParameters['issuer'],
+      'N42 Wallet',
+    );
+  });
 }

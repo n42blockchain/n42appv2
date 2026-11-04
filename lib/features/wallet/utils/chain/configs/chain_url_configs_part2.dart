@@ -958,8 +958,7 @@ final Map<String, dynamic> chainUrlConfigsPart2 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "RBTC",
-      "icon":
-          "https://cryptologos.cc/logos/rsk-infrastructure-framework-rif-logo.png",
+      "icon": "https://cryptologos.cc/logos/rsk-infrastructure-framework-rif-logo.png",
       "name": "Rootstock",
       "miniName": "RBTC",
       "unit": "RBTC",

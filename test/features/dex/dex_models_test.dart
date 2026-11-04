@@ -357,22 +357,18 @@ void main() {
     });
 
     test('status 0 and status 1 return different strings', () {
-      final s0 = DexHistoryModel.fromJson(
-        _fullHistoryJson(status: 0),
-      ).statusText;
-      final s1 = DexHistoryModel.fromJson(
-        _fullHistoryJson(status: 1),
-      ).statusText;
+      final s0 = DexHistoryModel.fromJson(_fullHistoryJson(status: 0))
+          .statusText;
+      final s1 = DexHistoryModel.fromJson(_fullHistoryJson(status: 1))
+          .statusText;
       expect(s0, isNot(equals(s1)));
     });
 
     test('status 2 and status 3 return different strings', () {
-      final s2 = DexHistoryModel.fromJson(
-        _fullHistoryJson(status: 2),
-      ).statusText;
-      final s3 = DexHistoryModel.fromJson(
-        _fullHistoryJson(status: 3),
-      ).statusText;
+      final s2 = DexHistoryModel.fromJson(_fullHistoryJson(status: 2))
+          .statusText;
+      final s3 = DexHistoryModel.fromJson(_fullHistoryJson(status: 3))
+          .statusText;
       expect(s2, isNot(equals(s3)));
     });
 

@@ -312,9 +312,8 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                     itemCount: _trades.length,
                     itemBuilder: (_, i) {
                       final t = _trades[i];
-                      final dateStr = DateFormat(
-                        'yyyy-MM-dd',
-                      ).format(t.buyTime);
+                      final dateStr = DateFormat('yyyy-MM-dd')
+                          .format(t.buyTime);
                       return ListTile(
                         dense: true,
                         contentPadding: EdgeInsets.symmetric(

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/data/transaction_history_query.dart';
@@ -8,6 +9,7 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 
 class _Repository extends TransactionHistoryRepository {
@@ -118,9 +120,8 @@ void main() {
         start: DateTime(2026, 1, 2),
         end: DateTime(2026, 1, 4),
       );
-      Navigator.of(
-        tester.element(find.byType(DateRangePickerDialog)),
-      ).pop(range);
+      Navigator.of(tester.element(find.byType(DateRangePickerDialog)))
+          .pop(range);
       await tester.pumpAndSettle();
       expect(find.text('2026-01-02 → 2026-01-04'), findsOneWidget);
       await apply();

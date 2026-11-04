@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/models/user_operation.dart';

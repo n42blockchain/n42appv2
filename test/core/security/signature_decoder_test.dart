@@ -100,62 +100,52 @@ void main() {
         );
       }
     });
-    test(
-      'transfer-from warns that an existing permission moves another account funds',
-      () {
+    test('transfer-from warns that an existing permission moves another account funds', () {
+      final result = SignatureDecoder.decodeContractCall(
+        calldata: call('23b872dd', '1'),
+      );
+      expect(result.riskLevel, TxRiskLevel.caution);
+      expect(result.hasWarnings, isTrue);
+      expect(
+        SignatureDecoder.decodeContractCall(calldata: '0x42842e0e').title,
+        'NFT Transfer',
+      );
+      expect(
+        SignatureDecoder.decodeContractCall(calldata: '0xa9059cbb').fields,
+        isEmpty,
+      );
+      expect(
+        SignatureDecoder.decodeContractCall(calldata: '0xa22cb465').isDangerous,
+        isTrue,
+      );
+      expect(
+        SignatureDecoder.decodeContractCall(calldata: '0xd505accf').isDangerous,
+        isTrue,
+      );
+    });
+    test('value-bearing calls show exact native funds and preserve unknown-function warning', () {
+      for (final selector in [
+        'd0e30db0',
+        '7ff36ab5',
+        'fb0f3ee1',
+        'a1903eab',
+        'deadbeef',
+      ]) {
         final result = SignatureDecoder.decodeContractCall(
-          calldata: call('23b872dd', '1'),
-        );
-        expect(result.riskLevel, TxRiskLevel.caution);
-        expect(result.hasWarnings, isTrue);
-        expect(
-          SignatureDecoder.decodeContractCall(calldata: '0x42842e0e').title,
-          'NFT Transfer',
+          calldata: '0x$selector',
+          contractAddress: spender,
+          value: '0x1',
         );
         expect(
-          SignatureDecoder.decodeContractCall(calldata: '0xa9059cbb').fields,
-          isEmpty,
-        );
-        expect(
-          SignatureDecoder.decodeContractCall(
-            calldata: '0xa22cb465',
-          ).isDangerous,
+          result.fields.any((f) => f.value == '0.000000000000000001'),
           isTrue,
         );
-        expect(
-          SignatureDecoder.decodeContractCall(
-            calldata: '0xd505accf',
-          ).isDangerous,
-          isTrue,
-        );
-      },
-    );
-    test(
-      'value-bearing calls show exact native funds and preserve unknown-function warning',
-      () {
-        for (final selector in [
-          'd0e30db0',
-          '7ff36ab5',
-          'fb0f3ee1',
-          'a1903eab',
-          'deadbeef',
-        ]) {
-          final result = SignatureDecoder.decodeContractCall(
-            calldata: '0x$selector',
-            contractAddress: spender,
-            value: '0x1',
-          );
-          expect(
-            result.fields.any((f) => f.value == '0.000000000000000001'),
-            isTrue,
-          );
-          if (selector == 'deadbeef') {
-            expect(result.riskLevel, TxRiskLevel.caution);
-            expect(result.hasWarnings, isTrue);
-          }
+        if (selector == 'deadbeef') {
+          expect(result.riskLevel, TxRiskLevel.caution);
+          expect(result.hasWarnings, isTrue);
         }
-      },
-    );
+      }
+    });
   });
 
   group('typed signatures', () {
@@ -176,24 +166,21 @@ void main() {
       expect(field(result, 'Amount'), 'UNLIMITED');
       expect(result.warnings, hasLength(2));
     });
-    test(
-      'limited permit preserves raw amount and handles absent or invalid deadline',
-      () {
-        for (final deadline in ['', 'invalid', '-999999999999999']) {
-          final result = SignatureDecoder.decodeTypedData({
-            'primaryType': 'Permit',
-            'message': {
-              'spender': 'short',
-              'value': '123456789',
-              'deadline': deadline,
-            },
-          });
-          expect(result.riskLevel, TxRiskLevel.caution);
-          expect(field(result, 'Amount'), '123456789');
-          expect(field(result, 'Expires'), isNull);
-        }
-      },
-    );
+    test('limited permit preserves raw amount and handles absent or invalid deadline', () {
+      for (final deadline in ['', 'invalid', '-999999999999999']) {
+        final result = SignatureDecoder.decodeTypedData({
+          'primaryType': 'Permit',
+          'message': {
+            'spender': 'short',
+            'value': '123456789',
+            'deadline': deadline,
+          },
+        });
+        expect(result.riskLevel, TxRiskLevel.caution);
+        expect(field(result, 'Amount'), '123456789');
+        expect(field(result, 'Expires'), isNull);
+      }
+    });
     test('far future expiry is displayed explicitly', () {
       final result = SignatureDecoder.decodeTypedData({
         'primaryType': 'Permit',
@@ -220,34 +207,31 @@ void main() {
         expect(field(result, 'spender'), spender);
       }
     });
-    test(
-      'Safe transaction preserves nonce and target; unknown typed data stays caution',
-      () {
-        final safe = SignatureDecoder.decodeTypedData({
-          'primaryType': 'SafeTx',
-          'message': {'to': spender, 'value': '42', 'nonce': 7},
-        });
-        expect(field(safe, 'To'), spender);
-        expect(field(safe, 'Value'), '42');
-        expect(field(safe, 'Nonce'), '7');
-        final generic = SignatureDecoder.decodeTypedData({
-          'primaryType': 'Custom',
-          'message': {
-            'nested': {'value': null},
-          },
-        });
-        expect(generic.riskLevel, TxRiskLevel.caution);
-        expect(generic.hasWarnings, isTrue);
-        expect(field(generic, 'nested.value'), 'null');
-        final order = SignatureDecoder.decodeTypedData({
-          'primaryType': 'OrderComponents',
-          'message': {'offerer': spender},
-        });
-        expect(order.riskLevel, TxRiskLevel.caution);
-        expect(order.hasWarnings, isTrue);
-        expect(field(order, 'offerer'), spender);
-      },
-    );
+    test('Safe transaction preserves nonce and target; unknown typed data stays caution', () {
+      final safe = SignatureDecoder.decodeTypedData({
+        'primaryType': 'SafeTx',
+        'message': {'to': spender, 'value': '42', 'nonce': 7},
+      });
+      expect(field(safe, 'To'), spender);
+      expect(field(safe, 'Value'), '42');
+      expect(field(safe, 'Nonce'), '7');
+      final generic = SignatureDecoder.decodeTypedData({
+        'primaryType': 'Custom',
+        'message': {
+          'nested': {'value': null},
+        },
+      });
+      expect(generic.riskLevel, TxRiskLevel.caution);
+      expect(generic.hasWarnings, isTrue);
+      expect(field(generic, 'nested.value'), 'null');
+      final order = SignatureDecoder.decodeTypedData({
+        'primaryType': 'OrderComponents',
+        'message': {'offerer': spender},
+      });
+      expect(order.riskLevel, TxRiskLevel.caution);
+      expect(order.hasWarnings, isTrue);
+      expect(field(order, 'offerer'), spender);
+    });
   });
 
   group('personal messages', () {
@@ -280,9 +264,9 @@ void main() {
         'Accept Terms',
       );
       expect(
-        SignatureDecoder.decodePersonalSign(
-          'Terms of Service ${'x' * 300}',
-        ).description.length,
+        SignatureDecoder.decodePersonalSign('Terms of Service ${'x' * 300}')
+            .description
+            .length,
         203,
       );
       final login = SignatureDecoder.decodePersonalSign('Sign in\nNonce: 1234');

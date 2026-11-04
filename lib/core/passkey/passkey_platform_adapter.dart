@@ -57,21 +57,23 @@ class PasskeyPlatformAdapter {
     List<String> excludeCredentialIds = const [],
   }) async {
     try {
-      final result = await _channel
-          .invokeMapMethod<String, dynamic>('register', {
-            'rpId': PasskeyConfig.rpId,
-            'rpName': PasskeyConfig.rpName,
-            'userId': userId,
-            'userName': userName,
-            'challenge': challenge,
-            'timeout': PasskeyConfig.timeout,
-            'attestation': PasskeyConfig.attestation,
-            'authenticatorAttachment': PasskeyConfig.authenticatorAttachment,
-            'userVerification': PasskeyConfig.userVerification,
-            'requireResidentKey': PasskeyConfig.requireResidentKey,
-            'pubKeyCredParams': PasskeyConfig.pubKeyCredParams,
-            'excludeCredentialIds': excludeCredentialIds,
-          });
+      final result = await _channel.invokeMapMethod<String, dynamic>(
+        'register',
+        {
+          'rpId': PasskeyConfig.rpId,
+          'rpName': PasskeyConfig.rpName,
+          'userId': userId,
+          'userName': userName,
+          'challenge': challenge,
+          'timeout': PasskeyConfig.timeout,
+          'attestation': PasskeyConfig.attestation,
+          'authenticatorAttachment': PasskeyConfig.authenticatorAttachment,
+          'userVerification': PasskeyConfig.userVerification,
+          'requireResidentKey': PasskeyConfig.requireResidentKey,
+          'pubKeyCredParams': PasskeyConfig.pubKeyCredParams,
+          'excludeCredentialIds': excludeCredentialIds,
+        },
+      );
 
       if (result == null) {
         throw PasskeyException('Registration returned null');
@@ -107,14 +109,16 @@ class PasskeyPlatformAdapter {
     List<String> allowCredentialIds = const [],
   }) async {
     try {
-      final result = await _channel
-          .invokeMapMethod<String, dynamic>('authenticate', {
-            'rpId': PasskeyConfig.rpId,
-            'challenge': challenge,
-            'timeout': PasskeyConfig.timeout,
-            'userVerification': PasskeyConfig.userVerification,
-            'allowCredentialIds': allowCredentialIds,
-          });
+      final result = await _channel.invokeMapMethod<String, dynamic>(
+        'authenticate',
+        {
+          'rpId': PasskeyConfig.rpId,
+          'challenge': challenge,
+          'timeout': PasskeyConfig.timeout,
+          'userVerification': PasskeyConfig.userVerification,
+          'allowCredentialIds': allowCredentialIds,
+        },
+      );
 
       if (result == null) {
         throw PasskeyException('Authentication returned null');

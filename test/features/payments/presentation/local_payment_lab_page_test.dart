@@ -87,9 +87,8 @@ Future<LocalPaymentClient> open(
   await tester.pumpWidget(
     MaterialApp(
       builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(
-          context,
-        ).copyWith(textScaler: TextScaler.linear(scale)),
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(scale)),
         child: child!,
       ),
       home: LocalPaymentLabPage(
@@ -564,9 +563,8 @@ void main() {
     final preferences = MockPreferences();
     when(() => preferences.reload()).thenAnswer((_) async {});
     when(() => preferences.get(any())).thenReturn(null);
-    when(
-      () => preferences.setString(any(), any()),
-    ).thenAnswer((_) async => false);
+    when(() => preferences.setString(any(), any()))
+        .thenAnswer((_) async => false);
     var posts = 0;
     await open(tester, (request) async {
       if (request.method == 'POST') posts++;

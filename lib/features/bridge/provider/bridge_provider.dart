@@ -16,8 +16,10 @@ part '_bridge_execution.dart';
 part '_bridge_persistence.dart';
 
 /// 状态变化回调：tx 已更新到终态 (completed / failed)
-typedef BridgeStatusChangeCallback =
-    void Function(BridgeTransaction tx, BridgeTransactionStatus newStatus);
+typedef BridgeStatusChangeCallback = void Function(
+  BridgeTransaction tx,
+  BridgeTransactionStatus newStatus,
+);
 
 /// 跨链桥状态
 enum BridgeState {

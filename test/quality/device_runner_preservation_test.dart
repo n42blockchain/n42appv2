@@ -104,23 +104,20 @@ void main() {
       expect(args, isNot(contains('--no-keep-app-running')));
     },
   );
-  test(
-    'full-flow drive refuses to install when no existing connection is supplied',
-    () async {
-      final result = await Process.run(
-        'bash',
-        ['scripts/run_automated_tests.sh', 'device'],
-        environment: {
-          ...environment,
-          'DEVICE_ID': 'device-fixture',
-          'PUBLISH_PORT': '1',
-          'DEVICE_VM_SERVICE_URL': '',
-          'N42_E2E_CHAT_USERNAME': 'fixture-user',
-          'N42_E2E_CHAT_PASSWORD': 'fixture-only',
-        },
-      );
-      expect(result.exitCode, 2);
-      expect(await capturedArguments.exists(), isFalse);
-    },
-  );
+  test('full-flow drive refuses to install when no existing connection is supplied', () async {
+    final result = await Process.run(
+      'bash',
+      ['scripts/run_automated_tests.sh', 'device'],
+      environment: {
+        ...environment,
+        'DEVICE_ID': 'device-fixture',
+        'PUBLISH_PORT': '1',
+        'DEVICE_VM_SERVICE_URL': '',
+        'N42_E2E_CHAT_USERNAME': 'fixture-user',
+        'N42_E2E_CHAT_PASSWORD': 'fixture-only',
+      },
+    );
+    expect(result.exitCode, 2);
+    expect(await capturedArguments.exists(), isFalse);
+  });
 }

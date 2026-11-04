@@ -194,22 +194,19 @@ void main() {
       expect(api.refreshCalls, 0);
     });
 
-    test(
-      'returns null without a network call when an expired token cannot refresh',
-      () async {
-        final storage = _FakeSecureStorage();
-        storage.store['n42id_token_$_did'] = _stored(
-          expiresAt: DateTime.now().millisecondsSinceEpoch - 1,
-        );
-        final api = _FakeIdHubApi();
+    test('returns null without a network call when an expired token cannot refresh', () async {
+      final storage = _FakeSecureStorage();
+      storage.store['n42id_token_$_did'] = _stored(
+        expiresAt: DateTime.now().millisecondsSinceEpoch - 1,
+      );
+      final api = _FakeIdHubApi();
 
-        expect(
-          await IdTokenStore(api: api, storage: storage).getValidToken(_did),
-          isNull,
-        );
-        expect(api.refreshCalls, 0);
-      },
-    );
+      expect(
+        await IdTokenStore(api: api, storage: storage).getValidToken(_did),
+        isNull,
+      );
+      expect(api.refreshCalls, 0);
+    });
 
     test(
       'keeps the cached session on recoverable Hub refresh failure',

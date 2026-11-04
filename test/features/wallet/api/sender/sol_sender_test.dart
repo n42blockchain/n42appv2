@@ -267,9 +267,8 @@ void main() {
     test('failure at $stage is reported without retry', () async {
       api.failAt = stage;
       expect(
-        (await sender.send(
-          params(contract: stage == 'account' ? 'mint' : ''),
-        )).success,
+        (await sender.send(params(contract: stage == 'account' ? 'mint' : '')))
+            .success,
         isFalse,
       );
       expect(api.sends, stage == 'send' || stage == 'throw' ? 1 : 0);

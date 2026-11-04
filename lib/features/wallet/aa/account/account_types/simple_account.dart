@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:typed_data';
+
 import 'package:web3dart/web3dart.dart';
 
 import '../../core/aa_config.dart';

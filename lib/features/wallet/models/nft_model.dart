@@ -11,8 +11,7 @@ class NftModel {
   final String? description;
   final String contractAddress;
   final String tokenId;
-  final String
-  nftType; // 'ERC721' | 'ERC1155' | 'NonFungibleToken'(SOL) | 'INSCRIPTION'(BTC)
+  final String nftType; // 'ERC721' | 'ERC1155' | 'NonFungibleToken'(SOL) | 'INSCRIPTION'(BTC)
   final int balance; // ERC1155 可能 > 1
   final String chain; // SimpleHash chain slug
   final String? openseaUrl;

@@ -5,6 +5,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';

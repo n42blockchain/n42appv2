@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/api_hub/datasources/debank_datasource.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/defi_positions_section.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 
 DeFiPortfolio portfolio(String name, {int count = 1}) => DeFiPortfolio(

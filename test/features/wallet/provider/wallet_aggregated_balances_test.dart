@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:n42_wallet/main.dart' as app;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
@@ -6,7 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/aggregated_token.dart';
+
 import '../../../helpers/aggregate_wallet_fixtures.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -146,22 +149,16 @@ void main() {
       expect(wallet.aggregateReceiveToken(coin, 'ETH'), isNull);
     },
   );
-  test(
-    'receive descriptor binds chain contract and decimals without signer material',
-    () {
-      wallet.coinModels.single.privateKey = 'fixture-do-not-copy';
-      final token = wallet.aggregateReceiveToken(coin, 'eth')!;
-      expect(
-        token.coin['contract'],
-        AggregatedTokens.usdt.chains.first.contract,
-      );
-      expect(token.coin['decimals'], 6);
-      expect(token.coin['coinType'], 'ETH');
-      expect(token.address, wallet.coinModels.single.address);
-      expect(token.isTest, isFalse);
-      expect(token.privateKey, isNull);
-    },
-  );
+  test('receive descriptor binds chain contract and decimals without signer material', () {
+    wallet.coinModels.single.privateKey = 'fixture-do-not-copy';
+    final token = wallet.aggregateReceiveToken(coin, 'eth')!;
+    expect(token.coin['contract'], AggregatedTokens.usdt.chains.first.contract);
+    expect(token.coin['decimals'], 6);
+    expect(token.coin['coinType'], 'ETH');
+    expect(token.address, wallet.coinModels.single.address);
+    expect(token.isTest, isFalse);
+    expect(token.privateKey, isNull);
+  });
   test(
     'single-chain detail projection refreshes without double-counting holdings',
     () async {

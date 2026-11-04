@@ -78,9 +78,8 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                       Icon(
                         Icons.bookmarks_outlined,
                         size: ScreenUtil().setWidth(48),
-                        color: AppColorTokens.of(
-                          context,
-                        ).textSubtitle.withAlpha(80),
+                        color: AppColorTokens.of(context).textSubtitle
+                            .withAlpha(80),
                       ),
                       SizedBox(height: AppSpacing.space4),
                       Text(

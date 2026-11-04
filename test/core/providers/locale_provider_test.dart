@@ -45,16 +45,13 @@ void main() {
       expect(info['icon'], contains('english'));
     });
 
-    test(
-      'getLocaleInfo should map Chinese Simplified locale to Traditional Chinese',
-      () async {
-        final notifier = container.read(localeProvider.notifier);
-        final info = notifier.getLocaleInfo(const Locale('zh', 'CN'));
+    test('getLocaleInfo should map Chinese Simplified locale to Traditional Chinese', () async {
+      final notifier = container.read(localeProvider.notifier);
+      final info = notifier.getLocaleInfo(const Locale('zh', 'CN'));
 
-        expect(info['title'], '繁體中文');
-        expect(info['icon'], contains('chinese'));
-      },
-    );
+      expect(info['title'], '繁體中文');
+      expect(info['icon'], contains('chinese'));
+    });
 
     test(
       'getLocaleInfo should return correct info for Traditional Chinese',

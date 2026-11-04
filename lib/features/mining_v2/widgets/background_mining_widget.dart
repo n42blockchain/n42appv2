@@ -141,9 +141,8 @@ class BackgroundMiningWidget extends StatelessWidget {
             boxShadow: isEnabled
                 ? [
                     BoxShadow(
-                      color: AppColorTokens.of(
-                        context,
-                      ).brand.withValues(alpha: 0.3),
+                      color: AppColorTokens.of(context).brand
+                          .withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),

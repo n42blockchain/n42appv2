@@ -184,9 +184,8 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                               vertical: 2.w,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColorTokens.of(
-                                context,
-                              ).textTertiary.withAlpha(30),
+                              color: AppColorTokens.of(context).textTertiary
+                                  .withAlpha(30),
                               borderRadius: AppRadius.brSm,
                             ),
                             child: Text(

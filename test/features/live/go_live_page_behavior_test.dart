@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import '../../helpers/widget_test_helpers.dart';
+
 import 'package:n42_wallet/features/live/presentation/pages/go_live_page.dart';
 import 'package:n42_wallet/features/live/presentation/widgets/gift_economy.dart';
 import 'package:n42_wallet/features/live/presentation/widgets/gift_providers.dart';

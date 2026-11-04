@@ -269,9 +269,8 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                     border: Border.all(
                       color: isSelected
                           ? _color(AppThemeKeys.mainBlueColor)
-                          : _color(
-                              AppThemeKeys.itemSubtitleTextColor,
-                            ).withAlpha(50),
+                          : _color(AppThemeKeys.itemSubtitleTextColor)
+                                .withAlpha(50),
                     ),
                   ),
                   child: Text(

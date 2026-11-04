@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -261,27 +262,24 @@ void main() {
       throwsA(code('invalid_response')),
     );
   });
-  test(
-    'local amount upper bound rejects requests and responses beyond server limit',
-    () async {
-      var calls = 0;
-      final c = client((_) {
-        calls++;
-        return response({'asset': 'a', 'available': '9000000000000001'});
-      })..activateTestAccount('synthetic-test-accounta');
-      expect(
-        () => c.transfer(
-          recipient: 'b',
-          asset: 'a',
-          amount: BigInt.parse('9000000000000001'),
-          key: 'k',
-        ),
-        throwsArgumentError,
-      );
-      expect(calls, 0);
-      await expectLater(c.balance('a'), throwsA(code('invalid_response')));
-    },
-  );
+  test('local amount upper bound rejects requests and responses beyond server limit', () async {
+    var calls = 0;
+    final c = client((_) {
+      calls++;
+      return response({'asset': 'a', 'available': '9000000000000001'});
+    })..activateTestAccount('synthetic-test-accounta');
+    expect(
+      () => c.transfer(
+        recipient: 'b',
+        asset: 'a',
+        amount: BigInt.parse('9000000000000001'),
+        key: 'k',
+      ),
+      throwsArgumentError,
+    );
+    expect(calls, 0);
+    await expectLater(c.balance('a'), throwsA(code('invalid_response')));
+  });
   test('endpoint getter returns the actual validated immutable URI', () {
     final endpoint = Uri.parse('http://127.0.0.1:9876/');
     final c = LocalPaymentClient(

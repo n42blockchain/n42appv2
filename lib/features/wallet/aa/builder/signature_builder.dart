@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:typed_data';
+
 import 'package:web3dart/web3dart.dart';
 
 import 'package:n42_wallet/core/passkey/passkey_credential.dart';

@@ -98,8 +98,7 @@ class SignatureDecoder {
         decoded.contains('Nonce:')) {
       return SignatureDecodedResult(
         title: 'Sign In to DApp',
-        description:
-            'This signature verifies your identity. It does NOT approve any transaction.',
+        description: 'This signature verifies your identity. It does NOT approve any transaction.',
         riskLevel: TxRiskLevel.safe,
         fields: [if (decoded.length <= 500) DecodedField('Message', decoded)],
         warnings: [],

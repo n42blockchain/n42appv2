@@ -67,9 +67,8 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
           Container(
             padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
-              color: _themeColor(
-                AppThemeKeys.backGroundColor.name,
-              ).withAlpha(100),
+              color: _themeColor(AppThemeKeys.backGroundColor.name)
+                  .withAlpha(100),
               borderRadius: AppRadius.brMd,
             ),
             child: Row(

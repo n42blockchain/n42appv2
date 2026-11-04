@@ -6,12 +6,11 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
-typedef SolRpcRequest =
-    Future<dynamic> Function(
-      String url,
-      Map<String, dynamic> body, {
-      required bool enableRetry,
-    });
+typedef SolRpcRequest = Future<dynamic> Function(
+  String url,
+  Map<String, dynamic> body, {
+  required bool enableRetry,
+});
 
 class SolApi {
   final SolRpcRequest? request;

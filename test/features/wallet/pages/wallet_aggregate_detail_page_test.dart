@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_aggregate_detail_page.da
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 import '../../../helpers/aggregate_wallet_fixtures.dart';
 
@@ -52,9 +54,8 @@ void main() {
       wrapForTest(
         Builder(
           builder: (context) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(narrow ? 2 : 1)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(narrow ? 2 : 1)),
             child: row
                 ? WalletCoinItem(
                     coinInfo: coin,

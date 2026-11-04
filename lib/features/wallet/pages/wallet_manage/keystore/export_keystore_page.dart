@@ -1,6 +1,7 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'dart:async';
+
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';

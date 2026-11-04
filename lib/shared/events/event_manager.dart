@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart' as global_bus;
 import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
+
 import 'cross_feature_events.dart';
 
 /// Centralized event manager for cross-feature communication.

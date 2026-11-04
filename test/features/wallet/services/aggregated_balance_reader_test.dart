@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -27,24 +28,18 @@ void main() {
     },
   };
 
-  test(
-    'ERC20 uses exact ABI owner word and returns integer above double precision',
-    () async {
-      final reader = AggregatedBalanceReader(
-        clientFactory: () => MockClient((request) async {
-          final body = jsonDecode(request.body);
-          expect(body['method'], 'eth_call');
-          expect(body['params'][0]['to'], eth.contract);
-          expect(
-            body['params'][0]['data'],
-            '0x70a08231${'1'.padLeft(64, '0')}',
-          );
-          return http.Response(jsonEncode({'result': '0x20000000000001'}), 200);
-        }),
-      );
-      expect(await reader.read(eth, address), BigInt.parse('9007199254740993'));
-    },
-  );
+  test('ERC20 uses exact ABI owner word and returns integer above double precision', () async {
+    final reader = AggregatedBalanceReader(
+      clientFactory: () => MockClient((request) async {
+        final body = jsonDecode(request.body);
+        expect(body['method'], 'eth_call');
+        expect(body['params'][0]['to'], eth.contract);
+        expect(body['params'][0]['data'], '0x70a08231${'1'.padLeft(64, '0')}');
+        return http.Response(jsonEncode({'result': '0x20000000000001'}), 200);
+      }),
+    );
+    expect(await reader.read(eth, address), BigInt.parse('9007199254740993'));
+  });
 
   for (final payload in [
     null,

@@ -120,8 +120,7 @@ class MiningRepositoryImpl implements MiningRepository {
     }
     return const Left(
       ServerFailure(
-        message:
-            'Mining not active. Use MiningV2Provider.createDepositUnsignedTx().',
+        message: 'Mining not active. Use MiningV2Provider.createDepositUnsignedTx().',
       ),
     );
   }
@@ -130,8 +129,7 @@ class MiningRepositoryImpl implements MiningRepository {
   Future<Either<Failure, void>> stopMining(String sessionId) async {
     return const Left(
       ServerFailure(
-        message:
-            'Use MiningV2Provider.createExitDepositUnsignedTx() to stop mining.',
+        message: 'Use MiningV2Provider.createExitDepositUnsignedTx() to stop mining.',
       ),
     );
   }
@@ -176,8 +174,7 @@ class MiningRepositoryImpl implements MiningRepository {
   }) async {
     return const Left(
       ServerFailure(
-        message:
-            'N chain rewards are distributed automatically; no manual claim needed.',
+        message: 'N chain rewards are distributed automatically; no manual claim needed.',
       ),
     );
   }

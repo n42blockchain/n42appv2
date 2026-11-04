@@ -90,52 +90,46 @@ void main() {
     await db.insert('TransationRecord', tx.toMapDb());
   }
 
-  test(
-    'filters the full ledger, isolates user/network/token and paginates matched rows',
-    () async {
-      for (var i = 0; i < 260; i++) {
-        await insert('ok-$i', time: '${1700000000 + i}');
-      }
-      await insert('failed-old', state: 2, time: '1600000000');
-      await insert('other-user', user: 'bob', state: 2);
-      await insert('testnet', testnet: 1, state: 2);
-      await insert('other-token', contract: '0xtoken', state: 2);
-      final failures = await repository.load(
-        scope: scope,
-        filter: const TransactionHistoryFilter(status: 2),
-      );
-      expect(failures.records, hasLength(1));
-      expect(
-        (failures.records.single as TransationRecordModel).txHash,
-        'failed-old',
-      );
-      final next = await repository.load(scope: scope, offset: 250);
-      expect(next.records, hasLength(11));
-      expect(next.hasMore, isFalse);
-      expect((next.records.last as TransationRecordModel).txHash, 'failed-old');
-      expect((await repository.load(scope: scope)).hasMore, isTrue);
-    },
-  );
+  test('filters the full ledger, isolates user/network/token and paginates matched rows', () async {
+    for (var i = 0; i < 260; i++) {
+      await insert('ok-$i', time: '${1700000000 + i}');
+    }
+    await insert('failed-old', state: 2, time: '1600000000');
+    await insert('other-user', user: 'bob', state: 2);
+    await insert('testnet', testnet: 1, state: 2);
+    await insert('other-token', contract: '0xtoken', state: 2);
+    final failures = await repository.load(
+      scope: scope,
+      filter: const TransactionHistoryFilter(status: 2),
+    );
+    expect(failures.records, hasLength(1));
+    expect(
+      (failures.records.single as TransationRecordModel).txHash,
+      'failed-old',
+    );
+    final next = await repository.load(scope: scope, offset: 250);
+    expect(next.records, hasLength(11));
+    expect(next.hasMore, isFalse);
+    expect((next.records.last as TransationRecordModel).txHash, 'failed-old');
+    expect((await repository.load(scope: scope)).hasMore, isTrue);
+  });
 
-  test(
-    'inclusive calendar dates exclude the next midnight across second/ms storage',
-    () async {
-      final day = DateTime(2026, 9, 10);
-      final end = DateTime(2026, 9, 11);
-      await insert('before', time: '${day.millisecondsSinceEpoch - 1}');
-      await insert('start', time: '${day.millisecondsSinceEpoch ~/ 1000}');
-      await insert('last-ms', time: '${end.millisecondsSinceEpoch - 1}');
-      await insert('next-day', time: '${end.millisecondsSinceEpoch ~/ 1000}');
-      final result = await repository.load(
-        scope: scope,
-        filter: TransactionHistoryFilter(dateFrom: day, dateTo: day),
-      );
-      expect(result.records.map((e) => (e as TransationRecordModel).txHash), [
-        'last-ms',
-        'start',
-      ]);
-    },
-  );
+  test('inclusive calendar dates exclude the next midnight across second/ms storage', () async {
+    final day = DateTime(2026, 9, 10);
+    final end = DateTime(2026, 9, 11);
+    await insert('before', time: '${day.millisecondsSinceEpoch - 1}');
+    await insert('start', time: '${day.millisecondsSinceEpoch ~/ 1000}');
+    await insert('last-ms', time: '${end.millisecondsSinceEpoch - 1}');
+    await insert('next-day', time: '${end.millisecondsSinceEpoch ~/ 1000}');
+    final result = await repository.load(
+      scope: scope,
+      filter: TransactionHistoryFilter(dateFrom: day, dateTo: day),
+    );
+    expect(result.records.map((e) => (e as TransationRecordModel).txHash), [
+      'last-ms',
+      'start',
+    ]);
+  });
 
   test(
     'export includes every matching row with exact amounts and escaped cells',
@@ -165,59 +159,56 @@ void main() {
     },
   );
 
-  test(
-    'BTC direction filtering scans beyond batches and preserves full input addresses',
-    () async {
-      const btcScope = TransactionHistoryScope(
+  test('BTC direction filtering scans beyond batches and preserves full input addresses', () async {
+    const btcScope = TransactionHistoryScope(
+      userId: 'alice',
+      address: '1AbC',
+      coinType: 'BTC',
+      blockchainType: 'Bitcoin',
+    );
+    for (var i = 0; i < 205; i++) {
+      final tx = BtcTransactionRecodeModel()
+        ..userUuid = 'alice'
+        ..address = '1AbC'
+        ..coinMiniName = 'BTC'
+        ..txHash = 'btc-$i'
+        ..coin = {'unit': 'BTC', 'decimals': 8}
+        ..txTime = '${1700000000 + i}'
+        ..inputModels = [
+          InputModel()..address = [i == 0 ? '1AbC' : '1abc'],
+        ]
+        ..outputModels = [
+          OutputModel()..address = ['1FullRecipientAddress'],
+        ];
+      await db.insert('BtcTransactionRecord', tx.toMapDb());
+    }
+    final filter = const TransactionHistoryFilter(direction: 'out');
+    final result = await repository.load(scope: btcScope, filter: filter);
+    expect(result.records, hasLength(1));
+    expect(
+      (result.records.single as BtcTransactionRecodeModel).txHash,
+      'btc-0',
+    );
+    final chunks = <String>[];
+    expect(
+      await repository.exportCsv(
+        scope: btcScope,
+        filter: filter,
+        writeChunk: (s) async => chunks.add(s),
+      ),
+      1,
+    );
+    expect(chunks.join(), contains('"1AbC","1FullRecipientAddress"'));
+    expect(
+      const TransactionHistoryScope(
         userId: 'alice',
-        address: '1AbC',
-        coinType: 'BTC',
-        blockchainType: 'Bitcoin',
-      );
-      for (var i = 0; i < 205; i++) {
-        final tx = BtcTransactionRecodeModel()
-          ..userUuid = 'alice'
-          ..address = '1AbC'
-          ..coinMiniName = 'BTC'
-          ..txHash = 'btc-$i'
-          ..coin = {'unit': 'BTC', 'decimals': 8}
-          ..txTime = '${1700000000 + i}'
-          ..inputModels = [
-            InputModel()..address = [i == 0 ? '1AbC' : '1abc'],
-          ]
-          ..outputModels = [
-            OutputModel()..address = ['1FullRecipientAddress'],
-          ];
-        await db.insert('BtcTransactionRecord', tx.toMapDb());
-      }
-      final filter = const TransactionHistoryFilter(direction: 'out');
-      final result = await repository.load(scope: btcScope, filter: filter);
-      expect(result.records, hasLength(1));
-      expect(
-        (result.records.single as BtcTransactionRecodeModel).txHash,
-        'btc-0',
-      );
-      final chunks = <String>[];
-      expect(
-        await repository.exportCsv(
-          scope: btcScope,
-          filter: filter,
-          writeChunk: (s) async => chunks.add(s),
-        ),
-        1,
-      );
-      expect(chunks.join(), contains('"1AbC","1FullRecipientAddress"'));
-      expect(
-        const TransactionHistoryScope(
-          userId: 'alice',
-          address: 'SoLaNa',
-          coinType: 'SOL',
-          blockchainType: 'Solana',
-        ).matchesAddress('solana'),
-        isFalse,
-      );
-    },
-  );
+        address: 'SoLaNa',
+        coinType: 'SOL',
+        blockchainType: 'Solana',
+      ).matchesAddress('solana'),
+      isFalse,
+    );
+  });
 
   test(
     'writer failure aborts export and invalid account cannot read records',

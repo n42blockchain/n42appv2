@@ -28,9 +28,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
       final url =
           '$baseUrl/simple/price?ids=$geckoIds&vs_currencies=usd,cny&include_24hr_change=true';
 
-      final response = await _stablecoinPriceRequest(
-        url,
-      ).timeout(const Duration(seconds: 8));
+      final response = await _stablecoinPriceRequest(url)
+          .timeout(const Duration(seconds: 8));
 
       if (response != null && response is Map) {
         final newPrices = <String, Map<String, double>>{};

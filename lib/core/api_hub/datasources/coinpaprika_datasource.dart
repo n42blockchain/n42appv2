@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+
 import '../models/coin_price.dart';
 
 /// CoinPaprika API datasource (free, no key required).
@@ -81,9 +82,8 @@ class CoinPaprikaDatasource {
       if (id == null) continue;
 
       try {
-        final raw = await ExternalHttp.get(
-          '$_base/tickers/$id',
-        ).timeout(const Duration(seconds: 8));
+        final raw = await ExternalHttp.get('$_base/tickers/$id')
+            .timeout(const Duration(seconds: 8));
         if (raw == null || raw is! Map) continue;
 
         final quotes = raw['quotes'] as Map?;

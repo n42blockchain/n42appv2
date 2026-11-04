@@ -366,9 +366,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       // 发现页「直播」入口 → 宿主的视频直播（复用 chat 的 Matrix 房间 +
       // 自部署 LiveKit）。未注册时发现页回退到语音房列表。
       N42Chat.setLiveEntryHandler((ctx) {
-        Navigator.of(
-          ctx,
-        ).push(MaterialPageRoute<void>(builder: (_) => const LiveApp()));
+        Navigator.of(ctx)
+            .push(MaterialPageRoute<void>(builder: (_) => const LiveApp()));
       });
 
       N42Chat.setGoLiveHandler((ctx) async {
@@ -469,9 +468,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
 
   Future<void> openChatEntry(BuildContext navContext) async {
     if (!mounted) return;
-    await Navigator.of(
-      navContext,
-    ).push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
+    await Navigator.of(navContext)
+        .push(MaterialPageRoute(builder: (_) => N42Chat.chatWidget()));
   }
 
   @visibleForTesting

@@ -112,29 +112,26 @@ void main() {
   );
   Future<void> noSleep(Duration _) async {}
 
-  test(
-    'registers, waits for the commit and the packet, verifies the head and sees it certified',
-    () async {
-      final node = _FakeNode();
-      final store = _MemoryStore();
-      final log = <String>[];
-      final result = await MobileVerifyProbe(
-        api: node,
-        store: store,
-        sleep: noSleep,
-      ).run(config, log.add);
+  test('registers, waits for the commit and the packet, verifies the head and sees it certified', () async {
+    final node = _FakeNode();
+    final store = _MemoryStore();
+    final log = <String>[];
+    final result = await MobileVerifyProbe(
+      api: node,
+      store: store,
+      sleep: noSleep,
+    ).run(config, log.add);
 
-      expect(result.passed, isTrue, reason: log.join('\n'));
-      expect(result.signers, 4);
-      expect(node.registers, 2);
-      expect(node.verified, ['0xhead']);
-      expect(node.opened, [
-        'http://10.0.2.2:21012|${'aa' * 32}|mainnet_qmdb_staggered',
-      ]);
-      expect(store.values[mobileVerifyKeyStorageKey], 'aa' * 32);
-      expect(node.closed, isTrue);
-    },
-  );
+    expect(result.passed, isTrue, reason: log.join('\n'));
+    expect(result.signers, 4);
+    expect(node.registers, 2);
+    expect(node.verified, ['0xhead']);
+    expect(node.opened, [
+      'http://10.0.2.2:21012|${'aa' * 32}|mainnet_qmdb_staggered',
+    ]);
+    expect(store.values[mobileVerifyKeyStorageKey], 'aa' * 32);
+    expect(node.closed, isTrue);
+  });
 
   test('reuses the stored device key', () async {
     final node = _FakeNode();

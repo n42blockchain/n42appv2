@@ -9,59 +9,56 @@ DexQuoteModel quote(String value, {String chain = 'ETH'}) =>
     DexQuoteModel.fromJson({'chain': chain, 'tx_value': value});
 void main() {
   const native = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-  test(
-    'native swaps attach exact input including one wei; token swaps attach zero',
-    () {
-      final amount = BigInt.parse('1000000000000000001');
+  test('native swaps attach exact input including one wei; token swaps attach zero', () {
+    final amount = BigInt.parse('1000000000000000001');
+    expect(
+      validatedDexValue(
+        quote: quote('$amount'),
+        chain: 'ETH',
+        tokenAddress: native,
+        amountIn: amount,
+      ),
+      amount,
+    );
+    expect(
+      validatedDexValue(
+        quote: quote('0'),
+        chain: 'ETH',
+        tokenAddress: '0xtoken',
+        amountIn: amount,
+      ),
+      BigInt.zero,
+    );
+    for (final value in ['0', '1', '-1', '1.5', '1000000000000000002']) {
       expect(
-        validatedDexValue(
-          quote: quote('$amount'),
+        () => validatedDexValue(
+          quote: quote(value),
           chain: 'ETH',
           tokenAddress: native,
           amountIn: amount,
         ),
-        amount,
-      );
-      expect(
-        validatedDexValue(
-          quote: quote('0'),
-          chain: 'ETH',
-          tokenAddress: '0xtoken',
-          amountIn: amount,
-        ),
-        BigInt.zero,
-      );
-      for (final value in ['0', '1', '-1', '1.5', '1000000000000000002']) {
-        expect(
-          () => validatedDexValue(
-            quote: quote(value),
-            chain: 'ETH',
-            tokenAddress: native,
-            amountIn: amount,
-          ),
-          throwsFormatException,
-        );
-      }
-      expect(
-        () => validatedDexValue(
-          quote: quote('1'),
-          chain: 'ETH',
-          tokenAddress: '0xtoken',
-          amountIn: amount,
-        ),
         throwsFormatException,
       );
-      expect(
-        () => validatedDexValue(
-          quote: quote('0', chain: 'BSC'),
-          chain: 'ETH',
-          tokenAddress: '0xtoken',
-          amountIn: amount,
-        ),
-        throwsFormatException,
-      );
-    },
-  );
+    }
+    expect(
+      () => validatedDexValue(
+        quote: quote('1'),
+        chain: 'ETH',
+        tokenAddress: '0xtoken',
+        amountIn: amount,
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => validatedDexValue(
+        quote: quote('0', chain: 'BSC'),
+        chain: 'ETH',
+        tokenAddress: '0xtoken',
+        amountIn: amount,
+      ),
+      throwsFormatException,
+    );
+  });
   test(
     'an account or derivation change invalidates even the same quote instance',
     () {
@@ -91,23 +88,20 @@ void main() {
       );
     },
   );
-  test(
-    'signing context belongs to the selected native network, with no cross-chain fallback',
-    () {
-      CoinModel coin(String chain, String contract) => CoinModel()
-        ..address = '0x$chain'
-        ..coin = {
-          'coinType': chain,
-          'contract': contract,
-          'blockchainType': 'Ethereum',
-        };
-      final eth = coin('ETH', '');
-      final token = coin('BNB', '0xtoken');
-      final bnb = coin('BNB', '');
-      expect(dexSigningCoin([eth, token, bnb], 'BNB'), same(bnb));
-      expect(dexSigningCoin([eth, token], 'BNB'), isNull);
-    },
-  );
+  test('signing context belongs to the selected native network, with no cross-chain fallback', () {
+    CoinModel coin(String chain, String contract) => CoinModel()
+      ..address = '0x$chain'
+      ..coin = {
+        'coinType': chain,
+        'contract': contract,
+        'blockchainType': 'Ethereum',
+      };
+    final eth = coin('ETH', '');
+    final token = coin('BNB', '0xtoken');
+    final bnb = coin('BNB', '');
+    expect(dexSigningCoin([eth, token, bnb], 'BNB'), same(bnb));
+    expect(dexSigningCoin([eth, token], 'BNB'), isNull);
+  });
   test(
     'negative and malformed decimal input cannot become a positive swap',
     () {

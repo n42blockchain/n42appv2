@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
@@ -683,18 +684,15 @@ void main() {
       );
     });
 
-    test(
-      'returns true for supported undeployed account when preferring efficiency',
-      () {
-        final result = V08MigrationHelper.shouldUseEIP7702(
-          chainSymbol: 'ETH',
-          isDeployed: false,
-          preferGasEfficiency: true,
-        );
-        // ETH supports EIP-7702; prefer gas efficiency; not deployed
-        expect(result, true);
-      },
-    );
+    test('returns true for supported undeployed account when preferring efficiency', () {
+      final result = V08MigrationHelper.shouldUseEIP7702(
+        chainSymbol: 'ETH',
+        isDeployed: false,
+        preferGasEfficiency: true,
+      );
+      // ETH supports EIP-7702; prefer gas efficiency; not deployed
+      expect(result, true);
+    });
 
     test('returns false when not preferring gas efficiency', () {
       expect(

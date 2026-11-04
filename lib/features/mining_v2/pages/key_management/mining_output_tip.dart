@@ -35,12 +35,10 @@ class MiningOutputTip extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppColorTokens.of(
-                          context,
-                        ).warning.withValues(alpha: 0.2),
-                        AppColorTokens.of(
-                          context,
-                        ).warning.withValues(alpha: 0.1),
+                        AppColorTokens.of(context).warning
+                            .withValues(alpha: 0.2),
+                        AppColorTokens.of(context).warning
+                            .withValues(alpha: 0.1),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -72,9 +70,8 @@ class MiningOutputTip extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.04)
-                      : AppColorTokens.of(
-                          context,
-                        ).textTertiary.withValues(alpha: 0.04),
+                      : AppColorTokens.of(context).textTertiary
+                            .withValues(alpha: 0.04),
                   borderRadius: AppRadius.brMd,
                   border: Border.all(
                     color: isDark

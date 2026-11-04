@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:n42_wallet/core/providers/core_providers.dart'
     show currentUserProvider;
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_execution_guard.dart';

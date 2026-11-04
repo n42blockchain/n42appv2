@@ -96,9 +96,8 @@ class _BalanceCard extends StatelessWidget {
             balanceAsync.when(
               data: (balance) => Text(
                 '\$${balance.toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context).textTheme.headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.w600),
               ),
               loading: () => const SizedBox(
                 height: 40,
@@ -288,9 +287,8 @@ class _WalletErrorWidget extends StatelessWidget {
             Text(
               error.toString(),
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColorTokens.of(context).textTertiary,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: AppColorTokens.of(context).textTertiary),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -328,9 +326,8 @@ class _EmptyWalletWidget extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             S.of(context).g_ui_wallet_get_started,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColorTokens.of(context).textTertiary,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: AppColorTokens.of(context).textTertiary),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(

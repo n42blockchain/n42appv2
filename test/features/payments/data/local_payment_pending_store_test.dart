@@ -316,9 +316,8 @@ void main() {
     'read failures are unavailable and write failures prevent caller POST',
     () async {
       final broken = MockPreferences();
-      when(
-        () => broken.reload(),
-      ).thenThrow(StateError('private platform detail'));
+      when(() => broken.reload())
+          .thenThrow(StateError('private platform detail'));
       final failing = LocalPaymentPendingStore(
         preferences: broken,
         mode: 'localSimulation',
@@ -342,9 +341,8 @@ void main() {
 
       await expectLater(dispatch(), throwsA(failure('write_failed')));
       expect(posts, 0);
-      when(
-        () => broken.setString(any(), any()),
-      ).thenThrow(StateError('secret'));
+      when(() => broken.setString(any(), any()))
+          .thenThrow(StateError('secret'));
       await expectLater(dispatch(), throwsA(failure('write_failed')));
       expect(posts, 0);
     },

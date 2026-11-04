@@ -447,9 +447,10 @@ class SPUtil {
   /// token discovery flow.
   Future<Set<String>> getIgnoredTokenContracts() async {
     await initPrefs();
-    return _decodeJsonList(
-      prefs?.getString(SPkey.ignoredTokenContracts.name),
-    ).map((c) => c.trim()).where((c) => c.isNotEmpty).toSet();
+    return _decodeJsonList(prefs?.getString(SPkey.ignoredTokenContracts.name))
+        .map((c) => c.trim())
+        .where((c) => c.isNotEmpty)
+        .toSet();
   }
 
   /// Persists [contracts] to the ignored list (merges with existing).

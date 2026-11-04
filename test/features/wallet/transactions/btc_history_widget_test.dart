@@ -5,6 +5,7 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_page.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_chain_info_transactions_item.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 
 void main() {

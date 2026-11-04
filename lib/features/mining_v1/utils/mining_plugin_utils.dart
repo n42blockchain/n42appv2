@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter_mining/flutter_mining.dart';
 
 final _flutterMiningPlugin = FlutterMining();

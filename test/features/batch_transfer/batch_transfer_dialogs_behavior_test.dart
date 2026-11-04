@@ -230,8 +230,7 @@ void main() {
     // Exercise the rendered branch without starting a network request.
     final hashProvider =
         _HashTransferProvider(
-          txHash:
-              '0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
+          txHash: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
         )..initialize(
           chainSymbol: 'ETH',
           rpcUrl: 'https://offline.invalid/rpc',

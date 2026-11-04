@@ -14,9 +14,8 @@ void main() {
         expect(isValid, true);
 
         final invalidAddress = '0x123';
-        final isInvalid = RegExp(
-          r'^0x[a-fA-F0-9]{40}$',
-        ).hasMatch(invalidAddress);
+        final isInvalid = RegExp(r'^0x[a-fA-F0-9]{40}$')
+            .hasMatch(invalidAddress);
         expect(isInvalid, false);
       });
     });

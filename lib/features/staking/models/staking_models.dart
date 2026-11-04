@@ -311,8 +311,7 @@ class StakingProtocols {
     description: 'Liquid staking for Ethereum. Stake ETH and receive stETH.',
     chainType: StakingChainType.ethereum,
     chainSymbol: 'ETH',
-    logoUri:
-        'https://tokens.1inch.io/0xae7ab96520de3a18e5e111b5eaab095312d7fe84.png',
+    logoUri: 'https://tokens.1inch.io/0xae7ab96520de3a18e5e111b5eaab095312d7fe84.png',
     apy: 4.0,
     minStakeAmount: 0.0001,
     unbondingPeriodDays: 0, // Lido 是流动性质押，无锁定期
@@ -327,8 +326,7 @@ class StakingProtocols {
     description: 'Native Solana staking with validators.',
     chainType: StakingChainType.solana,
     chainSymbol: 'SOL',
-    logoUri:
-        'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
+    logoUri: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
     apy: 7.0,
     minStakeAmount: 0.01,
     unbondingPeriodDays: 2,
@@ -340,8 +338,7 @@ class StakingProtocols {
     description: 'Native ATOM staking with Cosmos Hub validators.',
     chainType: StakingChainType.cosmos,
     chainSymbol: 'ATOM',
-    logoUri:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
+    logoUri: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
     apy: 15.0,
     minStakeAmount: 0.001,
     unbondingPeriodDays: 21,
@@ -353,8 +350,7 @@ class StakingProtocols {
     description: 'Native DOT staking with Polkadot validators.',
     chainType: StakingChainType.polkadot,
     chainSymbol: 'DOT',
-    logoUri:
-        'https://raw.githubusercontent.com/polkadot-js/apps/master/packages/apps/public/polkadot-circle.svg',
+    logoUri: 'https://raw.githubusercontent.com/polkadot-js/apps/master/packages/apps/public/polkadot-circle.svg',
     apy: 12.0,
     minStakeAmount: 1.0,
     unbondingPeriodDays: 28,

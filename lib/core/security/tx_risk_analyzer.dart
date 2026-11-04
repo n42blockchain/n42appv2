@@ -25,8 +25,7 @@ class TxRiskAnalyzer {
       '0x23b872dd'; // transferFrom(address,address,uint256)
   static const String _selIncAllowance =
       '0xb0431182'; // increaseAllowance(address,uint256)
-  static const String _selPermit =
-      '0xd505accf'; // permit(address,address,uint256,uint256,uint8,bytes32,bytes32)
+  static const String _selPermit = '0xd505accf'; // permit(address,address,uint256,uint256,uint8,bytes32,bytes32)
 
   // ERC-721 / ERC-1155
   static const String _selApprovalForAll =
@@ -159,8 +158,7 @@ class TxRiskAnalyzer {
         fields: fields,
         warnings: [
           'Gasless approval via EIP-2612 — spender gains transfer rights without a second transaction.',
-          if (isUnlimited)
-            'Amount is UNLIMITED — spender can drain all tokens from this contract.',
+          if (isUnlimited) 'Amount is UNLIMITED — spender can drain all tokens from this contract.',
         ],
       );
     }

@@ -107,36 +107,31 @@ class AppConfig {
     // Market API
     'marketHost': {
       'main': 'https://api.n42.world/market/v1',
-      'test':
-          'https://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
     },
 
     // NFT API
     'nftHost': {
       'main': 'https://api.n42.world/nft-market',
-      'test':
-          'https://5.78.28.90:9397', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9397', // TODO(production): Replace with domain name
     },
 
     // Activity API
     'activiteHost': {
       'main': 'https://api.n42.world/activity/v1',
-      'test':
-          'https://5.78.28.90:9390/v1', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9390/v1', // TODO(production): Replace with domain name
     },
 
     // Mining API
     'groupMiningHost': {
       'main': 'https://api.n42.world/activity',
-      'test':
-          'https://5.78.28.90:9390', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9390', // TODO(production): Replace with domain name
     },
 
     // User Center API
     'userInfoHost': {
       'main': 'https://api.n42.world/user',
-      'test':
-          'https://5.78.28.90:9393', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
 
     // Unified-identity N42 ID Hub. A build-time override can point device
@@ -151,15 +146,13 @@ class AppConfig {
     // Wallet/Token API
     'tokenViewUri': {
       'main': 'https://api.n42.world/wallet/',
-      'test':
-          'https://5.78.28.90:9492/', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9492/', // TODO(production): Replace with domain name
     },
 
     // Exchange/Swap API
     'exchangeHost': {
       'main': 'https://api.n42.world/swap',
-      'test':
-          'https://5.78.28.90:9391', // TODO(production): Replace with domain name
+      'test': 'https://5.78.28.90:9391', // TODO(production): Replace with domain name
     },
 
     // News API endpoint key was removed; NewsApi now reads public RSS

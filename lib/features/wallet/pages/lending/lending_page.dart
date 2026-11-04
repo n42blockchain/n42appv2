@@ -150,9 +150,8 @@ class _LendingPageState extends State<LendingPage>
           vertical: AppSpacing.space2,
         ),
         leading: CircleAvatar(
-          backgroundColor: AppColorTokens.of(
-            context,
-          ).brand.withValues(alpha: 0.1),
+          backgroundColor: AppColorTokens.of(context).brand
+              .withValues(alpha: 0.1),
           child: Text(
             reserve.symbol.length > 3
                 ? reserve.symbol.substring(0, 3)

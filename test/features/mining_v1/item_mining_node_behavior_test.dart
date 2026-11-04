@@ -19,10 +19,8 @@ void main() {
             width: 260,
             child: ItemMiningNode(
               countryName: 'USA',
-              nodeAddress:
-                  'https://rpc.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
-              socketUrl:
-                  'wss://ws.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
+              nodeAddress: 'https://rpc.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
+              socketUrl: 'wss://ws.n42.world/archive-mainnet/cluster/primary/region/north-america/node-01',
               icon: '',
               isSelected: true,
               onTap: () => tapped = true,

@@ -116,9 +116,8 @@ class PaymasterOptionCard extends StatelessWidget {
                               vertical: AppSpacing.space2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColorTokens.of(
-                                context,
-                              ).success.withAlpha(30),
+                              color: AppColorTokens.of(context).success
+                                  .withAlpha(30),
                               borderRadius: AppRadius.brSm,
                             ),
                             child: Text(

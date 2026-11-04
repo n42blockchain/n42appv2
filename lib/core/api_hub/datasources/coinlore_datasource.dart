@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+
 import '../models/coin_price.dart';
 
 /// CoinLore API datasource (free, no key required).
@@ -73,9 +74,8 @@ class CoinLoreDatasource {
       if (ids.isEmpty) return {};
 
       final url = '$_base/ticker/?id=${ids.join(',')}';
-      final raw = await ExternalHttp.get(
-        url,
-      ).timeout(const Duration(seconds: 8));
+      final raw = await ExternalHttp.get(url)
+          .timeout(const Duration(seconds: 8));
       if (raw == null || raw is! List) return {};
 
       final result = <String, CoinPrice>{};

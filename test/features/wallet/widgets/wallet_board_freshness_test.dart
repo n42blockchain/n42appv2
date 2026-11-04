@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 
 void main() {
@@ -20,9 +21,8 @@ void main() {
       wrapForTest(
         Builder(
           builder: (context) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(narrow ? 2 : 1)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(narrow ? 2 : 1)),
             child: SingleChildScrollView(
               child: WalletBoard(
                 accountPrice: 25,

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
@@ -13,6 +14,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../../helpers/widget_test_helpers.dart';
 import '../../../../helpers/test_current_user.dart';
 
@@ -105,9 +107,8 @@ void main() {
       wrapForTest(
         Builder(
           builder: (context) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
             child: child,
           ),
         ),

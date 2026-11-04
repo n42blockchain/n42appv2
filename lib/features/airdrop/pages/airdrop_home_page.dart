@@ -74,9 +74,8 @@ class _AirdropHomePageState extends State<AirdropHomePage> {
       opened = false;
     }
     if (!opened && mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_error_4)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(S.of(context).g_key_error_4)));
     }
   }
 
@@ -90,9 +89,8 @@ class _AirdropHomePageState extends State<AirdropHomePage> {
           title: Text(S.of(context).g_key_airdrop_title),
           actions: [
             IconButton(
-              tooltip: MaterialLocalizations.of(
-                context,
-              ).refreshIndicatorSemanticLabel,
+              tooltip: MaterialLocalizations.of(context)
+                  .refreshIndicatorSemanticLabel,
               onPressed: _loading ? null : _load,
               icon: const Icon(Icons.refresh_rounded),
             ),

@@ -215,9 +215,8 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
 
   void _showSnack(BuildContext context, String message) {
     if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
     }
   }
 

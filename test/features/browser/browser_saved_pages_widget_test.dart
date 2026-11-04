@@ -92,9 +92,8 @@ void main() {
         builder: (context) => TextButton(
           onPressed: () async {
             onResult(
-              await Navigator.of(
-                context,
-              ).push<Object?>(MaterialPageRoute(builder: (_) => page)),
+              await Navigator.of(context)
+                  .push<Object?>(MaterialPageRoute(builder: (_) => page)),
             );
           },
           child: const Text('Open saved page'),

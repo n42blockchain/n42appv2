@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/home/profile/profile_home_page.dart';
 import 'package:n42_wallet/features/home/setting/setting_sys_language.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/wallet_activity_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../helpers/widget_test_helpers.dart';
 
 void main() {

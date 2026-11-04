@@ -67,28 +67,25 @@ void main() {
       },
     );
 
-    test(
-      'second call while buildwallet==true is a no-op (idempotent)',
-      () async {
-        final provider = FakeWalletActionProvider();
+    test('second call while buildwallet==true is a no-op (idempotent)', () async {
+      final provider = FakeWalletActionProvider();
 
-        // Manually set lock to simulate in-flight state
-        provider.buildwallet = true;
+      // Manually set lock to simulate in-flight state
+      provider.buildwallet = true;
 
-        // This call should return immediately without incrementing initCallCount
-        await provider.initWallet();
+      // This call should return immediately without incrementing initCallCount
+      await provider.initWallet();
 
-        expect(
-          provider.initCallCount,
-          0,
-          reason: 'concurrent second call must be idempotent',
-        );
-        // Restore and verify normal call works afterwards
-        provider.buildwallet = false;
-        await provider.initWallet();
-        expect(provider.initCallCount, 1);
-      },
-    );
+      expect(
+        provider.initCallCount,
+        0,
+        reason: 'concurrent second call must be idempotent',
+      );
+      // Restore and verify normal call works afterwards
+      provider.buildwallet = false;
+      await provider.initWallet();
+      expect(provider.initCallCount, 1);
+    });
 
     test('sequential calls each complete and release lock', () async {
       final provider = FakeWalletActionProvider();

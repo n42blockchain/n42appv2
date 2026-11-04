@@ -33,9 +33,9 @@ class LoyaltyService {
 
     return LoyaltySnapshot(
       account: LoyaltyAccount.fromJson(_mapData(results[0])),
-      tasks: _listData(
-        results[1],
-      ).map(LoyaltyTask.fromJson).toList(growable: false),
+      tasks: _listData(results[1])
+          .map(LoyaltyTask.fromJson)
+          .toList(growable: false),
       rewards: _optionalList(results[2], LoyaltyReward.fromJson),
       history: _optionalList(results[3], LoyaltyHistoryItem.fromJson),
       referrals: _optionalList(results[4], LoyaltyReferral.fromJson),
@@ -78,9 +78,8 @@ class LoyaltyService {
   }
 
   Future<dynamic> _get(String path, String walletAddress) async {
-    final uri = Uri.parse(
-      '$_baseUrl$path',
-    ).replace(queryParameters: {'wallet': walletAddress});
+    final uri = Uri.parse('$_baseUrl$path')
+        .replace(queryParameters: {'wallet': walletAddress});
     final response = await _client
         .get(uri, headers: _headers)
         .timeout(const Duration(seconds: 12));

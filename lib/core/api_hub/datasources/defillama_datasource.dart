@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+
 import '../models/defi_protocol.dart';
 
 /// DeFi Llama API datasource (free, no key required).
@@ -31,9 +32,8 @@ class DefiLlamaDatasource {
     }
 
     try {
-      final raw = await ExternalHttp.get(
-        '$_base/protocols',
-      ).timeout(const Duration(seconds: 8));
+      final raw = await ExternalHttp.get('$_base/protocols')
+          .timeout(const Duration(seconds: 8));
       final protocols = parseProtocolsResponse(raw, fallback: _protocolsCache);
       if (protocols.isNotEmpty) {
         _protocolsCache = protocols;
@@ -62,9 +62,8 @@ class DefiLlamaDatasource {
     }
 
     try {
-      final raw = await ExternalHttp.get(
-        '$_yieldsBase/pools',
-      ).timeout(const Duration(seconds: 8));
+      final raw = await ExternalHttp.get('$_yieldsBase/pools')
+          .timeout(const Duration(seconds: 8));
       final yields = parseYieldsResponse(raw, fallback: _yieldsCache);
       if (yields.isNotEmpty) {
         _yieldsCache = yields;

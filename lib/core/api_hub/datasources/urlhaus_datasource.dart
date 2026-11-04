@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
+
 import '../models/url_threat.dart';
 
 /// URLhaus API datasource (abuse.ch — free, no key required).

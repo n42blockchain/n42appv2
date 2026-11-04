@@ -134,7 +134,13 @@ void main() {
         await tester.pump();
         await tester.pump();
         expect(tester.state(find.byType(ImportOne)), same(pageState));
-        expect(tester.widget<TextField>(find.byType(TextField).first).controller!.text, syntheticPhrase);
+        expect(
+          tester
+              .widget<TextField>(find.byType(TextField).first)
+              .controller!
+              .text,
+          syntheticPhrase,
+        );
         expect(tester.takeException(), isNull);
       }
       tester.view.viewInsets = const FakeViewPadding(bottom: 300);

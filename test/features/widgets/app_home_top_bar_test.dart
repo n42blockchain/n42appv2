@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../helpers/widget_test_helpers.dart';
 
 void main() {
@@ -17,8 +18,7 @@ void main() {
       await tester.pumpWidget(
         wrapForTest(
           AppHomeTopBar(
-            title:
-                'A very long wallet account name that must not cover any actions',
+            title: 'A very long wallet account name that must not cover any actions',
             onLeftImageUri: 'assets/img/menu.png',
             actions: [
               for (var i = 0; i < 3; i++)

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'bridge_provider_approval_test.dart' show FakeBridgeApiClient;
 
 MessageModel ok(dynamic data) => MessageModel()..data = data;
@@ -253,35 +255,32 @@ void main() {
     },
   );
 
-  test(
-    'native send persists exact original intent even if form changes during signing',
-    () async {
-      await configure();
-      final sent = <Map<String, dynamic>>[];
-      final result = await execute((tx) async {
-        sent.add(tx);
-        provider.setFromAmount('99');
-        return '0xsent';
-      });
-      expect(result.error, isFalse);
-      expect(result.data, '0xsent');
-      expect(sent, hasLength(1));
-      expect(api.allowanceCalls, 0);
-      final transaction = provider.transactions.single;
-      expect(transaction.fromAmount, '1.000000000000000001');
-      expect(transaction.fromChainId, 1);
-      expect(transaction.toChainId, 42161);
-      expect(transaction.fromAddress, '0xalice');
-      expect(transaction.toAddress, '0xbob');
-      expect(transaction.status, BridgeTransactionStatus.pending);
-      final prefs = await SharedPreferences.getInstance();
-      await Future<void>.delayed(Duration.zero);
-      expect(
-        jsonDecode(prefs.getString('bridge_transactions_v1')!)[0]['txHash'],
-        '0xsent',
-      );
-    },
-  );
+  test('native send persists exact original intent even if form changes during signing', () async {
+    await configure();
+    final sent = <Map<String, dynamic>>[];
+    final result = await execute((tx) async {
+      sent.add(tx);
+      provider.setFromAmount('99');
+      return '0xsent';
+    });
+    expect(result.error, isFalse);
+    expect(result.data, '0xsent');
+    expect(sent, hasLength(1));
+    expect(api.allowanceCalls, 0);
+    final transaction = provider.transactions.single;
+    expect(transaction.fromAmount, '1.000000000000000001');
+    expect(transaction.fromChainId, 1);
+    expect(transaction.toChainId, 42161);
+    expect(transaction.fromAddress, '0xalice');
+    expect(transaction.toAddress, '0xbob');
+    expect(transaction.status, BridgeTransactionStatus.pending);
+    final prefs = await SharedPreferences.getInstance();
+    await Future<void>.delayed(Duration.zero);
+    expect(
+      jsonDecode(prefs.getString('bridge_transactions_v1')!)[0]['txHash'],
+      '0xsent',
+    );
+  });
 
   test(
     'duplicate execution is rejected while the first transaction is preparing',
@@ -328,21 +327,18 @@ void main() {
     },
   );
 
-  test(
-    'cancelled and thrown signing do not create phantom history and allow retry',
-    () async {
-      await configure();
-      expect((await execute((_) async => null)).error, isTrue);
-      expect(provider.transactions, isEmpty);
-      expect(
-        (await execute((_) async => throw StateError('signing failed'))).error,
-        isTrue,
-      );
-      expect(provider.transactions, isEmpty);
-      expect((await execute((_) async => '0xretry')).error, isFalse);
-      expect(provider.transactions.single.txHash, '0xretry');
-    },
-  );
+  test('cancelled and thrown signing do not create phantom history and allow retry', () async {
+    await configure();
+    expect((await execute((_) async => null)).error, isTrue);
+    expect(provider.transactions, isEmpty);
+    expect(
+      (await execute((_) async => throw StateError('signing failed'))).error,
+      isTrue,
+    );
+    expect(provider.transactions, isEmpty);
+    expect((await execute((_) async => '0xretry')).error, isFalse);
+    expect(provider.transactions.single.txHash, '0xretry');
+  });
 
   test(
     'broadcast completed after disposal is persisted for restoration',

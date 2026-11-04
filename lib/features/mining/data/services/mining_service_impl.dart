@@ -6,6 +6,7 @@
 // Author: Jiang Yiwei
 
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;

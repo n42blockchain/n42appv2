@@ -170,27 +170,24 @@ void main() {
       expect(result['data'], '0xDataFirst');
     });
 
-    test(
-      'same raw params produce different from/data for eth_sign vs personal_sign',
-      () {
-        final rawParams = ['0xParamA', '0xParamB'];
+    test('same raw params produce different from/data for eth_sign vs personal_sign', () {
+      final rawParams = ['0xParamA', '0xParamB'];
 
-        final ethSign = parseEthSign(rawParams);
-        final personalSign = parsePersonalSign(rawParams);
+      final ethSign = parseEthSign(rawParams);
+      final personalSign = parsePersonalSign(rawParams);
 
-        // eth_sign: address at index 0
-        expect(ethSign['from'], '0xParamA');
-        expect(ethSign['data'], '0xParamB');
+      // eth_sign: address at index 0
+      expect(ethSign['from'], '0xParamA');
+      expect(ethSign['data'], '0xParamB');
 
-        // personal_sign: address at index 1
-        expect(personalSign['from'], '0xParamB');
-        expect(personalSign['data'], '0xParamA');
+      // personal_sign: address at index 1
+      expect(personalSign['from'], '0xParamB');
+      expect(personalSign['data'], '0xParamA');
 
-        // They must differ
-        expect(ethSign['from'], isNot(personalSign['from']));
-        expect(ethSign['data'], isNot(personalSign['data']));
-      },
-    );
+      // They must differ
+      expect(ethSign['from'], isNot(personalSign['from']));
+      expect(ethSign['data'], isNot(personalSign['data']));
+    });
 
     test('both eth_sign and personal_sign produce signType=message', () {
       expect(parseEthSign(['a', 'b'])['signType'], 'message');

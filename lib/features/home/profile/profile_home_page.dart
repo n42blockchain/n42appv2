@@ -243,9 +243,8 @@ class ProfileHomePage extends ConsumerWidget {
         Colors.indigo,
         () => _navigateToLanguageSettings(context, ref),
         trailing: Text(
-          getLanguageByCode(
-            languageCodeFromLocale(ref.watch(localeProvider)),
-          ).name,
+          getLanguageByCode(languageCodeFromLocale(ref.watch(localeProvider)))
+              .name,
           style: AppTypography.bodySm.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
           ),

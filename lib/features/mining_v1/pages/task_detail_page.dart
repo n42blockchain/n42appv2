@@ -106,16 +106,14 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                   //展示数据
                   NavShowDataItem(
                     "gasLimit",
-                    parseMiningNumericValue(
-                          taskDetailResponse?["gasLimit"],
-                        )?.toString() ??
+                    parseMiningNumericValue(taskDetailResponse?["gasLimit"])
+                            ?.toString() ??
                         '',
                   ),
                   NavShowDataItem(
                     "gasUsed",
-                    parseMiningNumericValue(
-                          taskDetailResponse?["gasUsed"],
-                        )?.toString() ??
+                    parseMiningNumericValue(taskDetailResponse?["gasUsed"])
+                            ?.toString() ??
                         '',
                   ),
 
@@ -161,17 +159,15 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                   ),
                   NavShowDataItem(
                     "block number",
-                    parseMiningNumericValue(
-                          taskDetailResponse?["number"],
-                        )?.toString() ??
+                    parseMiningNumericValue(taskDetailResponse?["number"])
+                            ?.toString() ??
                         '',
                   ),
                   NavShowDataItem(
                     "timestamp",
                     dataUtils.getTimeByTimeStamp(
-                      parseMiningNumericValue(
-                            taskDetailResponse?["timestamp"],
-                          )?.toString() ??
+                      parseMiningNumericValue(taskDetailResponse?["timestamp"])
+                              ?.toString() ??
                           '',
                     ),
                   ),

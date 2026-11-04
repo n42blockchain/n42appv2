@@ -113,11 +113,9 @@ void main() {
 
   (int, dynamic, dynamic) response(BrowserControllerFake controller) {
     final script = controller.scripts.lastWhere((s) => s.contains('._n42Cb('));
-    final args =
-        jsonDecode(
-              '[${script.substring(script.indexOf('._n42Cb(') + 8, script.length - 1)}]',
-            )
-            as List;
+    final args = jsonDecode(
+      '[${script.substring(script.indexOf('._n42Cb(') + 8, script.length - 1)}]',
+    ) as List;
     return (
       args[0] as int,
       args[1] == null ? null : jsonDecode(args[1] as String),
@@ -322,19 +320,16 @@ void main() {
     },
   );
 
-  test(
-    'title response for a previously selected tab does not rename the current tab',
-    () async {
-      final first = await tab('https://one.example.test');
-      final old = Completer<String?>();
-      first.title = () => old.future;
-      final pending = provider.getTitle();
-      await tab('https://two.example.test');
-      old.complete('Old tab title');
-      await pending;
-      expect(provider.wInfoList[1]['title'], isNull);
-    },
-  );
+  test('title response for a previously selected tab does not rename the current tab', () async {
+    final first = await tab('https://one.example.test');
+    final old = Completer<String?>();
+    first.title = () => old.future;
+    final pending = provider.getTitle();
+    await tab('https://two.example.test');
+    old.complete('Old tab title');
+    await pending;
+    expect(provider.wInfoList[1]['title'], isNull);
+  });
 
   test('newer navigation response wins over a slow earlier query', () async {
     final controller = await tab('https://one.example.test');
@@ -424,9 +419,11 @@ void main() {
       () async {
         final controller = await tab('https://one.example.test');
         if (hasApproval) {
-          provider.onSigningRequest =
-              ({required origin, required method, required details}) async =>
-                  false;
+          provider.onSigningRequest = ({
+            required origin,
+            required method,
+            required details,
+          }) async => false;
         }
         await message(controller, 'eth_requestAccounts');
         expect(response(controller).$3['code'], 4001);
@@ -459,36 +456,38 @@ void main() {
   test('different ports do not share account authorization', () async {
     final first = await tab('https://one.example.test:8443');
     final second = await tab('https://one.example.test:9443');
-    provider.onSigningRequest =
-        ({required origin, required method, required details}) async => true;
+    provider.onSigningRequest = ({
+      required origin,
+      required method,
+      required details,
+    }) async => true;
     await message(first, 'eth_requestAccounts');
     await message(second, 'eth_accounts');
     expect(response(second).$2, isEmpty);
   });
 
-  test(
-    'approval completing after cross-origin navigation cannot expose the account to the new page',
-    () async {
-      final controller = await tab('https://one.example.test');
-      final approval = Completer<bool>();
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) =>
-              approval.future;
-      await message(controller, 'eth_requestAccounts');
-      controller.navigation!.urlChanged!(
-        const UrlChange(url: 'https://two.example.test'),
-      );
-      approval.complete(true);
-      await flush();
-      expect(
-        controller.scripts,
-        isEmpty,
-        reason: 'Old promise response must not execute in the new document',
-      );
-      await message(controller, 'eth_accounts', id: 8);
-      expect(response(controller).$2, isEmpty);
-    },
-  );
+  test('approval completing after cross-origin navigation cannot expose the account to the new page', () async {
+    final controller = await tab('https://one.example.test');
+    final approval = Completer<bool>();
+    provider.onSigningRequest = ({
+      required origin,
+      required method,
+      required details,
+    }) => approval.future;
+    await message(controller, 'eth_requestAccounts');
+    controller.navigation!.urlChanged!(
+      const UrlChange(url: 'https://two.example.test'),
+    );
+    approval.complete(true);
+    await flush();
+    expect(
+      controller.scripts,
+      isEmpty,
+      reason: 'Old promise response must not execute in the new document',
+    );
+    await message(controller, 'eth_accounts', id: 8);
+    expect(response(controller).$2, isEmpty);
+  });
 
   test(
     'approval completing after its tab closes does not execute JavaScript',
@@ -496,9 +495,11 @@ void main() {
       final first = await tab('https://one.example.test');
       await tab('https://two.example.test');
       final approval = Completer<bool>();
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) =>
-              approval.future;
+      provider.onSigningRequest = ({
+        required origin,
+        required method,
+        required details,
+      }) => approval.future;
       await message(first, 'eth_requestAccounts');
       provider.wListDelete(0);
       await flush();
@@ -513,9 +514,11 @@ void main() {
     () async {
       final controller = await tab('https://one.example.test/start');
       final approval = Completer<bool>();
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) =>
-              approval.future;
+      provider.onSigningRequest = ({
+        required origin,
+        required method,
+        required details,
+      }) => approval.future;
       await message(controller, 'eth_requestAccounts');
       controller.navigation!.urlChanged!(
         const UrlChange(url: 'https://one.example.test/connected'),
@@ -533,9 +536,11 @@ void main() {
       () async {
         final controller = await tab('https://one.example.test');
         final approval = Completer<bool>();
-        provider.onSigningRequest =
-            ({required origin, required method, required details}) =>
-                approval.future;
+        provider.onSigningRequest = ({
+          required origin,
+          required method,
+          required details,
+        }) => approval.future;
         await message(controller, 'eth_requestAccounts');
         if (navigation == 'reload') {
           controller.navigation!.started!('https://one.example.test');
@@ -563,9 +568,11 @@ void main() {
     () async {
       final controller = await tab('https://one.example.test');
       final approval = Completer<bool>();
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) =>
-              approval.future;
+      provider.onSigningRequest = ({
+        required origin,
+        required method,
+        required details,
+      }) => approval.future;
       await message(controller, 'eth_requestAccounts');
       controller.navigation!.urlChanged!(
         const UrlChange(url: 'https://two.example.test'),
@@ -581,8 +588,11 @@ void main() {
     () async {
       final first = await tab('https://one.example.test/a');
       final second = await tab('https://one.example.test/b');
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) async => true;
+      provider.onSigningRequest = ({
+        required origin,
+        required method,
+        required details,
+      }) async => true;
       await message(first, 'eth_requestAccounts');
       await message(second, 'eth_coinbase');
       expect(response(second).$2, address);
@@ -603,25 +613,22 @@ void main() {
     );
   }
 
-  test(
-    'provider chain lookup follows replacement wallet models with the same count',
-    () async {
-      final controller = await tab('https://one.example.test');
-      await message(controller, 'eth_chainId');
-      expect(response(controller).$2, '0x1');
-      wallet.coinModels = [
-        CoinModel()
-          ..address = address
-          ..coin = {
-            'coinType': 'ETH',
-            'blockchainType': 'Ethereum',
-            'chainId': 137,
-          },
-      ];
-      await message(controller, 'eth_chainId');
-      expect(response(controller).$2, '0x89');
-    },
-  );
+  test('provider chain lookup follows replacement wallet models with the same count', () async {
+    final controller = await tab('https://one.example.test');
+    await message(controller, 'eth_chainId');
+    expect(response(controller).$2, '0x1');
+    wallet.coinModels = [
+      CoinModel()
+        ..address = address
+        ..coin = {
+          'coinType': 'ETH',
+          'blockchainType': 'Ethereum',
+          'chainId': 137,
+        },
+    ];
+    await message(controller, 'eth_chainId');
+    expect(response(controller).$2, '0x89');
+  });
 
   test(
     'sensitive request requires approval through the origin-bound handler',
@@ -643,9 +650,11 @@ void main() {
     test('pending signature rejects a wallet $change change', () async {
       final controller = await tab('https://one.example.test');
       final approval = Completer<bool>();
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) =>
-              approval.future;
+      provider.onSigningRequest = ({
+        required origin,
+        required method,
+        required details,
+      }) => approval.future;
       await message(controller, 'personal_sign', params: ['0x6869', address]);
       if (change == 'index') {
         wallet.walletIndex++;
@@ -674,9 +683,11 @@ void main() {
       addTearDown(app.globalProviderContainer.dispose);
       final controller = await tab('https://one.example.test');
       final approval = Completer<bool>();
-      provider.onSigningRequest =
-          ({required origin, required method, required details}) =>
-              approval.future;
+      provider.onSigningRequest = ({
+        required origin,
+        required method,
+        required details,
+      }) => approval.future;
       await message(controller, 'personal_sign', params: ['0x6869', address]);
       if (change == 'closed tab') {
         provider.wListDelete(0);
@@ -727,9 +738,11 @@ void main() {
   test('pending connection approval is rejected when wallet changes', () async {
     final controller = await tab('https://one.example.test');
     final approval = Completer<bool>();
-    provider.onSigningRequest =
-        ({required origin, required method, required details}) =>
-            approval.future;
+    provider.onSigningRequest = ({
+      required origin,
+      required method,
+      required details,
+    }) => approval.future;
     await message(controller, 'eth_requestAccounts');
     wallet.coinModels = [
       CoinModel()

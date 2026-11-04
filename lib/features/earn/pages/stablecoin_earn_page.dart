@@ -55,9 +55,9 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
       _chains.entries.map((e) async {
         try {
           final reserves = await AaveService.getReserves(e.key);
-          return StablecoinEarnUtils.filterSortStablecoins(
-            reserves,
-          ).map((r) => _StablecoinEarnEntry(e.key, e.value, r)).toList();
+          return StablecoinEarnUtils.filterSortStablecoins(reserves)
+              .map((r) => _StablecoinEarnEntry(e.key, e.value, r))
+              .toList();
         } catch (_) {
           return <_StablecoinEarnEntry>[];
         }

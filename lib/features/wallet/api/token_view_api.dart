@@ -177,9 +177,8 @@ class TokenViewApi {
       case 'Polkadot':
         return await DotApi().getTokens(address, coinType, isTest: isTest);
       case 'Aptos':
-        return await AptApi(
-          isTest: isTest,
-        ).getBalance(address, contract: contract);
+        return await AptApi(isTest: isTest)
+            .getBalance(address, contract: contract);
       case 'Sui':
         return await SuiApi(isTest: isTest).getBalanceSui(address);
       case 'TheOpenNetwork':
@@ -214,9 +213,8 @@ class TokenViewApi {
       case 'Algorand':
         return await AlgoApi().sendTx(signHash, isTest: netMode != 'main');
       case 'Zilliqa':
-        return await ZilApi(
-          isTest: netMode != 'main',
-        ).createTransaction(signHash);
+        return await ZilApi(isTest: netMode != 'main')
+            .createTransaction(signHash);
     }
     return null;
   }

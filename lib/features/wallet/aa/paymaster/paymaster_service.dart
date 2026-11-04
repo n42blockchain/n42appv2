@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 import 'package:n42_wallet/core/utils/app_logger.dart';

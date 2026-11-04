@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 
@@ -330,8 +331,7 @@ void main() {
           'primaryType': 'Permit',
           'message': {
             'spender': '0x1234567890abcdef1234567890abcdef12345678',
-            'value':
-                '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+            'value': '115792089237316195423570985008687907853269984665640564039457584007913129639935',
             'deadline': '1700000000',
           },
         });

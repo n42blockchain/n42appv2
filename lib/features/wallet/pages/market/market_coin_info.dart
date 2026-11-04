@@ -16,6 +16,7 @@ import 'package:n42_wallet/features/wallet/services/portfolio_trade_service.dart
 import 'package:n42_wallet/features/widgets/candlestick_chart.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+
 import 'market_coin_info_chart.dart';
 import 'market_coin_info_helpers.dart';
 import 'market_coin_info_links.dart';

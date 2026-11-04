@@ -175,9 +175,9 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       obscure: showPwd1,
                       onToggleObscure: () =>
                           setState(() => showPwd1 = !showPwd1),
-                      onEditingComplete: () => FocusScope.of(
-                        context,
-                      ).requestFocus(_uPasswordConfirmFocusNode),
+                      onEditingComplete: () =>
+                          FocusScope.of(context)
+                              .requestFocus(_uPasswordConfirmFocusNode),
                     ),
                     LoginTitle(
                       title: S.of(context).rest_Confirm_password,

@@ -5,6 +5,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
+
 import '../datasources/urlhaus_datasource.dart';
 import '../models/url_threat.dart';
 

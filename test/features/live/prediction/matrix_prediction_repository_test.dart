@@ -105,18 +105,16 @@ void main() {
     final sub = repo.watchMarkets(roomId).listen((_) {});
     await _flush();
 
-    final decoded =
-        jsonDecode(
-              jsonEncode({
-                't': 'pred',
-                'a': 'create',
-                'm': '$roomId~server-event',
-                'room': roomId,
-                'q': 'Visible on the viewer?',
-                'o': ['Yes', 'No'],
-              }),
-            )
-            as Map<String, dynamic>;
+    final decoded = jsonDecode(
+      jsonEncode({
+        't': 'pred',
+        'a': 'create',
+        'm': '$roomId~server-event',
+        'room': roomId,
+        'q': 'Visible on the viewer?',
+        'o': ['Yes', 'No'],
+      }),
+    ) as Map<String, dynamic>;
     chat.emit([
       LiveEvent(
         id: r'$remote-event',

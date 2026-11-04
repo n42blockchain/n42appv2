@@ -117,9 +117,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => ImportKeystore())),
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => ImportKeystore())),
           ),
         ),
         indentedDivider,

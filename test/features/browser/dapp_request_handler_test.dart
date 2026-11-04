@@ -81,9 +81,11 @@ void main() {
                   ..coin['service'] = 'http://127.0.0.1:1',
               ],
             )
-            ..onSigningRequest =
-                ({required origin, required method, required details}) async =>
-                    true;
+            ..onSigningRequest = ({
+              required origin,
+              required method,
+              required details,
+            }) async => true;
     });
     tearDown(() {
       handler.dispose();
@@ -267,9 +269,11 @@ void main() {
             );
             addTearDown(handler.dispose);
             final approval = Completer<bool>();
-            handler.onSigningRequest =
-                ({required origin, required method, required details}) =>
-                    approval.future;
+            handler.onSigningRequest = ({
+              required origin,
+              required method,
+              required details,
+            }) => approval.future;
             final request = handler.handleRequest(entry.key, entry.value);
             final rejected = expectLater(request, throwsRpcError(4001));
             if (change == 'address') {

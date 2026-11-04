@@ -109,60 +109,51 @@ void main() {
     },
   );
 
-  test(
-    'permission history loads persisted entries, ignores reads and isolates origins',
-    () async {
-      SharedPreferences.setMockInitialValues({'dapp_perms_v1': '{broken'});
-      expect(await DAppPermissionsTracker.getAll(), isEmpty);
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(
-        'dapp_perms_v1',
-        jsonEncode({
-          'https://first.test': ['eth_requestAccounts'],
-        }),
-      );
-      expect(await DAppPermissionsTracker.getForOrigin('https://first.test'), [
-        'eth_requestAccounts',
-      ]);
-      await DAppPermissionsTracker.record('', 'personal_sign');
-      await DAppPermissionsTracker.record(
-        'https://second.test',
-        'eth_blockNumber',
-      );
-      expect(await DAppPermissionsTracker.getForOrigin(''), isEmpty);
-      expect(
-        await DAppPermissionsTracker.getForOrigin('https://second.test'),
-        isEmpty,
-      );
-      await DAppPermissionsTracker.record(
-        'https://second.test',
-        'personal_sign',
-      );
-      await DAppPermissionsTracker.record(
-        'https://second.test',
-        'eth_sendTransaction',
-      );
-      await DAppPermissionsTracker.record(
-        'https://second.test',
-        'personal_sign',
-      );
-      final methods = await DAppPermissionsTracker.getForOrigin(
-        'https://second.test',
-      );
-      expect(methods, ['personal_sign', 'eth_sendTransaction']);
-      expect(() => methods.add('eth_sign'), throwsUnsupportedError);
-      expect(jsonDecode(prefs.getString('dapp_perms_v1')!), {
+  test('permission history loads persisted entries, ignores reads and isolates origins', () async {
+    SharedPreferences.setMockInitialValues({'dapp_perms_v1': '{broken'});
+    expect(await DAppPermissionsTracker.getAll(), isEmpty);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'dapp_perms_v1',
+      jsonEncode({
         'https://first.test': ['eth_requestAccounts'],
-        'https://second.test': ['personal_sign', 'eth_sendTransaction'],
-      });
-      await DAppPermissionsTracker.clearForOrigin('https://second.test');
-      expect(
-        await DAppPermissionsTracker.getForOrigin('https://second.test'),
-        isEmpty,
-      );
-      expect(await DAppPermissionsTracker.getForOrigin('https://first.test'), [
-        'eth_requestAccounts',
-      ]);
-    },
-  );
+      }),
+    );
+    expect(await DAppPermissionsTracker.getForOrigin('https://first.test'), [
+      'eth_requestAccounts',
+    ]);
+    await DAppPermissionsTracker.record('', 'personal_sign');
+    await DAppPermissionsTracker.record(
+      'https://second.test',
+      'eth_blockNumber',
+    );
+    expect(await DAppPermissionsTracker.getForOrigin(''), isEmpty);
+    expect(
+      await DAppPermissionsTracker.getForOrigin('https://second.test'),
+      isEmpty,
+    );
+    await DAppPermissionsTracker.record('https://second.test', 'personal_sign');
+    await DAppPermissionsTracker.record(
+      'https://second.test',
+      'eth_sendTransaction',
+    );
+    await DAppPermissionsTracker.record('https://second.test', 'personal_sign');
+    final methods = await DAppPermissionsTracker.getForOrigin(
+      'https://second.test',
+    );
+    expect(methods, ['personal_sign', 'eth_sendTransaction']);
+    expect(() => methods.add('eth_sign'), throwsUnsupportedError);
+    expect(jsonDecode(prefs.getString('dapp_perms_v1')!), {
+      'https://first.test': ['eth_requestAccounts'],
+      'https://second.test': ['personal_sign', 'eth_sendTransaction'],
+    });
+    await DAppPermissionsTracker.clearForOrigin('https://second.test');
+    expect(
+      await DAppPermissionsTracker.getForOrigin('https://second.test'),
+      isEmpty,
+    );
+    expect(await DAppPermissionsTracker.getForOrigin('https://first.test'), [
+      'eth_requestAccounts',
+    ]);
+  });
 }

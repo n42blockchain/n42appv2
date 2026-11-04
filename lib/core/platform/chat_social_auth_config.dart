@@ -71,9 +71,7 @@ class ChatSocialAuthConfig {
     final lines = <String>[];
 
     lines.add(
-      googleConfigured
-          ? '[ChatSocialAuth] Google: enabled'
-          : '[ChatSocialAuth] Google: disabled (missing client id / server client id)',
+      googleConfigured ? '[ChatSocialAuth] Google: enabled' : '[ChatSocialAuth] Google: disabled (missing client id / server client id)',
     );
     lines.add(
       supportsAppleForCurrentPlatform(isIOS: isIOS, isMacOS: isMacOS)

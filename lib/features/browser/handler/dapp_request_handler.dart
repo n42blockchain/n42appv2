@@ -17,12 +17,11 @@ import 'package:wallet/wallet.dart' as wallet_types;
 
 /// Callback to show a signing confirmation dialog.
 /// Returns `true` if the user approved, `false` if rejected.
-typedef DAppSigningCallback =
-    Future<bool> Function({
-      required String origin,
-      required String method,
-      required Map<String, dynamic> details,
-    });
+typedef DAppSigningCallback = Future<bool> Function({
+  required String origin,
+  required String method,
+  required Map<String, dynamic> details,
+});
 
 class DAppRequestHandler {
   final List<CoinModel> ethCoinModels;

@@ -3,27 +3,24 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_record_utils.dart';
 
 void main() {
-  test(
-    'portfolioRecordFromCoinModel keeps holdings with balance even when price is unavailable',
-    () {
-      final coin =
-          CoinModel.fromMap({
-              'miniName': 'ETH',
-              'coinType': 'ETH',
-              'name': 'Ethereum',
-              'icon': '',
-              'decimals': 18,
-            })
-            ..balance = BigInt.parse('1000000000000000000')
-            ..value = 0;
+  test('portfolioRecordFromCoinModel keeps holdings with balance even when price is unavailable', () {
+    final coin =
+        CoinModel.fromMap({
+            'miniName': 'ETH',
+            'coinType': 'ETH',
+            'name': 'Ethereum',
+            'icon': '',
+            'decimals': 18,
+          })
+          ..balance = BigInt.parse('1000000000000000000')
+          ..value = 0;
 
-      final record = portfolioRecordFromCoinModel(coin);
+    final record = portfolioRecordFromCoinModel(coin);
 
-      expect(record, isNotNull);
-      expect(record?.symbol, 'ETH');
-      expect(record?.value, 0.0);
-    },
-  );
+    expect(record, isNotNull);
+    expect(record?.symbol, 'ETH');
+    expect(record?.value, 0.0);
+  });
 
   test('portfolioRecordFromCoinModel excludes zero-balance holdings', () {
     final coin =

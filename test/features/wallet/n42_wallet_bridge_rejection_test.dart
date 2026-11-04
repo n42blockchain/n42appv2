@@ -306,9 +306,9 @@ void main() {
       snapshot.coinModels.add(chain);
 
       final tokens = await bridge.getSupportedTokens();
-      final usdc =
-          tokens.singleWhere((token) => token.symbol == 'USDC')
-              as WalletBridgeTokenInfo;
+      final usdc = tokens.singleWhere(
+        (token) => token.symbol == 'USDC',
+      ) as WalletBridgeTokenInfo;
 
       expect(usdc.chain, 'ethereum');
       expect(usdc.network, 'mainnet');
@@ -350,9 +350,9 @@ void main() {
       snapshot.coinModels.add(chain);
 
       final tokens = await bridge.getSupportedTokens();
-      final usdc =
-          tokens.singleWhere((token) => token.symbol == 'USDC')
-              as WalletBridgeTokenInfo;
+      final usdc = tokens.singleWhere(
+        (token) => token.symbol == 'USDC',
+      ) as WalletBridgeTokenInfo;
 
       expect(usdc.chain, 'ethereum');
       expect(usdc.network, 'testnet');

@@ -9,9 +9,8 @@ void main() {
         .where((entry) {
           final value = entry.value;
           if (value is! Map<String, dynamic>) return false;
-          return CoinConfigView(
-                resolveChainBaseInfo(value) ?? const {},
-              ).blockchainType ==
+          return CoinConfigView(resolveChainBaseInfo(value) ?? const {})
+                  .blockchainType ==
               'Cosmos';
         })
         .map((entry) => entry.key)

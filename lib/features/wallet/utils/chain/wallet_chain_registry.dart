@@ -2,6 +2,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:wallet/wallet.dart';
+
 import 'configs/wallet_chain_configs_part1.dart';
 import 'configs/wallet_chain_configs_part2.dart';
 import 'configs/wallet_chain_configs_part3.dart';

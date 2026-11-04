@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_backup/export_cloud_back
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../../helpers/test_current_user.dart';
 import '../../../../helpers/widget_test_helpers.dart';
 
@@ -22,9 +23,8 @@ void main() {
       wrapForTest(
         Builder(
           builder: (context) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(1.3)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(1.3)),
             child: page,
           ),
         ),

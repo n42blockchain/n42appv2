@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +9,9 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_order_form.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+
 import '../helpers/test_current_user.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -57,9 +60,8 @@ void main() {
                       )
                     : const ImportCloudBackup();
                 return MediaQuery(
-                  data: MediaQuery.of(
-                    context,
-                  ).copyWith(textScaler: TextScaler.linear(1.3)),
+                  data: MediaQuery.of(context)
+                      .copyWith(textScaler: TextScaler.linear(1.3)),
                   child: Theme(
                     data: theme.copyWith(
                       textTheme: theme.textTheme.apply(

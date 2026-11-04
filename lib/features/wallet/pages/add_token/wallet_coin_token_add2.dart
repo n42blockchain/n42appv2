@@ -77,9 +77,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
     if (coinMap['edit'] == true) return;
     setState(() => coinMap['edit'] = true);
     try {
-      final baseToken =
-          json.decode(json.encode(widget.coinModel.coin))
-              as Map<String, dynamic>;
+      final baseToken = json.decode(
+        json.encode(widget.coinModel.coin),
+      ) as Map<String, dynamic>;
       baseToken
         ..['isContract'] = true
         ..['contract'] = coinMap['contract'].toString()

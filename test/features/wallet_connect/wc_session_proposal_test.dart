@@ -338,18 +338,15 @@ void main() {
     expect(provider.states, [WalletConnectState.disconnect]);
   });
 
-  test(
-    'remote deletion of another session refreshes the list without disconnecting',
-    () {
-      provider.dAppTopic = 'selected';
-      var changes = 0;
-      provider.addListener(() => changes++);
-      provider.setChainInfo();
-      client.onSessionDelete.broadcast(wc.SessionDelete('other'));
-      expect(changes, 1);
-      expect(provider.states, isEmpty);
-    },
-  );
+  test('remote deletion of another session refreshes the list without disconnecting', () {
+    provider.dAppTopic = 'selected';
+    var changes = 0;
+    provider.addListener(() => changes++);
+    provider.setChainInfo();
+    client.onSessionDelete.broadcast(wc.SessionDelete('other'));
+    expect(changes, 1);
+    expect(provider.states, isEmpty);
+  });
 
   test(
     'user-initiated deletion suppresses duplicate remote disconnect handling',

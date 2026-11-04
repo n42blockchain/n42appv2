@@ -7,8 +7,11 @@ import 'package:n42_wallet/features/widgets/eso_image_cachemanager.dart';
 
 ///@author zhc 2022/3/30 10:57 上午
 ///@description: 图片加载框架
-typedef CachedImageBuilder =
-    Widget Function(BuildContext context, String url, Widget placeholderImage);
+typedef CachedImageBuilder = Widget Function(
+  BuildContext context,
+  String url,
+  Widget placeholderImage,
+);
 
 ///对图片框架cache network Image 进行封装 方便后期替换
 class ImageNetWork extends StatelessWidget {

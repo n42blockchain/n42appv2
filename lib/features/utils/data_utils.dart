@@ -47,9 +47,8 @@ class DataUtils {
     final dotIndex = num.toString().lastIndexOf(".");
     final decimals = num.toString().length - dotIndex - 1;
     if (decimals < position) {
-      return num.toStringAsFixed(
-        position,
-      ).substring(0, dotIndex + position + 1);
+      return num.toStringAsFixed(position)
+          .substring(0, dotIndex + position + 1);
     }
     return num.toString().substring(0, dotIndex + position + 1);
   }

@@ -220,9 +220,10 @@ class EthStakingApi {
       }
 
       const selector = '0x7a28fb88'; // getPooledEthByShares
-      final oneStEth = BigInt.from(
-        10,
-      ).pow(18).toRadixString(16).padLeft(64, '0');
+      final oneStEth = BigInt.from(10)
+          .pow(18)
+          .toRadixString(16)
+          .padLeft(64, '0');
 
       final response = await _ethCall(rpc, '$selector$oneStEth');
 

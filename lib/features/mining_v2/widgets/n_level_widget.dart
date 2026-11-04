@@ -124,9 +124,8 @@ class NLevelWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.06)
-                      : AppColorTokens.of(
-                          context,
-                        ).brand.withValues(alpha: 0.06),
+                      : AppColorTokens.of(context).brand
+                            .withValues(alpha: 0.06),
                   borderRadius: AppRadius.brSm,
                 ),
                 child: Row(

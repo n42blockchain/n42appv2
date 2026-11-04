@@ -49,9 +49,8 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
   }
 
   void _showSnackBar(String message, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
   void _finishCalculation({String? address, String? error}) {

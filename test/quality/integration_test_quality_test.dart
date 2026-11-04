@@ -69,9 +69,8 @@ void main() {
     test(
       'the app integration smoke test launches the production entrypoint',
       () {
-        final source = File(
-          'integration_test/app_test.dart',
-        ).readAsStringSync();
+        final source = File('integration_test/app_test.dart')
+            .readAsStringSync();
 
         expect(source, contains("package:n42_wallet/main.dart"));
         expect(source, contains('app.main();'));
@@ -81,9 +80,8 @@ void main() {
     );
 
     test('pending device cases are explicit skips with blockers', () {
-      final source = File(
-        'integration_test/flows/wallet_flow_test.dart',
-      ).readAsStringSync();
+      final source = File('integration_test/flows/wallet_flow_test.dart')
+          .readAsStringSync();
 
       expect(source, contains(r'[BLOCKED: ${testCase.blocker}]'));
       expect(source, contains('skip: true'));
@@ -140,9 +138,8 @@ void main() {
     test(
       'the full device flow performs real clicks and runtime-only login',
       () {
-        final source = File(
-          'integration_test/device_full_flow_test.dart',
-        ).readAsStringSync();
+        final source = File('integration_test/device_full_flow_test.dart')
+            .readAsStringSync();
 
         expect(source, contains("package:n42_wallet/main.dart"));
         expect(source, contains('app.main();'));
@@ -162,14 +159,12 @@ void main() {
           greaterThanOrEqualTo(6),
         );
 
-        final driver = File(
-          'test_driver/integration_test.dart',
-        ).readAsStringSync();
+        final driver = File('test_driver/integration_test.dart')
+            .readAsStringSync();
         expect(driver, contains('integrationDriver'));
 
-        final script = File(
-          'scripts/run_automated_tests.sh',
-        ).readAsStringSync();
+        final script = File('scripts/run_automated_tests.sh')
+            .readAsStringSync();
         expect(script, contains('PUBLISH_PORT'));
         expect(script, contains('flutter drive'));
         expect(script, contains('--publish-port'));
@@ -182,9 +177,9 @@ void main() {
         'lib/features/wallet_connect/pages/wallet_connect_sheet.dart',
       ]) {
         final source = File(path).readAsStringSync();
-        final disposeBody = RegExp(
-          r'void dispose\(\)\s*\{([\s\S]*?)\n\s*\}',
-        ).firstMatch(source)?.group(1);
+        final disposeBody = RegExp(r'void dispose\(\)\s*\{([\s\S]*?)\n\s*\}')
+            .firstMatch(source)
+            ?.group(1);
 
         expect(disposeBody, isNotNull, reason: '$path has no dispose method');
         expect(

@@ -278,8 +278,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
         minutes < 1 ||
         minutes > 10080) {
       setState(
-        () => _error =
-            'Enter room/asset, positive whole base units and valid slots, 1–10080 expiry minutes, and a valid synthetic test account when designated.',
+        () => _error = 'Enter room/asset, positive whole base units and valid slots, 1–10080 expiry minutes, and a valid synthetic test account when designated.',
       );
       return;
     }
@@ -302,8 +301,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
     final packet = _packet.text.trim();
     if (!RegExp(r'^packet_[a-f0-9]{64}$').hasMatch(packet)) {
       setState(
-        () => _error =
-            'Paste a local packet ID: packet_ followed by 64 lowercase hex characters.',
+        () => _error = 'Paste a local packet ID: packet_ followed by 64 lowercase hex characters.',
       );
       return;
     }
@@ -466,16 +464,14 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
       if (!_current(generation)) return;
       if (!result.isCompleted) {
         setState(
-          () => _error =
-              'Original result is unresolved. The saved request and key are unchanged.',
+          () => _error = 'Original result is unresolved. The saved request and key are unchanged.',
         );
         return;
       }
       final receipt = result.receipt!;
       if (!_matchesAttempt(attempt, receipt)) {
         setState(
-          () => _error =
-              'Original receipt does not match the saved operation. The request remains pending.',
+          () => _error = 'Original receipt does not match the saved operation. The request remains pending.',
         );
         return;
       }
@@ -520,8 +516,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
     } catch (_) {
       if (_current(generation)) {
         setState(
-          () => _error =
-              'Synthetic balance refresh failed. Retry Refresh synthetic balance.',
+          () => _error = 'Synthetic balance refresh failed. Retry Refresh synthetic balance.',
         );
       }
     } finally {

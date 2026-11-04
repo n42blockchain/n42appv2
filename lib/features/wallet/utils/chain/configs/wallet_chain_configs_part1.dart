@@ -381,7 +381,8 @@ Map<String, dynamic> walletChainConfigsPart1 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": BlockchainType.Ethereum.name,
       "coinType": CoinType.OP.name,
-      "icon": "https://api.n42.world/market/v1/r/coinImage/Optimism Ethereum.png",
+      "icon":
+          "https://api.n42.world/market/v1/r/coinImage/Optimism Ethereum.png",
       "name": "Optimism",
       "miniName": "OP",
       "unit": "ETH",
@@ -506,7 +507,8 @@ Map<String, dynamic> walletChainConfigsPart1 = {
     "baseInfo": <String, dynamic>{
       "blockchainType": BlockchainType.Ethereum.name,
       "coinType": CoinType.AVAX.name,
-      "icon": "https://api.n42.world/market/v1/r/coinImage/Avalanche C-Chain.png",
+      "icon":
+          "https://api.n42.world/market/v1/r/coinImage/Avalanche C-Chain.png",
       "name": "Avalanche C-Chain",
       "miniName": "AVAX",
       "unit": "AVAX",

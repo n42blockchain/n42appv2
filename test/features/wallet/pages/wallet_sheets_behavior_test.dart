@@ -24,9 +24,8 @@ void main() {
     ];
     when(() => walletProvider.walletInfoLsit).thenReturn(wallets);
     when(() => walletProvider.walletIndex).thenReturn(0);
-    when(
-      () => walletProvider.walletInfo,
-    ).thenReturn(WalletInfo(walletName: 'Primary'));
+    when(() => walletProvider.walletInfo)
+        .thenReturn(WalletInfo(walletName: 'Primary'));
     when(() => walletProvider.setWalletIndex(any())).thenAnswer((_) async {});
   });
 

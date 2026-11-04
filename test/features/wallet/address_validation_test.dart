@@ -52,18 +52,16 @@ void main() {
       test('valid P2PKH address should match pattern', () {
         // Legacy addresses start with 1
         const validAddress = '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2';
-        final isValid = RegExp(
-          r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$',
-        ).hasMatch(validAddress);
+        final isValid = RegExp(r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$')
+            .hasMatch(validAddress);
         expect(isValid, true);
       });
 
       test('valid P2SH address should match pattern', () {
         // P2SH addresses start with 3
         const validAddress = '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy';
-        final isValid = RegExp(
-          r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$',
-        ).hasMatch(validAddress);
+        final isValid = RegExp(r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$')
+            .hasMatch(validAddress);
         expect(isValid, true);
       });
 
@@ -147,9 +145,8 @@ void main() {
         const validAddresses = ['alice.near', 'bob.testnet', 'my-account.near'];
 
         for (final address in validAddresses) {
-          final isValid = RegExp(
-            r'^[a-z0-9._-]+\.(near|testnet)$',
-          ).hasMatch(address);
+          final isValid = RegExp(r'^[a-z0-9._-]+\.(near|testnet)$')
+              .hasMatch(address);
           expect(isValid, true, reason: '$address should be valid');
         }
       });
@@ -240,8 +237,7 @@ void main() {
 
     test('Cardano transaction should have UTXOs', () {
       final txData = {
-        'toAddress':
-            'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp',
+        'toAddress': 'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp',
         'amount': '1000000',
         'ttl': '1000000',
         'utxos': [

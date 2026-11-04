@@ -40,9 +40,8 @@ final class LocalPaymentClient {
 
   void activateTestAccount(String syntheticToken) {
     _requireEnabled();
-    if (!RegExp(
-      r'^synthetic-test-[A-Za-z0-9_-]{8,128}$',
-    ).hasMatch(syntheticToken)) {
+    if (!RegExp(r'^synthetic-test-[A-Za-z0-9_-]{8,128}$')
+        .hasMatch(syntheticToken)) {
       throw ArgumentError('Expected a synthetic test account token');
     }
     _generation++;
@@ -131,9 +130,8 @@ final class LocalPaymentClient {
       }
     } else if (!receipt.containsKey('id') &&
         receipt['packet'] is String &&
-        RegExp(
-          r'^packet_[a-f0-9]{64}$',
-        ).hasMatch(receipt['packet'] as String)) {
+        RegExp(r'^packet_[a-f0-9]{64}$')
+            .hasMatch(receipt['packet'] as String)) {
       _units(receipt['amount']);
     } else {
       throw const LocalPaymentException('invalid_response');
@@ -300,9 +298,8 @@ final class LocalPaymentClient {
           ? 'transfer'
           : 'refund';
       if (result['id'] is! String ||
-          !RegExp(
-            '^${prefix}_[a-f0-9]{64}\$',
-          ).hasMatch(result['id'] as String)) {
+          !RegExp('^${prefix}_[a-f0-9]{64}\$')
+              .hasMatch(result['id'] as String)) {
         throw const LocalPaymentException('invalid_response');
       }
       if (path.endsWith('/refunds')) _units(result['amount']);

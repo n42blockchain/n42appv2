@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
@@ -116,50 +117,47 @@ void main() {
     expect(await storage.getIdHubToken('did:n42:bob'), '{"token":"b"}');
   });
 
-  test(
-    'logout deletes all user secrets and settings but preserves device identity',
-    () async {
-      await storage.saveDeviceId('fixture-device');
-      await storage.saveToken('fixture-token');
-      await storage.saveUuid('alice');
-      await storage.saveEmail('alice@example.test');
-      await storage.saveUserInfo({'uuid': 'alice'});
-      await storage.setBiometricEnabled(true);
-      await storage.setPasskeyEnabled(true);
-      await storage.savePasskeyCredentials('[{"id":"fixture"}]');
-      for (final wallet in ['A', 'B']) {
-        await storage.saveWalletCredentials(
-          address: wallet,
-          credentials: {'id': wallet},
-        );
-        await storage.saveMnemonic(
-          walletId: wallet,
-          mnemonic: 'fixture-mnemonic',
-        );
-        await storage.savePrivateKey(
-          address: wallet,
-          privateKey: 'fixture-private-key',
-        );
-        await storage.saveIdHubToken('did:n42:$wallet', '{"token":"fixture"}');
-      }
-      await storage.clearUserData();
-      expect(await storage.getDeviceId(), 'fixture-device');
-      expect(await storage.hasCredentials(), isFalse);
-      expect(await storage.getEmail(), isNull);
-      expect(await storage.getUserInfo(), isNull);
-      expect(await storage.getPasskeyCredentials(), isNull);
-      expect(await storage.isPasskeyEnabled(), isFalse);
-      expect(await storage.isBiometricEnabled(), isFalse);
-      for (final wallet in ['A', 'B']) {
-        expect(await storage.getWalletCredentials(wallet), isNull);
-        expect(await storage.getMnemonic(wallet), isNull);
-        expect(await storage.getPrivateKey(wallet), isNull);
-        expect(await storage.getIdHubToken('did:n42:$wallet'), isNull);
-      }
-      await storage.clearUserData();
-      expect(await storage.getDeviceId(), 'fixture-device');
-    },
-  );
+  test('logout deletes all user secrets and settings but preserves device identity', () async {
+    await storage.saveDeviceId('fixture-device');
+    await storage.saveToken('fixture-token');
+    await storage.saveUuid('alice');
+    await storage.saveEmail('alice@example.test');
+    await storage.saveUserInfo({'uuid': 'alice'});
+    await storage.setBiometricEnabled(true);
+    await storage.setPasskeyEnabled(true);
+    await storage.savePasskeyCredentials('[{"id":"fixture"}]');
+    for (final wallet in ['A', 'B']) {
+      await storage.saveWalletCredentials(
+        address: wallet,
+        credentials: {'id': wallet},
+      );
+      await storage.saveMnemonic(
+        walletId: wallet,
+        mnemonic: 'fixture-mnemonic',
+      );
+      await storage.savePrivateKey(
+        address: wallet,
+        privateKey: 'fixture-private-key',
+      );
+      await storage.saveIdHubToken('did:n42:$wallet', '{"token":"fixture"}');
+    }
+    await storage.clearUserData();
+    expect(await storage.getDeviceId(), 'fixture-device');
+    expect(await storage.hasCredentials(), isFalse);
+    expect(await storage.getEmail(), isNull);
+    expect(await storage.getUserInfo(), isNull);
+    expect(await storage.getPasskeyCredentials(), isNull);
+    expect(await storage.isPasskeyEnabled(), isFalse);
+    expect(await storage.isBiometricEnabled(), isFalse);
+    for (final wallet in ['A', 'B']) {
+      expect(await storage.getWalletCredentials(wallet), isNull);
+      expect(await storage.getMnemonic(wallet), isNull);
+      expect(await storage.getPrivateKey(wallet), isNull);
+      expect(await storage.getIdHubToken('did:n42:$wallet'), isNull);
+    }
+    await storage.clearUserData();
+    expect(await storage.getDeviceId(), 'fixture-device');
+  });
 
   test('full reset also deletes device identity', () async {
     await storage.saveDeviceId('fixture-device');

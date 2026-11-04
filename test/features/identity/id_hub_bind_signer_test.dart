@@ -51,10 +51,19 @@ void main() {
       'accepts only exact allowlisted hosts over canonical https origins',
       () {
         expect(IdHubBindSigner.isHubAllowed('https://id.n42.world'), isTrue);
-        expect(IdHubBindSigner.isHubAllowed('https://id-dev.n42.world'), isTrue);
+        expect(
+          IdHubBindSigner.isHubAllowed('https://id-dev.n42.world'),
+          isTrue,
+        );
         expect(IdHubBindSigner.isHubAllowed('https://a.id.n42.world'), isFalse);
-        expect(IdHubBindSigner.isHubAllowed('https://id.n42.world/path'), isFalse);
-        expect(IdHubBindSigner.isHubAllowed('https://id.n42.world:8443'), isFalse);
+        expect(
+          IdHubBindSigner.isHubAllowed('https://id.n42.world/path'),
+          isFalse,
+        );
+        expect(
+          IdHubBindSigner.isHubAllowed('https://id.n42.world:8443'),
+          isFalse,
+        );
       },
     );
 

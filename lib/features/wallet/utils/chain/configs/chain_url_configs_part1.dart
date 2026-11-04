@@ -75,7 +75,8 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "AVAX",
-      "icon": "https://api.n42.world/market/v1/r/coinImage/Avalanche C-Chain.png",
+      "icon":
+          "https://api.n42.world/market/v1/r/coinImage/Avalanche C-Chain.png",
       "name": "Avalanche C-Chain",
       "miniName": "AVAX",
       "unit": "avax",
@@ -488,7 +489,8 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "ETC",
-      "icon": "https://api.n42.world/market/v1/r/coinImage/Ethereum Classic.png",
+      "icon":
+          "https://api.n42.world/market/v1/r/coinImage/Ethereum Classic.png",
       "name": "Ethereum Classic",
       "miniName": "ETC",
       "unit": "etc",
@@ -713,8 +715,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "KCS",
-      "icon":
-          "https://api.n42.world/market/v1/r/coinImage/KuCoin Community Chain.png",
+      "icon": "https://api.n42.world/market/v1/r/coinImage/KuCoin Community Chain.png",
       "name": "KuCoin Community Chain",
       "miniName": "KCS",
       "unit": "kcs",
@@ -1029,7 +1030,8 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "OP",
-      "icon": "https://api.n42.world/market/v1/r/coinImage/Optimism Ethereum.png",
+      "icon":
+          "https://api.n42.world/market/v1/r/coinImage/Optimism Ethereum.png",
       "name": "Optimism Ethereum",
       "miniName": "OP",
       "unit": "ETH",

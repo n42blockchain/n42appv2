@@ -126,14 +126,16 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      return await _channel
-          .invokeMethod('getPrivateKeyAndPublicKey', <String, String>{
-            'coin': coin,
-            'path': path,
-            'mnemonic': mnemonic,
-            'privateKey': pk,
-            'passphrase': passphrase,
-          });
+      return await _channel.invokeMethod(
+        'getPrivateKeyAndPublicKey',
+        <String, String>{
+          'coin': coin,
+          'path': path,
+          'mnemonic': mnemonic,
+          'privateKey': pk,
+          'passphrase': passphrase,
+        },
+      );
     } catch (e) {
       AppLogger.w('Trustdart', 'getPrivateKeyAndPublicKeyPair: $e');
       return '';
@@ -219,15 +221,17 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      final String raw = await _channel
-          .invokeMethod('signTransaction_byteArray', <String, dynamic>{
-            'coin': coin,
-            'txData': txData,
-            'path': path,
-            'mnemonic': mnemonic,
-            'passphrase': passphrase,
-            'pk': pk,
-          });
+      final String raw = await _channel.invokeMethod(
+        'signTransaction_byteArray',
+        <String, dynamic>{
+          'coin': coin,
+          'txData': txData,
+          'path': path,
+          'mnemonic': mnemonic,
+          'passphrase': passphrase,
+          'pk': pk,
+        },
+      );
       return json.decode(raw);
     } catch (e) {
       AppLogger.w('Trustdart', 'signTransactionByteArray: $e');
@@ -269,15 +273,17 @@ class Trustdart {
     String passphrase = '',
   }) async {
     try {
-      final String txHash = await _channel
-          .invokeMethod(method, <String, dynamic>{
-            'coin': coin,
-            'txData': txData,
-            'path': path,
-            'mnemonic': mnemonic,
-            'passphrase': passphrase,
-            'pk': pk,
-          });
+      final String txHash = await _channel.invokeMethod(
+        method,
+        <String, dynamic>{
+          'coin': coin,
+          'txData': txData,
+          'path': path,
+          'mnemonic': mnemonic,
+          'passphrase': passphrase,
+          'pk': pk,
+        },
+      );
       return txHash;
     } catch (e) {
       AppLogger.w('Trustdart', '$method: $e');

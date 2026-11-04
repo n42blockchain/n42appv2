@@ -394,9 +394,8 @@ class _IapPageState extends State<IapPage> {
                         end: Alignment.bottomRight,
                       ),
                 color: isPending
-                    ? AppColorTokens.of(
-                        context,
-                      ).textTertiary.withValues(alpha: 0.3)
+                    ? AppColorTokens.of(context).textTertiary
+                          .withValues(alpha: 0.3)
                     : null,
                 borderRadius: AppRadius.brMd,
               ),

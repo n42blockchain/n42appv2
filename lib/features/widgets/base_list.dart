@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 ///@description: 通用列表组件（可刷新 加载更多）
 
 /// 列表item布局
-typedef BuildItem =
-    Function(BuildContext context, List<dynamic> results, int index);
+typedef BuildItem = Function(
+  BuildContext context,
+  List<dynamic> results,
+  int index,
+);
 
 /// 列表数据源
 typedef GetData = Future<List<dynamic>?> Function(int page, int pageSize);
