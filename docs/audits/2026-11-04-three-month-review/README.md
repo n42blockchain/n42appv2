@@ -139,3 +139,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Preview dispatch also checks identity after initialization, so an older request cannot overwrite a newer preview. Added delayed-preview regression.
 - All five WalletConnect Provider suites: 51 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch14-before-tests.log, /tmp/n42-audit-batch14-final-tests.log, /tmp/n42-audit-batch14-final-analyze.log.
 - This guards the initialization boundary, not every later SDK/native/RPC await. Connection-level initialization may still require generation fencing for shared client/key mutation. Full session permissions, post-signing response ownership and device tests remain open. No release uploaded.
+
+## Batch 15 — post-response UI ownership
+
+- Reproduced before fixing: an old message response completion reset a newer request to connect; an old response failure set the newer request to error. Both regressions failed on the old implementation.
+- Capture message request identity before notifying listeners, and stop if that notification replaces the request. Message errors only affect their current request. All signing-handler completion paths now reset state only when their request is still current and the provider is not disconnected.
+- Added delayed success/failure response regressions for personal_sign, eth_signTransaction and eth_sendTransaction. Existing normal message, EVM and non-EVM flows remain covered. Previously completed request results are still returned to their original topic/id; only stale global UI writes are suppressed.
+- All five WalletConnect Provider suites: 57 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch15-before-final-tests.log, /tmp/n42-audit-batch15-final-tests.log, /tmp/n42-audit-batch15-final-analyze.log.
+- This protects UI writeback after response awaits, not cancellation of an already signed/broadcast transaction. Native signing credential ownership and connection-level shared state mutation across awaits still require review. No device or release acceptance implied.

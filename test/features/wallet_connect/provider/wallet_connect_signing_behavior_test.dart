@@ -12,12 +12,14 @@ final _testKey = web3.EthPrivateKey.fromInt(BigInt.one);
 class _WalletKit extends Fake implements wc.ReownWalletKit {
   final responses = <(String, wc.JsonRpcResponse)>[];
   Object? responseFailure;
+  Future<void> Function()? beforeRespond;
 
   @override
   Future<void> respondSessionRequest({
     required String topic,
     required wc.JsonRpcResponse response,
   }) async {
+    if (beforeRespond != null) await beforeRespond!();
     if (responseFailure case final failure?) throw failure;
     responses.add((topic, response));
   }
@@ -98,6 +100,28 @@ void main() {
     expect(provider.walletConnectState, WalletConnectState.error);
     expect(provider.errorMessage, contains('Requested signer'));
   });
+  for (final fail in [false, true]) {
+    test(
+      'old message response ${fail ? 'failure' : 'success'} preserves a new request state',
+      () async {
+        provider.actionData = _request('personal_sign', [
+          'old',
+          _testKey.address.with0x,
+        ]);
+        walletKit.beforeRespond = () async {
+          provider.actionData = _request('personal_sign', [
+            'new',
+            _testKey.address.with0x,
+          ]);
+          provider.walletConnectState = WalletConnectState.messageSignOK;
+          if (fail) throw StateError('old response failed');
+        };
+        await provider.messageSignTap();
+        expect(provider.walletConnectState, WalletConnectState.messageSignOK);
+        expect(provider.errorMessage, isEmpty);
+      },
+    );
+  }
   for (final message in ['deadbeef', 'cafe', '1234']) {
     test('personal_sign preserves unprefixed text $message', () async {
       provider.actionData = _request('personal_sign', [

@@ -11,12 +11,14 @@ import '../../../helpers/wallet_connect_client_fake.dart';
 
 class _Client extends Fake implements wc.ReownWalletKit {
   final responses = <(String, wc.JsonRpcResponse)>[];
+  Future<void> Function()? beforeRespond;
 
   @override
   Future<void> respondSessionRequest({
     required String topic,
     required wc.JsonRpcResponse response,
   }) async {
+    if (beforeRespond != null) await beforeRespond!();
     responses.add((topic, response));
   }
 }
@@ -114,6 +116,32 @@ void main() {
     provider.dispose();
   });
 
+  for (final method in ['eth_signTransaction', 'eth_sendTransaction']) {
+    for (final fail in [false, true]) {
+      test(
+        'old $method response ${fail ? 'failure' : 'success'} preserves a new request',
+        () async {
+          provider.actionData = _request(method, [
+            {
+              'from': _Provider._key.address.with0x,
+              'to': '0x2222222222222222222222222222222222222222',
+            },
+          ]);
+          client.beforeRespond = () async {
+            provider.actionData = _request('personal_sign', [
+              'new',
+              _Provider._key.address.with0x,
+            ]);
+            provider.walletConnectState = WalletConnectState.messageSignOK;
+            if (fail) throw StateError('old response failure');
+          };
+          await provider.transactionSignTap();
+          expect(provider.walletConnectState, WalletConnectState.messageSignOK);
+          expect(provider.errorMessage, isEmpty);
+        },
+      );
+    }
+  }
   for (final fail in [false, true]) {
     test(
       'superseded transaction initialization ${fail ? 'failure' : 'success'} cannot sign or overwrite the new request',

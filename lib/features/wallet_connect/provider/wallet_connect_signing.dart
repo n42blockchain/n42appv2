@@ -28,10 +28,12 @@ mixin WalletConnectSigning
   };
 
   Future<void> messageSignTap() async {
+    final requestSnapshot = actionData;
     try {
       if (walletConnectState == WalletConnectState.messageSign) return;
+      final eventData = requestSnapshot as wallet_connect.SessionRequestEvent;
       viewStateDeal(WalletConnectState.messageSign);
-      final eventData = actionData as wallet_connect.SessionRequestEvent;
+      if (!identical(actionData, eventData)) return;
       String signedDataHex;
 
       if (eventData.method == "personal_sign") {
@@ -113,7 +115,7 @@ mixin WalletConnectSigning
             result: {"signature": sig},
           ),
         );
-        viewStateDeal(WalletConnectState.connect);
+        _completeSigningRequest(eventData);
         return;
       } else if (eventData.method == "sui_signMessage") {
         final requestParams = eventData.params! as Map;
@@ -145,7 +147,7 @@ mixin WalletConnectSigning
             result: {"signature": sig},
           ),
         );
-        viewStateDeal(WalletConnectState.connect);
+        _completeSigningRequest(eventData);
         return;
       } else if (eventData.method == "solana_signMessage") {
         final requestParams = eventData.params! as Map;
@@ -180,7 +182,7 @@ mixin WalletConnectSigning
             result: {"signature": sig},
           ),
         );
-        viewStateDeal(WalletConnectState.connect);
+        _completeSigningRequest(eventData);
         return;
       } else if (eventData.method == "eth_sign") {
         // eth_sign signs arbitrary data and can be exploited to phish
@@ -195,7 +197,7 @@ mixin WalletConnectSigning
             ),
           ),
         );
-        viewStateDeal(WalletConnectState.connect);
+        _completeSigningRequest(eventData);
         return;
       } else {
         final requestParams = (eventData.params! as List).cast<String>();
@@ -224,8 +226,12 @@ mixin WalletConnectSigning
           result: signedDataHex,
         ),
       );
-      viewStateDeal(WalletConnectState.connect);
+      _completeSigningRequest(eventData);
     } catch (e) {
+      if (!identical(actionData, requestSnapshot) ||
+          walletConnectState == WalletConnectState.disconnect) {
+        return;
+      }
       viewStateDeal(WalletConnectState.error, params: e.toString());
     }
   }
@@ -315,7 +321,7 @@ mixin WalletConnectSigning
         result: returnStr,
       ),
     );
-    viewStateDeal(WalletConnectState.connect);
+    _completeSigningRequest(eventData);
   }
 
   Future<void> _handleSolanaTransaction(
@@ -388,7 +394,7 @@ mixin WalletConnectSigning
         ),
       );
     }
-    viewStateDeal(WalletConnectState.connect);
+    _completeSigningRequest(eventData);
   }
 
   Future<void> _handleEthTransaction(
@@ -468,7 +474,7 @@ mixin WalletConnectSigning
         result: returnStr,
       ),
     );
-    viewStateDeal(WalletConnectState.connect);
+    _completeSigningRequest(eventData);
   }
 
   /// Parse a hex (0x-prefixed) or decimal string to BigInt.
@@ -554,7 +560,7 @@ mixin WalletConnectSigning
         ),
       );
     }
-    viewStateDeal(WalletConnectState.connect);
+    _completeSigningRequest(eventData);
   }
 
   Future<void> _handleSuiTransaction(
@@ -601,7 +607,7 @@ mixin WalletConnectSigning
         result: {"signature": signedResult, "transactionBlock": txBlock},
       ),
     );
-    viewStateDeal(WalletConnectState.connect);
+    _completeSigningRequest(eventData);
   }
 
   Future<void> _handleNearTransaction(
@@ -685,7 +691,14 @@ mixin WalletConnectSigning
         ),
       );
     }
-    viewStateDeal(WalletConnectState.connect);
+    _completeSigningRequest(eventData);
+  }
+
+  void _completeSigningRequest(wallet_connect.SessionRequestEvent request) {
+    if (identical(actionData, request) &&
+        walletConnectState != WalletConnectState.disconnect) {
+      viewStateDeal(WalletConnectState.connect);
+    }
   }
 
   void _requireRequestedSigner(String requested, web3.EthPrivateKey key) {
