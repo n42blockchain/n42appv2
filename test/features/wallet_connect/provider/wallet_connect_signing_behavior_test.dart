@@ -66,6 +66,24 @@ void main() {
     provider.dispose();
   });
 
+  for (final message in ['deadbeef', 'cafe', '1234']) {
+    test('personal_sign preserves unprefixed text $message', () async {
+      provider.actionData = _request('personal_sign', [
+        message,
+        _testKey.address.with0x,
+      ]);
+      await provider.messageSignTap();
+      expect(
+        walletKit.responses.single.$2.result,
+        web3.bytesToHex(
+          _testKey.signPersonalMessageToUint8List(
+            Uint8List.fromList(utf8.encode(message)),
+          ),
+          include0x: true,
+        ),
+      );
+    });
+  }
   test(
     'personal_sign returns a signature recoverable to its test signer',
     () async {

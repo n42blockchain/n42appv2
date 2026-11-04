@@ -95,3 +95,10 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Reject RPC fee values without 0x, empty hex, negative values or values wider than uint256. Reject derived maxFee overflow and error-bearing responses. Legacy fallback remains available and zero gas price remains valid.
 - Fee/network/signing payload suites: 16 passed, covering normal EIP-1559, legacy, free-gas, malformed/negative/overflow quotes. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch10-tests.log and /tmp/n42-audit-batch10-analyze.log.
 - Primary reference: https://ethereum.github.io/execution-apis/next/api/methods/eth_feeHistory/ . Existing GasTrackerApi already encodes blockCount as hexadecimal. No native/device or on-chain acceptance and no new upload in this batch.
+
+## Batch 11 — WalletConnect message bytes and sign-only chain ID
+
+- Reproduced before fixing: personal_sign interpreted unprefixed text consisting of hex digits (deadbeef/cafe/1234) as decoded bytes instead of UTF-8. Decode only explicitly 0x-prefixed hex; retain existing plain-text and prefixed-byte paths.
+- Reproduced before fixing: eth_signTransaction omitted chainId and web3dart defaults to 1. Explicitly pass the selected coin's mainnet/testnet chain ID, matching the existing sendTransaction path.
+- Four new regressions failed before the change. Final WalletConnect signing/EVM suites: 36 passed, including prior transaction creation/fee mapping and non-EVM handlers. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch11-before-tests.log, /tmp/n42-audit-batch11-final-tests.log, /tmp/n42-audit-batch11-analyze.log.
+- This fixes byte/chain propagation, not the full authorization model. Session-approved address matching, mutable request ownership across awaits and EIP-712 domain/chain consistency remain for subsequent review. No hardware/device or production acceptance, no release upload.

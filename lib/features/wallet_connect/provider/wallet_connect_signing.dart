@@ -40,7 +40,7 @@ mixin WalletConnectSigning
         // DApps may send either hex-encoded bytes (0xdeadbeef) or plain
         // UTF-8 text (e.g. SIWE messages). Detect and decode accordingly.
         final stripped = web3.strip0x(rawData);
-        final encodedMessage = _isValidHex(stripped)
+        final encodedMessage = rawData.startsWith('0x') && _isValidHex(stripped)
             ? web3.hexToBytes(stripped)
             : Uint8List.fromList(utf8.encode(rawData));
         final signedData = privateKey.signPersonalMessageToUint8List(
@@ -187,8 +187,7 @@ mixin WalletConnectSigning
             id: eventData.id,
             error: wallet_connect.JsonRpcError(
               code: 4200,
-              message:
-                  'eth_sign is disabled for security reasons. Use personal_sign instead.',
+              message: 'eth_sign is disabled for security reasons. Use personal_sign instead.',
             ),
           ),
         );
@@ -429,7 +428,12 @@ mixin WalletConnectSigning
 
     String returnStr;
     if (eventData.method == "eth_signTransaction") {
-      final sig = await web3client!.signTransaction(privateKey, transaction);
+      final cm = coinModels[coinModelsIndex];
+      final sig = await web3client!.signTransaction(
+        privateKey,
+        transaction,
+        chainId: cm.isTest ? cm.config.chainIdTest : cm.config.chainId,
+      );
       returnStr = bytesToHex(sig, include0x: true);
     } else {
       final cm = coinModels[coinModelsIndex];

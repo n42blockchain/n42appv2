@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wc;
@@ -22,6 +23,7 @@ class _RpcClient extends Fake implements web3.Web3Client {
   web3.Transaction? signedTransaction;
   web3.Transaction? sentTransaction;
   int? sendChainId;
+  int? signChainId;
 
   @override
   Future<Uint8List> signTransaction(
@@ -31,6 +33,7 @@ class _RpcClient extends Fake implements web3.Web3Client {
     bool fetchChainIdFromNetworkId = false,
   }) async {
     signedTransaction = transaction;
+    signChainId = chainId;
     return Uint8List.fromList([1, 2, 3]);
   }
 
@@ -107,6 +110,20 @@ void main() {
     provider.dispose();
   });
 
+  test(
+    'sign-only requests preserve the configured test network chain ID',
+    () async {
+      provider.actionData = _request('eth_signTransaction', [
+        {
+          'from': '0x1111111111111111111111111111111111111111',
+          'to': '0x2222222222222222222222222222222222222222',
+          'value': '0x1',
+        },
+      ]);
+      await provider.transactionSignTap();
+      expect(rpc.signChainId, provider.coinModels.single.config.chainIdTest);
+    },
+  );
   test(
     'signTransaction maps JSON quantities to exact wei and transaction fields',
     () async {
