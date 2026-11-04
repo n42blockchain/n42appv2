@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+
+import '../../helpers/wallet_connect_client_fake.dart' show approvedEvmSession;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
@@ -47,7 +50,12 @@ class _Client extends Fake implements wc.ReownWalletKit {
   }
 
   @override
-  Map<String, wc.SessionData> getActiveSessions() => {};
+  Map<String, wc.SessionData> getActiveSessions() => {
+    'test-topic': approvedEvmSession(
+      'test-topic',
+      web3.EthPrivateKey.fromInt(BigInt.one).address.with0x,
+    ),
+  };
 }
 
 class _Provider extends WalletConnectProvider {
@@ -71,7 +79,7 @@ class _PreviewProvider extends _Provider {
 }
 
 Map<String, dynamic> _transaction(Map<String, dynamic> gas) => {
-  'from': '0x0000000000000000000000000000000000000001',
+  'from': web3.EthPrivateKey.fromInt(BigInt.one).address.with0x,
   'to': '0x0000000000000000000000000000000000000002',
   'value': '0x1',
   'gasPrice': '0x3b9aca00',
@@ -175,25 +183,22 @@ void main() {
     );
   }
 
-  test(
-    'omitted gas remains available for estimation with wei-denominated EIP-1559 fees',
-    () async {
-      final request = _request({});
-      final fields = (request.params as List).single as Map<String, dynamic>;
-      fields.remove('gasPrice');
-      fields['maxFeePerGas'] = '0x77359400';
-      fields['maxPriorityFeePerGas'] = '1000000000';
-      provider.actionData = request;
-      await provider.transactionSignTap();
-      expect(rpc.transaction!.maxGas, isNull);
-      expect(rpc.transaction!.gasPrice, isNull);
-      expect(rpc.transaction!.maxFeePerGas!.getInWei, BigInt.from(2000000000));
-      expect(
-        rpc.transaction!.maxPriorityFeePerGas!.getInWei,
-        BigInt.from(1000000000),
-      );
-    },
-  );
+  test('omitted gas remains available for estimation with wei-denominated EIP-1559 fees', () async {
+    final request = _request({});
+    final fields = (request.params as List).single as Map<String, dynamic>;
+    fields.remove('gasPrice');
+    fields['maxFeePerGas'] = '0x77359400';
+    fields['maxPriorityFeePerGas'] = '1000000000';
+    provider.actionData = request;
+    await provider.transactionSignTap();
+    expect(rpc.transaction!.maxGas, isNull);
+    expect(rpc.transaction!.gasPrice, isNull);
+    expect(rpc.transaction!.maxFeePerGas!.getInWei, BigInt.from(2000000000));
+    expect(
+      rpc.transaction!.maxPriorityFeePerGas!.getInWei,
+      BigInt.from(1000000000),
+    );
+  });
 
   test('the maximum exactly representable cap stays exact', () async {
     provider.actionData = _request({'gas': '0x1fffffffffffff'});

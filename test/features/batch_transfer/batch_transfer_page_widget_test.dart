@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +11,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 const _recipient = '0x1234567890abcdef1234567890abcdef12345678';
 
 Widget _app(Widget child) => ProviderScope(
+  overrides: [wapBridgeProvider.overrideWith((ref) => WalletActionProvider())],
   child: ScreenUtilInit(
     designSize: const Size(750, 1334),
     builder: (context, child) => MaterialApp(

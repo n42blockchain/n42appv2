@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import '../../helpers/wallet_connect_client_fake.dart' show approvedEvmSession;
+
 import 'package:eip712/eip712.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
@@ -13,6 +15,13 @@ final _fixtureKey = web3.EthPrivateKey.fromInt(BigInt.one);
 class _Client extends Fake implements wc.ReownWalletKit {
   final responses = <(String, wc.JsonRpcResponse)>[];
   Object? responseFailure;
+  @override
+  Map<String, wc.SessionData> getActiveSessions() => {
+    'request-topic': approvedEvmSession(
+      'request-topic',
+      _fixtureKey.address.with0x,
+    ),
+  };
 
   @override
   Future<void> respondSessionRequest({
@@ -272,14 +281,19 @@ void main() {
     await provider.messageSignTap();
     expect(client.responses, isEmpty);
     expect(provider.walletConnectState, WalletConnectState.error);
-    provider.actionData = _request('eth_sign', []);
+    provider.actionData = _request('eth_sign', [
+      _fixtureKey.address.with0x,
+      '0x',
+    ]);
     await provider.messageSignTap();
     expect(client.responses.single.$2.error?.code, 4200);
     expect(provider.walletConnectState, WalletConnectState.connect);
   });
 
   test('failed transaction chain initialization prevents signing', () async {
-    provider.actionData = _request('eth_sendTransaction', [{}]);
+    provider.actionData = _request('eth_sendTransaction', [
+      {'from': _fixtureKey.address.with0x},
+    ]);
     await provider.transactionSignTap();
     expect(provider.chainInitializations, 1);
     expect(provider.keyReads, 0);
@@ -290,7 +304,9 @@ void main() {
     'duplicate transaction tap does not initialize another signer',
     () async {
       provider.walletConnectState = WalletConnectState.transaction;
-      provider.actionData = _request('eth_sendTransaction', [{}]);
+      provider.actionData = _request('eth_sendTransaction', [
+        {'from': _fixtureKey.address.with0x},
+      ]);
       await provider.transactionSignTap();
       expect(provider.chainInitializations, 0);
       expect(client.responses, isEmpty);

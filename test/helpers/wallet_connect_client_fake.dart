@@ -175,3 +175,41 @@ wc.SessionRequestEvent sessionRequest(
   params,
   wc.TransportType.relay,
 );
+
+/// Approved EVM session fixture used by real handler integration tests.
+wc.SessionData approvedEvmSession(String topic, String address) {
+  const metadata = wc.ConnectionMetadata(
+    publicKey: 'fixture',
+    metadata: wc.PairingMetadata(
+      name: 'fixture',
+      description: '',
+      url: 'https://example.test',
+      icons: [],
+    ),
+  );
+  return wc.SessionData(
+    topic: topic,
+    pairingTopic: 'pairing',
+    relay: wc.Relay('irn'),
+    expiry: 4102444800,
+    acknowledged: true,
+    controller: 'fixture',
+    self: metadata,
+    peer: metadata,
+    namespaces: {
+      'eip155': wc.Namespace(
+        accounts: ['eip155:1:$address'],
+        methods: [
+          'personal_sign',
+          'eth_sign',
+          'eth_signTypedData',
+          'eth_signTypedData_v3',
+          'eth_signTypedData_v4',
+          'eth_signTransaction',
+          'eth_sendTransaction',
+        ],
+        events: [],
+      ),
+    },
+  );
+}

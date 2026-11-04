@@ -1,23 +1,24 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:web3dart/web3dart.dart' as web3;
 
 import '../../helpers/wallet_connect_client_fake.dart';
-
-class _Rpc extends Fake implements web3.Web3Client {
-  @override
-  Future<void> dispose() async {}
-}
 
 class _Provider extends WalletConnectProvider {
   int keyInitializations = 0;
   bool keyAvailable = true;
 
   @override
-  Future<bool> web3clientInit() async {
+  int get signingWalletIndex => 0;
+  @override
+  String get signingWalletOwner => 'fixture';
+  @override
+  Future<String?> loadSigningKey(int index, CoinModel cm) async {
     keyInitializations++;
-    if (keyAvailable) web3client = _Rpc();
-    return keyAvailable;
+    return keyAvailable ? base64Encode(Uint8List(32)..[31] = 1) : null;
   }
 
   @override
@@ -91,25 +92,22 @@ void main() {
     },
   );
 
-  test(
-    'EVM requests initialize once per selected chain and reuse the ready client',
-    () async {
-      provider.coinModels = [
-        sessionCoin(type: 'APT', blockchain: 'Aptos'),
-        sessionCoin(),
-        sessionCoin(type: 'MATIC', chainId: 137),
-      ];
-      provider.coinModelsIndex = 0;
-      expect(await provider.web3clientInitFromChainId('eip155:1'), isTrue);
-      expect(provider.coinModelsIndex, 1);
-      expect(provider.keyInitializations, 1);
-      expect(await provider.web3clientInitFromChainId('eip155:1'), isTrue);
-      expect(provider.keyInitializations, 1);
-      expect(await provider.web3clientInitFromChainId('eip155:137'), isTrue);
-      expect(provider.coinModelsIndex, 2);
-      expect(provider.keyInitializations, 2);
-    },
-  );
+  test('EVM requests initialize once per selected chain and reuse the ready client', () async {
+    provider.coinModels = [
+      sessionCoin(type: 'APT', blockchain: 'Aptos'),
+      sessionCoin(),
+      sessionCoin(type: 'MATIC', chainId: 137),
+    ];
+    provider.coinModelsIndex = 0;
+    expect(await provider.web3clientInitFromChainId('eip155:1'), isTrue);
+    expect(provider.coinModelsIndex, 1);
+    expect(provider.keyInitializations, 1);
+    expect(await provider.web3clientInitFromChainId('eip155:1'), isTrue);
+    expect(provider.keyInitializations, 1);
+    expect(await provider.web3clientInitFromChainId('eip155:137'), isTrue);
+    expect(provider.coinModelsIndex, 2);
+    expect(provider.keyInitializations, 2);
+  });
 
   test(
     'selected EVM chain with a missing client still initializes signing',

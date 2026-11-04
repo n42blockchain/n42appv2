@@ -1,5 +1,7 @@
 # Three-month code audit — batch 1
 
+本轮统一验证与收尾结果见 [closeout.md](closeout.md)：5,802 项全量测试通过，覆盖率 71.97%；全 CI 和人工/真机审计边界单独列明。
+
 Scope: N42 wallet, 2026-08-04 through 2026-11-04. Baseline `6a9bc5a11`.
 Git inventory: 658 commits, 751 distinct source paths across lib/plugins/ios/android/scripts. This inventory is not a claim that every file has received semantic review.
 

@@ -1,0 +1,52 @@
+{
+  "productionSource": "a67dd98e3fe700211212b0cf9a96f970ea77271a",
+  "tests": {
+    "passed": 5802,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "coverage": {
+    "hit": 98323,
+    "found": 136613,
+    "percent": 71.97192068104792,
+    "threshold": 70,
+    "passed": true
+  },
+  "analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 59
+  },
+  "miningPluginTests": 11,
+  "falconRustTests": 1,
+  "swap": "passed",
+  "existingCiFailures": {
+    "walletMissingLocalizationEntries": 1488,
+    "chatMissingLocalizationEntries": 1359,
+    "formatFiles": 199
+  },
+  "evidence": {
+    "/tmp/n42-audit-closeout-final-tests.jsonl": {
+      "sha256": "4ca0ebf0cfa251f06570a1fe5280563f9ab02f3dde951c095db4eb51aff8ac83"
+    },
+    "/tmp/n42-audit-closeout-final-analyze.log": {
+      "sha256": "1117ea94169815a0d137a223c6c32a4188d1164947d0a5be71bba7ed578fb559"
+    },
+    "/tmp/n42-audit-closeout-mining.log": {
+      "sha256": "440138704d3e06e048317c897128f606a3d5fcc253b7745d08285b95b9ef0c53"
+    },
+    "/tmp/n42-audit-closeout-rust.log": {
+      "sha256": "a6aa1489d917fd4fed018261e3af7a9e7f30d3c8ba6a5f05bb6498daea91a942"
+    },
+    "/tmp/n42-audit-closeout-swap.log": {
+      "sha256": "b849d0e3608cdcfe7ef3b6296f2eb3c59b0cdb63269ad995211bce624861a887"
+    },
+    "/tmp/n42-audit-closeout-all-localizations.log": {
+      "sha256": "6d08ce1ca362de31d8bcdb1f5cceba8d8d9a38e728eff5c34ed4fd7e908dbb9e"
+    },
+    "/tmp/n42-audit-closeout-format.log": {
+      "sha256": "d10c640e394f9c9816c15147e4cf109be13cf5e91e529d0c1dc3beac33636122"
+    }
+  }
+}
