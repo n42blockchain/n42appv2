@@ -33,3 +33,10 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Capture the page wallet identity and storage account. Require that identity before confirmation, after gas estimation, after confirmation, after transaction construction and after signing. Editing/resetting/disposing a batch invalidates its captured revision. Block concurrent confirmation/signing flows. Stale signing errors do not overwrite current state.
 - Quote-revision regression, page input/navigation and provider behavior suites: 19 passed. Scoped production analyze: no issues. Logs: /tmp/n42-audit-batch3-tests-final.log and /tmp/n42-audit-batch3-analyze-final.log.
 - Page tests now explicitly inject their wallet dependency; production requires the initialized wallet. Tests cover revision invalidation and existing page flows, not a physical-device native signer account-switch scenario. That acceptance remains open, as does durable recovery after an already-broadcast transaction.
+
+## Batch 4 — receipt input validation and bounded requests
+
+- Batch receipt polling accepted any non-null RPC result without transaction identity, mined block, status, response ID or HTTP status checks. Network requests had no per-attempt timeout.
+- Validate JSON-RPC envelope, matching transaction hash, mined block hash/number, and status 0/1. HTTP/RPC errors and malformed receipts remain unknown. Each attempt has a 10-second timeout. Internally created HTTP clients close after polling; injected test clients remain caller-owned.
+- Eight receipt tests plus eleven batch provider tests: 19 passed. Logs: /tmp/n42-audit-batch4-tests.log and /tmp/n42-audit-batch4-analyze-final.log.
+- This validates receipt shape and identity, not canonical inclusion/finality. Persistent pending records, preventing repeated broadcast after unknown outcomes, chain identity and canonical block confirmation remain open. No production or device acceptance is implied.

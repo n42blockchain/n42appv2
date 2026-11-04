@@ -345,26 +345,62 @@ class BatchTransferApi {
     String txHash, {
     int maxAttempts = 20,
     int intervalMs = 3000,
+    http.Client? client,
   }) async {
-    for (var i = 0; i < maxAttempts; i++) {
-      await Future.delayed(Duration(milliseconds: intervalMs));
-      try {
-        final resp = await http.post(
-          Uri.parse(rpcUrl),
-          body: jsonEncode({
-            'jsonrpc': '2.0',
-            'method': 'eth_getTransactionReceipt',
-            'params': [txHash],
-            'id': 1,
-          }),
-          headers: _jsonHeaders,
-        );
-        final result = jsonDecode(resp.body)['result'];
-        if (result != null) return Map<String, dynamic>.from(result);
-      } catch (e) {
-        AppLogger.w('BatchTransferApi', 'getTransactionReceipt failed: $e');
-      }
+    final hashPattern = RegExp(r'^0x[0-9a-fA-F]{64}$');
+    if (!hashPattern.hasMatch(txHash) || maxAttempts < 1 || intervalMs < 0) {
+      throw ArgumentError('Invalid receipt polling request');
     }
-    return null;
+    final transport = client ?? http.Client();
+    try {
+      for (var i = 0; i < maxAttempts; i++) {
+        await Future<void>.delayed(Duration(milliseconds: intervalMs));
+        try {
+          final resp = await transport
+              .post(
+                Uri.parse(rpcUrl),
+                body: jsonEncode({
+                  'jsonrpc': '2.0',
+                  'method': 'eth_getTransactionReceipt',
+                  'params': [txHash],
+                  'id': 1,
+                }),
+                headers: _jsonHeaders,
+              )
+              .timeout(const Duration(seconds: 10));
+          if (resp.statusCode != 200) continue;
+          final envelope = jsonDecode(resp.body);
+          if (envelope is! Map ||
+              envelope['jsonrpc'] != '2.0' ||
+              envelope['id'] != 1 ||
+              envelope.containsKey('error')) {
+            continue;
+          }
+          final result = envelope['result'];
+          if (result is! Map ||
+              result['transactionHash'] is! String ||
+              (result['transactionHash'] as String).toLowerCase() !=
+                  txHash.toLowerCase() ||
+              result['blockHash'] is! String ||
+              !hashPattern.hasMatch(result['blockHash'] as String) ||
+              result['blockNumber'] is! String ||
+              !RegExp(r'^0x(?:0|[1-9a-fA-F][0-9a-fA-F]*)$')
+                  .hasMatch(result['blockNumber'] as String) ||
+              !['0x0', '0x1'].contains(result['status'])) {
+            continue;
+          }
+          return Map<String, dynamic>.from(result);
+        } catch (_) {
+          // Malformed/unavailable receipts remain unknown, never reverted.
+          AppLogger.w(
+            'BatchTransferApi',
+            'Receipt unavailable; keeping transaction pending',
+          );
+        }
+      }
+      return null;
+    } finally {
+      if (client == null) transport.close();
+    }
   }
 }
