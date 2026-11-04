@@ -46,15 +46,34 @@ class _SigningProvider extends WalletConnectProvider {
   }
 }
 
-wc.SessionRequestEvent _request(String method, dynamic params) =>
-    wc.SessionRequestEvent(
-      451,
-      'request-session',
-      method,
-      'eip155:1',
-      params,
-      wc.TransportType.relay,
-    );
+wc.SessionRequestEvent _request(
+  String method,
+  dynamic params, {
+  String chainId = 'eip155:1',
+}) => wc.SessionRequestEvent(
+  451,
+  'request-session',
+  method,
+  chainId,
+  params,
+  wc.TransportType.relay,
+);
+
+String _typedData({Object? chainId = 1, bool includeChainId = true}) =>
+    jsonEncode({
+      'types': {
+        'EIP712Domain': [
+          {'name': 'name', 'type': 'string'},
+          if (includeChainId) {'name': 'chainId', 'type': 'uint256'},
+        ],
+        'Mail': [
+          {'name': 'contents', 'type': 'string'},
+        ],
+      },
+      'primaryType': 'Mail',
+      'domain': {'name': 'N42', if (includeChainId) 'chainId': chainId},
+      'message': {'contents': 'fixture'},
+    });
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -84,6 +103,81 @@ void main() {
       expect(provider.walletConnectState, WalletConnectState.connect);
     },
   );
+  for (final method in [
+    'eth_signTypedData',
+    'eth_signTypedData_v3',
+    'eth_signTypedData_v4',
+  ]) {
+    for (final otherChain in [2, '2', '0x2']) {
+      test(
+        '$method refuses a typed-data domain for another chain ($otherChain)',
+        () async {
+          provider.actionData = _request(method, [
+            _testKey.address.with0x,
+            _typedData(chainId: otherChain),
+          ]);
+          await provider.messageSignTap();
+          expect(walletKit.responses, isEmpty);
+          expect(provider.walletConnectState, WalletConnectState.error);
+          expect(provider.errorMessage, contains('chain'));
+        },
+      );
+    }
+    for (final ownChain in [1, '1', '0x1']) {
+      test('$method preserves a matching domain chain ($ownChain)', () async {
+        provider.actionData = _request(method, [
+          _testKey.address.with0x,
+          _typedData(chainId: ownChain),
+        ]);
+        await provider.messageSignTap();
+        expect(provider.errorMessage, isEmpty);
+        expect(
+          walletKit.responses.single.$2.result,
+          matches(RegExp(r'^0x[0-9a-f]{130}$')),
+        );
+      });
+    }
+    test('$method preserves a domain without an optional chain ID', () async {
+      provider.actionData = _request(method, [
+        _testKey.address.with0x,
+        _typedData(includeChainId: false),
+      ]);
+      await provider.messageSignTap();
+      expect(provider.errorMessage, isEmpty);
+      expect(
+        walletKit.responses.single.$2.result,
+        matches(RegExp(r'^0x[0-9a-f]{130}$')),
+      );
+    });
+  }
+
+  test('typed-data preserves matching custom-chain signing', () async {
+    provider.actionData = _request('eth_signTypedData_v4', [
+      _testKey.address.with0x,
+      _typedData(chainId: '0x2a'),
+    ], chainId: 'eip155:42');
+    await provider.messageSignTap();
+    expect(provider.errorMessage, isEmpty);
+    expect(
+      walletKit.responses.single.$2.result,
+      matches(RegExp(r'^0x[0-9a-f]{130}$')),
+    );
+  });
+  for (final malformed in [null, true, 1.5, '-1', '0x', ' 1']) {
+    test(
+      'typed-data refuses an invalid explicit domain chain ID ($malformed)',
+      () async {
+        provider.actionData = _request('eth_signTypedData_v4', [
+          _testKey.address.with0x,
+          _typedData(chainId: malformed),
+        ]);
+        await provider.messageSignTap();
+        expect(walletKit.responses, isEmpty);
+        expect(provider.walletConnectState, WalletConnectState.error);
+      },
+    );
+  }
+
   test('personal_sign rejects a different requested account', () async {
     provider.actionData = _request('personal_sign', [
       'fixture',

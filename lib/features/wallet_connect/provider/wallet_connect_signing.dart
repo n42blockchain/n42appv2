@@ -61,6 +61,7 @@ mixin WalletConnectSigning
         signedDataHex = _signTypedData(
           privateKey: signingKey,
           jsonData: requestParams[1],
+          requestChainId: eventData.chainId,
           version: _typedDataVersions[eventData.method]!,
         );
       } else if (eventData.method == "tron_signMessage") {
@@ -741,6 +742,7 @@ mixin WalletConnectSigning
   String _signTypedData({
     required web3.EthPrivateKey privateKey,
     required String jsonData,
+    required String requestChainId,
     required TypedDataVersion version,
   }) {
     final Map<String, dynamic> typedData = json.decode(jsonData);
@@ -749,6 +751,27 @@ mixin WalletConnectSigning
       if (!typedData.containsKey(field)) {
         throw FormatException(
           'Invalid EIP-712 data: missing required field "$field"',
+        );
+      }
+    }
+
+    final domain = typedData['domain'];
+    if (domain is! Map<String, dynamic>) {
+      throw const FormatException('Invalid EIP-712 domain');
+    }
+    // chainId is optional in EIP-712. When supplied, it must belong to the
+    // approved WalletConnect request, not a different signing domain.
+    if (domain.containsKey('chainId')) {
+      final domainChainId = domain['chainId'];
+      final chain = RegExp(r'^eip155:([0-9]+)$').firstMatch(requestChainId);
+      if (chain == null ||
+          (domainChainId is! int && domainChainId is! String)) {
+        throw const FormatException('Invalid EIP-712 domain chain ID');
+      }
+      if (_parseHexOrDecBigInt(domainChainId.toString()) !=
+          BigInt.parse(chain.group(1)!)) {
+        throw const FormatException(
+          'EIP-712 domain chain does not match the request',
         );
       }
     }
