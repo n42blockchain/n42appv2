@@ -18,6 +18,48 @@ part 'batch_transfer_encoding.dart';
 ///
 /// 使用 Multicall3 合约实现批量转账，节省 Gas 费用
 class BatchTransferApi {
+  BatchTransferApi({
+    Future<dynamic> Function(String url, String method, List<dynamic> params)?
+    rpcCall,
+  }) : _rpcOverride = rpcCall;
+  final Future<dynamic> Function(
+    String url,
+    String method,
+    List<dynamic> params,
+  )?
+  _rpcOverride;
+
+  Future<void> validateNetwork(
+    String rpcUrl,
+    int chainId,
+    String chainSymbol,
+  ) async {
+    if (chainId <= 0 || !supportsMulticall(chainSymbol)) {
+      throw StateError('Unsupported batch network');
+    }
+    final chain = await _rpcCall(rpcUrl, 'eth_chainId', []);
+    final value = chain is Map && chain['error'] == null
+        ? chain['result']
+        : null;
+    if (value is! String ||
+        !RegExp(r'^0x[0-9a-fA-F]+$').hasMatch(value) ||
+        BigInt.parse(value.substring(2), radix: 16) != BigInt.from(chainId)) {
+      throw StateError('Batch RPC chain does not match the selected network');
+    }
+    final code = await _rpcCall(rpcUrl, 'eth_getCode', [
+      getMulticall3Address(chainSymbol),
+      'latest',
+    ]);
+    final bytes = code is Map && code['error'] == null ? code['result'] : null;
+    if (bytes is! String ||
+        !RegExp(r'^0x(?:[0-9a-fA-F]{2})+$').hasMatch(bytes) ||
+        !RegExp(r'[1-9a-fA-F]').hasMatch(bytes.substring(2))) {
+      throw StateError(
+        'Batch contract is not deployed on the selected network',
+      );
+    }
+  }
+
   // Multicall3 合约地址 (大多数 EVM 链通用)
   static const String multicall3Address =
       '0xcA11bde05977b3631167028862bE2a173976CA11';
@@ -81,6 +123,7 @@ class BatchTransferApi {
 
   /// 执行 JSON-RPC 调用
   Future<dynamic> _rpcCall(String rpcUrl, String method, List<dynamic> params) {
+    if (_rpcOverride != null) return _rpcOverride(rpcUrl, method, params);
     final body = {
       'jsonrpc': '2.0',
       'method': method,

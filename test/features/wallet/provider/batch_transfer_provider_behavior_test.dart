@@ -24,6 +24,13 @@ class _BlockedHttpOverrides extends HttpOverrides {
 }
 
 class _DeferredBroadcastApi extends BatchTransferApi {
+  @override
+  Future<void> validateNetwork(
+    String rpcUrl,
+    int chainId,
+    String chainSymbol,
+  ) async {}
+
   final result = Completer<MessageModel>();
   final entered = Completer<void>();
   @override
@@ -34,6 +41,13 @@ class _DeferredBroadcastApi extends BatchTransferApi {
 }
 
 class _UnknownSubmissionApi extends BatchTransferApi {
+  @override
+  Future<void> validateNetwork(
+    String rpcUrl,
+    int chainId,
+    String chainSymbol,
+  ) async {}
+
   _UnknownSubmissionApi({this.fail = false});
   final bool fail;
   int sends = 0;
@@ -75,6 +89,19 @@ class _ConfirmedSubmissionApi extends _UnknownSubmissionApi {
     Map<String, dynamic> receipt, {
     Future<dynamic> Function(String method, List<dynamic> params)? rpc,
   }) async => true;
+}
+
+class _SwitchableNetworkApi extends _ConfirmedSubmissionApi {
+  _SwitchableNetworkApi() : super('0x1');
+  bool valid = false;
+  @override
+  Future<void> validateNetwork(
+    String rpcUrl,
+    int chainId,
+    String chainSymbol,
+  ) async {
+    if (!valid) throw StateError('wrong chain');
+  }
 }
 
 void main() {
@@ -199,6 +226,29 @@ void main() {
     expect(await create().broadcastTransaction('0x02'), isTrue);
     expect(api.sends, 1);
   });
+
+  test(
+    'network validation failure remains retryable without broadcasting',
+    () async {
+      final api = _SwitchableNetworkApi();
+      final provider = BatchTransferProvider(api: api);
+      addTearDown(provider.dispose);
+      provider.initialize(
+        chainSymbol: 'ETH',
+        rpcUrl: 'https://rpc.invalid',
+        chainId: 1,
+        fromAddress: '0x${'a1' * 20}',
+        tokenSymbol: 'ETH',
+        decimals: 18,
+      );
+      expect(await provider.broadcastTransaction('0x01'), isFalse);
+      expect(provider.state, BatchTransferState.error);
+      expect(api.sends, 0);
+      api.valid = true;
+      expect(await provider.broadcastTransaction('0x01'), isTrue);
+      expect(api.sends, 1);
+    },
+  );
 
   for (final status in ['0x1', '0x0']) {
     test(

@@ -242,6 +242,8 @@ class BatchTransferProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      await _api.validateNetwork(_rpcUrl, _chainId, _chainSymbol);
+      if (!isTransactionCurrent(revision)) return null;
       final nonce = await _api.getNonce(_rpcUrl, _fromAddress);
       if (_disposed || revision != _quoteRevision || _gasEstimate == null) {
         return null;
@@ -327,6 +329,7 @@ class BatchTransferProvider extends ChangeNotifier {
         _state == BatchTransferState.awaitingConfirmation) {
       return false;
     }
+    var submitted = false;
     final revision = _quoteRevision;
     final rpcUrl = _rpcUrl;
     bool current() =>
@@ -342,6 +345,8 @@ class BatchTransferProvider extends ChangeNotifier {
       if (!current()) return false;
       final chainId = _chainId;
       final sender = _fromAddress;
+      await _api.validateNetwork(rpcUrl, chainId, _chainSymbol);
+      if (!current()) return false;
       final localHash = await _journal.broadcast(
         chainId: chainId,
         sender: sender,
@@ -349,6 +354,7 @@ class BatchTransferProvider extends ChangeNotifier {
         isCurrent: current,
         send: (hash) async {
           _txHash = hash;
+          submitted = true;
           final response = await _api.broadcastTransaction(rpcUrl, signedTx);
           if (response.error ||
               response.data is! String ||
@@ -404,7 +410,9 @@ class BatchTransferProvider extends ChangeNotifier {
       if (!current()) return false;
       if (e is BatchSubmissionPending) _txHash = e.hash;
       _errorMessage = e.toString();
-      _state = BatchTransferState.awaitingConfirmation;
+      _state = submitted || e is BatchSubmissionPending
+          ? BatchTransferState.awaitingConfirmation
+          : BatchTransferState.error;
       notifyListeners();
       return false;
     }

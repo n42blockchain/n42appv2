@@ -80,3 +80,11 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Keep API preview metadata, unwrap only txData at Provider, and construct the shared bridge payload. Addresses retain 0x; numeric fields/calldata use hex without 0x. Empty contract selects a value-bearing native transfer with calldata to Multicall3. Preserve legacy and EIP-1559 fees, including zero gas prices for free-gas networks. Reject missing/inconsistent fee parameters.
 - Final payload/provider/CSV/page suites: 46 passed. Positive tests cover both fee modes, exact value/calldata, provider unwrapping and the real Dart Trustdart method invocation with a mocked native endpoint. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch8-final-tests.log and /tmp/n42-audit-batch8-final-analyze.log.
 - Native contract sources inspected: ios/Runner/WalletCorePlugin+Signing.swift signEthereumTransaction_erc721; Android TransactionSignerHandler.signEthereumTransactionErc721. No native source changed. Mocked channel acceptance is not device signature or on-chain execution proof; those remain open. ERC-20 EOA restrictions unchanged.
+
+## Batch 9 — selected chain and deployed batch target
+
+- Batch construction/broadcast did not check RPC eth_chainId or deployed bytecode at the configured Multicall address. Native value sent to an empty address can succeed without executing a batch; a gas estimate alone is insufficient.
+- Validate selected chain against eth_chainId and require non-empty, non-zero bytecode before constructing the signed payload and before preparing a broadcast. No static chain-ID restriction was added; a compatible custom chain remains accepted.
+- Pre-broadcast validation failures remain retryable errors, not falsely pending network submissions. Unknown outcomes after dispatch still retain durable pending records.
+- Network/signer/provider suites: 27 passed, including custom-chain success and retry after correcting network configuration. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch9-final-tests.log and /tmp/n42-audit-batch9-final-analyze.log.
+- Bytecode presence does not authenticate its implementation or the RPC. Expected runtime-code hashes and testing each configured chain/Multicall deployment remain open. No supported chain was removed, and no release uploaded.

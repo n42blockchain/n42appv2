@@ -7,6 +7,13 @@ import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 
 class _ReadyApi extends BatchTransferApi {
   @override
+  Future<void> validateNetwork(
+    String rpcUrl,
+    int chainId,
+    String chainSymbol,
+  ) async {}
+
+  @override
   Future<int> getNonce(String rpcUrl, String address) async => 7;
   @override
   Future<BatchGasEstimate> getGasEstimate({
