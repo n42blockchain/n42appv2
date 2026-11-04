@@ -110,12 +110,41 @@ void main() {
     provider.dispose();
   });
 
+  test('transaction sender case differences remain accepted', () async {
+    provider.actionData = _request('eth_signTransaction', [
+      {
+        'from': '0x${_Provider._key.address.with0x.substring(2).toUpperCase()}',
+        'to': '0x2222222222222222222222222222222222222222',
+        'value': '0x1',
+      },
+    ]);
+    await provider.transactionSignTap();
+    expect(rpc.signedTransaction, isNotNull);
+    expect(client.responses.single.$2.error, isNull);
+  });
+  for (final method in ['eth_signTransaction', 'eth_sendTransaction']) {
+    test('$method rejects a different requested sender', () async {
+      provider.actionData = _request(method, [
+        {
+          'from': '0x1111111111111111111111111111111111111111',
+          'to': '0x2222222222222222222222222222222222222222',
+          'value': '0x1',
+        },
+      ]);
+      await provider.transactionSignTap();
+      expect(rpc.signedTransaction, isNull);
+      expect(rpc.sentTransaction, isNull);
+      expect(client.responses, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+      expect(provider.errorMessage, contains('Requested signer'));
+    });
+  }
   test(
     'sign-only requests preserve the configured test network chain ID',
     () async {
       provider.actionData = _request('eth_signTransaction', [
         {
-          'from': '0x1111111111111111111111111111111111111111',
+          'from': _Provider._key.address.with0x,
           'to': '0x2222222222222222222222222222222222222222',
           'value': '0x1',
         },
@@ -129,7 +158,7 @@ void main() {
     () async {
       provider.actionData = _request('eth_signTransaction', [
         {
-          'from': '0x1111111111111111111111111111111111111111',
+          'from': _Provider._key.address.with0x,
           'to': '0x2222222222222222222222222222222222222222',
           'value': '0xde0b6b3a7640000',
           'gasPrice': '0x2540be400',
@@ -144,7 +173,7 @@ void main() {
       final transaction = rpc.signedTransaction!;
       expect(
         transaction.from!.without0x,
-        '1111111111111111111111111111111111111111',
+        _Provider._key.address.with0x.substring(2),
       );
       expect(
         transaction.to!.without0x,
@@ -166,7 +195,7 @@ void main() {
   test('EIP-1559 fee fields are preserved as wei quantities', () async {
     provider.actionData = _request('eth_signTransaction', [
       {
-        'from': '0x1111111111111111111111111111111111111111',
+        'from': _Provider._key.address.with0x,
         'maxFeePerGas': '0x59682f00',
         'maxPriorityFeePerGas': '0x3b9aca00',
         'data': '0x60006000',
@@ -192,7 +221,7 @@ void main() {
     () async {
       provider.actionData = _request('eth_sendTransaction', [
         {
-          'from': '0x1111111111111111111111111111111111111111',
+          'from': _Provider._key.address.with0x,
           'to': '0x2222222222222222222222222222222222222222',
           'gas': '21000',
         },
@@ -209,7 +238,7 @@ void main() {
 
   test('malformed gas cap stops before the signer is called', () async {
     provider.actionData = _request('eth_signTransaction', [
-      {'from': '0x1111111111111111111111111111111111111111', 'gas': '0xZZ'},
+      {'from': _Provider._key.address.with0x, 'gas': '0xZZ'},
     ]);
 
     await provider.transactionSignTap();

@@ -123,3 +123,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - personal_sign and EIP-712 signing accepted a requested signer address but did not compare it to the actual active key. Require the requested address to match the key address, case-insensitively, before cryptographic signing.
 - Existing successful fixtures used unrelated placeholder addresses; corrected them to the actual deterministic test key. Positive signing behavior remains covered. New mismatched-address tests verify no signature response; case-difference positive case preserves valid input.
 - Final WalletConnect suites: 39 passed. Evidence: /tmp/n42-audit-batch12-final-tests.log and /tmp/n42-audit-batch12-analyze.log. Scoped analyze: no issues. This is signer/request identity checking, not complete WalletConnect session-namespace authorization. No device or release acceptance implied.
+
+## Batch 13 — WalletConnect transaction sender identity
+
+- Reproduced before fixing: both eth_signTransaction and eth_sendTransaction accepted a from address unrelated to the actual signing key. Two regressions failed on the old implementation.
+- After transaction field parsing, capture the signing key once, validate from against its address using the same case-insensitive guard as message signing, and pass that captured key to sign/send. This keeps the displayed/requested sender bound to the actual signer.
+- Corrected existing positive fixtures to use their deterministic key's address, rather than unrelated placeholder senders. Added a case-difference success regression; malformed gas still fails before key access.
+- Final WalletConnect signing/EVM suites: 42 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch13-before-tests.log, /tmp/n42-audit-batch13-final-tests.log, /tmp/n42-audit-batch13-analyze.log.
+- This is sender/key identity checking; full session namespace permissions, request ownership across awaits and unknown-outcome recovery for WalletConnect broadcast remain open. No device or release acceptance implied.

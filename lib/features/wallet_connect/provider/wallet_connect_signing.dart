@@ -44,7 +44,7 @@ mixin WalletConnectSigning
             ? web3.hexToBytes(stripped)
             : Uint8List.fromList(utf8.encode(rawData));
         final signingKey = privateKey;
-        _requireMessageSigner(requestParams[1], signingKey);
+        _requireRequestedSigner(requestParams[1], signingKey);
         final signedData = signingKey.signPersonalMessageToUint8List(
           encodedMessage,
         );
@@ -52,7 +52,7 @@ mixin WalletConnectSigning
       } else if (_typedDataVersions.containsKey(eventData.method)) {
         final requestParams = (eventData.params! as List).cast<String>();
         final signingKey = privateKey;
-        _requireMessageSigner(requestParams[0], signingKey);
+        _requireRequestedSigner(requestParams[0], signingKey);
         signedDataHex = _signTypedData(
           privateKey: signingKey,
           jsonData: requestParams[1],
@@ -430,11 +430,14 @@ mixin WalletConnectSigning
       data: (data != null && data != '0x') ? web3.hexToBytes(data) : null,
     );
 
+    final signingKey = privateKey;
+    _requireRequestedSigner(from, signingKey);
+
     String returnStr;
     if (eventData.method == "eth_signTransaction") {
       final cm = coinModels[coinModelsIndex];
       final sig = await web3client!.signTransaction(
-        privateKey,
+        signingKey,
         transaction,
         chainId: cm.isTest ? cm.config.chainIdTest : cm.config.chainId,
       );
@@ -442,7 +445,7 @@ mixin WalletConnectSigning
     } else {
       final cm = coinModels[coinModelsIndex];
       returnStr = await web3client!.sendTransaction(
-        privateKey,
+        signingKey,
         transaction,
         chainId: cm.isTest ? cm.config.chainIdTest : cm.config.chainId,
       );
@@ -675,7 +678,7 @@ mixin WalletConnectSigning
     viewStateDeal(WalletConnectState.connect);
   }
 
-  void _requireMessageSigner(String requested, web3.EthPrivateKey key) {
+  void _requireRequestedSigner(String requested, web3.EthPrivateKey key) {
     if (!RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(requested) ||
         requested.toLowerCase() != key.address.with0x.toLowerCase()) {
       throw StateError('Requested signer does not match the active wallet');
