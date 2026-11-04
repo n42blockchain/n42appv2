@@ -118,6 +118,10 @@ class WalletSignFake extends Fake implements wc.IReownSign {
 
 /// Exercise the production mixins while isolating key loading and navigation.
 class SessionPreviewProvider extends WalletConnectProvider {
+  // This fixture isolates signing/preview; permission enforcement has its own suite.
+  @override
+  bool isSessionRequestAuthorized(wc.SessionRequestEvent request) => true;
+
   final availableChains = <String, CoinModel>{};
   final initializedChains = <String>[];
   final states = <WalletConnectState>[];

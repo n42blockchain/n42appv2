@@ -34,6 +34,9 @@ mixin WalletConnectSigning
       final eventData = requestSnapshot as wallet_connect.SessionRequestEvent;
       viewStateDeal(WalletConnectState.messageSign);
       if (!identical(actionData, eventData)) return;
+      if (!isSessionRequestAuthorized(eventData)) {
+        throw StateError('Request is outside approved session permissions');
+      }
       String signedDataHex;
 
       if (eventData.method == "personal_sign") {
@@ -243,11 +246,17 @@ mixin WalletConnectSigning
       final eventData = requestSnapshot as wallet_connect.SessionRequestEvent;
       viewStateDeal(WalletConnectState.transaction);
       if (!identical(actionData, eventData)) return;
+      if (!isSessionRequestAuthorized(eventData)) {
+        throw StateError('Request is outside approved session permissions');
+      }
       final initOk = await web3clientInitFromChainId(eventData.chainId);
       if (!initOk ||
           !identical(actionData, eventData) ||
           walletConnectState != WalletConnectState.transaction) {
         return;
+      }
+      if (!isSessionRequestAuthorized(eventData)) {
+        throw StateError('Session permissions changed during initialization');
       }
 
       if (eventData.method == "tron_signTransaction") {

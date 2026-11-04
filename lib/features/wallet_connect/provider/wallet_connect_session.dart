@@ -357,11 +357,70 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     });
   }
 
+  /// EVM signing gate; other namespaces retain their separate handlers.
+  bool isSessionRequestAuthorized(wallet_connect.SessionRequestEvent request) {
+    const signing = {
+      'personal_sign',
+      'eth_sign',
+      'eth_signTypedData',
+      'eth_signTypedData_v3',
+      'eth_signTypedData_v4',
+      'eth_signTransaction',
+      'eth_sendTransaction',
+    };
+    if (!signing.contains(request.method)) return true;
+    final session = getActiveSessions()[request.topic];
+    if (session == null ||
+        session.expiry <= DateTime.now().millisecondsSinceEpoch ~/ 1000 ||
+        !request.chainId.startsWith('eip155:')) {
+      return false;
+    }
+    final params = request.params;
+    if (params is! List || params.isEmpty) return false;
+    final Object? address;
+    if (request.method == 'eth_signTransaction' ||
+        request.method == 'eth_sendTransaction') {
+      address = params.first is Map ? (params.first as Map)['from'] : null;
+    } else {
+      if (params.length < 2) return false;
+      address = params[request.method == 'personal_sign' ? 1 : 0];
+    }
+    if (address is! String ||
+        !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address)) {
+      return false;
+    }
+    return session.namespaces.entries.any((entry) {
+      final allowed = entry.value;
+      return (entry.key == 'eip155' || entry.key == request.chainId) &&
+          allowed.methods.contains(request.method) &&
+          (allowed.chains == null ||
+              allowed.chains!.contains(request.chainId)) &&
+          allowed.accounts.any(
+            (account) =>
+                account.toLowerCase() ==
+                '${request.chainId}:$address'.toLowerCase(),
+          );
+    });
+  }
+
   // ── Request dispatch ──────────────────────────────────────────────────────
 
   Future<void> setActionDataMap(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
+    if (!isSessionRequestAuthorized(eventData)) {
+      await signClient?.respondSessionRequest(
+        topic: eventData.topic,
+        response: wallet_connect.JsonRpcResponse(
+          id: eventData.id,
+          error: wallet_connect.JsonRpcError(
+            code: 4100,
+            message: 'Request is outside approved session permissions',
+          ),
+        ),
+      );
+      return;
+    }
     // ── Auto-respond to stateless RPC calls (no UI, no web3 client needed) ──
     // DApps like Uniswap call these immediately after session establishment to
     // validate the connection. Rejecting them causes "connection failed" errors.

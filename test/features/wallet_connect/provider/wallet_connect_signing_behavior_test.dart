@@ -26,6 +26,10 @@ class _WalletKit extends Fake implements wc.ReownWalletKit {
 }
 
 class _SigningProvider extends WalletConnectProvider {
+  // This fixture isolates signing/preview; permission enforcement has its own suite.
+  @override
+  bool isSessionRequestAuthorized(wc.SessionRequestEvent request) => true;
+
   int privateKeyReads = 0;
   int chainInitializations = 0;
 

@@ -58,6 +58,10 @@ class _RpcClient extends Fake implements web3.Web3Client {
 }
 
 class _Provider extends WalletConnectProvider {
+  // This fixture isolates signing/preview; permission enforcement has its own suite.
+  @override
+  bool isSessionRequestAuthorized(wc.SessionRequestEvent request) => true;
+
   static final _key = web3.EthPrivateKey.fromInt(BigInt.one);
   int keyReads = 0;
   int chainInitializations = 0;

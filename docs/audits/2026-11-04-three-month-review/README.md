@@ -156,3 +156,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Added controlled key-loading hooks for deterministic tests while retaining the production WalletService/mnemonic fallback. Normal latest initialization and post-account-switch reinitialization remain usable.
 - All six WalletConnect Provider suites: 64 passed. Scoped analyze: no issues. Tests cover out-of-order success/failure, wallet/storage-owner switches, disconnect, disposal and cached-key reload. Logs: /tmp/n42-audit-batch16-final-tests.log and /tmp/n42-audit-batch16-final-analyze.log.
 - Automated tests inject delayed key loading; real-device storage/credential loading, reconnect and in-flight broadcast acceptance remain unverified. Session namespace enforcement and native signing awaits remain separate open items. No release uploaded.
+
+## Batch 17 — EVM signing session permissions
+
+- Add application-layer EVM signing checks against the SDK active-session store: topic exists, session not expired, namespace matches, method approved, chain allowed and requested signer/from belongs to that chain's approved accounts. This is defense in depth; it does not establish an SDK-level authorization bypass exploit.
+- Check before preview dispatch and at signing confirmation; transaction requests recheck after chain initialization so revoked permissions cannot proceed. Incoming unauthorized requests receive 4100 without replacing an unrelated active preview.
+- Preserve approved multi-chain sessions and chain-keyed namespaces. Normal signing suites explicitly isolate permission handling; a new suite exercises the production gate with real session objects, including an approved request reaching the signing handler, missing/expired/method/chain/account denial, revocation during initialization, and preview preservation.
+- All seven WalletConnect Provider suites: 75 passed. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch17-verified-tests.log and /tmp/n42-audit-batch17-verified-analyze.log.
+- Scope is EVM signing methods. Non-EVM permissions and stateless account/chain probes retain their existing paths and still need separate review; permissions during already-started SDK broadcast/native waits and real-device relay acceptance remain open. No release uploaded.
