@@ -110,10 +110,9 @@ extension _BatchTransferEncoding on BatchTransferApi {
   String _padLeft(String str, int length) => str.padLeft(length, '0');
 
   BigInt _hexToBigInt(String hex) {
-    final cleaned = (hex.startsWith('0x') || hex.startsWith('0X'))
-        ? hex.substring(2)
-        : hex;
-    if (cleaned.isEmpty) return BigInt.zero;
-    return BigInt.parse(cleaned, radix: 16);
+    if (!RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(hex)) {
+      throw const FormatException('Invalid RPC fee quantity');
+    }
+    return BigInt.parse(hex.substring(2), radix: 16);
   }
 }

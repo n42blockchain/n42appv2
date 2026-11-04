@@ -88,3 +88,10 @@ This is an incomplete audit. Continue with transaction signing/broadcast state a
 - Pre-broadcast validation failures remain retryable errors, not falsely pending network submissions. Unknown outcomes after dispatch still retain durable pending records.
 - Network/signer/provider suites: 27 passed, including custom-chain success and retry after correcting network configuration. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch9-final-tests.log and /tmp/n42-audit-batch9-final-analyze.log.
 - Bytecode presence does not authenticate its implementation or the RPC. Expected runtime-code hashes and testing each configured chain/Multicall deployment remain open. No supported chain was removed, and no release uploaded.
+
+## Batch 10 — fee quote compatibility and numeric validation
+
+- eth_feeHistory blockCount was sent as a JSON number while the official Execution API expects a string quantity. Use 0x4 so strict nodes can serve EIP-1559 history instead of accidentally falling back to legacy.
+- Reject RPC fee values without 0x, empty hex, negative values or values wider than uint256. Reject derived maxFee overflow and error-bearing responses. Legacy fallback remains available and zero gas price remains valid.
+- Fee/network/signing payload suites: 16 passed, covering normal EIP-1559, legacy, free-gas, malformed/negative/overflow quotes. Scoped analyze: no issues. Logs: /tmp/n42-audit-batch10-tests.log and /tmp/n42-audit-batch10-analyze.log.
+- Primary reference: https://ethereum.github.io/execution-apis/next/api/methods/eth_feeHistory/ . Existing GasTrackerApi already encodes blockCount as hexadecimal. No native/device or on-chain acceptance and no new upload in this batch.

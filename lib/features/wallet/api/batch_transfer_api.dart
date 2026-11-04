@@ -246,17 +246,20 @@ class BatchTransferApi {
     // 尝试 EIP-1559
     try {
       final feeResponse = await _rpcCall(rpcUrl, 'eth_feeHistory', [
-        4,
+        '0x4',
         'latest',
         <int>[25, 50, 75],
       ]);
-      if (feeResponse['result'] != null) {
+      if (feeResponse['error'] == null && feeResponse['result'] != null) {
         final baseFeeHistory =
             feeResponse['result']['baseFeePerGas'] as List<dynamic>?;
         if (baseFeeHistory != null && baseFeeHistory.isNotEmpty) {
           final latestBaseFee = _hexToBigInt(baseFeeHistory.last.toString());
           final maxPriorityBig = BigInt.from(1500000000); // 1.5 Gwei
           final maxFee = latestBaseFee * BigInt.from(2) + maxPriorityBig;
+          if (maxFee >= (BigInt.one << 256)) {
+            throw StateError('RPC fee quote exceeds uint256');
+          }
           return BatchGasEstimate(
             gasLimit: gasLimit,
             gasPrice: latestBaseFee + maxPriorityBig,
@@ -278,7 +281,8 @@ class BatchTransferApi {
         'eth_gasPrice',
         <dynamic>[],
       );
-      if (gasPriceResponse['result'] != null) {
+      if (gasPriceResponse['error'] == null &&
+          gasPriceResponse['result'] != null) {
         final gasPrice = _hexToBigInt(gasPriceResponse['result'].toString());
         return BatchGasEstimate(
           gasLimit: gasLimit,
