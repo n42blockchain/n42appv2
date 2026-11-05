@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_gas_limit.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_session.dart';
@@ -75,7 +76,9 @@ mixin WalletConnectSigning
           );
           return;
         }
+        final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         final credentials = await getCurrentWalletCredentials();
+        requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -100,7 +103,9 @@ mixin WalletConnectSigning
           );
           return;
         }
+        final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         final credentials = await getCurrentWalletCredentials();
+        requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -132,7 +137,9 @@ mixin WalletConnectSigning
           );
           return;
         }
+        final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         final credentials = await getCurrentWalletCredentials();
+        requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -166,7 +173,9 @@ mixin WalletConnectSigning
           );
           return;
         }
+        final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         final credentials = await getCurrentWalletCredentials();
+        requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
@@ -312,7 +321,9 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
+    requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -348,7 +359,9 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
+    requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -531,7 +544,9 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
+    requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -598,7 +613,9 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
+    requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -657,7 +674,9 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
+    requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
@@ -711,6 +730,52 @@ mixin WalletConnectSigning
       );
     }
     _completeSigningRequest(eventData);
+  }
+
+  /// Capture ownership before loading credentials. Invoke the returned guard
+  /// synchronously after that await, before handing secrets to native code.
+  void Function() _nonEvmSigningGuard(
+    wallet_connect.SessionRequestEvent request,
+    CoinModel cm,
+  ) {
+    final index = signingWalletIndex;
+    final owner = signingWalletOwner;
+    final modelIndex = coinModelsIndex;
+    final address = cm.address;
+    final pathIndex = cm.pathIndex;
+    final addrType = cm.addrType;
+    final path = cm.config.pathForAddrType(addrType);
+    final type = cm.config.coinType;
+    final isTest = cm.isTest;
+    final state = walletConnectState;
+    final client = signClient;
+    bool current() =>
+        identical(actionData, request) &&
+        walletConnectState == state &&
+        identical(signClient, client) &&
+        coinModelsIndex == modelIndex &&
+        modelIndex >= 0 &&
+        modelIndex < coinModels.length &&
+        identical(coinModels[modelIndex], cm) &&
+        cm.address == address &&
+        cm.pathIndex == pathIndex &&
+        cm.addrType == addrType &&
+        cm.isTest == isTest &&
+        cm.config.coinType == type &&
+        cm.config.pathForAddrType(addrType) == path &&
+        signingWalletIndex == index &&
+        signingWalletOwner == owner &&
+        isSessionRequestAuthorized(request);
+    void requireCurrent() {
+      if (!current()) {
+        throw StateError(
+          'Signing context or session permissions changed during credential loading',
+        );
+      }
+    }
+
+    requireCurrent();
+    return requireCurrent;
   }
 
   void _completeSigningRequest(wallet_connect.SessionRequestEvent request) {

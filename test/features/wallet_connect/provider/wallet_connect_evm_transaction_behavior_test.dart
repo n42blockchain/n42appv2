@@ -63,6 +63,11 @@ class _Provider extends WalletConnectProvider {
   bool isSessionRequestAuthorized(wc.SessionRequestEvent request) => true;
 
   static final _key = web3.EthPrivateKey.fromInt(BigInt.one);
+  @override
+  int get signingWalletIndex => 0;
+  @override
+  String get signingWalletOwner => 'fixture-owner';
+
   int keyReads = 0;
   int chainInitializations = 0;
   Future<bool> Function()? initialize;

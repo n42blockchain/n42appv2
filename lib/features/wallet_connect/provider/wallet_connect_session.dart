@@ -428,8 +428,14 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       final field = signerFields[namespace]!;
       if (params.containsKey(field)) {
         final requested = params[field];
-        if (requested is! String ||
-            !_sameSessionAccount(namespace, requested, address)) {
+        // Aptos signMessage uses a boolean address inclusion option. A string
+        // address remains a signer assertion; the actual configured account
+        // must still appear in the approved session below.
+        final aptosAddressOption =
+            request.method == 'aptos_signMessage' && requested is bool;
+        if (!aptosAddressOption &&
+            (requested is! String ||
+                !_sameSessionAccount(namespace, requested, address))) {
           return false;
         }
       }
@@ -622,7 +628,9 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         final params = eventData.params! as Map;
         actionDataMap = _buildMessageData(
           networkName,
-          params["address"] as String? ?? '',
+          params["address"] is String
+              ? params["address"] as String
+              : (coinModelFor(CoinType.APT)?.address as String? ?? ''),
           params["message"] as String? ??
               (params["fullMessage"] as String? ?? ''),
         );

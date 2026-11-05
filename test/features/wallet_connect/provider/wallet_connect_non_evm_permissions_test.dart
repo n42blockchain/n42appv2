@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
@@ -66,10 +68,28 @@ const _chains = [
 ];
 
 class _Signer extends WalletConnectProvider {
+  Completer<({String mnemonic, String privateKey})>? credentials;
+  int walletIndex = 0;
+  String owner = 'fixture-owner';
+  bool disposed = false;
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
+  }
+
+  @override
+  int get signingWalletIndex => walletIndex;
+  @override
+  String get signingWalletOwner => owner;
   @override
   Future<({String mnemonic, String privateKey})>
-  getCurrentWalletCredentials() async =>
-      (mnemonic: 'fixture mnemonic', privateKey: 'fixture private key');
+  getCurrentWalletCredentials() =>
+      credentials?.future ??
+      Future.value((
+        mnemonic: 'fixture mnemonic',
+        privateKey: 'fixture private key',
+      ));
 }
 
 wc.SessionData _session(
@@ -119,7 +139,7 @@ void main() {
   });
   tearDown(() {
     provider.signClient = null;
-    provider.dispose();
+    if (!(provider as _Signer).disposed) provider.dispose();
   });
   for (final c in _chains) {
     for (final method in c.methods) {
@@ -325,6 +345,153 @@ void main() {
         hex,
       );
     });
+  }
+
+  for (final c in _chains) {
+    for (final method in c.methods.where((m) => !m.contains('And'))) {
+      for (final mutation in [
+        'revoked',
+        'wallet',
+        'owner',
+        'address',
+        'path',
+        'request',
+        'disconnect',
+        'dispose',
+      ]) {
+        test(
+          '$method stops before native signing when $mutation changes during credential loading',
+          () async {
+            final signer = provider as _Signer;
+            signer.credentials =
+                Completer<({String mnemonic, String privateKey})>();
+            final calls = <MethodCall>[];
+            const channel = MethodChannel('trustdart');
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+                .setMockMethodCallHandler(channel, (call) async {
+                  calls.add(call);
+                  return 'fixture-signature';
+                });
+            addTearDown(
+              () => TestDefaultBinaryMessengerBinding
+                  .instance
+                  .defaultBinaryMessenger
+                  .setMockMethodCallHandler(channel, null),
+            );
+            final coin = sessionCoin(
+              type: c.type,
+              blockchain: c.blockchain,
+              address: c.address,
+            )..coin['path'] = {'legacy': "m/44'/0'/0'"};
+            signer.coinModels = [coin];
+            signer.coinModelsIndex = 0;
+            client.activeSessions['request-topic'] = _session(
+              c.ns,
+              c.chain,
+              c.address,
+              c.methods,
+            );
+            signer.actionData = sessionRequest(method, {
+              c.field: c.address,
+              'message': method == 'tron_signTransaction'
+                  ? <String, dynamic>{}
+                  : 'Zml4dHVyZQ==',
+              'transaction': 'cmF3',
+              'encodedTransaction': 'cmF3',
+              'transactionBlock': 'cmF3',
+              'transactions': ['cmF3'],
+            }, chain: c.chain);
+            final operation = method.endsWith('Message')
+                ? signer.messageSignTap()
+                : signer.transactionSignTap();
+            // Transactions first await chain initialization. Let the handler
+            // reach its controlled credential await before invalidating context.
+            await Future<void>.delayed(Duration.zero);
+            if (mutation == 'revoked') client.activeSessions.clear();
+            if (mutation == 'wallet') signer.walletIndex++;
+            if (mutation == 'owner') signer.owner = 'other-owner';
+            if (mutation == 'address') coin.address = 'different-account';
+            if (mutation == 'path') coin.pathIndex++;
+            if (mutation == 'request') {
+              signer.actionData = sessionRequest('personal_sign', [
+                'new',
+                'fixture',
+              ]);
+              signer.walletConnectState = WalletConnectState.messageSignOK;
+            }
+            if (mutation == 'disconnect') {
+              signer.walletConnectState = WalletConnectState.disconnect;
+            }
+            if (mutation == 'dispose') signer.dispose();
+            signer.credentials!.complete((
+              mnemonic: 'fixture mnemonic',
+              privateKey: 'fixture private key',
+            ));
+            await operation;
+            expect(calls, isEmpty);
+            expect(client.responses, isEmpty);
+            if (mutation == 'request') {
+              expect(
+                signer.walletConnectState,
+                WalletConnectState.messageSignOK,
+              );
+            }
+            if (mutation == 'disconnect') {
+              expect(signer.walletConnectState, WalletConnectState.disconnect);
+            }
+          },
+        );
+      }
+    }
+  }
+
+  for (final includeAddress in [false, true]) {
+    test(
+      'Aptos message address=$includeAddress remains an option, not a signer address',
+      () async {
+        final c = _chains[2];
+        final calls = <MethodCall>[];
+        const channel = MethodChannel('trustdart');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (call) async {
+              calls.add(call);
+              return 'fixture-signature';
+            });
+        addTearDown(
+          () => TestDefaultBinaryMessengerBinding
+              .instance
+              .defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, null),
+        );
+        provider.coinModels = [
+          sessionCoin(
+            type: c.type,
+            blockchain: c.blockchain,
+            address: c.address,
+          )..coin['path'] = {'legacy': "m/44'/637'/0'/0'"},
+        ];
+        provider.coinModelsIndex = 0;
+        client.activeSessions['request-topic'] = _session(
+          c.ns,
+          c.chain,
+          c.address,
+          c.methods,
+        );
+        final request = sessionRequest('aptos_signMessage', {
+          'address': includeAddress,
+          'message': 'fixture',
+        }, chain: c.chain);
+        expect(provider.isSessionRequestAuthorized(request), isTrue);
+        await provider.setActionDataMap(request);
+        expect(provider.errorMessage, isEmpty);
+        expect(provider.actionDataMap?['from'], c.address);
+        expect(provider.walletConnectState, WalletConnectState.messageSignOK);
+        await provider.messageSignTap();
+        expect(provider.errorMessage, isEmpty);
+        expect(calls, hasLength(1));
+        expect(client.responses.single.$2.error, isNull);
+      },
+    );
   }
 
   test('unapproved non-EVM request preserves an existing preview and responds 4100', () async {
