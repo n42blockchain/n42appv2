@@ -453,7 +453,12 @@ extension WalletCorePlugin {
         guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.solana, path: path, privateKey: pk) else {
             return nil
         }
-        let type = txData["type"] as! String
+        guard let type = txData["type"] as? String else { return nil }
+        if type == "WC_SOL" {
+            guard txData["encodeType"] as? String == "base64",
+                  let transaction = txData["transaction"] as? String else { return nil }
+            return signWalletConnectSolana(transaction, privateKey: privateKey)
+        }
         let encodeType = txData["encodeType"] as! String
         var txHash: String?
         if type == "token" {
@@ -532,6 +537,89 @@ extension WalletCorePlugin {
         return result
          */
       }
+
+    // WalletCore decodes and signs the original legacy/v0 message. Never
+    // rebuild a transfer, refresh a blockhash or overwrite another signer's slot.
+    private func signWalletConnectSolana(_ encoded: String, privateKey: PrivateKey) -> String? {
+        // Resource bound only; this is not a network packet-size declaration.
+        guard encoded.utf8.count <= 90_000,
+              let original = Data(base64Encoded: encoded), original.count <= 65_536,
+              let envelope = solanaSignatureEnvelope(original) else { return nil }
+        do {
+            let decoded = try SolanaDecodingTransactionOutput(serializedBytes:
+                TransactionDecoder.decode(coinType: .solana, encodedTx: original))
+            guard decoded.error == .ok, decoded.hasTransaction else { return nil }
+            let raw = decoded.transaction
+            let header: SolanaRawMessage.MessageHeader
+            let keys: [String]
+            let instructions: [SolanaRawMessage.Instruction]
+            let loadedAccounts: Int
+            switch raw.message {
+            case .legacy(let message):
+                header = message.header; keys = message.accountKeys
+                instructions = message.instructions; loadedAccounts = 0
+            case .v0(let message):
+                header = message.header; keys = message.accountKeys
+                instructions = message.instructions
+                loadedAccounts = message.addressTableLookups.reduce(0) {
+                    $0 + $1.writableIndexes.count + $1.readonlyIndexes.count
+                }
+            case .none: return nil
+            }
+            let required = Int(header.numRequiredSignatures)
+            guard required == envelope.count, required <= keys.count,
+                  keys.count + loadedAccounts <= 256,
+                  Int(header.numReadonlySignedAccounts) < required,
+                  Int(header.numReadonlyUnsignedAccounts) <= keys.count - required,
+                  instructions.allSatisfy({ instruction in
+                      Int(instruction.programID) < keys.count &&
+                      instruction.accounts.allSatisfy { Int($0) < keys.count + loadedAccounts }
+                  }) else { return nil }
+            let address = CoinType.solana.deriveAddress(privateKey: privateKey)
+            let slots = keys.prefix(required).enumerated().filter { $0.element == address }
+            guard slots.count == 1, let slot = slots.first?.offset else { return nil }
+            var input = SolanaSigningInput()
+            input.privateKey = privateKey.data
+            input.rawMessage = raw
+            input.txEncoding = .base64
+            let signed = try SolanaSigningOutput(serializedBytes:
+                AnySigner.nativeSign(data: try input.serializedData(), coin: .solana))
+            guard signed.error == .ok,
+                  let output = Data(base64Encoded: signed.encoded),
+                  let result = solanaSignatureEnvelope(output),
+                  result.count == envelope.count, result.offset == envelope.offset,
+                  output.subdata(in: result.offset..<output.count) ==
+                    original.subdata(in: envelope.offset..<original.count) else { return nil }
+            for index in 0..<required where index != slot {
+                let range = (envelope.prefix + index * 64)..<(envelope.prefix + (index + 1) * 64)
+                guard output.subdata(in: range) == original.subdata(in: range) else { return nil }
+            }
+            let signatureRange = (envelope.prefix + slot * 64)..<(envelope.prefix + (slot + 1) * 64)
+            guard privateKey.getPublicKeyEd25519().verify(
+                signature: output.subdata(in: signatureRange),
+                message: original.subdata(in: envelope.offset..<original.count)) else { return nil }
+            return output.base64EncodedString()
+        } catch { return nil }
+    }
+
+    // Read only the compact signature envelope. WalletCore owns message decoding.
+    private func solanaSignatureEnvelope(_ data: Data) -> (count: Int, prefix: Int, offset: Int)? {
+        var count = 0
+        for index in 0..<3 {
+            guard index < data.count else { return nil }
+            let byte = data[index]
+            if index == 2 && byte > 3 { return nil }
+            count |= Int(byte & 0x7f) << (index * 7)
+            if byte & 0x80 == 0 {
+                guard count > 0, count <= 255, index == 0 || byte != 0 else { return nil }
+                let prefix = index + 1
+                let offset = prefix + count * 64
+                guard offset < data.count else { return nil }
+                return (count, prefix, offset)
+            }
+        }
+        return nil
+    }
 
     func signTronTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],pk:PrivateKey?) -> String? {
        let cmd = txData["cmd"] as! String
