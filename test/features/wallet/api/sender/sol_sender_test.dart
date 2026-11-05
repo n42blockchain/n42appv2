@@ -85,6 +85,7 @@ class FakeSol extends SolApi {
   Future<MessageModel> sendTransaction(
     String signMessage, {
     bool isTest = false,
+    String encoding = 'base58',
   }) async {
     calls.add(('send', isTest));
     sends++;

@@ -1,13 +1,13 @@
 PODS:
-  - app_badge_plus (1.3.5):
+  - app_badge_plus (1.4.0):
     - FlutterMacOS
   - app_links (6.4.1):
     - FlutterMacOS
-  - AppAuth (2.1.0):
-    - AppAuth/Core (= 2.1.0)
-    - AppAuth/ExternalUserAgent (= 2.1.0)
-  - AppAuth/Core (2.1.0)
-  - AppAuth/ExternalUserAgent (2.1.0):
+  - AppAuth (3.0.0):
+    - AppAuth/Core (= 3.0.0)
+    - AppAuth/ExternalUserAgent (= 3.0.0)
+  - AppAuth/Core (3.0.0)
+  - AppAuth/ExternalUserAgent (3.0.0):
     - AppAuth/Core
   - AppCheckCore (11.3.2):
     - GoogleUtilities/Environment (~> 8.0)
@@ -29,29 +29,29 @@ PODS:
     - FlutterMacOS
   - file_selector_macos (0.0.1):
     - FlutterMacOS
-  - Firebase/CoreOnly (12.19.0):
-    - FirebaseCore (~> 12.19.0)
-  - Firebase/Crashlytics (12.19.0):
+  - Firebase/CoreOnly (12.19.3):
+    - FirebaseCore (~> 12.19.3)
+  - Firebase/Crashlytics (12.19.3):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 12.19.0)
-  - Firebase/Messaging (12.19.0):
+  - Firebase/Messaging (12.19.3):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 12.19.0)
-  - firebase_analytics (12.6.0):
+  - firebase_analytics (13.0.1):
     - firebase_core
-    - FirebaseAnalytics (= 12.19.0)
+    - FirebaseAnalytics (~> 12.19.0)
     - FlutterMacOS
-  - firebase_core (4.15.0):
-    - Firebase/CoreOnly (~> 12.19.0)
+  - firebase_core (5.1.0):
+    - Firebase/CoreOnly (~> 12.19.3)
     - FlutterMacOS
-  - firebase_crashlytics (5.4.0):
-    - Firebase/CoreOnly (~> 12.19.0)
-    - Firebase/Crashlytics (~> 12.19.0)
+  - firebase_crashlytics (6.0.1):
+    - Firebase/CoreOnly (~> 12.19.3)
+    - Firebase/Crashlytics (~> 12.19.3)
     - firebase_core
     - FlutterMacOS
-  - firebase_messaging (16.5.0):
-    - Firebase/CoreOnly (~> 12.19.0)
-    - Firebase/Messaging (~> 12.19.0)
+  - firebase_messaging (17.0.1):
+    - Firebase/CoreOnly (~> 12.19.3)
+    - Firebase/Messaging (~> 12.19.3)
     - firebase_core
     - FlutterMacOS
   - FirebaseAnalytics (12.19.0):
@@ -72,7 +72,7 @@ PODS:
     - GoogleUtilities/Network (~> 8.1)
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
     - nanopb (~> 3.30910.0)
-  - FirebaseCore (12.19.0):
+  - FirebaseCore (12.19.3):
     - FirebaseCoreInternal (~> 12.19.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
@@ -115,7 +115,7 @@ PODS:
     - PromisesSwift (~> 2.1)
   - flutter_contacts (0.0.1):
     - FlutterMacOS
-  - flutter_gemma (0.11.14):
+  - flutter_edge_ai (2.5.6):
     - FlutterMacOS
   - flutter_local_notifications (0.0.1):
     - FlutterMacOS
@@ -128,21 +128,24 @@ PODS:
     - FlutterMacOS
   - flutter_vodozemac (0.0.1):
     - FlutterMacOS
-  - flutter_webrtc (1.6.2):
+  - flutter_webrtc (1.6.3):
     - FlutterMacOS
-    - WebRTC-SDK (= 150.7871.01)
+    - WebRTC-SDK (= 150.7871.04)
   - FlutterMacOS (1.0.0)
   - FMDB/Core (2.7.12)
   - FMDB/SQLCipher (2.7.12):
     - FMDB/Core
     - SQLCipher (~> 4.6)
+  - geocoding_darwin (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - geolocator_apple (1.2.0):
     - Flutter
     - FlutterMacOS
   - google_sign_in_ios (0.0.1):
     - Flutter
     - FlutterMacOS
-    - GoogleSignIn (~> 9.0)
+    - GoogleSignIn (< 11.0, >= 9.0)
     - GTMSessionFetcher (>= 3.4.0)
   - GoogleAppMeasurement/Core (12.19.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
@@ -169,53 +172,55 @@ PODS:
   - GoogleDataTransport (10.1.1):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - GoogleSignIn (9.2.0):
-    - AppAuth (~> 2.1)
-    - AppCheckCore (~> 11.0)
-    - GTMAppAuth (~> 5.0)
-    - GTMSessionFetcher/Core (~> 3.3)
-  - GoogleUtilities/AppDelegateSwizzler (8.1.4):
+  - GoogleSignIn (10.1.0):
+    - AppAuth (~> 3.0)
+    - AppCheckCore (< 13.0, >= 11.0)
+    - GTMAppAuth (~> 6.0)
+    - GTMSessionFetcher/Core (< 6.0, >= 3.3)
+  - GoogleUtilities/AppDelegateSwizzler (8.1.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (8.1.4):
+  - GoogleUtilities/Environment (8.1.5):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.4):
+  - GoogleUtilities/Logger (8.1.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (8.1.4):
+  - GoogleUtilities/MethodSwizzler (8.1.5):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.1.4):
+  - GoogleUtilities/Network (8.1.5):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (8.1.4)":
+  - "GoogleUtilities/NSData+zlib (8.1.5)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.4)
-  - GoogleUtilities/Reachability (8.1.4):
+  - GoogleUtilities/Privacy (8.1.5)
+  - GoogleUtilities/Reachability (8.1.5):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (8.1.4):
+  - GoogleUtilities/UserDefaults (8.1.5):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GTMAppAuth (5.0.0):
-    - AppAuth/Core (~> 2.0)
-    - GTMSessionFetcher/Core (< 4.0, >= 3.3)
-  - GTMSessionFetcher (3.5.0):
-    - GTMSessionFetcher/Full (= 3.5.0)
-  - GTMSessionFetcher/Core (3.5.0)
-  - GTMSessionFetcher/Full (3.5.0):
+  - GTMAppAuth (6.0.0):
+    - AppAuth/Core (~> 3.0)
+    - GTMSessionFetcher/Core (< 6.0, >= 3.3)
+  - GTMSessionFetcher (5.3.1):
+    - GTMSessionFetcher/Full (= 5.3.1)
+  - GTMSessionFetcher/Core (5.3.1)
+  - GTMSessionFetcher/Full (5.3.1):
     - GTMSessionFetcher/Core
   - in_app_purchase_storekit (0.0.1):
     - Flutter
     - FlutterMacOS
-  - livekit_client (2.13.0):
+  - large_file_handler (0.5.0):
+    - FlutterMacOS
+  - livekit_client (2.13.2):
     - flutter_webrtc
     - FlutterMacOS
-    - WebRTC-SDK (= 150.7871.01)
+    - WebRTC-SDK (= 150.7871.04)
   - local_auth_darwin (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -241,7 +246,7 @@ PODS:
   - PromisesObjC (2.4.1)
   - PromisesSwift (2.4.1):
     - PromisesObjC (= 2.4.1)
-  - record_macos (1.2.1):
+  - record_macos (2.0.0):
     - FlutterMacOS
   - share_plus (0.0.1):
     - FlutterMacOS
@@ -263,9 +268,6 @@ PODS:
   - SQLCipher/common (4.10.0)
   - SQLCipher/standard (4.10.0):
     - SQLCipher/common
-  - sqlcipher_flutter_libs (0.0.1):
-    - FlutterMacOS
-    - SQLCipher (~> 4.10.0)
   - twitter_login (0.0.1):
     - FlutterMacOS
   - url_launcher_macos (0.0.1):
@@ -277,7 +279,7 @@ PODS:
     - FlutterMacOS
   - wakelock_plus (0.0.1):
     - FlutterMacOS
-  - WebRTC-SDK (150.7871.01)
+  - WebRTC-SDK (150.7871.04)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -296,7 +298,7 @@ DEPENDENCIES:
   - firebase_crashlytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_crashlytics/macos`)
   - firebase_messaging (from `Flutter/ephemeral/.symlinks/plugins/firebase_messaging/macos`)
   - flutter_contacts (from `Flutter/ephemeral/.symlinks/plugins/flutter_contacts/macos`)
-  - flutter_gemma (from `Flutter/ephemeral/.symlinks/plugins/flutter_gemma/macos`)
+  - flutter_edge_ai (from `Flutter/ephemeral/.symlinks/plugins/flutter_edge_ai/macos`)
   - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
   - flutter_new_badger (from `Flutter/ephemeral/.symlinks/plugins/flutter_new_badger/macos`)
   - flutter_secure_storage_darwin (from `Flutter/ephemeral/.symlinks/plugins/flutter_secure_storage_darwin/darwin`)
@@ -304,9 +306,11 @@ DEPENDENCIES:
   - flutter_vodozemac (from `Flutter/ephemeral/.symlinks/plugins/flutter_vodozemac/macos`)
   - flutter_webrtc (from `Flutter/ephemeral/.symlinks/plugins/flutter_webrtc/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - geocoding_darwin (from `Flutter/ephemeral/.symlinks/plugins/geocoding_darwin/darwin`)
   - geolocator_apple (from `Flutter/ephemeral/.symlinks/plugins/geolocator_apple/darwin`)
   - google_sign_in_ios (from `Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin`)
   - in_app_purchase_storekit (from `Flutter/ephemeral/.symlinks/plugins/in_app_purchase_storekit/darwin`)
+  - large_file_handler (from `Flutter/ephemeral/.symlinks/plugins/large_file_handler/macos`)
   - livekit_client (from `Flutter/ephemeral/.symlinks/plugins/livekit_client/macos`)
   - local_auth_darwin (from `Flutter/ephemeral/.symlinks/plugins/local_auth_darwin/darwin`)
   - mobile_scanner (from `Flutter/ephemeral/.symlinks/plugins/mobile_scanner/darwin`)
@@ -320,7 +324,6 @@ DEPENDENCIES:
   - sign_in_with_apple (from `Flutter/ephemeral/.symlinks/plugins/sign_in_with_apple/darwin`)
   - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
   - sqflite_sqlcipher (from `Flutter/ephemeral/.symlinks/plugins/sqflite_sqlcipher/macos`)
-  - sqlcipher_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/sqlcipher_flutter_libs/macos`)
   - twitter_login (from `Flutter/ephemeral/.symlinks/plugins/twitter_login/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - video_compress (from `Flutter/ephemeral/.symlinks/plugins/video_compress/macos`)
@@ -382,8 +385,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_messaging/macos
   flutter_contacts:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_contacts/macos
-  flutter_gemma:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_gemma/macos
+  flutter_edge_ai:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_edge_ai/macos
   flutter_local_notifications:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
   flutter_new_badger:
@@ -398,12 +401,16 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_webrtc/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
+  geocoding_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/geocoding_darwin/darwin
   geolocator_apple:
     :path: Flutter/ephemeral/.symlinks/plugins/geolocator_apple/darwin
   google_sign_in_ios:
     :path: Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin
   in_app_purchase_storekit:
     :path: Flutter/ephemeral/.symlinks/plugins/in_app_purchase_storekit/darwin
+  large_file_handler:
+    :path: Flutter/ephemeral/.symlinks/plugins/large_file_handler/macos
   livekit_client:
     :path: Flutter/ephemeral/.symlinks/plugins/livekit_client/macos
   local_auth_darwin:
@@ -430,8 +437,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin
   sqflite_sqlcipher:
     :path: Flutter/ephemeral/.symlinks/plugins/sqflite_sqlcipher/macos
-  sqlcipher_flutter_libs:
-    :path: Flutter/ephemeral/.symlinks/plugins/sqlcipher_flutter_libs/macos
   twitter_login:
     :path: Flutter/ephemeral/.symlinks/plugins/twitter_login/macos
   url_launcher_macos:
@@ -446,23 +451,23 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/webview_flutter_wkwebview/darwin
 
 SPEC CHECKSUMS:
-  app_badge_plus: e2be5ea6fb82cf5b0812203845d0dfaa4501a21f
+  app_badge_plus: 663f55331ddeae83245d0d849a9a3a3a64c34985
   app_links: 05a6ec2341985eb05e9f97dc63f5837c39895c3f
-  AppAuth: ef4da5a3fc2e10b90c09a0a94a9baeaedc0341d5
+  AppAuth: 5dec4b6a833eb0342b26bacbc5f3af694f71274a
   AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
   audioplayers_darwin: 835ced6edd4c9fc8ebb0a7cc9e294a91d99917d5
   connectivity_plus: 4adf20a405e25b42b9c9f87feff8f4b6fde18a4e
   device_info_plus: 4fb280989f669696856f8b129e4a5e3cd6c48f76
   facebook_auth_desktop: bf89ccf460c903de45e86fa0c7878b8b62db65fb
   file_picker_darwin: 4c2b9a50ea44cb3b071381ea0cf48591bdd80251
-  file_selector_macos: 9e9e068e90ebee155097d00e89ae91edb2374db7
-  Firebase: 7ca191e43724142f79fae653547b3382c45413cc
-  firebase_analytics: b7df5e79df324a07e8d3cc3231f6f6d45bf509c9
-  firebase_core: 43e1937898a25c5d76bc3ac4e58539465c9f219d
-  firebase_crashlytics: 9d6f7382bc9d0cfa4099b189416dc17f079aa413
-  firebase_messaging: 419610d30f5a0df8d18b09568c8149e33fa8e4b6
+  file_selector_macos: 3af0fddc391c32a6a3956a7d3898ca3a86057a4f
+  Firebase: e3c5ab38229ae085490d02398d97b9f5374bbe6e
+  firebase_analytics: 4d3b1b38a219f3c8fadd3ea81cfa82208b9026e8
+  firebase_core: 95179027a38e92461ea7ca6046efcac3a00b42eb
+  firebase_crashlytics: b18041dd6dc8a2bf852105e4a475b71d7d4d020b
+  firebase_messaging: e0d515491a89f5688545fc039e028cfb4ff4ceac
   FirebaseAnalytics: e9f8c369447e453da23f0455a06e4910bad10de0
-  FirebaseCore: c990214798d7c568ad436a15ba7da25c7a278c9a
+  FirebaseCore: ab948de5d99e69aeed3cd6f5ace263ce795b2559
   FirebaseCoreExtension: 201c78d7491a273d61d8afbf491214276a951e6d
   FirebaseCoreInternal: 656b1c2fd5a1c5976183dc54b73deda78fb26ee3
   FirebaseCrashlytics: 5c8e09beebcd41913b35250cd0e533b58e4961a0
@@ -471,25 +476,27 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 90659b3cac8f6de884f2d930fbdbeb711533e142
   FirebaseSessions: 39bcaa7c16b5d8b91d58f495f29ce2988d2f915c
   flutter_contacts: 6f45cdf49f4fb2241793263546f823f7e812668e
-  flutter_gemma: 91f6b6df28c2fb230f709e42690d8d65ae4d04b9
+  flutter_edge_ai: b7006f6a89f6ac6142ee1f4fc6d4f259ea545bd4
   flutter_local_notifications: 1fc7ffb10a83d6a2eeeeddb152d43f1944b0aad0
   flutter_new_badger: a80f15085ef4f645dede92f4e3ed83d84791b2a3
-  flutter_secure_storage_darwin: acdb3f316ed05a3e68f856e0353b133eec373a23
+  flutter_secure_storage_darwin: 46e401699982ee74142909676535e0f6a7321e58
   flutter_tts: ae915565cc6948444b513acc8ee021993281e027
   flutter_vodozemac: fd2ea9cb3e2a37beaac883a369811fbfe042fc53
-  flutter_webrtc: af708ba091a5d71e101f9f631a9f96c107581a3d
-  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+  flutter_webrtc: c7754800cea651bdfa9e8608fdb99b33a0880858
+  FlutterMacOS: c232990155153907050900a2e175c7773903ba4e
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
+  geocoding_darwin: 968545604e6896deeef55517d53a81b3b9801971
   geolocator_apple: ab36aa0e8b7d7a2d7639b3b4e48308394e8cef5e
-  google_sign_in_ios: d66ab4c862f03eb4b3cac147ba2d9d7e56ef03f7
+  google_sign_in_ios: 806534db1c1dd465bbc8c1f495bdf7c69cf6f08f
   GoogleAppMeasurement: f2f676480e4c97936df934aa181bc29caea46975
   GoogleDataTransport: a24e58982ab3ba2f64d79613e027fe7f57e88539
-  GoogleSignIn: e449a40a92e9f2eea56e98b5214d13725dc5a00a
-  GoogleUtilities: db34c1c11c6f2eccb6fab2340cb8ceb1451299dc
-  GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
-  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
+  GoogleSignIn: 52f0c3c702ae6ff72fcbcf695a9f26c52f31dc4b
+  GoogleUtilities: 7dc09b3fa9ecb5c2298b952313d14628b61b9da3
+  GTMAppAuth: 66e839a30bb63acb109b8986a0c3f642d56d48fd
+  GTMSessionFetcher: a6d2b2aa203485893d4511ff64642dc811f7c09f
   in_app_purchase_storekit: 22cca7d08eebca9babdf4d07d0baccb73325d3c8
-  livekit_client: a6026d572e01431fd06d6ccd6f44eaf4b72dec4b
+  large_file_handler: b337fef756ae925be9c28112a81c7c4275d91c45
+  livekit_client: c80bedf4e839fe23e2ce2b0615519029603b6e2a
   local_auth_darwin: c3ee6cce0a8d56be34c8ccb66ba31f7f180aaebb
   mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
@@ -499,22 +506,21 @@ SPEC CHECKSUMS:
   pro_image_editor: e57a76b305fd8c2e06d57f92aec82b9c6a6e8d9f
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
-  record_macos: 5d55909f9650314be6424ffd6b123ac75a08c3c1
+  record_macos: 2e43c16b84ce188b8137754ee648322a2dcdf7fa
   share_plus: 510bf0af1a42cd602274b4629920c9649c52f4cc
-  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
+  shared_preferences_foundation: a7c3904f2dedb3701dd1903cb152ef5e7df92422
   sign_in_with_apple: 5e34677a4e74c5f42760f41b3bbe05343e84d171
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   sqflite_sqlcipher: a4c2f17db76d2f86dfe044937d3a851d8880cbb9
   SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
-  sqlcipher_flutter_libs: 01ead34db27ae5e49987cae46c8a34199eb22cfe
   twitter_login: 3c619c5ec590d0cd8c79511b94e1928ec091fe6e
   url_launcher_macos: f87a979182d112f911de6820aefddaf56ee9fbfd
   video_compress: 752b161da855df2492dd1a8fa899743cc8fe9534
-  video_player_avfoundation: 3453f792138786248960ca029747fcd9f318ef52
+  video_player_avfoundation: bc5f800d1e1c4f389bc5d51778a4f89dd1bf4a77
   wakelock_plus: 917609be14d812ddd9e9528876538b2263aaa03b
-  WebRTC-SDK: 7dc931c64c00c735a614382f1a59cf65019c3c17
+  WebRTC-SDK: 71bce2be85c3082d24bbfd1a9930ea07d0c494c1
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
 
-PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
+PODFILE CHECKSUM: 1e95c36afbfd1cb6423ceca4de7a8e1b256fb6ac
 
 COCOAPODS: 1.17.0

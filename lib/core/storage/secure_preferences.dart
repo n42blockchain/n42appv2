@@ -26,9 +26,9 @@ class FlutterSecureStore implements SecureStore {
           storage ??
           const FlutterSecureStorage(
             aOptions: AndroidOptions(
-              // Keep the legacy namespace so existing secure preferences remain readable.
-              // ignore: deprecated_member_use
-              sharedPreferencesName: 'n42_secure_prefs',
+              // Import legacy sp_ values into an isolated, versioned namespace.
+              storageNamespace: 'n42_secure_v11_preferences',
+              resetOnError: false,
               preferencesKeyPrefix: 'sp_',
             ),
             iOptions: IOSOptions(

@@ -25,7 +25,6 @@
 		690ACF652F1628AA00F9B66D /* MobileSdk.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */; };
 		690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
 		691MLS012F90000100000002 /* N42Mls.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 691MLS012F90000100000001 /* N42Mls.xcframework */; };
-		F42000000000000000000512 /* N42Pq.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42000000000000000000511 /* N42Pq.xcframework */; };
 		691MLS022F90000100000002 /* N42MlsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691MLS022F90000100000001 /* N42MlsHandler.swift */; };
 		691SPH010000000000000002 /* ScreenProtectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691SPH010000000000000001 /* ScreenProtectionHandler.swift */; };
 		6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */; };
@@ -44,6 +43,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		F42000000000000000000512 /* N42Pq.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42000000000000000000511 /* N42Pq.xcframework */; };
 		N42PRI0022026012800000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = N42PRI0012026012800000001 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -103,7 +103,6 @@
 		683A53A702C850643338E96D /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		691MLS002F90000100000001 /* n42_mls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = n42_mls.h; sourceTree = "<group>"; };
 		691MLS012F90000100000001 /* N42Mls.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = N42Mls.xcframework; sourceTree = "<group>"; };
-		F42000000000000000000511 /* N42Pq.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = N42Pq.xcframework; sourceTree = "<group>"; };
 		691MLS022F90000100000001 /* N42MlsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N42MlsHandler.swift; sourceTree = "<group>"; };
 		691SPH010000000000000001 /* ScreenProtectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenProtectionHandler.swift; sourceTree = "<group>"; };
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
@@ -135,6 +134,7 @@
 		B0E3E09262C62E34D1464EA0 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 		E71FF1C35D107396DB6CC4C0 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F04F9C4638963A4198071CD6 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F42000000000000000000511 /* N42Pq.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = N42Pq.xcframework; sourceTree = "<group>"; };
 		N42PRI0012026012800000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

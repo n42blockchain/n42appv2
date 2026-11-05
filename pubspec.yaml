@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.5.3+73117
+version: 2.5.3+73118
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -18,7 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.9
   flutter_screenutil: ^5.9.3
   easy_refresh: ^4.0.0
-  flutter_slidable: ^4.0.3
+  flutter_slidable: ^5.2.0
   qr_flutter: ^4.1.0
   fl_chart: ^1.2.0
   extended_image: ^10.1.0
@@ -41,7 +41,11 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.6
   shared_preferences: ^2.5.5
-  flutter_secure_storage: ^10.3.4
+  flutter_secure_storage:
+    git:
+      url: https://github.com/n42blockchain/n42appv2.git
+      ref: 9733aa21eb7e4fa98c2aa8a287ef9588960023c2
+      path: packages/flutter_secure_storage
 
   # === Network ===
   dio: ^5.11.1
@@ -52,7 +56,7 @@ dependencies:
   cached_network_image: ^4.0.4
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.14.1
-  webview_flutter_wkwebview: ^3.26.1
+  webview_flutter_wkwebview: ^3.27.2
   web_socket_channel: ^3.0.3
   http: ^1.6.0
   url_launcher: ^6.3.3
@@ -61,6 +65,7 @@ dependencies:
   # === Blockchain & Crypto ===
   eip712: ^1.0.1  # 替换 eth_sig_util，支持 EIP-712 typed data signing
   web3dart: ^3.0.3
+  # v8 requires an SPM-only iOS SDK; keep the working CocoaPods login integration.
   web3auth_flutter: ^7.0.1
   fast_base58: ^0.2.2
   bech32: ^0.2.2
@@ -93,7 +98,7 @@ dependencies:
   video_compress: ^3.1.4
   video_player: ^2.14.1
   pro_image_editor: ^14.8.0
-  open_filex: ^4.7.0
+  open_filex: ^5.0.0
   share_plus: ^13.3.1
 
   # === Security & Auth ===
@@ -123,17 +128,17 @@ dependencies:
   in_app_purchase: ^3.3.1
 
   # === Firebase ===
-  firebase_core: ^4.15.0
+  firebase_core: ^5.1.0
   # Keep Firebase Messaging aligned with the current Chat plugin APIs.
-  firebase_messaging: ^16.7.0
+  firebase_messaging: ^17.0.1
   firebase_messaging_platform_interface: ^4.10.0
-  firebase_crashlytics: ^5.4.0
-  firebase_analytics: ^12.6.0
+  firebase_crashlytics: ^6.0.1
+  firebase_analytics: ^13.0.1
 
   # === Enterprise Architecture ===
   go_router: ^18.0.1
   dartz: ^0.10.1
-  equatable: ^2.1.0
+  equatable: ^3.0.0
   freezed_annotation: ^3.1.0
 
   # === V1 Mining Plugin ===
@@ -144,7 +149,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 7e7106f1c3163256624be7decbca2e849d5430fb
+      ref: 4ec1cd8cf45002835627586d4d7eca954bc86296
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
@@ -160,13 +165,17 @@ dependencies:
   flutter_background: ^1.3.1
   nfc_manager: ^4.2.1
 
-# Keep v10 migration support for legacy encrypted wallet storage. v11 removes
-# legacy cipher/EncryptedSharedPreferences migration and requires compileSdk 37.
+# The pinned storage fork preserves legacy cipher/EncryptedSharedPreferences
+# migration. Do not replace it with unpatched upstream v11.
   wallet: any
 dependency_overrides:
   # connectivity_plus 7.3.2 and Chat wakelock_plus 1.8.1 require dbus 0.8.
   dbus: ^0.8.0
-  flutter_secure_storage: ^10.3.4
+  flutter_secure_storage:
+    git:
+      url: https://github.com/n42blockchain/n42appv2.git
+      ref: 9733aa21eb7e4fa98c2aa8a287ef9588960023c2
+      path: packages/flutter_secure_storage
 
 dev_dependencies:
   image_picker_platform_interface: ^2.11.1

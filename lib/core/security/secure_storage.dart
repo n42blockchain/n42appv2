@@ -40,9 +40,9 @@ class SecureStorage {
       // 注意：encryptedSharedPreferences (Jetpack Security) 在 v11 中已废弃，
       // 库会在首次访问时自动将旧数据迁移到 custom cipher，无需额外配置。
       aOptions: AndroidOptions(
-        // Keep the legacy namespace so existing secure-storage data remains readable.
-        // ignore: deprecated_member_use
-        sharedPreferencesName: 'n42_secure_prefs',
+        // The pinned native adapter imports the old namespace before any writes.
+        storageNamespace: 'n42_secure_v11_wallet',
+        resetOnError: false,
         preferencesKeyPrefix: 'n42_',
       ),
       // iOS：first_unlock_this_device

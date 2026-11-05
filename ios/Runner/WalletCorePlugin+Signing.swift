@@ -565,6 +565,7 @@ extension WalletCorePlugin {
                     $0 + $1.writableIndexes.count + $1.readonlyIndexes.count
                 }
             case .none: return nil
+            @unknown default: return nil
             }
             let required = Int(header.numRequiredSignatures)
             guard required == envelope.count, required <= keys.count,

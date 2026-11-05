@@ -163,7 +163,7 @@ dependencies {
     implementation("com.google.mlkit:text-recognition-korean:16.0.1")
     // ✅ 加入 desugar_jdk_libs，解决 flutter_local_notifications 的需求
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    implementation("com.trustwallet:wallet-core:4.8.4")
+    implementation("com.trustwallet:wallet-core:4.8.7")
     implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("com.google.android.material:material:1.14.0")
     implementation("com.squareup.okhttp3:okhttp:5.4.0")
@@ -177,7 +177,7 @@ dependencies {
     // MediaPipe LLM Inference — 本地 Gemma 推理（可选，未安装时 LocalLlmHandler 走 fallback）
     implementation("com.google.mediapipe:tasks-genai:0.10.35")
     // Chat virtual background publisher frame injection.
-    implementation("io.github.webrtc-sdk:android:150.7871.01")
+    implementation("io.github.webrtc-sdk:android:150.7871.04")
     implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
     // Kotlin Coroutines（LocalLlmHandler 异步推理）
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")

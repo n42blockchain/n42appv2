@@ -33,7 +33,6 @@ def declaration(source, marker):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--simulator', required=True, help='Booted test simulator UDID')
-    parser.add_argument('--products', type=Path, default=ROOT / 'build/ios/Debug-iphonesimulator')
     args = parser.parse_args()
     source = (ROOT / 'ios/Runner/WalletCorePlugin+Signing.swift').read_text()
     names = ['resolveSigningPrivateKey', 'signSolanaTransaction',
@@ -47,11 +46,16 @@ def main():
                 'testOrdinarySolAndSplTransfersRemainUsable'}
     if set(re.findall(r'func (test\w+)\(', tests)) != expected:
         raise SystemExit('Update component harness to run the changed XCTest inventory')
-    frameworks = [args.products / 'TrustWalletCore', args.products / 'WalletCoreSwiftProtobuf',
-                  ROOT / 'ios/Pods/TrustWalletCore/WalletCoreCommon.xcframework/ios-arm64_x86_64-simulator']
-    for directory, module in zip(frameworks, ['WalletCore', 'WalletCoreSwiftProtobuf', 'WalletCoreCommon']):
+    # Official 4.8.7 bundles Swift and C APIs in a single binary framework.
+    # Prefer the installed binaries; never silently test cached older products.
+    frameworks = []
+    modules = ['WalletCore', 'WalletCoreSwiftProtobuf']
+    for pod, module in [('TrustWalletCore', 'WalletCore'),
+                        ('WalletCoreSwiftProtobuf', 'WalletCoreSwiftProtobuf')]:
+        directory = ROOT / 'ios/Pods' / pod / (module + '.xcframework') / 'ios-arm64_x86_64-simulator'
         if not (directory / (module + '.framework')).exists():
-            raise SystemExit(f'Missing simulator framework: {directory}; build the CocoaPods target first')
+            raise SystemExit(f'Missing installed simulator framework: {directory}; run pod install first')
+        frameworks.append(directory)
     sdk = subprocess.check_output(['xcrun', '--sdk', 'iphonesimulator', '--show-sdk-path'], text=True).strip()
     with tempfile.TemporaryDirectory(prefix='n42-solana-native-') as temp:
         temp = Path(temp)
@@ -59,12 +63,13 @@ def main():
         bridge.write_text('import Foundation\nimport WalletCore\nclass WalletCorePlugin {}\nextension WalletCorePlugin {\n' + methods + '\n}\n')
         runner = temp / 'Runner.swift'
         runner.write_text('import Foundation\nimport WalletCore\nimport CryptoKit\n' + tests + '\n' +
+                          (ROOT / 'test/native/wallet_core_upgrade_checks.swift').read_text() + '\n' +
                           (ROOT / 'test/native/solana_component_harness.swift').read_text())
         binary = temp / 'native-tests'
         command = ['xcrun', '--sdk', 'iphonesimulator', 'swiftc', '-target', 'arm64-apple-ios16.0-simulator', '-sdk', sdk]
         for directory in frameworks:
-            command += ['-F', str(directory)]
-        for module in ['WalletCore', 'WalletCoreSwiftProtobuf', 'WalletCoreCommon', 'Security']:
+            command += ['-F', str(directory), '-Xlinker', '-rpath', '-Xlinker', str(directory)]
+        for module in [*modules, 'Security']:
             command += ['-framework', module]
         command += ['-lc++', str(bridge), str(runner), '-o', str(binary)]
         subprocess.run(command, check=True)

@@ -13,7 +13,8 @@ func XCTUnwrap<T>(_ value: T?) throws -> T { guard let value = value else { thro
   let cases: [(String, () throws -> Void)] = [
     ("legacy/v0 signatures", suite.testLegacyAndV0PreserveMessageAndOtherSignatures),
     ("malformed and unauthorized inputs", suite.testNonSignerAndMalformedInputsReturnNil),
-    ("ordinary SOL/SPL", suite.testOrdinarySolAndSplTransfersRemainUsable)]
+    ("ordinary SOL/SPL", suite.testOrdinarySolAndSplTransfersRemainUsable),
+    ("BIP-39 addresses and scrypt keystore safety", verifyWalletCoreUpgrade)]
   for (name, run) in cases { let before = failures; do { try run() } catch { recordFailure("\(name): \(error)") }; print("\(name): \(before == failures ? "PASS" : "FAIL")") }
   print("native failures: \(failures)")
   if failures != 0 { exit(1) }
