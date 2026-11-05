@@ -273,7 +273,7 @@ void main() {
       expect(client.responses, isEmpty);
       expect(provider.keyReads, 0);
       expect(provider.walletConnectState, WalletConnectState.error);
-      expect(provider.errorMessage, contains('chain'));
+      expect(provider.errorMessage, contains('approved session permissions'));
     });
   }
 

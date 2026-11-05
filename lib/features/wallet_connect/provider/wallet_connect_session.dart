@@ -357,7 +357,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     });
   }
 
-  /// EVM signing gate; other namespaces retain their separate handlers.
+  /// Require approved method, chain and signer for every supported namespace.
   bool isSessionRequestAuthorized(wallet_connect.SessionRequestEvent request) {
     const signing = {
       'personal_sign',
@@ -368,39 +368,104 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       'eth_signTransaction',
       'eth_sendTransaction',
     };
-    if (!signing.contains(request.method)) return true;
+    const otherSigning = {
+      'tron': _tronMethods,
+      'solana': _solanaMethods,
+      'aptos': _aptosMethods,
+      'sui': _suiMethods,
+      'near': _nearMethods,
+    };
+    final namespace = signing.contains(request.method)
+        ? 'eip155'
+        : otherSigning.entries
+              .where((entry) => entry.value.contains(request.method))
+              .firstOrNull
+              ?.key;
+    // Stateless probes and unsupported methods retain their existing dispatch.
+    if (namespace == null) return true;
     final session = getActiveSessions()[request.topic];
     if (session == null ||
         session.expiry <= DateTime.now().millisecondsSinceEpoch ~/ 1000 ||
-        !request.chainId.startsWith('eip155:')) {
+        !RegExp('^$namespace:[^:]+\$').hasMatch(request.chainId)) {
       return false;
     }
     final params = request.params;
-    if (params is! List || params.isEmpty) return false;
-    final Object? address;
-    if (request.method == 'eth_signTransaction' ||
-        request.method == 'eth_sendTransaction') {
-      address = params.first is Map ? (params.first as Map)['from'] : null;
+    final String address;
+    if (namespace == 'eip155') {
+      if (params is! List || params.isEmpty) return false;
+      final Object? signer;
+      if (request.method == 'eth_signTransaction' ||
+          request.method == 'eth_sendTransaction') {
+        signer = params.first is Map ? (params.first as Map)['from'] : null;
+      } else {
+        if (params.length < 2) return false;
+        signer = params[request.method == 'personal_sign' ? 1 : 0];
+      }
+      if (signer is! String ||
+          !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(signer)) {
+        return false;
+      }
+      address = signer;
     } else {
-      if (params.length < 2) return false;
-      address = params[request.method == 'personal_sign' ? 1 : 0];
-    }
-    if (address is! String ||
-        !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address)) {
-      return false;
+      if (params is! Map) return false;
+      const types = {
+        'tron': CoinType.TRX,
+        'solana': CoinType.SOL,
+        'aptos': CoinType.APT,
+        'sui': CoinType.SUI,
+        'near': CoinType.NEAR,
+      };
+      final signer = coinModelFor(types[namespace]!)?.address;
+      if (signer is! String || signer.isEmpty || signer == 'null') return false;
+      address = signer;
+      const signerFields = {
+        'tron': 'address',
+        'solana': 'pubkey',
+        'aptos': 'address',
+        'sui': 'account',
+        'near': 'signerId',
+      };
+      final field = signerFields[namespace]!;
+      if (params.containsKey(field)) {
+        final requested = params[field];
+        if (requested is! String ||
+            !_sameSessionAccount(namespace, requested, address)) {
+          return false;
+        }
+      }
+      // Serialized transactions need not repeat their signer in params. Bind
+      // the configured signer to the approved account; Solana feePayer may be
+      // a different participant and is not itself the requested signing key.
     }
     return session.namespaces.entries.any((entry) {
       final allowed = entry.value;
-      return (entry.key == 'eip155' || entry.key == request.chainId) &&
+      return (entry.key == namespace || entry.key == request.chainId) &&
           allowed.methods.contains(request.method) &&
           (allowed.chains == null ||
               allowed.chains!.contains(request.chainId)) &&
           allowed.accounts.any(
             (account) =>
-                account.toLowerCase() ==
-                '${request.chainId}:$address'.toLowerCase(),
+                account.startsWith('${request.chainId}:') &&
+                _sameSessionAccount(
+                  namespace,
+                  account.substring(request.chainId.length + 1),
+                  address,
+                ),
           );
     });
+  }
+
+  bool _sameSessionAccount(String namespace, String a, String b) {
+    if (namespace == 'eip155') return a.toLowerCase() == b.toLowerCase();
+    if (namespace == 'aptos' || namespace == 'sui') {
+      final hexAddress = RegExp(r'^0[xX][0-9a-fA-F]{1,64}$');
+      return hexAddress.hasMatch(a) &&
+          hexAddress.hasMatch(b) &&
+          BigInt.parse(a.substring(2), radix: 16) ==
+              BigInt.parse(b.substring(2), radix: 16);
+    }
+    // Base58 addresses and NEAR account IDs are not case-insensitive hex.
+    return a == b;
   }
 
   // ── Request dispatch ──────────────────────────────────────────────────────
