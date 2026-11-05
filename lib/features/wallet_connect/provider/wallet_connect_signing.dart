@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_gas_l
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_session.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:web3dart/web3dart.dart' as web3;
 import 'package:web3dart/web3dart.dart' show bytesToHex;
 import 'package:wallet/wallet.dart' as wallet_types;
@@ -348,6 +349,7 @@ mixin WalletConnectSigning
   Future<void> _handleSolanaTransaction(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
+    final responseClient = signClient!;
     final requestParams = eventData.params! as Map;
     // DApp sends a base64-encoded serialized transaction
     final rawTxBase64 = requestParams["transaction"] as String? ?? '';
@@ -382,6 +384,7 @@ mixin WalletConnectSigning
     );
 
     if (signedTxBase64.isEmpty) {
+      requireCurrent();
       viewStateDeal(
         WalletConnectState.error,
         params: 'Solana transaction signing failed',
@@ -391,16 +394,21 @@ mixin WalletConnectSigning
 
     if (eventData.method == "solana_signAndSendTransaction") {
       // Broadcast the signed transaction
-      final solApi = SolApi();
-      final result = await solApi.sendTransaction(signedTxBase64);
+      requireCurrent();
+      final result = await broadcastNonEvmTransaction(
+        CoinType.SOL,
+        signedTxBase64,
+        isTest: cm.isTest,
+      );
       if (result.error) {
+        if (!_signingContextIsCurrent(requireCurrent)) return;
         viewStateDeal(
           WalletConnectState.error,
           params: result.data?.toString() ?? 'Broadcast failed',
         );
         return;
       }
-      await signClient!.respondSessionRequest(
+      await responseClient.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -409,7 +417,7 @@ mixin WalletConnectSigning
       );
     } else {
       // solana_signTransaction: return the signed transaction
-      await signClient!.respondSessionRequest(
+      await responseClient.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -417,7 +425,7 @@ mixin WalletConnectSigning
         ),
       );
     }
-    _completeSigningRequest(eventData);
+    _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
 
   Future<void> _handleEthTransaction(
@@ -531,6 +539,7 @@ mixin WalletConnectSigning
   Future<void> _handleAptosTransaction(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
+    final responseClient = signClient!;
     final requestParams = eventData.params! as Map;
     // DApp sends pre-built BCS-encoded raw transaction (base64 or hex)
     final rawTx =
@@ -560,6 +569,7 @@ mixin WalletConnectSigning
       pk: credentials.privateKey,
     );
     if (signedHex.isEmpty) {
+      requireCurrent();
       viewStateDeal(
         WalletConnectState.error,
         params: 'Aptos transaction signing failed',
@@ -568,16 +578,21 @@ mixin WalletConnectSigning
     }
 
     if (eventData.method == "aptos_signAndSubmitTransaction") {
-      final aptApi = AptApi(isTest: cm.isTest);
-      final result = await aptApi.sendTxHash(signedHex);
+      requireCurrent();
+      final result = await broadcastNonEvmTransaction(
+        CoinType.APT,
+        signedHex,
+        isTest: cm.isTest,
+      );
       if (result.error) {
+        if (!_signingContextIsCurrent(requireCurrent)) return;
         viewStateDeal(
           WalletConnectState.error,
           params: result.data?.toString() ?? 'Broadcast failed',
         );
         return;
       }
-      await signClient!.respondSessionRequest(
+      await responseClient.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -586,7 +601,7 @@ mixin WalletConnectSigning
       );
     } else {
       // aptos_signTransaction: return signed bytes
-      await signClient!.respondSessionRequest(
+      await responseClient.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -594,7 +609,7 @@ mixin WalletConnectSigning
         ),
       );
     }
-    _completeSigningRequest(eventData);
+    _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
 
   Future<void> _handleSuiTransaction(
@@ -649,6 +664,7 @@ mixin WalletConnectSigning
   Future<void> _handleNearTransaction(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
+    final responseClient = signClient!;
     final requestParams = eventData.params! as Map;
     // DApp sends either a list of base64-encoded borsh transactions or a single one
     final txList = requestParams["transactions"];
@@ -710,17 +726,22 @@ mixin WalletConnectSigning
     }
 
     if (eventData.method == "near_signAndSendTransaction") {
-      final nearApi = NearApi(isTest: cm.isTest);
-      // Broadcast first transaction
-      final result = await nearApi.sendTransaction(signedTxList[0]);
+      // Preserve the existing single-result submission path here.
+      requireCurrent();
+      final result = await broadcastNonEvmTransaction(
+        CoinType.NEAR,
+        signedTxList[0],
+        isTest: cm.isTest,
+      );
       if (result.error) {
+        if (!_signingContextIsCurrent(requireCurrent)) return;
         viewStateDeal(
           WalletConnectState.error,
           params: result.data?.toString() ?? 'Broadcast failed',
         );
         return;
       }
-      await signClient!.respondSessionRequest(
+      await responseClient.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -728,7 +749,7 @@ mixin WalletConnectSigning
         ),
       );
     } else {
-      await signClient!.respondSessionRequest(
+      await responseClient.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
           id: eventData.id,
@@ -736,8 +757,21 @@ mixin WalletConnectSigning
         ),
       );
     }
-    _completeSigningRequest(eventData);
+    _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
+
+  /// Submission boundary for deterministic lifecycle tests. Preserve each
+  /// existing API's encoding/network behavior; protocol routing is separate.
+  Future<MessageModel> broadcastNonEvmTransaction(
+    CoinType type,
+    String signedTransaction, {
+    required bool isTest,
+  }) => switch (type) {
+    CoinType.SOL => SolApi().sendTransaction(signedTransaction),
+    CoinType.APT => AptApi(isTest: isTest).sendTxHash(signedTransaction),
+    CoinType.NEAR => NearApi(isTest: isTest).sendTransaction(signedTransaction),
+    _ => throw ArgumentError.value(type, 'type', 'Unsupported broadcast chain'),
+  };
 
   /// Capture ownership before loading credentials. Invoke the returned guard
   /// synchronously after that await, before handing secrets to native code.
@@ -776,7 +810,7 @@ mixin WalletConnectSigning
     void requireCurrent() {
       if (!current()) {
         throw StateError(
-          'Signing context or session permissions changed during credential loading',
+          'Signing context or session permissions changed before the next operation',
         );
       }
     }
@@ -785,9 +819,22 @@ mixin WalletConnectSigning
     return requireCurrent;
   }
 
-  void _completeSigningRequest(wallet_connect.SessionRequestEvent request) {
+  bool _signingContextIsCurrent(void Function() requireCurrent) {
+    try {
+      requireCurrent();
+      return true;
+    } on StateError {
+      return false;
+    }
+  }
+
+  void _completeSigningRequest(
+    wallet_connect.SessionRequestEvent request, {
+    void Function()? requireCurrent,
+  }) {
     if (identical(actionData, request) &&
-        walletConnectState != WalletConnectState.disconnect) {
+        walletConnectState != WalletConnectState.disconnect &&
+        (requireCurrent == null || _signingContextIsCurrent(requireCurrent))) {
       viewStateDeal(WalletConnectState.connect);
     }
   }
