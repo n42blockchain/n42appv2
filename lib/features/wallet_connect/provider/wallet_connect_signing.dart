@@ -654,7 +654,12 @@ mixin WalletConnectSigning
     final txList = requestParams["transactions"];
     final List<String> rawTxList;
     if (txList is List) {
-      rawTxList = txList.map((e) => e.toString()).toList();
+      if (txList.any((tx) => tx is! String || tx.isEmpty)) {
+        throw const FormatException(
+          'NEAR transactions must be non-empty strings',
+        );
+      }
+      rawTxList = List<String>.from(txList);
     } else {
       final single = requestParams["transaction"] as String? ?? '';
       rawTxList = single.isNotEmpty ? [single] : [];
@@ -684,6 +689,7 @@ mixin WalletConnectSigning
 
     final signedTxList = <String>[];
     for (final rawTx in rawTxList) {
+      requireCurrent();
       final txData = {"type": "WC_NEAR", "transaction": rawTx};
       final signed = await trustdart.signTransaction(
         CoinType.NEAR.name,
@@ -693,6 +699,7 @@ mixin WalletConnectSigning
         pk: credentials.privateKey,
       );
       if (signed.isEmpty) {
+        requireCurrent();
         viewStateDeal(
           WalletConnectState.error,
           params: 'NEAR transaction signing failed',
