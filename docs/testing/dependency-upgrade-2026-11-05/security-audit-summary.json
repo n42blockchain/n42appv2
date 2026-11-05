@@ -1,0 +1,81 @@
+{
+  "pq": {
+    "vulnerabilities": [],
+    "maintenance_warnings": [
+      {
+        "package": "pqcrypto-falcon",
+        "id": "RUSTSEC-2026-0165"
+      },
+      {
+        "package": "pqcrypto-internals",
+        "id": "RUSTSEC-2026-0163"
+      },
+      {
+        "package": "pqcrypto-traits",
+        "id": "RUSTSEC-2026-0162"
+      }
+    ]
+  },
+  "mls": {
+    "vulnerabilities": [
+      {
+        "package": "crypto-bigint",
+        "version": "0.5.5",
+        "id": "RUSTSEC-2026-0387",
+        "title": "Multiple timing variability issues in operations intended to be constant-time",
+        "patched": [
+          ">=0.7.6"
+        ]
+      },
+      {
+        "package": "libcrux-kem",
+        "version": "0.0.9",
+        "id": "RUSTSEC-2026-0331",
+        "title": "Panic on Decoding Short Hybrid Keys",
+        "patched": [
+          ">=0.0.10"
+        ]
+      },
+      {
+        "package": "libcrux-kem",
+        "version": "0.0.9",
+        "id": "RUSTSEC-2026-0330",
+        "title": "Hybrid Encapsulation from Seed Panics on Short Seed",
+        "patched": [
+          ">=0.0.10"
+        ]
+      }
+    ],
+    "maintenance_warnings": [
+      {
+        "package": "proc-macro-error2",
+        "id": "RUSTSEC-2026-0173"
+      }
+    ],
+    "exposure": {
+      "libcrux-kem": "Not selected in cargo tree --target all; retained as an optional lockfile dependency.",
+      "crypto-bigint": "Compiled through p256/p384/k256 providers. Current engine uses X25519/ChaCha20/Ed25519; this does not remove the upstream advisory.",
+      "upgrade_probes": "Patched libcrux-kem 0.0.10 and crypto-bigint 0.7.6 conflict with current stable provider requirements. No forced cryptography rewrite."
+    }
+  },
+  "go": {
+    "toolchain": "go1.26.10",
+    "modules": [
+      "swap",
+      "loyalty",
+      "livekit-jwt",
+      "social-auth"
+    ],
+    "crypto_fix": "golang.org/x/crypto v0.58.1-0.20261009181718-2f1f834330b2",
+    "advisory": "GO-2026-5932",
+    "final_scan": "No vulnerabilities found in all four modules."
+  },
+  "extension": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  }
+}

@@ -1,0 +1,12 @@
+3217eaac6f14517e4c935e780daf144b9e20addc648b997cc42c6987f5ed9aa4  android/app/src/main/jniLibs/arm64-v8a/libn42_mls.so
+c096c2a6b9705e05ce2f5f2dc5bcffe346fd60a924fba2a07cb175b60f283b42  android/app/src/main/jniLibs/arm64-v8a/libn42_pq.so
+98f0e872c7e7023560ea8199d47770cfdd396e9f1174a9ef7dd23a19e89ea80f  android/app/src/main/jniLibs/armeabi-v7a/libn42_mls.so
+ca0fa70a6f251ee747dbb5221a425ca9b7233fc7314bef42d9b8321eeecbe291  android/app/src/main/jniLibs/armeabi-v7a/libn42_pq.so
+1a24af4ee3c236312d0d1595cb0782a862584ff3756cf99472a6cda77d6b3ca7  android/app/src/main/jniLibs/x86/libn42_mls.so
+fde29de361768664291cd3a78d1e83d20391a847b4c1cebec01ee79b2b53907a  android/app/src/main/jniLibs/x86/libn42_pq.so
+6a91cbb0b8a2bcc4cbf8ac3dd951f78457d817020437614bb28bdcff8e0bbb00  android/app/src/main/jniLibs/x86_64/libn42_mls.so
+8afff175e019950c65150719187bb04fca6bac7050b4c80f7d36691a841ff868  android/app/src/main/jniLibs/x86_64/libn42_pq.so
+740f603b9c1ef9966ad23a8ec8d27040fece0d49eea9f951bf3d746f14a8a9f7  ios/N42Mls.xcframework/ios-arm64/libn42_mls.a
+74ee97453e5a70aa6d07c99649896d4319ffe50e9a7b9fdba1c35338cb2b408d  ios/N42Mls.xcframework/ios-arm64_x86_64-simulator/libn42_mls_sim.a
+194d92e999328eeed0ab5168c58a707b56ac9f210b8d332102eabccf6bbe3d67  ios/N42Pq.xcframework/ios-arm64/libn42_pq.a
+15e34d6280d3f9bbe30c539c2a2006b59226242b637d24fdac7e88d8c9f48c73  ios/N42Pq.xcframework/ios-arm64_x86_64-simulator/libn42_pq_sim.a

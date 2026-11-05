@@ -1,0 +1,442 @@
+{
+  "_flutterfire_internals": {
+    "before": "1.3.77",
+    "after": "1.3.79"
+  },
+  "android_file_picker": {
+    "before": "2.0.0",
+    "after": "2.1.3"
+  },
+  "app_badge_plus": {
+    "before": "1.3.5",
+    "after": "1.4.0"
+  },
+  "app_links": {
+    "before": "7.2.1",
+    "after": "7.2.2"
+  },
+  "app_links_linux": {
+    "before": "1.0.3",
+    "after": "1.0.4"
+  },
+  "app_links_web": {
+    "before": "1.0.4",
+    "after": "1.0.5"
+  },
+  "archive": {
+    "before": "4.3.0",
+    "after": "4.6.0"
+  },
+  "asn1lib": {
+    "before": "1.6.5",
+    "after": "1.6.8"
+  },
+  "background_downloader": {
+    "before": "9.6.4",
+    "after": "9.6.6"
+  },
+  "build_daemon": {
+    "before": "4.1.6",
+    "after": "4.1.7"
+  },
+  "cached_network_image": {
+    "before": "4.0.4",
+    "after": "4.0.6"
+  },
+  "cached_network_image_web": {
+    "before": "2.0.3",
+    "after": "2.0.4"
+  },
+  "chewie": {
+    "before": "1.17.2",
+    "after": "1.17.4"
+  },
+  "cli_util": {
+    "before": null,
+    "after": "0.6.0"
+  },
+  "code_assets": {
+    "before": "1.2.1",
+    "after": "2.1.0"
+  },
+  "code_builder": {
+    "before": "4.12.0",
+    "after": "4.13.0"
+  },
+  "coverage": {
+    "before": "1.15.1",
+    "after": "1.16.0"
+  },
+  "crypto": {
+    "before": "3.0.7",
+    "after": "3.0.8"
+  },
+  "cupertino_ui": {
+    "before": "1.1.1",
+    "after": "1.1.6"
+  },
+  "dart_style": {
+    "before": "3.1.13",
+    "after": "3.1.14"
+  },
+  "drift": {
+    "before": "2.35.2",
+    "after": "2.35.3"
+  },
+  "equatable": {
+    "before": "2.1.0",
+    "after": "3.0.0"
+  },
+  "file_picker": {
+    "before": "13.1.0",
+    "after": "13.3.2"
+  },
+  "file_picker_darwin": {
+    "before": "2.1.2",
+    "after": "2.4.2"
+  },
+  "file_picker_linux": {
+    "before": "2.0.1",
+    "after": "2.0.3"
+  },
+  "file_picker_platform_interface": {
+    "before": "4.0.0",
+    "after": "4.2.0"
+  },
+  "file_picker_web": {
+    "before": "4.0.0",
+    "after": "4.2.0"
+  },
+  "file_selector_macos": {
+    "before": "0.9.5+1",
+    "after": "0.9.5+2"
+  },
+  "firebase_analytics": {
+    "before": "12.6.0",
+    "after": "13.0.1"
+  },
+  "firebase_analytics_platform_interface": {
+    "before": "6.0.7",
+    "after": "6.0.9"
+  },
+  "firebase_analytics_web": {
+    "before": "0.6.1+13",
+    "after": "0.6.3+15"
+  },
+  "firebase_core": {
+    "before": "4.15.0",
+    "after": "5.1.0"
+  },
+  "firebase_core_web": {
+    "before": "3.12.0",
+    "after": "4.1.0"
+  },
+  "firebase_crashlytics": {
+    "before": "5.4.0",
+    "after": "6.0.1"
+  },
+  "firebase_crashlytics_platform_interface": {
+    "before": "3.9.0",
+    "after": "3.9.2"
+  },
+  "firebase_messaging": {
+    "before": "16.7.0",
+    "after": "17.0.1"
+  },
+  "firebase_messaging_platform_interface": {
+    "before": "4.10.0",
+    "after": "4.11.1"
+  },
+  "firebase_messaging_web": {
+    "before": "4.2.5",
+    "after": "4.3.1"
+  },
+  "fl_chart": {
+    "before": "1.2.0",
+    "after": "1.3.0"
+  },
+  "flutter_cache_manager": {
+    "before": "3.4.5",
+    "after": "3.5.0"
+  },
+  "flutter_edge_ai": {
+    "before": "2.5.4",
+    "after": "2.5.6"
+  },
+  "flutter_edge_ai_mediapipe": {
+    "before": "1.2.4",
+    "after": "1.2.6"
+  },
+  "flutter_facebook_auth": {
+    "before": "7.2.0",
+    "after": "7.3.2"
+  },
+  "flutter_facebook_auth_platform_interface": {
+    "before": "6.1.2",
+    "after": "6.1.3"
+  },
+  "flutter_local_notifications": {
+    "before": "22.3.1",
+    "after": "22.3.3"
+  },
+  "flutter_local_notifications_linux": {
+    "before": "8.0.1",
+    "after": "8.0.2"
+  },
+  "flutter_secure_storage": {
+    "before": "10.3.4",
+    "after": "11.2.0"
+  },
+  "flutter_secure_storage_darwin": {
+    "before": "0.3.2",
+    "after": "0.4.3"
+  },
+  "flutter_slidable": {
+    "before": "4.0.3",
+    "after": "5.2.0"
+  },
+  "flutter_vodozemac": {
+    "before": "0.8.1",
+    "after": "0.9.0"
+  },
+  "flutter_webrtc": {
+    "before": "1.6.2+hotfix.3",
+    "after": "1.6.3"
+  },
+  "frontend_server_client": {
+    "before": "4.1.0",
+    "after": "4.2.0"
+  },
+  "go_router": {
+    "before": "18.0.2",
+    "after": "18.1.3"
+  },
+  "google_sign_in_android": {
+    "before": "7.2.17",
+    "after": "7.2.18"
+  },
+  "google_sign_in_ios": {
+    "before": "6.3.6",
+    "after": "6.4.0"
+  },
+  "http_multi_server": {
+    "before": "3.2.2",
+    "after": "3.2.3"
+  },
+  "image": {
+    "before": "4.10.1",
+    "after": "4.12.0"
+  },
+  "image_picker": {
+    "before": "1.2.3",
+    "after": "1.2.4"
+  },
+  "image_picker_ios": {
+    "before": "0.8.13+9",
+    "after": "0.8.13+15"
+  },
+  "image_picker_platform_interface": {
+    "before": "2.11.1",
+    "after": "2.11.2"
+  },
+  "in_app_purchase_android": {
+    "before": "0.5.3",
+    "after": "0.5.5"
+  },
+  "in_app_purchase_storekit": {
+    "before": "0.4.13",
+    "after": "0.4.17"
+  },
+  "intl_utils": {
+    "before": "2.8.16",
+    "after": "2.8.17"
+  },
+  "jni": {
+    "before": "1.1.0",
+    "after": "1.1.2"
+  },
+  "jni_flutter": {
+    "before": "1.0.3",
+    "after": "1.0.4+1"
+  },
+  "json_serializable": {
+    "before": "6.14.1",
+    "after": "6.15.2"
+  },
+  "livekit_client": {
+    "before": "2.13.0",
+    "after": "2.13.2"
+  },
+  "local_auth_android": {
+    "before": "2.2.0",
+    "after": "2.3.0"
+  },
+  "local_auth_darwin": {
+    "before": "2.0.4",
+    "after": "2.0.5"
+  },
+  "lottie": {
+    "before": "3.7.0",
+    "after": "3.8.2"
+  },
+  "material_ui": {
+    "before": "1.5.0",
+    "after": "1.10.0"
+  },
+  "matrix": {
+    "before": "13.0.0",
+    "after": "15.0.0"
+  },
+  "mobile_scanner": {
+    "before": "7.4.2",
+    "after": "7.5.0"
+  },
+  "native_toolchain_c": {
+    "before": "0.19.3",
+    "after": "0.19.5"
+  },
+  "nfc_manager": {
+    "before": "4.2.1",
+    "after": "4.3.0"
+  },
+  "objective_c": {
+    "before": "9.5.0",
+    "after": "9.6.2"
+  },
+  "octo_image": {
+    "before": "2.1.2",
+    "after": "2.1.3"
+  },
+  "open_filex": {
+    "before": "4.7.0",
+    "after": "5.0.0"
+  },
+  "permission_handler_android": {
+    "before": "14.1.0",
+    "after": "14.1.1"
+  },
+  "permission_handler_apple": {
+    "before": "9.6.2",
+    "after": "9.6.5"
+  },
+  "permission_handler_windows": {
+    "before": "0.2.2",
+    "after": "0.2.3"
+  },
+  "posix": {
+    "before": "6.5.2",
+    "after": "6.5.4"
+  },
+  "pro_image_editor": {
+    "before": "14.8.0",
+    "after": "14.25.0"
+  },
+  "pubspec_parse": {
+    "before": "1.6.0",
+    "after": "1.7.0"
+  },
+  "qr": {
+    "before": "3.0.2",
+    "after": "3.0.3"
+  },
+  "shared_preferences": {
+    "before": "2.5.5",
+    "after": "2.5.6"
+  },
+  "shared_preferences_android": {
+    "before": "2.4.28",
+    "after": "2.5.4"
+  },
+  "shared_preferences_foundation": {
+    "before": "2.5.7",
+    "after": "2.6.1"
+  },
+  "shelf": {
+    "before": "1.4.2",
+    "after": "1.4.3"
+  },
+  "shelf_static": {
+    "before": "1.1.3",
+    "after": "1.2.0"
+  },
+  "source_helper": {
+    "before": "1.3.13",
+    "after": "1.4.0"
+  },
+  "sqflite": {
+    "before": "2.4.4+1",
+    "after": "2.4.5"
+  },
+  "sqflite_android": {
+    "before": "2.4.4",
+    "after": "2.4.5"
+  },
+  "sqflite_common": {
+    "before": "2.5.13+1",
+    "after": "2.5.15"
+  },
+  "sqflite_common_ffi": {
+    "before": "2.4.3",
+    "after": "2.4.5"
+  },
+  "sqflite_darwin": {
+    "before": "2.4.4",
+    "after": "2.4.5"
+  },
+  "sqflite_platform_interface": {
+    "before": "2.4.2",
+    "after": "2.4.3"
+  },
+  "sqlite3": {
+    "before": "3.7.0",
+    "after": "3.9.0"
+  },
+  "synchronized": {
+    "before": "3.4.2",
+    "after": "3.6.1"
+  },
+  "timezone": {
+    "before": "0.11.1",
+    "after": "0.11.2"
+  },
+  "vector_graphics": {
+    "before": "1.2.4",
+    "after": "1.2.6"
+  },
+  "vector_graphics_compiler": {
+    "before": "1.3.3",
+    "after": "1.3.4"
+  },
+  "vector_math": {
+    "before": "2.4.3",
+    "after": "2.4.4"
+  },
+  "video_player_avfoundation": {
+    "before": "2.12.0",
+    "after": "2.12.3"
+  },
+  "vm_service": {
+    "before": "15.3.0",
+    "after": "15.4.0"
+  },
+  "vodozemac": {
+    "before": "0.8.0",
+    "after": "0.9.0"
+  },
+  "wakelock_plus": {
+    "before": "1.8.1",
+    "after": "1.8.2"
+  },
+  "web": {
+    "before": "1.1.1",
+    "after": "1.1.2"
+  },
+  "webview_flutter_wkwebview": {
+    "before": "3.26.1",
+    "after": "3.27.2"
+  },
+  "windows_file_picker": {
+    "before": "2.0.0",
+    "after": "2.0.1"
+  }
+}

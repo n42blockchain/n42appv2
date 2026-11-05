@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-05",
+  "base": "c389ea0b4d53af71d14cad9d9961b7282b6b8a2e",
+  "toolchain": {
+    "flutter": "3.47.8",
+    "dart": "3.13.7",
+    "flutter_revision": "737ba8f885dc774b53b442759999a312c9461e4e",
+    "go": "1.26.10",
+    "agp": "9.5.1",
+    "gradle": "9.6.0",
+    "kotlin": "2.4.21"
+  },
+  "wallet_full_suite": {
+    "passed": 6248,
+    "skipped": 0,
+    "failed": 0,
+    "runner_success": true,
+    "duration_ms": 1399532,
+    "json_log_sha256": "485c7900d4454553b7aa61ba9833b9649a67c1d541f7e694236e531da8231040"
+  },
+  "chat_full_suite": {
+    "passed": 7753,
+    "skipped": 4,
+    "failed": 0,
+    "runner_success": true,
+    "duration_ms": 482858,
+    "json_log_sha256": "6365846fc5e145c9ba87b7c0cb51fbc2e58a096f0a8d1c594ae0ee2259a93783",
+    "final_git_pin": "4ec1cd8cf45002835627586d4d7eca954bc86296",
+    "runtime_and_manifest_identical_to_full_run": true
+  },
+  "coverage": {
+    "found": 138209,
+    "hit": 100064,
+    "passed": true,
+    "percent": 72.40049490264744,
+    "threshold": 70.0
+  },
+  "analysis": {
+    "exit_code": 0,
+    "errors": 0,
+    "warnings": 0,
+    "info_diagnostics": 66
+  },
+  "builds": {
+    "ios_debug_no_codesign": {
+      "exit_code": 0,
+      "duration_seconds": 484.6
+    },
+    "android_debug_apk": {
+      "exit_code": 0,
+      "duration_seconds": 486.3,
+      "sha256": "d20cad1168d5a7180792c006ddf5dd6a576d8fe88bfa8c0e7454ae5592f42fa1",
+      "bytes": 714434738,
+      "wallet_core": "4.8.7"
+    },
+    "macos_debug": {
+      "exit_code": 0
+    },
+    "android_native_compile_and_mining_jvm_test": {
+      "exit_code": 0,
+      "tasks": 657,
+      "jvm_tests": 1
+    }
+  },
+  "component_tests": {
+    "walletcore_simulator": {
+      "groups_passed": 4,
+      "failures": 0,
+      "official_ios_frameworks_exact_match": true,
+      "official_android_arm64_library_exact_match": true
+    },
+    "webkit": 164,
+    "firebase_analytics_vendor": 12,
+    "video_thumbnail_vendor": 2,
+    "mining_flutter_plugin": 11,
+    "rust_pq": 1,
+    "rust_mls": 6
+  },
+  "android_elf": {
+    "artifact": "build/app/outputs/flutter-apk/app-debug.apk",
+    "libraries_checked": 50,
+    "unaligned_libraries": [],
+    "passed": true,
+    "scope": "ELF load segments only; ZIP alignment and 16 KB device execution require separate verification"
+  },
+  "android_zip_alignment_16k": true,
+  "localization_audit": "passed",
+  "physical_device_acceptance": "deferred by user",
+  "store_upload": "not performed",
+  "external_services_and_chain_acceptance": "not performed",
+  "android_core_aar_abi_coverage": {
+    "before": [
+      "arm64-v8a",
+      "armeabi-v7a",
+      "x86",
+      "x86_64"
+    ],
+    "after": [
+      "arm64-v8a",
+      "armeabi-v7a",
+      "x86",
+      "x86_64"
+    ],
+    "lost_abis": []
+  }
+}
