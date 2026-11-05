@@ -760,14 +760,17 @@ mixin WalletConnectSigning
     _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
 
-  /// Submission boundary for deterministic lifecycle tests. Preserve each
-  /// existing API's encoding/network behavior; protocol routing is separate.
+  /// Submission boundary for deterministic lifecycle tests. Serialized Solana
+  /// uses base64; endpoint selection retains its existing behavior.
   Future<MessageModel> broadcastNonEvmTransaction(
     CoinType type,
     String signedTransaction, {
     required bool isTest,
   }) => switch (type) {
-    CoinType.SOL => SolApi().sendTransaction(signedTransaction),
+    CoinType.SOL => SolApi().sendTransaction(
+      signedTransaction,
+      encoding: 'base64',
+    ),
     CoinType.APT => AptApi(isTest: isTest).sendTxHash(signedTransaction),
     CoinType.NEAR => NearApi(isTest: isTest).sendTransaction(signedTransaction),
     _ => throw ArgumentError.value(type, 'type', 'Unsupported broadcast chain'),

@@ -54,6 +54,36 @@ void main() {
       );
     });
   }
+  for (final isTest in [false, true]) {
+    test(
+      'base64 serialized broadcast retains its encoding and disables retries ($isTest)',
+      () async {
+        result = 'signature';
+        final response = await api.sendTransaction(
+          'c2lnbmVk',
+          isTest: isTest,
+          encoding: 'base64',
+        );
+        expect(response.error, isFalse);
+        expect(response.data, 'signature');
+        expect(calls.single.$2['params'], [
+          'c2lnbmVk',
+          {'encoding': 'base64'},
+        ]);
+        expect(calls.single.$3, isFalse);
+        expect(calls.single.$1, contains(isTest ? 'testnet' : 'mainnet'));
+      },
+    );
+  }
+  test(
+    'unsupported transaction encoding fails before network dispatch',
+    () async {
+      final response = await api.sendTransaction('signed', encoding: 'hex');
+      expect(response.error, isTrue);
+      expect(calls, isEmpty);
+    },
+  );
+
   for (final value in [null, -1, 'invalid', 1.5]) {
     test('invalid native value $value returns error', () async {
       result = {'value': value};

@@ -153,13 +153,19 @@ class SolApi {
   Future<MessageModel> sendTransaction(
     String signMessage, {
     bool isTest = false,
+    String encoding = 'base58',
   }) async {
+    if (encoding != 'base58' && encoding != 'base64') {
+      return MessageModel()
+        ..error = true
+        ..data = 'Unsupported Solana transaction encoding';
+    }
     return resultToMessageModel(
       await baseRPCSol(
         'sendTransaction',
         [
           signMessage,
-          {'encoding': 'base58'},
+          {'encoding': encoding},
         ],
         isTest: isTest,
         enableRetry: false,
