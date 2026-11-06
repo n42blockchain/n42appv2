@@ -236,3 +236,13 @@ Server identity/session implementation and deployment remain outstanding.
 - Remaining: Google authorization-code handoff, Android Facebook and Apple/Web UI handoff, deployed callbacks, provider and physical-device acceptance. Google `google_sign_in` 7.2.0 documents exactly-once initialization, so setting a new nonce by repeated singleton initialization is not supported. This build setting does not enable those unfinished paths.
 - Production enablement is still off. Registered provider clients and mocked tests do not prove deployed login readiness.
 - Host checks: 62 initialization/social-configuration tests passed; analysis of `chat_initialization.dart` found no issues. Only the pinned Chat Git ref changed in `pubspec.lock`.
+
+## 2026-11-06: Google native authorization-code follow-up
+
+- Backend `7e5914a`; Chat `1cb711cdf90b932a29910a5957801feaaa453e21`.
+- The opt-in adapter now supports Google on iOS and Android. It requests the SDK's one-time `serverAuthCode` immediately after sign-in. It never reinitializes the Google singleton to change a nonce, and never substitutes an ID/access token when no code is returned.
+- The backend's Google code exchange is separately disabled by default (`googleNativeCodeEnabled`). It requires the dedicated N42 Google server credentials. `googleNativeRedirectUri` must be validated against the actual provider exchange before enablement; it is never supplied by the app.
+- Backend: 116 focused tests plus TypeScript/ESLint passed. Chat: 130 regression tests and one SDK-boundary test passed; targeted analysis has informational lints only.
+- Still pending: Android Facebook, Android Apple browser handoff, Web UI integration, public callback deployment, provider-console completion and real-device/provider acceptance. No production login claim or TestFlight acceptance is implied by these commits.
+- Primary guidance: https://developers.google.com/identity/sign-in/ios/offline-access and google_sign_in 7.2.0 `authorizeServer` API documentation.
+- Wallet host: 62 initialization/configuration regression tests passed with the new immutable Git pin; no other dependency versions changed.
