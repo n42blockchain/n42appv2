@@ -1,3 +1,4 @@
+import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
@@ -82,14 +83,32 @@ class SuiApi {
 
   //交易上链（明确禁用重试，防止双发）
   Future<MessageModel> submit(String transactionBlock, String signStr) async {
-    return resultToMessageModel(
+    final response = resultToMessageModel(
       await baseRPCSui("sui_executeTransactionBlock", [
         transactionBlock,
         [signStr],
-        "WaitForEffectsCert",
         {"showEffects": true, "showEvents": true},
       ], enableRetry: false),
     );
+    if (response.error) return response;
+    final data = response.data;
+    final digest = data is Map ? data['digest'] : null;
+    final effects = data is Map ? data['effects'] : null;
+    final status = effects is Map ? effects['status'] : null;
+    var validDigest = false;
+    if (digest is String) {
+      try {
+        final bytes = Base58Decode(digest);
+        validDigest = bytes.length == 32 && Base58Encode(bytes) == digest;
+      } catch (_) {
+        // A malformed RPC response is not evidence of successful execution.
+      }
+    }
+    if (!validDigest || status is! Map || status['status'] != 'success') {
+      return MessageModel.error()
+        ..data = 'Sui transaction execution was not confirmed';
+    }
+    return response;
   }
 
   //查询交易信息

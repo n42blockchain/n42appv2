@@ -483,3 +483,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `f205f334a234c63f71ecc46a059cb219a7dfe2cf` is pushed and pinned. This does not repair corrupt records, persist send-failure status or resolve unknown server outcomes. Full-suite results from batch 51 precede this change; this batch uses scoped regression, not a fresh coverage measurement or release/device acceptance.
 
 - Wallet host integration: 114 tests passed (`/tmp/n42-read-recovery-host-tests.log`), covering Chat initialization, provider/native configuration, sticker assets, push/tap routing and the device fixture contract. The lockfile changes only the Chat reference.
+
+
+## Batch 53 — Sui submission contract and receipt validation (2026-11-06)
+
+- Corrected `sui_executeTransactionBlock` positional arguments to transaction bytes, signature array and response options. The prior call placed a request-type string in the options slot. This follows the [official SDK JSON-RPC client](https://raw.githubusercontent.com/MystenLabs/ts-sdks/main/packages/sui/src/jsonRpc/client.ts). Broadcasting remains non-retrying.
+- Successful RPC transport alone no longer means a successful transfer: the response must contain a canonical 32-byte Base58 digest and explicit successful execution effects. Empty/malformed/unconfirmed/failed effects are rejected while successful receipts retain their original fields.
+- 28 Sui API/amount/send-interaction tests pass (`/tmp/n42-sui-submit-contract.log`), including actual loopback HTTP requests, RPC failure and malformed receipts. Scoped analysis is clean. This is not native signing or live-chain acceptance.
+- JSON-RPC is a legacy interface in the current [Sui documentation](https://docs.sui.io/sui-api-ref). gRPC/GraphQL migration, real endpoint availability and native sender parameter/serialization validation remain open.
