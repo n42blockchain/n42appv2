@@ -12,7 +12,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 151
+## Current interruption inventory — through batch 152
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -44,6 +44,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Account-scoped composer drafts — batch 152
+
+- While wiring recovery back to the composer, source inspection found ordinary drafts were persisted under room-only keys and asynchronous loading could overwrite fresh input. Chat a05cdcdd switches the production composer to serialized account+room draft storage, with captured origin checks after storage awaits. Legacy unowned keys remain intact and are never silently assigned to the current user.
+- Input revision and original value checks reject late loads after typing, including type-then-clear. A failed/unfinished load with no user edit no longer causes dispose to delete an unknown existing draft. New account-scoped write/remove methods validate identity, await durable acknowledgement and reload cache after failure. Existing compatibility methods remain available for legacy records/tools.
+- Actual ChatPage, storage, message-report/action and scheduled-page suites: 203 pass (/tmp/n42-chat-b152-final.log); scoped analysis clean (/tmp/n42-chat-b152-analysis-final.log). Tests cover same room under two accounts, legacy preservation, changed-account pending writes, failed write/delete acknowledgement, load failure and typed-then-cleared input.
+- The wallet pins this reviewed Chat source; 7 host fixture/asset tests pass (/tmp/n42-chat-b152-host.log). This closes a prerequisite safety defect, not the remaining recovery-to-composer route. Confirmed text restoration, legacy ownership migration/review and physical installed-account acceptance remain open. No automatic send, live account action or new release.
+
 
 ### Structured recovery inspection — batch 151
 
