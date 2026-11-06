@@ -22,28 +22,30 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 159
+## Current interruption inventory — through batch 160
 
-The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
+The interrupted patches through batch 159 are committed. Batch 160 revalidated the complete current wallet source after the Chat recovery and EGLD signing changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
 | ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Batch 139 releases exact reservations on explicit no-broadcast results. Batch 143 adds durable prepared/dispatching phases and recovers new tracked prepared rows on the next explicit send. Legacy/dispatching orphans, other entry points and physical process-crash acceptance remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
-| Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Batch 144 aligns XLM fee/Max UI with checked account/ledger data and binds the reviewed fee to signing. Batch 146 connects ADA quotes/Max and reviewed fees. Stellar surge pricing and ADA multi-asset change remain unclosed. |
-| Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
+| Other chain signing | Preserve ADA/XLM native repairs through batch 133. EGLD owner binding, native payload, network fees, reviewed confirmation and native input validation are implemented through batch 159. Continue durable uncertain EGLD broadcast recovery, Android JNI runtime signing, AA/hardware permissions and remaining chain semantics. Batch 144 aligns XLM fee/Max UI with checked account/ledger data and binds the reviewed fee to signing. Batch 146 connects ADA quotes/Max and reviewed fees. Stellar surge pricing and ADA multi-asset change remain unclosed. |
+| Native social login and Matrix | Batch 155 confirmed the deployed Google native gate is false. Verify Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity before enabling Google native. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
-| Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export is implemented in batch 141; real OS share-sheet delivery remains unverified. |
+| Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export/import, account-scoped drafts and explicitly confirmed text recovery to the composer are implemented through batches 153–154; real OS share-sheet delivery, rich recovery and duplicate-delivery reconciliation remain unverified. |
 | Dependency and localization | Recorded compatibility holds and editorial/RTL/UI review remain. Catalog integrity does not prove translation quality. |
 | IAP and payment delivery | ACTIVE_TASKS retains IAP receipt verification, account binding, idempotent delivery/refund/restore and payment-provider production acceptance as open; do not lose these older tasks when summarizing recent audit work. |
 | Retained worktrees | Fresh inventory: 13 auxiliary wallet trees, seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
 
 Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0/0); Chat is pinned to f4fc66d07b56f7d75d17f43411b80fbad3a3811e, also pushed to its task branch. Four baseline untracked wallet paths remain untouched. The ID Hub clean-state observation at 7c0dd68 and the 13-worktree classification are from the earlier reconciliation, not new service/deployment acceptance. Historical entries below remain evidence for their own revisions.
 
-## Latest verified full-regression baseline — batch 140
+## Latest verified full-regression baseline — batch 160
 
-- Wallet source c45e9a7ee: **6,991 passed, zero failures/skips**, coverage **73.43%** (102,715/139,881), 70% gate passes. Full analysis has no errors/warnings and 68 infos; 49 Python script tests and localization integrity pass. Falcon native tests executed. Logs and hashes are in batch 140 below.
-- Chat recovery-copy deletion f4fc66d0 was integrated afterward: **247 standalone targeted tests and 62 host tests pass**, plus localization integrity. Do not attribute the preceding full-wallet coverage run to this later dependency pin. Latest standalone Chat full-suite coverage remains batch 112 (7,962 pass, four fixture skips, 70.93%).
-- Recovery, native provider/Matrix, Meta public availability, current-source release, editorial/RTL, dependency holds and old worktree reconciliation remain open. Automated regression does not establish live/device/production acceptance.
+- Source `534fbb6e4`, Chat production pin `b6ff2c465937982551fb84c44e672bc17676614a`: **7,128 passed, zero failures/skips**, fresh coverage **73.5642%** (103,201/140,287); unchanged 70% gate passes. Flutter process exit 0 and machine final success both verified. Falcon native library was explicitly supplied.
+- Full analysis: zero errors/warnings, 75 informational lints (analysis exits 1 for infos). All 52 Python script tests and localization integrity pass. This supersedes batch 140 for wallet automated regression only. Latest standalone Chat full-suite baseline remains batch 112, not this host run.
+- No tracked wallet implementation edits were left before this record update. Fresh fetch confirms wallet `534fbb6e4` and Chat `b372034a` each match upstream (0/0). Chat's later commit is test-only; production pin remains correct. Existing Chat coverage modification and four untracked wallet paths are preserved. ID Hub is clean at `7c0dd68`.
+- Recounted 13 auxiliary wallet trees: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. No deletion or merge: uncommitted files and unique patches require review.
+- Remaining: native social/Matrix acceptance and Google activation; uncertain transaction and rich Chat recovery; dependency holds and editorial/RTL review; older IAP/payment delivery; retained worktrees; current-source signed release. Device acceptance remains deferred. Mintus 3211 upload/deployment evidence is historical record evidence; processing/tester visibility remains unverified.
 
 ## Historical full-regression follow-up inspection
 
@@ -54,6 +56,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Current-source full regression and interruption reconciliation — batch 160
+
+- Reused the running full suite instead of launching a duplicate. Source `534fbb6e4`: 7,128 visible tests pass, zero failures/skips, process exit 0, machine success true. Fresh LCOV 103,201/140,287 lines = 73.5641934%; 70% gate passes without exclusions or threshold changes. N42_PQ_LIBRARY points to the built host Falcon dylib.
+- Full Flutter analysis: zero errors/warnings and 75 infos; exit 1 due to informational diagnostics. Python script suite: 52 pass. Localization integrity passes. No new app/device/provider/store acceptance or release upload.
+- Evidence: `/tmp/n42-wallet-full-b160.jsonl`, `/tmp/n42-wallet-b160-lcov.info`, `/tmp/n42-wallet-b160-tests.json`, `/tmp/n42-wallet-b160-coverage.json`, `/tmp/n42-wallet-b160-analysis.log`, `/tmp/n42-wallet-b160-scripts.log`, `/tmp/n42-wallet-b160-localization.log`.
+- SHA-256 test log: `f5b2caa9a8000fde5ac27df0f70f44f89e8bf45b7209e433eea8f127d4ff106f`; LCOV: `7ced942322258b1c1f26310b55e5127f7e0c069efd504efafba95ea32b6461b3`.
+- Current inventory no longer lists completed EGLD fee/confirmation/native validation or Chat text recovery as missing. Keep runtime/provider, durable recovery, release, old IAP/payment and worktree boundaries explicit. No business function was removed.
 
 ### EGLD native signing validation — batch 159
 
