@@ -107,6 +107,8 @@ Batch 85 fixes Aptos balance asset paths, reproduced against a public testnet ac
 
 Batch 86 binds ordinary Aptos signing to the selected chain ID reported by the ledger endpoint; wrong/malformed IDs stop signing. All 82 API/sender tests and scoped analysis pass. Malicious-state verification and remaining transaction lifecycle work stay open.
 
+Batch 87 aligns iOS ordinary Aptos signing with Android sender/key binding and validates sender/recipient addresses. Actual Swift component tests pass with reference signatures and wrong-key/address rejection. Dart owner/session and full transaction lifecycle acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

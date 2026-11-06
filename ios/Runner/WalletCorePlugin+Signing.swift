@@ -1036,6 +1036,14 @@ extension WalletCorePlugin {
         return (raw + Data([0, 32]) + publicBytes + Data([64]) + signature).hexString
     }
 
+    private func aptosAddress(_ value: Any?) -> String? {
+        guard let text = value as? String, text.hasPrefix("0x") else { return nil }
+        let hex = String(text.dropFirst(2)).lowercased()
+        guard (1...64).contains(hex.utf8.count),
+              hex.utf8.allSatisfy({ ($0 >= 48 && $0 <= 57) || ($0 >= 97 && $0 <= 102) }) else { return nil }
+        return "0x" + String(repeating: "0", count: 64 - hex.utf8.count) + hex
+    }
+
     private func aptosUInt64(_ value: Any?) -> UInt64? {
         let text: String
         if let string = value as? String {
@@ -1070,8 +1078,9 @@ extension WalletCorePlugin {
               let amount = aptosUInt64(txData["amount"]),
               let chain = aptosUInt64(txData["chainId"]), chain > 0, chain <= 255,
               let sequence = aptosUInt64(txData["SequenceNumber"]),
-              let toAddress = txData["toAddress"] as? String,
-              let senderAddress = txData["fromAddress"] as? String,
+              let toAddress = aptosAddress(txData["toAddress"]),
+              let senderAddress = aptosAddress(txData["fromAddress"]),
+              senderAddress == aptosAddress(CoinType.aptos.deriveAddress(privateKey: pk)),
               let contractAddress = txData["contractAddress"] as? String,
               let contractModule = txData["contractModule"] as? String,
               let contractName = txData["contractName"] as? String else { return nil }

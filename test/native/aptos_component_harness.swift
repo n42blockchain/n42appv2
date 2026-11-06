@@ -35,6 +35,21 @@ func unhex(_ value: String) -> Data {
             ]
             precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:transfer,privateKey:key) == actual,
                          "Raw signer differs from WalletCore standard transfer signer")
+            let otherKey = PrivateKey(data:Data(repeating:2,count:32))!
+            precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:transfer,privateKey:otherKey) == nil,
+                         "ordinary transfer must reject a different signer")
+            var wrongOwner = transfer; wrongOwner["fromAddress"] = "0x2"
+            precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:wrongOwner,privateKey:key) == nil)
+            var normalized = transfer
+            normalized["fromAddress"] = "0x" + raw.prefix(32).hexString.uppercased()
+            normalized["toAddress"] = "0x" + String(repeating:"0",count:63) + "2"
+            precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:normalized,privateKey:key) == actual)
+            for field in ["fromAddress", "toAddress"] {
+                for invalid: Any in [true, 2, "", "0x", "0xgg", "0x2\n", "0x" + String(repeating:"1",count:65)] {
+                    var bad = transfer; bad[field] = invalid
+                    precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:bad,privateKey:key) == nil)
+                }
+            }
             var strings = transfer
             for field in ["amount", "chainId", "SequenceNumber", "gasUnitPrice", "maxGasAmount", "expirationTimestampSecs"] {
                 strings[field] = String(plugin.aptosUInt64(transfer[field])!)
