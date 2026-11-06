@@ -10,6 +10,8 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 class _Api extends AptApi {
   BigInt price = BigInt.from(7);
   BigInt balance = BigInt.from(10000000);
+  dynamic sequence = BigInt.zero;
+  dynamic timestamp = BigInt.from(2000000000000000);
   int priceReads = 0;
   int submits = 0;
   @override
@@ -26,10 +28,10 @@ class _Api extends AptApi {
 
   @override
   Future<MessageModel> getAccountInfo(String address) async =>
-      MessageModel()..data = 0;
+      MessageModel()..data = sequence;
   @override
   Future<MessageModel> getServiceInfo() async =>
-      MessageModel()..data = 2000000000000000;
+      MessageModel()..data = timestamp;
   @override
   Future<MessageModel> sendTxHash(String signedHex) async {
     submits++;
@@ -57,6 +59,55 @@ class _Signer extends Trustdart {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => S.load(const Locale('en')));
+  test('RPC maximum sequence and microseconds reach signer exactly', () async {
+    final max = (BigInt.one << 64) - BigInt.one;
+    final api = _Api()
+      ..sequence = max
+      ..timestamp = max;
+    final signer = _Signer();
+    await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+      const SendParams(
+        coinType: 'APT',
+        fromAddress: 'owner',
+        toAddress: 'recipient',
+        amount: 1,
+        decimals: 0,
+        path: '',
+        privateKey: 'public-test-only',
+      ),
+    );
+    expect(signer.received!['SequenceNumber'], max.toString());
+    expect(signer.received!['expirationTimestampSecs'], '18446744073769');
+    expect(api.submits, 0);
+  });
+  for (final field in ['sequence', 'timestamp']) {
+    for (final value in [null, -1, 1.5, '18446744073709551616']) {
+      test('invalid $field stops native dispatch: $value', () async {
+        final api = _Api();
+        if (field == 'sequence') {
+          api.sequence = value;
+        } else {
+          api.timestamp = value;
+        }
+        final signer = _Signer();
+        final result =
+            await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+              const SendParams(
+                coinType: 'APT',
+                fromAddress: 'owner',
+                toAddress: 'recipient',
+                amount: 1,
+                decimals: 0,
+                path: '',
+                privateKey: 'public-test-only',
+              ),
+            );
+        expect(result.success, false);
+        expect(signer.received, isNull);
+        expect(api.submits, 0);
+      });
+    }
+  }
   for (final token in [false, true]) {
     for (final exact in [
       BigInt.parse('9007199254740993'),

@@ -15,8 +15,29 @@ typedef AptTransactionSubmit = Future<dynamic> Function(
 class AptApi {
   final String url;
   final AptTransactionSubmit? submit;
+  final Future<dynamic> Function(String url)? read;
 
-  AptApi({bool isTest = false, this.submit})
+  Future<dynamic> _get(String endpoint) => read != null
+      ? read!(endpoint)
+      : BaseApi.requestEmptyH.get(endpoint, params: {});
+
+  /// Preserve REST uint64 strings; never accept rounded floating-point values.
+  static BigInt parseUint64(dynamic value) {
+    if (value is! String && value is! int && value is! BigInt) {
+      throw const FormatException('Invalid Aptos uint64');
+    }
+    final text = value.toString();
+    final number = BigInt.tryParse(text);
+    if (number == null ||
+        number < BigInt.zero ||
+        number >= (BigInt.one << 64) ||
+        number.toString() != text) {
+      throw const FormatException('Invalid Aptos uint64');
+    }
+    return number;
+  }
+
+  AptApi({bool isTest = false, this.submit, this.read})
     : url = RequestUrl().getUrl2(CoinType.APT.name, 'rpc', isTest: isTest);
 
   Future<MessageModel> getBalance(
@@ -30,8 +51,8 @@ class AptApi {
           : '$contract::celer_coin_manager::$tokenName';
       final uri =
           '${url}accounts/$address/balance/0x1::coin::CoinStore<$coinType>';
-      final data = await BaseApi.requestEmptyH.get(uri, params: {});
-      return MessageModel()..data = BigInt.from(data);
+      final data = await _get(uri);
+      return MessageModel()..data = parseUint64(data);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -39,11 +60,8 @@ class AptApi {
 
   Future<MessageModel> getGasPrice() async {
     try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${url}estimate_gas_price',
-        params: {},
-      );
-      return MessageModel()..data = BigInt.from(data['gas_estimate']);
+      final data = await _get('${url}estimate_gas_price');
+      return MessageModel()..data = parseUint64(data['gas_estimate']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -51,11 +69,8 @@ class AptApi {
 
   Future<MessageModel> getAccountInfo(String address) async {
     try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${url}accounts/$address',
-        params: {},
-      );
-      return MessageModel()..data = int.parse(data['sequence_number']);
+      final data = await _get('${url}accounts/$address');
+      return MessageModel()..data = parseUint64(data['sequence_number']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -63,11 +78,8 @@ class AptApi {
 
   Future<MessageModel> getServiceInfo() async {
     try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${url}ledger/info',
-        params: {},
-      );
-      return MessageModel()..data = int.parse(data['ledger_timestamp']);
+      final data = await _get(url);
+      return MessageModel()..data = parseUint64(data['ledger_timestamp']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }

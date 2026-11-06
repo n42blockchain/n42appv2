@@ -7,6 +7,54 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 
 void main() {
+  for (final value in ['18446744073709551615', '9007199254740993', '0', 42]) {
+    test('REST uint64 stays exact: $value', () async {
+      final api = AptApi(
+        read: (url) async {
+          if (url.endsWith('estimate_gas_price')) {
+            return {'gas_estimate': value};
+          }
+          if (url.endsWith('accounts/0x1')) return {'sequence_number': value};
+          if (url.contains('/balance/')) return value;
+          expect(url, endsWith('/v1/'));
+          return {'ledger_timestamp': value};
+        },
+      );
+      for (final response in [
+        await api.getBalance('0x1'),
+        await api.getGasPrice(),
+        await api.getAccountInfo('0x1'),
+        await api.getServiceInfo(),
+      ]) {
+        expect(response.error, false);
+        expect(response.data, BigInt.parse(value.toString()));
+      }
+    });
+  }
+  for (final value in [
+    null,
+    true,
+    1.5,
+    -1,
+    '',
+    '01',
+    '+1',
+    '1e3',
+    '18446744073709551616',
+  ]) {
+    test('invalid REST uint64 fails: $value', () async {
+      final api = AptApi(
+        read: (_) async => {
+          'sequence_number': value,
+          'ledger_timestamp': value,
+          'gas_estimate': value,
+        },
+      );
+      expect((await api.getAccountInfo('0x1')).error, true);
+      expect((await api.getServiceInfo()).error, true);
+      expect((await api.getGasPrice()).error, true);
+    });
+  }
   final hash = '0x${List.filled(64, 'a').join()}';
   for (final encoded in ['00aBff', '0x00aBff', '0X00aBff']) {
     for (final isTest in [false, true]) {

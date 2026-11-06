@@ -98,7 +98,18 @@ class AptSender implements ChainSender {
     if (ledgerTimestamp.error) {
       return SendResult.fail(ledgerTimestamp.data?.toString());
     }
-    final lt = (ledgerTimestamp.data as int) ~/ 1000000 + 60;
+    final BigInt sequence;
+    final BigInt lt;
+    try {
+      sequence = AptApi.parseUint64(sequenceNumber.data);
+      final micros = AptApi.parseUint64(ledgerTimestamp.data);
+      if (micros == BigInt.zero) {
+        return const SendResult.fail('Invalid Aptos ledger timestamp');
+      }
+      lt = micros ~/ BigInt.from(1000000) + BigInt.from(60);
+    } on FormatException {
+      return const SendResult.fail('Invalid Aptos account or ledger response');
+    }
 
     final int? resolvedChainId = resolveChainConfigIdOrNull(
       params.chainConfig ?? _defaultChainConfig,
@@ -113,14 +124,14 @@ class AptSender implements ChainSender {
     final signMap = <String, dynamic>{
       'amount': valuePrice.toString(),
       'toAddress': params.toAddress,
-      'SequenceNumber': sequenceNumber.data,
+      'SequenceNumber': sequence.toString(),
       'fromAddress': params.fromAddress,
       'contractAddress': params.contractAddress,
       'contractModule': '',
       'contractName': '',
       'gasUnitPrice': gasPrice.toString(),
       'maxGasAmount': gas,
-      'expirationTimestampSecs': lt,
+      'expirationTimestampSecs': lt.toString(),
       'chainId': chainId,
     };
 
