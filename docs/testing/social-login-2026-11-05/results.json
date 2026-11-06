@@ -34,6 +34,20 @@
     "play_signing_verified": false,
     "web_login_deployed": false
   },
-  "apple_console": "N42 primary App ID enabled; N42 Services ID absent",
-  "meta_console": "Current account cannot access existing N42 app; owner decision pending"
+  "apple_console": "N42 primary App ID and Services ID enabled; domain and callback verified after reopening",
+  "meta_console": "Current account cannot access existing N42 app; owner decision pending",
+  "apple_registration": {
+    "team_id": "CFRXH38L48",
+    "native_client_id": "ai.n42.www",
+    "web_client_id": "ai.n42.www.web",
+    "web_origin": "https://n42.world",
+    "redirect_uri": "https://n42.world/v1/auth/n42/social/apple/callback",
+    "configuration_persisted": true,
+    "signing_key": "CYCTXT3C2G",
+    "callback_deployed": false,
+    "live_authorization_verified": false,
+    "client_secret_signature_verified": true,
+    "client_secret_expires_at": "2027-02-04T03:06:58Z",
+    "private_key_protected": true
+  }
 }

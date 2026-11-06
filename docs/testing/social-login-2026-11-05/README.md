@@ -132,3 +132,42 @@ Remaining: external N42 backend verification and existing account mapping;
 Google consent branding review; Apple Web/Android service and callback;
 Meta app access/configuration and Limited Login verification; Web login UI and
 server deployment; real provider authorization and first/repeat login acceptance.
+
+
+## Apple Services ID update — 2026-11-05
+
+The next live check found `N42 Wallet Web Login` / `ai.n42.www.web` already
+registered by the owner. Sign In with Apple was configured for the existing
+primary App ID `CFRXH38L48.ai.n42.www`, domain `n42.world`, and return URL
+`https://n42.world/v1/auth/n42/social/apple/callback`.
+
+The owner completed Save while the browser was shared. Reopening the Services ID
+confirmed Sign In with Apple is selected. Reopening Configure and expanding the
+Website URLs selector confirmed the exact domain and return URL are persisted.
+No Club or Mintus identifier was modified.
+
+This is provider registration only: the N42 callback is not yet implemented or
+deployed. It must validate state and nonce, exchange the one-time authorization
+code on the server, verify Apple's signature/issuer/audience/expiry, then resolve
+the existing N42 account mapping. Do not point it at the Club PDS provisioning
+flow or treat a provider token as a wallet signing key.
+
+The owner registered the prepared `N42 Wallet Login` key (`CYCTXT3C2G`) and
+explicitly confirmed creation/download and controlled storage. Only Sign in with
+Apple was selected, associated with `ai.n42.www`. Chrome confirmed the 257-byte
+`.p8` download completed. Both Downloads and the controlled copy have mode 0600;
+`~/.config/n42/secrets` has mode 0700.
+
+Controlled files (never commit or print their contents):
+
+- `~/.config/n42/secrets/AuthKey_CYCTXT3C2G.p8`
+- `~/.config/n42/secrets/apple-provider.json`
+
+Node's crypto module verified the key is P-256 and generated an ES256 client
+secret for `ai.n42.www.web`, issuer `CFRXH38L48`, audience
+`https://appleid.apple.com`. The generated signature was verified locally using
+the corresponding public key. Expiration: **2027-02-04T03:06:58Z**; renew before
+expiry. This signature self-check is not an Apple authorization-code exchange.
+The config includes the registered callback, but has not been deployed. The
+native iOS token audience remains `ai.n42.www` and must not be confused with
+the Web Services ID audience.
