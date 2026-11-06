@@ -10,11 +10,16 @@ iOS device/simulator and four Android ABIs. Build them from the locked source:
 
 ```sh
 bash scripts/build_falcon_native.sh all
-cargo build --locked --release --manifest-path rust/n42_pq/Cargo.toml
-N42_PQ_LIBRARY="$PWD/rust/n42_pq/target/release/libn42_pq.dylib" \
-  /Users/jieliu/.codex/toolchains/flutter-3.47.5/flutter/bin/flutter test --no-pub \
-  test/features/wallet/falcon
+# Host-only verification; does not rebuild or replace the mobile packages.
+bash scripts/test_falcon_native.sh
 ```
+
+The host runner requires Rust/C build tools and the project's Flutter SDK on
+PATH (currently Flutter 3.47.8). Set `FLUTTER_BIN` to an explicit Flutter executable
+when the default SDK differs. Run `flutter pub get` before it. The runner builds
+for the Rust host target into `rust/n42_pq/target/host-tests`, runs the Rust test
+and both native Dart suites, and sets `N42_PQ_LIBRARY` for later GitHub Actions
+steps. A missing toolchain, failed build or failed test fails the command.
 
 Each sensitive operation requires OS device authentication. Secret keys live in
 FlutterSecureStorage. Backups use PBKDF2-HMAC-SHA256 (310,000 iterations), a random
@@ -65,3 +70,14 @@ activates compatible chain configuration. See each client's
 - Android `:app:mergeDebugNativeLibs` with JDK 21: succeeded. Packaged Falcon
   libraries match source SHA-256 hashes for arm64-v8a, armeabi-v7a, x86 and
   x86_64. This verifies packaging, not Android device runtime acceptance.
+
+## Host verification refresh, 2026-11-06
+
+- Rebuilt from Cargo.lock using rustc 1.97.1 for aarch64-apple-darwin.
+- Rust: 1 passed. Real native Dart suites: 16 passed, no skips, exit 0.
+- Verified the CI environment-file export with a second successful run.
+- Logs: /tmp/n42-falcon-native-b68.log and /tmp/n42-falcon-ci-env-b68.log.
+- Local dylib SHA-256: a2befdb8ed3e94333c87ded191fcad1279956c79c4e8dd139803c438587f3349.
+- The network suite uses synthetic RPC responses and secure-storage mocks with
+  actual native signatures. It does not submit to a node or validate device
+  keychain/keystore behavior. Linux CI execution remains to be observed remotely.

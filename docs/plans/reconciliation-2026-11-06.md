@@ -52,6 +52,8 @@ Batch 66 integrates strict scheduled-queue reading (Chat 4f972fcc): corrupt reco
 
 Batch 67 completes fresh full-suite regression after batches 52–66: wallet 6,392 passed / 2 skipped / 0 failed; Chat 7,930 passed / 4 skipped / 0 failed. First-run file-IO fixture timeouts were fixed without removing behavior assertions, then both full suites reran successfully. Chat 716eac2c changes only the fixture/ledger. Native-library/external-account skips, coverage measurement and live/release acceptance remain separate.
 
+Batch 68 executes the two previously skipped Falcon suites using a freshly built host library: 1 Rust and 16 Flutter native/network tests pass. A reusable host runner is wired before CI coverage and exports the library path. This closes the local missing-library verification gap, not real RPC/device or remote Linux CI acceptance.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.

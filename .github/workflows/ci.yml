@@ -139,6 +139,9 @@ jobs:
           (cd plugins/flutter_mining/example && flutter pub get && flutter test test/)
           flutter test packages/webview_flutter_wkwebview/test/
 
+      - name: Build and test native Falcon signing
+        run: bash scripts/test_falcon_native.sh
+
       - name: Run tests with coverage
         id: root_tests
         run: |

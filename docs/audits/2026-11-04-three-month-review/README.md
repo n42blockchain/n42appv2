@@ -609,3 +609,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Full reruns with these fixture fixes: wallet **6,392 passed / 2 skipped / 0 failed** and Chat **7,930 passed / 4 skipped / 0 failed**, both exit 0. Logs: /tmp/n42-wallet-full-b67-final.log and /tmp/n42-chat-full-b67-final.log. These supersede the failed /tmp/n42-wallet-full-b66.log and /tmp/n42-chat-full-b66.log runs.
 - Wallet skips require N42_PQ_LIBRARY. Chat skips require disposable smoke URL, media corpus, QA accounts and registration/login fixtures. No fresh coverage measured, native signing/provider/device/server acceptance or TestFlight upload. Existing Windows Facebook plugin metadata warning remains.
 - Chat fixture/evidence commit 716eac2cd7730869162f18db47bd95b79644520c is pushed and pinned. Its diff from the full-wallet-tested Chat runtime changes only the test fixture and issue ledger.
+
+
+## Batch 68 — execute native Falcon suites and enable CI (2026-11-06)
+
+- Added scripts/test_falcon_native.sh: locked host-native Rust build/test, explicit host target/output directory and real Flutter FFI suites. Mobile packaged libraries are untouched. The CI test job invokes this before coverage and retains N42_PQ_LIBRARY via GITHUB_ENV so subsequent full tests no longer skip these suites for a missing path.
+- macOS arm64: Rust 1 passed; Flutter native/network suites 16 passed, no skips. A second run validates the CI environment export and repeats all 16 passes. Shell syntax and Ruby YAML parsing/step ordering passed; Python YAML validation was unavailable because PyYAML is not installed.
+- Logs: /tmp/n42-falcon-native-b68.log and /tmp/n42-falcon-ci-env-b68.log. The prior full suite remains 6,392 passed / 2 skipped; do not rewrite that historical count. These new runs separately exercise the two previously skipped suites.
+- Network responses and secure storage remain test doubles; signatures are real. Linux hosted CI, native app/device signing, node submission and seven-node deployment remain unverified. No new TestFlight upload or coverage measurement.
