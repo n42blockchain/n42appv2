@@ -517,3 +517,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Dart API/page regressions: 35 passed; new sender regressions: 8 passed. These cover precision beyond 2^53, fee reservation, complete references, duplicate pending submission, invalid native output, pagination and dry-run failures. Logs: /tmp/n42-sui-transfer-dart-final.log and /tmp/n42-sui-transfer-sender.log.
 - Actual Swift component entrypoint passed ordinary signing, wrong-source/duplicate-coin/integer rejection and the four existing independently generated intent vectors (/tmp/n42-sui-transfer-native.log). Ordinary coin references are synthetic; no node acceptance is claimed. Android Debug build and six Sui JVM tests passed (/tmp/n42-sui-transfer-android.log); these validate parameter/protobuf encoding, not Android JNI signing.
 - Still open: real-node transfer and failure reconciliation, Android JNI signing, native UI/account-switch acceptance, full raw-BCS semantics, token-specific Sui transactions and current-source release. No physical-device installation, real-funds transaction or TestFlight upload. Earlier full-suite counts do not cover this batch.
+
+
+## Batch 57 — Sui confirmation request consistency (2026-11-06)
+
+- Snapshot recipient, exact amount, wallet index, source address, network and derivation identity before asynchronous validation. Recheck after validation, simulation and confirmation before proceeding. Editing the request or switching its source no longer combines an old validated recipient with newly read form state. Confirmation uses the captured exact amount.
+- Return safely when address validation finishes after disposal. Save the confirmed transaction recipient to recent addresses rather than reading the editable field after broadcasting.
+- All 15 Sui send-page tests pass, including six new delayed-validation cases (amount, recipient, network, source, derivation index and page disposal). Scoped analysis is clean. Logs: /tmp/n42-sui-confirmation-race-final.log and /tmp/n42-sui-confirmation-analysis-final.log.
+- These tests cover the pre-simulation async boundary. Post-confirmation provider/device acceptance, account switches during broadcast/result storage, live-node submission and Android JNI acceptance remain open. No new release or device installation.

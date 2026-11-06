@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -91,6 +94,58 @@ void main() {
     expect(tester.takeException(), isNull);
     return state;
   }
+
+  for (final changed in ['amount', 'recipient', 'network', 'source', 'path']) {
+    testWidgets('send stops when $changed changes during address validation', (
+      tester,
+    ) async {
+      final state = await mount(tester);
+      state.valueTextEditingController.text = '1';
+      state.toTextEditingController.text = '0x${'22' * 32}';
+      final validation = Completer<bool>();
+      var signingCalls = 0;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(trustdart, (call) async {
+            if (call.method == 'validateAddress') return validation.future;
+            signingCalls++;
+            throw StateError('Stale request reached signer');
+          });
+      final pending = state.sendTransaction();
+      await tester.pump();
+      if (changed == 'amount') state.valueTextEditingController.text = '0.5';
+      if (changed == 'recipient') {
+        state.toTextEditingController.text = '0x${'33' * 32}';
+      }
+      if (changed == 'network') state.widget.coinModel.isTest = true;
+      if (changed == 'source') {
+        state.widget.coinModel.address = '0x${'44' * 32}';
+      }
+      if (changed == 'path') state.widget.coinModel.pathIndex = 1;
+      validation.complete(true);
+      await pending;
+      await tester.pump();
+      expect(signingCalls, 0);
+      expect(state.load, Load.finish);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('leaving during address validation does not set disposed state', (
+    tester,
+  ) async {
+    final state = await mount(tester);
+    state.valueTextEditingController.text = '1';
+    state.toTextEditingController.text = '0x${'22' * 32}';
+    final validation = Completer<bool>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(trustdart, (_) => validation.future);
+    final pending = state.sendTransaction();
+    await tester.pump();
+    await tester.pumpWidget(const SizedBox());
+    validation.complete(true);
+    await pending;
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('SUI amount validation rejects truncation and fee overdraft', (
     tester,

@@ -312,11 +312,32 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     amountCheck();
     if (amountErrorMessage != "") return;
 
+    final requestedRecipient = toTextEditingController.text.trim();
+    final requestedAmount = valueTextEditingController.text;
+    final requestedValue = transferValue;
+    final requestedWallet = ref.read(wapBridgeProvider).walletIndex;
+    final requestedAddress = widget.coinModel.address;
+    final requestedNetwork = widget.coinModel.isTest;
+    final requestedPathIndex = widget.coinModel.pathIndex;
+    final requestedAddressType = widget.coinModel.addrType;
+    bool requestIsCurrent() =>
+        mounted &&
+        toTextEditingController.text.trim() == requestedRecipient &&
+        valueTextEditingController.text == requestedAmount &&
+        ref.read(wapBridgeProvider).walletIndex == requestedWallet &&
+        widget.coinModel.address == requestedAddress &&
+        widget.coinModel.isTest == requestedNetwork &&
+        widget.coinModel.pathIndex == requestedPathIndex &&
+        widget.coinModel.addrType == requestedAddressType;
+
     setState(() => load = Load.loading);
 
-    final String? toAddr = await toAddressCheck(
-      toTextEditingController.text.trim(),
-    );
+    final String? toAddr = await toAddressCheck(requestedRecipient);
+    if (!mounted) return;
+    if (!requestIsCurrent()) {
+      _resetLoad();
+      return;
+    }
     if (toAddr == null) {
       _resetLoad();
       return;
@@ -324,7 +345,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
     final estimated = await estimateGasEthLocal(checkAddress: false);
     if (!mounted) return;
-    if (estimated != true || errorMessage != "") {
+    if (!requestIsCurrent() || estimated != true || errorMessage != "") {
       _resetLoad();
       return;
     }
@@ -356,7 +377,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     trModel.gasPrice = totalGasPrice;
     trModel.gas = gas.toInt();
     trModel.gasPriceValue = gasPrice;
-    trModel.price = transferValue;
+    trModel.price = requestedValue;
     if (widget.coinModel.config.blockchainType ==
         BlockchainType.Ethereum.name) {
       trModel.message = noteTextEditingController.text.trim();
@@ -371,8 +392,8 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       ),
     );
     if (!mounted) return;
-    if (check == true) {
-      signTx(trModel);
+    if (check == true && requestIsCurrent()) {
+      await signTx(trModel);
     } else {
       _resetLoad();
     }
@@ -422,10 +443,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(
-          coinType,
-          toTextEditingController.text.trim(),
-        );
+        await RecentAddressService.save(coinType, trModel.to1);
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
