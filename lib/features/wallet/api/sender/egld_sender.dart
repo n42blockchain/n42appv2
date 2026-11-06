@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
+
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -19,6 +21,7 @@ class EgldSender implements ChainSender {
   final Object? Function() _ownerIdentity;
   final String? Function() _readMnemonic;
   final Future<dynamic> Function(String url) _getAccount;
+  final Future<dynamic> Function(String url) _getNetworkConfig;
   final Future<dynamic> Function(String url, String signed) _broadcast;
 
   EgldSender({
@@ -26,11 +29,13 @@ class EgldSender implements ChainSender {
     Object? Function()? ownerIdentity,
     String? Function()? readMnemonic,
     Future<dynamic> Function(String url)? getAccount,
+    Future<dynamic> Function(String url)? getNetworkConfig,
     Future<dynamic> Function(String url, String signed)? broadcast,
   }) : _trustdart = trustdart ?? Trustdart(),
        _ownerIdentity = ownerIdentity ?? _currentOwner,
        _readMnemonic = readMnemonic ?? _currentMnemonic,
-       _getAccount = getAccount ?? _loadAccount,
+       _getAccount = getAccount ?? _getJson,
+       _getNetworkConfig = getNetworkConfig ?? _getJson,
        _broadcast = broadcast ?? _submit;
 
   static Object? _currentOwner() {
@@ -57,7 +62,7 @@ class EgldSender implements ChainSender {
     }
   }
 
-  static Future<dynamic> _loadAccount(String url) => BaseApi.requestEmptyH.get(
+  static Future<dynamic> _getJson(String url) => BaseApi.requestEmptyH.get(
     url,
     params: {},
     defaultReturn: false,
@@ -130,9 +135,52 @@ class EgldSender implements ChainSender {
       return SendResult.fail(S.current.g_key_wallet_m5('EGLD'));
     }
 
-    const int gasLimit = 50000;
-    const int gasPrice = 1000000000;
-    final totalGas = BigInt.from(gasLimit) * BigInt.from(gasPrice);
+    final BigInt gasLimit;
+    final int gasPrice;
+    final int version;
+    try {
+      final response = await _getNetworkConfig('$base/network/config');
+      if (!signerIsCurrent()) {
+        return const SendResult.fail('Wallet signing context changed');
+      }
+      if (response is! Map ||
+          response['code'] != 'successful' ||
+          response['data'] is! Map ||
+          response['data']['config'] is! Map) {
+        throw const FormatException('Invalid network configuration');
+      }
+      final config = response['data']['config'] as Map;
+      int integer(String key, {bool zeroAllowed = false}) {
+        final value = config[key];
+        if (value is! int || value < (zeroAllowed ? 0 : 1)) {
+          throw const FormatException('Invalid network parameter');
+        }
+        return value;
+      }
+
+      if (config['erd_chain_id'] != (params.isTest ? 'T' : '1') ||
+          integer('erd_denomination') != params.decimals) {
+        throw const FormatException('Network does not match transfer');
+      }
+      final minimum = integer('erd_min_gas_limit');
+      final perByte = integer('erd_gas_per_data_byte', zeroAllowed: true);
+      final maximum = integer('erd_max_gas_per_transaction');
+      gasPrice = integer('erd_min_gas_price');
+      version = integer('erd_min_transaction_version');
+      if (version > 0x7fffffff) {
+        throw const FormatException('Invalid transaction version');
+      }
+      gasLimit =
+          BigInt.from(minimum) +
+          BigInt.from(perByte) *
+              BigInt.from(utf8.encode(params.memo ?? '').length);
+      if (gasLimit > BigInt.from(maximum)) {
+        throw const FormatException('Transfer exceeds network gas limit');
+      }
+    } catch (_) {
+      return const SendResult.fail('Unable to validate network fees');
+    }
+    final totalGas = gasLimit * BigInt.from(gasPrice);
 
     BigInt valuePrice = ethToWeiString(
       params.amountDecimalString,
@@ -161,7 +209,7 @@ class EgldSender implements ChainSender {
       'gasLimit': gasLimit.toString(),
       'gasPrice': gasPrice.toString(),
       'chainId': params.isTest ? 'T' : '1',
-      'version': '1',
+      'version': version.toString(),
       'data': params.memo ?? '',
     };
 

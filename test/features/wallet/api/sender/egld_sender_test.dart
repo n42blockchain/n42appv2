@@ -55,6 +55,25 @@ class _Signer extends Trustdart {
   }
 }
 
+Map<String, dynamic> networkConfig({
+  bool testnet = false,
+  Map<String, dynamic> overrides = const {},
+}) => {
+  'code': 'successful',
+  'data': {
+    'config': {
+      'erd_chain_id': testnet ? 'T' : '1',
+      'erd_denomination': 18,
+      'erd_min_gas_limit': 50000,
+      'erd_gas_per_data_byte': 1500,
+      'erd_min_gas_price': 1000000000,
+      'erd_max_gas_per_transaction': 600000000,
+      'erd_min_transaction_version': 1,
+      ...overrides,
+    },
+  },
+};
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async => S.load(const Locale('en')));
@@ -92,6 +111,10 @@ void main() {
       );
       final sender = EgldSender(
         ownerIdentity: () => 'fixture owner',
+        getNetworkConfig: (url) async {
+          expect(url, 'https://testnet-api.multiversx.com/network/config');
+          return networkConfig(testnet: true);
+        },
         getAccount: (_) async => {
           'nonce': 7,
           'balance': '10000000000000000000',
@@ -140,6 +163,15 @@ void main() {
     'derive fails',
     'sign fails',
     'insufficient balance',
+    'unicode memo',
+    'repriced fees',
+    'owner during fees',
+    'key during fees',
+    'wrong network',
+    'bad config',
+    'fee RPC failure',
+    'gas exceeds limit',
+    'invalid gas price',
   ]) {
     test(scenario, () async {
       Object? owner = scenario == 'no owner' ? null : Object();
@@ -171,6 +203,25 @@ void main() {
         readMnemonic: () {
           if (key != null) fail('Explicit key must not load a mnemonic');
           return mnemonic;
+        },
+        getNetworkConfig: (url) async {
+          expect(url, '$base/network/config');
+          mutate('fees');
+          if (scenario == 'fee RPC failure') throw StateError('offline');
+          if (scenario == 'bad config') return {'code': 'successful'};
+          return networkConfig(
+            testnet: scenario == 'testnet',
+            overrides: {
+              if (scenario == 'wrong network') 'erd_chain_id': 'D',
+              if (scenario == 'gas exceeds limit')
+                'erd_max_gas_per_transaction': 50000,
+              if (scenario == 'invalid gas price')
+                'erd_min_gas_price': '1000000000',
+              if (scenario == 'repriced fees') 'erd_min_gas_limit': 60000,
+              if (scenario == 'repriced fees') 'erd_min_gas_price': 2000000000,
+              if (scenario == 'repriced fees') 'erd_gas_per_data_byte': 2000,
+            },
+          );
         },
         getAccount: (url) async {
           expect(url, '$base/accounts/erd1sender');
@@ -209,7 +260,7 @@ void main() {
           decimalAmountOverride: scenario == 'exact amount'
               ? '1.250000000000000001'
               : null,
-          memo: 'invoice 42',
+          memo: scenario == 'unicode memo' ? '你好🙂' : 'invoice 42',
           isTest: scenario == 'testnet',
           sendMax: scenario == 'max',
         ),
@@ -220,6 +271,8 @@ void main() {
         'testnet',
         'max',
         'exact amount',
+        'unicode memo',
+        'repriced fees',
       ].contains(scenario);
       expect(result.success, success);
       expect(broadcasts, success ? 1 : 0);
@@ -237,8 +290,14 @@ void main() {
         expect(signer.derivedKey, key ?? '');
         expect(signer.payload!['nonce'], '7');
         expect(signer.payload!['toAddress'], 'erd1recipient');
-        expect(signer.payload!['gasLimit'], '50000');
-        expect(signer.payload!['gasPrice'], '1000000000');
+        expect(
+          signer.payload!['gasLimit'],
+          scenario == 'repriced fees' ? '80000' : '65000',
+        );
+        expect(
+          signer.payload!['gasPrice'],
+          scenario == 'repriced fees' ? '2000000000' : '1000000000',
+        );
         expect(signer.payload!['version'], '1');
         expect(signer.payload!.keys.toSet(), {
           'nonce',
@@ -251,11 +310,14 @@ void main() {
           'data',
         });
         expect(signer.payload!['chainId'], scenario == 'testnet' ? 'T' : '1');
-        expect(signer.payload!['data'], 'invoice 42');
+        expect(
+          signer.payload!['data'],
+          scenario == 'unicode memo' ? '你好🙂' : 'invoice 42',
+        );
         expect(
           signer.payload!['amount'],
           scenario == 'max'
-              ? '9999950000000000000'
+              ? '9999935000000000000'
               : scenario == 'exact amount'
               ? '1250000000000000001'
               : '1250000000000000000',

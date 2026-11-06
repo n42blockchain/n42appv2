@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 156
+## Current interruption inventory — through batch 157
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -54,6 +54,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### EGLD network fees and UTF-8 memo gas — batch 157
+
+- Replaced fixed 50,000 gas / 1,000,000,000 gas price with the selected API origin's /network/config. Require successful config envelope, matching chain ID and denomination, positive integer limits/price/version and nonnegative gas-per-byte. Reject malformed/mismatched responses and recheck captured wallet context after the new await.
+- Plain transfer gas is minimum plus gas-per-byte times UTF-8 memo byte length, bounded by network maximum. BigInt arithmetic determines the fee and Max subtraction. Existing native payload now carries the checked gas price, gas limit and minimum version. No fallback to stale constants after RPC/configuration failure.
+- Verified official formula: https://docs.multiversx.com/developers/gas-and-fees/egld-transfers/ and network parameter schema: https://docs.multiversx.com/integrators/creating-transactions/. Read-only live mainnet /network/config confirmed the successful/data/config envelope used by the parser; no transaction was submitted.
+- Final EGLD/VET suites: 50 pass (/tmp/n42-wallet-b157-final.log); scoped analysis clean (/tmp/n42-wallet-b157-analysis-final.log). Coverage includes ordinary/Max/exact amounts, Chinese+emoji byte cost, repriced limits/price, wrong chain, malformed config, offline config, maximum exceeded and wallet/key changes during config fetch. Fixtures do not establish real native signatures or live acceptance.
+- Remaining: confirmation-page quote/fee consistency, contract/token-specific estimation, durable broadcast ambiguity recovery and native/device/on-chain acceptance. The last Android APK predates this patch.
 
 ### EGLD signing context and native payload — batch 156
 
