@@ -473,3 +473,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Targeted wallet suites: 44 passed; Chat poll suite: 11 passed. Scoped wallet analysis reports no issues (`/tmp/n42-fixtures-analyze.log`).
 - Full reruns: wallet 6,310 passed, two PQ-native-library configuration skips, zero failures; Chat 7,915 passed, four disposable-account/media-fixture skips, zero failures. Logs: `/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`. No fresh coverage measurement or device acceptance.
 - Wallet pins pushed Chat `334dc9274f9b0125709817b7975240e01e186cc4`; subsequent `20d1b065` changes only Chat's verification ledger. The dependency lockfile changes only that Chat reference. No TestFlight upload or device operation.
+
+
+## Batch 52 — scheduled draft read-error recovery (2026-11-06)
+
+- Fixed false empty-state reporting when scheduled draft storage cannot be read or decoded. Room reads propagate errors and reject malformed entries instead of silently dropping them. Original storage bytes remain untouched; invalid account IDs are explicitly rejected.
+- The scheduled page shows localized load-failed/retry controls, clears unsafe cancellation state and retains its account-generation boundary. Successful retry restores the persisted drafts. Logs record exception types rather than raw error contents.
+- Chat: 259 storage/page/BLoC regressions pass (`/tmp/n42-scheduled-read-recovery-final.log`), plus 17 final page tests with English/Arabic load failure and retry at 320x480 with 2x text (`/tmp/n42-scheduled-read-page-final.log`). Scoped analysis has no issues (`/tmp/n42-scheduled-read-analyze.log`). All 26 catalogs contain the reused load-error/retry strings.
+- Chat `f205f334a234c63f71ecc46a059cb219a7dfe2cf` is pushed and pinned. This does not repair corrupt records, persist send-failure status or resolve unknown server outcomes. Full-suite results from batch 51 precede this change; this batch uses scoped regression, not a fresh coverage measurement or release/device acceptance.
+
+- Wallet host integration: 114 tests passed (`/tmp/n42-read-recovery-host-tests.log`), covering Chat initialization, provider/native configuration, sticker assets, push/tap routing and the device fixture contract. The lockfile changes only the Chat reference.

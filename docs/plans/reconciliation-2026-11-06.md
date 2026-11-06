@@ -12,6 +12,8 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+- Batch 52 updates the wallet pin to pushed Chat `f205f334`: storage-read errors now produce an explicit localized retry state instead of claiming the scheduled queue is empty. 259 related regressions and 17 final page tests pass. Corrupt-record repair and persistent send-failure recovery remain open. Batch 51 full-suite results precede this change.
+
 - At the start of this inspection, wallet `eb05473d9` matched freshly fetched `origin/master` (0 ahead / 0 behind). Four previously recorded untracked paths remain preserved. Batch 42 completes the interrupted Chat acknowledgement patch and updates the host pin.
 - Chat task worktree `.tmp-worktrees/n42-chat-native-hub-20261106` is now at pushed `fd519bff`. Account isolation and the interrupted server-acknowledgement patch are completed; the wallet pin is updated to the same source.
 - The earlier run (171 passed / 2 failed) is superseded by `/tmp/n42-owner-broad-final.log`: 3,398 passed, plus four client/token-switch transport checks in `/tmp/n42-owner-session-tests.log`. Analyzer reports no errors/warnings and ten informational diagnostics. Batch 36 records scope and limitations.
