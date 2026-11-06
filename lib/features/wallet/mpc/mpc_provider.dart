@@ -7,7 +7,16 @@ library;
 import 'dart:typed_data';
 
 /// MPC 登录方式
-enum MpcLoginType { google, apple, email, phone, twitter, discord, github }
+enum MpcLoginType {
+  google,
+  apple,
+  email,
+  phone,
+  twitter,
+  discord,
+  github,
+  facebook,
+}
 
 /// MPC 登录结果
 class MpcLoginResult {

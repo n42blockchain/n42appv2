@@ -1,3 +1,4 @@
+import 'package:web3auth_flutter/input.dart' show UserCancelledException;
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
@@ -39,6 +40,12 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
       color: Color(0xFF373739),
     ),
     (
+      type: MpcLoginType.facebook,
+      icon: Icons.facebook,
+      label: 'Facebook',
+      color: Color(0xFF1877F2),
+    ),
+    (
       type: MpcLoginType.email,
       icon: Icons.email_outlined,
       label: 'Email',
@@ -65,9 +72,12 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
   ];
 
   Future<void> _loginWith(MpcLoginType type) async {
+    if (_loginLoad == Load.loading) return;
+    final wap = ref.read(wapBridgeProvider);
+    final owner = wap.userUUID;
     final provider = MpcProviderRegistry.instance.defaultProvider;
     if (provider == null) {
-      setState(() => _errorMsg = 'MPC provider not configured');
+      setState(() => _errorMsg = S.of(context).g_key_error_19);
       return;
     }
 
@@ -84,10 +94,28 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
 
       final result = await provider.login(type);
 
-      if (!mounted) return;
+      if (!mounted ||
+          wap.userUUID != owner ||
+          wap.walletDataOwnerUuid != owner) {
+        await provider.logout();
+        return;
+      }
+      // Recover the existing entry instead of adding the same wallet again.
+      final existing = wap.walletInfoList.indexWhere(
+        (wallet) =>
+            wallet.isMpc &&
+            wallet.mpcProvider == result.provider &&
+            (wallet.coinInfo?['ETH']?['address'] as String?)?.toLowerCase() ==
+                result.address.toLowerCase(),
+      );
+      if (existing >= 0) {
+        wap.walletIndex = existing;
+        wap.refresh();
+        Navigator.of(context).pop(true);
+        return;
+      }
 
       // Create wallet info from MPC result
-      final wap = ref.read(wapBridgeProvider);
       final walletInfo = WalletInfo(
         walletName: 'MPC Wallet',
         walletUuid: wap.userUUID,
@@ -112,14 +140,17 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
 
       // Success — navigate back to wallet list
       final nav = Navigator.of(context);
-      nav.pop(); // pop this page
-      nav.pop(); // pop create wallet menu
+      nav.pop(true); // The caller closes the create-wallet menu once.
+    } on UserCancelledException {
+      // Closing provider authorization is a normal cancellation.
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _loginLoad = Load.finish;
-        _errorMsg = e.toString();
+        _errorMsg = S.of(context).g_key_error_19;
       });
+    } finally {
+      if (mounted) setState(() => _loginLoad = Load.finish);
     }
   }
 
@@ -132,7 +163,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_ui_create_wallet),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,6 +190,14 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
               ),
               SizedBox(height: AppSpacing.space12),
 
+              if (MpcProviderRegistry.instance.defaultProvider == null)
+                Padding(
+                  padding: EdgeInsets.only(bottom: AppSpacing.space4),
+                  child: Text(
+                    S.of(context).g_key_error_19,
+                    style: AppTypography.bodySm.copyWith(color: subColor),
+                  ),
+                ),
               // Login options
               ...(_loginOptions.map(
                 (opt) => Padding(
@@ -192,7 +231,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                 ),
               ],
 
-              const Spacer(),
+              SizedBox(height: AppSpacing.space4),
 
               // Security note
               Container(
@@ -232,7 +271,9 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
     required Color textColor,
   }) {
     final isLoading = _loginLoad == Load.loading && _selectedType == type;
-    final isDisabled = _loginLoad == Load.loading && _selectedType != type;
+    final isDisabled =
+        _loginLoad == Load.loading ||
+        MpcProviderRegistry.instance.defaultProvider == null;
 
     return SizedBox(
       width: double.infinity,

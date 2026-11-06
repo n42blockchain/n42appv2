@@ -20,6 +20,11 @@ class Web3AuthMpcProvider implements MpcProvider {
   String? _privateKey;
   EthPrivateKey? _cachedCredentials;
   bool _initialized = false;
+  bool _loginPending = false;
+  bool _disposed = false;
+  int _generation = 0;
+  Future<void>? _initializing;
+  Future<void>? _loggingOut;
 
   /// Web3Auth Client ID（从 dashboard.web3auth.io 获取）
   final String clientId;
@@ -52,8 +57,18 @@ class Web3AuthMpcProvider implements MpcProvider {
   }
 
   @override
-  Future<void> initialize() async {
-    if (_initialized) return;
+  Future<void> initialize() {
+    if (_disposed || _loggingOut != null) {
+      throw StateError('Provider unavailable');
+    }
+    if (_initialized) return Future.value();
+    return _initializing ??= _initialize().whenComplete(
+      () => _initializing = null,
+    );
+  }
+
+  Future<void> _initialize() async {
+    final generation = _generation;
 
     await Web3AuthFlutter.init(
       Web3AuthOptions(
@@ -72,56 +87,94 @@ class Web3AuthMpcProvider implements MpcProvider {
     // Check for existing session
     try {
       await Web3AuthFlutter.initialize();
-      _privateKey = await Web3AuthFlutter.getPrivateKey();
-      if (_privateKey != null && _privateKey!.isEmpty) {
-        _privateKey = null;
-      }
+      final key = await Web3AuthFlutter.getPrivateKey();
+      if (generation != _generation || _disposed) return;
+      if (key.isNotEmpty) _acceptKey(key);
     } catch (_) {
-      _privateKey = null;
+      if (generation == _generation) _clearSession();
     }
 
+    if (generation != _generation || _disposed) return;
     _initialized = true;
     AppLogger.d('Web3AuthMpc', 'initialized, logged_in=$isLoggedIn');
   }
 
   @override
   Future<MpcLoginResult> login(MpcLoginType type, {String? hint}) async {
-    if (!_initialized) await initialize();
-
-    final loginProvider = _mapLoginType(type);
-
-    final response = await Web3AuthFlutter.connectTo(
-      LoginParams(
-        authConnection: loginProvider,
-        extraLoginOptions: hint != null
-            ? ExtraLoginOptions(login_hint: hint)
-            : null,
-        mfaLevel: MFALevel.DEFAULT,
-      ),
-    );
-
-    _state = response;
-    _privateKey = response.privateKey;
-
-    if (_privateKey == null || _privateKey!.isEmpty) {
-      _privateKey = null;
-      throw MpcLoginException('Login succeeded but no key was returned');
+    if (_disposed || _loginPending || _loggingOut != null) {
+      throw MpcLoginException('Login unavailable or already in progress');
     }
+    _loginPending = true;
+    final generation = _generation;
+    try {
+      if (!_initialized) await initialize();
+      _assertCurrent(generation);
+      // A cancelled/rejected account switch must not leave the old signer active.
+      _clearSession();
+      final response = await Web3AuthFlutter.connectTo(
+        LoginParams(
+          authConnection: _mapLoginType(type),
+          extraLoginOptions: hint != null
+              ? ExtraLoginOptions(login_hint: hint)
+              : null,
+          mfaLevel: MFALevel.DEFAULT,
+        ),
+      );
+      _assertCurrent(generation);
+      _acceptKey(response.privateKey ?? '');
+      _state = response;
+      final userInfo = response.userInfo;
+      return MpcLoginResult(
+        address: _deriveAddress(_privateKey!),
+        publicKey: _derivePublicKey(_privateKey!),
+        userId: userInfo?.userId ?? '',
+        loginHint: _buildLoginHint(type, userInfo),
+        provider: providerId,
+      );
+    } catch (_) {
+      if (generation == _generation) _clearSession();
+      rethrow;
+    } finally {
+      _loginPending = false;
+    }
+  }
 
-    final address = _deriveAddress(_privateKey!);
-    final userInfo = response.userInfo;
+  void _assertCurrent(int generation) {
+    if (_disposed || generation != _generation) {
+      throw MpcLoginException('Login expired');
+    }
+  }
 
-    return MpcLoginResult(
-      address: address,
-      publicKey: _derivePublicKey(_privateKey!),
-      userId: userInfo?.userId ?? '',
-      loginHint: _buildLoginHint(type, userInfo),
-      provider: providerId,
+  void _clearSession() {
+    _privateKey = null;
+    _cachedCredentials = null;
+    _state = null;
+  }
+
+  void _acceptKey(String key) {
+    final hex = key.startsWith('0x') ? key.substring(2) : key;
+    final number = BigInt.tryParse(hex, radix: 16);
+    final order = BigInt.parse(
+      'fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141',
+      radix: 16,
     );
+    if (!RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hex) ||
+        number == null ||
+        number <= BigInt.zero ||
+        number >= order) {
+      throw MpcLoginException('Login returned an invalid signing key');
+    }
+    _clearSession();
+    _privateKey = hex;
   }
 
   @override
-  Future<void> logout() async {
+  Future<void> logout() =>
+      _loggingOut ??= _logout().whenComplete(() => _loggingOut = null);
+
+  Future<void> _logout() async {
+    ++_generation;
+    _clearSession();
     try {
       await Web3AuthFlutter.logout();
     } catch (_) {}
@@ -166,8 +219,9 @@ class Web3AuthMpcProvider implements MpcProvider {
 
   @override
   void dispose() {
-    _privateKey = null;
-    _state = null;
+    _disposed = true;
+    ++_generation;
+    _clearSession();
   }
 
   // ── Private helpers ──────────────────────────────────────────────────────
@@ -181,6 +235,7 @@ class Web3AuthMpcProvider implements MpcProvider {
   AuthConnection _mapLoginType(MpcLoginType type) => switch (type) {
     MpcLoginType.google => AuthConnection.google,
     MpcLoginType.apple => AuthConnection.apple,
+    MpcLoginType.facebook => AuthConnection.facebook,
     MpcLoginType.email => AuthConnection.email_passwordless,
     MpcLoginType.phone => AuthConnection.sms_passwordless,
     MpcLoginType.twitter => AuthConnection.twitter,

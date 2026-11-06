@@ -15,6 +15,7 @@ import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/app/chat_initialization.dart';
 import 'package:n42_wallet/core/app/navigation_wiring.dart';
+import 'package:n42_wallet/features/wallet/mpc/mpc_login_config.dart';
 import 'package:n42_wallet/core/app/push_route_wiring.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -114,6 +115,7 @@ Future<void> main() async {
   syncRpcOverridesToChainUrlMap();
   registerHostNavigation();
   initAppConfig();
+  const MpcLoginConfig().register(isMobile: Platform.isIOS || Platform.isAndroid);
   RequestUrl.initializeApiKeys();
 
   final previousFlutterErrorHandler = FlutterError.onError;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -75,6 +76,7 @@ void main() {
   for (final entry in {
     MpcLoginType.google: 'google',
     MpcLoginType.apple: 'apple',
+    MpcLoginType.facebook: 'facebook',
     MpcLoginType.email: 'email_passwordless',
     MpcLoginType.phone: 'sms_passwordless',
     MpcLoginType.twitter: 'twitter',
@@ -118,4 +120,70 @@ void main() {
       throwsA(isA<MpcNotLoggedInException>()),
     );
   });
+  test('switching social accounts replaces the cached signer', () async {
+    await provider.login(MpcLoginType.google);
+    loginKey = '2'.padLeft(64, '0');
+    final next = await provider.login(MpcLoginType.facebook);
+    expect(next.address, isNot(address));
+    expect(provider.currentAddress, next.address);
+    await provider.logout();
+    final restored = await provider.login(MpcLoginType.apple);
+    expect(restored.address, next.address);
+  });
+
+  for (final invalid in [
+    '',
+    '0',
+    '0'.padLeft(64, '0'),
+    'f'.padLeft(64, 'f'),
+    'malformed',
+  ]) {
+    test(
+      'invalid replacement key clears the old signing session: ${invalid.length}',
+      () async {
+        await provider.login(MpcLoginType.google);
+        loginKey = invalid;
+        await expectLater(
+          provider.login(MpcLoginType.apple),
+          throwsA(isA<MpcLoginException>()),
+        );
+        expect(provider.currentAddress, isNull);
+        await expectLater(
+          provider.signMessage(Uint8List(0)),
+          throwsA(isA<MpcNotLoggedInException>()),
+        );
+      },
+    );
+  }
+
+  for (final close in ['logout', 'dispose']) {
+    test('$close invalidates an in-flight social authorization', () async {
+      await provider.initialize();
+      final pending = Completer<String>();
+      final started = Completer<void>();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            if (call.method == 'connectTo') {
+              started.complete();
+              return pending.future;
+            }
+            return null;
+          });
+      final login = provider.login(MpcLoginType.facebook);
+      final rejected = expectLater(login, throwsA(isA<MpcLoginException>()));
+      await started.future;
+      await expectLater(
+        provider.login(MpcLoginType.google),
+        throwsA(isA<MpcLoginException>()),
+      );
+      if (close == 'logout') {
+        await provider.logout();
+      } else {
+        provider.dispose();
+      }
+      pending.complete(jsonEncode({'privKey': key}));
+      await rejected;
+      expect(provider.currentAddress, isNull);
+    });
+  }
 }
