@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 167
+## Current interruption inventory — through batch 168
 
 The interrupted patches through batch 159 are committed. Batch 160 revalidated the complete current wallet source after the Chat recovery and EGLD signing changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -56,6 +56,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Isolate media sends across room/account changes — batch 168
+
+- Before-fix regression reproduced all 18 image/voice/video/file-bytes/file-path/file-stream cases: settings preparation could dispatch to the new room, and old uploads polluted its active count. Reused the text room/account-generation guard across these media handlers, captured the destination, and checked before dispatch and after result/error awaits. Room initialization resets media count; current-room overlapping uploads retain their count until each completes. Old completions preserve a newer reply target.
+- BLoC/composer suites: 161 pass (/tmp/n42-chat-b168-verified.log), including four media same-account replacement-generation cases. Scoped analysis: no errors/warnings, nine existing infos (/tmp/n42-chat-b168-analysis-final.log). Before-fix evidence: /tmp/n42-chat-b168-before.log. Existing overlapping-send coverage remains enabled.
+- Chat ede279e568e425f1471077ab8133e7571cc49fbd is pushed; wallet dependency pin/lock updated with no unrelated resolution changes. All three wallet host fixture tests pass (/tmp/n42-wallet-b168-host.log). Existing local coverage and untracked files preserved.
+- This does not cancel an already dispatched repository upload or prove server/account upload isolation inside that call. Other message/command contexts, ambiguous outcomes, rich attachment recovery and device/provider/release acceptance remain open. No real message or release upload; full-wallet coverage still belongs to the earlier batch 160 source.
+
 
 ### Bind text dispatch to its original context — batch 167
 
