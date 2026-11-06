@@ -12,7 +12,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 146
+## Current interruption inventory — through batch 147
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -45,13 +45,21 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 
 ## Latest interruption check
 
+### Reject Cardano input scans across chain movement — batch 147
+
+- Fresh source inspection confirms bounded UTxO pagination already shipped in batch 124; it was not a missing implementation. The remaining defect was a disjoint cross-page scan whose chain state changed without producing duplicate outpoints.
+- The production AdaApi now reads and validates the latest block before and after a complete scan, with the same captured RPC base and project header. A changed hash (including a same-height fork), height or slot, malformed tip, or failed read rejects the whole result. Existing duplicate/outpoint validation, page-limit failure and no-partial-success behavior remain intact. Quote and sender callers already reject API errors before native planning/signing.
+- Blockfrost latest-block fields verified against the [Cardano developer provider guide](https://developers.cardano.org/docs/get-started/infrastructure/api-providers/blockfrost/get-started/). The scan adds two read requests. There is no automatic retry or broadcast. Matching tips are an observation guard, not an atomic snapshot or a guarantee against a stale/inconsistent remote indexer; changes after the final read remain possible.
+- API/pagination/sender/quote/parser/actual-page regression: 178 pass (/tmp/n42-b147-tests.log). Scoped analysis: zero errors/warnings, three constructor-style infos (/tmp/n42-b147-analysis-final.log). No real account/network/device/release acceptance. Native-token change and inputs beyond the bounded scan remain open.
+
+
 ### ADA quote, Max and reviewed fee integration — batch 146
 
 - Completes the interrupted quote service and typed native plan parser, and connects them to the real Memo page. Max validates a recipient and uses ADA-only selected inputs, exact native fee and fixed decimal amount. Ordinary Send obtains a fresh quote before opening confirmation; unavailable or stale quotes cannot proceed. Token-bearing inputs stay untouched; native-token change is not implemented by this batch.
 - Form/account/network/wallet identity is rechecked across asynchronous recipient validation and after confirmation. Quote results also bind to the opening form; late Max results cannot overwrite edited inputs. The sender replans before signing, rejects a changed reviewed fee, then checks the actual signed fee before any broadcast. Reviewed amounts remain exact with sendMax=false.
 - Final combined Cardano utility/service, all sender and Memo/XLM page regressions: 400 pass, log /tmp/n42-b146-final.log. Includes real confirmation-route amount/fee checks, cancellation, changed form rejection, expected-fee forwarding, malformed plan accounting, token input exclusion, stale results and zero-broadcast fee mismatches. Scoped analysis is clean: /tmp/n42-b146-analysis-final.log.
 - Native iOS WalletCore simulator harness: 29 checks pass, /tmp/n42-b146-native.log, including Max-to-fixed-amount fee equivalence. Temporary simulator was shut down. No real key, broadcast, physical-device acceptance or release upload. This is targeted evidence; the full-suite coverage baseline remains batch 140.
-- Remaining: ADA native-token change, wider UTxO selection/pagination and live network/device acceptance; other outstanding scopes in the table remain open.
+- Remaining: ADA native-token change, inputs beyond the bounded scan and live network/device acceptance; pagination already exists (batch 124), with chain-movement checks added by batch 147; other outstanding scopes in the table remain open.
 
 
 ### Key-free native Cardano transaction planning — batch 145

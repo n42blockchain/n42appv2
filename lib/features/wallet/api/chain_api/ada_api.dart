@@ -26,8 +26,13 @@ class AdaApi {
   )?
   _readUtxoPage;
 
+  final Future<dynamic> Function(String url, Map<String, String> header)?
+  _readChainTip;
+
   AdaApi({
     required this.projectId,
+    Future<dynamic> Function(String url, Map<String, String> header)?
+    readChainTip,
     Future<dynamic> Function(
       String url,
       Map<String, dynamic> query,
@@ -42,7 +47,8 @@ class AdaApi {
     })?
     submit,
   }) : _submit = submit,
-       _readUtxoPage = readUtxoPage;
+       _readUtxoPage = readUtxoPage,
+       _readChainTip = readChainTip;
 
   String _base(bool isTest) =>
       RequestUrl().getUrl2(_coinType.name, 'rpc', isTest: isTest);
@@ -80,9 +86,36 @@ class AdaApi {
     try {
       const pageSize = 100;
       const maxPages = 100;
-      final url =
-          '${_base(isTest)}/addresses/${Uri.encodeComponent(address)}/utxos';
+      final base = _base(isTest);
+      final url = '$base/addresses/${Uri.encodeComponent(address)}/utxos';
       final header = _header;
+      Future<(String, int, int)> tip() async {
+        final data = _readChainTip != null
+            ? await _readChainTip('$base/blocks/latest', header)
+            : await BaseApi.requestEmptyH.get(
+                '$base/blocks/latest',
+                params: {},
+                defaultReturn: false,
+                header: header,
+              );
+        if (data is! Map) {
+          throw const FormatException('Invalid Cardano chain tip');
+        }
+        final hash = data['hash'];
+        final height = data['height'];
+        final slot = data['slot'];
+        if (hash is! String ||
+            !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash) ||
+            height is! int ||
+            height < 0 ||
+            slot is! int ||
+            slot < 0) {
+          throw const FormatException('Invalid Cardano chain tip');
+        }
+        return (hash.toLowerCase(), height, slot);
+      }
+
+      final openingTip = await tip();
       final inputs = <Map<String, dynamic>>[];
       final seen = <String>{};
       for (var page = 1; page <= maxPages; page++) {
@@ -103,8 +136,9 @@ class AdaApi {
           return _err('Invalid Cardano UTxO page');
         }
         for (final item in data) {
-          if (item is! Map<String, dynamic>)
+          if (item is! Map<String, dynamic>) {
             return _err('Invalid Cardano UTxO');
+          }
           final hash = item['tx_hash'];
           final index = item['output_index'];
           if (hash is! String ||
@@ -123,7 +157,17 @@ class AdaApi {
           }
           inputs.add(Map<String, dynamic>.from(item));
         }
-        if (data.length < pageSize) return MessageModel()..data = inputs;
+        if (data.length < pageSize) {
+          // Pagination has no block-pinned endpoint. Reject observed chain
+          // movement, including same-height forks; never return a partial Max.
+          // This cannot prove atomicity against an inconsistent remote indexer.
+          if (await tip() != openingTip) {
+            return _err(
+              'Cardano chain changed during input scan; refresh required',
+            );
+          }
+          return MessageModel()..data = inputs;
+        }
       }
       return _err(
         'Cardano UTxO scan limit reached; complete input set unavailable',

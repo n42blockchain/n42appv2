@@ -13,6 +13,71 @@ Map<String, dynamic> utxo(int id) => {
 };
 
 void main() {
+  for (final change in ['hash', 'height', 'slot', 'offline', 'malformed']) {
+    test(
+      'changed or unavailable closing tip ($change) discards disjoint pages',
+      () async {
+        var tips = 0;
+        var pages = 0;
+        final urls = <String>[];
+        final api = AdaApi(
+          projectId: 'fixture',
+          readChainTip: (url, header) async {
+            urls.add(url);
+            expect(header['project_id'], 'fixture');
+            tips++;
+            final tip = <String, dynamic>{
+              'hash': 'ab' * 32,
+              'height': 100,
+              'slot': 100000,
+            };
+            if (tips == 2) {
+              if (change == 'offline') throw const SocketException('offline');
+              if (change == 'malformed') return {'hash': 'ab' * 32};
+              tip[change] = change == 'hash'
+                  ? 'cd' * 32
+                  : (tip[change] as int) + 1;
+            }
+            return tip;
+          },
+          readUtxoPage: (url, query, header) async {
+            pages++;
+            return pages == 1
+                ? [for (var i = 0; i < 100; i++) utxo(i)]
+                : [utxo(101)];
+          },
+        );
+        final result = await api.getAddressUtxos('addr_owner', isTest: true);
+        expect(result.error, isTrue);
+        expect(result.data, isNot(isA<List>()));
+        expect(pages, 2);
+        expect(tips, 2);
+        expect(urls.toSet(), hasLength(1));
+        expect(urls.first, endsWith('/blocks/latest'));
+      },
+    );
+  }
+  for (final malformed in [
+    null,
+    {},
+    {'hash': 'ab' * 32, 'height': -1, 'slot': 2},
+    {'hash': 'ab' * 32, 'height': 1, 'slot': '2'},
+    {'hash': 'invalid', 'height': 1, 'slot': 2},
+  ]) {
+    test('malformed opening tip $malformed stops before page reads', () async {
+      var pages = 0;
+      final api = AdaApi(
+        projectId: 'fixture',
+        readChainTip: (_, _) async => malformed,
+        readUtxoPage: (_, _, _) async {
+          pages++;
+          return [];
+        },
+      );
+      expect((await api.getAddressUtxos('addr_owner')).error, isTrue);
+      expect(pages, 0);
+    });
+  }
   for (final total in [0, 1, 99, 100, 101, 200, 201]) {
     test(
       'returns all $total inputs with stable query and credentials',
@@ -20,6 +85,11 @@ void main() {
         final pages = <int>[];
         final urls = <String>[];
         final api = AdaApi(
+          readChainTip: (_, _) async => {
+            'hash': 'ab' * 32,
+            'height': 100,
+            'slot': 100000,
+          },
           projectId: 'fixture-project',
           readUtxoPage: (url, query, header) async {
             urls.add(url);
@@ -53,6 +123,11 @@ void main() {
     test('$scenario on later page discards the partial scan', () async {
       var calls = 0;
       final api = AdaApi(
+        readChainTip: (_, _) async => {
+          'hash': 'ab' * 32,
+          'height': 100,
+          'slot': 100000,
+        },
         projectId: 'fixture',
         readUtxoPage: (url, query, header) async {
           calls++;
@@ -75,6 +150,11 @@ void main() {
   test('bounded scan does not return a truncated success', () async {
     var calls = 0;
     final api = AdaApi(
+      readChainTip: (_, _) async => {
+        'hash': 'ab' * 32,
+        'height': 100,
+        'slot': 100000,
+      },
       projectId: 'fixture',
       readUtxoPage: (url, query, header) async {
         final start = calls++ * 100;
@@ -89,6 +169,11 @@ void main() {
   for (final index in [-1, 1.5, true, '1', 4294967296]) {
     test('malformed outpoint index $index fails', () async {
       final api = AdaApi(
+        readChainTip: (_, _) async => {
+          'hash': 'ab' * 32,
+          'height': 100,
+          'slot': 100000,
+        },
         projectId: 'fixture',
         readUtxoPage: (_, _, _) async => [utxo(0)..['output_index'] = index],
       );
