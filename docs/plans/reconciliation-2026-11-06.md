@@ -2,7 +2,7 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 140
+## Current interruption inventory — through batch 141
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -12,7 +12,7 @@ The interrupted patches through batch 139 are committed. Batch 140 revalidated t
 | Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Fee/max confirmation UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
-| Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership/import, damaged-record repair, portable export/retention policy and process-crash/cross-process boundaries remain open. |
+| Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership/import, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export is implemented in batch 141; real OS share-sheet delivery remains unverified. |
 | Dependency and localization | Recorded compatibility holds and editorial/RTL/UI review remain. Catalog integrity does not prove translation quality. |
 | IAP and payment delivery | ACTIVE_TASKS retains IAP receipt verification, account binding, idempotent delivery/refund/restore and payment-provider production acceptance as open; do not lose these older tasks when summarizing recent audit work. |
 | Retained worktrees | Fresh inventory: 13 auxiliary wallet trees, seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
@@ -34,6 +34,15 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Confirmed portable Chat recovery export — batch 141
+
+- Inspection found two interrupted, uncommitted Chat source edits. Scoped analysis reproduced an undefined scheduledRecoveryExportHint getter. Completed the warning in all 26 locales and regenerated localization sources.
+- Chat f1ce85e5448a79f1fcadfb2223f04f545f985342 exports a versioned JSON recovery copy after an explicit plaintext/account-data warning. It rereads the account-scoped copy, validates its digest and preserves complete Unicode content rather than the bounded preview. Attachments are explicitly excluded; export never deletes, imports or schedules content.
+- 257 entity/storage/page/preferences/attachment/BLoC regressions pass, including cancellation, logout during lookup, changed/deleted copies, share failure and Arabic 320x480 at 2x text. Scoped source/entity-test analysis is clean. Logs: /tmp/n42-chat-b141-broad.log and /tmp/n42-chat-b141-analysis.log.
+- Pinned the wallet to the pushed Chat revision and regenerated the lockfile. Host Chat/auth/config tests: 62 pass (/tmp/n42-chat-b141-host.log); wallet and pinned Chat localization integrity passes (/tmp/n42-chat-b141-host-l10n.log). No fresh full-suite or coverage claim for this pin; batch 140 remains the full-wallet baseline.
+- Real OS share-sheet delivery, damaged-copy repair/import, legacy ownership, retention policy and device/process-crash acceptance remain open. No new release or live-provider acceptance. Baseline wallet untracked paths and the Chat coverage file remain untouched.
+
 
 ### Full wallet regression and Chat recovery-copy integration — batch 140
 
