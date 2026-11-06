@@ -1590,7 +1590,29 @@ extension WalletCorePlugin {
         return "0x" + output.encoded.hexString
     }
 
+    private func validMultiversXSigningInput(_ txData: [String: Any]) -> Bool {
+        func decimal(_ value: Any?, zeroAllowed: Bool = false) -> String? {
+            guard let text = value as? String, !text.isEmpty,
+                  text.utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+                  text == "0" || !text.hasPrefix("0"),
+                  zeroAllowed || text != "0" else { return nil }
+            return text
+        }
+        guard let recipient = txData["toAddress"] as? String, !recipient.isEmpty,
+              decimal(txData["amount"], zeroAllowed: true) != nil,
+              let nonce = decimal(txData["nonce"], zeroAllowed: true), Int64(nonce) != nil,
+              let price = decimal(txData["gasPrice"]), Int64(price) != nil,
+              let limit = decimal(txData["gasLimit"]), Int64(limit) != nil,
+              let version = decimal(txData["version"]), Int32(version) != nil,
+              let chain = txData["chainId"] as? String, !chain.isEmpty
+        else { return false }
+        if let value = txData["data"], !(value is String) { return false }
+        return true
+    }
+
     func signMultiversXTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        guard validMultiversXSigningInput(txData),
+              AnyAddress.isValid(string: txData["toAddress"] as! String, coin: .multiversX) else { return nil }
         guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.multiversX, path: path, privateKey: pk) else {
             return nil
         }
@@ -1621,6 +1643,7 @@ extension WalletCorePlugin {
             }
         }
         let output: MultiversXSigningOutput = AnySigner.sign(input: input, coin: CoinType.multiversX)
+        guard output.error == .ok, output.errorMessage.isEmpty, !output.encoded.isEmpty, !output.signature.isEmpty else { return nil }
         return output.encoded
     }
 }

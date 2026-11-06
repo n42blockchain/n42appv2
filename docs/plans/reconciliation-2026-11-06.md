@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 158
+## Current interruption inventory — through batch 159
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -54,6 +54,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### EGLD native signing validation — batch 159
+
+- Swift/Kotlin MultiversX handlers now validate canonical decimal wire fields before casts/key lookup: zero nonce, nonnegative arbitrary-precision amount, positive bounded gas/version fields, explicit nonempty chain ID, string data and nonempty recipient. WalletCore validates the actual recipient before key access. Missing Android wallet now returns no signature instead of forcing a null dereference. Both platforms reject WalletCore errors, empty encoded transactions or missing signatures.
+- Preserve zero-value generic actions and custom nonempty chain IDs at the native layer; the ordinary EGLD sender separately enforces positive transfers and its configured mainnet/testnet. Do not narrow generic signing to the UI's plain-transfer subset.
+- Production validators extracted and compiled against shared fixtures: Swift 102 pass and Kotlin 102 pass (/tmp/n42-wallet-b159-native-input-final.log). Cases cover missing/wrong-type fields, canonical zero, overflow, Unicode digits, large exact values, memos and network identifiers. Python harness compilation and diff whitespace checks pass.
+- Actual production Swift signing methods linked with installed WalletCore on simulator 0E87F2AC-1C02-448D-98E0-E31B679009F5: 58 checks pass (/tmp/n42-wallet-b159-component-final.log). Public BIP39 fixture covers exact values above signed 64-bit, zero nonce/value, Unicode data encoding, three network domains, derived sender, alternate paths, explicit keys, absent keys and invalid inputs. Simulator was shut down afterward. This is real local signing, not independent cryptographic conformance, app/device or network acceptance.
+- Android JDK 21 :app:compileDebugKotlin succeeds, exit 0, in 2m10s (/tmp/n42-wallet-b159-android.log). No release APK, real-account transaction or production deployment was made. Android runtime JNI signing, broadcast ambiguity recovery and full device/live-chain acceptance remain open.
 
 ### EGLD reviewed fee and Max integration — batch 158
 

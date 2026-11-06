@@ -1632,8 +1632,28 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         return Numeric.toHexString(output.encoded.toByteArray())
     }
 
+    private fun validMultiversXSigningInput(txData: Map<String, Any>): Boolean {
+        fun decimal(value: Any?, zeroAllowed: Boolean = false): String? {
+            val text = value as? String ?: return null
+            if (text.isEmpty() || !text.all { it in '0'..'9' } ||
+                (text != "0" && text.startsWith("0")) || (!zeroAllowed && text == "0")) return null
+            return text
+        }
+        val recipient = txData["toAddress"] as? String ?: return false
+        if (recipient.isEmpty() || decimal(txData["amount"], true) == null ||
+            decimal(txData["nonce"], true)?.toLongOrNull() == null ||
+            decimal(txData["gasPrice"])?.toLongOrNull() == null ||
+            decimal(txData["gasLimit"])?.toLongOrNull() == null ||
+            decimal(txData["version"])?.toIntOrNull() == null ||
+            (txData["chainId"] as? String).isNullOrEmpty()) return false
+        if (txData.containsKey("data") && txData["data"] !is String) return false
+        return true
+    }
+
     private fun signMultiversXTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
-        val privateKey = pk ?: wallet!!.getKey(CoinType.MULTIVERSX, path)
+        if (!validMultiversXSigningInput(txData)) return null
+        if (!CoinType.MULTIVERSX.validate(txData["toAddress"] as String)) return null
+        val privateKey = pk ?: wallet?.getKey(CoinType.MULTIVERSX, path) ?: return null
 
         val toAddress: String = txData["toAddress"] as String
         val amount: String = txData["amount"] as String
@@ -1666,6 +1686,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             .build()
 
         val output = AnySigner.sign(input, CoinType.MULTIVERSX, MultiversX.SigningOutput.parser())
+        if (output.errorValue != 0 || output.errorMessage.isNotEmpty() || output.encoded.isEmpty() || output.signature.isEmpty()) return null
         return output.encoded
     }
 }
