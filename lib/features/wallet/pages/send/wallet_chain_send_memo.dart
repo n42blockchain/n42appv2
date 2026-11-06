@@ -40,7 +40,14 @@ part 'wallet_chain_send_memo_widgets.dart';
 /// 则捕获异常并友好提示。
 class WalletChainSendMemo extends ConsumerStatefulWidget {
   final CoinModel coinModel;
-  const WalletChainSendMemo(this.coinModel, {super.key});
+  final Future<SendResult> Function(SendParams)? transactionSender;
+  final Future<int> Function(TransationRecordModel)? persistTransaction;
+  const WalletChainSendMemo(
+    this.coinModel, {
+    super.key,
+    this.transactionSender,
+    this.persistTransaction,
+  });
 
   @override
   ConsumerState<WalletChainSendMemo> createState() =>

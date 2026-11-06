@@ -8,7 +8,7 @@ Inspection on 2026-11-06 found eight tracked files with an unfinished Cardano ha
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
-| Cardano submission recovery | Complete batch 127 validation/delivery; then wire durable journal/history and unknown-outcome UI. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
+| Cardano submission recovery | Complete batch 127 validation/delivery; batch 133 wires Memo-page pre-broadcast history; full journal and unknown-outcome recovery UI remain open. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
 | Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Batch 129 adds native malformed-input rejection. Batch 130 adds reserve/liability-aware spendable balance and current ledger base fee. Quote UI, surge pricing and recovery remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
 | Native social login and Matrix | Google native code exchange defaults to disabled in ID Hub source; verify deployed capability and Google/Apple/Facebook native flows with same-DID Matrix identity before enabling. Existing Web login evidence is insufficient. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No store-console verification or upload was done in this inspection. |
@@ -33,6 +33,13 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Memo page pre-broadcast history — batch 133
+
+- Live-call inspection found SendResult.toMessageModel currently has no callers. The actual loss boundary was WalletChainSendMemo: only successful responses saved history. Its ADA/XLM path now passes beforeBroadcast to persist the original hash and require a positive database ID before submission. Preserve exact decimal amount text. In-flight and prepared-hash guards prevent repeated submission from the same page.
+- Unknown responses with the prepared hash retain the existing record, enter the pending-history projection and show the localized pending message. Do not insert again after acknowledgement, replace the saved hash with a different response hash, or depend on the page staying mounted for already saved history. Account checks guard persistence/projection, and ancillary projection failure cannot unlock the prepared submission. Other Memo senders retain their existing success path.
+- Added optional sender/history persistence injection and eight real-widget scenarios: success, unknown result, concurrent duplicate invocation, foreign hash, storage error, nonpositive database ID, projection error and disposal before acknowledgement. Initial run failed because the synthetic display address was too short for the existing address formatter; corrected the fixture without relaxing assertions (`/tmp/n42-memo-b133.log`). Focused rerun passed eight tests; final page/amount/general-send regression: 43 passed (`/tmp/n42-memo-b133-final.log`, exit 0). Scoped analysis clean (`/tmp/n42-memo-b133-analysis-final.log`).
+- Persistence behavior is verified through the real page with controlled storage/sender providers; no new real-device or live-network result. Existing transaction DAO is used in production. TransactionStateResolver still has no XLM/ADA resolver, and cross-page duplicate prevention, explicit non-broadcast record repair, restart/crash recovery and fee/max confirmation UI remain open. This is history preservation and same-page protection, not complete recovery. No release/upload.
 
 ### Stellar pre-broadcast hash and uncertain result — batch 132
 

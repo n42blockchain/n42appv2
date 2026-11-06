@@ -219,7 +219,16 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     }
   }
 
+  bool _signing = false;
+  String? _preparedHash;
+
+  Future<int> _persistTransaction(TransationRecordModel record) =>
+      widget.persistTransaction?.call(record) ??
+      AppDatabase().insertTransationRecord(record);
+
   Future<void> signTx(TransationRecordModel trModel) async {
+    if (_signing || _preparedHash != null || !mounted) return;
+    _signing = true;
     final recentAddressOwner = trModel.userUuid.isNotEmpty
         ? trModel.userUuid
         : RecentAddressService.currentUser;
@@ -239,42 +248,77 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       final decimals =
           (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-      final result = await SenderFactory.instance
-          .getSender(coinType)
-          .send(
-            SendParams(
-              coinType: coinType,
-              fromAddress: trModel.from1,
-              toAddress: trModel.to1,
-              amount: toEther(trModel.price.toString(), decimals).toDouble(),
-              decimals: decimals,
-              path: path,
-              sendMax: false,
-              isTest: widget.coinModel.isTest,
-              contractAddress: trModel.contract,
-              tokenDecimals: 0,
-              memo: trModel.message,
-              privateKey: widget.coinModel.privateKey,
-              chainConfig: widget.coinModel.coin,
-            ),
-          );
+      final submit =
+          widget.transactionSender ??
+          SenderFactory.instance.getSender(coinType).send;
+      final result = await submit(
+        SendParams(
+          coinType: coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), decimals).toDouble(),
+          decimals: decimals,
+          path: path,
+          sendMax: false,
+          isTest: widget.coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: 0,
+          memo: trModel.message,
+          privateKey: widget.coinModel.privateKey,
+          chainConfig: widget.coinModel.coin,
+          decimalAmountOverride: toEther(
+            trModel.price.toString(),
+            decimals,
+          ).toString(),
+          beforeBroadcast: {'ADA', 'XLM'}.contains(coinType)
+              ? (hash) async {
+                  if (!mounted ||
+                      RecentAddressService.currentUser != recentAddressOwner) {
+                    throw StateError('Wallet context changed');
+                  }
+                  trModel.txHash = hash;
+                  trModel.trId = await _persistTransaction(trModel);
+                  if (trModel.trId <= 0) {
+                    throw StateError('Transaction was not saved');
+                  }
+                  _preparedHash = hash;
+                  if (!mounted ||
+                      RecentAddressService.currentUser != recentAddressOwner) {
+                    throw StateError('Wallet context changed');
+                  }
+                }
+              : null,
+        ),
+      );
 
-      if (!mounted) return;
-      if (result.success) {
-        trModel.txHash = result.txHash ?? '';
-        trModel.trId = await AppDatabase().insertTransationRecord(trModel);
-        if (!mounted) return;
+      if (result.success ||
+          (_preparedHash != null && result.txHash == _preparedHash)) {
+        // A returned hash cannot replace the durable original submission ID.
+        if (_preparedHash != null && result.txHash != _preparedHash) {
+          throw StateError('Transaction result does not match saved hash');
+        }
+        trModel.txHash = _preparedHash ?? result.txHash ?? '';
+        if (trModel.trId == 0) {
+          trModel.trId = await _persistTransaction(trModel);
+        }
+        if (!mounted || RecentAddressService.currentUser != recentAddressOwner)
+          return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(
           coinType,
-          toCtrl.text.trim(),
+          trModel.to1,
           userUuid: recentAddressOwner,
         );
         if (!mounted) return;
-        ToastUtils.show(S.current.g_key_nft_41);
+        ToastUtils.show(
+          result.success
+              ? S.current.g_key_nft_41
+              : S.current.g_key_bridge_tx_pending,
+        );
         completedWithExit = true;
         Navigator.pop(context);
       } else {
+        if (!mounted) return;
         errorMessage = result.error ?? '';
         final friendly = _isFriendlyError(errorMessage)
             ? S.current.g_key_chain_transfer_not_supported
@@ -283,8 +327,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       }
     } catch (e) {
       errorMessage = e.toString();
-      ToastUtils.show(errorMessage);
+      if (mounted) ToastUtils.show(errorMessage);
     } finally {
+      _signing = false;
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});
     }
