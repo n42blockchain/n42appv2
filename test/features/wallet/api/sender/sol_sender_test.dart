@@ -86,6 +86,7 @@ class FakeSol extends SolApi {
     String signMessage, {
     bool isTest = false,
     String encoding = 'base58',
+    String? walletConnectChainId,
   }) async {
     calls.add(('send', isTest));
     sends++;

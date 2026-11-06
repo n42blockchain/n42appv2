@@ -465,3 +465,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `fd519bff141e3e264c25dbe02615651b36fc6db5` is pushed with remote parity verified. This is a storage API repair, not new bulk-cancel UI. Historical orphan/deferred file reconciliation and cross-process coordination remain open. Account logout does not authorize deleting retained scheduled drafts. No release upload or device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-room-cleanup-host-tests.log`); lockfile changes only the Chat reference.
+
+
+## Batch 51 — interrupted full-regression follow-up (2026-11-06)
+
+- Closed the three failures from the previous full runs: two stale poll scheduling label finders and the Solana sender test double's missing optional chain argument. Poll/quiz assertions remain intact; the disabled scheduling assertion now checks the actual localized label, and the wallet result resets between English/Arabic iterations. No product capability was removed or changed.
+- Targeted wallet suites: 44 passed; Chat poll suite: 11 passed. Scoped wallet analysis reports no issues (`/tmp/n42-fixtures-analyze.log`).
+- Full reruns: wallet 6,310 passed, two PQ-native-library configuration skips, zero failures; Chat 7,915 passed, four disposable-account/media-fixture skips, zero failures. Logs: `/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`. No fresh coverage measurement or device acceptance.
+- Wallet pins pushed Chat `334dc9274f9b0125709817b7975240e01e186cc4`; subsequent `20d1b065` changes only Chat's verification ledger. The dependency lockfile changes only that Chat reference. No TestFlight upload or device operation.

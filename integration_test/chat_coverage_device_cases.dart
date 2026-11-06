@@ -61,6 +61,7 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
       addTearDown(tester.testTextInput.unregister);
       PollComposerResult? result;
       for (final language in ['en', 'ar']) {
+        result = null;
         await tester.pumpWidget(
           _app(
             Builder(
@@ -103,7 +104,7 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
         );
         await tap(tester, quiz);
         await tap(tester, find.text(strings.chatMultiChoiceLabel));
-        await tap(tester, find.text('Schedule'));
+        await tap(tester, find.text(strings.scheduledSendTitle));
         expect(result, isNotNull);
         expect(result!.question, 'Device question');
         expect(result!.options, ['One', 'Two']);

@@ -2,6 +2,14 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+## Full-regression follow-up inspection
+
+- Rechecked wallet `5bd9e69dc` against freshly fetched `origin/master`: 0 ahead / 0 behind; no tracked local edits before this record update. The four baseline untracked paths remain untouched. Chat task worktree is clean at `fd519bff`, matching the wallet dependency pin.
+- The previously running full suites have finished. Wallet: **6,268 passed, 2 skipped, 2 failed** (`/tmp/n42-wallet-full-20261106.log`). Chat: **7,914 passed, 4 skipped, 1 failed** (`/tmp/n42-chat-full-20261106.log`). These runs are not green and did not measure fresh coverage.
+- Regression follow-up fixed: wallet `chat_device_fixture_contract_test.dart` and Chat `poll_composer_behavior_test.dart` now use the localized scheduling title. The disabled-button assertion checks the current label too; wallet resets the result between English/Arabic runs. Existing poll/quiz behavior assertions remain intact.
+- Regression follow-up fixed: `FakeSol.sendTransaction` now accepts the optional `walletConnectChainId` argument from the real API. Wallet fixture/sender suites pass all 44 tests; Chat poll composer passes all 11 tests. Logs: `/tmp/n42-interrupted-fixtures-wallet.log`, `/tmp/n42-interrupted-fixtures-chat.log`.
+- Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
+
 ## Latest interruption check
 
 - At the start of this inspection, wallet `eb05473d9` matched freshly fetched `origin/master` (0 ahead / 0 behind). Four previously recorded untracked paths remain preserved. Batch 42 completes the interrupted Chat acknowledgement patch and updates the host pin.
