@@ -17,7 +17,7 @@ The interrupted patches through batch 139 are committed. Batch 140 revalidated t
 | IAP and payment delivery | ACTIVE_TASKS retains IAP receipt verification, account binding, idempotent delivery/refund/restore and payment-provider production acceptance as open; do not lose these older tasks when summarizing recent audit work. |
 | Retained worktrees | Fresh inventory: 13 auxiliary wallet trees, seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
 
-Fresh fetch before this batch: wallet e2d3b9330 equals origin/master (0/0). ID Hub is clean at 7c0dd68. Wallet Chat dependency remains pinned to 798d20f55faf49c1bd3ff4dd5a67e254bd453df6. Four baseline untracked paths remain untouched. This is a wallet/direct-dependency source and record inspection, not fresh acceptance of every sibling project or deployment. Historical entries below remain evidence for their own revisions.
+Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0/0); Chat is pinned to f4fc66d07b56f7d75d17f43411b80fbad3a3811e, also pushed to its task branch. Four baseline untracked wallet paths remain untouched. The ID Hub clean-state observation at 7c0dd68 and the 13-worktree classification are from the earlier reconciliation, not new service/deployment acceptance. Historical entries below remain evidence for their own revisions.
 
 ## Latest verified full-regression baseline — batch 140
 
