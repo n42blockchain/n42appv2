@@ -154,6 +154,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directLocalLlmModelUrl = normalizedEnv(envLocalLlmModelUrl);
       final directLocalLlmHfToken = normalizedEnv(envLocalLlmHfToken);
       final idHubUrl = normalizedEnv(envIdHubUrl);
+      final n42NativeAuthUrl = normalizedEnv(
+        const String.fromEnvironment('N42_NATIVE_AUTH_URL'),
+      );
 
       for (final line in chatSocialAuthConfig.diagnostics(
         isAndroid: Platform.isAndroid,
@@ -200,7 +203,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
                 isIOS: Platform.isIOS,
                 isMacOS: Platform.isMacOS,
               ),
-          enableAppleLogin: Platform.isIOS || Platform.isMacOS,
+          enableAppleLogin:
+              Platform.isIOS ||
+              Platform.isMacOS ||
+              (Platform.isAndroid && n42NativeAuthUrl != null),
           enableFacebookLogin: chatSocialAuthConfig
               .supportsFacebookForCurrentPlatform(
                 isAndroid: Platform.isAndroid,
@@ -247,9 +253,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
               ? null
               : chatSocialAuthConfig.telegramBotId,
           // Opt in only after provider and Matrix deployment acceptance.
-          n42NativeAuthUrl: normalizedEnv(
-            const String.fromEnvironment('N42_NATIVE_AUTH_URL'),
-          ),
+          n42NativeAuthUrl: n42NativeAuthUrl,
           socialAuthBaseUrl: chatSocialAuthConfig.socialAuthBaseUrl.isEmpty
               ? null
               : chatSocialAuthConfig.socialAuthBaseUrl,

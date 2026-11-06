@@ -246,3 +246,13 @@ Server identity/session implementation and deployment remain outstanding.
 - Still pending: Android Facebook, Android Apple browser handoff, Web UI integration, public callback deployment, provider-console completion and real-device/provider acceptance. No production login claim or TestFlight acceptance is implied by these commits.
 - Primary guidance: https://developers.google.com/identity/sign-in/ios/offline-access and google_sign_in 7.2.0 `authorizeServer` API documentation.
 - Wallet host: 62 initialization/configuration regression tests passed with the new immutable Git pin; no other dependency versions changed.
+
+## 2026-11-06: Android browser handoff and standalone Web login
+
+- Backend commits: `8f34847` (browser protocol/page), `cdfba5e` (Compose configuration forwarding). Chat pin: `1a54f54f7f598fcb20b35f02bbdf5cabe937f698`.
+- Android Apple/Facebook use the system browser, one-use launch ticket, explicit browser approval and an app-held completion secret. Google keeps its native SDK server-code path. The host exposes Android Apple only when `N42_NATIVE_AUTH_URL` is set. Existing default enablement remains unchanged.
+- Web identity page supports configured Google/Apple/Facebook login, DID display and sign-out. Tokens remain in page memory. This is not a full Web wallet transaction interface.
+- Verification: 120 backend tests passed, including a disposable Redis 7 instance for atomic completion; TypeScript and ESLint passed. Chat passed 134 targeted tests and analysis with informational lints only. Wallet passed 62 initialization/configuration tests and targeted analysis with no issues. Only the Chat Git pin changed in the dependency lockfile.
+- Safari rendered the Web page against local capability fixtures. No real provider authorization was performed.
+- Built server image `n42-id-hub:n42-auth-cdfba5e` on the web host. Image ID: `sha256:a4f98ba1b4a5c788c9bbdf6e63803073ecb97f451a41b71b2c723cd390c4e9b6`. Source is isolated at `/home/ubuntu/releases/n42-id-hub/cdfba5e`; the active service and its uncommitted deployment configuration were preserved.
+- The running service still lacks `N42_AUTH_CONFIG` and `N42_AUTH_HMAC_KEY`. A built image is not deployment or login acceptance. Public callback proxying, dedicated runtime configuration, Google callback registration, Meta publication prerequisites and real-provider/device acceptance remain open. No new TestFlight upload was performed.
