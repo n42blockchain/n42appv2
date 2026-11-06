@@ -2,6 +2,13 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Poll callback and completion session isolation — batch 174
+
+- Completed the interrupted poll implementation identified in the latest inspection. Subscription callbacks and queued poll events now retain room/account generation. Poll send/vote/end handlers capture room identity, reject stale errors/results and avoid starting aggregation after session change; aggregate completion is checked again before state mutation.
+- Final BLoC/event/extended/poll-composer suites: **336 pass**, exit 0 (/tmp/n42-chat-b174-final.log). Includes four stream cases, eight delayed send/vote/end/aggregation results after room round trip, and two queued-origin cases. The earlier stale stream cases failed before the fix. New async fixtures initially raced the normal room loader; initialization now completes before the deferred response and the initial poll state is asserted. Scoped analysis: zero errors/warnings, six existing constructor infos (/tmp/n42-chat-b174-analysis.log).
+- Chat fix `a8f3eaf0f34b77bded9a3da339ae4324c38a6208` is pushed. Wallet pins that exact revision; pub get changed only the Chat dependency. All three host fixture contracts pass (/tmp/n42-wallet-b174-host.log). Existing full-suite baselines remain source-specific (wallet batch 172, Chat batch 173); no fresh full suite, device, production-message or release acceptance is claimed.
+- Remaining: repeated/revised vote accounting, same-session request ordering, repository-internal account changes, Chat recovery, native login/Matrix, Meta publication, dependency/editorial review, payment/IAP, worktrees and current-source release.
+
 ## Latest inspection — interrupted poll work and delivery reconciliation
 
 - Fresh fetch confirms wallet `eeb7868b9` and Chat `a7622dca` match their upstreams (0/0). Wallet tracked files are clean; four baseline untracked paths remain. Chat has an uncommitted 31-line poll regression addition and its pre-existing coverage change. No poll production fix is present.
