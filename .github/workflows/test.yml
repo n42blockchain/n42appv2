@@ -10,6 +10,17 @@ on:
   pull_request:
     branches: [master, main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
 env:
   FLUTTER_VERSION: '3.47.8'
 
@@ -17,6 +28,7 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     
     steps:
       - name: Checkout code
@@ -36,7 +48,7 @@ jobs:
           flutter test test/ \
             --coverage \
             --reporter expanded \
-            --no-pub
+            --no-pub 2>&1 | tee unit-tests.log
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -48,9 +60,21 @@ jobs:
         run: |
           python3 scripts/quality_gate.py coverage coverage/lcov.info --threshold 70
 
+      - name: Preserve test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: |
+            unit-tests.log
+            coverage/lcov.info
+          if-no-files-found: warn
+          retention-days: 14
+
   widget-tests:
     name: Widget Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     
     steps:
       - name: Checkout code
@@ -69,11 +93,22 @@ jobs:
         run: |
           flutter test test/widget/ \
             --reporter expanded \
-            --no-pub
+            --no-pub 2>&1 | tee widget-tests.log
+
+      - name: Preserve test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: widget-test-results
+          path: |
+            widget-tests.log
+          if-no-files-found: warn
+          retention-days: 14
 
   integration-tests:
     name: Integration Tests
     runs-on: macos-latest
+    timeout-minutes: 60
     
     steps:
       - name: Checkout code
@@ -100,11 +135,22 @@ jobs:
           flutter test integration_test/ \
             --device-id "$IOS_SIMULATOR_ID" \
             --reporter expanded \
-            --no-pub
+            --no-pub 2>&1 | tee ios-integration.log
+
+      - name: Preserve test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-integration-results
+          path: |
+            ios-integration.log
+          if-no-files-found: warn
+          retention-days: 14
 
   integration-tests-android:
     name: Integration Tests (Android)
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     
     steps:
       - name: Checkout code
@@ -138,26 +184,46 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Nexus 6
-          script: flutter test integration_test/ --no-pub
+          script: bash -o pipefail -c "flutter test integration_test/ --no-pub --reporter expanded 2>&1 | tee android-integration.log"
+
+      - name: Preserve test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-integration-results
+          path: |
+            android-integration.log
+          if-no-files-found: warn
+          retention-days: 14
 
   test-summary:
     name: Test Summary
     runs-on: ubuntu-latest
+    if: always()
+    timeout-minutes: 5
     needs: [unit-tests, widget-tests, integration-tests, integration-tests-android]
-    
     steps:
       - name: Generate summary
+        env:
+          UNIT_RESULT: ${{ needs.unit-tests.result }}
+          WIDGET_RESULT: ${{ needs.widget-tests.result }}
+          IOS_RESULT: ${{ needs.integration-tests.result }}
+          ANDROID_RESULT: ${{ needs.integration-tests-android.result }}
         run: |
-          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Test Type | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Unit Tests | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| Widget Tests | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Coverage" >> $GITHUB_STEP_SUMMARY
-          echo "| Layer | Target | Actual |" >> $GITHUB_STEP_SUMMARY
-          echo "|-------|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Domain | 100% | TBD |" >> $GITHUB_STEP_SUMMARY
-          echo "| State | 90% | TBD |" >> $GITHUB_STEP_SUMMARY
-          echo "| UI | 50% | TBD |" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Test Results"
+            echo ""
+            echo "| Job | Result |"
+            echo "|-----|--------|"
+            printf '| Unit tests and coverage gate | %s |\n' "$UNIT_RESULT"
+            printf '| Widget tests | %s |\n' "$WIDGET_RESULT"
+            printf '| iOS integration | %s |\n' "$IOS_RESULT"
+            printf '| Android integration | %s |\n' "$ANDROID_RESULT"
+            echo ""
+            echo "See job logs and uploaded artifacts for test counts and measured coverage."
+          } >> "$GITHUB_STEP_SUMMARY"
+          for result in "$UNIT_RESULT" "$WIDGET_RESULT" "$IOS_RESULT" "$ANDROID_RESULT"; do
+            if [[ "$result" != "success" ]]; then
+              exit 1
+            fi
+          done

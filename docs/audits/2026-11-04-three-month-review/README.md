@@ -674,3 +674,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Regressions cover other-room and empty-room identity, source preservation, explicit repair, legacy records and identical transaction IDs across list/due reads. Focused storage/entity/page suites: 47 passed; broader preferences/BLoC: 166 passed. Scoped analysis clean. Logs: /tmp/n42-chat-room-b75-final.log, /tmp/n42-chat-room-b75-broad.log, /tmp/n42-chat-room-b75-analysis.log.
 - Wallet host fixture tests pass, exit 0 (/tmp/n42-chat-room-b75-host.log). Dependency lock changes only the Chat Git revision. Chat issue MSG-001 retains manual repair/import, process-crash and live-server/device gaps. No automatic deletion or reassignment of damaged records, no real-device test or release upload.
 - Remote a2fc4ba2c CI 42224246475 passed analysis and four backend jobs; tests/coverage and security were still setting up. These are not completed acceptance for this new pin.
+
+
+## Batch 76 — keep hosted validation current and observable (2026-11-06)
+
+- Live inspection found six superseded Tests runs active while the current c8150f646 run was queued. Jobs were still active (for example iOS job 127905908555), not proven hung. The workflow lacked branch concurrency and explicit job limits, so frequent source pushes accumulated full mobile builds.
+- Add same-workflow/ref concurrency with cancellation of superseded runs, bounded 60-minute unit/mobile and 20-minute widget jobs. Keep every existing test invocation and the 70% coverage gate. Preserve expanded test logs and available coverage as artifacts even after failure. Explicit bash pipefail prevents tee from masking test failures, including Android's emulator wrapper.
+- Summary now runs after failed/skipped dependencies, shows all four actual job results and fails unless all succeed. Remove fixed success icons and unmeasured per-layer coverage placeholders. Cancellation and missing artifacts never count as acceptance.
+- Local verification: YAML parses; all shell blocks pass bash syntax; artifact placement and limits validated; 16 summary outcome combinations cover success/failure/cancelled/skipped for every dependency; pipefail preserves an injected exit 7. Remote execution remains to be observed. No app runtime change, device test or release upload.
