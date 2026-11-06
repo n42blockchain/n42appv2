@@ -23,4 +23,9 @@ const rows = [
     signature: new Uint8Array(64).fill(3), ...overrides});
   return {name, transaction: tx.toPlainObject(), hash: new TransactionComputer().computeTransactionHash(tx)};
 });
+for (const transaction of require('../test/fixtures/multiversx/native_transactions.json')) {
+  const tx = Transaction.newFromPlainObject(transaction);
+  rows.push({name: 'walletcore-native-' + transaction.chainID, transaction,
+    hash: new TransactionComputer().computeTransactionHash(tx)});
+}
 process.stdout.write(JSON.stringify({sdk: '@multiversx/sdk-core@' + version, vectors: rows}, null, 2) + '\n');

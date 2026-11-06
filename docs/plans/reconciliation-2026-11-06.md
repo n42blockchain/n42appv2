@@ -57,6 +57,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 
 ## Latest interruption check
 
+### EGLD sender hash binding and dispatch boundary — batch 162
+
+- Integrated the local hash codec into EgldSender. Before any broadcast, require native output sender/recipient/value/nonce/gas/network/version/memo to match the reviewed request and reject unrequested options. Invalid output cannot invoke persistence or submission.
+- Invoke beforeBroadcast with the immutable local hash, then onBroadcastStarting; revalidate captured owner/key after each await. Storage/dispatch failures and context changes return explicit notSubmitted with that hash and zero network calls. After dispatch, timeout, malformed response, missing hash or a different RPC hash return uncertain with the original hash; no automatic retry. Matching RPC acknowledgement returns that local hash.
+- Sender/hash/confirmation regression: 114 pass (/tmp/n42-wallet-b162-final.log); scoped analysis clean (/tmp/n42-wallet-b162-analysis-final.log). Cases cover all reviewed fields, persistence/dispatch rejection, account/key changes and broadcast response ambiguity.
+- Actual production Swift signer on the existing simulator: 58 checks pass (/tmp/n42-wallet-b162-native.log). Exported only public signed fixture transactions from the public test mnemonic, then derived three expected hashes using official sdk-core 16.0.0. Mainnet/testnet native outputs pass sender validation; devnet remains a codec vector. Simulator shut down after verification. No real transaction submitted and no private credentials exported.
+- Not yet closed: Memo-page/database EGLD reservation integration and chain receipt querying. Existing ADA/XLM page reservation still excludes EGLD, so this batch must not be presented as cross-page/process duplicate-payment protection. Next connect all those paths together and test reopen/concurrent sends; preserve live/device and release boundaries.
+
 ### EGLD local recovery hash foundation — batch 161
 
 - Confirmed the sender currently depends on a returned RPC hash and reports broadcast exceptions as generic failures. Durable recovery needs the original signed transaction hash before dispatch; ordinary JSON hashing is incorrect.

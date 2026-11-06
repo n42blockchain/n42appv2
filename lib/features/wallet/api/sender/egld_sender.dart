@@ -3,7 +3,10 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
+
 import 'package:n42_wallet/features/wallet/services/egld_quote_service.dart';
+import 'package:n42_wallet/features/wallet/services/egld_transaction_hash.dart';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
@@ -222,16 +225,76 @@ class EgldSender implements ChainSender {
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
-    // Broadcast
+    final String localHash;
+    try {
+      localHash = EgldTransactionHash.compute(signStr);
+      final signed = jsonDecode(signStr) as Map<String, dynamic>;
+      // Native output is a boundary: never broadcast different reviewed fields.
+      if (signed['sender'] != params.fromAddress ||
+          signed['receiver'] != params.toAddress ||
+          signed['value'] != valuePrice.toString() ||
+          signed['nonce'] != nonce ||
+          signed['gasLimit'] != quote.gasLimit.toInt() ||
+          signed['gasPrice'] != quote.gasPrice ||
+          signed['chainID'] != signMap['chainId'] ||
+          signed['version'] != quote.version ||
+          (signed['options'] ?? 0) != 0 ||
+          (signed['data'] ?? '') !=
+              base64Encode(utf8.encode(params.memo ?? ''))) {
+        return const SendResult.fail(
+          'Signed transaction differs from reviewed transfer',
+        );
+      }
+    } catch (_) {
+      return const SendResult.fail('Invalid signed transaction');
+    }
+
+    try {
+      await params.beforeBroadcast?.call(localHash);
+    } catch (_) {
+      return SendResult.notSubmitted(
+        localHash,
+        'Unable to preserve transaction before submission',
+      );
+    }
+    if (!signerIsCurrent()) {
+      return SendResult.notSubmitted(
+        localHash,
+        'Wallet signing context changed',
+      );
+    }
+    try {
+      await params.onBroadcastStarting?.call(localHash);
+    } catch (_) {
+      return SendResult.notSubmitted(
+        localHash,
+        'Unable to record transaction dispatch',
+      );
+    }
+    if (!signerIsCurrent()) {
+      return SendResult.notSubmitted(
+        localHash,
+        'Wallet signing context changed',
+      );
+    }
+
+    SendResult unknown() => SendResult.uncertain(
+      localHash,
+      'MultiversX submission status is unknown; check the original transaction',
+      actualAmount: adjustedAmount,
+    );
     try {
       final data = await _broadcast('$base/transactions', signStr);
-      final txHash = (data as Map<String, dynamic>)['txHash']?.toString();
-      if (txHash == null || txHash.isEmpty) {
-        return SendResult.fail(data['error']?.toString() ?? 'Broadcast failed');
+      if (data is! Map<String, dynamic> ||
+          data['txHash'] is! String ||
+          (data['txHash'] as String).toLowerCase() != localHash) {
+        return unknown();
       }
-      return SendResult.ok(txHash, actualAmount: adjustedAmount);
-    } catch (e) {
-      return SendResult.fail(e.toString());
+      return SendResult.ok(localHash, actualAmount: adjustedAmount);
+    } catch (_) {
+      // A transport error is not proof of rejection. Never replace the hash or
+      // repeat the POST; callers retain this exact submission for lookup.
+      return unknown();
     }
   }
 }

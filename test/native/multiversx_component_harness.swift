@@ -11,6 +11,7 @@ import WalletCore
         let recipient = CoinType.multiversX.deriveAddress(privateKey: wallet.getKey(coin: .multiversX, derivationPath: "m/44'/508'/0'/0'/3'")!)
         let plugin = WalletCorePlugin()
         var signatures: [String] = []
+        var publicTransactions: [[String: Any]] = []
         var checks = 0
         func check(_ value: Bool, _ label: String) {
             precondition(value, label); checks += 1
@@ -37,9 +38,14 @@ import WalletCore
             check(plugin.signMultiversXTransaction(wallet: wallet, path: path, txData: zero, pk: nil) != nil, "generic action zero value")
             var invalid = data; invalid["toAddress"] = "invalid"
             check(plugin.signMultiversXTransaction(wallet: wallet, path: path, txData: invalid, pk: nil) == nil, "invalid address")
+            publicTransactions.append(tx)
             signatures.append(tx["signature"] as! String)
         }
         check(Set(signatures).count == 3, "network signatures differ")
+        if CommandLine.arguments.count == 2 {
+            let data = try JSONSerialization.data(withJSONObject: publicTransactions, options: [.prettyPrinted, .sortedKeys])
+            try data.write(to: URL(fileURLWithPath: CommandLine.arguments[1]))
+        }
         print("MultiversX native signing: \(checks) checks passed")
     }
 }

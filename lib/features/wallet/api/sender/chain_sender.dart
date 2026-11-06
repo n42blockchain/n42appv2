@@ -56,11 +56,11 @@ class SendParams {
   /// binary floating point before a chain sender converts it to base units.
   final String? decimalAmountOverride;
 
-  /// EVM/Aptos/Cardano/Stellar: durably save the locally computed hash before any broadcast.
+  /// EVM/Aptos/Cardano/Stellar/MultiversX: durably save the locally computed hash before any broadcast.
   /// Throwing aborts submission. No private key or signed bytes are passed.
   final Future<void> Function(String txHash)? beforeBroadcast;
 
-  /// ADA/XLM only: persist the dispatch phase after preparation and before the
+  /// ADA/XLM/EGLD: persist the dispatch phase after preparation and before the
   /// network call. Throwing aborts this attempt without invoking the API.
   final Future<void> Function(String txHash)? onBroadcastStarting;
 

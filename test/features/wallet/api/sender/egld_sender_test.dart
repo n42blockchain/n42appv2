@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:n42_wallet/features/wallet/services/egld_transaction_hash.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,8 +10,22 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/egld_sender.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+String signedFixture(Map payload) => jsonEncode({
+  'sender': 'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+  'receiver': payload['toAddress'],
+  'value': payload['amount'],
+  'nonce': int.parse(payload['nonce'] as String),
+  'gasPrice': int.parse(payload['gasPrice'] as String),
+  'gasLimit': int.parse(payload['gasLimit'] as String),
+  'chainID': payload['chainId'],
+  'version': int.parse(payload['version'] as String),
+  'data': base64Encode(utf8.encode(payload['data'] as String)),
+  'signature': '03' * 64,
+});
+
 class _Signer extends Trustdart {
-  String address = 'erd1sender';
+  String address =
+      'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7';
   VoidCallback? onDerive;
   VoidCallback? onSign;
   int signatures = 0;
@@ -15,6 +33,7 @@ class _Signer extends Trustdart {
   String? derivedKey;
   String? derivedPath;
   Map? payload;
+  String Function(String)? alterSigned;
   @override
   Future<Map> generateAddress(
     String coin,
@@ -51,7 +70,8 @@ class _Signer extends Trustdart {
     signatures++;
     payload = txData;
     onSign?.call();
-    return 'signed-json';
+    final signed = signedFixture(txData);
+    return alterSigned?.call(signed) ?? signed;
   }
 }
 
@@ -90,11 +110,13 @@ void main() {
             expect(args['path'], "m/44'/508'/0'/0'/2'");
             expect(args['pk'], 'fixture key');
             if (call.method == 'generateAddress') {
-              return {'legacy': 'erd1sender'};
+              return {
+                'legacy': 'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+              };
             }
             expect(call.method, 'signTransaction');
             expect(args['txData'], {
-              'toAddress': 'erd1recipient',
+              'toAddress': 'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
               'amount': '1000000000000000000',
               'nonce': '7',
               'gasPrice': '1000000000',
@@ -103,7 +125,7 @@ void main() {
               'version': '1',
               'data': '',
             });
-            return 'signed-json';
+            return signedFixture(args['txData'] as Map);
           });
       addTearDown(
         () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -120,15 +142,16 @@ void main() {
           'balance': '10000000000000000000',
         },
         broadcast: (_, signed) async {
-          expect(signed, 'signed-json');
-          return {'txHash': 'accepted-hash'};
+          return {'txHash': EgldTransactionHash.compute(signed)};
         },
       );
       final result = await sender.send(
         const SendParams(
           coinType: 'EGLD',
-          fromAddress: 'erd1sender',
-          toAddress: 'erd1recipient',
+          fromAddress:
+              'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+          toAddress:
+              'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
           amount: 1,
           decimals: 18,
           path: "m/44'/508'/0'/0'/2'",
@@ -140,6 +163,199 @@ void main() {
       expect(calls, ['generateAddress', 'signTransaction']);
     },
   );
+  final nativeRows =
+      (jsonDecode(
+            File('test/fixtures/multiversx/transaction_hashes.json')
+                .readAsStringSync(),
+          ) as Map)['vectors']
+          as List;
+  for (final row in nativeRows.where(
+    (row) =>
+        row['name'] == 'walletcore-native-1' ||
+        row['name'] == 'walletcore-native-T',
+  )) {
+    test(
+      'real WalletCore output survives sender checks: ${row['name']}',
+      () async {
+        final tx = row['transaction'] as Map;
+        final signer = _Signer()
+          ..address = tx['sender'] as String
+          ..alterSigned = (_) => jsonEncode(tx);
+        var broadcasts = 0;
+        final sender = EgldSender(
+          trustdart: signer,
+          ownerIdentity: () => 'owner',
+          readMnemonic: () => 'fixture',
+          getAccount: (_) async => {
+            'nonce': 0,
+            'balance': '20000000000000000000',
+          },
+          getNetworkConfig: (_) async =>
+              networkConfig(testnet: tx['chainID'] == 'T'),
+          broadcast: (_, signed) async {
+            broadcasts++;
+            expect(EgldTransactionHash.compute(signed), row['hash']);
+            return {'txHash': row['hash']};
+          },
+        );
+        final result = await sender.send(
+          SendParams(
+            coinType: 'EGLD',
+            fromAddress: tx['sender'] as String,
+            toAddress: tx['receiver'] as String,
+            amount: 10,
+            decimals: 18,
+            path: "m/44'/508'/0'/0'/2'",
+            memo: '你好🙂',
+            isTest: tx['chainID'] == 'T',
+          ),
+        );
+        expect(result.success, isTrue);
+        expect(result.txHash, row['hash']);
+        expect(broadcasts, 1);
+      },
+    );
+  }
+  for (final scenario in [
+    'accepted',
+    'timeout',
+    'missing hash',
+    'wrong hash',
+    'malformed response',
+    'save fails',
+    'dispatch fails',
+    'owner after save',
+    'key after save',
+    'owner after dispatch',
+    'key after dispatch',
+    'owner during broadcast',
+  ]) {
+    test('submission boundary: $scenario', () async {
+      Object owner = Object();
+      var mnemonic = 'fixture mnemonic';
+      final stages = <String>[];
+      String? original;
+      final sender = EgldSender(
+        trustdart: _Signer(),
+        ownerIdentity: () => owner,
+        readMnemonic: () => mnemonic,
+        getAccount: (_) async => {
+          'nonce': 7,
+          'balance': '10000000000000000000',
+        },
+        getNetworkConfig: (_) async => networkConfig(),
+        broadcast: (_, signed) async {
+          stages.add('broadcast');
+          expect(EgldTransactionHash.compute(signed), original);
+          if (scenario == 'timeout') throw StateError('timeout');
+          if (scenario == 'owner during broadcast') owner = Object();
+          if (scenario == 'missing hash') return <String, dynamic>{};
+          if (scenario == 'wrong hash') return {'txHash': '00' * 32};
+          if (scenario == 'malformed response') return [];
+          return {'txHash': original!.toUpperCase()};
+        },
+      );
+      final result = await sender.send(
+        SendParams(
+          coinType: 'EGLD',
+          fromAddress:
+              'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+          toAddress:
+              'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
+          amount: 1,
+          decimals: 18,
+          path: "m/44'/508'/0'/0'/0'",
+          beforeBroadcast: (hash) async {
+            original = hash;
+            stages.add('save');
+            if (scenario == 'save fails') throw StateError('disk full');
+            if (scenario == 'owner after save') owner = Object();
+            if (scenario == 'key after save') mnemonic = 'other';
+          },
+          onBroadcastStarting: (hash) async {
+            expect(hash, original);
+            stages.add('dispatch');
+            if (scenario == 'dispatch fails') throw StateError('disk full');
+            if (scenario == 'owner after dispatch') owner = Object();
+            if (scenario == 'key after dispatch') mnemonic = 'other';
+          },
+        ),
+      );
+      final notSubmitted =
+          scenario.contains('fails') || scenario.contains('after');
+      expect(result.txHash, original);
+      expect(result.definitelyNotSubmitted, notSubmitted);
+      expect(
+        stages.where((s) => s == 'broadcast').length,
+        notSubmitted ? 0 : 1,
+      );
+      expect(
+        result.success,
+        scenario == 'accepted' || scenario == 'owner during broadcast',
+      );
+      if (!notSubmitted) expect(stages, ['save', 'dispatch', 'broadcast']);
+    });
+  }
+  for (final field in [
+    'sender',
+    'receiver',
+    'value',
+    'nonce',
+    'gasPrice',
+    'gasLimit',
+    'chainID',
+    'version',
+    'data',
+  ]) {
+    test('native output mismatch in $field never saves or broadcasts', () async {
+      final signer = _Signer()
+        ..alterSigned = (signed) {
+          final tx = jsonDecode(signed) as Map<String, dynamic>;
+          tx[field] = switch (field) {
+            'sender' =>
+              'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
+            'receiver' =>
+              'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+            'value' => '2',
+            'nonce' => 8,
+            'gasPrice' => 2,
+            'gasLimit' => 60000,
+            'chainID' => 'T',
+            'version' => 2,
+            _ => base64Encode(utf8.encode('other')),
+          };
+          return jsonEncode(tx);
+        };
+      final sender = EgldSender(
+        trustdart: signer,
+        ownerIdentity: () => 'owner',
+        readMnemonic: () => 'fixture',
+        getAccount: (_) async => {
+          'nonce': 7,
+          'balance': '10000000000000000000',
+        },
+        getNetworkConfig: (_) async => networkConfig(),
+        broadcast: (_, _) async => fail('must not broadcast'),
+      );
+      final result = await sender.send(
+        SendParams(
+          coinType: 'EGLD',
+          fromAddress:
+              'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+          toAddress:
+              'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
+          amount: 1,
+          decimals: 18,
+          path: "m/44'/508'/0'/0'/0'",
+          beforeBroadcast: (_) async =>
+              fail('must not save mismatched transaction'),
+        ),
+      );
+      expect(result.success, isFalse);
+      expect(result.txHash, isNull);
+      expect(result.error, contains('differs'));
+    });
+  }
   for (final scenario in [
     'mnemonic',
     'private key',
@@ -226,7 +442,10 @@ void main() {
           );
         },
         getAccount: (url) async {
-          expect(url, '$base/accounts/erd1sender');
+          expect(
+            url,
+            '$base/accounts/erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+          );
           mutate('RPC');
           if (scenario == 'invalid account') return [];
           if (scenario == 'missing nonce') {
@@ -241,16 +460,18 @@ void main() {
         },
         broadcast: (url, signed) async {
           expect(url, '$base/transactions');
-          expect(signed, 'signed-json');
+          expect(jsonDecode(signed)['sender'], signer.address);
           broadcasts++;
-          return {'txHash': 'accepted-hash'};
+          return {'txHash': EgldTransactionHash.compute(signed)};
         },
       );
       final result = await sender.send(
         SendParams(
           coinType: 'EGLD',
-          fromAddress: 'erd1sender',
-          toAddress: 'erd1recipient',
+          fromAddress:
+              'erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7',
+          toAddress:
+              'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
           amount: scenario == 'max'
               ? 10
               : scenario == 'insufficient balance'
@@ -293,11 +514,17 @@ void main() {
             : 0,
       );
       if (success) {
-        expect(result.txHash, 'accepted-hash');
+        expect(
+          result.txHash,
+          EgldTransactionHash.compute(signedFixture(signer.payload!)),
+        );
         expect(signer.derivedMnemonic, key == null ? 'captured mnemonic' : '');
         expect(signer.derivedKey, key ?? '');
         expect(signer.payload!['nonce'], '7');
-        expect(signer.payload!['toAddress'], 'erd1recipient');
+        expect(
+          signer.payload!['toAddress'],
+          'erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k',
+        );
         expect(
           signer.payload!['gasLimit'],
           scenario == 'repriced fees' ? '80000' : '65000',

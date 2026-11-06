@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--simulator', required=True)
+    parser.add_argument('--fixture-output', type=Path, help='Export only signed public test transactions')
     args = parser.parse_args()
     source = (ROOT / 'ios/Runner/WalletCorePlugin+Signing.swift').read_text()
     methods = '\n'.join(declaration(source, 'func ' + name + '(').replace('private func', 'func', 1)
@@ -28,7 +29,7 @@ def main():
             command += ['-F',str(directory),'-Xlinker','-rpath','-Xlinker',str(directory),'-framework',module]
         command += ['-framework','Security','-lc++',str(bridge),str(ROOT/'test/native/multiversx_component_harness.swift'),'-o',str(binary)]
         subprocess.run(command,check=True)
-        subprocess.run(['xcrun','simctl','spawn',args.simulator,str(binary)],check=True)
+        subprocess.run(['xcrun','simctl','spawn',args.simulator,str(binary)] + ([str(args.fixture_output.resolve())] if args.fixture_output else []),check=True)
 
 if __name__ == '__main__':
     main()
