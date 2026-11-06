@@ -2,6 +2,13 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Preserve timeline on failed recall — batch 175
+
+- ChatBloc redaction failure restored an entire pre-request message list, losing later arrivals and affecting a newly selected room. A false repository result was also treated as success. Capture room/account generation; roll back only the identical optimistic message instance, preserving other messages and newer server redaction state; false now follows the failure path.
+- Four new cases cover interim arrivals, newer server redaction, room switch and false completion. Redaction/event focused suite: 8 pass; BLoC/extended/event suites: **329 pass**, exit 0 (/tmp/n42-chat-b175-final.log). Scoped analysis reports no issues (/tmp/n42-chat-b175-analysis.log). Initial failure evidence: /tmp/n42-chat-b175-before.log (the server-update case was subsequently made specific to authoritative redaction).
+- Chat `3d743e4e30b4ba9fb3c75f3e273bb6346530facf` is pushed and pinned in the wallet. Dependency resolution changed only Chat; all three host fixture tests pass (/tmp/n42-wallet-b175-host.log). Prior full-suite baselines remain scoped to batches 172/173. No live message or release upload.
+- Remaining: independent MessageActionBloc boolean-result handling, concurrent same-message operations, newer non-redacted sync revisions suppressed by the existing optimistic merge, other action/session boundaries and broader native login/recovery/dependency/payment/release acceptance.
+
 ### Poll callback and completion session isolation — batch 174
 
 - Completed the interrupted poll implementation identified in the latest inspection. Subscription callbacks and queued poll events now retain room/account generation. Poll send/vote/end handlers capture room identity, reject stale errors/results and avoid starting aggregation after session change; aggregate completion is checked again before state mutation.
