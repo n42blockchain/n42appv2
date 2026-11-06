@@ -18,7 +18,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
-### Current inspection — after batch 106
+### Repository inspection snapshot — after batch 106
 
 - Fresh fetch confirms wallet `8a8de601d` equals `origin/master` (0 ahead / 0 behind). No tracked edits were interrupted; the four existing untracked paths remain preserved. Version is 2.5.3+73221. Chat worktree is clean and both manifest and lockfile pin `3197dc770bdf6bf326e4a4e68d66fdc40fee9353`.
 - Batch 106 is committed and pushed, not awaiting delivery. Its 204 Chat tests and 3 host fixtures are targeted evidence; the latest wallet full run remains batch 105 at the earlier source. No new full regression or release was performed in this inspection.
@@ -176,6 +176,8 @@ Batch 107 reserves a durable unsubmitted Aptos record before history insertion a
 Batch 108 implements bounded nested generic Aptos Coin transfers through the existing native raw-signing bridge. All 137 related Dart tests pass; Swift matches two generic vectors and Android JNI matches eight native/Coin/FA/generic vectors. Temporary Android emulator shut down. Gas simulation, arbitrary Move types/payloads and live/device acceptance remain open; historical generic-Coin gaps below are superseded only within these bounds.
 
 Batch 109 adds the scheduled error-page recovery-copy action, account-scoped exact-byte persistence and bounded preview, with 26 locale updates. Chat 221 tests and scoped analysis pass. Copies neither change nor send drafts; damaged-record repair/import, unowned legacy confirmation and copy management remain unfinished. The wallet pins Chat db950517; no fresh full-suite/release claim.
+
+Batch 110 exposes saved recovery history even after the active queue is empty, with per-copy integrity status and a full-screen accessible list. Chat 229 regressions pass; the wallet pins b2bafca9. Manual repair/import, legacy ownership and export/retention controls remain open; viewing copies does not resume delivery.
 
 ## Still open, in execution order
 
