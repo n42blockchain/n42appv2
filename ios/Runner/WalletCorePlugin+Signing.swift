@@ -1346,6 +1346,7 @@ extension WalletCorePlugin {
             $0.fee = fee
             $0.sequence = sequence
             $0.privateKey = privateKey.data
+            $0.account = CoinType.stellar.deriveAddress(privateKey: privateKey)
             $0.opPayment = StellarOperationPayment.with {
                 $0.destination = toAddress
                 $0.amount = amount
@@ -1355,6 +1356,7 @@ extension WalletCorePlugin {
             input.memoText = StellarMemoText.with { $0.text = memo }
         }
         let output: StellarSigningOutput = AnySigner.sign(input: input, coin: CoinType.stellar)
+        guard output.error == .ok, !output.signature.isEmpty else { return nil }
         return output.signature
     }
 

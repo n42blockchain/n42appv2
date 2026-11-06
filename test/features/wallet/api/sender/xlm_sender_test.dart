@@ -201,7 +201,10 @@ void main() {
           'amount': scenario == 'send max' ? '99999900' : '12500000',
           'sequence': '8',
           'memo': 'invoice 42',
-          'fee': 100,
+          'fee': '100',
+          'passphrase': scenario == 'testnet'
+              ? 'Test SDF Network ; September 2015'
+              : 'Public Global Stellar Network ; September 2015',
         });
         expect(api.testnet, scenario == 'testnet');
       }

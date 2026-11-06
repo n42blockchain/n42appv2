@@ -1328,7 +1328,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
     }
 
     private fun signStellarTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
-        val privateKey = pk ?: wallet!!.getKey(CoinType.STELLAR, path)
+        val privateKey = pk ?: wallet?.getKey(CoinType.STELLAR, path) ?: return null
 
         val toAddress: String = txData["toAddress"] as String
         val amount: Long = (txData["amount"] as String).toLong()
@@ -1344,6 +1344,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
 
         val inputBuilder = Stellar.SigningInput.newBuilder()
             .setPassphrase(passphrase)
+            .setAccount(CoinType.STELLAR.deriveAddress(privateKey))
             .setFee(fee)
             .setSequence(sequence)
             .setPrivateKey(ByteString.copyFrom(privateKey.data()))
@@ -1354,6 +1355,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         }
 
         val output = AnySigner.sign(inputBuilder.build(), CoinType.STELLAR, Stellar.SigningOutput.parser())
+        if (output.errorValue != 0 || output.signature.isEmpty()) return null
         return output.signature
     }
 

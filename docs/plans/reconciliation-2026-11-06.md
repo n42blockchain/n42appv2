@@ -9,7 +9,7 @@ Inspection on 2026-11-06 found eight tracked files with an unfinished Cardano ha
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
 | Cardano submission recovery | Complete batch 127 validation/delivery; then wire durable journal/history and unknown-outcome UI. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
-| Other chain signing | Confirmed XLM sends integer fee while Swift/Kotlin cast String; repair this crash path first. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
+| Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Native malformed inputs and reserve-aware amount handling remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
 | Native social login and Matrix | Google native code exchange defaults to disabled in ID Hub source; verify deployed capability and Google/Apple/Facebook native flows with same-DID Matrix identity before enabling. Existing Web login evidence is insufficient. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No store-console verification or upload was done in this inspection. |
 | Chat recovery | Explicit legacy ownership/import, damaged-record repair UI, retention/export and process-crash/cross-process boundaries remain open. |
@@ -33,6 +33,13 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Stellar native signing repair — batch 128
+
+- Repaired the actual Dart/native contract: fee is a decimal string, and network passphrase is explicitly selected for mainnet/testnet. Both native signers now populate the source account from the signing key and reject SDK error/empty output. Android's absent wallet no longer force-unwraps.
+- Real Swift execution initially returned empty signatures (failure logs `/tmp/n42-xlm-b128-swift.log`, `/tmp/n42-xlm-b128-debug.log`), exposing the missing source account. Final production bridge/WalletCore checks: 9 passed (`/tmp/n42-xlm-b128-swift-final.log`), including network distinction, direct SDK parity, private-key parity and invalid recipient rejection. Android debug build/install and real MethodChannel/JNI test pass (`/tmp/n42-xlm-b128-android.log`, exit 0). Dart sender tests: 16 passed (`/tmp/n42-xlm-b128.log`); scoped analysis clean (`/tmp/n42-xlm-b128-analysis-final.log`).
+- Network constants checked against https://github.com/stellar/stellar-core/blob/master/docs/stellar-core_testnet.cfg and https://github.com/stellar/quickstart/blob/main/start; WalletCore account field checked against https://github.com/trustwallet/wallet-core/blob/master/src/proto/Stellar.proto.
+- These are public test keys and synthetic offline transactions. No live settlement or physical-device operation. Simulators/emulators stopped after use. Native malformed-input casts, reserve-aware spendable balance, dynamic fees and durable uncertain-submission recovery still require work; this batch does not claim complete XLM acceptance. Existing plugin/KGP build warnings remain.
 
 ### Cardano pre-broadcast hash and uncertain submission — batch 127
 

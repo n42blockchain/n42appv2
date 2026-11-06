@@ -131,3 +131,13 @@ is open, returns home, and rejects an untrusted origin before navigation.
 It never taps the signing confirmation. This exercises the app's pending-link
 handoff; it is not an operating-system universal-link association or completed
 SSO/account-binding acceptance. `DEVICE_DEEP_LINK` records the outcome.
+
+### Stellar native signing
+
+Run `flutter test integration_test/native_stellar_signing_test.dart -d emulator-5556 --no-pub`
+on an explicitly selected Android emulator. The test uses a public BIP39 fixture and
+synthetic sequence, without RPC or broadcast. It checks the string-valued fee contract
+and distinct mainnet/testnet XDR signing through the real MethodChannel/JNI bridge.
+The Swift component equivalent is `python3 scripts/test_stellar_native.py --simulator <UDID>`;
+it compares production bridge output with WalletCore and checks invalid recipients.
+These checks do not establish funded-account, reserve, fee-market or settlement acceptance.

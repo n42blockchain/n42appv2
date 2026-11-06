@@ -135,7 +135,10 @@ class XlmSender implements ChainSender {
       'amount': valuePrice.toString(),
       'sequence': nextSequence,
       'memo': params.memo ?? '',
-      'fee': fee,
+      'fee': fee.toString(),
+      'passphrase': params.isTest
+          ? 'Test SDF Network ; September 2015'
+          : 'Public Global Stellar Network ; September 2015',
     };
 
     if (!signerIsCurrent()) {
