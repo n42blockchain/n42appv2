@@ -591,3 +591,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Wallet host contracts: 3 passed (/tmp/n42-shared-receipt-host.log). Lockfile changes only the Chat revision. Flutter reports the existing Windows Facebook plugin metadata warning; Windows acceptance is not claimed.
 - Chat entity/storage/service/BLoC/page regressions: 98 passed. Scoped analysis: six existing infos, no errors/warnings. Logs: /tmp/n42-shared-receipt-final.log and /tmp/n42-shared-receipt-analysis.log.
 - Same-isolate recovery only. Process termination before receipt persistence, multiple processes/devices, manual reconciliation and live acceptance remain open. No physical-device test or TestFlight upload.
+
+
+## Batch 66 — preserve malformed scheduled queues (2026-11-06)
+
+- Integrated pushed Chat 4f972fcc417002d39b944a4481f46c7e74fb96e1. Due scans report parse/read failures instead of skipping invalid records or claiming an empty queue. Draft decoding rejects missing identity, invalid timestamps/payload and unknown types. Older text drafts without type/payload fields remain supported.
+- Failed scans preserve stored bytes and release the serialized store operation; explicit repair restores reads. The existing room page handles these failures with its localized retry UI. Automatic delivery stops that account scan on corruption; no silent partial dispatch or implicit data deletion.
+- All 241 related entity/storage/concurrency/attachment/BLoC/page tests pass. Scoped analysis reports no issues. Logs: /tmp/n42-scheduled-strict-final.log and /tmp/n42-scheduled-strict-analysis.log. The first run exposed the old empty-owner expectation; it now asserts the existing invalid-owner error instead of a false empty queue.
+- Wallet host contracts: 3 passed (/tmp/n42-scheduled-strict-host.log); lockfile changes only the Chat revision. Existing Windows Facebook plugin metadata warning remains outside this test acceptance.
+- User-confirmed repair/import and isolating damaged drafts remain open. No process-crash/server/device acceptance or new release upload.
