@@ -2,7 +2,7 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 136
+## Current interruption inventory — through batch 137
 
 Fresh inspection on 2026-11-06 found two modified runtime files and two untracked tests left by the interrupted Stellar recovery work. The previous inventory still described batch 126 and incorrectly presented later-completed implementation as missing. Batches 127–133 are committed; batch 134 below closes the remaining local patch after validation.
 
@@ -34,6 +34,14 @@ Fresh fetch before this batch: wallet e2d3b9330 equals origin/master (0/0). ID H
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Non-overlapping pending-transaction polling — batch 137
+
+- Virtual-time regression reproduced four concurrent lookups of one pending record after three additional timer intervals. A first-record StateError also prevented the second record from being checked. Before-fix log: /tmp/n42-poll-b137-before.log (21 pass, four failing cases).
+- Ordinary and BTC timers now keep an independent running latch per timer instance, released in finally. Slow rounds do not overlap. Each record has its own error boundary, so malformed data cannot starve later entries. Log only a generic failure, without remote exception content.
+- Before each subsequent record, require the captured session, current timer handle and queue membership. An old callback cannot continue its old snapshot after timer replacement, or release a replacement timer's latch. Existing intervals and transaction-status behavior are preserved.
+- Provider/Memo tests: 35 pass, including six virtual-time cases for ordinary/BTC overlap, failure isolation and replacement while an old RPC is pending (/tmp/n42-poll-b137-fixed.log, exit 0). Scoped analysis clean (/tmp/n42-poll-b137-analysis.log); whitespace check passes.
+- This closes periodic-round overlap, not manual-refresh/background request coalescing or durable submission coordination. Cross-page duplicate-send prevention, process-crash recovery, live/device acceptance and current-source release remain open. No new dependencies, device or release operation.
 
 ### Pending-history session isolation — batch 136
 

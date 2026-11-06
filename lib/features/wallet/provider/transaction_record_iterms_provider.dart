@@ -107,29 +107,43 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
   void timerStart() {
     if (_disposed || (_timer != null && _timer!.isActive)) return;
+    // Keep this latch local to the timer: a replaced timer must not unlock or
+    // block its successor when an old request eventually returns.
+    var running = false;
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+      if (running || _disposed || !identical(timer, _timer)) return;
+      running = true;
+      final session = _session;
       try {
         if (_unDoneTrModelList.isEmpty) {
           timer.cancel();
           _timer = null;
           return;
         }
-        // Snapshot list to avoid concurrent modification during async iteration
         final pending = List<TransationRecordModel>.of(_unDoneTrModelList);
         for (final trm in pending) {
-          await checkUndoneTr(trm);
+          if (!_isCurrent(session) || !identical(timer, _timer)) break;
+          if (!_unDoneTrModelList.contains(trm)) continue;
+          try {
+            await checkUndoneTr(trm);
+          } catch (_) {
+            // A malformed record must not starve the rest of this queue.
+            AppLogger.w('TxRecordItems', 'Pending transaction check failed');
+          }
         }
-      } on Exception catch (e) {
-        AppLogger.w('TxRecordItems', 'timerStart callback error: $e');
+      } finally {
+        running = false;
       }
     });
   }
 
   void timerStartBtc() {
     if (_disposed || (_timerBtc != null && _timerBtc!.isActive)) return;
-    // callback 必须 async：否则 checkUndoneTrBtc 是 fire-and-forget，
-    // 空列表检查会在异步完成前执行，定时器永远无法停止
+    var running = false;
     _timerBtc = Timer.periodic(const Duration(seconds: 180), (timer) async {
+      if (running || _disposed || !identical(timer, _timerBtc)) return;
+      running = true;
+      final session = _session;
       try {
         if (_trUndoneList.isEmpty) {
           timer.cancel();
@@ -137,10 +151,19 @@ class TransactionRecordItemProvider with ChangeNotifier {
           return;
         }
         for (final trm in List<BtcTransactionRecodeModel>.of(_trUndoneList)) {
-          await checkUndoneTrBtc(trm);
+          if (!_isCurrent(session) || !identical(timer, _timerBtc)) break;
+          if (!_trUndoneList.contains(trm)) continue;
+          try {
+            await checkUndoneTrBtc(trm);
+          } catch (_) {
+            AppLogger.w(
+              'TxRecordItems',
+              'Pending BTC transaction check failed',
+            );
+          }
         }
-      } on Exception catch (e) {
-        AppLogger.w('TxRecordItems', 'timerStartBtc callback error: $e');
+      } finally {
+        running = false;
       }
     });
   }

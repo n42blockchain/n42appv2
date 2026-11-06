@@ -74,6 +74,24 @@ class _Resolver extends TransactionStateResolver {
   }
 }
 
+class _PollingResolver extends TransactionStateResolver {
+  int calls = 0;
+  bool failFirst = false;
+  final results = <Completer<int>>[];
+  Future<int> next() {
+    calls++;
+    if (failFirst && calls == 1) throw StateError('fixture failure');
+    final result = Completer<int>();
+    results.add(result);
+    return result.future;
+  }
+
+  @override
+  Future<int> resolveState(TransationRecordModel item) => next();
+  @override
+  Future<int> resolveBtcConfirmations(BtcTransactionRecodeModel item) => next();
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   for (final interrupted in ['account', 'session', 'dispose']) {
@@ -220,4 +238,115 @@ void main() {
     expect(await provider.checkUndoneTrBtcReturn(btc), isNull);
     expect(resolver.calls, 0);
   });
+  for (final btc in [false, true]) {
+    testWidgets('slow polling btc=$btc never overlaps and resumes', (
+      tester,
+    ) async {
+      final resolver = _PollingResolver();
+      final provider = TransactionRecordItemProvider(
+        resolver: resolver,
+        userUuid: () => 'alice',
+      );
+      final interval = Duration(seconds: btc ? 180 : 10);
+      if (btc) {
+        provider.addUndoneTr(
+          BtcTransactionRecodeModel()..userUuid = 'alice',
+          0,
+        );
+      } else {
+        provider.addUndoneTr(TransationRecordModel()..userUuid = 'alice', 1);
+      }
+      await tester.pump(interval);
+      expect(resolver.calls, 1);
+      await tester.pump(interval * 3);
+      expect(resolver.calls, 1);
+      resolver.results.single.complete(-1);
+      await tester.pump();
+      await tester.pump(interval);
+      expect(resolver.calls, 2);
+      provider.dispose();
+      resolver.results.last.complete(-1);
+      await tester.pump();
+      await tester.pump(interval * 2);
+      expect(resolver.calls, 2);
+    });
+    testWidgets('one broken record does not starve polling btc=$btc', (
+      tester,
+    ) async {
+      final resolver = _PollingResolver()..failFirst = true;
+      final provider = TransactionRecordItemProvider(
+        resolver: resolver,
+        userUuid: () => 'alice',
+      );
+      for (var i = 0; i < 2; i++) {
+        if (btc) {
+          provider.addUndoneTr(
+            BtcTransactionRecodeModel()
+              ..userUuid = 'alice'
+              ..txHash = '$i',
+            0,
+          );
+        } else {
+          provider.addUndoneTr(
+            TransationRecordModel()
+              ..userUuid = 'alice'
+              ..txHash = '$i',
+            1,
+          );
+        }
+      }
+      await tester.pump(Duration(seconds: btc ? 180 : 10));
+      expect(resolver.calls, 2);
+      provider.dispose();
+      resolver.results.single.complete(-1);
+      await tester.pump();
+    });
+  }
+  for (final btc in [false, true]) {
+    testWidgets('replacement timer btc=$btc is independent of old request', (
+      tester,
+    ) async {
+      final resolver = _PollingResolver();
+      final provider = TransactionRecordItemProvider(
+        resolver: resolver,
+        userUuid: () => 'alice',
+      );
+      final interval = Duration(seconds: btc ? 180 : 10);
+      void add(String hash) {
+        if (btc) {
+          provider.addUndoneTr(
+            BtcTransactionRecodeModel()
+              ..userUuid = 'alice'
+              ..txHash = hash,
+            0,
+          );
+        } else {
+          provider.addUndoneTr(
+            TransationRecordModel()
+              ..userUuid = 'alice'
+              ..txHash = hash,
+            1,
+          );
+        }
+      }
+
+      add('old-first');
+      add('old-second');
+      await tester.pump(interval);
+      expect(resolver.calls, 1);
+      provider.unDoneTrModelList.clear();
+      provider.trUndoneList.clear();
+      provider.checkUndoneList();
+      add('new');
+      await tester.pump(interval);
+      expect(resolver.calls, 2);
+      resolver.results.first.complete(-1);
+      await tester.pump();
+      await tester.pump(interval * 2);
+      expect(resolver.calls, 2);
+      provider.dispose();
+      resolver.results.last.complete(-1);
+      await tester.pump();
+    });
+  }
 }
