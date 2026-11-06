@@ -179,6 +179,8 @@ Batch 109 adds the scheduled error-page recovery-copy action, account-scoped exa
 
 Batch 110 exposes saved recovery history even after the active queue is empty, with per-copy integrity status and a full-screen accessible list. Chat 229 regressions pass; the wallet pins b2bafca9. Manual repair/import, legacy ownership and export/retention controls remain open; viewing copies does not resume delivery.
 
+Batch 111 allows explicit reset of a corrupt active scheduled queue after acknowledged exact-byte preservation and confirmation. Snapshot checks and account-wide same-isolate exclusion protect against concurrent changes/sends; new schedules can then proceed. Chat 245 regressions pass, wallet pins 798d20f5. Old content remains in recovery history; repair/import, legacy ownership and cross-process/device acceptance are still open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.
