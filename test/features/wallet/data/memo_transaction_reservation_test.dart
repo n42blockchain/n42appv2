@@ -1,3 +1,6 @@
+import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
+
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -44,11 +47,14 @@ void main() {
   TransationRecordModel record(String chain, {String hash = 'ab'}) =>
       TransationRecordModel()
         ..coinMiniName = chain
+        ..coin = {'blockchainType': chain == 'EGLD' ? 'MultiversX' : chain}
+        ..to1 = 'recipient'
+        ..price = BigInt.one
         ..from1 = 'sender'
         ..userUuid = 'alice'
         ..txHash = hash * 32;
 
-  for (final chain in ['ADA', 'XLM']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD']) {
     for (final sameHash in [false, true]) {
       test(
         '$chain simultaneous reservations sameHash=$sameHash allow one broadcast',
@@ -94,7 +100,33 @@ void main() {
           db.reserveMemoTransaction(record(chain, hash: 'cd')),
           throwsA(isA<PendingMemoTransactionException>()),
         );
-        original.state = 1;
+        if (chain == 'EGLD') {
+          final restored = TransationRecordModel.fromMap(
+            (await connection.query('TransationRecord')).single,
+          );
+          var receipt = <String, dynamic>{};
+          final resolver = TransactionStateResolver(
+            egldApi: EgldApi(get: (_) async => receipt),
+          );
+          expect(await resolver.resolveState(restored), -1);
+          await expectLater(
+            db.reserveMemoTransaction(record(chain, hash: 'cd')),
+            throwsA(isA<PendingMemoTransactionException>()),
+          );
+          receipt = {
+            'txHash': restored.txHash,
+            'sender': restored.from1,
+            'receiver': restored.to1,
+            'value': '1',
+            'status': 'success',
+            'miniBlockHash': 'ef' * 32,
+            'timestamp': 123,
+          };
+          original.state = await resolver.resolveState(restored);
+          expect(original.state, 1);
+        } else {
+          original.state = 1;
+        }
         expect(await db.updateTransationRecordTxhash(original), 1);
         expect(
           await db.reserveMemoTransaction(record(chain, hash: 'cd')),
@@ -132,7 +164,7 @@ void main() {
       },
     );
   }
-  for (final chain in ['ADA', 'XLM']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD']) {
     test('$chain release targets only original pending identity', () async {
       final original = record(chain);
       original.trId = await db.reserveMemoTransaction(original);
@@ -170,7 +202,7 @@ void main() {
       });
     }
   }
-  for (final chain in ['ADA', 'XLM']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD']) {
     for (final terminal in [1, 2]) {
       test(
         '$chain late polling cannot overwrite terminal state $terminal',
@@ -218,7 +250,7 @@ void main() {
     );
   }
 
-  for (final chain in ['ADA', 'XLM']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD']) {
     test(
       '$chain prepared crash can retry after reopen without broadcasting old row',
       () async {

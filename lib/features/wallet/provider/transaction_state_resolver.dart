@@ -1,3 +1,4 @@
+import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/ada_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -25,13 +26,16 @@ class TransactionStateResolver {
 
   final XlmApi _xlmApi;
   final AdaApi _adaApi;
+  final EgldApi _egldApi;
 
   TransactionStateResolver({
     TokenViewApi? tokenViewApi,
     XlmApi? xlmApi,
     AdaApi? adaApi,
+    EgldApi? egldApi,
   }) : _tokenViewApi = tokenViewApi ?? TokenViewApi(),
        _xlmApi = xlmApi ?? XlmApi(),
+       _egldApi = egldApi ?? EgldApi(),
        _adaApi =
            adaApi ??
            AdaApi(
@@ -58,6 +62,8 @@ class TransactionStateResolver {
         return _resolveRipple(trm);
       case BlockchainType.Cardano:
         return _resolveCardano(trm);
+      case BlockchainType.MultiversX:
+        return _resolveEgld(trm);
       case BlockchainType.Stellar:
         return _resolveStellar(trm);
       case BlockchainType.Filecoin:
@@ -88,6 +94,72 @@ class TransactionStateResolver {
       );
       if (mm.error) return -1;
       return mm.data as int? ?? 0;
+    }
+  }
+
+  Future<int> _resolveEgld(TransationRecordModel record) async {
+    final hash = record.txHash;
+    final network = record.isTest;
+    final identity = (
+      record.userUuid,
+      record.walletIndex,
+      record.coinId,
+      record.from1,
+      record.to1,
+      record.price,
+      record.contract,
+    );
+    final hashPattern = RegExp(r'^[0-9a-fA-F]{64}$');
+    if (hash.length != 64 ||
+        !hashPattern.hasMatch(hash) ||
+        ![0, 1].contains(network) ||
+        record.from1.isEmpty ||
+        record.to1.isEmpty ||
+        record.price <= BigInt.zero ||
+        record.contract.isNotEmpty) {
+      return -1;
+    }
+    try {
+      final data = await _egldApi.getTransaction(hash, isTest: network == 1);
+      if (record.txHash != hash ||
+          record.isTest != network ||
+          (
+                record.userUuid,
+                record.walletIndex,
+                record.coinId,
+                record.from1,
+                record.to1,
+                record.price,
+                record.contract,
+              ) !=
+              identity) {
+        return -1;
+      }
+      if (data is! Map ||
+          data['txHash'] is! String ||
+          (data['txHash'] as String).toLowerCase() != hash.toLowerCase() ||
+          data['sender'] != record.from1 ||
+          data['receiver'] != record.to1 ||
+          data['value'] != record.price.toString()) {
+        return -1;
+      }
+      if (data['status'] == 'pending') return 0;
+      // Only included terminal receipts release a reservation. Not-found,
+      // transport errors and unfamiliar statuses must never authorize a retry.
+      if (data['miniBlockHash'] is! String ||
+          (data['miniBlockHash'] as String).length != 64 ||
+          !hashPattern.hasMatch(data['miniBlockHash'] as String) ||
+          data['timestamp'] is! int ||
+          (data['timestamp'] as int) <= 0) {
+        return -1;
+      }
+      return switch (data['status']) {
+        'success' => 1,
+        'fail' || 'invalid' => 2,
+        _ => -1,
+      };
+    } catch (_) {
+      return -1;
     }
   }
 

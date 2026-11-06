@@ -83,7 +83,7 @@ extension TransactionRecordDao on AppDatabase {
     );
   }
 
-  /// Atomically reserve ADA/XLM history before any broadcast. A new page or
+  /// Atomically reserve ADA/XLM/EGLD history before any broadcast. A new page or
   /// process must not bypass an existing unresolved submission. Even an equal
   /// hash is rejected: it may already have been broadcast by the other caller.
   Future<int> reserveMemoTransaction(
@@ -92,7 +92,7 @@ extension TransactionRecordDao on AppDatabase {
   }) async {
     final values = Map<String, Object?>.from(record.toMapDb());
     final hash = values['txHash'] as String;
-    if (!{'ADA', 'XLM'}.contains(values['coinMiniName']) ||
+    if (!{'ADA', 'XLM', 'EGLD'}.contains(values['coinMiniName']) ||
         !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash) ||
         hash.length != 64 ||
         (values['from1'] as String).isEmpty ||
@@ -145,7 +145,7 @@ extension TransactionRecordDao on AppDatabase {
   Future<bool> markMemoTransactionDispatch(TransationRecordModel record) async {
     final values = Map<String, Object?>.from(record.toMapDb());
     final id = record.trId;
-    if (id <= 0 || !{'ADA', 'XLM'}.contains(values['coinMiniName'])) {
+    if (id <= 0 || !{'ADA', 'XLM', 'EGLD'}.contains(values['coinMiniName'])) {
       return false;
     }
     final db = await database;
@@ -177,7 +177,7 @@ extension TransactionRecordDao on AppDatabase {
     final id = record.trId;
     final hash = values['txHash'] as String;
     if (id <= 0 ||
-        !{'ADA', 'XLM'}.contains(values['coinMiniName']) ||
+        !{'ADA', 'XLM', 'EGLD'}.contains(values['coinMiniName']) ||
         hash.length != 64 ||
         !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash)) {
       return false;
