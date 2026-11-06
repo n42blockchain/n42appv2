@@ -2,7 +2,13 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Full-regression follow-up inspection
+## Latest verified baseline — batch 105
+
+- Wallet runtime source `0f9ed4f7a`: fresh full regression **6,565 passed, 0 failed, no skips reported**; coverage **72.86%** (101,372/139,128), unchanged 70% gate passes. Falcon native tests executed. Full analysis: no errors/warnings, 68 infos; Python scripts 49 pass; wallet/Chat localization integrity passes. Full source and log hashes are in audit batch 105.
+- Aptos journal/sender/recovery-page wiring and signed-expiry recovery are implemented through batches 103–104. Earlier statements that these are unwired are superseded. Legacy expiry-less records, SQLite/secure-storage crash windows, non-page callers without history, cross-process coordination, generic Coin, gas simulation and live/device acceptance remain open.
+- Other remaining work is unchanged: native social login/Matrix acceptance and disabled native Google exchange, Meta public availability, current-source release, Chat legacy/corrupt draft recovery, broader security/AA/hardware review, editorial/RTL work, dependency holds and old worktree reconciliation. Full wallet tests do not replace standalone Chat regression or production acceptance.
+
+## Historical full-regression follow-up inspection
 
 - Rechecked wallet `5bd9e69dc` against freshly fetched `origin/master`: 0 ahead / 0 behind; no tracked local edits before this record update. The four baseline untracked paths remain untouched. Chat task worktree is clean at `fd519bff`, matching the wallet dependency pin.
 - The previously running full suites have finished. Wallet: **6,268 passed, 2 skipped, 2 failed** (`/tmp/n42-wallet-full-20261106.log`). Chat: **7,914 passed, 4 skipped, 1 failed** (`/tmp/n42-chat-full-20261106.log`). These runs are not green and did not measure fresh coverage.

@@ -904,3 +904,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Expired is a distinct internal receipt status; the existing page saves it as unsuccessful history before clearing the journal. Never auto-resubmit. Malformed/mismatching signed metadata is rejected before persistence/dispatch.
 - API/journal/sender/page suites: 172 passed; scoped analysis clean. New cases include pinned version beyond 2^53, time/sequence/chain failures, persisted expiry after service reconstruction, save-before-clear and signed-expiry mismatch. Logs: /tmp/n42-apt-expiry-b104.log and /tmp/n42-apt-expiry-b104-analysis.log.
 - Remaining: old expiry-less record recovery, two-store crash/abandoned-history cleanup, non-page callers without history, cross-process coordination, real node/device/process-kill acceptance, generic Coin and gas simulation. No physical-device operation, real transaction or release upload.
+
+
+## Batch 105 — full wallet regression after Aptos recovery integration (2026-11-06)
+
+- Fixed source: 0f9ed4f7a50ba878237f09fdc9020f28985d9e61. No tracked source edits during the full run. Flutter 3.47.8, file limit 4096, flutter test test/ --no-pub --coverage --concurrency=4 --reporter expanded. N42_PQ_LIBRARY points to the verified host Falcon library; rust/n42_pq has no source changes since the batch 95 native run. Falcon native/page tests actually executed.
+- Full result: **6,565 passed, 0 failed, no skipped tests reported**, exit 0, 13m47s. /tmp/n42-full-b105-tests.log. This supersedes the batch 95 wallet result for current runtime code, not the standalone Chat suite or live/device acceptance.
+- Fresh coverage: **101,372 / 139,128 = 72.86240009200161%**, unchanged 70% gate passes. /tmp/n42-full-b105-coverage.json; preserved LCOV /tmp/n42-full-b105-lcov.info, SHA-256 dde4d68b467115573048cf7061b2d0eb48856efe0b00ca14a7fbfba67c9dcaba. No exclusions/threshold reduction.
+- Full analysis exits 0 with no errors/warnings and 68 informational diagnostics (/tmp/n42-full-b105-analysis.log). All 49 Python script tests pass (/tmp/n42-full-b105-scripts.log). Wallet/Chat localization integrity passes (/tmp/n42-full-b105-l10n.log). Baseline untracked files remain untouched.
+- Native-provider/Matrix E2E, live-node/process-kill/device durability, current-source release, legacy/abandoned recovery and broader open maturity work remain unresolved. No new app build/upload, real transaction or physical-device operation. Hosted Tests/CI were pending at the initial observation and are not claimed passed by this local run.
