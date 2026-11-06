@@ -340,3 +340,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `3ce77c7a2b2cd896ee114df25296b0c21b6bb198` is pushed. Still open: UI intents originating before handler entry and standalone scheduled-page same-user re-login need their own generation binding; legacy draft recovery and live/cross-device scheduling remain in MSG-001. No new release/device acceptance is implied.
 
 - Wallet host integration: 129 passed at the exact Chat pin (`/tmp/n42-generation-host-tests.log`); pub get changed only that pin in the lockfile.
+
+
+## Batch 38 — scheduled UI intent origins (2026-11-06)
+
+- Chat pages capture an opaque login origin at initialization and attach it to scheduled creation/cancellation events. Production BLoC rejects missing, stale or wrong-manager origins before account capture; it cannot reinterpret a pre-login-change UI action as a new-session action. The standalone draft page checks its page origin before loading, cancellation and acknowledgements, including same-user re-login.
+- Scheduled attachments reject an invalid origin before success feedback. If a newly persisted attachment outlives its origin during persistence, its temporary file is deleted and the operation fails rather than enqueueing under the new session. Text scheduling does not clear the composer after the picker when its origin is stale.
+- 251 relevant BLoC/event/page/media-interaction tests passed (`/tmp/n42-origin-verified.log`). Paired valid/stale cases preserve normal creation/cancellation and image scheduling; invalidation while the original-image picker is open emits no scheduled event or success notice. Source analysis reports no errors/warnings; existing informational style diagnostics remain (`/tmp/n42-origin-final-analyze.log`).
+- Chat `cc05a316ebcd0104b047b625e5b4fb246cc9a196` is pushed. This closes the queued-UI and standalone-page generation gaps recorded in batch 37. Legacy unowned draft recovery, process/device coordination, and races with already-dispatched SDK work remain in MSG-001. No device installation or TestFlight upload.
+
+- Wallet host integration: 129 passed at the exact Chat pin (`/tmp/n42-origin-host-tests.log`). Only the Chat reference changed in the lockfile.
