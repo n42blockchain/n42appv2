@@ -3,7 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'dart:convert';
+import 'package:n42_wallet/features/wallet/services/egld_quote_service.dart';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
@@ -135,52 +135,26 @@ class EgldSender implements ChainSender {
       return SendResult.fail(S.current.g_key_wallet_m5('EGLD'));
     }
 
-    final BigInt gasLimit;
-    final int gasPrice;
-    final int version;
+    final EgldFeeQuote quote;
     try {
       final response = await _getNetworkConfig('$base/network/config');
       if (!signerIsCurrent()) {
         return const SendResult.fail('Wallet signing context changed');
       }
-      if (response is! Map ||
-          response['code'] != 'successful' ||
-          response['data'] is! Map ||
-          response['data']['config'] is! Map) {
-        throw const FormatException('Invalid network configuration');
-      }
-      final config = response['data']['config'] as Map;
-      int integer(String key, {bool zeroAllowed = false}) {
-        final value = config[key];
-        if (value is! int || value < (zeroAllowed ? 0 : 1)) {
-          throw const FormatException('Invalid network parameter');
-        }
-        return value;
-      }
-
-      if (config['erd_chain_id'] != (params.isTest ? 'T' : '1') ||
-          integer('erd_denomination') != params.decimals) {
-        throw const FormatException('Network does not match transfer');
-      }
-      final minimum = integer('erd_min_gas_limit');
-      final perByte = integer('erd_gas_per_data_byte', zeroAllowed: true);
-      final maximum = integer('erd_max_gas_per_transaction');
-      gasPrice = integer('erd_min_gas_price');
-      version = integer('erd_min_transaction_version');
-      if (version > 0x7fffffff) {
-        throw const FormatException('Invalid transaction version');
-      }
-      gasLimit =
-          BigInt.from(minimum) +
-          BigInt.from(perByte) *
-              BigInt.from(utf8.encode(params.memo ?? '').length);
-      if (gasLimit > BigInt.from(maximum)) {
-        throw const FormatException('Transfer exceeds network gas limit');
-      }
+      quote = EgldFeeQuote.parse(
+        response,
+        isTest: params.isTest,
+        decimals: params.decimals,
+        memo: params.memo ?? '',
+      );
     } catch (_) {
       return const SendResult.fail('Unable to validate network fees');
     }
-    final totalGas = gasLimit * BigInt.from(gasPrice);
+    final totalGas = quote.fee;
+    if (params.expectedFeeBaseUnits != null &&
+        params.expectedFeeBaseUnits != totalGas) {
+      return SendResult.fail(S.current.g_audit_quote_changed);
+    }
 
     BigInt valuePrice = ethToWeiString(
       params.amountDecimalString,
@@ -206,10 +180,10 @@ class EgldSender implements ChainSender {
       'nonce': nonce.toString(),
       'amount': valuePrice.toString(),
       'toAddress': params.toAddress,
-      'gasLimit': gasLimit.toString(),
-      'gasPrice': gasPrice.toString(),
+      'gasLimit': quote.gasLimit.toString(),
+      'gasPrice': quote.gasPrice.toString(),
       'chainId': params.isTest ? 'T' : '1',
-      'version': version.toString(),
+      'version': quote.version.toString(),
       'data': params.memo ?? '',
     };
 

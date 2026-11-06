@@ -61,6 +61,70 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     await loadBalance();
   }
 
+  bool get _isEgldNative =>
+      widget.coinModel.config.coinType == 'EGLD' &&
+      !widget.coinModel.config.isContract;
+  EgldFeeQuote? _egldQuote;
+  Object? _egldContext;
+  int _egldVersion = 0;
+  EgldFeeQuote? get _currentEgldQuote =>
+      _egldContext == _formContext ? _egldQuote : null;
+
+  void _invalidateEgldQuote() {
+    if (mounted && _egldQuote != null && _egldContext != _formContext) {
+      setState(() => _egldQuote = null);
+    }
+  }
+
+  Future<bool> prepareEgldQuote({bool maximum = false}) async {
+    _egldQuote = null;
+    if (widget.coinModel.loadError) {
+      setState(() => errorMessage = S.of(context).g_audit_quote_changed);
+      return false;
+    }
+    final opening = _formContext;
+    final version = ++_egldVersion;
+    bool current() =>
+        mounted && opening == _formContext && version == _egldVersion;
+    try {
+      final quote = await (widget.egldQuotes ?? EgldQuoteService()).quote(
+        isTest: widget.coinModel.isTest,
+        decimals: widget.coinModel.coin['decimals'] as int,
+        memo: memoCtrl.text.trim(),
+      );
+      if (!current()) return false;
+      final amount = maximum
+          ? widget.coinModel.balance - quote.fee
+          : transferValue;
+      if (amount <= BigInt.zero ||
+          amount + quote.fee > widget.coinModel.balance) {
+        setState(() => amountError = S.of(context).g_key_47);
+        return false;
+      }
+      if (maximum) {
+        transferValue = amount;
+        valueCtrl.text = toEther(
+          amount.toString(),
+          widget.coinModel.coin['decimals'] as int,
+        ).toString();
+      }
+      _egldQuote = quote;
+      _egldContext = _formContext;
+      totalGasPrice = quote.fee;
+      gas = quote.gasLimit;
+      gasPrice = BigInt.from(quote.gasPrice);
+      amountError = '';
+      errorMessage = '';
+      setState(() {});
+      return true;
+    } catch (_) {
+      if (current()) {
+        setState(() => errorMessage = S.of(context).g_audit_quote_changed);
+      }
+      return false;
+    }
+  }
+
   bool get _isCardanoNative =>
       widget.coinModel.config.coinType == 'ADA' &&
       !widget.coinModel.config.isContract;
@@ -155,6 +219,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     setState(() {
       load = Load.loading;
       _stellarFunds = null;
+      _egldQuote = null;
     });
     var ok = false;
     try {
@@ -235,6 +300,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     if ((_isStellarNative && valueBi > _currentStellarFunds!.spendable) ||
         (!_isStellarNative &&
             !_isCardanoNative &&
+            !_isEgldNative &&
             widget.coinModel.coin['isContract'] != true &&
             valueBi + totalGasPrice > widget.coinModel.balance)) {
       amountError = S.of(context).g_key_47;
@@ -330,6 +396,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       return;
     }
 
+    if (_isEgldNative && !await prepareEgldQuote()) {
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
     if (_isCardanoNative && !await prepareCardanoQuote(toAddr)) {
       if (mounted) setState(() => load = Load.finish);
       return;
@@ -440,7 +510,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           decimals: decimals,
           path: path,
           sendMax: false,
-          expectedFeeBaseUnits: (_isStellarNative || _isCardanoNative)
+          expectedFeeBaseUnits:
+              (_isStellarNative || _isCardanoNative || _isEgldNative)
               ? trModel.gasPrice
               : null,
           isTest: widget.coinModel.isTest,
@@ -584,6 +655,16 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   Future<void> maxTag() async {
+    if (_isEgldNative) {
+      if (load == Load.loading) return;
+      setState(() => load = Load.loading);
+      try {
+        await prepareEgldQuote(maximum: true);
+      } finally {
+        if (mounted) setState(() => load = Load.finish);
+      }
+      return;
+    }
     if (_isCardanoNative) {
       if (load == Load.loading) return;
       setState(() => load = Load.loading);

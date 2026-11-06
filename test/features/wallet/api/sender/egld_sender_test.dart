@@ -172,6 +172,8 @@ void main() {
     'fee RPC failure',
     'gas exceeds limit',
     'invalid gas price',
+    'reviewed fee changed',
+    'reviewed fee matches',
   ]) {
     test(scenario, () async {
       Object? owner = scenario == 'no owner' ? null : Object();
@@ -257,6 +259,11 @@ void main() {
           decimals: 18,
           path: "m/44'/508'/0'/0'/2'",
           privateKey: key,
+          expectedFeeBaseUnits: scenario == 'reviewed fee changed'
+              ? BigInt.one
+              : scenario == 'reviewed fee matches'
+              ? BigInt.from(65000000000000)
+              : null,
           decimalAmountOverride: scenario == 'exact amount'
               ? '1.250000000000000001'
               : null,
@@ -273,6 +280,7 @@ void main() {
         'exact amount',
         'unicode memo',
         'repriced fees',
+        'reviewed fee matches',
       ].contains(scenario);
       expect(result.success, success);
       expect(broadcasts, success ? 1 : 0);
