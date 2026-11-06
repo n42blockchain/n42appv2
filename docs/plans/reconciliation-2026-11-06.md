@@ -5,9 +5,9 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 ## Latest interruption check
 
 - Wallet `b8ee625ad` matches freshly fetched `origin/master` (0 ahead / 0 behind). Tracked wallet sources are clean; four previously recorded untracked paths remain preserved.
-- Chat task worktree `.tmp-worktrees/n42-chat-native-hub-20261106` is now clean at pushed `0f253a97`. The interrupted account-isolation patch is completed; the wallet pin is updated to the same source.
+- Chat task worktree `.tmp-worktrees/n42-chat-native-hub-20261106` is now clean at pushed `2bebc449`. The interrupted account-isolation patch is completed; the wallet pin is updated to the same source.
 - The earlier run (171 passed / 2 failed) is superseded by `/tmp/n42-owner-broad-final.log`: 3,398 passed, plus four client/token-switch transport checks in `/tmp/n42-owner-session-tests.log`. Analyzer reports no errors/warnings and ten informational diagnostics. Batch 36 records scope and limitations.
-- Legacy unattributed drafts remain preserved and unsent. A user-confirmed recovery flow, cross-device/process coordination and already-dispatched SDK races (batches 37–38 now guard BLoC work and queued UI/standalone-page login origins) and live-server acceptance remain open in MSG-001.
+- Legacy unattributed drafts remain preserved and unsent. A user-confirmed recovery flow, cross-device/process coordination and server-outcome recovery (batches 37–38 guard login origins; batch 40 coordinates send/cancel across BLoCs and standalone pages in the same isolate) and live-server acceptance remain open in MSG-001.
 - Thirteen auxiliary wallet worktrees were inspected again: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. None was removed or merged by this inspection.
 
 ## Still open, in execution order

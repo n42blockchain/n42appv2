@@ -360,3 +360,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `0f253a97491d273be9e757d73ff220d747092f95` is pushed. Other scheduling pickers/snackbars and module literal candidates remain QA-006; native-speaker review and physical-device acceptance remain open. No new TestFlight upload or device install.
 
 - Wallet host integration: 129 passed (`/tmp/n42-scheduled-l10n-host-tests.log`). The lockfile changes only the Chat pin.
+
+
+## Batch 40 — shared scheduled-operation coordination (2026-11-06)
+
+- Replaced per-BLoC send/cancel exclusion with a shared non-blocking account/room/draft lease. Independent chat controllers and standalone scheduled pages now use the same lease across transport and persistence awaits. Leases release in finally; releasing an old lease twice cannot release its replacement. Existing stable transaction IDs and account/login guards remain.
+- 71 focused tests passed (`/tmp/n42-scheduled-coordination-verified.log`). Two real BLoCs share the queue: only one sends while pending; cancellation cannot report success; failed transport preserves the draft and permits a later retry; successful cleanup prevents another send from a stale due list. Standalone cancellation waits for a free operation slot by rejecting busy attempts and allowing user retry. Distinct accounts/rooms/drafts do not block each other. Scoped analysis has no errors/warnings and seven existing style infos (`/tmp/n42-scheduled-coordination-analyze.log`).
+- Chat `2bebc449c564b26352e11b8ea9ec52b5729c618f` is pushed. This closes same-isolate cross-BLoC/standalone send-cancel overlap, not durable multi-process coordination or cross-device exactly-once delivery. Legacy recovery and live/device acceptance remain MSG-001. No release upload or device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-coordination-host-tests.log`); the lockfile changes only the Chat reference.
