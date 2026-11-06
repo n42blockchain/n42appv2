@@ -1380,6 +1380,15 @@ extension WalletCorePlugin {
         }
         let output: StellarSigningOutput = AnySigner.sign(input: input, coin: CoinType.stellar)
         guard output.error == .ok, !output.signature.isEmpty else { return nil }
+        if (txData["returnMetadata"] as? Bool) == true {
+            guard let inputData = try? input.serializedData() else { return nil }
+            let preimageData = TransactionCompiler.preImageHashes(coinType: .stellar, txInputData: inputData)
+            guard let preimage = try? TxCompilerPreSigningOutput(serializedBytes: preimageData),
+                  preimage.error == .ok, preimage.dataHash.count == 32 else { return nil }
+            let metadata = ["encoded": output.signature, "txHash": preimage.dataHash.hexString]
+            guard let json = try? JSONSerialization.data(withJSONObject: metadata) else { return nil }
+            return String(data: json, encoding: .utf8)
+        }
         return output.signature
     }
 

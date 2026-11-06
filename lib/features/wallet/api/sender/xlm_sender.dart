@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 import '../../utils/stellar/spendable_balance.dart';
+import '../../utils/stellar/signed_transaction.dart';
 
 import 'chain_sender.dart';
 
@@ -130,6 +131,7 @@ class XlmSender implements ChainSender {
       'sequence': nextSequence,
       'memo': params.memo ?? '',
       'fee': fee.toString(),
+      'returnMetadata': true,
       'passphrase': params.isTest
           ? 'Test SDF Network ; September 2015'
           : 'Public Global Stellar Network ; September 2015',
@@ -175,12 +177,41 @@ class XlmSender implements ChainSender {
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
-    final sendMm = await xlmApi.sendTransaction(signStr, isTest: params.isTest);
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-
-    final txHash =
-        (sendMm.data as Map<String, dynamic>?)?['hash']?.toString() ??
-        sendMm.data?.toString();
-    return SendResult.ok(txHash, actualAmount: adjustedAmount);
+    final StellarSignedTransaction signed;
+    try {
+      signed = StellarSignedTransaction.parse(signStr);
+    } on FormatException catch (error) {
+      return SendResult.fail(error.message);
+    }
+    try {
+      await params.beforeBroadcast?.call(signed.txHash);
+    } catch (_) {
+      return const SendResult.fail(
+        'Unable to preserve transaction before submission',
+      );
+    }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    try {
+      final result = await xlmApi.sendTransaction(
+        signed.encoded,
+        isTest: params.isTest,
+      );
+      final data = result.data;
+      if (!result.error &&
+          data is Map &&
+          data['hash'] is String &&
+          (data['hash'] as String).toLowerCase() == signed.txHash) {
+        return SendResult.ok(signed.txHash, actualAmount: adjustedAmount);
+      }
+    } catch (_) {
+      // A lost response cannot prove rejection. Do not sign or submit again.
+    }
+    return SendResult.uncertain(
+      signed.txHash,
+      'Stellar submission status is unknown; check the original transaction',
+      actualAmount: adjustedAmount,
+    );
   }
 }

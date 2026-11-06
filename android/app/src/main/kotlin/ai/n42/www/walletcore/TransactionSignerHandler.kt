@@ -25,6 +25,7 @@ import wallet.core.jni.proto.Filecoin
 import wallet.core.jni.proto.Polkadot
 import wallet.core.jni.proto.Ripple
 import wallet.core.jni.proto.Solana
+import wallet.core.jni.proto.TransactionCompiler as TxCompiler
 import wallet.core.jni.proto.Stellar
 import wallet.core.jni.proto.Sui
 import wallet.core.jni.proto.Tezos
@@ -1379,6 +1380,13 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
 
         val output = AnySigner.sign(inputBuilder.build(), CoinType.STELLAR, Stellar.SigningOutput.parser())
         if (output.errorValue != 0 || output.signature.isEmpty()) return null
+        if (txData["returnMetadata"] == true) {
+            val preimage = TxCompiler.PreSigningOutput.parseFrom(
+                TransactionCompiler.preImageHashes(CoinType.STELLAR, inputBuilder.build().toByteArray()))
+            if (preimage.errorValue != 0 || preimage.dataHash.size() != 32) return null
+            return JSONObject().put("encoded", output.signature)
+                .put("txHash", Numeric.toHexString(preimage.dataHash.toByteArray()).removePrefix("0x")).toString()
+        }
         return output.signature
     }
 

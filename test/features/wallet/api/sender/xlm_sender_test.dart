@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
@@ -13,6 +15,10 @@ class _Api extends XlmApi {
   bool ledgerError = false;
   bool malformedLedger = false;
   int fee = 100;
+  bool submissionError = false;
+  bool submissionThrows = false;
+  String hash = 'ab' * 32;
+  VoidCallback? onSend;
   int broadcasts = 0;
   int reads = 0;
   bool? testnet;
@@ -52,10 +58,13 @@ class _Api extends XlmApi {
     String txXdr, {
     bool isTest = false,
   }) async {
-    expect(txXdr, 'signed-xdr');
+    expect(txXdr, '+/8=');
     broadcasts++;
     testnet = isTest;
-    return MessageModel()..data = {'hash': 'accepted-hash'};
+    onSend?.call();
+    if (submissionThrows) throw StateError('Lost response');
+    if (submissionError) return MessageModel.error();
+    return MessageModel()..data = {'hash': hash};
   }
 }
 
@@ -104,7 +113,7 @@ class _Signer extends Trustdart {
     signatures++;
     payload = txData;
     onSign?.call();
-    return 'signed-xdr';
+    return jsonEncode({'encoded': '+/8=', 'txHash': 'ab' * 32});
   }
 }
 
@@ -236,7 +245,7 @@ void main() {
         success || scenario.endsWith('during signing') ? 1 : 0,
       );
       if (success) {
-        expect(result.txHash, 'accepted-hash');
+        expect(result.txHash, 'ab' * 32);
         expect(
           result.actualAmount,
           scenario == 'send max'
@@ -259,6 +268,7 @@ void main() {
               : '12500000',
           'sequence': '8',
           'memo': 'invoice 42',
+          'returnMetadata': true,
           'fee': scenario == 'current base fee' ? '300' : '100',
           'passphrase': scenario == 'testnet'
               ? 'Test SDF Network ; September 2015'
@@ -273,6 +283,53 @@ void main() {
       ].contains(scenario)) {
         expect(api.reads, 0);
       }
+    });
+  }
+  for (final scenario in [
+    'accepted',
+    'persist failure',
+    'owner change',
+    'timeout',
+    'error',
+    'foreign hash',
+  ]) {
+    test('submission recovery $scenario', () async {
+      Object owner = Object();
+      final saved = <String>[];
+      final api = _Api()
+        ..submissionThrows = scenario == 'timeout'
+        ..submissionError = scenario == 'error'
+        ..hash = scenario == 'foreign hash' ? 'cd' * 32 : 'ab' * 32
+        ..onSend = () => expect(saved, ['ab' * 32]);
+      final sender = XlmSender(
+        api: api,
+        trustdart: _Signer(),
+        ownerIdentity: () => owner,
+        readMnemonic: () => 'fixture mnemonic',
+      );
+      final result = await sender.send(
+        SendParams(
+          coinType: 'XLM',
+          fromAddress: 'GCONFIRMED',
+          toAddress: 'GRECIPIENT',
+          amount: 1.25,
+          decimals: 7,
+          path: "m/44'/148'/2'",
+          beforeBroadcast: (hash) async {
+            saved.add(hash);
+            if (scenario == 'persist failure') {
+              throw StateError('Storage failed');
+            }
+            if (scenario == 'owner change') owner = Object();
+          },
+        ),
+      );
+      final aborted = ['persist failure', 'owner change'].contains(scenario);
+      expect(saved, ['ab' * 32]);
+      expect(api.broadcasts, aborted ? 0 : 1);
+      expect(result.success, scenario == 'accepted');
+      expect(result.txHash, aborted ? null : 'ab' * 32);
+      if (!aborted) expect(result.actualAmount, 1.25);
     });
   }
 }

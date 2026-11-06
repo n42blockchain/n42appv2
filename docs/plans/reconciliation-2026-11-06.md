@@ -34,6 +34,13 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 
 ## Latest interruption check
 
+### Stellar pre-broadcast hash and uncertain result — batch 132
+
+- Both native signers now support opt-in metadata containing the unchanged signed XDR plus the SDK transaction hash from TransactionCompiler.preImageHashes using the same signing input. Require successful compiler output and 32-byte hash; preserve legacy raw-XDR output for other callers. Upstream implementation reference: https://github.com/trustwallet/wallet-core/blob/master/src/Stellar/Entry.cpp.
+- Dart validates canonical base64/hash metadata, calls beforeBroadcast with the original hash and rechecks owner before submission. Callback failure stops broadcast. A lost response, error or foreign returned hash yields SendResult.uncertain with the original hash and actual amount, without automatic retry or replacing the hash with remote data.
+- 90 Dart API/sender/metadata/balance tests pass (`/tmp/n42-xlm-b132.log`, exit 0). Cover storage failure, owner switch during storage, timeout, rejected result and foreign hash. Scoped analysis clean (`/tmp/n42-xlm-b132-analysis-final.log`). Real Swift/WalletCore: 27 checks pass (`/tmp/n42-xlm-b132-swift-final.log`); Android debug build/install and both native bridge tests pass (`/tmp/n42-xlm-b132-android.log`). Verify metadata/raw parity, 32-byte hashes and mainnet/testnet hash distinction. Expected txhash_null warnings are malformed-input cases.
+- Hash evidence is SDK/bridge consistency, not independent encoded-body verification. The save callback is optional; journal/history/page wiring and legacy SendResult.toMessageModel preservation remain open. Do not claim durable recovery or live settlement from this batch. No physical device, live transfer, release or upload. Simulators/emulators stopped after tests.
+
 ### Stellar submission encoding and response contract — batch 131
 
 - A local real-HTTP regression reproduced that the former uppercase Content-Type header was ignored by BaseHttp's lowercase explicit contentType lookup: the request arrived as application/json, not URL-encoded form (`/tmp/n42-xlm-b131-before.log`, failed). Changed the submission header to lowercase `content-type`, retaining exactly one `tx` field and disabled automatic retries.

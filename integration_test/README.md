@@ -138,6 +138,7 @@ Run `flutter test integration_test/native_stellar_signing_test.dart -d emulator-
 on an explicitly selected Android emulator. The test uses a public BIP39 fixture and
 synthetic sequence, without RPC or broadcast. It checks the string-valued fee contract
 and distinct mainnet/testnet XDR signing through the real MethodChannel/JNI bridge.
+Opt-in native metadata must preserve the legacy XDR and supply a 32-byte transaction hash; both networks must produce different hashes.
 Malformed fields, overflow, integer fee and oversized UTF-8 memo are rejected; a 28-byte emoji memo remains valid.
 Host wire-validator fixtures run with `python3 scripts/test_stellar_native_input.py`.
 The Swift component equivalent is `python3 scripts/test_stellar_native.py --simulator <UDID>`;

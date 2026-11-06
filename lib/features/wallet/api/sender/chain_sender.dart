@@ -52,7 +52,7 @@ class SendParams {
   /// binary floating point before a chain sender converts it to base units.
   final String? decimalAmountOverride;
 
-  /// EVM/Aptos/Cardano: durably save the locally computed hash before any broadcast.
+  /// EVM/Aptos/Cardano/Stellar: durably save the locally computed hash before any broadcast.
   /// Throwing aborts submission. No private key or signed bytes are passed.
   final Future<void> Function(String txHash)? beforeBroadcast;
 

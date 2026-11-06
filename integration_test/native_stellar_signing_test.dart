@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/utils/stellar/signed_transaction.dart';
 
 /// Public BIP39 fixture and synthetic sequence. No RPC or broadcast.
 void main() {
@@ -25,6 +26,7 @@ void main() {
     );
     expect(address['legacy'], startsWith('G'));
     final signatures = <String>[];
+    final hashes = <String>[];
     for (final network in [
       'Public Global Stellar Network ; September 2015',
       'Test SDF Network ; September 2015',
@@ -39,9 +41,23 @@ void main() {
       }, mnemonic: mnemonic);
       expect(signature, isNotEmpty);
       expect(base64Decode(signature), isNotEmpty);
+      final metadata = StellarSignedTransaction.parse(
+        await sdk.signTransaction('XLM', path, {
+          'toAddress': address['legacy'],
+          'amount': '12500000',
+          'fee': '100',
+          'sequence': '8',
+          'memo': 'invoice 42',
+          'passphrase': network,
+          'returnMetadata': true,
+        }, mnemonic: mnemonic),
+      );
+      expect(metadata.encoded, signature);
+      hashes.add(metadata.txHash);
       signatures.add(signature);
     }
     expect(signatures[0], isNot(signatures[1]));
+    expect(hashes[0], isNot(hashes[1]));
   });
   testWidgets('NATIVE-XLM-02 malformed requests fail without native crash', (
     tester,

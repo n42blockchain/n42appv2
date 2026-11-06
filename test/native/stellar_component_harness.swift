@@ -35,9 +35,15 @@ import WalletCore
             precondition(plugin.signStellarTransaction(wallet: wallet, path: path, txData: memo, pk: nil) == nil)
             memo["memo"] = String(repeating: "😀", count: 7)
             precondition(!(plugin.signStellarTransaction(wallet: wallet, path: path, txData: memo, pk: nil) ?? "").isEmpty)
+            var metadataInput = data; metadataInput["returnMetadata"] = true
+            let metadataJSON = plugin.signStellarTransaction(wallet: wallet, path: path, txData: metadataInput, pk: nil)!
+            let metadata = try! JSONSerialization.jsonObject(with: Data(metadataJSON.utf8)) as! [String: String]
+            let preimage = try! TxCompilerPreSigningOutput(serializedBytes: TransactionCompiler.preImageHashes(coinType: .stellar, txInputData: input.serializedData()))
+            precondition(preimage.error == .ok && preimage.dataHash.count == 32)
+            precondition(metadata["encoded"] == signed && metadata["txHash"] == preimage.dataHash.hexString)
             signatures.append(signed)
         }
         precondition(signatures[0] != signatures[1], "Network domain must change the signature")
-        print("Stellar native signing: 23 checks passed")
+        print("Stellar native signing: 27 checks passed")
     }
 }
