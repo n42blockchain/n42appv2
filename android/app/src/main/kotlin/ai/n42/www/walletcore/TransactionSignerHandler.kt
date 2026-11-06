@@ -864,6 +864,11 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
     private fun signSolanaTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
         val privateKey = pk ?: wallet!!.getKey(CoinType.SOLANA, path)
         val type: String = txData["type"] as String
+        if (type == "WC_SOL") {
+            if (txData["encodeType"] != "base64") return null
+            val transaction = txData["transaction"] as? String ?: return null
+            return SolanaRawTransactionSigner.sign(transaction, privateKey)
+        }
         val encodeType: String = txData["encodeType"] as String
         if (type == "createTokenAccount") {
             val createTokenAccount: Map<String, String> = txData["createTokenAccount"] as Map<String, String>
