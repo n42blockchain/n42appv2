@@ -1103,25 +1103,22 @@ extension WalletCorePlugin {
                 $0.amount = amount
             }
             input.transfer = transferMsg
-        }else{
+        } else {
+            guard let account = aptosAddress(contractAddress),
+                  contractModule.range(of: #"^[A-Za-z_][A-Za-z0-9_]*\z"#, options: .regularExpression) != nil,
+                  contractName.range(of: #"^[A-Za-z_][A-Za-z0-9_]*\z"#, options: .regularExpression) != nil else { return nil }
             let structTag = AptosStructTag.with {
-                $0.accountAddress = contractAddress
+                $0.accountAddress = account
                 $0.module = contractModule
                 $0.name = contractName
             }
-            let tokenTransferMessage = AptosTokenTransferMessage.with {
+            input.tokenTransferCoins = AptosTokenTransferCoinsMessage.with {
                 $0.to = toAddress
                 $0.amount = amount
-                $0.function=structTag
+                $0.function = structTag
             }
-            input.tokenTransfer=tokenTransferMessage
-            /*input.tokenTransferCoins=AptosTokenTransferCoinsMessage.with{
-                $0.to = toAddress
-                $0.amount = amount
-                $0.function=structTag
-            }*/
-
         }
+
         let output: AptosSigningOutput = AnySigner.sign(input: input, coin: CoinType.aptos)
         guard output.error == .ok, !output.encoded.isEmpty else { return nil }
         return output.encoded.hexString

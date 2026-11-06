@@ -26,15 +26,26 @@ func unhex(_ value: String) -> Data {
             let params: [String: Any] = ["type":"WC_APT", "encodedTransaction":raw.base64EncodedString(), "chainId":chain]
             let actual = plugin.signAptosTransaction(wallet:nil,path:"",txData:params,privateKey:key)
             precondition(actual == vector["signed"] as? String, "Node signature/authenticator mismatch")
+            let isToken = vector["token"] as? Bool ?? false
             let transfer: [String: Any] = [
                 "type":"transfer", "fromAddress":"0x" + raw.prefix(32).hexString,
                 "toAddress":"0x2", "amount":UInt64(1), "chainId":UInt32(chain),
                 "SequenceNumber":Int64(0), "gasUnitPrice":UInt64(100),
                 "maxGasAmount":UInt64(10000), "expirationTimestampSecs":UInt64(2000000000),
-                "contractAddress":"", "contractModule":"", "contractName":""
+                "contractAddress":isToken ? "0x2a" : "", "contractModule":isToken ? "usd" : "", "contractName":isToken ? "USDC" : ""
             ]
             precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:transfer,privateKey:key) == actual,
                          "Raw signer differs from WalletCore standard transfer signer")
+            if isToken {
+                for field in ["contractAddress", "contractModule", "contractName"] {
+                    for invalid in ["", "bad value", "x\n"] {
+                        // Empty contract selects native transfer by protocol, not a malformed token.
+                        if field == "contractAddress" && invalid.isEmpty { continue }
+                        var bad = transfer; bad[field] = invalid
+                        precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:bad,privateKey:key) == nil)
+                    }
+                }
+            }
             let otherKey = PrivateKey(data:Data(repeating:2,count:32))!
             precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:transfer,privateKey:otherKey) == nil,
                          "ordinary transfer must reject a different signer")

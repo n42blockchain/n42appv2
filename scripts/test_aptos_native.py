@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--simulator', required=True)
+    parser.add_argument('--token', action='store_true')
     args = parser.parse_args()
     source = (ROOT / 'ios/Runner/WalletCorePlugin+Signing.swift').read_text()
     methods = '\n'.join(declaration(source, 'func ' + name + '(').replace('private func', 'func', 1)
@@ -18,7 +19,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='n42-aptos-native-') as temp:
         temp = Path(temp)
         fixture = temp / 'vectors.json'
-        fixture.write_bytes(subprocess.check_output(['node', str(ROOT / 'test/native/aptos_reference_vector.cjs')]))
+        fixture.write_bytes(subprocess.check_output(['node', str(ROOT / 'test/native/aptos_reference_vector.cjs')] + (['--token'] if args.token else [])))
         bridge = temp / 'Bridge.swift'
         bridge.write_text('import Foundation\nimport WalletCore\nclass WalletCorePlugin {}\nextension WalletCorePlugin {\n'+methods+'\n}')
         sdk = subprocess.check_output(['xcrun','--sdk','iphonesimulator','--show-sdk-path'],text=True).strip()
