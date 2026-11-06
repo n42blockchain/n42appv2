@@ -600,3 +600,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - All 241 related entity/storage/concurrency/attachment/BLoC/page tests pass. Scoped analysis reports no issues. Logs: /tmp/n42-scheduled-strict-final.log and /tmp/n42-scheduled-strict-analysis.log. The first run exposed the old empty-owner expectation; it now asserts the existing invalid-owner error instead of a false empty queue.
 - Wallet host contracts: 3 passed (/tmp/n42-scheduled-strict-host.log); lockfile changes only the Chat revision. Existing Windows Facebook plugin metadata warning remains outside this test acceptance.
 - User-confirmed repair/import and isolating damaged drafts remain open. No process-crash/server/device acceptance or new release upload.
+
+
+## Batch 67 — full regression after recovery changes (2026-11-06)
+
+- First full runs on wallet 2a0ab4010 / Chat 4f972fcc reported wallet 6,391 passed / 2 skipped / 1 failed and Chat 7,929 passed / 4 skipped / 1 failed. Failures were transaction-history export and friend-photo deletion widget-test timeouts. Both fixtures stopped their real IO wait at a filesystem milestone before async cleanup cleared the busy UI; fake-clock pumpAndSettle then could not reliably finish that IO.
+- Wait for the actual restored export control or absent photo progress indicator inside runAsync, with bounded real deadlines. Preserve CSV/share/filter, deletion, preview, failure and retry assertions. No production behavior changed. Focused tests: wallet 4 passed, Chat 11 passed; both scoped analyses are clean.
+- Full reruns with these fixture fixes: wallet **6,392 passed / 2 skipped / 0 failed** and Chat **7,930 passed / 4 skipped / 0 failed**, both exit 0. Logs: /tmp/n42-wallet-full-b67-final.log and /tmp/n42-chat-full-b67-final.log. These supersede the failed /tmp/n42-wallet-full-b66.log and /tmp/n42-chat-full-b66.log runs.
+- Wallet skips require N42_PQ_LIBRARY. Chat skips require disposable smoke URL, media corpus, QA accounts and registration/login fixtures. No fresh coverage measured, native signing/provider/device/server acceptance or TestFlight upload. Existing Windows Facebook plugin metadata warning remains.
+- Chat fixture/evidence commit 716eac2cd7730869162f18db47bd95b79644520c is pushed and pinned. Its diff from the full-wallet-tested Chat runtime changes only the test fixture and issue ledger.

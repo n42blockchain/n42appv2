@@ -136,11 +136,20 @@ void main() {
   Future<void> finishExport(WidgetTester tester) async {
     await tester.runAsync(() async {
       repository.resume.complete();
-      // File IO runs outside the widget test's fake clock. Wait until cleanup
-      // or the share call completes, then allow its final state update to run.
-      for (var i = 0; i < 100; i++) {
+      // Filesystem completion can precede the async cleanup's final setState.
+      // Keep the real IO zone alive until the actual UI is ready again.
+      final deadline = DateTime.now().add(const Duration(seconds: 5));
+      while (true) {
+        await tester.pump();
+        final disposed = find.byType(TransactionHistoryList).evaluate().isEmpty;
+        final ready = disposed
+            ? directory.listSync().isEmpty
+            : find.byIcon(Icons.download_outlined).evaluate().isNotEmpty;
+        if (ready) break;
+        if (DateTime.now().isAfter(deadline)) {
+          fail('Export cleanup did not restore the page before the deadline');
+        }
         await Future<void>.delayed(const Duration(milliseconds: 10));
-        if (shared.isCompleted || directory.listSync().isEmpty) break;
       }
     });
     await tester.pumpAndSettle();
