@@ -369,3 +369,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `2bebc449c564b26352e11b8ea9ec52b5729c618f` is pushed. This closes same-isolate cross-BLoC/standalone send-cancel overlap, not durable multi-process coordination or cross-device exactly-once delivery. Legacy recovery and live/device acceptance remain MSG-001. No release upload or device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-coordination-host-tests.log`); the lockfile changes only the Chat reference.
+
+
+## Batch 41 — stale cancellation acknowledgement (2026-11-06)
+
+- Cancellation previously returned success when no draft remained, including a stale page after another controller sent/cleaned up the record. Missing records now return unconfirmed cancellation and clear stale BLoC previews. Standalone pages reread account-scoped pending records under the shared lease; missing records cause refresh without a successful cancellation claim. Rejected BLoC cancellation also refreshes the page.
+- Late rejection after leaving the page does not call setState on disposed state. Existing real pending-record deletion still waits for durable acknowledgement, and failures retain the record. Updated old positive test fixtures to contain an actual pending record instead of silently accepting removal of nothing.
+- 72 focused BLoC/page tests passed (`/tmp/n42-scheduled-cancel-final.log`), including cancellation after the second-controller send completes, missing drafts, failed writes, stale due queues and disposed-page acknowledgements. Scoped analysis has no errors/warnings and seven existing informational diagnostics (`/tmp/n42-scheduled-missing-analyze.log`).
+- Chat `792173289f4c3e35e56907065555015e691e0031` is pushed. An existing record after an unconfirmed remote send still does not prove that the event was never delivered; remote-outcome recovery remains MSG-001, together with legacy draft recovery and cross-device/process acceptance. No release upload or device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-cancel-missing-host-tests.log`). Dependency resolution changed only the Chat Git reference in the lockfile.
