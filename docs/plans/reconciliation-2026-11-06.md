@@ -125,6 +125,8 @@ Batch 94 verifies six native/Coin/FA vectors through actual Android MethodChanne
 
 Batch 95 completes fresh wallet regression at c776a77e3: 6,491 passed / 0 failed / no skips reported; coverage 72.77% passes 70%. Full analysis has no errors/warnings (68 infos), 49 script tests, localization and 1,641-file format checks pass. This supersedes old wallet counts only, not standalone Chat or live/device/release acceptance.
 
+Batch 96 guards Aptos request identity across address-validation/confirmation awaits and fixes short-address display/disposal errors. Final page/sender 66 tests and scoped analysis pass; the earlier full-suite result predates this change. Confirmation-route and receipt recovery work remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

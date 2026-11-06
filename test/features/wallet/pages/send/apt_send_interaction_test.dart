@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,6 +10,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_apt.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
@@ -73,6 +78,65 @@ void main() {
     state.totalGasPrice = BigInt.from(10000);
     expect(tester.takeException(), isNull);
     return state;
+  }
+
+  for (final change in [
+    'amount',
+    'recipient',
+    'network',
+    'wallet',
+    'source',
+    'path',
+    'fee',
+    'decimals',
+    'disposed',
+  ]) {
+    testWidgets('stale $change during address validation does not confirm', (
+      tester,
+    ) async {
+      final pending = Completer<bool>();
+      const channel = MethodChannel('trustdart');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) => pending.future);
+      addTearDown(
+        () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null),
+      );
+      final dynamic state = await mount(
+        tester,
+        balance: BigInt.from(1000000000),
+      );
+      state.toTextEditingController.text = '0x2';
+      state.valueTextEditingController.text = '1';
+      final sending = state.sendTransaction() as Future<void>;
+      await tester.pump();
+      switch (change) {
+        case 'amount':
+          state.valueTextEditingController.text = '2';
+        case 'recipient':
+          state.toTextEditingController.text = '0x3';
+        case 'wallet':
+          state.ref.read(wapBridgeProvider).walletIndex = 1;
+        case 'network':
+          state.widget.coinModel.isTest = true;
+        case 'source':
+          state.widget.coinModel.address = '0x3';
+        case 'path':
+          state.widget.coinModel.pathIndex = 1;
+        case 'fee':
+          state.totalGasPrice = BigInt.from(20000);
+        case 'decimals':
+          state.widget.coinModel.coin['decimals'] = 6;
+        case 'disposed':
+          await tester.pumpWidget(const SizedBox.shrink());
+      }
+      pending.complete(true);
+      await sending;
+      await tester.pumpAndSettle();
+      if (change != 'disposed') expect(state.load, Load.finish);
+      expect(find.byType(WalletBaseSend), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
   }
 
   for (final token in [false, true]) {

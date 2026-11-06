@@ -162,7 +162,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   }
 
   void _finishLoading() {
-    setState(() => load = Load.finish);
+    if (mounted) setState(() => load = Load.finish);
   }
 
   Future<void> sendTransaction() async {
@@ -174,12 +174,48 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     amountCheck();
     if (amountErrorMessage.isNotEmpty) return;
 
+    final requestedRecipient = toTextEditingController.text.trim();
+    final requestedAmount = valueTextEditingController.text;
+    final requestedValue = transferValue;
+    final requestedUser = AppGlobals.userInfo?.uuid ?? '';
+    final requestedStorage = AppGlobals.walletStorageUuid;
+    final requestedWallet = ref.read(wapBridgeProvider).walletIndex;
+    Object? walletIdentity() {
+      final wallet = ref.read(wapBridgeProvider);
+      return wallet.isWalletReady ? wallet.walletInfo : null;
+    }
+
+    final requestedWalletIdentity = walletIdentity();
+    Object sourceIdentity() => (
+      widget.coinModel.address,
+      widget.coinModel.isTest,
+      widget.coinModel.addrType,
+      widget.coinModel.pathIndex,
+      widget.coinModel.config.contract,
+      widget.coinModel.config.contractTest,
+      widget.coinModel.coin['decimals'],
+      widget.coinModel.coin['chainId'],
+      widget.coinModel.coin['chainId_test'],
+      widget.coinModel.config.pathForAddrType(widget.coinModel.addrType),
+    );
+    final requestedSource = sourceIdentity();
+    final requestedFee = (gas, gasPrice, totalGasPrice);
+    bool requestIsCurrent() =>
+        mounted &&
+        (AppGlobals.userInfo?.uuid ?? '') == requestedUser &&
+        AppGlobals.walletStorageUuid == requestedStorage &&
+        identical(walletIdentity(), requestedWalletIdentity) &&
+        ref.read(wapBridgeProvider).walletIndex == requestedWallet &&
+        sourceIdentity() == requestedSource &&
+        toTextEditingController.text.trim() == requestedRecipient &&
+        valueTextEditingController.text == requestedAmount &&
+        transferValue == requestedValue &&
+        (gas, gasPrice, totalGasPrice) == requestedFee;
+
     setState(() => load = Load.loading);
 
-    final String? toAddr = await toAddressCheck(
-      toTextEditingController.text.trim(),
-    );
-    if (toAddr == null) {
+    final String? toAddr = await toAddressCheck(requestedRecipient);
+    if (!requestIsCurrent() || toAddr == null) {
       _finishLoading();
       return;
     }
@@ -203,7 +239,8 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       ..from1 = widget.coinModel.address.toString()
       ..to1 = toAddr
       ..addrType = widget.coinModel.addrType
-      ..coin = widget.coinModel.coin
+      ..coin = Map<String, dynamic>.from(widget.coinModel.coin)
+      ..userUuid = requestedUser
       ..coinMiniName = widget.coinModel.config.coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = widget.coinModel.isTest
@@ -234,8 +271,8 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       ),
     );
     if (!mounted) return;
-    if (check == true) {
-      signTx(trModel);
+    if (check == true && requestIsCurrent()) {
+      await signTx(trModel);
     } else {
       _finishLoading();
     }

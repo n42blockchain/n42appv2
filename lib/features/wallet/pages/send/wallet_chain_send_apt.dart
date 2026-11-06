@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';

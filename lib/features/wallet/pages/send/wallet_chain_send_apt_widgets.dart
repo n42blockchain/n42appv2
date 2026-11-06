@@ -170,9 +170,10 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget ownerAddress() {
-    final String addr = dataUtils.addressFarmat(
-      widget.coinModel.address.toString(),
-    );
+    final address = widget.coinModel.address.toString();
+    final addr = address.length <= 16
+        ? address
+        : dataUtils.addressFarmat(address);
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: AppSpacing.space4,
