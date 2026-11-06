@@ -839,3 +839,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Nine delayed-validation widget cases cover edited amount/recipient, wallet index, network, source, derivation index, fee, decimals and disposed page; assert no confirmation route and no Flutter exception. These tests also exposed valid short Aptos addresses crashing the owner display's fixed substring formatting. Short addresses now render directly; longer addresses retain the existing abbreviation.
 - First run failed only the short-address scenario; fixed the actual display code and reran. Final page/sender suites: 66 passed, exit 0; scoped analysis clean. Logs: /tmp/n42-apt-confirm-b96-verified.log and /tmp/n42-apt-confirm-b96-analysis-verified.log. The prior batch 95 full-suite evidence predates this runtime change.
 - The shared predicate is called after confirmation as well, but a dedicated real confirmation-route interaction test, post-submit record/unknown-outcome recovery, generic Coin and simulation remain open. No physical-device, live broadcast or release acceptance.
+
+
+## Batch 97 — exercise the Aptos confirmation route (2026-11-06)
+
+- Added ten real WalletBaseSend route interactions: unchanged confirmation, cancellation, and changes to amount, recipient, network, wallet index, source, derivation path, fee and decimals while confirmation is open. Verify the original displayed record, zero sender calls for cancelled/stale requests, and exactly one call with the original integer amount for unchanged confirmation.
+- Authentication is represented by the route return value; the injected sender stops before signing/broadcast. This verifies page orchestration, not native password/biometric checks or settled payments. The first run exposed missing chain IDs in the test coin fixture; populated both network IDs and reran.
+- Final page suite: 23 passed. Scoped analysis and formatting pass. Logs: /tmp/n42-apt-route-b97.log and /tmp/n42-apt-route-b97-analysis.log. No runtime code changed. Batch 95 remains the last full-suite source snapshot.
+- Post-submit durable receipt/unknown-outcome recovery, generic Coin support, gas simulation and the other open maturity tasks remain unfinished. No device operation or release upload.

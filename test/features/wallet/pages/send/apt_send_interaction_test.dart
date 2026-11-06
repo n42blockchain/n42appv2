@@ -17,8 +17,10 @@ import '../../../../helpers/widget_test_helpers.dart';
 
 class _CapturingSender implements ChainSender {
   SendParams? params;
+  int calls = 0;
   @override
   Future<SendResult> send(SendParams params) async {
+    calls++;
     this.params = params;
     return const SendResult.fail('fixture stop before signing');
   }
@@ -49,6 +51,8 @@ void main() {
     ..coin = {
       'coinType': 'APT',
       'blockchainType': 'Aptos',
+      'chainId': 1,
+      'chainId_test': 2,
       'unit': 'APT',
       'miniName': 'APT',
       'decimals': 8,
@@ -60,10 +64,14 @@ void main() {
     ..addrType = 'legacy'
     ..balance = balance ?? BigInt.from(20001);
 
-  Future<dynamic> mount(WidgetTester tester, {BigInt? balance}) async {
+  Future<dynamic> mount(
+    WidgetTester tester, {
+    BigInt? balance,
+    ChainSender? sender,
+  }) async {
     await tester.pumpWidget(
       wrapForTest(
-        WalletChainSendApt(makeCoin(balance: balance)),
+        WalletChainSendApt(makeCoin(balance: balance), sender: sender),
         overrides: [
           wapBridgeProvider.overrideWith((ref) => _OfflineWalletProvider()),
         ],
@@ -134,6 +142,81 @@ void main() {
       await sending;
       await tester.pumpAndSettle();
       if (change != 'disposed') expect(state.load, Load.finish);
+      expect(find.byType(WalletBaseSend), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final change in [
+    'unchanged',
+    'cancel',
+    'amount',
+    'recipient',
+    'network',
+    'wallet',
+    'source',
+    'path',
+    'fee',
+    'decimals',
+  ]) {
+    testWidgets('confirmation route preserves request identity: $change', (
+      tester,
+    ) async {
+      const channel = MethodChannel('trustdart');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async => true);
+      addTearDown(
+        () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null),
+      );
+      final sender = _CapturingSender();
+      final dynamic state = await mount(
+        tester,
+        balance: BigInt.from(1000000000),
+        sender: sender,
+      );
+      state.toTextEditingController.text = '0x2';
+      state.valueTextEditingController.text = '1';
+      final sending = state.sendTransaction() as Future<void>;
+      await tester.pumpAndSettle();
+      expect(find.byType(WalletBaseSend), findsOneWidget);
+      final confirmation = tester.widget<WalletBaseSend>(
+        find.byType(WalletBaseSend),
+      );
+      expect(confirmation.transationRecordModel!.to1, '0x2');
+      expect(confirmation.transationRecordModel!.price, BigInt.from(100000000));
+      switch (change) {
+        case 'amount':
+          state.valueTextEditingController.text = '2';
+        case 'recipient':
+          state.toTextEditingController.text = '0x3';
+        case 'network':
+          state.widget.coinModel.isTest = true;
+        case 'wallet':
+          state.ref.read(wapBridgeProvider).walletIndex = 1;
+        case 'source':
+          state.widget.coinModel.address = '0x3';
+        case 'path':
+          state.widget.coinModel.pathIndex = 1;
+        case 'fee':
+          state.totalGasPrice = BigInt.from(20000);
+        case 'decimals':
+          state.widget.coinModel.coin['decimals'] = 6;
+      }
+      // Exercise the real route return boundary; native authentication is not
+      // under test. The injected sender never signs or broadcasts a transaction.
+      Navigator.of(tester.element(find.byType(WalletBaseSend)))
+          .pop(change != 'cancel');
+      await tester.pumpAndSettle();
+      await sending;
+      expect(sender.calls, change == 'unchanged' ? 1 : 0);
+      if (change == 'unchanged') {
+        expect(sender.params, isNotNull);
+        expect(sender.params!.valueWeiOverride, BigInt.from(100000000));
+      } else {
+        expect(sender.params, isNull);
+      }
+      expect(state.load, Load.finish);
       expect(find.byType(WalletBaseSend), findsNothing);
       expect(tester.takeException(), isNull);
     });
