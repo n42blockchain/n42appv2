@@ -18,6 +18,13 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Interrupted AA handler — batch 116
+
+- Found and completed uncommitted signer/account/network binding work. The handler now captures credentials before queuing, verifies the derived owner, rejects changed signing context, selects the correct testnet configuration and checks RPC/bundler network identity. Operation-scoped bundler clients are closed. Existing pending receipt behavior is preserved.
+- 523 sender/AA tests pass; scoped analysis reports no errors/warnings and four style infos. Evidence: `/tmp/n42-aa-signer-b116-final.log`, `/tmp/n42-aa-signer-b116-analysis-final.log`. These are local fixtures, not live AA acceptance. Batch 112 remains the latest full regression baseline.
+- Still open: non-EVM signer guards and remaining old-branch differences; native social/Matrix acceptance (native Google exchange remains disabled); Meta public review; current-source signed release; Chat repair/import and legacy ownership; dependency holds and editorial/device checks. Preserve auxiliary worktrees until their unique changes and local files are reconciled.
+
+
 ### Batch-transfer account binding — batch 115
 
 - The page now verifies the derived signing address against the confirmed sender and binds the pre-build path, credentials, owner and transaction revision across asynchronous work. The same capability check reaches provider/journal broadcasting. Wrong-key behavior was reproduced against prior source; the fixed real-page and related suites pass 52 tests, with clean scoped analysis.

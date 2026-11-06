@@ -5,6 +5,9 @@
 
 import 'dart:typed_data';
 
+import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -75,11 +78,26 @@ class AATransferParams extends TransferParams {
 /// - First-time account deployment
 class AATransferHandler extends BaseTransferHandler {
   final String _chainSymbol;
-  BundlerClient? _bundlerClient;
   String? _bundlerApiKey;
+  final Trustdart? _signer;
+  final CoinModel? Function(String)? _coinModelReader;
+  final BundlerClient Function(AAChainConfig, String?)? _bundlerFactory;
+  final Set<BundlerClient> _clients = {};
+  bool _disposed = false;
 
-  AATransferHandler(this._chainSymbol, {String? bundlerApiKey})
-    : _bundlerApiKey = bundlerApiKey;
+  AATransferHandler(
+    this._chainSymbol, {
+    String? bundlerApiKey,
+    Trustdart? signer,
+    CoinModel? Function(String)? coinModelReader,
+    BundlerClient Function(AAChainConfig, String?)? bundlerFactory,
+  }) : _bundlerApiKey = bundlerApiKey,
+       _signer = signer,
+       _coinModelReader = coinModelReader,
+       _bundlerFactory = bundlerFactory;
+
+  @override
+  Trustdart get trustdart => _signer ?? super.trustdart;
 
   @override
   String get chainSymbol => _chainSymbol;
@@ -89,58 +107,118 @@ class AATransferHandler extends BaseTransferHandler {
     return AAConfig.isChainSupported(normalizeSymbol(chainSymbol));
   }
 
-  /// Get or create bundler client
-  BundlerClient _getBundlerClient() {
-    _bundlerClient ??= BundlerClient.forChain(
-      _chainSymbol,
-      apiKey: _bundlerApiKey,
-    );
-    return _bundlerClient!;
+  AAChainConfig? _selectedConfig(AATransferParams params) {
+    final symbol = normalizeSymbol(params.chainSymbol);
+    final selected = params.isTest
+        ? switch (symbol) {
+            'ETH' => 'SEPOLIA',
+            'BASE' => 'BASE_SEPOLIA',
+            'ARB' => 'ARB_SEPOLIA',
+            _ => symbol,
+          }
+        : symbol;
+    return AAConfig.getChainConfig(selected, isTestnet: params.isTest);
   }
 
-  /// Set bundler API key
-  void setBundlerApiKey(String? apiKey) {
-    _bundlerApiKey = apiKey;
-    _bundlerClient = null; // Reset client to use new key
+  BundlerClient _createBundler(AAChainConfig config) {
+    if (_disposed) throw StateError('Transfer handler is disposed');
+    final client =
+        _bundlerFactory?.call(config, _bundlerApiKey) ??
+        BundlerClient(
+          bundlerUrl: config.bundlerUrl,
+          entryPoint: config.entryPoint,
+          apiKey: _bundlerApiKey,
+          version: config.version,
+        );
+    _clients.add(client);
+    return client;
   }
+
+  void _releaseBundler(BundlerClient? client) {
+    if (client != null && _clients.remove(client)) client.dispose();
+  }
+
+  /// Existing in-flight requests retain their captured credentials.
+  void setBundlerApiKey(String? apiKey) => _bundlerApiKey = apiKey;
 
   @override
   Future<MessageModel> transfer(TransferParams params) async {
     if (params is! AATransferParams) {
       return createError('Invalid parameters: AATransferParams required');
     }
+    final _AASigningContext signer;
+    try {
+      signer = _captureSigner(params);
+    } on AAError catch (error) {
+      return createError(error.message);
+    } catch (_) {
+      return createError('Unable to prepare smart account signer');
+    }
     // 同一智能账户的转账串行化：nonce 从查询到广播之间没有链上互斥，
     // 并发构建（快速双击/自动重试）会拿到同一 nonce 并各自广播（双花）。
     return TransferSerializer.run(
       '${params.chainSymbol}:${params.smartAccount.address}',
-      () => _transferSerialized(params),
+      () => _transferSerialized(params, signer),
     );
   }
 
-  Future<MessageModel> _transferSerialized(AATransferParams params) async {
+  Future<MessageModel> _transferSerialized(
+    AATransferParams params,
+    _AASigningContext signer,
+  ) async {
+    BundlerClient? bundler;
     try {
       if (!AAConfig.isChainSupported(normalizeSymbol(params.chainSymbol))) {
         return createError(S.current.g_key_wallet_m1(params.chainSymbol));
       }
 
-      final chainConfig = AAConfig.getChainConfig(params.chainSymbol);
+      final chainConfig = _selectedConfig(params);
       if (chainConfig == null) {
         return createError('Chain configuration not found');
       }
 
+      if (normalizeSymbol(params.chainSymbol) !=
+              normalizeSymbol(_chainSymbol) ||
+          params.smartAccount.chainId != chainConfig.chainId) {
+        return createError('Smart account network does not match transfer');
+      }
+      signer.checkCurrent();
+      final derived = await trustdart.generateAddress(
+        'ETH',
+        signer.path,
+        'legacy',
+        mnemonic: signer.privateKey == null ? signer.mnemonic : '',
+        pk: signer.privateKey ?? '',
+        isTest: params.isTest,
+      );
+      signer.checkCurrent();
+      final address = derived['legacy'];
+      if (address is! String ||
+          !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address) ||
+          address.toLowerCase() !=
+              params.smartAccount.ownerAddress.toLowerCase()) {
+        return createError('Signing key does not match smart account owner');
+      }
       final userOp = await _buildUserOperation(params, chainConfig);
-
-      final bundler = _getBundlerClient();
+      signer.checkCurrent();
+      bundler = _createBundler(chainConfig);
+      if (await bundler.getChainId() != BigInt.from(chainConfig.chainId)) {
+        return createError('Bundler network does not match smart account');
+      }
+      signer.checkCurrent();
       final gasEstimate = await bundler.estimateUserOperationGas(userOp);
       final userOpWithGas = gasEstimate
           .withBuffer(AAConstants.gasBufferMultiplier)
           .applyTo(userOp);
 
+      signer.checkCurrent();
       final signedUserOp = await _signUserOperation(
         userOpWithGas,
         params,
         chainConfig,
+        signer,
       );
+      signer.checkCurrent();
       final userOpHash = await bundler.sendUserOperation(signedUserOp);
 
       AppLogger.d('AATransferHandler', 'UserOp sent, hash: $userOpHash');
@@ -193,7 +271,90 @@ class AATransferHandler extends BaseTransferHandler {
         stackTrace: s,
       );
       return createError(e.toString());
+    } finally {
+      _releaseBundler(bundler);
     }
+  }
+
+  _AASigningContext _captureSigner(AATransferParams params) {
+    if (_disposed) throw SignatureError('Transfer handler is disposed');
+    if (!RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(params.fromAddress) ||
+        params.fromAddress.toLowerCase() !=
+            params.smartAccount.address.toLowerCase()) {
+      throw SignatureError('Sender does not match smart account');
+    }
+    if (params.smartAccount.signerType != SignerType.eoa) {
+      throw SignatureError(
+        'This transfer requires an EOA smart account signer',
+      );
+    }
+    Object? ownerIdentity() {
+      try {
+        final provider = walletProvider;
+        if (!provider.isWalletReady) return null;
+        return (
+          provider.userUUID,
+          provider.walletDataOwnerUuid,
+          provider.walletIndex,
+          provider.walletInfo,
+        );
+      } catch (_) {
+        return null;
+      }
+    }
+
+    String? resolvePath() {
+      final map = params.chainMap ?? getChainMap(params.chainSymbol);
+      final explicit = map?['path'];
+      if (explicit is String && explicit.isNotEmpty) return explicit;
+      CoinModel? coin;
+      try {
+        coin = _coinModelReader != null
+            ? _coinModelReader(params.chainSymbol)
+            : walletProvider.getCoinModelWithCoinType(params.chainSymbol);
+      } catch (_) {
+        // Explicit private-key callers can supply a path without a UI wallet.
+      }
+      if (coin != null) {
+        final base = coin.config.pathForAddrType(coin.addrType);
+        if (base != null && base.isNotEmpty) {
+          return getPathWithIndex(base, coin.pathIndex);
+        }
+      }
+      final baseInfo = map?['baseInfo'] is Map ? map!['baseInfo'] as Map : map;
+      final paths = baseInfo?['path'];
+      final base = paths is Map ? paths['legacy'] : null;
+      return base is String && base.isNotEmpty
+          ? getPathWithIndex(base, params.pathIndex)
+          : null;
+    }
+
+    final owner = ownerIdentity();
+    final wallet = params.privateKey == null ? walletProvider.walletInfo : null;
+    if (wallet != null && owner == null) {
+      throw SignatureError('Wallet is not ready');
+    }
+    final storedMnemonic = wallet?.mnemonic;
+    final storedKey = wallet?.privateKey;
+    final privateKey =
+        params.privateKey ?? (storedKey?.isNotEmpty == true ? storedKey : null);
+    final mnemonic = privateKey == null ? (storedMnemonic ?? '') : '';
+    final path = resolvePath();
+    if (path == null || (privateKey ?? mnemonic).trim().isEmpty) {
+      throw SignatureError('Signing key or derivation path is unavailable');
+    }
+    return _AASigningContext(path, mnemonic, privateKey, () {
+      try {
+        return !_disposed &&
+            ownerIdentity() == owner &&
+            resolvePath() == path &&
+            (wallet == null ||
+                (wallet.mnemonic == storedMnemonic &&
+                    wallet.privateKey == storedKey));
+      } catch (_) {
+        return false;
+      }
+    });
   }
 
   /// Build UserOperation for the transfer
@@ -257,6 +418,7 @@ class AATransferHandler extends BaseTransferHandler {
       final factory = SmartAccountFactory(
         ownerAddress: smartAccount.ownerAddress,
         chainId: smartAccount.chainId,
+        config: chainConfig,
       );
       builder.setInitCode(factory.getInitCode(salt: smartAccount.salt));
 
@@ -279,7 +441,9 @@ class AATransferHandler extends BaseTransferHandler {
     UserOperation userOp,
     AATransferParams params,
     AAChainConfig chainConfig,
+    _AASigningContext signer,
   ) async {
+    signer.checkCurrent();
     // Get the hash to sign
     final userOpHash = UserOpHasher.hash(
       userOp: userOp,
@@ -289,46 +453,14 @@ class AATransferHandler extends BaseTransferHandler {
 
     final hashHex = '0x${bytesToHex(userOpHash)}';
 
-    // Get chain map for signing
-    final chainMap = params.chainMap ?? getChainMap(params.chainSymbol);
-    if (chainMap == null) {
-      throw UserOperationBuildError('Chain map not found');
-    }
-
-    // 签名 path 必须与 owner 地址派生用同一 pathIndex/addrType。owner 来自
-    // walletProvider.getAddress(chainSymbol)(活跃钱包真实 pathIndex);此前 path
-    // 取 chainMap['path'](该键在 walletMap 是 Map 非 String,`as String?` 恒命中
-    // null)→ 硬编码 index-0,多账户(pathIndex>0)AA 会 signer≠owner 被 bundler
-    // 拒、资金锁死在该智能账户(第三轮 P1)。
-    String path = chainMap['path'] as String? ?? '';
-    if (path.isEmpty) {
-      final ownerCm = walletProvider.getCoinModelWithCoinType(
-        params.chainSymbol,
-      );
-      if (ownerCm != null) {
-        final base =
-            ownerCm.config.pathForAddrType(ownerCm.addrType) ??
-            "m/44'/60'/0'/0/0";
-        path = getPathWithIndex(base, ownerCm.pathIndex);
-      } else {
-        path = "m/44'/60'/0'/0/0";
-      }
-    }
-
-    // Sign using trustdart (prefer private key, fallback to mnemonic)
-    final signatureHex = params.privateKey != null
-        ? await trustdart.signMessage(
-            params.chainSymbol,
-            path,
-            hashHex,
-            pk: params.privateKey!,
-          )
-        : await trustdart.signMessage(
-            params.chainSymbol,
-            path,
-            hashHex,
-            mnemonic: walletProvider.walletInfo.mnemonic ?? '',
-          );
+    final signatureHex = await trustdart.signMessage(
+      'ETH',
+      signer.path,
+      hashHex,
+      pk: signer.privateKey ?? '',
+      mnemonic: signer.privateKey == null ? signer.mnemonic : '',
+    );
+    signer.checkCurrent();
 
     if (signatureHex.isEmpty) {
       throw SignatureError('Failed to sign UserOperation');
@@ -350,6 +482,12 @@ class AATransferHandler extends BaseTransferHandler {
       // Query nonce from EntryPoint contract via eth_call
       final ethApi = EthAPI.init(_chainSymbol, _getRpcUrl(isTest: isTest), '');
 
+      final network = await ethApi.getChainId();
+      if (network.error || network.data != BigInt.from(chainConfig.chainId)) {
+        throw UserOperationBuildError(
+          'RPC network does not match smart account',
+        );
+      }
       // getNonce(address sender, uint192 key)
       // Function selector: 0x35567e1a
       final senderPadded = sender
@@ -389,7 +527,8 @@ class AATransferHandler extends BaseTransferHandler {
   /// Get RPC URL for the chain
   String _getRpcUrl({bool isTest = false}) {
     final key = isTest ? 'service_test' : 'service';
-    return getChainMap(_chainSymbol)?[key] as String? ??
+    final base = resolveChainBaseInfo(getChainMap(_chainSymbol));
+    return base?[key] as String? ??
         chainUrlMap[_chainSymbol]?['baseInfo']?[key] as String? ??
         '';
   }
@@ -403,6 +542,7 @@ class AATransferHandler extends BaseTransferHandler {
       BlockchainType.Ethereum.name,
       chainSymbol,
       isTest: isTest,
+      rpc: _getRpcUrl(isTest: isTest),
     );
 
     if (mm == null || mm.error) {
@@ -450,14 +590,23 @@ class AATransferHandler extends BaseTransferHandler {
 
   @override
   Future<GasEstimation> estimateGas(TransferParams params) async {
+    BundlerClient? bundler;
     try {
       if (params is! AATransferParams) return _gasError('Invalid parameters');
 
-      final chainConfig = AAConfig.getChainConfig(params.chainSymbol);
+      final chainConfig = _selectedConfig(params);
       if (chainConfig == null) return _gasError('Chain not supported');
+      if (normalizeSymbol(params.chainSymbol) !=
+              normalizeSymbol(_chainSymbol) ||
+          params.smartAccount.chainId != chainConfig.chainId) {
+        return _gasError('Smart account network does not match transfer');
+      }
 
       final userOp = await _buildUserOperation(params, chainConfig);
-      final bundler = _getBundlerClient();
+      bundler = _createBundler(chainConfig);
+      if (await bundler.getChainId() != BigInt.from(chainConfig.chainId)) {
+        return _gasError('Bundler network does not match smart account');
+      }
       final estimate = await bundler.estimateUserOperationGas(userOp);
       final gasPrices = await _getGasPrices(
         params.chainSymbol,
@@ -472,6 +621,8 @@ class AATransferHandler extends BaseTransferHandler {
       );
     } catch (e) {
       return _gasError(e.toString());
+    } finally {
+      _releaseBundler(bundler);
     }
   }
 
@@ -493,7 +644,21 @@ class AATransferHandler extends BaseTransferHandler {
 
   /// Clean up resources
   void dispose() {
-    _bundlerClient?.dispose();
-    _bundlerClient = null;
+    _disposed = true;
+    for (final client in _clients) {
+      client.dispose();
+    }
+    _clients.clear();
+  }
+}
+
+class _AASigningContext {
+  final String path;
+  final String mnemonic;
+  final String? privateKey;
+  final bool Function() _isCurrent;
+  _AASigningContext(this.path, this.mnemonic, this.privateKey, this._isCurrent);
+  void checkCurrent() {
+    if (!_isCurrent()) throw SignatureError('Wallet signing context changed');
   }
 }
