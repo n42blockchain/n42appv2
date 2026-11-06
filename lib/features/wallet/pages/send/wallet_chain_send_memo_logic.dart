@@ -301,8 +301,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         if (trModel.trId == 0) {
           trModel.trId = await _persistTransaction(trModel);
         }
-        if (!mounted || RecentAddressService.currentUser != recentAddressOwner)
+        if (!mounted || RecentAddressService.currentUser != recentAddressOwner) {
           return;
+        }
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(
           coinType,

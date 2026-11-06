@@ -94,8 +94,9 @@ void main() {
               if ([
                 'dispose before ack',
                 'in flight duplicate',
-              ].contains(scenario))
+              ].contains(scenario)) {
                 await ack.future;
+              }
               if (scenario == 'success') return SendResult.ok('ab' * 32);
               if (scenario == 'foreign hash') return SendResult.ok('cd' * 32);
               return SendResult.uncertain('ab' * 32, 'Response lost');
