@@ -215,6 +215,9 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    final recentAddressOwner = trModel.userUuid.isNotEmpty
+        ? trModel.userUuid
+        : RecentAddressService.currentUser;
     if (!signTxCheck()) return;
     bool completedWithExit = false;
     try {
@@ -261,6 +264,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
         await RecentAddressService.save(
           coinType,
           toTextEditingController.text.trim(),
+          userUuid: recentAddressOwner,
         );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);

@@ -220,6 +220,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    final recentAddressOwner = trModel.userUuid.isNotEmpty
+        ? trModel.userUuid
+        : RecentAddressService.currentUser;
     bool completedWithExit = false;
     try {
       final coinType = widget.coinModel.config.coinType;
@@ -262,7 +265,11 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(coinType, toCtrl.text.trim());
+        await RecentAddressService.save(
+          coinType,
+          toCtrl.text.trim(),
+          userUuid: recentAddressOwner,
+        );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;

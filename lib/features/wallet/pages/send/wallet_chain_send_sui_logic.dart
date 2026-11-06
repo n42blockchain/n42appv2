@@ -406,6 +406,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    final recentAddressOwner = trModel.userUuid.isNotEmpty
+        ? trModel.userUuid
+        : RecentAddressService.currentUser;
     if (!mounted || _signing || _acceptedHash != null) return;
     bool ownerIsCurrent() =>
         mounted &&
@@ -463,8 +466,12 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         if (trModel.trId <= 0) throw StateError('Transaction was not saved');
         if (!ownerIsCurrent()) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(coinType, trModel.to1);
-        if (!ownerIsCurrent()) return;
+        await RecentAddressService.save(
+          coinType,
+          trModel.to1,
+          userUuid: recentAddressOwner,
+        );
+        if (!mounted || !ownerIsCurrent()) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);

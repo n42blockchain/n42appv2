@@ -588,6 +588,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       .send(params);
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    final recentAddressOwner = trModel.userUuid.isNotEmpty
+        ? trModel.userUuid
+        : RecentAddressService.currentUser;
     if (_signing || _preparedHash != null) {
       return;
     }
@@ -650,7 +653,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         }
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(_coinType, trModel.to1);
+        await RecentAddressService.save(
+          _coinType,
+          trModel.to1,
+          userUuid: recentAddressOwner,
+        );
         if (!mounted) return;
         ToastUtils.show(
           result.success

@@ -5,6 +5,8 @@
 
 import 'dart:convert';
 
+import 'package:n42_wallet/core/app/app_globals.dart';
+
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +39,9 @@ class RecentAddressEntry {
 
 /// 最近转账地址服务
 ///
-/// 存储格式（SharedPreferences key = recentSendAddresses）：
+/// Storage is partitioned by the wallet identity namespace. Legacy unscoped
+/// recentSendAddresses data is retained but never assigned to a new identity.
+/// Each namespace stores:
 /// ```json
 /// {
 ///   "ETH": [{"address":"0x…","name":"Alice","time":"2026-02-20T10:00:00Z"}],
@@ -46,11 +50,22 @@ class RecentAddressEntry {
 /// ```
 class RecentAddressService {
   static const int _maxPerChain = 10;
+  static String get currentUser => AppGlobals.walletStorageUuid;
+  static Future<void> _pending = Future.value();
+  static String _key(String user) =>
+      '${SPkey.recentSendAddresses.name}.v2.${base64Url.encode(utf8.encode(user))}';
+  static Future<void> _mutate(Future<void> Function() operation) {
+    final next = _pending.then((_) => operation());
+    _pending = next.then<void>((_) {}, onError: (Object _, StackTrace _) {});
+    return next;
+  }
 
   /// 读取底层存储（完整 map，key = coinType）
-  static Future<Map<String, List<RecentAddressEntry>>> _readAll() async {
+  static Future<Map<String, List<RecentAddressEntry>>> _readAll(
+    String user,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(SPkey.recentSendAddresses.name);
+    final raw = prefs.getString(_key(user));
     if (raw == null || raw.isEmpty) return {};
 
     try {
@@ -68,13 +83,16 @@ class RecentAddressService {
 
   /// 写入底层存储
   static Future<void> _writeAll(
+    String user,
     Map<String, List<RecentAddressEntry>> data,
   ) async {
     final prefs = await SharedPreferences.getInstance();
     final encoded = json.encode(
       data.map((k, v) => MapEntry(k, v.map((e) => e.toJson()).toList())),
     );
-    await prefs.setString(SPkey.recentSendAddresses.name, encoded);
+    if (!await prefs.setString(_key(user), encoded)) {
+      throw StateError('Recent addresses were not saved');
+    }
   }
 
   /// 保存地址：插到头部、按地址去重、截断至 [_maxPerChain]
@@ -84,10 +102,20 @@ class RecentAddressService {
     String coinType,
     String address, {
     String? name,
-  }) async {
-    if (address.isEmpty) return;
+    String? userUuid,
+  }) {
+    final user = userUuid ?? currentUser;
+    if (address.isEmpty || user.isEmpty) return Future.value();
+    return _mutate(() => _save(user, coinType, address, name));
+  }
 
-    final all = await _readAll();
+  static Future<void> _save(
+    String user,
+    String coinType,
+    String address,
+    String? name,
+  ) async {
+    final all = await _readAll(user);
     final list = List<RecentAddressEntry>.from(all[coinType] ?? []);
 
     // 去重：移除旧条目（不区分大小写比对）
@@ -109,24 +137,33 @@ class RecentAddressService {
     }
 
     all[coinType] = list;
-    await _writeAll(all);
+    await _writeAll(user, all);
   }
 
   /// 读取指定链最近 [maxCount] 条地址（按时间倒序，默认 5 条）
   static Future<List<RecentAddressEntry>> load(
     String coinType, {
     int maxCount = 5,
+    String? userUuid,
   }) async {
-    final all = await _readAll();
+    final user = userUuid ?? currentUser;
+    if (user.isEmpty) return [];
+    await _pending;
+    final all = await _readAll(user);
+    if (userUuid == null && user != currentUser) return [];
     final list = all[coinType] ?? [];
     // 存储时已按时间倒序排列（save 总是插到头部），直接截取
     return list.take(maxCount).toList();
   }
 
   /// 清除指定链历史，其他链不受影响
-  static Future<void> clear(String coinType) async {
-    final all = await _readAll();
-    all.remove(coinType);
-    await _writeAll(all);
+  static Future<void> clear(String coinType, {String? userUuid}) {
+    final user = userUuid ?? currentUser;
+    if (user.isEmpty) return Future.value();
+    return _mutate(() async {
+      final all = await _readAll(user);
+      all.remove(coinType);
+      await _writeAll(user, all);
+    });
   }
 }

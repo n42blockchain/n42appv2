@@ -242,6 +242,7 @@ class RecentAddressBar extends StatefulWidget {
 
 class _RecentAddressBarState extends State<RecentAddressBar> {
   List<RecentAddressEntry> _entries = [];
+  String? _loadedUser;
 
   @override
   void initState() {
@@ -249,14 +250,32 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
     _load();
   }
 
+  @override
+  void didUpdateWidget(covariant RecentAddressBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.coinType != widget.coinType ||
+        _loadedUser != RecentAddressService.currentUser) {
+      _entries = [];
+      _load();
+    }
+  }
+
   Future<void> _load() async {
+    final user = RecentAddressService.currentUser;
     final list = await RecentAddressService.load(widget.coinType, maxCount: 5);
-    if (mounted) setState(() => _entries = list);
+    if (mounted && user == RecentAddressService.currentUser) {
+      setState(() {
+        _entries = list;
+        _loadedUser = user;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_entries.isEmpty) return const SizedBox.shrink();
+    if (_entries.isEmpty || _loadedUser != RecentAddressService.currentUser) {
+      return const SizedBox.shrink();
+    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -292,7 +311,11 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
                       ],
                     ),
                   ),
-                  onPressed: () => widget.onSelected(entry.address),
+                  onPressed: () {
+                    if (_loadedUser == RecentAddressService.currentUser) {
+                      widget.onSelected(entry.address);
+                    }
+                  },
                 ),
               ),
             );

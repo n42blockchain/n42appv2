@@ -139,6 +139,9 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
 
   // Bug#2: reset load on early return so the send button is not stuck loading.
   Future<void> signTx(BtcTransactionRecodeModel trModel) async {
+    final recentAddressOwner = trModel.userUuid.isNotEmpty
+        ? trModel.userUuid
+        : RecentAddressService.currentUser;
     load = Load.loading;
     setState(() {});
     if (unspents.isEmpty) {
@@ -161,6 +164,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     await RecentAddressService.save(
       widget.coinModel.config.coinType,
       toTextEditingController.text.trim(),
+      userUuid: recentAddressOwner,
     );
     if (!mounted) return;
     ToastUtils.show(S.current.g_key_nft_41);
