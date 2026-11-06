@@ -21,7 +21,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 ### EVM account-binding follow-up — batch 113
 
 - The EVM portion of the missed security branch is now ported to current sender code: capture owner/key before serialization, validate the derived sender address, and check owner/credentials across RPC, native signing and persistence awaits. Ethereum address derivation preserves custom-network support. Existing exact amounts/fees/nonce/history behavior remains covered.
-- 202 targeted sender/data/EVM tests pass; scoped analysis clean. Evidence: `/tmp/n42-evm-owner-b113-final.log`, `/tmp/n42-evm-owner-b113-analysis.log`. Native calls use controlled fixtures; no real payment/device acceptance. Non-EVM/batch/AA and other old-branch guards still need comparison/porting; keep the worktree. The deep-link test timing improvement remains open.
+- 202 targeted sender/data/EVM tests pass; scoped analysis clean. Evidence: `/tmp/n42-evm-owner-b113-final.log`, `/tmp/n42-evm-owner-b113-analysis.log`. Native calls use controlled fixtures; no real payment/device acceptance. Non-EVM/batch/AA and other old-branch guards still need comparison/porting; keep the worktree. Batch 114 restores the deep-link test timing improvement: wait for asynchronous delivery after disposal; 64 handler/lifecycle tests pass. The old test-audit branch stays preserved pending worktree cleanup review.
 
 ### Full-regression inspection — batch 112 complete
 

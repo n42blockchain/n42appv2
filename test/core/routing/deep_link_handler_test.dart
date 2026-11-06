@@ -267,7 +267,7 @@ void main() {
       expect(DeepLinkHandler.generateGroupLink('group1'), 'n42://group/group1');
     });
 
-    test('should handle dispose gracefully', () {
+    test('dispose stops asynchronous navigation and is idempotent', () async {
       handler.startListening();
       handler.dispose();
       handler.dispose();
@@ -279,6 +279,9 @@ void main() {
         ),
       );
 
+      // Broadcast streams deliver asynchronously. An immediate assertion can
+      // pass before an uncancelled subscription gets a chance to navigate.
+      await Future<void>.delayed(Duration.zero);
       expect(navigatedData, isEmpty);
     });
   });

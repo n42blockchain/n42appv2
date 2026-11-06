@@ -985,3 +985,10 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Exact amount, token/native fee reservation, nonce serialization, custom RPC routing and durable pre-broadcast recovery stay in place. **202 sender/data/EVM regressions pass**, exit 0, `/tmp/n42-evm-owner-b113-final.log`. New cases cover wrong/empty/malformed derived addresses, derivation failure, matching mnemonic, owner or credential replacement during RPC, owner replacement during derivation/signing/persistence, queued requests and custom EVM networks. The SQLite reopen fixture now derives its own declared sender rather than a different address; its original recovery assertions remain.
 - Scoped analysis: no issues, `/tmp/n42-evm-owner-b113-analysis.log`; diff whitespace check passes. Batch 112 full-suite/coverage evidence predates this runtime change. These tests use controlled native/RPC fixtures, not real payments or new device signing acceptance; private-pool live acceptance remains unverified.
 - Remaining old-branch work: non-EVM sender guards, batch/AA paths and selected-wallet semantics must be compared independently with newer protections. Do not delete or merge the old worktree wholesale. Native provider/Matrix, current-source release and broader maturity issues remain open.
+
+
+## Batch 114 — recover the old deep-link disposal assertion (2026-11-06)
+
+- Ported the remaining asynchronous assertion timing from old test-audit commit `4f64ed5cf`: emit after double disposal, allow the broadcast stream an event-loop turn, then assert no navigation. An immediate assertion could pass before delivery. Runtime behavior is unchanged.
+- Handler/lifecycle suites: **64 passed**, exit 0, `/tmp/n42-deep-link-b114.log`; scoped analysis clean, `/tmp/n42-deep-link-b114-analysis.log`; whitespace check passes.
+- This closes the identified test timing omission, not all auxiliary-worktree reconciliation. No worktree, branch, ignored build data or local configuration was deleted.
