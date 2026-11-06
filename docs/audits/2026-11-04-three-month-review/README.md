@@ -321,3 +321,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat source `d141cbc363045b1a4674af752f8d75b70b98ee08` is pushed and pinned. No live-server deduplication or exactly-once guarantee: Matrix transaction identifiers are device/endpoint scoped (https://spec.matrix.org/v1.16/client-server-api/#transaction-identifiers). New device/logins, encryption/type transitions, old pre-upgrade attempts, cross-instance scheduling, account ownership and media re-upload costs remain open in MSG-001. No production release/upload.
 
 - Wallet host integration: 129 tests passed with this exact Chat pin. Pub get changed only its lockfile reference. Log: `/tmp/n42-scheduled-tx-host-tests.log`. Existing Facebook Windows plugin metadata warning remains; no native acceptance is inferred.
+
+
+## Batch 36 — scheduled-message account isolation (2026-11-06)
+
+- Closed the interrupted nine-file draft by scoping scheduled storage to the Matrix user. Existing unowned records are preserved in the legacy key and are not automatically claimed by a newly logged-in account. New creation events carry their original account/room; late queue reads, previews, cancellation and cleanup check account/session ownership.
+- Text, poll, GIF and sticker senders recheck their captured client/session after asynchronous preparation and before SDK dispatch. Existing media guards remain. All seven scheduled message families and stable retry IDs are preserved.
+- Relevant Chat data-source/repository/BLoC/entity/page suites: 3,398 passed. Four additional transport cases reject client/token switches for text/poll before SDK send. Tests also cover account-scoped same-ID drafts, concurrent writes, retained legacy data, stale page loading/cancellation and due-queue account switches. Logs: `/tmp/n42-owner-broad-final.log`, `/tmp/n42-owner-session-tests.log`.
+- Still open in MSG-001: user-confirmed legacy recovery, same-user re-login intent generations, cross-process/device scheduling and live-server acceptance. Retaining legacy data is not a completed migration or exactly-once guarantee. No device installation or release upload performed.
+
+- Chat `1a5acbdc0185c8479573dd20420e72623ae7c740` is pushed and pinned. Wallet host integration: 129 passed (`/tmp/n42-owner-host-tests.log`); pub get changed only the Chat lockfile reference. Final scoped source analyzer: no errors/warnings, ten informational diagnostics (`/tmp/n42-owner-analyze-verified.log`). Existing Facebook Windows metadata warning remains.
