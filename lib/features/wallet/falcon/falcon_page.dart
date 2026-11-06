@@ -156,12 +156,12 @@ class _FalconPageState extends State<FalconPage> {
       feeCap: number('feeCap'),
       publicKey: key,
     );
-    final network = FalconNetwork.endpoint(fields['rpc']!.text);
+    final network = send ? FalconNetwork.endpoint(fields['rpc']!.text) : null;
     if (send) {
       if (!await vault!.backupVerified()) {
         throw StateError('Verify the encrypted backup first');
       }
-      await network.validate(tx);
+      await network!.validate(tx);
     }
     if (!mounted || !widget.isOwnerCurrent()) return;
     final confirmed = await showDialog<bool>(
@@ -193,13 +193,13 @@ class _FalconPageState extends State<FalconPage> {
     );
     if (confirmed != true || !mounted || !widget.isOwnerCurrent()) return;
     if (send) {
-      await network.validate(tx);
+      await network!.validate(tx);
     }
     if (!mounted || !widget.isOwnerCurrent()) return;
     final signature = await vault!.sign(tx.digest);
     if (send) {
       if (!mounted || !widget.isOwnerCurrent()) return;
-      final hash = await network.submit(
+      final hash = await network!.submit(
         tx,
         signature,
         vault!.crypto,
