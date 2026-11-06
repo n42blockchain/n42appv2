@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Cardano paginated input discovery — batch 124
+
+- UTxO discovery now explicitly scans 100-entry pages until a short page. Errors, malformed/repeated outpoints and scan exhaustion cannot return partial success. Endpoint and headers remain captured for the scan.
+- 92 API/pagination/sender/normalization tests pass (`/tmp/n42-ada-pages-b124.log`); analysis has no errors/warnings and three style infos. Snapshot consistency during chain changes and accounts beyond the 100-page bound remain unverified/unsupported by this scan. Multi-asset change, send-max/fee accuracy and Android signing are still pending.
+
+
 ### Real Swift Cardano signing — batch 123
 
 - The normalized payload now has executable Swift/WalletCore evidence: 13 component checks pass on the N42 simulator, including signing, direct SDK equivalence, key-source parity, fee/change balance and rejected invalid requests. A reproduced invalid-recipient failure led to explicit SDK error-enum/nonempty-encoding checks in both native bridges.

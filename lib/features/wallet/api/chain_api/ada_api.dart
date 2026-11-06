@@ -19,8 +19,21 @@ class AdaApi {
   })?
   _submit;
 
+  final Future<dynamic> Function(
+    String url,
+    Map<String, dynamic> query,
+    Map<String, String> header,
+  )?
+  _readUtxoPage;
+
   AdaApi({
     required this.projectId,
+    Future<dynamic> Function(
+      String url,
+      Map<String, dynamic> query,
+      Map<String, String> header,
+    )?
+    readUtxoPage,
     Future<dynamic> Function(
       String url,
       Uint8List bytes, {
@@ -28,7 +41,8 @@ class AdaApi {
       required bool enableRetry,
     })?
     submit,
-  }) : _submit = submit;
+  }) : _submit = submit,
+       _readUtxoPage = readUtxoPage;
 
   String _base(bool isTest) =>
       RequestUrl().getUrl2(_coinType.name, 'rpc', isTest: isTest);
@@ -64,13 +78,56 @@ class AdaApi {
     bool isTest = false,
   }) async {
     try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_base(isTest)}/addresses/$address/utxos',
-        params: {},
-        defaultReturn: false,
-        header: _header,
+      const pageSize = 100;
+      const maxPages = 100;
+      final url =
+          '${_base(isTest)}/addresses/${Uri.encodeComponent(address)}/utxos';
+      final header = _header;
+      final inputs = <Map<String, dynamic>>[];
+      final seen = <String>{};
+      for (var page = 1; page <= maxPages; page++) {
+        final query = <String, dynamic>{
+          'page': page,
+          'count': pageSize,
+          'order': 'asc',
+        };
+        final data = _readUtxoPage != null
+            ? await _readUtxoPage(url, query, header)
+            : await BaseApi.requestEmptyH.get(
+                url,
+                params: query,
+                defaultReturn: false,
+                header: header,
+              );
+        if (data is! List || data.length > pageSize) {
+          return _err('Invalid Cardano UTxO page');
+        }
+        for (final item in data) {
+          if (item is! Map<String, dynamic>)
+            return _err('Invalid Cardano UTxO');
+          final hash = item['tx_hash'];
+          final index = item['output_index'];
+          if (hash is! String ||
+              !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash) ||
+              index is! int ||
+              index < 0 ||
+              index > 0xffffffff) {
+            return _err('Invalid Cardano UTxO outpoint');
+          }
+          // Do not deduplicate silently: overlap can indicate a moving page
+          // boundary or a server that ignored pagination. Discard the scan.
+          if (!seen.add('${hash.toLowerCase()}:$index')) {
+            return _err(
+              'Cardano UTxO pages changed or repeated; refresh required',
+            );
+          }
+          inputs.add(Map<String, dynamic>.from(item));
+        }
+        if (data.length < pageSize) return MessageModel()..data = inputs;
+      }
+      return _err(
+        'Cardano UTxO scan limit reached; complete input set unavailable',
       );
-      return MessageModel()..data = data;
     } catch (e) {
       return _err(e);
     }
