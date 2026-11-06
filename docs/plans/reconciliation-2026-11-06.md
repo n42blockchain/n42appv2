@@ -175,6 +175,8 @@ Batch 107 reserves a durable unsubmitted Aptos record before history insertion a
 
 Batch 108 implements bounded nested generic Aptos Coin transfers through the existing native raw-signing bridge. All 137 related Dart tests pass; Swift matches two generic vectors and Android JNI matches eight native/Coin/FA/generic vectors. Temporary Android emulator shut down. Gas simulation, arbitrary Move types/payloads and live/device acceptance remain open; historical generic-Coin gaps below are superseded only within these bounds.
 
+Batch 109 adds the scheduled error-page recovery-copy action, account-scoped exact-byte persistence and bounded preview, with 26 locale updates. Chat 221 tests and scoped analysis pass. Copies neither change nor send drafts; damaged-record repair/import, unowned legacy confirmation and copy management remain unfinished. The wallet pins Chat db950517; no fresh full-suite/release claim.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.
