@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Cardano TTL and normalized inputs — batch 122
+
+- Sender now provides checked native UTxO fields and TTL derived from the selected node's slot. Funding uses selected input value, not the aggregate address balance. Token-bearing inputs remain unspent until native multi-asset change is implemented; insufficient eligible funds reports that limitation.
+- 302 normalization/sender/API tests pass (`/tmp/n42-ada-inputs-b122-final.log`); scoped analysis clean. Missing TTL/raw amount-list mismatch is repaired. Still open: actual native signing, fees/send-max, network addresses, full multi-asset change, pagination and durable unknown-submission recovery. No full-runtime/device acceptance claim.
+
+
 ### Cardano binary submission — batch 121
 
 - AdaApi now decodes native hex to binary CBOR before HTTP submission, validates encoding before network access, retains disabled retries and rejects malformed success IDs. Official Blockfrost OpenAPI confirms the binary upload contract. A local HTTP server verifies actual request bytes and headers.

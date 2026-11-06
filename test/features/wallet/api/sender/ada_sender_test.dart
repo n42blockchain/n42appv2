@@ -8,7 +8,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class _Api extends AdaApi {
-  _Api({String projectId = 'fixture-project'}) : super(projectId: projectId);
+  _Api({super.projectId = 'fixture-project'});
   VoidCallback? onAccount;
   int broadcasts = 0;
   int reads = 0;
@@ -28,6 +28,9 @@ class _Api extends AdaApi {
       };
   }
 
+  bool tokenOnly = false;
+  bool wrongInputOwner = false;
+  dynamic slot = 100000;
   VoidCallback? onUtxos;
   @override
   Future<MessageModel> getAddressUtxos(
@@ -38,13 +41,22 @@ class _Api extends AdaApi {
     return MessageModel()
       ..data = [
         {
-          'tx_hash': 'fixture-hash',
+          'tx_hash': 'ab' * 32,
+          'address': wrongInputOwner ? 'addr_other' : 'addr_confirmed',
           'output_index': 2,
           'amount': [
             {'unit': 'lovelace', 'quantity': '10000000'},
+            if (tokenOnly) {'unit': 'ab' * 28, 'quantity': '1'},
           ],
         },
       ];
+  }
+
+  VoidCallback? onBlock;
+  @override
+  Future<MessageModel> getLatestBlock({bool isTest = false}) async {
+    onBlock?.call();
+    return MessageModel()..data = {'slot': slot};
   }
 
   @override
@@ -123,6 +135,10 @@ void main() {
     'address case',
     'owner during RPC',
     'owner during UTxO',
+    'owner during block',
+    'invalid slot',
+    'token-only inputs',
+    'wrong input owner',
     'missing project',
     'key during RPC',
     'owner during derivation',
@@ -139,6 +155,9 @@ void main() {
       final api = _Api(
         projectId: scenario == 'missing project' ? '' : 'fixture-project',
       );
+      api.slot = scenario == 'invalid slot' ? null : 100000;
+      api.tokenOnly = scenario == 'token-only inputs';
+      api.wrongInputOwner = scenario == 'wrong input owner';
       final signer = _Signer();
       void changeOwner() {
         owner = Object();
@@ -157,6 +176,8 @@ void main() {
           signer.address = 'ADDR_CONFIRMED';
         case 'owner during RPC':
           api.onAccount = changeOwner;
+        case 'owner during block':
+          api.onBlock = changeOwner;
         case 'owner during UTxO':
           api.onUtxos = changeOwner;
         case 'key during RPC':
@@ -229,15 +250,15 @@ void main() {
           scenario == 'send max' ? '9826000' : '1250000',
         );
         expect(signer.payload!['fee'], 174000);
+        expect(signer.payload!['ttl'], '103600');
         expect(signer.payload!['changeAddress'], 'addr_confirmed');
         expect(signer.payload!['toAddress'], 'addr_recipient');
         expect(signer.payload!['utxos'], [
           {
-            'txHash': 'fixture-hash',
+            'txHash': 'ab' * 32,
+            'address': 'addr_confirmed',
             'outputIndex': 2,
-            'amount': [
-              {'unit': 'lovelace', 'quantity': '10000000'},
-            ],
+            'amount': '10000000',
           },
         ]);
         expect(result.actualAmount, scenario == 'send max' ? 9.826 : 1.25);

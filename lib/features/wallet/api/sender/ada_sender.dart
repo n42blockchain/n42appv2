@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 import 'chain_sender.dart';
+import '../../utils/cardano/signing_inputs.dart';
 
 /// Cardano (ADA) sender — uses Blockfrost API.
 class AdaSender implements ChainSender {
@@ -118,7 +119,29 @@ class AdaSender implements ChainSender {
       isTest: params.isTest,
     );
     if (mmUtxos.error) return SendResult.fail(mmUtxos.data?.toString());
-    final utxos = mmUtxos.data as List<dynamic>;
+    final CardanoSigningInputs inputs;
+    try {
+      inputs = CardanoSigningInputs.fromBlockfrost(
+        mmUtxos.data,
+        params.fromAddress,
+      );
+    } on FormatException catch (error) {
+      return SendResult.fail(error.message);
+    }
+    // Only the selected spendable inputs can fund this operation. Never count
+    // assets retained in excluded multi-asset UTxOs or another API page.
+    chainBalance = inputs.balance;
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    final block = await adaApi.getLatestBlock(isTest: params.isTest);
+    if (block.error) return SendResult.fail(block.data?.toString());
+    final String ttl;
+    try {
+      ttl = CardanoSigningInputs.ttl(block.data);
+    } on FormatException catch (error) {
+      return SendResult.fail(error.message);
+    }
 
     // Estimated fee (174000 lovelace minimum fee)
     const int estimatedFee = 174000;
@@ -141,21 +164,16 @@ class AdaSender implements ChainSender {
     }
     if (valuePrice <= BigInt.zero ||
         BigInt.from(estimatedFee) + valuePrice > chainBalance) {
-      return SendResult.fail(S.current.g_key_wallet_m5('ADA'));
+      return SendResult.fail(
+        inputs.excludesNativeAssets
+            ? 'Insufficient ADA-only inputs; native-token inputs remain unspent'
+            : S.current.g_key_wallet_m5('ADA'),
+      );
     }
 
-    // Build sign map for trustdart
-    final utxoList = utxos.map((u) {
-      final uMap = u as Map<String, dynamic>;
-      return {
-        'txHash': uMap['tx_hash'],
-        'outputIndex': uMap['output_index'],
-        'amount': uMap['amount'],
-      };
-    }).toList();
-
     final signMap = <String, dynamic>{
-      'utxos': utxoList,
+      'utxos': inputs.utxos,
+      'ttl': ttl,
       'toAddress': params.toAddress,
       'amount': valuePrice.toString(),
       'changeAddress': params.fromAddress,
