@@ -525,3 +525,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Return safely when address validation finishes after disposal. Save the confirmed transaction recipient to recent addresses rather than reading the editable field after broadcasting.
 - All 15 Sui send-page tests pass, including six new delayed-validation cases (amount, recipient, network, source, derivation index and page disposal). Scoped analysis is clean. Logs: /tmp/n42-sui-confirmation-race-final.log and /tmp/n42-sui-confirmation-analysis-final.log.
 - These tests cover the pre-simulation async boundary. Post-confirmation provider/device acceptance, account switches during broadcast/result storage, live-node submission and Android JNI acceptance remain open. No new release or device installation.
+
+
+## Batch 58 — retain accepted Sui receipts across page/account changes (2026-11-06)
+
+- Persist successful Sui results using the original transaction record even if the page was disposed during submission. Guard current-page/provider updates by user UUID, wallet index, source address and network. Confirmation now also binds the user UUID.
+- Block concurrent signing and further broadcasts from the page after confirmed success, including when local record insertion throws or returns an invalid row ID. Retain the accepted hash in the error message for the original account. Local persistence failure is no longer treated as permission to send again.
+- All 18 Sui page tests pass, including delayed submission followed by source change/disposal and a failed local record write. The first fixture run exposed the toast timer; the final fixture waits for it without weakening business assertions. Scoped analysis passed before this test-only timer adjustment. Logs: /tmp/n42-sui-result-owner-final.log and /tmp/n42-sui-result-owner-analysis.log.
+- Scope limitation: guards are page-local. Durable recovery after failed writes/restart, unknown broadcast outcomes, account-scoped recent-address storage, full provider-switch lifecycle and real-node/device acceptance remain open. No TestFlight upload or physical-device operation.

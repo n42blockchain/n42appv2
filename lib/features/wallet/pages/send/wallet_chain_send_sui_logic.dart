@@ -35,6 +35,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   BigInt transferValue = BigInt.zero;
   List<Map<String, dynamic>> utxos = [];
 
+  bool _signing = false;
+  String? _acceptedHash;
+
   Load load = Load.loading;
   Load gasLimitLoad = Load.finish;
 
@@ -303,6 +306,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   void _resetLoad() => setState(() => load = Load.finish);
 
   Future<void> sendTransaction() async {
+    if (_acceptedHash != null || _signing) return;
     if (load == Load.loading) {
       ToastUtils.show("loading");
       return;
@@ -315,6 +319,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     final requestedRecipient = toTextEditingController.text.trim();
     final requestedAmount = valueTextEditingController.text;
     final requestedValue = transferValue;
+    final requestedUser = AppGlobals.userInfo?.uuid ?? "";
     final requestedWallet = ref.read(wapBridgeProvider).walletIndex;
     final requestedAddress = widget.coinModel.address;
     final requestedNetwork = widget.coinModel.isTest;
@@ -322,6 +327,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     final requestedAddressType = widget.coinModel.addrType;
     bool requestIsCurrent() =>
         mounted &&
+        (AppGlobals.userInfo?.uuid ?? "") == requestedUser &&
         toTextEditingController.text.trim() == requestedRecipient &&
         valueTextEditingController.text == requestedAmount &&
         ref.read(wapBridgeProvider).walletIndex == requestedWallet &&
@@ -400,6 +406,18 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   Future<void> signTx(TransationRecordModel trModel) async {
+    if (!mounted || _signing || _acceptedHash != null) return;
+    bool ownerIsCurrent() =>
+        mounted &&
+        (AppGlobals.userInfo?.uuid ?? '') == trModel.userUuid &&
+        ref.read(wapBridgeProvider).walletIndex == trModel.walletIndex &&
+        widget.coinModel.address == trModel.from1 &&
+        widget.coinModel.isTest == (trModel.isTest == 1);
+    if (!ownerIsCurrent()) return;
+    final writeRecord =
+        widget.transactionWriter ??
+        (record) => AppDatabase().insertTransationRecord(record);
+    _signing = true;
     bool completedWithExit = false;
     try {
       final coinType = widget.coinModel.config.coinType;
@@ -416,46 +434,54 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       final decimals =
           (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-      final result = await SenderFactory.instance
-          .getSender(coinType)
-          .send(
-            SendParams(
-              coinType: coinType,
-              fromAddress: trModel.from1,
-              toAddress: trModel.to1,
-              amount: toEther(trModel.price.toString(), decimals).toDouble(),
-              decimals: decimals,
-              valueWeiOverride: trModel.price,
-              path: path,
-              sendMax: false,
-              isTest: widget.coinModel.isTest,
-              contractAddress: trModel.contract,
-              tokenDecimals: 0,
-              memo: trModel.message,
-              privateKey: widget.coinModel.privateKey,
-              chainConfig: widget.coinModel.coin,
-            ),
-          );
+      final send =
+          widget.transactionSender ??
+          SenderFactory.instance.getSender(coinType).send;
+      final result = await send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), decimals).toDouble(),
+          decimals: decimals,
+          valueWeiOverride: trModel.price,
+          path: path,
+          sendMax: false,
+          isTest: widget.coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: 0,
+          memo: trModel.message,
+          privateKey: widget.coinModel.privateKey,
+          chainConfig: widget.coinModel.coin,
+        ),
+      );
 
-      if (!mounted) return;
       if (result.success) {
         trModel.txHash = result.txHash ?? '';
-        trModel.trId = await AppDatabase().insertTransationRecord(trModel);
-        if (!mounted) return;
+        _acceptedHash = trModel.txHash;
+        trModel.trId = await writeRecord(trModel);
+        if (trModel.trId <= 0) throw StateError('Transaction was not saved');
+        if (!ownerIsCurrent()) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(coinType, trModel.to1);
-        if (!mounted) return;
+        if (!ownerIsCurrent()) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
       } else {
+        if (!ownerIsCurrent()) return;
         errorMessage = result.error ?? '';
         ToastUtils.show(errorMessage);
       }
     } catch (e) {
-      errorMessage = e.toString();
-      ToastUtils.show(e.toString());
+      if (ownerIsCurrent()) {
+        errorMessage = _acceptedHash == null
+            ? e.toString()
+            : '${S.current.g_key_nft_41}: $_acceptedHash. $e';
+        ToastUtils.show(errorMessage);
+      }
     } finally {
+      _signing = false;
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});
     }

@@ -1,3 +1,6 @@
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+
 import 'dart:io';
 import 'dart:async';
 
@@ -72,6 +75,8 @@ void main() {
   Future<dynamic> mount(
     WidgetTester tester, {
     BigInt? balance,
+    Future<SendResult> Function(SendParams)? transactionSender,
+    Future<int> Function(TransationRecordModel)? transactionWriter,
     Future<MessageModel?> Function(CoinModel)? gasPriceLoader,
     Future<List<dynamic>> Function(CoinModel)? ownedObjectsLoader,
   }) async {
@@ -79,6 +84,8 @@ void main() {
       wrapForTest(
         WalletChainSendSui(
           makeCoin(balance: balance),
+          transactionSender: transactionSender,
+          transactionWriter: transactionWriter,
           gasPriceLoader:
               gasPriceLoader ?? (_) async => MessageModel()..data = BigInt.one,
           ownedObjectsLoader: ownedObjectsLoader ?? (_) async => const [],
@@ -94,6 +101,78 @@ void main() {
     expect(tester.takeException(), isNull);
     return state;
   }
+
+  TransationRecordModel recordFor(dynamic state) => TransationRecordModel()
+    ..from1 = state.widget.coinModel.address
+    ..walletIndex = state.ref.read(wapBridgeProvider).walletIndex
+    ..to1 = '0x${'22' * 32}'
+    ..price = BigInt.from(1000000000);
+
+  for (final leave in [false, true]) {
+    testWidgets(
+      'accepted receipt persists for original source after ${leave ? 'disposal' : 'source switch'}',
+      (tester) async {
+        final broadcast = Completer<SendResult>();
+        final saved = <TransationRecordModel>[];
+        var sends = 0;
+        final state = await mount(
+          tester,
+          transactionSender: (_) {
+            sends++;
+            return broadcast.future;
+          },
+          transactionWriter: (record) async {
+            saved.add(record);
+            return 7;
+          },
+        );
+        final record = recordFor(state);
+        final pending = state.signTx(record);
+        await tester.pump();
+        await state.signTx(record);
+        expect(sends, 1);
+        if (leave) {
+          await tester.pumpWidget(const SizedBox());
+        } else {
+          state.widget.coinModel.address = '0x${'44' * 32}';
+        }
+        broadcast.complete(const SendResult.ok('confirmed-hash'));
+        await pending;
+        expect(saved, [record]);
+        expect(saved.single.from1, '0x${'11' * 32}');
+        expect(saved.single.txHash, 'confirmed-hash');
+        expect(saved.single.trId, 7);
+        if (!leave) {
+          state.widget.coinModel.address = record.from1;
+          await state.signTx(record);
+          expect(sends, 1);
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets('local persistence failure does not enable a second broadcast', (
+    tester,
+  ) async {
+    var sends = 0;
+    final state = await mount(
+      tester,
+      transactionSender: (_) async {
+        sends++;
+        return const SendResult.ok('accepted-hash');
+      },
+      transactionWriter: (_) async => throw StateError('disk unavailable'),
+    );
+    final record = recordFor(state);
+    await state.signTx(record);
+    expect(state.errorMessage, contains('accepted-hash'));
+    await state.signTx(record);
+    expect(sends, 1);
+    expect(record.txHash, 'accepted-hash');
+    await tester.pump(const Duration(seconds: 8));
+    expect(tester.takeException(), isNull);
+  });
 
   for (final changed in ['amount', 'recipient', 'network', 'source', 'path']) {
     testWidgets('send stops when $changed changes during address validation', (

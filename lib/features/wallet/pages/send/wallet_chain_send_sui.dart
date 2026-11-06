@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
@@ -43,12 +44,16 @@ part 'wallet_chain_send_sui_widgets.dart';
 class WalletChainSendSui extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? initialToAddress;
+  final Future<SendResult> Function(SendParams)? transactionSender;
+  final Future<int> Function(TransationRecordModel)? transactionWriter;
   final Future<MessageModel?> Function(CoinModel coin)? gasPriceLoader;
   final Future<List<dynamic>> Function(CoinModel coin)? ownedObjectsLoader;
 
   const WalletChainSendSui(
     this.coinModel, {
     this.initialToAddress,
+    this.transactionSender,
+    this.transactionWriter,
     this.gasPriceLoader,
     this.ownedObjectsLoader,
     super.key,

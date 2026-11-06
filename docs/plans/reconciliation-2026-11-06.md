@@ -32,6 +32,8 @@ Batch 56 now completes and verifies the interrupted ordinary Sui signing interfa
 
 Batch 57 guards Sui confirmation against edited requests/source changes and disposed-page callbacks; 15 page tests pass. Broadcast-result/account-switch recovery remains open.
 
+Batch 58 preserves accepted Sui receipts after disposal/source changes and blocks page-local duplicate broadcasts after record-write failure (18 page tests passed). Durable restart/unknown-outcome recovery and shared recent-address isolation remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
