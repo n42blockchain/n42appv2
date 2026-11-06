@@ -542,3 +542,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - RecentAddressBar suppresses stale-identity rendering and selection, discards obsolete asynchronous loads and reloads when its identity/chain changes on widget update. Device-level account-switch visual acceptance remains open.
 - Service/Sui suites: 32 passed; existing send utilities: 6 passed. New service cases cover separate owners, independent clearing, preserved legacy data and concurrent updates. Analysis of send pages/service/tests has no errors/warnings and one pre-existing brace-style info at wallet_chain_send_logic.dart:511. Logs: /tmp/n42-recent-scope.log, /tmp/n42-recent-ui.log, /tmp/n42-recent-scope-analysis-final.log.
 - Remaining: full cross-chain/provider device regression, user-confirmed legacy-history recovery, corruption/cross-process storage recovery, durable transaction recovery and live acceptance. No new release upload.
+
+
+## Batch 60 — preserve recent-history data and transfer outcomes (2026-11-06)
+
+- Deduplicate recipients without case folding on Base58/unknown chains; known EVM families retain case-insensitive matching. SOL/BTC/TRX/custom tests preserve differently cased strings and still deduplicate exact repeats.
+- Parse stored history strictly before save/clear so empty, malformed or invalid-shape records cannot be silently replaced. Reads still return an empty list for corrupt data; a dedicated recovery/error UI remains open. Failed auxiliary save returns false, preventing accepted transactions from entering callers' retryable payment-error paths. Explicit clear still reports corruption.
+- Release the serialization Future when idle. The first broader run stalled in a send-guard widget test; it was stopped and is not acceptance evidence. After removing the retained initial/completed Future, the complete send and send-page suites passed: 144 tests, no failures. Scoped service/test analysis reports no issues. Logs: /tmp/n42-send-history-regression-final.log and /tmp/n42-history-analysis-final.log.
+- These are automated local checks. Cross-process storage, recoverable corrupt/legacy history UI, durable transaction restart recovery, native/provider/device acceptance and release delivery remain open.

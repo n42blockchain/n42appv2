@@ -36,6 +36,8 @@ Batch 58 preserves accepted Sui receipts after disposal/source changes and block
 
 Batch 59 partitions recent recipients by the existing wallet identity namespace and binds all 13 send writers to their captured owner; legacy unscoped data stays preserved. Service/Sui/utilities: 38 tests passed. Per-wallet subdivision and device-level account-switch UI acceptance are separate.
 
+Batch 60 preserves case-sensitive recipients and damaged history, prevents auxiliary history failures from becoming retryable payment errors, and releases idle mutation queues. All 144 send/send-page tests pass. Corrupt/legacy history recovery UI and cross-process coordination remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.

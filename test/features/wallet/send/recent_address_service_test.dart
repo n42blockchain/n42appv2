@@ -75,6 +75,46 @@ void main() {
     );
   });
 
+  for (final chain in ['SOL', 'BTC', 'TRX', 'CUSTOM']) {
+    test('$chain preserves distinct case-sensitive recipients', () async {
+      await RecentAddressService.save(chain, 'Abc123', userUuid: 'alice');
+      await RecentAddressService.save(chain, 'abc123', userUuid: 'alice');
+      final list = await RecentAddressService.load(chain, userUuid: 'alice');
+      expect(list.map((e) => e.address), ['abc123', 'Abc123']);
+      await RecentAddressService.save(chain, 'Abc123', userUuid: 'alice');
+      expect(
+        (await RecentAddressService.load(chain, userUuid: 'alice')).length,
+        2,
+      );
+    });
+  }
+  for (final damaged in ['', '{broken', '[]', '{"SUI":[{}]}']) {
+    test(
+      'damaged history $damaged is preserved and never turns history save into payment failure',
+      () async {
+        await RecentAddressService.save('SUI', 'original', userUuid: 'alice');
+        final prefs = await SharedPreferences.getInstance();
+        final key = prefs.getKeys().single;
+        await prefs.setString(key, damaged);
+        expect(
+          await RecentAddressService.save('SUI', 'new', userUuid: 'alice'),
+          false,
+        );
+        expect(prefs.getString(key), damaged);
+        await expectLater(
+          RecentAddressService.clear('SUI', userUuid: 'alice'),
+          throwsFormatException,
+        );
+        expect(prefs.getString(key), damaged);
+        // A failed operation must not poison the mutation queue for other owners.
+        expect(
+          await RecentAddressService.save('SUI', 'bob', userUuid: 'bob'),
+          true,
+        );
+      },
+    );
+  }
+
   group('RecentAddressEntry JSON round-trip', () {
     test('8. toJson + fromJson 数据无损（有 name）', () {
       final entry = RecentAddressEntry(

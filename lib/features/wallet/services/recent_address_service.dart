@@ -5,6 +5,8 @@
 
 import 'dart:convert';
 
+import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
+
 import 'package:n42_wallet/core/app/app_globals.dart';
 
 import 'package:n42_wallet/core/storage/sp_util.dart';
@@ -51,22 +53,33 @@ class RecentAddressEntry {
 class RecentAddressService {
   static const int _maxPerChain = 10;
   static String get currentUser => AppGlobals.walletStorageUuid;
-  static Future<void> _pending = Future.value();
+  static Future<void>? _pending;
   static String _key(String user) =>
       '${SPkey.recentSendAddresses.name}.v2.${base64Url.encode(utf8.encode(user))}';
-  static Future<void> _mutate(Future<void> Function() operation) {
-    final next = _pending.then((_) => operation());
-    _pending = next.then<void>((_) {}, onError: (Object _, StackTrace _) {});
+  static Future<T> _mutate<T>(Future<T> Function() operation) {
+    final previous = _pending;
+    final next = previous == null
+        ? Future<T>.sync(operation)
+        : previous.then((_) => operation());
+    final settled = next.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    _pending = settled;
+    settled.then((_) {
+      if (identical(_pending, settled)) _pending = null;
+    });
     return next;
   }
 
   /// 读取底层存储（完整 map，key = coinType）
   static Future<Map<String, List<RecentAddressEntry>>> _readAll(
-    String user,
-  ) async {
+    String user, {
+    bool strict = false,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_key(user));
-    if (raw == null || raw.isEmpty) return {};
+    if (raw == null) return {};
 
     try {
       final decoded = json.decode(raw) as Map<String, dynamic>;
@@ -77,6 +90,9 @@ class RecentAddressService {
         return MapEntry(coinType, entries);
       });
     } catch (_) {
+      if (strict) {
+        throw const FormatException('Recent address storage is damaged');
+      }
       return {};
     }
   }
@@ -98,15 +114,25 @@ class RecentAddressService {
   /// 保存地址：插到头部、按地址去重、截断至 [_maxPerChain]
   ///
   /// 若地址已存在，则更新其时间和名称（移到头部）。
-  static Future<void> save(
+  /// Returns false if history cannot be saved; this does not undo a transfer.
+  static Future<bool> save(
     String coinType,
     String address, {
     String? name,
     String? userUuid,
   }) {
     final user = userUuid ?? currentUser;
-    if (address.isEmpty || user.isEmpty) return Future.value();
-    return _mutate(() => _save(user, coinType, address, name));
+    if (address.isEmpty || user.isEmpty) return Future.value(false);
+    return _mutate(() async {
+      try {
+        await _save(user, coinType, address, name);
+        return true;
+      } catch (_) {
+        // Ancillary history failure must not turn an accepted transfer into a
+        // retryable payment error. Keep the original stored bytes untouched.
+        return false;
+      }
+    });
   }
 
   static Future<void> _save(
@@ -115,11 +141,18 @@ class RecentAddressService {
     String address,
     String? name,
   ) async {
-    final all = await _readAll(user);
+    final all = await _readAll(user, strict: true);
     final list = List<RecentAddressEntry>.from(all[coinType] ?? []);
 
-    // 去重：移除旧条目（不区分大小写比对）
-    list.removeWhere((e) => e.address.toLowerCase() == address.toLowerCase());
+    // Only known EVM families have case-insensitive recipient identity.
+    // Base58 and unknown/custom chains must preserve exact address bytes.
+    final isEvm =
+        allChainUrlMap[coinType]?['baseInfo']?['blockchainType'] == 'Ethereum';
+    list.removeWhere(
+      (e) => isEvm
+          ? e.address.toLowerCase() == address.toLowerCase()
+          : e.address == address,
+    );
 
     // 插到头部
     list.insert(
@@ -148,7 +181,8 @@ class RecentAddressService {
   }) async {
     final user = userUuid ?? currentUser;
     if (user.isEmpty) return [];
-    await _pending;
+    final pending = _pending;
+    if (pending != null) await pending;
     final all = await _readAll(user);
     if (userUuid == null && user != currentUser) return [];
     final list = all[coinType] ?? [];
@@ -161,7 +195,7 @@ class RecentAddressService {
     final user = userUuid ?? currentUser;
     if (user.isEmpty) return Future.value();
     return _mutate(() async {
-      final all = await _readAll(user);
+      final all = await _readAll(user, strict: true);
       all.remove(coinType);
       await _writeAll(user, all);
     });
