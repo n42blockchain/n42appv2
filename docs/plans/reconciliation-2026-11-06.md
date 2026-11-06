@@ -72,6 +72,8 @@ Batch 73 strengthens Falcon recovery: pending records clear only when the confir
 
 Batch 74 removes the unnecessary RPC requirement from offline Falcon signing while retaining authentication and confirmation. Real-native UI regression verifies cancel and signed output; Rust 1 / Flutter 21 pass. No release/device acceptance claimed.
 
+Batch 75 integrates Chat d387fca6: reject explicit scheduled-message room mismatches while preserving original records and supporting legacy missing roomId. Chat 213 related tests and wallet host fixtures pass. Manual repair/import and live delivery remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
