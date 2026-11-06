@@ -195,3 +195,34 @@ Validation: 35 focused Flutter tests passed; targeted analyzer found no issues;
 iOS plist validation and Swift syntax parse passed; Android Debug/Release resource
 generation passed. No provider E2E, signed release, deployment, or account migration
 is claimed for this batch.
+
+## Dedicated Meta registration completed
+
+The owner created the independent N42 Wallet Meta app and confirmed continuation.
+App ID: `1403945225096358`; business: Si46world digital technology inc.
+The app remains unpublished. Only the Facebook Login use case and default
+`public_profile` permission are configured; no additional profile permissions
+were requested.
+
+Saved and re-opened platform settings:
+
+- Web: `https://n42.world/`, app domain `n42.world`.
+- iOS: `ai.n42.www`, iPhone Store ID `6738644072`.
+- Android: `ai.n42.www`, activity `ai.n42.www.MainActivity`; local Release and
+  Debug certificate SHA-1 values from the Google registration above converted
+  to Meta base64 key hashes. Play app-signing certificate remains unverified.
+- Exact OAuth redirect: `https://n42.world/v1/auth/n42/social/facebook/callback`.
+  Registration does not mean this server route is deployed.
+- Automatic iOS events and Android purchase logging were disabled.
+
+The dedicated client token and App Secret were saved only in mode-0600 files
+`~/.config/n42/secrets/facebook-native.json` and `facebook-provider.json`.
+The provider file pins the console's API version `v27.0`. Native local build
+configuration was populated in ignored xcconfig/local.properties files; no
+credential was committed. iOS Limited Login remains gated until backend verification.
+
+Android Debug/Release generated resources and Xcode Debug settings were checked
+against the dedicated native configuration. No signed build or real-user provider
+login was run. The Meta console still requires app icon, privacy URL, deletion
+instructions and category, plus its testing/review requirements before publication.
+Server identity/session implementation and deployment remain outstanding.
