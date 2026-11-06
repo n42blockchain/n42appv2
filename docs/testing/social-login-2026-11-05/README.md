@@ -256,3 +256,17 @@ Server identity/session implementation and deployment remain outstanding.
 - Safari rendered the Web page against local capability fixtures. No real provider authorization was performed.
 - Built server image `n42-id-hub:n42-auth-cdfba5e` on the web host. Image ID: `sha256:a4f98ba1b4a5c788c9bbdf6e63803073ecb97f451a41b71b2c723cd390c4e9b6`. Source is isolated at `/home/ubuntu/releases/n42-id-hub/cdfba5e`; the active service and its uncommitted deployment configuration were preserved.
 - The running service still lacks `N42_AUTH_CONFIG` and `N42_AUTH_HMAC_KEY`. A built image is not deployment or login acceptance. Public callback proxying, dedicated runtime configuration, Google callback registration, Meta publication prerequisites and real-provider/device acceptance remain open. No new TestFlight upload was performed.
+
+## 2026-11-06: public deployment and live Web acceptance
+
+- Dedicated listener: `n42-wallet-auth`, image `n42-id-hub:n42-auth-cdfba5e`, loopback port 18790. Public N42 auth/revoke routes are deployed; existing Club service and website remain available. Independent N42 runtime settings/HMAC are controlled outside Git. Backend deployment/evidence commits: `2429851`, `dd8c2d7`, `7c0dd68`.
+- Google callback was saved and reopened in its dedicated client. Google, Apple and Facebook each completed two real Web logins with a stable provider-bound DID and two successful sign-outs. Read-only database counts confirm one binding/two sessions/two revoked sessions per provider. Provider identities are separate; no implicit linking or legacy migration.
+- Facebook acceptance uses an authorized developer/test account. The app remains unpublished/unreviewed. Existing privacy/terms URLs and category were saved; working data-deletion instructions/process and publication requirements remain incomplete.
+- Native Google server-code exchange remains disabled pending device acceptance. These Web checks do not establish native Matrix login, wallet signing or TestFlight acceptance.
+
+## 2026-11-06: reference social-button layout
+
+- Chat pin `beee7e5fa38a2a082497d5ed469a7eb97c3fc149`: compact Google/Facebook icons and labels on the left, wider Apple control on the right. Narrow/accessibility layouts wrap. Additional configured providers and existing sign-in callbacks remain intact.
+- iOS host renders a real `ASAuthorizationAppleIDButton` with `.continue`, built-in black/white style and system-localized label. Flutter only passes enabled state and handles tap delivery through the existing authorization handler. It does not draw or restyle the Apple logo/title. Other platforms use the existing plugin's Apple button.
+- Chat: 102 layout/config/auth tests passed. Wallet: 63 initialization/config/native-channel tests passed, including disabling native taps while busy and using the current callback after rebuilding. Targeted analysis passed with informational lints only. Swift source parse and iPhoneOS SDK type-check passed.
+- Android Release build attempted before the layout update failed because generated `GeneratedPluginRegistrant.java` referenced `dev.flutter.plugins.integration_test`, absent from the Release classpath. No app was installed or uninstalled. Native visual/device acceptance and a new release artifact remain pending; no TestFlight upload was performed.

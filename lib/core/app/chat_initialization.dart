@@ -15,6 +15,7 @@ import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/platform/chat_social_auth_config.dart';
 import 'package:n42_wallet/core/platform/chat_mini_app_security_config.dart';
 import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
+import 'package:n42_wallet/core/platform/native_apple_sign_in_button.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/routing/chat_sso_utils.dart';
@@ -254,6 +255,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
               : chatSocialAuthConfig.telegramBotId,
           // Opt in only after provider and Matrix deployment acceptance.
           n42NativeAuthUrl: n42NativeAuthUrl,
+          appleSignInButtonBuilder: Platform.isIOS
+              ? (context, onPressed) =>
+                    NativeAppleSignInButton(onPressed: onPressed)
+              : null,
           socialAuthBaseUrl: chatSocialAuthConfig.socialAuthBaseUrl.isEmpty
               ? null
               : chatSocialAuthConfig.socialAuthBaseUrl,

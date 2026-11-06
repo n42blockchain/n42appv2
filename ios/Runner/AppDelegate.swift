@@ -2,6 +2,7 @@
 import SuggestedActions
 import SwiftUI
 #endif
+import AuthenticationServices
 import EventKit
 import EventKitUI
 import Flutter
@@ -149,6 +150,10 @@ private final class N42GeometryView: UIView {
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     let registry = engineBridge.pluginRegistry
     GeneratedPluginRegistrant.register(with: registry)
+    if let registrar = registry.registrar(forPlugin: "N42AppleSignInButton") {
+      registrar.register(N42AppleSignInButtonFactory(messenger: registrar.messenger()),
+        withId: "n42.wallet/apple_sign_in_button")
+    }
     let actionsChannel = FlutterMethodChannel(name: "n42.chat/suggested_actions",
       binaryMessenger: engineBridge.applicationRegistrar.messenger())
     actionsChannel.setMethodCallHandler { call, result in
@@ -650,3 +655,44 @@ private final class N42SuggestedActionsContainer: UIView {
   }
 }
 #endif
+
+
+@MainActor
+private final class N42AppleSignInButtonFactory: NSObject, @preconcurrency FlutterPlatformViewFactory {
+  private let messenger: FlutterBinaryMessenger
+  init(messenger: FlutterBinaryMessenger) { self.messenger = messenger; super.init() }
+  func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol { FlutterStandardMessageCodec.sharedInstance() }
+  func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
+    N42AppleSignInButtonView(frame: frame, id: viewId, arguments: args, messenger: messenger)
+  }
+}
+
+@MainActor
+private final class N42AppleSignInButtonView: NSObject, @preconcurrency FlutterPlatformView {
+  private let button: ASAuthorizationAppleIDButton
+  private let channel: FlutterMethodChannel
+  init(frame: CGRect, id: Int64, arguments: Any?, messenger: FlutterBinaryMessenger) {
+    let args = arguments as? [String: Any] ?? [:]
+    button = ASAuthorizationAppleIDButton(authorizationButtonType: .continue,
+      authorizationButtonStyle: (args["dark"] as? Bool ?? false) ? .white : .black)
+    button.frame = frame
+    button.cornerRadius = 8
+    button.isEnabled = args["enabled"] as? Bool ?? true
+    channel = FlutterMethodChannel(name: "n42.wallet/apple_sign_in_button/\(id)", binaryMessenger: messenger)
+    super.init()
+    button.addTarget(self, action: #selector(pressed), for: .touchUpInside)
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard call.method == "setEnabled", let enabled = call.arguments as? Bool else {
+        result(FlutterMethodNotImplemented); return
+      }
+      self?.button.isEnabled = enabled
+      result(nil)
+    }
+  }
+  @objc private func pressed() {
+    guard button.isEnabled else { return }
+    channel.invokeMethod("pressed", arguments: nil)
+  }
+  func view() -> UIView { button }
+  deinit { channel.setMethodCallHandler(nil) }
+}
