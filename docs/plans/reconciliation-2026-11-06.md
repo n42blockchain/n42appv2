@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### VeChain signer follow-up — batch 118
+
+- Closed VET's late global-mnemonic access. Original owner/key are captured before balance/block queries, the derived address must match the confirmed sender, and changed signing context prevents broadcast. Existing chainTag/blockRef/clauses and VTHO fee behavior remain covered.
+- 18 new controlled scenarios; all 228 sender-directory tests pass. Scoped analysis clean. Evidence: `/tmp/n42-vet-b118-regression.log`, `/tmp/n42-vet-b118-analysis.log`. No live/node/device acceptance claim. ADA/EGLD signer protection and the broader unfinished plan remain open.
+
+
 ### Stellar signer follow-up — batch 117
 
 - Closed the XLM late-global-mnemonic gap: capture owner/key before Horizon lookup, verify the derived sender with the same path/key used to sign, and reject account/key changes before broadcast. Private-key sends retain their independent credential source.

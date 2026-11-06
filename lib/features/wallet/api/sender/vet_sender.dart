@@ -18,12 +18,72 @@ import 'chain_sender.dart';
 
 /// VeChain (VET) sender.
 class VetSender implements ChainSender {
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
+  final VetApi _api;
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
+
+  VetSender({
+    Trustdart? trustdart,
+    VetApi? api,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+  }) : _trustdart = trustdart ?? Trustdart(),
+       _api = api ?? VetApi(),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic;
+
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   final _dataUtils = DataUtils();
 
   @override
   Future<SendResult> send(SendParams params) async {
-    final vetApi = VetApi();
+    final Object? owner;
+    final String? mnemonic;
+    try {
+      owner = _ownerIdentity();
+      mnemonic = params.privateKey == null ? _readMnemonic() : null;
+    } catch (_) {
+      return const SendResult.fail('Wallet is not ready');
+    }
+    bool signerIsCurrent() {
+      try {
+        return _ownerIdentity() == owner &&
+            (params.privateKey != null ||
+                (owner != null && mnemonic == _readMnemonic()));
+      } catch (_) {
+        return false;
+      }
+    }
+
+    if (!signerIsCurrent() ||
+        (params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+      return const SendResult.fail('Wallet signing context is unavailable');
+    }
+    final vetApi = _api;
 
     // Get account balance
     final mmAccount = await vetApi.getAccount(
@@ -85,24 +145,41 @@ class VetSender implements ChainSender {
       'nonce': Random().nextInt(0xFFFFFFFF),
     };
 
-    String signStr;
-    if (params.privateKey == null) {
-      if (!AppGlobals.appContext.mounted) {
-        return const SendResult.fail('Context is no longer valid');
-      }
-      signStr = await _trustdart.signTransaction(
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    final Map derived;
+    try {
+      derived = await _trustdart.generateAddress(
         CoinType.VET.name,
         params.path,
-        signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        'legacy',
+        mnemonic: mnemonic ?? '',
+        pk: params.privateKey ?? '',
+        isTest: params.isTest,
       );
-    } else {
-      signStr = await _trustdart.signTransaction(
-        CoinType.VET.name,
-        params.path,
-        signMap,
-        pk: params.privateKey!,
-      );
+    } catch (_) {
+      return const SendResult.fail('Unable to verify signing address');
+    }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    // VeChain uses 20-byte hex account addresses; compare their bytes.
+    final address = derived['legacy'];
+    if (address is! String ||
+        !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address) ||
+        address.toLowerCase() != params.fromAddress.toLowerCase()) {
+      return const SendResult.fail('Signing key does not match sender');
+    }
+    final signStr = await _trustdart.signTransaction(
+      CoinType.VET.name,
+      params.path,
+      signMap,
+      mnemonic: mnemonic ?? '',
+      pk: params.privateKey ?? '',
+    );
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
