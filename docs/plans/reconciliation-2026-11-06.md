@@ -12,7 +12,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 148
+## Current interruption inventory — through batch 149
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -22,7 +22,7 @@ The interrupted patches through batch 139 are committed. Batch 140 revalidated t
 | Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Batch 144 aligns XLM fee/Max UI with checked account/ledger data and binds the reviewed fee to signing. Batch 146 connects ADA quotes/Max and reviewed fees. Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
-| Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership/import, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export is implemented in batch 141; real OS share-sheet delivery remains unverified. |
+| Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export is implemented in batch 141; real OS share-sheet delivery remains unverified. |
 | Dependency and localization | Recorded compatibility holds and editorial/RTL/UI review remain. Catalog integrity does not prove translation quality. |
 | IAP and payment delivery | ACTIVE_TASKS retains IAP receipt verification, account binding, idempotent delivery/refund/restore and payment-provider production acceptance as open; do not lose these older tasks when summarizing recent audit work. |
 | Retained worktrees | Fresh inventory: 13 auxiliary wallet trees, seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
@@ -44,6 +44,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Confirmed portable Chat recovery import UI — batch 149
+
+- Chat eb86e75e connects the import foundation to the actual scheduled-message page: JSON selection, bounded streamed input (8 MiB), schema/account/digest validation, a bounded raw preview and explicit confirmation. Saved copies reopen in the existing evidence preview. Cancellation, foreign/malformed files, write failures and changed accounts stop the flow; no imported content enters the dispatcher.
+- Added import title/explanation in all 26 catalogs and regenerated localization files. Tests exposed a missing-localization host crash in the new button; fallback behavior now matches the existing page. Narrow 320px, RTL and 200% text preview passes.
+- 122 related entity/storage/cleanup/page/localization tests pass (/tmp/n42-chat-b149-verified.log); scoped page analysis clean (/tmp/n42-chat-b149-analysis-final.log). Catalog checks confirm both keys in all locales; 7 wallet host fixture/asset tests pass (/tmp/n42-chat-b149-host.log). UI tests inject picker bytes: actual native file-provider reads, OS share delivery, native-speaker review and physical device durability are not accepted by this evidence.
+- Supersedes batch 148's unwired import UI. Manual repair/re-enqueue, legacy ownership and retention remain unfinished, as do the other wallet/Chat maturity items. Imported evidence is not restored scheduled delivery.
+
 
 ### Portable Chat recovery import foundation — batch 148
 
