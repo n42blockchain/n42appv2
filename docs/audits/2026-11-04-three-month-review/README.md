@@ -437,3 +437,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `ff8c43685664e30a69e6b444e3a75034b681be28` is pushed with remote parity verified. This closes the GIF picker retention gap from batch 46. Unknown persistence reconciliation, distributed delivery and device/provider acceptance remain MSG-001 boundaries. No release upload or physical-device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-gif-ack-host-tests.log`); the lockfile changes only the Chat reference.
+
+
+## Batch 48 — preserve drafts with temporarily unavailable attachments (2026-11-06)
+
+- The failed-send handler previously removed a scheduled draft when its file was missing, empty or a file-system check failed. Failure now preserves the draft for retry or explicit cancellation. Empty files are rejected before repository dispatch. Successful acknowledged sends still use the normal cleanup path.
+- 60 BLoC regressions pass (`/tmp/n42-recoverable-attachment-tests.log`). Missing/empty attachment tests verify no send or record removal, then restore the bytes and verify successful retry with the same transaction ID. Both tests fail against the previous source because the draft disappears (`/tmp/n42-recoverable-attachment-baseline.log`). Scoped analysis has no errors/warnings and six existing informational diagnostics (`/tmp/n42-recoverable-attachment-analyze.log`).
+- Chat `08614fdf666c018c59d988b8a0f6d6d0cddb438e` is pushed with remote parity verified. MSG-001 retains persistent failure UI/backoff, orphan reconciliation and ownership/reference checks before existing post-success/cancellation file cleanup. This batch does not certify shared-file cleanup safety, distributed delivery or device acceptance. No release upload or device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-recoverable-attachment-host-tests.log`); dependency resolution changes only the Chat reference.
