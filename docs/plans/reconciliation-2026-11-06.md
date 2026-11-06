@@ -9,7 +9,7 @@ Inspection on 2026-11-06 found eight tracked files with an unfinished Cardano ha
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
 | Cardano submission recovery | Complete batch 127 validation/delivery; then wire durable journal/history and unknown-outcome UI. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
-| Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Batch 129 adds native malformed-input rejection. Reserve-aware amount handling and recovery remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
+| Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Batch 129 adds native malformed-input rejection. Batch 130 adds reserve/liability-aware spendable balance and current ledger base fee. Quote UI, surge pricing and recovery remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
 | Native social login and Matrix | Google native code exchange defaults to disabled in ID Hub source; verify deployed capability and Google/Apple/Facebook native flows with same-DID Matrix identity before enabling. Existing Web login evidence is insufficient. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No store-console verification or upload was done in this inspection. |
 | Chat recovery | Explicit legacy ownership/import, damaged-record repair UI, retention/export and process-crash/cross-process boundaries remain open. |
@@ -33,6 +33,14 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Stellar spendable balance and ledger fee — batch 130
+
+- Replaced total-balance spending with checked CAP-0033 reserve accounting: (2 + subentries + sponsoring - sponsored) times the latest ledger base reserve, then subtract native selling liabilities and the single-payment base fee. Fully sponsored accounts can have zero reserve. Latest ledger parameters replace the fixed fee; this is a current base fee, not surge-price selection or an inclusion guarantee.
+- Added strict Horizon account/ledger parsing, canonical exact seven-decimal stroop conversion, sequence increment bounds, unique native-balance checks and fail-closed missing liability/count/network data. Owner continuity is checked after both account and ledger reads. Ordinary payments retain their exact amount; only an explicit full-balance send-max request is reduced to spendable value. Returned actualAmount follows that value. One-stroop double inputs are expanded without permitting precision loss.
+- Initial focused run: 52 pass (`/tmp/n42-xlm-b130.log`). Final helper plus complete sender-directory regression: 294 pass (`/tmp/n42-xlm-b130-final.log`, exit 0). Includes sponsorship/subentries/liabilities composition, current reserve and base fee, malformed RPC data, overdrafts, owner changes during ledger lookup, exact small amounts and max actualAmount. Scoped analysis clean (`/tmp/n42-xlm-b130-analysis-final.log`); whitespace check passes.
+- Protocol references: https://github.com/stellar/stellar-protocol/blob/master/core/cap-0033.md and https://developers.stellar.org/docs/data/apis/horizon/api-reference/resources/ledgers/object. Liabilities are deducted once, separately from reserve.
+- Controlled fixtures only; no device, RPC submission or release. Account/ledger snapshot consistency, quote/confirmation UI, surge pricing, recipient account creation and durable unknown-submission recovery remain open. Earlier native signing evidence remains batch 128–129; this batch changes Dart planning only. Chat recovery, provider acceptance and broader maturity work remain active.
 
 ### Stellar native input validation — batch 129
 

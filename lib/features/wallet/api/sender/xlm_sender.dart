@@ -11,6 +11,8 @@ import 'package:n42_wallet/features/wallet/api/chain_api/xlm_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
+import '../../utils/stellar/spendable_balance.dart';
+
 import 'chain_sender.dart';
 
 /// Stellar (XLM) sender.
@@ -86,49 +88,41 @@ class XlmSender implements ChainSender {
       isTest: params.isTest,
     );
     if (mmAccount.error) return SendResult.fail(mmAccount.data?.toString());
-    final accountData = mmAccount.data as Map<String, dynamic>;
-
-    // Extract native XLM balance
-    BigInt chainBalance = BigInt.zero;
-    final balances = accountData['balances'] as List<dynamic>? ?? [];
-    for (final b in balances) {
-      final bMap = b as Map<String, dynamic>;
-      if (bMap['asset_type'] == 'native') {
-        final balStr = bMap['balance']?.toString() ?? '0';
-        chainBalance = ethToWeiString(
-          balStr,
-          7,
-        ); // XLM uses 7 decimal places (stroops)
-        break;
-      }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
     }
-
-    if (chainBalance == BigInt.zero) {
+    final ledger = await xlmApi.getLatestLedger(isTest: params.isTest);
+    if (ledger.error) return SendResult.fail(ledger.data?.toString());
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    final StellarSpendableBalance funds;
+    final BigInt requested;
+    try {
+      funds = StellarSpendableBalance.parse(mmAccount.data, ledger.data);
+      var amountText = params.amountDecimalString;
+      if (params.decimalAmountOverride == null && amountText.contains('e')) {
+        final expanded = params.amount.toStringAsFixed(7);
+        if (double.tryParse(expanded) != params.amount) {
+          throw const FormatException('Stellar amount exceeds seven decimals');
+        }
+        amountText = expanded;
+      }
+      requested = StellarSpendableBalance.stroops(amountText);
+    } on FormatException catch (error) {
+      return SendResult.fail(error.message);
+    }
+    // Only an explicit full-balance request can be reduced automatically.
+    // An ordinary payment retains the exact user-entered amount.
+    final valuePrice = params.sendMax && requested == funds.balance
+        ? funds.spendable
+        : requested;
+    if (valuePrice <= BigInt.zero || valuePrice > funds.spendable) {
       return SendResult.fail(S.current.g_key_wallet_m5('XLM'));
     }
-
-    const int fee = 100; // base fee in stroops
-    BigInt valuePrice = ethToWeiString(
-      params.amountDecimalString,
-      7,
-    ); // 1 XLM = 10,000,000 stroops
-    double adjustedAmount = params.amount;
-
-    if (valuePrice == chainBalance && params.sendMax) {
-      final feeBig = BigInt.from(fee);
-      if (feeBig >= valuePrice) {
-        return SendResult.fail(S.current.g_key_wallet_m5('XLM'));
-      }
-      valuePrice = valuePrice - feeBig;
-      adjustedAmount = toEther(valuePrice.toString(), 7).toDouble();
-    }
-    if (valuePrice <= BigInt.zero ||
-        BigInt.from(fee) + valuePrice > chainBalance) {
-      return SendResult.fail(S.current.g_key_wallet_m5('XLM'));
-    }
-
-    final sequence = accountData['sequence']?.toString() ?? '0';
-    final nextSequence = (BigInt.parse(sequence) + BigInt.one).toString();
+    final adjustedAmount = toEther(valuePrice.toString(), 7).toDouble();
+    final fee = funds.fee;
+    final nextSequence = funds.nextSequence.toString();
 
     final signMap = <String, dynamic>{
       'toAddress': params.toAddress,

@@ -9,6 +9,10 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class _Api extends XlmApi {
   VoidCallback? onAccount;
+  VoidCallback? onLedger;
+  bool ledgerError = false;
+  bool malformedLedger = false;
+  int fee = 100;
   int broadcasts = 0;
   int reads = 0;
   bool? testnet;
@@ -19,9 +23,27 @@ class _Api extends XlmApi {
     return MessageModel()
       ..data = {
         'sequence': '7',
+        'subentry_count': 0,
+        'num_sponsoring': 0,
+        'num_sponsored': 0,
         'balances': [
-          {'asset_type': 'native', 'balance': '10'},
+          {'asset_type': 'native', 'balance': '10', 'selling_liabilities': '0'},
         ],
+      };
+  }
+
+  @override
+  Future<MessageModel> getLatestLedger({bool isTest = false}) async {
+    onLedger?.call();
+    if (ledgerError) return MessageModel.error();
+    if (malformedLedger) return MessageModel()..data = {};
+    return MessageModel()
+      ..data = {
+        '_embedded': {
+          'records': [
+            {'base_reserve_in_stroops': 5000000, 'base_fee_in_stroops': fee},
+          ],
+        },
       };
   }
 
@@ -96,6 +118,12 @@ void main() {
     'private key',
     'testnet',
     'send max',
+    'reserve overdraw',
+    'ledger error',
+    'malformed ledger',
+    'owner during ledger',
+    'one stroop',
+    'current base fee',
     'wrong address',
     'empty address',
     'address case',
@@ -123,6 +151,16 @@ void main() {
       }
 
       switch (scenario) {
+        case 'current base fee':
+          api.fee = 300;
+        case 'reserve overdraw':
+          break;
+        case 'ledger error':
+          api.ledgerError = true;
+        case 'malformed ledger':
+          api.malformedLedger = true;
+        case 'owner during ledger':
+          api.onLedger = changeOwner;
         case 'wrong address':
           signer.address = 'GOTHER';
         case 'empty address':
@@ -168,7 +206,13 @@ void main() {
           coinType: 'XLM',
           fromAddress: 'GCONFIRMED',
           toAddress: 'GRECIPIENT',
-          amount: scenario == 'send max' ? 10 : 1.25,
+          amount: scenario == 'send max'
+              ? 10
+              : scenario == 'reserve overdraw'
+              ? 9.5
+              : scenario == 'one stroop'
+              ? 0.0000001
+              : 1.25,
           decimals: 7,
           path: "m/44'/148'/2'",
           privateKey: privateKey,
@@ -182,6 +226,8 @@ void main() {
         'private key',
         'testnet',
         'send max',
+        'one stroop',
+        'current base fee',
       ].contains(scenario);
       expect(result.success, success);
       expect(api.broadcasts, success ? 1 : 0);
@@ -191,6 +237,14 @@ void main() {
       );
       if (success) {
         expect(result.txHash, 'accepted-hash');
+        expect(
+          result.actualAmount,
+          scenario == 'send max'
+              ? 8.99999
+              : scenario == 'one stroop'
+              ? 0.0000001
+              : 1.25,
+        );
         expect(signer.derivedPath, "m/44'/148'/2'");
         expect(
           signer.derivedMnemonic,
@@ -198,10 +252,14 @@ void main() {
         );
         expect(signer.payload, {
           'toAddress': 'GRECIPIENT',
-          'amount': scenario == 'send max' ? '99999900' : '12500000',
+          'amount': scenario == 'send max'
+              ? '89999900'
+              : scenario == 'one stroop'
+              ? '1'
+              : '12500000',
           'sequence': '8',
           'memo': 'invoice 42',
-          'fee': '100',
+          'fee': scenario == 'current base fee' ? '300' : '100',
           'passphrase': scenario == 'testnet'
               ? 'Test SDF Network ; September 2015'
               : 'Public Global Stellar Network ; September 2015',
