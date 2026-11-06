@@ -1,5 +1,7 @@
 # 第三方登录补齐方案（Chat）
 
+> 2026-11-06：下文是历史方案，旧 Amaze App ID、旧网关和本地镜像说明不可用于当前 N42 配置。当前采用独立 N42 客户端与 ID Hub，不继承旧账号。最新实现和验收见[登录记录](testing/social-login-2026-11-05/README.md)，剩余工作见[任务核对](plans/reconciliation-2026-11-06.md)。
+
 > 2026-07-06 整理。Chat 社交登录经 `packages/n42_chat` 的 `AuthMethodsService` 发起，
 > 用第三方 token 调**外部后端** `api.n42.network/v1/user/loginSocial` 换取 Matrix 账号凭据
 > （`matrix_user_id`/`access_token`/`device_id`/`homeserver`）。UI 在
