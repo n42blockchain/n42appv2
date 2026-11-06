@@ -2,13 +2,13 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — batch 134 inspection
+## Current interruption inventory — through batch 135
 
 Fresh inspection on 2026-11-06 found two modified runtime files and two untracked tests left by the interrupted Stellar recovery work. The previous inventory still described batch 126 and incorrectly presented later-completed implementation as missing. Batches 127–133 are committed; batch 134 below closes the remaining local patch after validation.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
-| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. ADA status lookup, cross-page duplicate prevention, unsubmitted-record repair and process-crash recovery remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
+| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Cross-page duplicate prevention, unsubmitted-record repair and process-crash recovery remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
 | Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Fee/max confirmation UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
@@ -34,6 +34,13 @@ Fresh fetch before this batch: wallet e2d3b9330 equals origin/master (0/0). ID H
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Cardano pending receipt recovery — batch 135
+
+- Added Cardano to TransactionStateResolver using the same BLOCKFROST_PROJECT_ID setting as AdaSender. Missing configuration or invalid local identity leaves the record unknown without querying. Mainnet/testnet selection follows the saved record.
+- Require the original transaction hash, a 64-hex block hash, nonnegative integer block height and Boolean valid_contract. Included failed-script transactions report failure; timeout, not-found, malformed data and identity changes during lookup remain unknown. No automatic resend. Contract checked against the official Blockfrost OpenAPI: https://raw.githubusercontent.com/blockfrost/openapi/master/openapi.yaml (tx_content).
+- 106 targeted tests passed across ADA sender, ADA/XLM status resolvers and wallet data (`/tmp/n42-ada-b135-final.log`, exit 0). Real SQLite close/reopen covers recovery with and without persisted row ID and preserves same-hash histories belonging to another user, wallet, network or chain. Initial scoped analysis found one test super-parameter style info; fixed, final analysis is clean (`/tmp/n42-ada-b135-analysis-final.log`).
+- This closes the missing ADA lookup implementation, not live network acceptance, cryptographic receipt verification or finality/reorg handling. The configured project must match its Blockfrost network; no live project credentials or endpoints were validated. Cross-page duplicate prevention, unsubmitted-record repair and process-kill recovery remain open. No device, release or deployment operation.
 
 ### Stellar pending receipt and isolated history update — batch 134
 

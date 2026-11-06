@@ -1,3 +1,4 @@
+import 'package:n42_wallet/features/wallet/api/chain_api/ada_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/algo_api.dart';
@@ -23,10 +24,19 @@ class TransactionStateResolver {
   final TokenViewApi _tokenViewApi;
 
   final XlmApi _xlmApi;
+  final AdaApi _adaApi;
 
-  TransactionStateResolver({TokenViewApi? tokenViewApi, XlmApi? xlmApi})
-    : _tokenViewApi = tokenViewApi ?? TokenViewApi(),
-      _xlmApi = xlmApi ?? XlmApi();
+  TransactionStateResolver({
+    TokenViewApi? tokenViewApi,
+    XlmApi? xlmApi,
+    AdaApi? adaApi,
+  }) : _tokenViewApi = tokenViewApi ?? TokenViewApi(),
+       _xlmApi = xlmApi ?? XlmApi(),
+       _adaApi =
+           adaApi ??
+           AdaApi(
+             projectId: const String.fromEnvironment('BLOCKFROST_PROJECT_ID'),
+           );
 
   /// 根据区块链类型查询 [trm] 的上链状态。
   Future<int> resolveState(TransationRecordModel trm) async {
@@ -46,6 +56,8 @@ class TransactionStateResolver {
         return _resolveTezos(trm);
       case BlockchainType.Ripple:
         return _resolveRipple(trm);
+      case BlockchainType.Cardano:
+        return _resolveCardano(trm);
       case BlockchainType.Stellar:
         return _resolveStellar(trm);
       case BlockchainType.Filecoin:
@@ -76,6 +88,52 @@ class TransactionStateResolver {
       );
       if (mm.error) return -1;
       return mm.data as int? ?? 0;
+    }
+  }
+
+  Future<int> _resolveCardano(TransationRecordModel record) async {
+    final hash = record.txHash;
+    final network = record.isTest;
+    final identity = (
+      record.userUuid,
+      record.walletIndex,
+      record.from1,
+      record.coinId,
+    );
+    final hashPattern = RegExp(r'^[0-9a-fA-F]{64}$');
+    if (_adaApi.projectId.trim().isEmpty ||
+        !hashPattern.hasMatch(hash) ||
+        hash.length != 64 ||
+        ![0, 1].contains(network) ||
+        record.from1.isEmpty) {
+      return -1;
+    }
+    try {
+      final response = await _adaApi.getTransaction(hash, isTest: network == 1);
+      if (response.error) return -1;
+      final data = response.data;
+      if (data is! Map ||
+          data['hash'] is! String ||
+          (data['hash'] as String).toLowerCase() != hash.toLowerCase() ||
+          data['block'] is! String ||
+          (data['block'] as String).length != 64 ||
+          !hashPattern.hasMatch(data['block'] as String) ||
+          data['block_height'] is! int ||
+          (data['block_height'] as int) < 0 ||
+          data['valid_contract'] is! bool) {
+        return -1;
+      }
+      if (record.txHash != hash ||
+          record.isTest != network ||
+          (record.userUuid, record.walletIndex, record.from1, record.coinId) !=
+              identity) {
+        return -1;
+      }
+      // Inclusion with a failed script is not a successful payment. Not-found
+      // and transport errors above remain unknown, never an instruction to resend.
+      return data['valid_contract'] == true ? 1 : 2;
+    } catch (_) {
+      return -1;
     }
   }
 
