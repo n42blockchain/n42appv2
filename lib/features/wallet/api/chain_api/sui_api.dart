@@ -35,50 +35,61 @@ class SuiApi {
 
   //用户所有的对象，NFT，合约等
   Future<List<dynamic>> getOwnedObjects(String address) async {
-    final result = await baseRPCSui("suix_getOwnedObjects", [
-      address,
-      {
-        "filter": {
-          "MatchAll": [
-            {"StructType": "0x2::coin::Coin<0x2::sui::SUI>"},
-            {"AddressOwner": address},
-          ],
+    final objects = <dynamic>[];
+    final cursors = <String>{};
+    String? cursor;
+    while (true) {
+      final result = await baseRPCSui("suix_getOwnedObjects", [
+        address,
+        {
+          "filter": {"StructType": "0x2::coin::Coin<0x2::sui::SUI>"},
+          "options": {"showContent": true},
         },
-        "options": {
-          "showType": true,
-          "showOwner": true,
-          "showPreviousTransaction": true,
-          "showContent": false,
-        },
-      },
-    ]);
-    final rmm = resultToMessageModel(result);
-    if (rmm.error == false) {
-      return rmm.data['data'] ?? [];
+        cursor,
+        50,
+      ]);
+      final response = resultToMessageModel(result);
+      final page = response.data;
+      if (response.error ||
+          page is! Map ||
+          page['data'] is! List ||
+          page['hasNextPage'] is! bool) {
+        return [];
+      }
+      objects.addAll(page['data'] as List);
+      if (page['hasNextPage'] == false) return objects;
+      final next = page['nextCursor'];
+      if (next is! String || next.isEmpty || !cursors.add(next)) return [];
+      cursor = next;
     }
-    return [];
   }
 
   //模拟交易
   Future<MessageModel> dryRunTransactionBlock(String signStr) async {
     final result = await baseRPCSui("sui_dryRunTransactionBlock", [signStr]);
     final rmm = resultToMessageModel(result);
-    if (rmm.error == false) {
-      if (rmm.data['effects']['status'] == 'success') {
-        //computationCost + storageCost - storageRebate
-        int computationCost = int.parse(
-          rmm.data['effects']['gasUsed']['computationCost'],
-        );
-        int storageCost = int.parse(
-          rmm.data['effects']['gasUsed']['storageCost'],
-        );
-        int storageRebate = int.parse(
-          rmm.data['effects']['gasUsed']['storageRebate'],
-        );
-        rmm.data = BigInt.from(computationCost + storageCost - storageRebate);
-      }
+    if (rmm.error) return rmm;
+    final data = rmm.data;
+    final effects = data is Map ? data['effects'] : null;
+    final status = effects is Map ? effects['status'] : null;
+    final gas = effects is Map ? effects['gasUsed'] : null;
+    if (status is! Map || status['status'] != 'success' || gas is! Map) {
+      return MessageModel.error()..data = 'Sui simulation was not successful';
     }
-    return rmm;
+    BigInt? cost(String key) {
+      final value = gas[key];
+      if (value is! String || !RegExp(r'^[0-9]+$').hasMatch(value)) return null;
+      return BigInt.tryParse(value);
+    }
+
+    final computation = cost('computationCost');
+    final storage = cost('storageCost');
+    final rebate = cost('storageRebate');
+    if (computation == null || storage == null || rebate == null) {
+      return MessageModel.error()..data = 'Invalid Sui simulation gas usage';
+    }
+    final net = computation + storage - rebate;
+    return MessageModel()..data = net.isNegative ? BigInt.zero : net;
   }
 
   //交易上链（明确禁用重试，防止双发）

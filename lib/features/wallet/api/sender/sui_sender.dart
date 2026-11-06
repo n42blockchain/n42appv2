@@ -12,14 +12,51 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 import 'chain_sender.dart';
+import 'sui_transaction_message.dart';
+import '../../pages/send/sui_amount_utils.dart';
 
 /// Sui chain sender.
 class SuiSender implements ChainSender {
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
+  final SuiApi Function(bool) _apiFactory;
+  bool _sending = false;
+
+  SuiSender({Trustdart? trustdart, SuiApi Function(bool)? apiFactory})
+    : _trustdart = trustdart ?? Trustdart(),
+      _apiFactory = apiFactory ?? ((isTest) => SuiApi(isTest: isTest));
 
   @override
   Future<SendResult> send(SendParams params) async {
-    final suiApi = SuiApi(isTest: params.isTest);
+    if (_sending) return const SendResult.fail('A transfer is already pending');
+    _sending = true;
+    try {
+      return await _send(params);
+    } catch (_) {
+      return const SendResult.fail('Unable to prepare or send Sui transfer');
+    } finally {
+      _sending = false;
+    }
+  }
+
+  Future<SendResult> _send(SendParams params) async {
+    if (params.contractAddress.isNotEmpty) {
+      return const SendResult.fail(
+        'Sui token transfers require a token-specific transaction',
+      );
+    }
+    if (params.decimals != 9) {
+      return const SendResult.fail('Invalid Sui decimals');
+    }
+    final maxU64 = (BigInt.one << 64) - BigInt.one;
+    var valuePrice =
+        params.valueWeiOverride ??
+        suiAmountToBaseUnits(params.amountDecimalString, params.decimals);
+    if (valuePrice == null ||
+        valuePrice <= BigInt.zero ||
+        valuePrice > maxU64) {
+      return const SendResult.fail('Invalid Sui transfer amount');
+    }
+    final suiApi = _apiFactory(params.isTest);
 
     // Get balance
     final mmb = await suiApi.getBalanceSui(params.fromAddress);
@@ -33,13 +70,11 @@ class SuiSender implements ChainSender {
     final mmg = await suiApi.getGasPriceSui();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
-    final gasLimit = BigInt.from(2000000); // 2M MIST budget
-    final totalGas = gasPrice * gasLimit;
+    if (gasPrice <= BigInt.zero || gasPrice > maxU64) {
+      return const SendResult.fail('Invalid Sui reference gas price');
+    }
+    final totalGas = suiTransferGasBudget;
 
-    BigInt valuePrice = ethToWeiString(
-      params.amountDecimalString,
-      params.decimals,
-    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -59,15 +94,24 @@ class SuiSender implements ChainSender {
     // Get owned objects (coins) for gas
     final ownedObjects = await suiApi.getOwnedObjects(params.fromAddress);
 
+    if (ownedObjects.isEmpty) {
+      return const SendResult.fail('No spendable Sui coins');
+    }
     final signMap = <String, dynamic>{
+      'type': 'SUI_TRANSFER',
       'amount': valuePrice.toString(),
       'toAddress': params.toAddress,
       'fromAddress': params.fromAddress,
       'gasBudget': totalGas.toString(),
-      'gasPrice': gasPrice.toString(),
-      'coins': ownedObjects
-          .map((o) => (o as Map<String, dynamic>)['data']?['objectId'])
-          .toList(),
+      'referenceGasPrice': gasPrice.toString(),
+      'utxo': ownedObjects.map((o) {
+        final data = (o as Map)['data'] as Map;
+        return {
+          'objectId': data['objectId'],
+          'version': data['version'],
+          'objectDigest': data['digest'],
+        };
+      }).toList(),
     };
 
     String signStr;
@@ -92,23 +136,17 @@ class SuiSender implements ChainSender {
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
-    // SUI needs transactionBlock + signature separately
-    // The trustdart returns "txBlock|signature" format
-    String txBlock;
-    String sig;
-    if (signStr.contains('|')) {
-      final parts = signStr.split('|');
-      txBlock = parts[0];
-      sig = parts[1];
-    } else {
-      txBlock = signStr;
-      sig = signStr;
+    final signed = SuiSignedTransaction.parse(signStr);
+    if (signed == null) {
+      return const SendResult.fail('Invalid Sui signing output');
     }
-
-    final sendMm = await suiApi.submit(txBlock, sig);
+    final sendMm = await suiApi.submit(signed.transaction, signed.signature);
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
 
     final txHash = _extractSuiTxHash(sendMm.data);
+    if (txHash == null || txHash.isEmpty) {
+      return const SendResult.fail('Missing Sui transaction digest');
+    }
     return SendResult.ok(txHash, actualAmount: adjustedAmount);
   }
 

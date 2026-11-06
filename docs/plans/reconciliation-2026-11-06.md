@@ -12,6 +12,14 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Recheck at wallet c1aa17a90 (superseded by batch 56)
+
+- Fresh fetch confirms master is 0 ahead / 0 behind origin/master. The ordinary Sui transfer follow-up is interrupted: seven tracked files are modified and two implementation files are untracked (SuiTransferParameters.kt and sui_transaction_message.dart). These changes are not committed, pushed or accepted. Preserve them for the next implementation batch.
+- Scoped Dart analysis of the sender, envelope parser, API and send page reports no errors/warnings and five brace-style informational diagnostics. No behavioral or native test was run for these pending changes in this check; earlier full-suite results do not cover them.
+- Chat task worktree and ID Hub have no local changes. Wallet still has 13 auxiliary worktrees: seven dirty ancestor heads, five clean non-ancestor heads and one clean ancestor head. No worktree was removed.
+- Remaining categories below remain open: native provider acceptance/Google exchange enablement, Meta publication, current-source release, Chat recovery, audit continuation, localization review, dependency holds and worktree reconciliation. Existing Web provider and historical build evidence must not be counted as native or current-release acceptance.
+
+
 - Batch 52 updates the wallet pin to pushed Chat `f205f334`: storage-read errors now produce an explicit localized retry state instead of claiming the scheduled queue is empty. 259 related regressions and 17 final page tests pass. Corrupt-record repair and persistent send-failure recovery remain open. Batch 51 full-suite results precede this change.
 
 - At the start of this inspection, wallet `eb05473d9` matched freshly fetched `origin/master` (0 ahead / 0 behind). Four previously recorded untracked paths remain preserved. Batch 42 completes the interrupted Chat acknowledgement patch and updates the host pin.
@@ -20,9 +28,11 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Legacy unattributed drafts remain preserved and unsent. A user-confirmed recovery flow, cross-device/process coordination and server-outcome recovery (batches 37–38 guard login origins; batch 40 coordinates send/cancel across BLoCs and standalone pages in the same isolate; batch 41 prevents missing-record cancellation success claims; batch 42 preserves known server acceptance independently of local sync) and live-server acceptance remain open in MSG-001. Batch 44 prevents text loss before scheduled-draft persistence; batch 45 also gates attachment creation notices on persistence acknowledgement. Batch 46 preserves poll/sticker composers until acknowledged storage and scheduled quiz answer fields through dispatch. Retained files after uncertain writes require safe reconciliation against stored queues; batch 47 now retains GIF selection context on rejected scheduling and prevents duplicate host dispatch. Batch 48 preserves drafts with unavailable attachments for recovery; batch 49 now limits single-draft file cleanup to owned, unreferenced files under the store lock. Batch 50 extends safe cleanup to room-wide storage removal. Historical orphan/cross-process reconciliation and persistent failure presentation remain open.
 - Thirteen auxiliary wallet worktrees were inspected again: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. None was removed or merged by this inspection.
 
+Batch 56 now completes and verifies the interrupted ordinary Sui signing interface: 43 Dart tests, actual Swift component checks and six Android JVM tests pass. Native/live-node acceptance and current-source release remain open; see the audit batch for evidence.
+
 ## Still open, in execution order
 
-- Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Next reconcile ordinary Sui sender/native fields and output; do not treat component tests as a complete wallet flow.
+- Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
 
 | Priority | Work | Current evidence and next step |
 | --- | --- | --- |

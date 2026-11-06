@@ -1116,6 +1116,19 @@ extension WalletCorePlugin {
         return output.signature
     }
 
+    private func suiUInt64(_ value: Any?) -> UInt64? {
+        let text: String
+        if let string = value as? String {
+            text = string
+        } else if let number = value as? NSNumber,
+                  CFGetTypeID(number) != CFBooleanGetTypeID() {
+            text = number.stringValue
+        } else { return nil }
+        guard !text.isEmpty, text.utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+              let result = UInt64(text), String(result) == text else { return nil }
+        return result
+    }
+
     func signSuiTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
         guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.sui, path: path, privateKey: privateKey) else {
@@ -1127,38 +1140,48 @@ extension WalletCorePlugin {
             return signWalletConnectSui(encoded, privateKey: pk)
         }
 
-        let referenceGasPrice : UInt64 = txData["referenceGasPrice"] as! UInt64
-        let gasBudget : UInt64 = txData["gasBudget"] as! UInt64
-        let toAddress : String = txData["toAddress"] as! String
-        let amount : UInt64 = txData["amount"] as! UInt64
-        let chainId : UInt32 = txData["chainId"] as! UInt32
-        let utxos: [[String: Any]] = txData["utxo"] as! [[String: Any]]
-
-        var paySui = SuiPaySui.with{
-            $0.amounts = [amount]
-            $0.recipients = [toAddress]
+        guard let referenceGasPrice = suiUInt64(txData["referenceGasPrice"]), referenceGasPrice > 0,
+              let gasBudget = suiUInt64(txData["gasBudget"]), gasBudget > 0,
+              let toAddress = txData["toAddress"] as? String,
+              AnyAddress.isValid(string: toAddress, coin: .sui),
+              let amount = suiUInt64(txData["amount"]), amount > 0,
+              let utxos = txData["utxo"] as? [[String: Any]], !utxos.isEmpty else { return nil }
+        if txData["type"] as? String == "SUI_TRANSFER" {
+            guard let from = txData["fromAddress"] as? String,
+                  AnyAddress(string: from, coin: .sui)?.description == CoinType.sui.deriveAddress(privateKey: pk) else { return nil }
         }
-        var inputCoins : [SuiObjectRef] = []
-        for utx in utxos {
-            inputCoins.append(
-                SuiObjectRef.with{
-                    $0.objectID = utx["objectId"] as! String
-                    $0.version = utx["version"] as! UInt64
-                    $0.objectDigest = utx["objectDigest"] as! String
-                }
-            )
+        var inputCoins: [SuiObjectRef] = []
+        var ids = Set<String>()
+        for coin in utxos {
+            guard let id = coin["objectId"] as? String,
+                  let address = AnyAddress(string: id, coin: .sui),
+                  ids.insert(address.description).inserted,
+                  let version = suiUInt64(coin["version"]),
+                  let digest = coin["objectDigest"] as? String, !digest.isEmpty else { return nil }
+            inputCoins.append(SuiObjectRef.with {
+                $0.objectID = address.description
+                $0.version = version
+                $0.objectDigest = digest
+            })
         }
-        paySui.inputCoins=inputCoins
         let input = SuiSigningInput.with {
-            $0.paySui = paySui
+            $0.paySui = SuiPaySui.with {
+                $0.amounts = [amount]
+                $0.recipients = [toAddress]
+                $0.inputCoins = inputCoins
+            }
             $0.privateKey = pk.data
             $0.gasBudget = gasBudget
             $0.referenceGasPrice = referenceGasPrice
         }
-
-        let output: SuiSigningOutput = AnySigner.sign(input: input, coin: CoinType.sui)
+        let output: SuiSigningOutput = AnySigner.sign(input: input, coin: .sui)
+        guard output.error == .ok, !output.unsignedTx.isEmpty, !output.signature.isEmpty else { return nil }
+        if txData["type"] as? String == "SUI_TRANSFER" {
+            return output.unsignedTx + "|" + output.signature
+        }
+        // Preserve the old unsigned-only interface for legacy dry-run callers.
         return output.unsignedTx
-      }
+    }
 
     func signTonTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 

@@ -101,11 +101,13 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     if (!mounted) return;
     if (!mm.error) {
       gasPrice = mm.data;
+      totalGasPrice = suiTransferGasBudget;
     } else {
+      gasPrice = BigInt.zero;
+      totalGasPrice = BigInt.zero;
       errorMessage = mm.data.toString();
       ToastUtils.show(errorMessage);
     }
-    totalGasPrice = gasPrice * gas;
     setState(() => load = Load.finish);
   }
 
@@ -140,16 +142,28 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         if (toAddr == null) return;
       } else {
         toAddr = toTextEditingController.text.trim();
+        final parts = toAddr.split(":");
+        if (parts.length == 2) toAddr = parts[1];
       }
       if (toErrorMessage.isNotEmpty) return;
       final price = valueTextEditingController.text;
       if (price.isEmpty) return;
 
+      final exactAmount = suiAmountToBaseUnits(
+        price,
+        widget.coinModel.config.decimals,
+      );
+      if (exactAmount == null || exactAmount <= BigInt.zero) {
+        errorMessage = S.current.g_key_134;
+        return false;
+      }
       final signData = <String, dynamic>{
-        "referenceGasPrice": totalGasPrice.toInt(),
-        "gasBudget": (totalGasPrice.toDouble() * 1.2).toInt(),
-        "toAddress": toTextEditingController.text,
-        "amount": transferValue.toInt(),
+        "type": "SUI_TRANSFER",
+        "fromAddress": widget.coinModel.address,
+        "referenceGasPrice": gasPrice.toString(),
+        "gasBudget": suiTransferGasBudget.toString(),
+        "toAddress": toAddr,
+        "amount": exactAmount.toString(),
         "utxo": utxos,
       };
       final SuiApi suiApi = SuiApi(isTest: widget.coinModel.isTest);
@@ -167,14 +181,19 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         pk: widget.coinModel.privateKey ?? "",
       );
       if (!mounted) return false;
+      final signed = SuiSignedTransaction.parse(signStr);
+      if (signed == null) {
+        errorMessage = S.current.g_key_wallet_m6;
+        return false;
+      }
       final MessageModel suiMessage = await suiApi.dryRunTransactionBlock(
-        signStr,
+        signed.transaction,
       );
       if (!mounted) return false;
 
       if (!suiMessage.error) {
-        gasPrice = suiMessage.data;
-        totalGasPrice = gasPrice;
+        // Keep the full signing budget reserved; net simulated gas can include rebates.
+        totalGasPrice = suiTransferGasBudget;
         errorMessage = "";
         return true;
       }
@@ -184,9 +203,11 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       errorMessage = e.toString();
       return false;
     } finally {
-      setState(() {
-        gasLimitLoad = Load.finish;
-      });
+      if (mounted) {
+        setState(() {
+          gasLimitLoad = Load.finish;
+        });
+      }
     }
   }
 
@@ -301,9 +322,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       return;
     }
 
-    await estimateGasEthLocal(checkAddress: false);
+    final estimated = await estimateGasEthLocal(checkAddress: false);
     if (!mounted) return;
-    if (errorMessage != "") {
+    if (estimated != true || errorMessage != "") {
       _resetLoad();
       return;
     }
@@ -383,6 +404,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
               toAddress: trModel.to1,
               amount: toEther(trModel.price.toString(), decimals).toDouble(),
               decimals: decimals,
+              valueWeiOverride: trModel.price,
               path: path,
               sendMax: false,
               isTest: widget.coinModel.isTest,

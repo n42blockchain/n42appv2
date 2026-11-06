@@ -1294,33 +1294,13 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             return SuiRawTransactionSigner.sign(txData["transaction"] as? String, privateKey) ?: ""
         }
 
-        val referenceGasPrice: Long = (txData["referenceGasPrice"] as Number).toLong()
-        val gasBudget: Long = (txData["gasBudget"] as Number).toLong()
-        val toAddress: String = txData["toAddress"] as String
-        val amount: Long = (txData["amount"] as Number).toLong()
-        val utxos: List<Map<String, Any>> = txData["utxo"] as List<Map<String, Any>>
-
-        val paySui = Sui.PaySui.newBuilder()
-            .addRecipients(toAddress)
-            .addAmounts(amount)
-        for (utx in utxos) {
-            paySui.addInputCoins(
-                Sui.ObjectRef.newBuilder()
-                    .setObjectId(utx["objectId"] as String)
-                    .setVersion((utx["version"] as String).toLong())
-                    .setObjectDigest(utx["objectDigest"] as String)
-            )
-        }
-
-        val signingInput = Sui.SigningInput.newBuilder()
-            .setPaySui(paySui)
-            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
-            .setGasBudget(gasBudget)
-            .setReferenceGasPrice(referenceGasPrice)
-            .build()
-
-        val output = AnySigner.sign(signingInput, CoinType.SUI, Sui.SigningOutput.parser())
-        return output.unsignedTx
+        val input = SuiTransferParameters.build(txData) ?: return ""
+        if (txData["type"] == "SUI_TRANSFER" &&
+            SuiTransferParameters.address(txData["fromAddress"]) != CoinType.SUI.deriveAddress(privateKey)) return ""
+        val output = AnySigner.sign(input.setPrivateKey(ByteString.copyFrom(privateKey.data())).build(),
+            CoinType.SUI, Sui.SigningOutput.parser())
+        if (output.errorValue != 0 || output.unsignedTx.isEmpty() || output.signature.isEmpty()) return ""
+        return if (txData["type"] == "SUI_TRANSFER") output.unsignedTx + "|" + output.signature else output.unsignedTx
     }
 
     private fun signTonTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {

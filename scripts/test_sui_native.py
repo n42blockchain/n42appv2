@@ -14,7 +14,7 @@ def main():
     args = parser.parse_args()
     source = (ROOT / 'ios/Runner/WalletCorePlugin+Signing.swift').read_text()
     methods = '\n'.join(declaration(source, 'func ' + name + '(').replace('private func', 'func', 1)
-        for name in ['resolveSigningPrivateKey', 'signSuiTransaction', 'signWalletConnectSui'])
+        for name in ['resolveSigningPrivateKey', 'signSuiTransaction', 'signWalletConnectSui', 'suiUInt64'])
     with tempfile.TemporaryDirectory(prefix='n42-sui-native-') as temp:
         temp = Path(temp)
         fixture = temp / 'vectors.json'
