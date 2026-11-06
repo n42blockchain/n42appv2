@@ -202,6 +202,67 @@ void main() {
     });
   }
 
+  for (final c in _chains.skip(1)) {
+    for (final requestIsTest in [false, true]) {
+      for (final walletIsTest in [false, true]) {
+        test(
+          '${c.ns} request network $requestIsTest overrides wallet mode $walletIsTest',
+          () async {
+            final chain = c.ns == 'aptos'
+                ? (requestIsTest ? 'aptos:2' : 'aptos:1')
+                : (requestIsTest ? 'near:testnet' : 'near:mainnet');
+            provider.coinModels = [
+              sessionCoin(
+                  type: c.type,
+                  blockchain: c.blockchain,
+                  address: c.address,
+                )
+                ..coin['path'] = {'legacy': "m/44'/0'/0'"}
+                ..isTest = walletIsTest,
+            ];
+            provider.coinModelsIndex = 0;
+            client.activeSessions['request-topic'] = _session(
+              c.ns,
+              chain,
+              c.address,
+              c.method,
+            );
+            provider.actionData = sessionRequest(c.method, {
+              'transaction': 'cmF3',
+            }, chain: chain);
+            final operation = provider.transactionSignTap();
+            await nativeStarted.future;
+            native.complete('signed');
+            await operation;
+            expect(provider.submissions.single.$3, requestIsTest);
+            expect(client.responses.single.$2.result, c.result);
+          },
+        );
+      }
+    }
+    test('${c.ns} unknown approved chain cannot reach native signer', () async {
+      final chain = '${c.ns}:unknown';
+      provider.coinModels = [
+        sessionCoin(type: c.type, blockchain: c.blockchain, address: c.address)
+          ..coin['path'] = {'legacy': "m/44'/0'/0'"},
+      ];
+      provider.coinModelsIndex = 0;
+      client.activeSessions['request-topic'] = _session(
+        c.ns,
+        chain,
+        c.address,
+        c.method,
+      );
+      provider.actionData = sessionRequest(c.method, {
+        'transaction': 'cmF3',
+      }, chain: chain);
+      await provider.transactionSignTap();
+      expect(nativeCalls, 0);
+      expect(provider.submissions, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+    });
+  }
+
   for (final c in _chains) {
     Future<void> execute() {
       provider.coinModels = [

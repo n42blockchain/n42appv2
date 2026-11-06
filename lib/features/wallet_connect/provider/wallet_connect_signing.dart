@@ -557,6 +557,7 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requestIsTest = _requestTestNetwork(CoinType.APT, eventData.chainId);
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
     requireCurrent();
@@ -586,7 +587,7 @@ mixin WalletConnectSigning
       final result = await broadcastNonEvmTransaction(
         CoinType.APT,
         signedHex,
-        isTest: cm.isTest,
+        isTest: requestIsTest,
       );
       if (result.error) {
         if (!_signingContextIsCurrent(requireCurrent)) return;
@@ -699,6 +700,7 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requestIsTest = _requestTestNetwork(CoinType.NEAR, eventData.chainId);
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
     requireCurrent();
@@ -735,7 +737,7 @@ mixin WalletConnectSigning
       final result = await broadcastNonEvmTransaction(
         CoinType.NEAR,
         signedTxList[0],
-        isTest: cm.isTest,
+        isTest: requestIsTest,
       );
       if (result.error) {
         if (!_signingContextIsCurrent(requireCurrent)) return;
@@ -763,6 +765,17 @@ mixin WalletConnectSigning
     }
     _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
+
+  bool _requestTestNetwork(CoinType type, String chainId) =>
+      switch ((type, chainId)) {
+        (CoinType.APT, 'aptos:1') || (CoinType.NEAR, 'near:mainnet') => false,
+        (CoinType.APT, 'aptos:2') || (CoinType.NEAR, 'near:testnet') => true,
+        _ => throw ArgumentError.value(
+          chainId,
+          'chainId',
+          'Unsupported request chain',
+        ),
+      };
 
   /// Submission boundary for deterministic lifecycle tests. Serialized Solana
   /// uses base64 and the approved request chain, never the UI network toggle.

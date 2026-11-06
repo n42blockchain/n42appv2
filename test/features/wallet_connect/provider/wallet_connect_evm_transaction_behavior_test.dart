@@ -650,7 +650,7 @@ void main() {
       ..coinModelsIndex = 0
       ..actionData = _request('aptos_signTransaction', {
         'transaction': 'encoded-aptos-transaction',
-      });
+      }, chain: 'aptos:1');
 
     await provider.transactionSignTap();
 
