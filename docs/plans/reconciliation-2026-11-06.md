@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Bind clear-history callbacks to their originating session — batch 181
+
+- Settings callbacks previously cleared whichever chat session was current. Capture room/account/session before opening the route, reject stale confirmation before callback/success feedback, and recheck origin in ClearChatHistory. Same-room reinitialization invalidates the captured guard. Existing no-argument event and legacy callback APIs remain compatible.
+- Initial BLoC/event/detail/media run: **376 pass** (/tmp/n42-chat-b181-final.log). After the same-room guard addition, all four origin tests and 93 detail/media tests pass (/tmp/n42-chat-b181-origin.log, /tmp/n42-chat-b181-pages-final.log). Scoped analysis: zero errors/warnings, six existing infos (/tmp/n42-chat-b181-analysis-final.log). Chat `e241a8596762c369642a4c52e20dd3005c2ce20d` is pushed and pinned. Dependency resolution changed only Chat; all three wallet host tests pass (/tmp/n42-wallet-b181-host.log).
+- Confirmed feature gap: clearing only hides loaded IDs in memory; there is no durable full-history clear/persistence acknowledgement and history can return after reopening. Next implement account-scoped durable clearing with restart/pagination and failed-write acceptance, then make success feedback depend on persistence. This batch only closes stale-route clearing, not that feature gap or broader native/recovery/release acceptance.
+
 ### Detach disposed chat resources before asynchronous cleanup — batch 180
 
 - Disposal awaited cancellation before resetting shared fields, so an old continuation could clear a newer session. It also left poll/destruction/scheduling resources active. It now synchronously detaches all three subscriptions, stops room timers and resets local state, then awaits only captured subscriptions with independent cancellation error handling.
