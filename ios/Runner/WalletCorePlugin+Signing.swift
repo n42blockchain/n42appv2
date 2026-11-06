@@ -1036,6 +1036,20 @@ extension WalletCorePlugin {
         return (raw + Data([0, 32]) + publicBytes + Data([64]) + signature).hexString
     }
 
+    private func aptosUInt64(_ value: Any?) -> UInt64? {
+        let text: String
+        if let string = value as? String {
+            text = string
+        } else if let number = value as? NSNumber,
+                  CFGetTypeID(number) != CFBooleanGetTypeID(),
+                  !["f", "d"].contains(String(cString: number.objCType)) {
+            text = number.stringValue
+        } else { return nil }
+        guard !text.isEmpty, text.utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+              let result = UInt64(text), String(result) == text else { return nil }
+        return result
+    }
+
     func signAptosTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
         guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.aptos, path: path, privateKey: privateKey) else {
@@ -1050,17 +1064,19 @@ extension WalletCorePlugin {
             return signWalletConnectAptos(raw, chain: chain, privateKey: pk)
         }
 
-        let gasUnitPrice : UInt64 = txData["gasUnitPrice"] as! UInt64
-        let maxGasAmount : UInt64 = txData["maxGasAmount"] as! UInt64
-        let expirationTimestampSecs : UInt64 = txData["expirationTimestampSecs"] as! UInt64
-        let toAddress : String = txData["toAddress"] as! String
-        let senderAddress : String = txData["fromAddress"] as! String
-        let amount : UInt64 = txData["amount"] as! UInt64
-        let chainId : UInt32 = txData["chainId"] as! UInt32
-        let sequenceNumber : Int64 = txData["SequenceNumber"] as! Int64
-        let contractAddress : String = txData["contractAddress"] as! String
-        let contractModule : String = txData["contractModule"] as! String
-        let contractName : String = txData["contractName"] as! String
+        guard let gasUnitPrice = aptosUInt64(txData["gasUnitPrice"]), gasUnitPrice > 0,
+              let maxGasAmount = aptosUInt64(txData["maxGasAmount"]), maxGasAmount > 0,
+              let expirationTimestampSecs = aptosUInt64(txData["expirationTimestampSecs"]), expirationTimestampSecs > 0,
+              let amount = aptosUInt64(txData["amount"]),
+              let chain = aptosUInt64(txData["chainId"]), chain > 0, chain <= 255,
+              let sequence = aptosUInt64(txData["SequenceNumber"]),
+              let toAddress = txData["toAddress"] as? String,
+              let senderAddress = txData["fromAddress"] as? String,
+              let contractAddress = txData["contractAddress"] as? String,
+              let contractModule = txData["contractModule"] as? String,
+              let contractName = txData["contractName"] as? String else { return nil }
+        let chainId = UInt32(chain)
+        let sequenceNumber = Int64(bitPattern: sequence)
 
         var input = AptosSigningInput.with {
             $0.chainID = chainId
@@ -1098,6 +1114,7 @@ extension WalletCorePlugin {
 
         }
         let output: AptosSigningOutput = AnySigner.sign(input: input, coin: CoinType.aptos)
+        guard output.error == .ok, !output.encoded.isEmpty else { return nil }
         return output.encoded.hexString
       }
 

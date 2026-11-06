@@ -15,6 +15,10 @@ func unhex(_ value: String) -> Data {
     static func main() throws {
         let vectors = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1]))) as! [[String: Any]]
         let plugin = WalletCorePlugin()
+        precondition(plugin.aptosUInt64("18446744073709551615") == UInt64.max)
+        for invalid: Any in [true, -1, 1.5, "01", "-1", "18446744073709551616"] {
+            precondition(plugin.aptosUInt64(invalid) == nil)
+        }
         for vector in vectors {
             let raw = unhex(vector["raw"] as! String)
             let chain = vector["chain"] as! Int
@@ -31,6 +35,27 @@ func unhex(_ value: String) -> Data {
             ]
             precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:transfer,privateKey:key) == actual,
                          "Raw signer differs from WalletCore standard transfer signer")
+            var strings = transfer
+            for field in ["amount", "chainId", "SequenceNumber", "gasUnitPrice", "maxGasAmount", "expirationTimestampSecs"] {
+                strings[field] = String(plugin.aptosUInt64(transfer[field])!)
+            }
+            precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:strings,privateKey:key) == actual)
+            var largest = strings
+            largest["amount"] = "18446744073709551615"
+            largest["SequenceNumber"] = "18446744073709551615"
+            var largestRaw = raw
+            largestRaw.replaceSubrange(32..<40, with: Data(repeating:255,count:8))
+            largestRaw.replaceSubrange((raw.count-33)..<(raw.count-25), with: Data(repeating:255,count:8))
+            let largestSigned = plugin.signAptosTransaction(wallet:nil,path:"",txData:largest,privateKey:key)
+            precondition(largestSigned != nil)
+            precondition(largestSigned!.hasPrefix(largestRaw.hexString), "uint64 amount or sequence truncated")
+            precondition(largestSigned == plugin.signWalletConnectAptos(largestRaw,chain:chain,privateKey:key))
+            for field in ["amount", "SequenceNumber", "gasUnitPrice", "maxGasAmount", "expirationTimestampSecs"] {
+                for invalid: Any in [true, -1, 1.5, "01", "18446744073709551616"] {
+                    var bad = strings; bad[field] = invalid
+                    precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:bad,privateKey:key) == nil)
+                }
+            }
             precondition(plugin.signWalletConnectAptos(raw,chain:chain == 1 ? 2 : 1,privateKey:key) == nil)
             precondition(plugin.signWalletConnectAptos(raw,chain:chain,privateKey:PrivateKey(data:Data(repeating:2,count:32))!) == nil)
             for length in 0..<67 { precondition(plugin.signWalletConnectAptos(Data(raw.prefix(length)),chain:chain,privateKey:key) == nil) }

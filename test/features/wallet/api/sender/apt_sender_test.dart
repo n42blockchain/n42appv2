@@ -60,13 +60,15 @@ void main() {
   for (final token in [false, true]) {
     for (final exact in [
       BigInt.parse('9007199254740993'),
+      (BigInt.one << 64) - BigInt.one,
+      BigInt.one << 64,
       BigInt.zero,
       -BigInt.one,
     ]) {
       test(
         'exact amount takes precedence token=$token amount=$exact',
         () async {
-          final api = _Api()..balance = BigInt.parse('9007199255740993');
+          final api = _Api()..balance = BigInt.one << 65;
           final signer = _Signer();
           await AptSender(trustdart: signer, apiFactory: (_) => api).send(
             SendParams(
@@ -83,8 +85,8 @@ void main() {
               tokenValueWeiOverride: token ? exact : BigInt.from(123),
             ),
           );
-          if (exact > BigInt.zero) {
-            expect(signer.received!['amount'], exact.toInt());
+          if (exact > BigInt.zero && exact < (BigInt.one << 64)) {
+            expect(signer.received!['amount'], exact.toString());
           } else {
             expect(signer.received, isNull);
           }
@@ -109,11 +111,11 @@ void main() {
           contractAddress: token ? '0x1' : '',
         ),
       );
-      expect(signer.received!['amount'], token ? 1234567 : 123456700);
+      expect(signer.received!['amount'], token ? '1234567' : '123456700');
       expect(api.submits, 0);
     });
   }
-  for (final price in [BigInt.zero, -BigInt.one, BigInt.one << 63]) {
+  for (final price in [BigInt.zero, -BigInt.one, BigInt.one << 64]) {
     test('invalid gas price stops before signing: $price', () async {
       final api = _Api()..price = price;
       final signer = _Signer();
@@ -166,9 +168,12 @@ void main() {
           expect(result.success, false);
           expect(signer.received, isNotNull);
           expect(api.priceReads, 1);
-          expect(signer.received!['gasUnitPrice'], price);
+          expect(signer.received!['gasUnitPrice'], price.toString());
           expect(signer.received!['maxGasAmount'], 10000);
-          expect(signer.received!['amount'], 10000000 - price * 10000);
+          expect(
+            signer.received!['amount'],
+            (10000000 - price * 10000).toString(),
+          );
           expect(signer.received!['chainId'], isTest ? 2 : 1);
           expect(api.submits, 0);
         },

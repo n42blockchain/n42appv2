@@ -51,7 +51,8 @@ class AptSender implements ChainSender {
     final mmg = await aptApi.getGasPrice();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
-    if (gasPrice <= BigInt.zero || gasPrice > BigInt.from(0x7fffffffffffffff)) {
+    if (gasPrice <= BigInt.zero ||
+        gasPrice > ((BigInt.one << 64) - BigInt.one)) {
       return const SendResult.fail('Invalid Aptos gas unit price');
     }
     final totalGasPrice = gasPrice * BigInt.from(gas);
@@ -65,7 +66,7 @@ class AptSender implements ChainSender {
           params.amountDecimalString,
           isContract ? params.tokenDecimals : params.decimals,
         );
-    if (valuePrice <= BigInt.zero) {
+    if (valuePrice <= BigInt.zero || valuePrice >= (BigInt.one << 64)) {
       return const SendResult.fail('Invalid Aptos transfer amount');
     }
     double adjustedAmount = params.amount;
@@ -110,14 +111,14 @@ class AptSender implements ChainSender {
     final chainId = resolvedChainId ?? 1;
 
     final signMap = <String, dynamic>{
-      'amount': valuePrice.toInt(),
+      'amount': valuePrice.toString(),
       'toAddress': params.toAddress,
       'SequenceNumber': sequenceNumber.data,
       'fromAddress': params.fromAddress,
       'contractAddress': params.contractAddress,
       'contractModule': '',
       'contractName': '',
-      'gasUnitPrice': gasPrice.toInt(),
+      'gasUnitPrice': gasPrice.toString(),
       'maxGasAmount': gas,
       'expirationTimestampSecs': lt,
       'chainId': chainId,

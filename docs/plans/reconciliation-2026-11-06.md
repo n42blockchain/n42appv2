@@ -99,6 +99,8 @@ Batch 81 corrects AptSender network selection and gas price/unit mapping; shared
 
 Batch 82 fixes AptSender asset-specific exact overrides and decimal selection; all 15 sender tests and scoped analysis pass. Full uint64 bridging and the other sender/live acceptance gaps remain open.
 
+Batch 83 preserves uint64 amount/gas values over the Dart/native bridge and removes iOS numeric force casts. All 19 sender regressions plus real Swift component tests pass, including maximum amount/sequence BCS bytes. RPC decoding and full transaction lifecycle acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.
