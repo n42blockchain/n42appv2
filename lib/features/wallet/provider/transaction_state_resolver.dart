@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/algo_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/fil_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/xlm_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xtz_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/zil_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
@@ -21,8 +22,11 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 class TransactionStateResolver {
   final TokenViewApi _tokenViewApi;
 
-  TransactionStateResolver({TokenViewApi? tokenViewApi})
-    : _tokenViewApi = tokenViewApi ?? TokenViewApi();
+  final XlmApi _xlmApi;
+
+  TransactionStateResolver({TokenViewApi? tokenViewApi, XlmApi? xlmApi})
+    : _tokenViewApi = tokenViewApi ?? TokenViewApi(),
+      _xlmApi = xlmApi ?? XlmApi();
 
   /// 根据区块链类型查询 [trm] 的上链状态。
   Future<int> resolveState(TransationRecordModel trm) async {
@@ -42,6 +46,8 @@ class TransactionStateResolver {
         return _resolveTezos(trm);
       case BlockchainType.Ripple:
         return _resolveRipple(trm);
+      case BlockchainType.Stellar:
+        return _resolveStellar(trm);
       case BlockchainType.Filecoin:
         return _resolveFilecoin(trm);
       case BlockchainType.Harmony:
@@ -70,6 +76,45 @@ class TransactionStateResolver {
       );
       if (mm.error) return -1;
       return mm.data as int? ?? 0;
+    }
+  }
+
+  Future<int> _resolveStellar(TransationRecordModel record) async {
+    // Capture the persisted identity before awaiting network data.
+    final hash = record.txHash;
+    final sender = record.from1;
+    final network = record.isTest;
+    final owner = (record.userUuid, record.walletIndex);
+    if (!RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash) ||
+        sender.isEmpty ||
+        ![0, 1].contains(network)) {
+      return -1;
+    }
+    try {
+      final response = await _xlmApi.getTransaction(hash, isTest: network == 1);
+      if (response.error) return -1;
+      final data = response.data;
+      if (data is! Map ||
+          data['hash'] is! String ||
+          (data['hash'] as String).toLowerCase() != hash.toLowerCase() ||
+          data['source_account'] != sender ||
+          data['successful'] is! bool ||
+          data['ledger'] is! int ||
+          (data['ledger'] as int) <= 0 ||
+          (data['ledger'] as int) > 4294967295) {
+        return -1;
+      }
+      // Do not apply a receipt to a record whose identity changed in flight.
+      if (record.txHash != hash ||
+          record.from1 != sender ||
+          record.isTest != network ||
+          (record.userUuid, record.walletIndex) != owner) {
+        return -1;
+      }
+      return data['successful'] == true ? 1 : 2;
+    } catch (_) {
+      // Not found/timeout is not evidence that the original send failed.
+      return -1;
     }
   }
 

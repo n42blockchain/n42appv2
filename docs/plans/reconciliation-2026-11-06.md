@@ -2,21 +2,22 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — after batch 126
+## Current interruption inventory — batch 134 inspection
 
-Inspection on 2026-11-06 found eight tracked files with an unfinished Cardano hash/submission patch (batch 127), not a clean finished task. Its earlier Dart run completed with 121 passing tests. Batch 127 below now closes native validation and implementation delivery; full recovery remains open.
+Fresh inspection on 2026-11-06 found two modified runtime files and two untracked tests left by the interrupted Stellar recovery work. The previous inventory still described batch 126 and incorrectly presented later-completed implementation as missing. Batches 127–133 are committed; batch 134 below closes the remaining local patch after validation.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
-| Cardano submission recovery | Complete batch 127 validation/delivery; batch 133 wires Memo-page pre-broadcast history; full journal and unknown-outcome recovery UI remain open. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
-| Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Batch 129 adds native malformed-input rejection. Batch 130 adds reserve/liability-aware spendable balance and current ledger base fee. Quote UI, surge pricing and recovery remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
-| Native social login and Matrix | Google native code exchange defaults to disabled in ID Hub source; verify deployed capability and Google/Apple/Facebook native flows with same-DID Matrix identity before enabling. Existing Web login evidence is insufficient. |
-| Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No store-console verification or upload was done in this inspection. |
+| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. ADA status lookup, cross-page duplicate prevention, unsubmitted-record repair and process-crash recovery remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
+| Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Fee/max confirmation UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
+| Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
+| Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
 | Chat recovery | Explicit legacy ownership/import, damaged-record repair UI, retention/export and process-crash/cross-process boundaries remain open. |
-| Dependency and localization | Resolve recorded dependency compatibility holds; finish editorial/RTL and UI review. Generated-key integrity does not prove translation quality. |
-| Retained worktrees | 13 auxiliary wallet trees: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
+| Dependency and localization | Recorded compatibility holds and editorial/RTL/UI review remain. Catalog integrity does not prove translation quality. |
+| IAP and payment delivery | ACTIVE_TASKS retains IAP receipt verification, account binding, idempotent delivery/refund/restore and payment-provider production acceptance as open; do not lose these older tasks when summarizing recent audit work. |
+| Retained worktrees | Fresh inventory: 13 auxiliary wallet trees, seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
 
-Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub is clean at 7c0dd68; wallet Chat dependency is pinned to 798d20f55faf49c1bd3ff4dd5a67e254bd453df6. Chat task worktree is at 31714c7b: only OPEN_ISSUES.md differs from the wallet pin; its local coverage/lcov.info modification is preserved. Four baseline untracked paths remain untouched. This inspection covers wallet and directly linked records; it is not a fresh acceptance of every sibling project's earlier plans. Historical batches below describe their source at that time and must not be treated as the current missing-work list.
+Fresh fetch before this batch: wallet e2d3b9330 equals origin/master (0/0). ID Hub is clean at 7c0dd68. Wallet Chat dependency remains pinned to 798d20f55faf49c1bd3ff4dd5a67e254bd453df6. Four baseline untracked paths remain untouched. This is a wallet/direct-dependency source and record inspection, not fresh acceptance of every sibling project or deployment. Historical entries below remain evidence for their own revisions.
 
 ## Latest verified full-regression baseline — batch 112
 
@@ -33,6 +34,13 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Stellar pending receipt and isolated history update — batch 134
+
+- Completed the interrupted Stellar status resolver: query the persisted mainnet/testnet hash and accept only a matching hash/source account, Boolean outcome and positive bounded ledger. Timeout, not-found, malformed receipts or record identity changes stay unknown; never rebroadcast.
+- Closed a shared DAO isolation defect: updateTransationRecordTxhash previously matched hash alone. It now snapshots owner/wallet/chain/sender/network/contract identity before awaiting the database, with the primary key when available. A receipt must not overwrite another account's history of the same transaction.
+- Fresh validation: 49 tests passed across the complete wallet data test directory and Stellar status tests (`/tmp/n42-interruption-b134-tests.log`, exit 0). Real SQLite close/reopen tests cover both persisted-ID and legacy no-ID updates, preserving same-hash records for another user, wallet, network and chain ID. Scoped Dart analysis reports no issues (`/tmp/n42-interruption-b134-analysis.log`); whitespace check passes.
+- This proves local database reopen and controlled receipt recovery, not full application/process-kill recovery or live Horizon settlement. ADA lookup, cross-page duplicate prevention, explicit unsubmitted-history repair, fee confirmation and broader audit boundaries remain open. No physical-device, release or deployment operation.
 
 ### Memo page pre-broadcast history — batch 133
 

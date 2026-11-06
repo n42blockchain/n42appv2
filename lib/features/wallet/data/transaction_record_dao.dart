@@ -203,12 +203,29 @@ extension TransactionRecordDao on AppDatabase {
   }
 
   Future<int> updateTransationRecordTxhash(TransationRecordModel trm) async {
+    // A chain hash can appear in several users' histories. Never overwrite
+    // another owner's record merely because it describes the same transaction.
+    final values = Map<String, Object?>.from(trm.toMapDb());
+    final recordId = trm.trId;
+    final where =
+        'txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? '
+        'AND coinId=? AND from1=? AND isTest=? AND contract=?';
+    final args = <Object?>[
+      values['txHash'],
+      values['userUuid'],
+      values['walletIndex'],
+      values['coinMiniName'],
+      values['coinId'],
+      values['from1'],
+      values['isTest'],
+      values['contract'],
+    ];
     final db = await database;
     return db.update(
       "TransationRecord",
-      trm.toMapDb(),
-      where: 'txHash=?',
-      whereArgs: [trm.txHash],
+      values,
+      where: recordId > 0 ? '$where AND trId=?' : where,
+      whereArgs: recordId > 0 ? [...args, recordId] : args,
     );
   }
 
