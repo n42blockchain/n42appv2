@@ -144,6 +144,8 @@ Batch 98 persists accepted Aptos records even after page disposal and suppresses
 
 Batch 99 computes Aptos signed-transaction hashes locally and rejects mismatched submission acknowledgements. Six independent native/Coin/FA hash vectors and 107 API/sender tests pass. Pre-submit persistence and timeout/restart reconciliation still need implementation; hash matching alone is not recovery.
 
+Batch 100 adds typed, identity-checked Aptos recovery lookup with 119 API/sender tests passing. It is not yet connected to a journal/UI; pre-submit persistence and timeout/restart orchestration remain next. Errors/not-found do not constitute completion evidence.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

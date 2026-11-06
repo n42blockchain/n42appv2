@@ -863,3 +863,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Algorithm checked against [official Aptos Go SDK](https://github.com/aptos-labs/aptos-go-sdk/blob/main/signedTransaction.go): SHA3-256 of the Transaction domain hash, user-transaction variant byte and signed BCS. This identifier does not validate BCS semantics or the signature.
 - Extended the independent Node/OpenSSL generator with hashes for all six native/Coin/FA vectors and regenerated fixtures. Tests compare Dart hashes to independent constants, reject unrelated well-formed hashes, accept equivalent hex casing and retain real loopback HTTP byte assertions. API/sender suites: 107 passed; scoped analysis clean. Logs: /tmp/n42-apt-hash-b99.log and /tmp/n42-apt-hash-b99-analysis.log.
 - This supplies the local identifier required for recovery but does not yet persist a pre-submit journal or prevent a new signature after timeout/restart. Those remain next work; no broadcast, real-device operation or release.
+
+
+## Batch 100 — validate Aptos recovery lookup identity (2026-11-06)
+
+- Added read-only transaction-by-hash lookup with explicit expected chain, sender and sequence. Validate configured RPC chain before lookup; require matching normalized hash/address and exact uint64 sequence. Return typed pending/succeeded/failed results; committed results require a boolean execution status and exact uint64 version. Missing/timeout/malformed/wrong-identity responses remain errors, never a final result.
+- Pending results cannot carry contradictory committed success/version fields. Field shapes checked against [official Aptos transaction API types](https://github.com/aptos-labs/aptos-core/blob/main/api/types/src/transaction.rs). This is RPC consistency checking, not a ledger proof or quorum finality.
+- Twelve added cases cover success/revert, pending, six malformed/identity fields, wrong-chain short circuit, contradictory pending data, not-found and timeout. API/sender suites: 119 passed; scoped analysis clean. Logs: /tmp/n42-apt-recovery-b100.log and /tmp/n42-apt-recovery-b100-analysis.log.
+- Lookup is a tested recovery building block, not yet connected to a durable pending journal or recovery UI. Current sending still needs pre-submit persistence, same-account serialization and timeout/restart orchestration. No live payment, device operation or release.

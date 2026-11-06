@@ -35,6 +35,130 @@ void main() {
     );
     expect((await api.sendTxHash('00ff')).error, isTrue);
   });
+  group('receipt recovery identity', () {
+    final hash = '0x${'ab' * 32}';
+    final sequence = BigInt.parse('9007199254740993');
+    Map<String, dynamic> receipt() => {
+      'type': 'user_transaction',
+      'hash': hash,
+      'sender': '0x${'0' * 63}1',
+      'sequence_number': sequence.toString(),
+      'version': '18446744073709551615',
+      'success': true,
+    };
+    Future<dynamic> query(Map<String, dynamic> data, {int chain = 2}) =>
+        AptApi(
+          isTest: true,
+          read: (url) async => url.endsWith('/v1/')
+              ? {'chain_id': chain, 'ledger_timestamp': '1000000'}
+              : data,
+        ).getTransactionReceipt(
+          hash: hash,
+          sender: '0x1',
+          sequence: sequence,
+          chainId: 2,
+        );
+
+    for (final success in [true, false]) {
+      test(
+        'terminal execution success=$success preserves exact version',
+        () async {
+          final result = await query(receipt()..['success'] = success);
+          expect(result.error, false);
+          final value = result.data as AptTransactionReceipt;
+          expect(value.hash, hash);
+          expect(
+            value.status,
+            success
+                ? AptTransactionStatus.succeeded
+                : AptTransactionStatus.failed,
+          );
+          expect(value.version, BigInt.parse('18446744073709551615'));
+        },
+      );
+    }
+    test('pending stays pending', () async {
+      final data = receipt()
+        ..['type'] = 'pending_transaction'
+        ..remove('success')
+        ..remove('version');
+      final result = await query(data);
+      expect(result.error, false);
+      expect(
+        (result.data as AptTransactionReceipt).status,
+        AptTransactionStatus.pending,
+      );
+      expect((result.data as AptTransactionReceipt).version, isNull);
+    });
+    for (final field in <String, dynamic>{
+      'hash': '0x${'cd' * 32}',
+      'sender': '0x2',
+      'sequence_number': '9007199254740992',
+      'type': 'block_metadata_transaction',
+      'success': 'true',
+      'version': 1.5,
+    }.entries) {
+      test('reject mismatched or malformed ${field.key}', () async {
+        expect((await query(receipt()..[field.key] = field.value)).error, true);
+      });
+    }
+    test('wrong chain rejects before transaction lookup', () async {
+      var calls = 0;
+      final api = AptApi(
+        read: (_) async {
+          calls++;
+          return {'chain_id': 1, 'ledger_timestamp': '1000000'};
+        },
+      );
+      expect(
+        (await api.getTransactionReceipt(
+          hash: hash,
+          sender: '0x1',
+          sequence: sequence,
+          chainId: 2,
+        )).error,
+        true,
+      );
+      expect(calls, 1);
+    });
+    test('pending cannot carry committed fields', () async {
+      expect(
+        (await query(receipt()..['type'] = 'pending_transaction')).error,
+        true,
+      );
+    });
+    test('not found and transport failures remain unknown', () async {
+      for (final response in [
+        null,
+        <String, dynamic>{'error_code': 'transaction_not_found'},
+      ]) {
+        final api = AptApi(
+          read: (url) async => url.endsWith('/v1/')
+              ? {'chain_id': 2, 'ledger_timestamp': '1000000'}
+              : response,
+        );
+        expect(
+          (await api.getTransactionReceipt(
+            hash: hash,
+            sender: '0x1',
+            sequence: sequence,
+            chainId: 2,
+          )).error,
+          true,
+        );
+      }
+      final api = AptApi(read: (_) async => throw TimeoutException('offline'));
+      expect(
+        (await api.getTransactionReceipt(
+          hash: hash,
+          sender: '0x1',
+          sequence: sequence,
+          chainId: 2,
+        )).error,
+        true,
+      );
+    });
+  });
   for (final asset in [
     ('', '', '0x1::aptos_coin::AptosCoin'),
     ('0x42::usd_coin::USDC', '', '0x42::usd_coin::USDC'),

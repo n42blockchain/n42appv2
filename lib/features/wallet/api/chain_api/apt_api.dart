@@ -15,6 +15,15 @@ typedef AptTransactionSubmit = Future<dynamic> Function(
   required bool enableRetry,
 });
 
+enum AptTransactionStatus { pending, succeeded, failed }
+
+class AptTransactionReceipt {
+  final String hash;
+  final AptTransactionStatus status;
+  final BigInt? version;
+  const AptTransactionReceipt(this.hash, this.status, {this.version});
+}
+
 class AptApi {
   final String url;
   final AptTransactionSubmit? submit;
@@ -97,6 +106,67 @@ class AptApi {
         }
       }
       return MessageModel()..data = parseUint64(data['ledger_timestamp']);
+    } catch (e) {
+      return MessageModel.error()..data = e.toString();
+    }
+  }
+
+  /// Read only. Missing/malformed responses must not unlock a pending intent.
+  /// RPC field consistency is not a cryptographic ledger proof.
+  Future<MessageModel> getTransactionReceipt({
+    required String hash,
+    required String sender,
+    required BigInt sequence,
+    required int chainId,
+  }) async {
+    try {
+      if (!RegExp(r'^0x[0-9a-fA-F]{64}$').hasMatch(hash) || hash.length != 66) {
+        throw const FormatException('Invalid Aptos transaction hash');
+      }
+      String canonicalAddress(dynamic value) {
+        if (value is! String ||
+            !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(value) ||
+            value.contains(RegExp(r'\s'))) {
+          throw const FormatException('Invalid Aptos transaction sender');
+        }
+        return value.substring(2).toLowerCase().padLeft(64, '0');
+      }
+
+      final expectedSender = canonicalAddress(sender);
+      parseUint64(sequence);
+      final ledger = await getServiceInfo(expectedChainId: chainId);
+      if (ledger.error) return ledger;
+      final expectedHash = hash.toLowerCase();
+      final data = await _get('${url}transactions/by_hash/$expectedHash');
+      if (data is! Map ||
+          data['hash'] is! String ||
+          data['hash'].toString().toLowerCase() != expectedHash ||
+          canonicalAddress(data['sender']) != expectedSender ||
+          parseUint64(data['sequence_number']) != sequence) {
+        throw const FormatException('Aptos transaction identity mismatch');
+      }
+      if (data['type'] == 'pending_transaction') {
+        if (data.containsKey('success') || data.containsKey('version')) {
+          throw const FormatException('Inconsistent Aptos pending transaction');
+        }
+        return MessageModel()
+          ..data = AptTransactionReceipt(
+            expectedHash,
+            AptTransactionStatus.pending,
+          );
+      }
+      if (data['type'] != 'user_transaction' || data['success'] is! bool) {
+        throw const FormatException('Invalid Aptos execution status');
+      }
+      final version = parseUint64(data['version']);
+      return MessageModel()
+        ..data = AptTransactionReceipt(
+          expectedHash,
+          data['success']
+              ? AptTransactionStatus.succeeded
+              : AptTransactionStatus.failed,
+          version: version,
+        );
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
