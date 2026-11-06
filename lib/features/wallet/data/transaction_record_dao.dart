@@ -78,6 +78,63 @@ extension TransactionRecordDao on AppDatabase {
     );
   }
 
+  /// Idempotent Aptos history persistence for submission/recovery retries.
+  /// Snapshot caller-owned state before opening the database asynchronously.
+  Future<int> saveAptTransactionRecord(TransationRecordModel record) async {
+    final values = Map<String, Object?>.from(record.toMapDb());
+    final hash = record.txHash.toLowerCase();
+    final sender = record.from1;
+    if (record.coinMiniName != 'APT' ||
+        record.coinId < 1 ||
+        record.coinId > 255 ||
+        ![0, 1, 2].contains(record.state) ||
+        !RegExp(r'^0x[0-9a-f]{64}$').hasMatch(hash) ||
+        hash.length != 66 ||
+        !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(sender) ||
+        sender.contains(RegExp(r'\s'))) {
+      throw ArgumentError('Invalid Aptos history record');
+    }
+    values['txHash'] = hash;
+    values['from1'] = '0x${sender.substring(2).toLowerCase().padLeft(64, '0')}';
+    const where =
+        'userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND txHash=?';
+    final args = [
+      values['userUuid'],
+      values['walletIndex'],
+      'APT',
+      values['coinId'],
+      values['from1'],
+      hash,
+    ];
+    final db = await database;
+    return db.transaction((txn) async {
+      final rows = await txn.query(
+        'TransationRecord',
+        where: where,
+        whereArgs: args,
+      );
+      if (rows.length > 1) throw StateError('Ambiguous Aptos history record');
+      if (rows.isEmpty) return txn.insert('TransationRecord', values);
+      final previous = rows.single;
+      // A stale acknowledgement must not regress a recovered terminal result.
+      final oldState = previous['state'];
+      if (oldState == 1 || oldState == 2) {
+        if (values['state'] != 0 && values['state'] != oldState) {
+          throw StateError('Conflicting Aptos execution result');
+        }
+        return previous['trId'] as int;
+      }
+      // Keep the original payment details; recovery only changes outcome fields.
+      await txn.update(
+        'TransationRecord',
+        {'state': values['state'], 'errorMessage': values['errorMessage']},
+        where: 'trId=?',
+        whereArgs: [previous['trId']],
+      );
+      return previous['trId'] as int;
+    });
+  }
+
   //修改交易记录
   Future<int> updateTransationRecord(TransationRecordModel trm) async {
     final db = await database;

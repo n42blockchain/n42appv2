@@ -303,7 +303,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     if (!ownerIsCurrent()) return;
     final writeRecord =
         widget.transactionWriter ??
-        (record) => AppDatabase().insertTransationRecord(record);
+        (record) => AppDatabase().saveAptTransactionRecord(record);
     _signing = true;
     bool completedWithExit = false;
     try {

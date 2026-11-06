@@ -148,6 +148,8 @@ Batch 100 adds typed, identity-checked Aptos recovery lookup with 119 API/sender
 
 Batch 101 adds the durable Aptos journal service and verifies 76 journal/API cases. It remains unwired: integrate sender, recovery UI and idempotent history persistence together next. Mock secure-storage tests do not establish physical-device durability or process-kill recovery.
 
+Batch 102 connects an idempotent Aptos history writer to the existing page. Five real SQLite tests plus page regressions pass (31 total), including concurrent writes and file reopen. Journal/sender/recovery-page integration remains next; no claim of enabled pre-submit protection.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.
