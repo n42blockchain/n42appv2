@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MainActivity reads these optional provider settings with getIdentifier().
+     Keep them in Release so shrinking cannot silently disable native login. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@string/n42_chat_*,@string/default_web_client_id,@string/facebook_app_id,@string/facebook_client_token" />
