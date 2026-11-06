@@ -109,6 +109,8 @@ Batch 86 binds ordinary Aptos signing to the selected chain ID reported by the l
 
 Batch 87 aligns iOS ordinary Aptos signing with Android sender/key binding and validates sender/recipient addresses. Actual Swift component tests pass with reference signatures and wrong-key/address rejection. Dart owner/session and full transaction lifecycle acceptance remain open.
 
+Batch 88 captures Aptos send ownership and checks it before native credential access/signing and broadcast. All 86 API/sender tests and scoped analysis pass. Token/FA, simulation and durable broadcast recovery remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

@@ -20,17 +20,37 @@ class AptSender implements ChainSender {
   final Map<String, dynamic>? _defaultChainConfig;
   final Trustdart _trustdart;
   final AptApi Function(bool isTest) _apiFactory;
+  final Object? Function() _ownerIdentity;
+
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
 
   AptSender({
     Map<String, dynamic>? chainConfig,
     Trustdart? trustdart,
     AptApi Function(bool isTest)? apiFactory,
+    Object? Function()? ownerIdentity,
   }) : _defaultChainConfig = chainConfig,
        _trustdart = trustdart ?? Trustdart(),
-       _apiFactory = apiFactory ?? ((isTest) => AptApi(isTest: isTest));
+       _apiFactory = apiFactory ?? ((isTest) => AptApi(isTest: isTest)),
+       _ownerIdentity = ownerIdentity ?? _currentOwner;
 
   @override
   Future<SendResult> send(SendParams params) async {
+    final owner = _ownerIdentity();
+    if (owner == null) return const SendResult.fail('Wallet is not ready');
+    bool ownerIsCurrent() => _ownerIdentity() == owner;
     final coinType = params.coinType.toUpperCase();
     final isContract = params.contractAddress.isNotEmpty;
     final gas = getCoinGas(coinType, contract: isContract);
@@ -140,6 +160,9 @@ class AptSender implements ChainSender {
       'chainId': chainId,
     };
 
+    if (!ownerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Aptos signing');
+    }
     String signStr;
     if (params.privateKey == null) {
       if (!AppGlobals.appContext.mounted) {
@@ -173,6 +196,9 @@ class AptSender implements ChainSender {
       );
     }
 
+    if (!ownerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Aptos submission');
+    }
     final sendMm = await aptApi.sendTxHash(signStr);
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);

@@ -1,4 +1,7 @@
 import 'package:flutter/widgets.dart';
+
+import '../../../../native/aptos_reference_vectors.dart';
+
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
@@ -16,6 +19,7 @@ class _Api extends AptApi {
   dynamic timestamp = BigInt.from(2000000000000000);
   int priceReads = 0;
   int submits = 0;
+  void Function()? onLedger;
   @override
   Future<MessageModel> getBalance(
     String address, {
@@ -33,6 +37,7 @@ class _Api extends AptApi {
       MessageModel()..data = sequence;
   @override
   Future<MessageModel> getServiceInfo({int? expectedChainId}) async {
+    onLedger?.call();
     expectedChain = expectedChainId;
     return AptApi(
       read: (_) async => {'chain_id': chainId, 'ledger_timestamp': timestamp},
@@ -48,6 +53,8 @@ class _Api extends AptApi {
 
 class _Signer extends Trustdart {
   Map? received;
+  void Function()? onSign;
+  String signed = '';
   @override
   Future<String> signTransaction(
     String coin,
@@ -58,8 +65,9 @@ class _Signer extends Trustdart {
     String passphrase = '',
   }) async {
     received = txData;
+    onSign?.call();
     // No broadcast: stop at the native boundary to inspect the approved fields.
-    return '';
+    return signed;
   }
 }
 
@@ -72,7 +80,11 @@ void main() {
       ..sequence = max
       ..timestamp = max;
     final signer = _Signer();
-    await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+    await AptSender(
+      ownerIdentity: () => 'test-owner',
+      trustdart: signer,
+      apiFactory: (_) => api,
+    ).send(
       const SendParams(
         coinType: 'APT',
         fromAddress: 'owner',
@@ -87,6 +99,59 @@ void main() {
     expect(signer.received!['expirationTimestampSecs'], '18446744073769');
     expect(api.submits, 0);
   });
+  for (final phase in ['unchanged', 'ledger', 'signer']) {
+    test('owner binding across $phase await', () async {
+      Object? owner = 'original';
+      final api = _Api();
+      final signer = _Signer()
+        ..signed = aptosReferenceVectors.first['signed'] as String;
+      if (phase == 'ledger') api.onLedger = () => owner = 'replacement';
+      if (phase == 'signer') signer.onSign = () => owner = 'replacement';
+      final result =
+          await AptSender(
+            ownerIdentity: () => owner,
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
+            const SendParams(
+              coinType: 'APT',
+              fromAddress: 'owner',
+              toAddress: 'recipient',
+              amount: 1,
+              decimals: 0,
+              path: '',
+              privateKey: 'public-test-only',
+            ),
+          );
+      expect(result.success, phase == 'unchanged');
+      expect(api.submits, phase == 'unchanged' ? 1 : 0);
+      expect(signer.received == null, phase == 'ledger');
+    });
+  }
+  test('missing owner stops before network and signing', () async {
+    final api = _Api();
+    final signer = _Signer();
+    final result =
+        await AptSender(
+          ownerIdentity: () => null,
+          trustdart: signer,
+          apiFactory: (_) => api,
+        ).send(
+          const SendParams(
+            coinType: 'APT',
+            fromAddress: 'owner',
+            toAddress: 'recipient',
+            amount: 1,
+            decimals: 0,
+            path: '',
+            privateKey: 'public-test-only',
+          ),
+        );
+    expect(result.success, false);
+    expect(api.priceReads, 0);
+    expect(signer.received, isNull);
+    expect(api.submits, 0);
+  });
   for (final field in ['sequence', 'timestamp']) {
     for (final value in [null, -1, 1.5, '18446744073709551616']) {
       test('invalid $field stops native dispatch: $value', () async {
@@ -98,7 +163,11 @@ void main() {
         }
         final signer = _Signer();
         final result =
-            await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+            await AptSender(
+              ownerIdentity: () => 'test-owner',
+              trustdart: signer,
+              apiFactory: (_) => api,
+            ).send(
               const SendParams(
                 coinType: 'APT',
                 fromAddress: 'owner',
@@ -119,8 +188,12 @@ void main() {
     test('wrong or malformed RPC chain blocks signing: $reported', () async {
       final api = _Api()..chainId = reported;
       final signer = _Signer();
-      final result = await AptSender(trustdart: signer, apiFactory: (_) => api)
-          .send(
+      final result =
+          await AptSender(
+            ownerIdentity: () => 'test-owner',
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
             const SendParams(
               coinType: 'APT',
               fromAddress: 'owner',
@@ -150,7 +223,11 @@ void main() {
         () async {
           final api = _Api()..balance = BigInt.one << 65;
           final signer = _Signer();
-          await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+          await AptSender(
+            ownerIdentity: () => 'test-owner',
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
             SendParams(
               coinType: 'APT',
               fromAddress: 'owner',
@@ -177,7 +254,11 @@ void main() {
     test('decimal text uses asset decimals token=$token', () async {
       final api = _Api()..balance = BigInt.from(1000000000);
       final signer = _Signer();
-      await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+      await AptSender(
+        ownerIdentity: () => 'test-owner',
+        trustdart: signer,
+        apiFactory: (_) => api,
+      ).send(
         SendParams(
           coinType: 'APT',
           fromAddress: 'owner',
@@ -199,8 +280,12 @@ void main() {
     test('invalid gas price stops before signing: $price', () async {
       final api = _Api()..price = price;
       final signer = _Signer();
-      final result = await AptSender(trustdart: signer, apiFactory: (_) => api)
-          .send(
+      final result =
+          await AptSender(
+            ownerIdentity: () => 'test-owner',
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
             const SendParams(
               coinType: 'APT',
               fromAddress: 'owner',
@@ -226,6 +311,7 @@ void main() {
             ..chainId = isTest ? 2 : 1;
           final signer = _Signer();
           final sender = AptSender(
+            ownerIdentity: () => 'test-owner',
             trustdart: signer,
             apiFactory: (selectedTestnet) {
               expect(selectedTestnet, isTest);
