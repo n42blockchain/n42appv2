@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Detach disposed chat resources before asynchronous cleanup — batch 180
+
+- Disposal awaited cancellation before resetting shared fields, so an old continuation could clear a newer session. It also left poll/destruction/scheduling resources active. It now synchronously detaches all three subscriptions, stops room timers and resets local state, then awaits only captured subscriptions with independent cancellation error handling.
+- Two new tests cover immediate reset, poll cancellation and new-room message-stream survival after delayed successful/failed cancellation. The earlier implementation fails the immediate-reset assertion. BLoC/extended/event suites: **347 pass**, exit 0 (/tmp/n42-chat-b180-final.log); scoped analysis clean (/tmp/n42-chat-b180-analysis.log). Before-fix evidence: /tmp/n42-chat-b180-before.log. Chat `1bb416d3cd92c79176851cb55ba450ae37af31f8` is pushed and pinned. Dependency resolution changed only Chat; all three wallet host tests pass (/tmp/n42-wallet-b180-host.log).
+- Remaining: Bloc.close lifecycle, queued old page actions, concurrent reactions, ambiguous transport outcomes, repository transitions and broader login/recovery/dependency/payment/release acceptance. No fresh full suite, live message, device or release claim.
+
 ### Roll back rejected reactions without reverting newer state — batch 179
 
 - False/exception responses left optimistic add/remove state displayed. Capture original and optimistic emoji entries; on failure in the same session restore only the unchanged entry while retaining current message fields, other emoji, new arrivals and newer server entries.
