@@ -456,3 +456,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `2b32b5cbbc714ca958fb0efbbabeedbcfc4e5dda` is pushed with remote parity verified. This protects same-isolate application operations; independent processes and hostile external filesystem mutation are not covered. Historical orphan/deferred files and room-wide clearing/logout cleanup still need reconciliation. No device operation or release upload.
 
 - Wallet host integration: 129 passed (`/tmp/n42-cleanup-host-tests.log`); the lockfile changes only the Chat reference.
+
+
+## Batch 50 — room-wide scheduled attachment cleanup (2026-11-06)
+
+- clearScheduledMessages now passes removed room drafts to the owned/reference-aware cleanup only after persistence acknowledgement, under the shared scheduled-store lock. Duplicate paths in the removed room are deduplicated; references in other rooms, accounts or legacy queues continue to protect files. Missing rooms do not cause unnecessary writes.
+- 147 scheduled-storage/preferences regressions passed (`/tmp/n42-room-cleanup-tests.log`). New cases exercise last-reference cleanup, shared/external files, rejected remove/set operations and absent rooms. Scoped source/test analysis is clean (`/tmp/n42-room-cleanup-analyze.log`).
+- Chat `fd519bff141e3e264c25dbe02615651b36fc6db5` is pushed with remote parity verified. This is a storage API repair, not new bulk-cancel UI. Historical orphan/deferred file reconciliation and cross-process coordination remain open. Account logout does not authorize deleting retained scheduled drafts. No release upload or device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-room-cleanup-host-tests.log`); lockfile changes only the Chat reference.
