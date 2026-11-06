@@ -80,9 +80,11 @@ Batch 77 addresses the confirmed hosted iOS missing-GoogleService-Info.plist bui
 
 Batch 78 addresses the observed Android WalletCore package-authentication omission using dedicated secrets when present, otherwise a job-scoped read-only token. CI build-validation jobs also generate isolated Firebase resources. Remote package access and build/test completion remain unverified; no binary downgrade or production credential transfer.
 
+Batch 79 executes the real Sui Android plugin/JNI on an isolated API 36 arm64 emulator: four independent signature vectors and ordinary transfer validation pass in two integration tests. The Android Sui JNI component gap below is now superseded; full UI/session, BCS semantics and node/device coverage remain open. No physical phone or network transaction was used.
+
 ## Still open, in execution order
 
-- Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
+- Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.
 
 | Priority | Work | Current evidence and next step |
 | --- | --- | --- |
