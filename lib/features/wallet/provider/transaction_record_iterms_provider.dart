@@ -20,7 +20,34 @@ class TransactionRecordItemProvider with ChangeNotifier {
     return _db!;
   }
 
-  final TransactionStateResolver _resolver = TransactionStateResolver();
+  final TransactionStateResolver _resolver;
+  final String Function() _userUuid;
+  final Object? Function() _sessionIdentity;
+  bool _disposed = false;
+  int _loadGeneration = 0;
+
+  TransactionRecordItemProvider({
+    AppDatabase? database,
+    TransactionStateResolver? resolver,
+    String Function()? userUuid,
+    Object? Function()? sessionIdentity,
+  }) : _db = database,
+       _resolver = resolver ?? TransactionStateResolver(),
+       _userUuid = userUuid ?? (() => AppGlobals.userInfo?.uuid ?? ''),
+       _sessionIdentity = sessionIdentity ?? _currentSession;
+
+  static Object _currentSession() {
+    Object? wallet;
+    try {
+      wallet = (globalWapAdapter.walletIndex, globalWapAdapter.walletInfo);
+    } catch (_) {
+      // The account provider can load history before the wallet adapter exists.
+    }
+    return (AppGlobals.userInfo, AppGlobals.walletStorageUuid, wallet);
+  }
+
+  Object get _session => (_userUuid(), _sessionIdentity(), _loadGeneration);
+  bool _isCurrent(Object session) => !_disposed && _session == session;
 
   // 未完成的 EVM/Solana 等交易列表
   List<TransationRecordModel> _unDoneTrModelList = [];
@@ -35,6 +62,8 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
+    _loadGeneration++;
     _timer?.cancel();
     _timer = null;
     _timerBtc?.cancel();
@@ -44,13 +73,20 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
   // 查询未完成的交易（启动时调用）
   Future<void> selectUndoneTr() async {
-    _unDoneTrModelList = await db.selectTransationRecordUnDone(
-      AppGlobals.userInfo?.uuid ?? '',
-    );
-    _trUndoneList = await db.selectBtcTransationRecordByUUID(
-      AppGlobals.userInfo?.uuid ?? '',
-      2,
-    );
+    if (_disposed) return;
+    _loadGeneration++;
+    final session = _session;
+    final user = _userUuid();
+    _unDoneTrModelList = [];
+    _trUndoneList = [];
+    checkUndoneList();
+    notifyListeners();
+    final transactions = await db.selectTransationRecordUnDone(user);
+    if (!_isCurrent(session)) return;
+    final btc = await db.selectBtcTransationRecordByUUID(user, 2);
+    if (!_isCurrent(session)) return;
+    _unDoneTrModelList = transactions;
+    _trUndoneList = btc;
     if (_unDoneTrModelList.isNotEmpty) timerStart();
     if (_trUndoneList.isNotEmpty) timerStartBtc();
     notifyListeners();
@@ -58,6 +94,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
   // 添加未完成的交易；type：0=比特币类，1=其它类型
   void addUndoneTr(dynamic trm, int type) {
+    if (_disposed || trm.userUuid != _userUuid()) return;
     if (type == 1) {
       _unDoneTrModelList.add(trm);
       timerStart();
@@ -69,7 +106,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
   }
 
   void timerStart() {
-    if (_timer != null && _timer!.isActive) return;
+    if (_disposed || (_timer != null && _timer!.isActive)) return;
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       try {
         if (_unDoneTrModelList.isEmpty) {
@@ -89,7 +126,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
   }
 
   void timerStartBtc() {
-    if (_timerBtc != null && _timerBtc!.isActive) return;
+    if (_disposed || (_timerBtc != null && _timerBtc!.isActive)) return;
     // callback 必须 async：否则 checkUndoneTrBtc 是 fire-and-forget，
     // 空列表检查会在异步完成前执行，定时器永远无法停止
     _timerBtc = Timer.periodic(const Duration(seconds: 180), (timer) async {
@@ -110,27 +147,33 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
   // 检查未完成的交易（有副作用：数据库更新 + Toast + 事件）
   Future<void> checkUndoneTr(TransationRecordModel trm) async {
+    final session = _session;
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
     final int resolved = await _resolver.resolveState(trm);
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
 
     // -1 = RPC 错误，无法判断状态，跳过本次
     if (resolved == -1 || resolved == 0) return;
 
     trm.state = resolved;
-    await db.updateTransationRecord(trm);
+    final updated = await db.updateTransationRecordTxhash(trm);
+    if (!_isCurrent(session) || updated == 0) return;
 
     if (resolved == 1) {
       ToastUtils.show(S.current.g_key_140);
-      if (!AppGlobals.appContext.mounted) return;
-      globalWapAdapter.refreshCoinBalance(
-        trm.coin['coinType'],
-        contract: trm.contract,
-      );
-      eventBus.fire(EventPublic(EventPublicType.transferOk));
+      if (AppGlobals.appContext.mounted &&
+          globalWapAdapter.walletIndex == trm.walletIndex) {
+        globalWapAdapter.refreshCoinBalance(
+          trm.coin['coinType'],
+          contract: trm.contract,
+        );
+        eventBus.fire(EventPublic(EventPublicType.transferOk));
+      }
     } else if (resolved == 2) {
       ToastUtils.show(S.current.g_key_175);
     }
 
-    _removeFromUndoneList(trm.txHash);
+    _unDoneTrModelList.remove(trm);
     checkUndoneList();
     notifyListeners();
   }
@@ -139,29 +182,38 @@ class TransactionRecordItemProvider with ChangeNotifier {
   Future<TransationRecordModel?> checkUndoneTrReturn(
     TransationRecordModel trm,
   ) async {
+    final session = _session;
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
     final int resolved = await _resolver.resolveState(trm);
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
 
     // -1 = RPC 错误，无法判断状态
     if (resolved == -1) return null;
     if (resolved == 0) {
-      await db.updateTransationRecordTxhash(trm);
+      final updated = await db.updateTransationRecordTxhash(trm);
+      if (!_isCurrent(session) || updated == 0) return null;
       return trm;
     }
 
     trm.state = resolved;
-    await db.updateTransationRecordTxhash(trm);
+    final updated = await db.updateTransationRecordTxhash(trm);
+    if (!_isCurrent(session) || updated == 0) return null;
     return trm;
   }
 
   // 检查未完成的 BTC 类交易（有副作用）
   Future<void> checkUndoneTrBtc(BtcTransactionRecodeModel trm) async {
+    final session = _session;
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
     final int confirmations = await _resolver.resolveBtcConfirmations(trm);
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
     if (confirmations < 0) return; // 查询失败
 
     // 主网记录实际确认数；测试网只需判断是否达标（resolveBtc 已返回 0 或 6）
     if (trm.isTest != 1) trm.confirmations = confirmations;
     if (confirmations >= 6) trm.state = 1;
     await db.updateBtcTransactionRecord(trm);
+    if (!_isCurrent(session)) return;
 
     // 未达标则本轮保留在列表继续轮询
     if (trm.state != 1) return;
@@ -169,14 +221,16 @@ class TransactionRecordItemProvider with ChangeNotifier {
     // 修复：原代码在 isTest==1 分支 state==1 后 return、以及 unmount 时 return，
     // 都不从列表移除也不停定时器，导致测试网 / 后台场景下 BTC 定时器永不停止。
     // 刷新余额/发事件只在 mounted 时做，但移除+停表+通知无论如何都执行。
-    if (AppGlobals.appContext.mounted) {
+    if (AppGlobals.appContext.mounted &&
+        globalWapAdapter.walletIndex == trm.walletIndex) {
       await globalWapAdapter.refreshCoinBalance(
         trm.coin['coinType'],
         contract: '',
       );
+      if (!_isCurrent(session)) return;
       eventBus.fire(EventPublic(EventPublicType.transferOk));
     }
-    _trUndoneList.removeWhere((v) => v.txHash == trm.txHash);
+    _trUndoneList.remove(trm);
     checkUndoneList();
     notifyListeners();
   }
@@ -185,13 +239,17 @@ class TransactionRecordItemProvider with ChangeNotifier {
   Future<BtcTransactionRecodeModel?> checkUndoneTrBtcReturn(
     BtcTransactionRecodeModel trm,
   ) async {
+    final session = _session;
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
     final int confirmations = await _resolver.resolveBtcConfirmations(trm);
+    if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
     if (confirmations < 0) return null; // 查询失败
 
     if (trm.isTest == 1) {
       if (confirmations >= 6) {
         trm.state = 1;
         await db.updateBtcTransactionRecord(trm);
+        if (!_isCurrent(session)) return null;
       }
       return trm;
     }
@@ -201,6 +259,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
       trm.state = 1;
     }
     await db.updateBtcTransactionRecord(trm);
+    if (!_isCurrent(session)) return null;
     return trm;
   }
 
@@ -212,15 +271,6 @@ class TransactionRecordItemProvider with ChangeNotifier {
     if (_unDoneTrModelList.isEmpty && _timer != null) {
       _timer!.cancel();
       _timer = null;
-    }
-  }
-
-  // ---------- private helpers ----------
-
-  void _removeFromUndoneList(String txHash) {
-    final int index = _unDoneTrModelList.indexWhere((v) => v.txHash == txHash);
-    if (index >= 0) {
-      _unDoneTrModelList.removeAt(index);
     }
   }
 }

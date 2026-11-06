@@ -2,7 +2,7 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 135
+## Current interruption inventory — through batch 136
 
 Fresh inspection on 2026-11-06 found two modified runtime files and two untracked tests left by the interrupted Stellar recovery work. The previous inventory still described batch 126 and incorrectly presented later-completed implementation as missing. Batches 127–133 are committed; batch 134 below closes the remaining local patch after validation.
 
@@ -34,6 +34,14 @@ Fresh fetch before this batch: wallet e2d3b9330 equals origin/master (0/0). ID H
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Pending-history session isolation — batch 136
+
+- Found that selectUndoneTr read the active user twice across asynchronous database queries and assigned partial results directly. It now captures one user/session/generation, clears old projections, and publishes both lists only while that load remains current. A slower previous load cannot replace a newer account's history; disposal invalidates work and cancels timers.
+- Added session checks around RPC and persistence awaits in both ordinary and BTC polling/return methods. Foreign-account records cannot be queued or queried. Session identity includes the active wallet; balance refresh additionally requires the record's wallet index. Completed queue removal uses record identity rather than a shared transaction hash. Ordinary polling now uses the scoped DAO update from batch 134 and does not publish a missing-row update as completion.
+- Added injectable database/resolver/session readers without changing default callers. 21 provider cases cover delayed load/account/session/disposal, newer-load ordering, all four receipt entry paths, valid persistence, persistence-time account switch and foreign records. Memo-page regressions remain intact.
+- Initial expanded test run failed to compile one new mixed Future<void>/nullable-result assertion; corrected the fixture's Future type. Combined provider/ADA/XLM/data/Memo run: 106 passed (`/tmp/n42-record-b136-fixed.log`). After the final balance-wallet predicate, provider/Memo rerun: 29 passed (`/tmp/n42-record-b136-last.log`, exit 0). Scoped analysis clean (`/tmp/n42-record-b136-analysis-fixed.log`). No fresh whole-suite or coverage claim.
+- Controlled async fixtures verify provider behavior, not live UI/account switching or process-kill recovery. Durable cross-page submission coordination, timer overlap/coalescing, mutable-record identity review and physical-device/release acceptance remain open. Baseline untracked plans and Chat mirror remain untouched.
 
 ### Cardano pending receipt recovery — batch 135
 
