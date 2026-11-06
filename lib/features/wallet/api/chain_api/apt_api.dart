@@ -1,12 +1,22 @@
+import 'dart:typed_data';
+
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
+typedef AptTransactionSubmit = Future<dynamic> Function(
+  String url,
+  Uint8List bytes, {
+  required Map<String, dynamic> header,
+  required bool enableRetry,
+});
+
 class AptApi {
   final String url;
+  final AptTransactionSubmit? submit;
 
-  AptApi({bool isTest = false})
+  AptApi({bool isTest = false, this.submit})
     : url = RequestUrl().getUrl2(CoinType.APT.name, 'rpc', isTest: isTest);
 
   Future<MessageModel> getBalance(
@@ -63,14 +73,48 @@ class AptApi {
     }
   }
 
-  Future<MessageModel> sendTxHash(String txHash) async {
+  /// Native signers return hex; the REST BCS endpoint requires raw bytes.
+  Future<MessageModel> sendTxHash(String signedHex) async {
     try {
-      final data = await BaseApi.requestEmptyH.post(
-        '${url}transactions',
-        params: {},
-        data: txHash,
-        header: {'content-type': 'application/x.aptos.signed_transaction+bcs'},
-      );
+      final hex = signedHex.startsWith('0x') || signedHex.startsWith('0X')
+          ? signedHex.substring(2)
+          : signedHex;
+      if (hex.isEmpty ||
+          hex.length.isOdd ||
+          !RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex)) {
+        return MessageModel.error()..data = 'Invalid Aptos signed transaction';
+      }
+      final bytes = Uint8List(hex.length ~/ 2);
+      for (var i = 0; i < bytes.length; i++) {
+        bytes[i] = int.parse(hex.substring(i * 2, i * 2 + 2), radix: 16);
+      }
+      const header = <String, dynamic>{
+        'content-type': 'application/x.aptos.signed_transaction+bcs',
+      };
+      final request = submit;
+      final data = request != null
+          ? await request(
+              '${url}transactions',
+              bytes,
+              header: header,
+              enableRetry: false,
+            )
+          : await BaseApi.requestEmptyH.post(
+              '${url}transactions',
+              params: {},
+              data: bytes,
+              header: header,
+              enableRetry: false,
+            );
+      if (data is! Map ||
+          data['hash'] is! String ||
+          (data['hash'] as String).length != 66 ||
+          !RegExp(r'^0x[0-9a-fA-F]{64}$').hasMatch(data['hash'] as String) ||
+          (data.containsKey('success') && data['success'] != true)) {
+        return MessageModel.error()
+          ..data = 'Invalid or failed Aptos submission response';
+      }
+      // A hash acknowledges submission; it is not proof of final execution.
       return MessageModel()..data = data['hash'];
     } catch (e) {
       return MessageModel.error()..data = e.toString();
