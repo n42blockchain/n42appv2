@@ -119,6 +119,8 @@ Batch 91 aligns iOS token signing with Android transfer_coins selection and veri
 
 Batch 92 connects non-generic Coin metadata to native fields and separately validates token and APT fee balances. API/sender/page 103 tests and scoped analysis pass. FA/generic signing, Android token vectors and lifecycle acceptance remain open.
 
+Batch 93 wires FA metadata-address transfers through Dart/iOS/Android. Dart 104 and JVM 5 tests pass; six Swift native/Coin/FA signature vectors match independent bytes. Android Coin/FA JNI and live lifecycle acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

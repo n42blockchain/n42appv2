@@ -188,7 +188,7 @@ void main() {
     });
   }
   for (final asset in [
-    '0x2a',
+    '0x',
     '0xgg::usd::USDC',
     '0x2a::usd::',
     '0x2a::u sd::USDC',
@@ -220,6 +220,39 @@ void main() {
       expect(signer.received, isNull);
     });
   }
+  test(
+    'FA metadata routes to the native FA payload with separate fees',
+    () async {
+      final api = _Api()
+        ..balance = BigInt.from(100)
+        ..nativeBalance = BigInt.from(70000);
+      final signer = _Signer();
+      await AptSender(
+        ownerIdentity: () => 'owner',
+        trustdart: signer,
+        apiFactory: (_) => api,
+      ).send(
+        SendParams(
+          coinType: 'APT',
+          fromAddress: 'owner',
+          toAddress: 'recipient',
+          amount: 100,
+          decimals: 8,
+          tokenDecimals: 0,
+          path: '',
+          privateKey: 'public-test-only',
+          contractAddress: '0x2a',
+          tokenValueWeiOverride: BigInt.from(100),
+        ),
+      );
+      expect(api.balanceAssets, ['0x2a', '']);
+      expect(signer.received!['type'], 'APT_FA_TRANSFER');
+      expect(signer.received!['contractAddress'], '0x2a');
+      expect(signer.received!['contractModule'], '');
+      expect(signer.received!['contractName'], '');
+      expect(signer.received!['amount'], '100');
+    },
+  );
   for (final phase in ['unchanged', 'ledger', 'signer']) {
     test('owner binding across $phase await', () async {
       Object? owner = 'original';

@@ -67,8 +67,13 @@ class AptSender implements ChainSender {
     }
 
     final isContract = params.contractAddress.isNotEmpty;
+    final isFungibleAsset =
+        isContract &&
+        RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(params.contractAddress) &&
+        !params.contractAddress.contains(RegExp(r'\s'));
     final assetParts = params.contractAddress.split('::');
     if (isContract &&
+        !isFungibleAsset &&
         (assetParts.length != 3 ||
             !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(assetParts[0]) ||
             !RegExp(r'^[A-Za-z_][A-Za-z0-9_]*$').hasMatch(assetParts[1]) ||
@@ -178,9 +183,10 @@ class AptSender implements ChainSender {
       'toAddress': params.toAddress,
       'SequenceNumber': sequence.toString(),
       'fromAddress': params.fromAddress,
+      'type': isFungibleAsset ? 'APT_FA_TRANSFER' : 'APT_TRANSFER',
       'contractAddress': isContract ? assetParts[0] : '',
-      'contractModule': isContract ? assetParts[1] : '',
-      'contractName': isContract ? assetParts[2] : '',
+      'contractModule': isContract && !isFungibleAsset ? assetParts[1] : '',
+      'contractName': isContract && !isFungibleAsset ? assetParts[2] : '',
       'gasUnitPrice': gasPrice.toString(),
       'maxGasAmount': gas,
       'expirationTimestampSecs': lt.toString(),

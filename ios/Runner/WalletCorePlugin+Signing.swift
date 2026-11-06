@@ -1097,7 +1097,14 @@ extension WalletCorePlugin {
             $0.privateKey = pk.data
         }
 
-        if contractAddress == "" {
+        if txData["type"] as? String == "APT_FA_TRANSFER" {
+            guard let metadata = aptosAddress(contractAddress) else { return nil }
+            input.fungibleAssetTransfer = AptosFungibleAssetTransferMessage.with {
+                $0.metadataAddress = metadata
+                $0.to = toAddress
+                $0.amount = amount
+            }
+        } else if contractAddress == "" {
             let transferMsg = AptosTransferMessage.with {
                 $0.to = toAddress
                 $0.amount = amount

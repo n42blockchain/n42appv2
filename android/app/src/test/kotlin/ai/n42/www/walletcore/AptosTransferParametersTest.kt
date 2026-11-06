@@ -23,6 +23,22 @@ class AptosTransferParametersTest {
         assertEquals(9007199254740993L, max.sequenceNumber)
     }
 
+    @Test fun buildsFungibleAssetPayloadWithExactAmount() {
+        val fa = transfer().also {
+            it["type"] = "APT_FA_TRANSFER"; it["contractAddress"] = "0x2a"
+            it["amount"] = "18446744073709551615"
+        }
+        val input = AptosTransferParameters.build(fa)!!.build()
+        assertTrue(input.hasFungibleAssetTransfer())
+        assertFalse(input.hasTransfer())
+        assertFalse(input.hasTokenTransferCoins())
+        assertEquals(-1L, input.fungibleAssetTransfer.amount)
+        assertEquals("0x" + "0".repeat(62) + "2a", input.fungibleAssetTransfer.metadataAddress)
+        for (bad in listOf("", "0xgg", "0x1::coin::Token")) {
+            assertNull(AptosTransferParameters.build(fa.toMutableMap().also { it["contractAddress"] = bad }))
+        }
+    }
+
     @Test fun rejectsLossyAndInvalidFields() {
         for (field in listOf("amount", "gasUnitPrice", "maxGasAmount", "expirationTimestampSecs", "SequenceNumber", "chainId")) {
             for (bad in listOf(-1, "18446744073709551616", "01", 1.5, true)) {

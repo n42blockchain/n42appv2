@@ -26,16 +26,23 @@ func unhex(_ value: String) -> Data {
             let params: [String: Any] = ["type":"WC_APT", "encodedTransaction":raw.base64EncodedString(), "chainId":chain]
             let actual = plugin.signAptosTransaction(wallet:nil,path:"",txData:params,privateKey:key)
             precondition(actual == vector["signed"] as? String, "Node signature/authenticator mismatch")
+            let isFA = vector["fa"] as? Bool ?? false
             let isToken = vector["token"] as? Bool ?? false
             let transfer: [String: Any] = [
-                "type":"transfer", "fromAddress":"0x" + raw.prefix(32).hexString,
+                "type":isFA ? "APT_FA_TRANSFER" : "transfer", "fromAddress":"0x" + raw.prefix(32).hexString,
                 "toAddress":"0x2", "amount":UInt64(1), "chainId":UInt32(chain),
                 "SequenceNumber":Int64(0), "gasUnitPrice":UInt64(100),
                 "maxGasAmount":UInt64(10000), "expirationTimestampSecs":UInt64(2000000000),
-                "contractAddress":isToken ? "0x2a" : "", "contractModule":isToken ? "usd" : "", "contractName":isToken ? "USDC" : ""
+                "contractAddress":(isToken || isFA) ? "0x2a" : "", "contractModule":isToken ? "usd" : "", "contractName":isToken ? "USDC" : ""
             ]
             precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:transfer,privateKey:key) == actual,
                          "Raw signer differs from WalletCore standard transfer signer")
+            if isFA {
+                for invalid in ["", "0xgg", "0x1::coin::Token", "0x2a\n"] {
+                    var bad = transfer; bad["contractAddress"] = invalid
+                    precondition(plugin.signAptosTransaction(wallet:nil,path:"",txData:bad,privateKey:key) == nil)
+                }
+            }
             if isToken {
                 for field in ["contractAddress", "contractModule", "contractName"] {
                     for invalid in ["", "bad value", "x\n"] {

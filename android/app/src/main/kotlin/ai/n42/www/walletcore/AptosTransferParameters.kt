@@ -35,7 +35,11 @@ internal object AptosTransferParameters {
             .setSender(sender).setSequenceNumber(sequence.toLong())
             .setGasUnitPrice(price.toLong()).setMaxGasAmount(gas.toLong())
             .setExpirationTimestampSecs(expiry.toLong())
-        if (contract.isEmpty()) {
+        if (data["type"] == "APT_FA_TRANSFER") {
+            val metadata = address(contract) ?: return null
+            input.fungibleAssetTransfer = Aptos.FungibleAssetTransferMessage.newBuilder()
+                .setMetadataAddress(metadata).setTo(recipient).setAmount(amount.toLong()).build()
+        } else if (contract.isEmpty()) {
             input.transfer = Aptos.TransferMessage.newBuilder()
                 .setAmount(amount.toLong()).setTo(recipient).build()
         } else {
