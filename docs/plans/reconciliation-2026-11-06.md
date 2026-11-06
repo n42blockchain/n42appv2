@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Cardano signer follow-up and native blocker — batch 119
+
+- ADA credentials are now captured before RPC; derived sender and owner/key continuity are checked before broadcast. 18 new fixture scenarios; 246 sender-directory tests pass. Analysis has no errors/warnings and one style info. Evidence: `/tmp/n42-ada-b119-regression.log`, `/tmp/n42-ada-b119-analysis.log`.
+- **ADA is not runtime-accepted:** inspection confirmed missing TTL and mismatched UTxO amount/address fields between Dart and both native signers; Swift force casts can crash. Next work must repair and validate the native request/submission contract, including token preservation and CBOR encoding. Fixture success does not close this blocker. EGLD account binding remains pending.
+
+
 ### VeChain signer follow-up — batch 118
 
 - Closed VET's late global-mnemonic access. Original owner/key are captured before balance/block queries, the derived address must match the confirmed sender, and changed signing context prevents broadcast. Existing chainTag/blockRef/clauses and VTHO fee behavior remain covered.
