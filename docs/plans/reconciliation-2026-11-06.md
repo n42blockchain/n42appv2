@@ -57,6 +57,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 
 ## Latest interruption check
 
+### Preserve drafts after local send rejection — batch 166
+
+- Found a concrete composer/BLoC mismatch: slow mode rejects before isSendingText, while the page has already cleared input and set its pending-send lock. Added optional event-scoped TextSendPreflight results for admitted/rejected/handled. Only known local rejection can restore the draft/mentions and release the lock; handled slash commands release the lock without restoring executed commands. Admission is not delivery acceptance.
+- Restoration requires the captured session and unchanged input revision after clear. Newer text, including type-then-clear, cannot be overwritten. Restored text is saved through the account-scoped draft path. No automatic re-send and no new interpretation of ambiguous network errors. Reply and ordinary send event compatibility remain intact.
+- Regression against old page fails its missing-acknowledgement assertion (/tmp/n42-chat-b166-before.log). Page/actions/BLoC/event/state suites: 287 pass (/tmp/n42-chat-b166-final.log). Follow-up input-revision guard: all 25 composer tests pass (/tmp/n42-chat-b166-revision.log), scoped page/test analysis clean. Broader analysis has zero errors/warnings and six pre-existing constructor-style infos. Initial test scaffolding required nullable callback invocation and mock isClosed setup; fixed before final runs.
+- Chat changes pushed in 8bf9b0a5 and 2f256aeb; wallet now pins 2f256aebee93a4ebafdf2c0a736779c371c5ab9d. flutter pub get changed only that dependency ref. Host fixture suite: 3 pass (/tmp/n42-wallet-b166-host.log). Existing local coverage and untracked files preserved.
+- Remaining: generic send uncertainty, async failure after admission, live-server/device acceptance and richer recovery. This does not claim exactly-once delivery or installed-app release. Full-wallet coverage remains the earlier batch 160 baseline.
+
 ### Chat draft autosave and background flush — batch 165
 
 - Source inspection confirmed ordinary composer drafts were saved mainly at disposal. Chat now saves after 500 ms without text edits and flushes when leaving resumed lifecycle state. A flush/dispose cancels the timer; selection-only changes and restored text do not schedule redundant writes. Existing serialized owner/room store and captured session checks remain intact. Pending initial reads cannot overwrite new input; a later lifecycle flush retries after a failed save.
