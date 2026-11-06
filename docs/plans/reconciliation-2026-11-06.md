@@ -12,7 +12,18 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
-### Current inspection — after batch 81
+### Current inspection — after batch 96
+
+- Fresh fetch confirms wallet `9a2a7a9389bd6cf211e54d1b33a3559b75bf78f7` equals `origin/master` (0 ahead / 0 behind). No tracked edits were left interrupted. The same four baseline untracked paths remain; no deletion or merge was performed.
+- Rechecked Chat `d387fca6` and ID Hub `7c0dd68`: both clean. Wallet pubspec and lockfile resolve the same Chat revision. All 13 auxiliary wallet worktrees remain: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Ancestor status does not make uncommitted work safe to delete.
+- Verified the retained batch 95 coverage result: 100,979 / 138,772 lines (72.7661%), passing the unchanged 70% gate. Its 6,491-test full run applies to `c776a77e3`, before batch 96. Batch 96's final log confirms 66 targeted tests passed; do not describe the current source as freshly full-suite verified.
+- Hosted runs for `9a2a7a938`: HIG audit and Performance Benchmark completed successfully; Tests `42235776202` and CI Pipeline `42235776034` were still in progress at inspection. No hosted full-pass claim.
+- Concrete interrupted next step: add a real Aptos confirmation-route regression for stale requests during confirmation, plus an unchanged-request positive case. Batch 96 covers changes during address validation and implements the post-confirmation predicate, but does not yet exercise that route.
+- Remaining implementation work: Aptos post-submit receipt persistence/unknown-outcome recovery, generic Coin and gas simulation; Chat manual corrupt/legacy draft recovery and crash/cross-process boundaries; other chain/AA/hardware review. These are separate from completed native/Coin/FA signature component tests.
+- Remaining acceptance/delivery: native Google/Apple/Facebook and same-DID Matrix login, Meta public review/deletion process, current-source release/TestFlight, editorial/RTL review, dependency holds and per-worktree patch reconciliation. Native Google exchange is still recorded as disabled pending native acceptance. Physical-device QA remains deferred.
+- No new app build, upload, deployment, device operation or runtime source change was made by this inspection. Older sections below are historical evidence, not new work queues.
+
+### Historical inspection — after batch 81
 
 - Fresh fetch confirms wallet `361aed6945be827668d0b4798a8bf54b44463062` equals origin/master (0 ahead / 0 behind). No tracked edits were left interrupted. Four pre-existing untracked paths remain preserved; their presence is not proof of missing implementation.
 - Chat worktree is clean at `d387fca6`; ID Hub is clean at `7c0dd68`. The wallet Chat pin is `d387fca66dbca1ace199084a30703b6a72d93cf9`. Earlier pin statements below are historical.
