@@ -3,6 +3,8 @@ import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
 class ChatSocialAuthConfig {
   final String googleClientId;
   final String googleServerClientId;
+  final String googleCallbackScheme;
+  final bool facebookIosEnabled;
   final String twitterApiKey;
   final String twitterApiSecret;
   final String twitterRedirectUri;
@@ -17,6 +19,8 @@ class ChatSocialAuthConfig {
   const ChatSocialAuthConfig({
     required this.googleClientId,
     required this.googleServerClientId,
+    this.googleCallbackScheme = '',
+    this.facebookIosEnabled = false,
     required this.twitterApiKey,
     required this.twitterApiSecret,
     required this.twitterRedirectUri,
@@ -53,7 +57,18 @@ class ChatSocialAuthConfig {
     required bool isIOS,
     required bool isMacOS,
   }) {
-    return googleConfigured && (isAndroid || isIOS || isMacOS);
+    if (isAndroid) return googleServerClientId.isNotEmpty;
+    if (isIOS || isMacOS) {
+      const suffix = '.apps.googleusercontent.com';
+      if (!googleClientId.endsWith(suffix)) return false;
+      final prefix = googleClientId.substring(
+        0,
+        googleClientId.length - suffix.length,
+      );
+      return prefix.isNotEmpty &&
+          googleCallbackScheme == 'com.googleusercontent.apps.$prefix';
+    }
+    return false;
   }
 
   bool supportsAppleForCurrentPlatform({
@@ -63,6 +78,11 @@ class ChatSocialAuthConfig {
     return isIOS || isMacOS;
   }
 
+  bool supportsFacebookForCurrentPlatform({
+    required bool isAndroid,
+    required bool isIOS,
+  }) => isAndroid || (isIOS && facebookIosEnabled);
+
   List<String> diagnostics({
     required bool isAndroid,
     required bool isIOS,
@@ -71,7 +91,13 @@ class ChatSocialAuthConfig {
     final lines = <String>[];
 
     lines.add(
-      googleConfigured ? '[ChatSocialAuth] Google: enabled' : '[ChatSocialAuth] Google: disabled (missing client id / server client id)',
+      supportsGoogleForCurrentPlatform(
+            isAndroid: isAndroid,
+            isIOS: isIOS,
+            isMacOS: isMacOS,
+          )
+          ? '[ChatSocialAuth] Google: enabled'
+          : '[ChatSocialAuth] Google: disabled (missing platform client or matching callback)',
     );
     lines.add(
       supportsAppleForCurrentPlatform(isIOS: isIOS, isMacOS: isMacOS)
@@ -79,9 +105,9 @@ class ChatSocialAuthConfig {
           : '[ChatSocialAuth] Apple: disabled (platform unsupported)',
     );
     lines.add(
-      isAndroid
+      supportsFacebookForCurrentPlatform(isAndroid: isAndroid, isIOS: isIOS)
           ? '[ChatSocialAuth] Facebook: enabled'
-          : '[ChatSocialAuth] Facebook: disabled (host only enables Android)',
+          : '[ChatSocialAuth] Facebook: disabled (platform or Limited Login backend not enabled)',
     );
     lines.add(
       twitterConfigured
@@ -122,6 +148,7 @@ class ChatSocialAuthConfig {
   factory ChatSocialAuthConfig.resolve({
     required SocialAuthNativeConfig nativeConfig,
     String envGoogleClientId = '',
+    bool facebookIosEnabled = false,
     String envGoogleServerClientId = '',
     String envTwitterApiKey = '',
     String envTwitterApiSecret = '',
@@ -134,8 +161,11 @@ class ChatSocialAuthConfig {
     String envSocialAuthBaseUrl = '',
   }) {
     String preferEnv(String envValue, String? nativeValue) {
-      if (envValue.isNotEmpty) return envValue;
-      return nativeValue ?? '';
+      final value = envValue.trim();
+      if (value.isNotEmpty && value != 'null' && !value.startsWith(r'$(')) {
+        return value;
+      }
+      return nativeValue?.trim() ?? '';
     }
 
     final resolvedTwitterRedirectUri = preferEnv(
@@ -144,7 +174,9 @@ class ChatSocialAuthConfig {
     );
 
     return ChatSocialAuthConfig(
+      facebookIosEnabled: facebookIosEnabled,
       googleClientId: preferEnv(envGoogleClientId, nativeConfig.googleClientId),
+      googleCallbackScheme: nativeConfig.googleCallbackScheme ?? '',
       googleServerClientId: preferEnv(
         envGoogleServerClientId,
         nativeConfig.googleServerClientId,

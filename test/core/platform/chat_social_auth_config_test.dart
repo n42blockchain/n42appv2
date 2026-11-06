@@ -67,6 +67,8 @@ void main() {
       final config = ChatSocialAuthConfig.resolve(
         nativeConfig: const SocialAuthNativeConfig(
           googleServerClientId: 'server-client-id',
+          googleClientId: 'ios.apps.googleusercontent.com',
+          googleCallbackScheme: 'com.googleusercontent.apps.ios',
           twitterApiKey: 'twitter-key',
           twitterApiSecret: 'twitter-secret',
           weChatAppId: 'wx123',
@@ -92,6 +94,8 @@ void main() {
       final config = ChatSocialAuthConfig.resolve(
         nativeConfig: const SocialAuthNativeConfig(
           googleServerClientId: 'server-client-id',
+          googleClientId: 'ios.apps.googleusercontent.com',
+          googleCallbackScheme: 'com.googleusercontent.apps.ios',
         ),
       );
 
@@ -109,6 +113,8 @@ void main() {
       final config = ChatSocialAuthConfig.resolve(
         nativeConfig: const SocialAuthNativeConfig(
           googleServerClientId: 'server-client-id',
+          googleClientId: 'ios.apps.googleusercontent.com',
+          googleCallbackScheme: 'com.googleusercontent.apps.ios',
           weChatAppId: 'wx123',
         ),
       );
@@ -247,8 +253,9 @@ void main() {
 
   group('supportsGoogleForCurrentPlatform', () {
     const configured = ChatSocialAuthConfig(
-      googleClientId: 'abc',
-      googleServerClientId: '',
+      googleClientId: 'ios.apps.googleusercontent.com',
+      googleServerClientId: 'server',
+      googleCallbackScheme: 'com.googleusercontent.apps.ios',
       twitterApiKey: '',
       twitterApiSecret: '',
       twitterRedirectUri: '',
@@ -414,5 +421,52 @@ void main() {
         isTrue,
       );
     });
+  });
+  test('iOS Google rejects an absent or mismatched native callback', () {
+    for (final callback in ['', 'com.googleusercontent.apps.other']) {
+      final config = ChatSocialAuthConfig.resolve(
+        nativeConfig: SocialAuthNativeConfig(
+          googleClientId: 'ios.apps.googleusercontent.com',
+          googleCallbackScheme: callback,
+        ),
+      );
+      expect(
+        config.supportsGoogleForCurrentPlatform(
+          isAndroid: false,
+          isIOS: true,
+          isMacOS: false,
+        ),
+        false,
+      );
+    }
+  });
+  test('iOS Facebook is opt-in after server Limited Login support', () {
+    for (final enabled in [false, true]) {
+      final config = ChatSocialAuthConfig.resolve(
+        nativeConfig: const SocialAuthNativeConfig(),
+        facebookIosEnabled: enabled,
+      );
+      expect(
+        config.supportsFacebookForCurrentPlatform(
+          isAndroid: false,
+          isIOS: true,
+        ),
+        enabled,
+      );
+      expect(
+        config.supportsFacebookForCurrentPlatform(
+          isAndroid: true,
+          isIOS: false,
+        ),
+        true,
+      );
+      expect(
+        config.supportsFacebookForCurrentPlatform(
+          isAndroid: false,
+          isIOS: false,
+        ),
+        false,
+      );
+    }
   });
 }

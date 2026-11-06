@@ -119,6 +119,9 @@ private final class N42GeometryView: UIView {
     return [
       "googleClientId": normalizeConfigValue(info["N42ChatGoogleClientID"]) ?? googleServiceValue("CLIENT_ID"),
       "googleServerClientId": normalizeConfigValue(info["N42ChatGoogleServerClientID"]),
+      "googleCallbackScheme": (info["CFBundleURLTypes"] as? [[String: Any]])?
+        .flatMap { $0["CFBundleURLSchemes"] as? [String] ?? [] }
+        .first { $0.hasPrefix("com.googleusercontent.apps.") },
       "twitterApiKey": normalizeConfigValue(info["N42ChatTwitterApiKey"]),
       "twitterApiSecret": normalizeConfigValue(info["N42ChatTwitterApiSecret"]),
       "twitterRedirectUri": normalizeConfigValue(info["N42ChatTwitterRedirectUri"]) ?? "n42://auth/twitter",

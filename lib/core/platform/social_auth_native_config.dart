@@ -7,6 +7,7 @@ class SocialAuthNativeConfig {
 
   final String? googleClientId;
   final String? googleServerClientId;
+  final String? googleCallbackScheme;
   final String? twitterApiKey;
   final String? twitterApiSecret;
   final String? twitterRedirectUri;
@@ -16,6 +17,7 @@ class SocialAuthNativeConfig {
   const SocialAuthNativeConfig({
     this.googleClientId,
     this.googleServerClientId,
+    this.googleCallbackScheme,
     this.twitterApiKey,
     this.twitterApiSecret,
     this.twitterRedirectUri,
@@ -39,6 +41,7 @@ class SocialAuthNativeConfig {
     return SocialAuthNativeConfig(
       googleClientId: _normalize(map['googleClientId']),
       googleServerClientId: _normalize(map['googleServerClientId']),
+      googleCallbackScheme: _normalize(map['googleCallbackScheme']),
       twitterApiKey: _normalize(map['twitterApiKey']),
       twitterApiSecret: _normalize(map['twitterApiSecret']),
       twitterRedirectUri: _normalize(map['twitterRedirectUri']),

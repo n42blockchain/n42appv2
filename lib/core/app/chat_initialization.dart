@@ -119,6 +119,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final nativeSocialAuthConfig = await SocialAuthNativeConfig.load();
       final chatSocialAuthConfig = ChatSocialAuthConfig.resolve(
         nativeConfig: nativeSocialAuthConfig,
+        facebookIosEnabled: const bool.fromEnvironment(
+          'N42_CHAT_FACEBOOK_IOS_ENABLED',
+        ),
         envGoogleClientId: envChatGoogleClientId,
         envGoogleServerClientId: envChatGoogleServerClientId,
         envTwitterApiKey: envChatTwitterApiKey,
@@ -198,7 +201,11 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
                 isMacOS: Platform.isMacOS,
               ),
           enableAppleLogin: Platform.isIOS || Platform.isMacOS,
-          enableFacebookLogin: Platform.isAndroid,
+          enableFacebookLogin: chatSocialAuthConfig
+              .supportsFacebookForCurrentPlatform(
+                isAndroid: Platform.isAndroid,
+                isIOS: Platform.isIOS,
+              ),
           enableTwitterLogin: chatSocialAuthConfig.twitterConfigured,
           enableWeChatLogin: chatSocialAuthConfig.weChatConfigured,
           enableDiscordLogin: chatSocialAuthConfig.discordConfigured,
