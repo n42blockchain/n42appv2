@@ -82,6 +82,8 @@ Batch 78 addresses the observed Android WalletCore package-authentication omissi
 
 Batch 79 executes the real Sui Android plugin/JNI on an isolated API 36 arm64 emulator: four independent signature vectors and ordinary transfer validation pass in two integration tests. The Android Sui JNI component gap below is now superseded; full UI/session, BCS semantics and node/device coverage remain open. No physical phone or network transaction was used.
 
+Batch 80 fixes the reproduced Aptos Android Int/Long cast failure and verifies real JNI signatures against two independent vectors, including ordinary transfers. Four JVM tests pass. Prior Android Aptos component gaps are superseded; Dart sender gas/amount mapping, full session/UI and live-chain acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

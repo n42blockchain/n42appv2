@@ -1244,46 +1244,11 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             } catch (_: Exception) { "" }
         }
 
-        val gasUnitPrice: Long = txData["gasUnitPrice"] as Long
-        val maxGasAmount: Long = txData["maxGasAmount"] as Long
-        val expirationTimestampSecs: Long = txData["expirationTimestampSecs"] as Long
-        val toAddress: String = txData["toAddress"] as String
-        val senderAddress: String = txData["fromAddress"] as String
-        val amount: Long = txData["amount"] as Long
-        val chainId: Int = txData["chainId"] as Int
-        val sequenceNumber: Long = txData["SequenceNumber"] as Long
-        val contractAddress: String = txData["contractAddress"] as String
-        val contractModule: String = txData["contractModule"] as String
-        val contractName: String = txData["contractName"] as String
-
-        val input = Aptos.SigningInput.newBuilder()
-            .setChainId(chainId)
-            .setSender(senderAddress)
-            .setSequenceNumber(sequenceNumber)
-            .setGasUnitPrice(gasUnitPrice)
-            .setMaxGasAmount(maxGasAmount)
-            .setExpirationTimestampSecs(expirationTimestampSecs)
-            .setPrivateKey(ByteString.copyFrom(privateKey.data()))
-        if (contractAddress == "") {
-            val transfer = Aptos.TransferMessage.newBuilder()
-                .setAmount(amount)
-                .setTo(toAddress).build()
-            input.transfer = transfer
-        } else {
-            val structTag = Aptos.StructTag.newBuilder()
-                .setAccountAddress(contractAddress)
-                .setModule(contractModule)
-                .setName(contractName)
-                .build()
-            val transfer = Aptos.TokenTransferCoinsMessage.newBuilder()
-                .setAmount(amount)
-                .setTo(toAddress)
-                .setFunction(structTag)
-                .build()
-            input.tokenTransferCoins = transfer
-        }
-
+        val input = AptosTransferParameters.build(txData) ?: return ""
+        if (input.sender != AptosTransferParameters.address(CoinType.APTOS.deriveAddress(privateKey))) return ""
+        input.setPrivateKey(ByteString.copyFrom(privateKey.data()))
         val output = AnySigner.sign(input.build(), CoinType.APTOS, Aptos.SigningOutput.parser())
+        if (output.errorValue != 0 || output.encoded.isEmpty) return ""
         return Numeric.toHexString(output.encoded.toByteArray())
     }
 
