@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -5,6 +7,24 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// Stellar (XLM) — Horizon REST API
 class XlmApi {
+  final Future<dynamic> Function(
+    String url,
+    Map<String, String> body, {
+    required Map<String, dynamic> header,
+    required bool enableRetry,
+  })?
+  _submit;
+
+  XlmApi({
+    Future<dynamic> Function(
+      String url,
+      Map<String, String> body, {
+      required Map<String, dynamic> header,
+      required bool enableRetry,
+    })?
+    submit,
+  }) : _submit = submit;
+
   static const _coinType = CoinType.XLM;
   static const _header = {'Content-Type': 'application/json'};
 
@@ -34,14 +54,32 @@ class XlmApi {
     bool isTest = false,
   }) async {
     try {
-      final data = await BaseApi.requestEmptyH.post(
-        '${_base(isTest)}/transactions',
-        params: {},
-        data: {'tx': txXdr},
-        defaultReturn: false,
-        header: {'Content-Type': 'application/x-www-form-urlencoded'},
-        enableRetry: false,
-      );
+      // Preserve the exact signed envelope. Reject altered/noncanonical base64
+      // before transport; full XDR/signature validation belongs to the signer.
+      if (txXdr.isEmpty || base64Encode(base64Decode(txXdr)) != txXdr) {
+        return _err('Invalid signed Stellar transaction encoding');
+      }
+      final url = '${_base(isTest)}/transactions';
+      final body = {'tx': txXdr};
+      final header = <String, dynamic>{
+        'content-type': 'application/x-www-form-urlencoded',
+      };
+      final data = _submit != null
+          ? await _submit(url, body, header: header, enableRetry: false)
+          : await BaseApi.requestEmptyH.post(
+              url,
+              params: {},
+              data: body,
+              defaultReturn: false,
+              header: header,
+              enableRetry: false,
+            );
+      if (data is! Map ||
+          data['successful'] != true ||
+          data['hash'] is! String ||
+          !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(data['hash'] as String)) {
+        return _err('Invalid Stellar submission response; status is unknown');
+      }
       return MessageModel()..data = data;
     } catch (e) {
       return _err(e);

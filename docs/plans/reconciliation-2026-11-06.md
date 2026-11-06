@@ -34,6 +34,13 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 
 ## Latest interruption check
 
+### Stellar submission encoding and response contract — batch 131
+
+- A local real-HTTP regression reproduced that the former uppercase Content-Type header was ignored by BaseHttp's lowercase explicit contentType lookup: the request arrived as application/json, not URL-encoded form (`/tmp/n42-xlm-b131-before.log`, failed). Changed the submission header to lowercase `content-type`, retaining exactly one `tx` field and disabled automatic retries.
+- Reject empty/noncanonical base64 before transport. Require a map with `successful: true` and a 64-hex transaction hash before representing a successful submission. Malformed responses report unknown status; no blind retry or resubmission is added. Optional submit injection enables real network-layer tests without live funds.
+- Final API/sender/balance regression: 74 passed (`/tmp/n42-xlm-b131-final.log`, exit 0). The real HTTP server verifies content type, form decoding and lossless + / = preservation. Additional cases cover malformed encoding, unsuccessful/malformed bodies, valid responses and one-attempt timeout handling. Scoped analysis clean (`/tmp/n42-xlm-b131-analysis.log`); whitespace check passes.
+- Horizon contract reference: https://developers.stellar.org/docs/data/apis/horizon/api-reference/submit-a-transaction. Encoding validation is not independent XDR/signature verification, and synthetic transport bytes are not a valid transaction. No live provider submission, device or release. Local pre-broadcast hash, durable uncertain-outcome history/UI and end-to-end settlement remain open.
+
 ### Stellar spendable balance and ledger fee — batch 130
 
 - Replaced total-balance spending with checked CAP-0033 reserve accounting: (2 + subentries + sponsoring - sponsored) times the latest ledger base reserve, then subtract native selling liabilities and the single-payment base fee. Fully sponsored accounts can have zero reserve. Latest ledger parameters replace the fixed fee; this is a current base fee, not surge-price selection or an inclusion guarantee.
