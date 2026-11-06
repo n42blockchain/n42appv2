@@ -385,11 +385,11 @@ void main() {
       }
     });
 
-    test('Facebook line is enabled only on Android', () {
+    test('Facebook is disabled without an N42 app registration', () {
       expect(
         emptyCfg
             .diagnostics(isAndroid: true, isIOS: false, isMacOS: false)
-            .any((l) => l.contains('Facebook: enabled')),
+            .any((l) => l.contains('Facebook: disabled')),
         isTrue,
       );
       expect(
@@ -443,7 +443,7 @@ void main() {
   test('iOS Facebook is opt-in after server Limited Login support', () {
     for (final enabled in [false, true]) {
       final config = ChatSocialAuthConfig.resolve(
-        nativeConfig: const SocialAuthNativeConfig(),
+        nativeConfig: const SocialAuthNativeConfig(facebookAppId: '123456789'),
         facebookIosEnabled: enabled,
       );
       expect(
@@ -468,5 +468,21 @@ void main() {
         false,
       );
     }
+  });
+  test('legacy Amaze Facebook ID is rejected on both native platforms', () {
+    final config = ChatSocialAuthConfig.resolve(
+      nativeConfig: const SocialAuthNativeConfig(
+        facebookAppId: '903080600916838',
+      ),
+      facebookIosEnabled: true,
+    );
+    expect(
+      config.supportsFacebookForCurrentPlatform(isAndroid: true, isIOS: false),
+      false,
+    );
+    expect(
+      config.supportsFacebookForCurrentPlatform(isAndroid: false, isIOS: true),
+      false,
+    );
   });
 }

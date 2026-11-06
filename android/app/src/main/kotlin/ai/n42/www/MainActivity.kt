@@ -26,6 +26,8 @@ class MainActivity: FlutterFragmentActivity() {
             stringResource("n42_chat_google_server_client_id")
                 ?: stringResource("default_web_client_id")
         return mapOf(
+            "facebookAppId" to stringResource("facebook_app_id")
+                ?.takeIf { stringResource("facebook_client_token") != null },
             "googleClientId" to stringResource("n42_chat_google_client_id"),
             "googleServerClientId" to googleServerClientId,
             "twitterApiKey" to stringResource("n42_chat_twitter_api_key"),

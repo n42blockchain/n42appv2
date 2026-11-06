@@ -116,7 +116,13 @@ private final class N42GeometryView: UIView {
 
   private func socialAuthConfig() -> [String: Any?] {
     let info = Bundle.main.infoDictionary ?? [:]
+    let facebookAppId = normalizeConfigValue(info["FacebookAppID"])
+    let schemes = (info["CFBundleURLTypes"] as? [[String: Any]])?
+      .flatMap { $0["CFBundleURLSchemes"] as? [String] ?? [] } ?? []
+    let facebookConfigured = facebookAppId.map { schemes.contains("fb\($0)") } ?? false
     return [
+      "facebookAppId": facebookConfigured && normalizeConfigValue(info["FacebookClientToken"]) != nil
+        ? facebookAppId : nil,
       "googleClientId": normalizeConfigValue(info["N42ChatGoogleClientID"]) ?? googleServiceValue("CLIENT_ID"),
       "googleServerClientId": normalizeConfigValue(info["N42ChatGoogleServerClientID"]),
       "googleCallbackScheme": (info["CFBundleURLTypes"] as? [[String: Any]])?

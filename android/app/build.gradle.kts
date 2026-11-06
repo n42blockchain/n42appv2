@@ -72,6 +72,8 @@ android {
                 arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
             }
         }
+        resValue("string", "facebook_app_id", escapeResValue(readConfigValue("N42_CHAT_FACEBOOK_APP_ID")))
+        resValue("string", "facebook_client_token", escapeResValue(readConfigValue("N42_CHAT_FACEBOOK_CLIENT_TOKEN")))
         resValue(
             "string",
             "n42_chat_google_client_id",

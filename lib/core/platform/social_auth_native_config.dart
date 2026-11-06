@@ -5,6 +5,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 class SocialAuthNativeConfig {
   static const MethodChannel _channel = MethodChannel('ai.n42.www/app_config');
 
+  final String? facebookAppId;
   final String? googleClientId;
   final String? googleServerClientId;
   final String? googleCallbackScheme;
@@ -15,6 +16,7 @@ class SocialAuthNativeConfig {
   final String? weChatUniversalLink;
 
   const SocialAuthNativeConfig({
+    this.facebookAppId,
     this.googleClientId,
     this.googleServerClientId,
     this.googleCallbackScheme,
@@ -39,6 +41,7 @@ class SocialAuthNativeConfig {
 
   factory SocialAuthNativeConfig.fromMap(Map<String, dynamic> map) {
     return SocialAuthNativeConfig(
+      facebookAppId: _normalize(map['facebookAppId']),
       googleClientId: _normalize(map['googleClientId']),
       googleServerClientId: _normalize(map['googleServerClientId']),
       googleCallbackScheme: _normalize(map['googleCallbackScheme']),

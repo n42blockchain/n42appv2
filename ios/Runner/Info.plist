@@ -45,7 +45,7 @@
 			<string>facebook</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb903080600916838</string>
+				<string>$(N42_CHAT_FACEBOOK_URL_SCHEME)</string>
 			</array>
 		</dict>
 		<dict>
@@ -97,9 +97,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>FacebookAppID</key>
-	<string>903080600916838</string>
+	<string>$(N42_CHAT_FACEBOOK_APP_ID)</string>
 	<key>FacebookClientToken</key>
-	<string>b968a2a64f80b3bf9fe9981d72d2cd8b</string>
+	<string>$(N42_CHAT_FACEBOOK_CLIENT_TOKEN)</string>
 	<key>FacebookDisplayName</key>
 	<string>N42</string>
 	<key>N42ChatGoogleClientID</key>

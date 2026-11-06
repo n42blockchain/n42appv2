@@ -14,3 +14,8 @@ N42_CHAT_WECHAT_UNIVERSAL_LINK =
 
 // Runner/Info.plist expands N42_CHAT_GOOGLE_REVERSED_CLIENT_ID into its URL schemes.
 // Use the reversed iOS OAuth client ID, not the server/web client ID.
+
+// N42-only Meta app. Never use the legacy Amaze app.
+N42_CHAT_FACEBOOK_APP_ID =
+N42_CHAT_FACEBOOK_CLIENT_TOKEN =
+N42_CHAT_FACEBOOK_URL_SCHEME =

@@ -171,3 +171,27 @@ expiry. This signature self-check is not an Apple authorization-code exchange.
 The config includes the registered callback, but has not been deployed. The
 native iOS token audience remains `ai.n42.www` and must not be confused with
 the Web Services ID audience.
+
+## Independent N42 identity decision
+
+The owner explicitly declined Amaze account inheritance. N42 must not import,
+auto-link by email, or reuse historical Amaze Firebase/provider identities.
+Historical bindings remain untouched. Any N42 identity backend must use a
+separate binding namespace and must not call the legacy email-linking path.
+
+- Removed the hard-coded Amaze Meta App ID and client token from both native
+  platforms. N42 Meta values are now build configuration, with no legacy fallback.
+- Facebook availability requires a configured N42 App ID and native client token;
+  iOS additionally requires the matching URL scheme and the existing Limited
+  Login backend opt-in. The known Amaze App ID is rejected even if supplied.
+- Provider implementation remains available for the dedicated N42 registration.
+- Prepared Meta creation: N42 Wallet, Facebook Login only, existing verified
+  Si46world business. Final submission awaits action-time acceptance of Meta terms.
+- N42 Firebase Identity Platform initialization returned HTTP 400
+  `FAILED_PRECONDITION BILLING_NOT_ENABLED`. No billing was enabled. This attempt
+  did not complete authentication initialization or change the legacy project.
+
+Validation: 35 focused Flutter tests passed; targeted analyzer found no issues;
+iOS plist validation and Swift syntax parse passed; Android Debug/Release resource
+generation passed. No provider E2E, signed release, deployment, or account migration
+is claimed for this batch.

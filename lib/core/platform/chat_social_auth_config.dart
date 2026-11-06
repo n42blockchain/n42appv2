@@ -1,6 +1,7 @@
 import 'package:n42_wallet/core/platform/social_auth_native_config.dart';
 
 class ChatSocialAuthConfig {
+  final String facebookAppId;
   final String googleClientId;
   final String googleServerClientId;
   final String googleCallbackScheme;
@@ -17,6 +18,7 @@ class ChatSocialAuthConfig {
   final String socialAuthBaseUrl;
 
   const ChatSocialAuthConfig({
+    this.facebookAppId = '',
     required this.googleClientId,
     required this.googleServerClientId,
     this.googleCallbackScheme = '',
@@ -81,7 +83,10 @@ class ChatSocialAuthConfig {
   bool supportsFacebookForCurrentPlatform({
     required bool isAndroid,
     required bool isIOS,
-  }) => isAndroid || (isIOS && facebookIosEnabled);
+  }) =>
+      RegExp(r'^[0-9]+$').hasMatch(facebookAppId) &&
+      facebookAppId != '903080600916838' &&
+      (isAndroid || (isIOS && facebookIosEnabled));
 
   List<String> diagnostics({
     required bool isAndroid,
@@ -174,6 +179,7 @@ class ChatSocialAuthConfig {
     );
 
     return ChatSocialAuthConfig(
+      facebookAppId: nativeConfig.facebookAppId ?? '',
       facebookIosEnabled: facebookIosEnabled,
       googleClientId: preferEnv(envGoogleClientId, nativeConfig.googleClientId),
       googleCallbackScheme: nativeConfig.googleCallbackScheme ?? '',
