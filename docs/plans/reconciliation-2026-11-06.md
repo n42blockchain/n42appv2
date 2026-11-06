@@ -40,6 +40,8 @@ Batch 60 preserves case-sensitive recipients and damaged history, prevents auxil
 
 Batch 61 adds localized recent-history read failure/retry UI and discards stale chain/identity results. Six bar tests and related regressions pass. Explicit corrupt/legacy repair remains open.
 
+Batch 62 integrates Chat 99f5fce1: unconfirmed scheduled attempts persist and appear after reopening, with all 26 locale values. Chat 89+1 and host 3 tests pass. Retry backoff and delivery/crash reconciliation remain open in MSG-001.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.

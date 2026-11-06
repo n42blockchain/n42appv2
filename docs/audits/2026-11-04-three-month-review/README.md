@@ -558,3 +558,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Number each load and bind it to identity and chain. Older success/failure callbacks cannot overwrite a new list. Suppress outdated selections before a parent rebuild, reload on identity/chain widget updates and ignore completion after disposal.
 - Related service/Sui/UI regressions: 45 passed. After adding the identity-switch case, all six bar tests passed, including real corrupt preferences, retry-to-selection, late old-chain success/failure, identity switch and disposal. Scoped analysis has no issues. Logs: /tmp/n42-recent-retry.log, /tmp/n42-recent-retry-final.log and /tmp/n42-recent-retry-analysis-final.log.
 - Corrupt/legacy record repair/import and cross-process coordination remain open; retry only retries reading. No physical-device acceptance, provider authorization or release upload performed.
+
+
+## Batch 62 — persistent unconfirmed scheduled-message status (2026-11-06)
+
+- Integrated pushed Chat 99f5fce11d5d8993245693a3d4f6b6ba3c21774b. Failed/unconfirmed due sends persist an additive status on an existing account-owned draft; updates preserve creation time, payload and transaction ID and cannot resurrect cancelled records. Reopened queue pages display the status with 26 localized catalog values. Generated localization was rebuilt with flutter gen-l10n.
+- Known server acceptance followed only by cleanup failure does not set a new unconfirmed flag. Existing flags can remain if a later accepted retry fails cleanup; the status is not proof that nothing was delivered. Automatic timer retry behavior is unchanged.
+- Chat entity/storage/BLoC/page suites: 89 passed; accepted-cleanup distinction: 1 passed. Wallet host component contracts: 3 passed. Scoped Chat analysis has six existing infos, no errors/warnings. Locale validation confirmed 26 nonempty values without placeholders. Logs: /tmp/n42-chat-delivery-tests.log, /tmp/n42-chat-delivery-cleanup.log, /tmp/n42-chat-delivery-host.log.
+- Remaining MSG-001 work includes retry backoff, manual reconciliation, known-acceptance crash recovery, legacy recovery, cross-process coordination and live-device acceptance. Updating the immutable host pin is not a release upload.
