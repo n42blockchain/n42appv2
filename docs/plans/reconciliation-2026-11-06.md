@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 163
+## Current interruption inventory — through batch 165
 
 The interrupted patches through batch 159 are committed. Batch 160 revalidated the complete current wallet source after the Chat recovery and EGLD signing changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -56,6 +56,13 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Chat draft autosave and background flush — batch 165
+
+- Source inspection confirmed ordinary composer drafts were saved mainly at disposal. Chat now saves after 500 ms without text edits and flushes when leaving resumed lifecycle state. A flush/dispose cancels the timer; selection-only changes and restored text do not schedule redundant writes. Existing serialized owner/room store and captured session checks remain intact. Pending initial reads cannot overwrite new input; a later lifecycle flush retries after a failed save.
+- New tests reproduced absent autosave/background writes before the fix. The initial run also exposed a test teardown issue when attempting disposal while frames were paused; resume before disposal/DI reset fixes that harness condition. Final composer/storage/message-action/preferences suite: 150 pass (/tmp/n42-chat-b165-verified.log); scoped analysis clean (/tmp/n42-chat-b165-analysis-final.log). Tests include debouncing, clear, selection, background flush, disposal, invalidated account, late load and failed-write retry.
+- Chat `df2643fc8344ba8c5779d5d545267ef20702515a` is pushed. Wallet pin/lock updated with flutter pub get; no unrelated dependency changed. Host fixture contracts: 3 pass (/tmp/n42-wallet-b165-host.log). Existing Chat coverage modification and wallet untracked baseline are preserved.
+- This reduces the unsaved-input window; it does not guarantee persistence if killed before platform acknowledgement or solve disk exhaustion/cross-process conflicts. Rich recovery/rescheduling, legacy ownership and installed-device acceptance remain open in Chat MSG-001. No release upload or production-message send. Current full-wallet coverage remains scoped to batch 160's older source.
 
 ### Continuous EGLD page/sender/database recovery — batch 164
 
