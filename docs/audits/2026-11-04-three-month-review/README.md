@@ -417,3 +417,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `5d9b8c9e82f317204221c2776d78ef068e9f6252` is pushed and remote parity verified. This closes the attachment-success-before-storage gap from batch 44. MSG-001 retains safe reconciliation of files after uncertain writes, legacy recovery and distributed/remote outcomes. No release upload or device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-attachment-ack-host-tests.log`); lockfile changes only the Chat reference.
+
+
+## Batch 46 — rich composer acknowledgement and scheduled quiz fidelity (2026-11-06)
+
+- The shared poll/sticker/GIF scheduling helper now awaits draft persistence and checks its page/login origin. Poll forms remain open on cancelled time selection or rejected persistence; pending submission locks the form to preserve its submitted contents. Stickers close their picker only on acknowledged persistence. Immediate-send callbacks remain intact. The poll scheduling control reuses the localized scheduling title.
+- Scheduled quiz correct-answer index and explanation were dropped by both the composer payload and due-send path. Both now preserve those fields into the repository request; ordinary polls retain null quiz fields.
+- 115 page/BLoC/GIF-lifecycle regressions passed (`/tmp/n42-rich-ack-final.log`), including poll and sticker cancellation/failure/success plus ordinary and quiz due dispatch. Scoped analysis has no errors/warnings and six existing informational diagnostics (`/tmp/n42-rich-ack-analyze.log`).
+- Chat `de975306fc078e6de22b607139a8fa86e5cb9622` is pushed with remote parity verified. This does not establish GIF selection restoration after persistence failure, distributed exactly-once delivery or device acceptance. Remaining boundaries stay in MSG-001. No release upload or device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-rich-ack-host-tests.log`); the lockfile changes only the Chat reference.
