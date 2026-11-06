@@ -22,9 +22,9 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 171
+## Current interruption inventory — through batch 172
 
-The interrupted patches through batch 159 are committed. Batch 160 revalidated the complete current wallet source after the Chat recovery and EGLD signing changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
+The interrupted patches through batch 159 are committed. Batch 172 revalidated wallet source 5cb2b8a7b after the latest Chat session-isolation and EGLD recovery changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
@@ -39,7 +39,16 @@ The interrupted patches through batch 159 are committed. Batch 160 revalidated t
 
 Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0/0); Chat is pinned to f4fc66d07b56f7d75d17f43411b80fbad3a3811e, also pushed to its task branch. Four baseline untracked wallet paths remain untouched. The ID Hub clean-state observation at 7c0dd68 and the 13-worktree classification are from the earlier reconciliation, not new service/deployment acceptance. Historical entries below remain evidence for their own revisions.
 
-## Latest verified full-regression baseline — batch 160
+## Current wallet full regression — batch 172
+
+- Tested source: `5cb2b8a7b79116fdc7064831e60ca21585f3f2d8`; immutable Chat dependency: `dcd7d49e328474a65fddb103f382862fcb67dd9e`. Flutter 3.47.8, concurrency 4, --no-pub, coverage and machine output. Explicit N42_PQ_LIBRARY points to the existing host Falcon dylib. Tracked source stayed unchanged throughout execution.
+- **7,271 tests passed, zero failed/skipped/errors**. Flutter process exit 0 and final machine success true both verified. Fresh coverage: **103,363 / 140,450 = 73.5941616%**, unchanged 70% gate passes. Hidden setup/loading events are excluded from the reported test count.
+- Full analysis exits 0 with --no-fatal-infos: zero errors/warnings, 75 informational lints. Python script checks: 49 test_*.py cases plus 3 capability-manifest *_test.py cases pass, 52 total. Wallet/Chat localization integrity passes; this does not establish editorial/RTL quality. The existing facebook_auth_desktop Windows plugin metadata warning remains a dependency limitation.
+- Evidence: /tmp/n42-wallet-full-b172.jsonl, /tmp/n42-wallet-full-b172.stderr, /tmp/n42-wallet-b172-lcov.info, /tmp/n42-wallet-b172-tests.json, /tmp/n42-wallet-b172-coverage.json, /tmp/n42-wallet-b172-analysis.log, /tmp/n42-wallet-b172-scripts.log, /tmp/n42-wallet-b172-manifest.log, /tmp/n42-wallet-b172-localization.log.
+- SHA-256 test log: `00ef0f92de5c8d9f902404ed1d4ff70affbb751e5545cfc32937dd4c6b388cc0`; LCOV: `fc972c1f9f23b4c0e64cee44ccdd63b7bbb84d2d6a24808d0ba7336b417029b9`.
+- This supersedes batch 160 only as the latest wallet full-suite baseline. It includes host integration with the pinned Chat version, not a new standalone Chat full run, installed-device/provider acceptance, live transactions, TestFlight or production deployment. Existing native social/Matrix, Meta public availability, recovery edges, dependencies/editorial QA, IAP/payment delivery and retained-worktree work remain open. No implementation change was needed to make this run pass. Baseline untracked files remain preserved.
+
+## Historical full-regression baseline — batch 160
 
 - Source `534fbb6e4`, Chat production pin `b6ff2c465937982551fb84c44e672bc17676614a`: **7,128 passed, zero failures/skips**, fresh coverage **73.5642%** (103,201/140,287); unchanged 70% gate passes. Flutter process exit 0 and machine final success both verified. Falcon native library was explicitly supplied.
 - Full analysis: zero errors/warnings, 75 informational lints (analysis exits 1 for infos). All 52 Python script tests and localization integrity pass. This supersedes batch 140 for wallet automated regression only. Latest standalone Chat full-suite baseline remains batch 112, not this host run.
