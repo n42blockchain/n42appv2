@@ -15,11 +15,70 @@ import 'chain_sender.dart';
 
 /// Stellar (XLM) sender.
 class XlmSender implements ChainSender {
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
+  final XlmApi _api;
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
+
+  XlmSender({
+    Trustdart? trustdart,
+    XlmApi? api,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+  }) : _trustdart = trustdart ?? Trustdart(),
+       _api = api ?? XlmApi(),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic;
+
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   Future<SendResult> send(SendParams params) async {
-    final xlmApi = XlmApi();
+    final Object? owner;
+    final String? mnemonic;
+    try {
+      owner = _ownerIdentity();
+      mnemonic = params.privateKey == null ? _readMnemonic() : null;
+    } catch (_) {
+      return const SendResult.fail('Wallet is not ready');
+    }
+    bool signerIsCurrent() {
+      try {
+        return _ownerIdentity() == owner &&
+            (params.privateKey != null ||
+                (owner != null && mnemonic == _readMnemonic()));
+      } catch (_) {
+        return false;
+      }
+    }
+
+    if (!signerIsCurrent() ||
+        (params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+      return const SendResult.fail('Wallet signing context is unavailable');
+    }
+    final xlmApi = _api;
 
     // Get account info (balance + sequence)
     final mmAccount = await xlmApi.getAccount(
@@ -79,24 +138,42 @@ class XlmSender implements ChainSender {
       'fee': fee,
     };
 
-    String signStr;
-    if (params.privateKey == null) {
-      if (!AppGlobals.appContext.mounted) {
-        return const SendResult.fail('Context is no longer valid');
-      }
-      signStr = await _trustdart.signTransaction(
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    final Map derived;
+    try {
+      derived = await _trustdart.generateAddress(
         CoinType.XLM.name,
         params.path,
-        signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        'legacy',
+        mnemonic: mnemonic ?? '',
+        pk: params.privateKey ?? '',
+        isTest: params.isTest,
       );
-    } else {
-      signStr = await _trustdart.signTransaction(
-        CoinType.XLM.name,
-        params.path,
-        signMap,
-        pk: params.privateKey!,
-      );
+    } catch (_) {
+      return const SendResult.fail('Unable to verify signing address');
+    }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    // Stellar account IDs are case-sensitive. Never normalize a different ID
+    // into the confirmed sender, or trust a caller-provided verification flag.
+    final address = derived['legacy'];
+    if (address is! String ||
+        address.isEmpty ||
+        address != params.fromAddress) {
+      return const SendResult.fail('Signing key does not match sender');
+    }
+    final signStr = await _trustdart.signTransaction(
+      CoinType.XLM.name,
+      params.path,
+      signMap,
+      mnemonic: mnemonic ?? '',
+      pk: params.privateKey ?? '',
+    );
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);

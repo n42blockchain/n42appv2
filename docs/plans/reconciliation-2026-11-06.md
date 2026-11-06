@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Stellar signer follow-up — batch 117
+
+- Closed the XLM late-global-mnemonic gap: capture owner/key before Horizon lookup, verify the derived sender with the same path/key used to sign, and reject account/key changes before broadcast. Private-key sends retain their independent credential source.
+- 16 new local scenarios and all 210 sender-directory tests pass; scoped analysis clean. Logs: `/tmp/n42-xlm-b117.log`, `/tmp/n42-xlm-b117-regression.log`, `/tmp/n42-xlm-b117-analysis.log`. No native/live settlement acceptance claim. ADA/VET/EGLD guards and broader old-branch review remain open.
+
+
 ### Interrupted AA handler — batch 116
 
 - Found and completed uncommitted signer/account/network binding work. The handler now captures credentials before queuing, verifies the derived owner, rejects changed signing context, selects the correct testnet configuration and checks RPC/bundler network identity. Operation-scoped bundler clients are closed. Existing pending receipt behavior is preserved.
