@@ -20,6 +20,7 @@ class _Api extends AptApi {
   int priceReads = 0;
   int submits = 0;
   void Function()? onLedger;
+  void Function()? onPrice;
   @override
   Future<MessageModel> getBalance(
     String address, {
@@ -29,6 +30,7 @@ class _Api extends AptApi {
   @override
   Future<MessageModel> getGasPrice() async {
     priceReads++;
+    onPrice?.call();
     return MessageModel()..data = price;
   }
 
@@ -99,6 +101,47 @@ void main() {
     expect(signer.received!['expirationTimestampSecs'], '18446744073769');
     expect(api.submits, 0);
   });
+  for (final defaultConfig in [false, true]) {
+    for (final nodeFollowsMutation in [false, true]) {
+      test(
+        'network snapshot default=$defaultConfig nodeChanges=$nodeFollowsMutation',
+        () async {
+          final config = <String, dynamic>{'chainId': 1};
+          final api = _Api();
+          api.onPrice = () {
+            config['chainId'] = 2;
+            if (nodeFollowsMutation) api.chainId = 2;
+          };
+          final signer = _Signer();
+          await AptSender(
+            ownerIdentity: () => 'owner',
+            chainConfig: defaultConfig ? config : null,
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
+            SendParams(
+              coinType: 'APT',
+              fromAddress: 'owner',
+              toAddress: 'recipient',
+              amount: 1,
+              decimals: 0,
+              path: '',
+              privateKey: 'public-test-only',
+              chainConfig: defaultConfig ? null : config,
+            ),
+          );
+          expect(config['chainId'], 2);
+          expect(api.expectedChain, 1);
+          if (nodeFollowsMutation) {
+            expect(signer.received, isNull);
+          } else {
+            expect(signer.received!['chainId'], 1);
+          }
+          expect(api.submits, 0);
+        },
+      );
+    }
+  }
   for (final phase in ['unchanged', 'ledger', 'signer']) {
     test('owner binding across $phase await', () async {
       Object? owner = 'original';

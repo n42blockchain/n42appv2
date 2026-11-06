@@ -52,6 +52,20 @@ class AptSender implements ChainSender {
     if (owner == null) return const SendResult.fail('Wallet is not ready');
     bool ownerIsCurrent() => _ownerIdentity() == owner;
     final coinType = params.coinType.toUpperCase();
+    // Resolve mutable configuration before the first asynchronous operation.
+    final int? resolvedChainId = resolveChainConfigIdOrNull(
+      params.chainConfig ?? _defaultChainConfig,
+      isTest: params.isTest,
+    );
+    // Aptos 测试网 chain_id=2；缺配置时回退 1 签出的交易在主网合法，拒发。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
+    if (chainId < 1 || chainId > 255) {
+      return const SendResult.fail('Invalid Aptos chain ID');
+    }
+
     final isContract = params.contractAddress.isNotEmpty;
     final gas = getCoinGas(coinType, contract: isContract);
     final aptApi = _apiFactory(params.isTest);
@@ -112,19 +126,6 @@ class AptSender implements ChainSender {
     final sequenceNumber = await aptApi.getAccountInfo(params.fromAddress);
     if (sequenceNumber.error) {
       return SendResult.fail(sequenceNumber.data?.toString());
-    }
-
-    final int? resolvedChainId = resolveChainConfigIdOrNull(
-      params.chainConfig ?? _defaultChainConfig,
-      isTest: params.isTest,
-    );
-    // Aptos 测试网 chain_id=2；缺配置时回退 1 签出的交易在主网合法，拒发。
-    if (params.isTest && resolvedChainId == null) {
-      return SendResult.fail('Missing testnet chain ID for $coinType');
-    }
-    final chainId = resolvedChainId ?? 1;
-    if (chainId < 1 || chainId > 255) {
-      return const SendResult.fail('Invalid Aptos chain ID');
     }
 
     final ledgerTimestamp = await aptApi.getServiceInfo(
