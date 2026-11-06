@@ -55,6 +55,22 @@ import WalletCore
         var insufficient = payload; insufficient["amount"] = "100000000"
         precondition(plugin.signCardanoTransaction(wallet: wallet, path: path, txData: insufficient, pk: nil) == nil)
         count += 1
+        var metadata = payload; metadata["returnMetadata"] = true
+        let ordinaryJSON = plugin.signCardanoTransaction(wallet: wallet, path: path, txData: metadata, pk: nil)!
+        let ordinary = try! JSONSerialization.jsonObject(with: Data(ordinaryJSON.utf8)) as! [String: String]
+        precondition(ordinary["encoded"] == signed && ordinary["amount"] == String(plan.amount))
+        precondition(ordinary["fee"] == String(plan.fee) && ordinary["change"] == String(plan.change))
+        metadata["useMaxAmount"] = true; metadata["amount"] = "10000000"
+        let maxJSON = plugin.signCardanoTransaction(wallet: wallet, path: path, txData: metadata, pk: nil)!
+        let maximum = try! JSONSerialization.jsonObject(with: Data(maxJSON.utf8)) as! [String: String]
+        precondition(maximum["change"] == "0" && maximum["available"] == "10000000")
+        precondition(UInt64(maximum["amount"]!)! + UInt64(maximum["fee"]!)! == 10000000)
+        var maxInput = input; maxInput.transferMessage.useMaxAmount = true; maxInput.transferMessage.amount = 10000000
+        let maxPlan: CardanoTransactionPlan = AnySigner.plan(input: maxInput, coin: .cardano)
+        maxInput.plan = maxPlan
+        let maxReference: CardanoSigningOutput = AnySigner.sign(input: maxInput, coin: .cardano)
+        precondition(maxReference.error == .ok && maximum["encoded"] == "0x" + maxReference.encoded.hexString)
+        count += 5
         print("Cardano native signing: \(count) checks passed")
     }
 }

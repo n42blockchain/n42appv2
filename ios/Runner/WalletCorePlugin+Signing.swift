@@ -1492,7 +1492,7 @@ extension WalletCorePlugin {
             })
         }
 
-        let input = CardanoSigningInput.with {
+        var input = CardanoSigningInput.with {
             $0.ttl = ttl
             $0.privateKey = [privateKey.data]
             $0.utxos = utxoList
@@ -1500,12 +1500,25 @@ extension WalletCorePlugin {
                 $0.toAddress = toAddress
                 $0.changeAddress = CoinType.cardano.deriveAddress(privateKey: privateKey)
                 $0.amount = amount
-                $0.useMaxAmount = false
+                $0.useMaxAmount = txData["useMaxAmount"] as? Bool ?? false
             }
         }
+        let plan: CardanoTransactionPlan = AnySigner.plan(input: input, coin: .cardano)
+        guard plan.error == .ok, plan.amount > 0, plan.fee > 0 else { return nil }
+        input.plan = plan
         let output: CardanoSigningOutput = AnySigner.sign(input: input, coin: CoinType.cardano)
         if output.error != .ok || !output.errorMessage.isEmpty || output.encoded.isEmpty {
             return nil
+        }
+        if txData["returnMetadata"] as? Bool == true {
+            let result: [String: String] = [
+                "encoded": "0x" + output.encoded.hexString,
+                "amount": String(plan.amount), "fee": String(plan.fee),
+                "change": String(plan.change), "available": String(plan.availableAmount),
+            ]
+            guard let data = try? JSONSerialization.data(withJSONObject: result),
+                  let json = String(data: data, encoding: .utf8) else { return nil }
+            return json
         }
         return "0x" + output.encoded.hexString
     }

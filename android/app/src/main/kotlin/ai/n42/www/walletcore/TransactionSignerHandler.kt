@@ -1537,17 +1537,26 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             .setToAddress(toAddress)
             .setChangeAddress(CoinType.CARDANO.deriveAddress(privateKey))
             .setAmount(amount)
-            .setUseMaxAmount(false)
+            .setUseMaxAmount(txData["useMaxAmount"] as? Boolean ?: false)
             .build()
 
         inputBuilder.setTransferMessage(transferMsg)
 
+        val plan = AnySigner.plan(inputBuilder.build(), CoinType.CARDANO, Cardano.TransactionPlan.parser())
+        if (plan.errorValue != 0 || plan.amount <= 0 || plan.fee <= 0) return null
+        inputBuilder.setPlan(plan)
         val output = AnySigner.sign(inputBuilder.build(), CoinType.CARDANO, Cardano.SigningOutput.parser())
 
         if (output.errorValue != 0 || output.errorMessage.isNotEmpty() || output.encoded.isEmpty) {
             return null
         }
 
+        if (txData["returnMetadata"] == true) {
+            return JSONObject().put("encoded", Numeric.toHexString(output.encoded.toByteArray()))
+                .put("amount", plan.amount.toString()).put("fee", plan.fee.toString())
+                .put("change", plan.change.toString()).put("available", plan.availableAmount.toString())
+                .toString()
+        }
         return Numeric.toHexString(output.encoded.toByteArray())
     }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
@@ -64,7 +66,7 @@ class _Api extends AdaApi {
     String txXdr, {
     bool isTest = false,
   }) async {
-    expect(txXdr, 'signed-cbor');
+    expect(txXdr, '0x00ff');
     broadcasts++;
     testnet = isTest;
     return MessageModel()..data = 'accepted-hash';
@@ -76,6 +78,7 @@ class _Signer extends Trustdart {
   VoidCallback? onDerive;
   VoidCallback? onSign;
   int signatures = 0;
+  bool invalidPlan = false;
   String? derivedMnemonic;
   String? derivedKey;
   String? derivedPath;
@@ -116,7 +119,16 @@ class _Signer extends Trustdart {
     signatures++;
     payload = txData;
     onSign?.call();
-    return 'signed-cbor';
+    final amount = txData['useMaxAmount'] == true
+        ? BigInt.from(9800000)
+        : BigInt.parse(txData['amount'] as String);
+    return jsonEncode({
+      'encoded': '0x00ff',
+      'amount': invalidPlan ? '1' : amount.toString(),
+      'fee': '200000',
+      'change': (BigInt.from(9800000) - amount).toString(),
+      'available': '10000000',
+    });
   }
 }
 
@@ -139,6 +151,7 @@ void main() {
     'invalid slot',
     'token-only inputs',
     'wrong input owner',
+    'invalid native plan',
     'missing project',
     'key during RPC',
     'owner during derivation',
@@ -158,7 +171,7 @@ void main() {
       api.slot = scenario == 'invalid slot' ? null : 100000;
       api.tokenOnly = scenario == 'token-only inputs';
       api.wrongInputOwner = scenario == 'wrong input owner';
-      final signer = _Signer();
+      final signer = _Signer()..invalidPlan = scenario == 'invalid native plan';
       void changeOwner() {
         owner = Object();
       }
@@ -236,7 +249,11 @@ void main() {
       expect(api.broadcasts, success ? 1 : 0);
       expect(
         signer.signatures,
-        success || scenario.endsWith('during signing') ? 1 : 0,
+        success ||
+                scenario.endsWith('during signing') ||
+                scenario == 'invalid native plan'
+            ? 1
+            : 0,
       );
       if (success) {
         expect(result.txHash, 'accepted-hash');
@@ -247,9 +264,10 @@ void main() {
         );
         expect(
           signer.payload!['amount'],
-          scenario == 'send max' ? '9826000' : '1250000',
+          scenario == 'send max' ? '10000000' : '1250000',
         );
-        expect(signer.payload!['fee'], 174000);
+        expect(signer.payload!['returnMetadata'], isTrue);
+        expect(signer.payload!['useMaxAmount'], scenario == 'send max');
         expect(signer.payload!['ttl'], '103600');
         expect(signer.payload!['changeAddress'], 'addr_confirmed');
         expect(signer.payload!['toAddress'], 'addr_recipient');
@@ -261,7 +279,7 @@ void main() {
             'amount': '10000000',
           },
         ]);
-        expect(result.actualAmount, scenario == 'send max' ? 9.826 : 1.25);
+        expect(result.actualAmount, scenario == 'send max' ? 9.8 : 1.25);
         expect(api.testnet, scenario == 'testnet');
       }
       if ([

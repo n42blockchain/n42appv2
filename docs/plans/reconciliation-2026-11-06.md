@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Cardano native planning and max result — batch 125
+
+- Replaced the sender's fixed fee subtraction with native SDK planning. Both bridges sign the same plan they report; Dart checks conservation, exact normal amounts and zero-change/full-balance max before submitting. Actual amount is returned from the signed plan. Legacy native callers keep hex responses unless metadata is requested.
+- 18 real Swift/WalletCore component checks and 113 Dart tests pass; scoped analysis clean. Logs: `/tmp/n42-ada-plan-b125-native.log`, `/tmp/n42-ada-plan-b125-final.log`, `/tmp/n42-ada-plan-b125-analysis.log`. Simulator returned to shutdown. UI fee confirmation, Android execution, multi-asset change, network/protocol parameters and durable recovery remain open.
+
+
 ### Cardano paginated input discovery — batch 124
 
 - UTxO discovery now explicitly scans 100-entry pages until a short page. Errors, malformed/repeated outpoints and scan exhaustion cannot return partial success. Endpoint and headers remain captured for the scan.

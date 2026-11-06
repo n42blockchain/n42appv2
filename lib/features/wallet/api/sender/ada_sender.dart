@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 import 'chain_sender.dart';
 import '../../utils/cardano/signing_inputs.dart';
+import '../../utils/cardano/signed_transfer.dart';
 
 /// Cardano (ADA) sender — uses Blockfrost API.
 class AdaSender implements ChainSender {
@@ -143,27 +144,12 @@ class AdaSender implements ChainSender {
       return SendResult.fail(error.message);
     }
 
-    // Estimated fee (174000 lovelace minimum fee)
-    const int estimatedFee = 174000;
-    BigInt valuePrice = ethToWeiString(
+    final valuePrice = ethToWeiString(
       params.amountDecimalString,
       params.decimals,
-    ); // decimals=6 for ADA
-    double adjustedAmount = params.amount;
-
-    if (valuePrice == chainBalance && params.sendMax) {
-      final feeBig = BigInt.from(estimatedFee);
-      if (feeBig >= valuePrice) {
-        return SendResult.fail(S.current.g_key_wallet_m5('ADA'));
-      }
-      valuePrice = valuePrice - feeBig;
-      adjustedAmount = toEther(
-        valuePrice.toString(),
-        params.decimals,
-      ).toDouble();
-    }
-    if (valuePrice <= BigInt.zero ||
-        BigInt.from(estimatedFee) + valuePrice > chainBalance) {
+    );
+    final useMaxAmount = params.sendMax && valuePrice == chainBalance;
+    if (valuePrice <= BigInt.zero || valuePrice > chainBalance) {
       return SendResult.fail(
         inputs.excludesNativeAssets
             ? 'Insufficient ADA-only inputs; native-token inputs remain unspent'
@@ -177,7 +163,8 @@ class AdaSender implements ChainSender {
       'toAddress': params.toAddress,
       'amount': valuePrice.toString(),
       'changeAddress': params.fromAddress,
-      'fee': estimatedFee,
+      'useMaxAmount': useMaxAmount,
+      'returnMetadata': true,
     };
 
     if (!signerIsCurrent()) {
@@ -220,8 +207,28 @@ class AdaSender implements ChainSender {
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
-    final sendMm = await adaApi.sendTransaction(signStr, isTest: params.isTest);
+    final CardanoSignedTransfer signed;
+    try {
+      signed = CardanoSignedTransfer.parse(
+        signStr,
+        requested: valuePrice,
+        available: chainBalance,
+        sendMax: useMaxAmount,
+      );
+    } on FormatException catch (error) {
+      return SendResult.fail(error.message);
+    }
+    final sendMm = await adaApi.sendTransaction(
+      signed.encoded,
+      isTest: params.isTest,
+    );
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-    return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);
+    return SendResult.ok(
+      sendMm.data?.toString(),
+      actualAmount: toEther(
+        signed.amount.toString(),
+        params.decimals,
+      ).toDouble(),
+    );
   }
 }
