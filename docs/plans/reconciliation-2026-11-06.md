@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Bind reply preparation and completion to the originating session — batch 177
+
+- Five tests reproduced stale reply dispatch after settings loading, old success/error state writes after a room round trip, clearing a newer reply target and accepting a null receipt. Capture room/account generation and mentions before awaits; recheck before dispatch/completion; require a nonempty receipt and clear only the matching reply target.
+- Final BLoC/extended/event suites: **334 pass**, exit 0 (/tmp/n42-chat-b177-final.log); scoped analysis clean (/tmp/n42-chat-b177-analysis.log). Before-fix five failures: /tmp/n42-chat-b177-before.log. Chat `61fa7bc3ba6e1f4eb1bfb76b01abe9b30163deb9` is pushed and pinned. Only Chat changed in dependency resolution; all three wallet host tests pass (/tmp/n42-wallet-b177-host.log).
+- Already dispatched requests are not cancelled. Same-session send indicators, same-message target reselection, repository-internal account transitions, other action callbacks and broader login/recovery/dependency/payment/release acceptance remain open. No fresh full suite, live message, device or release claim.
+
 ### Require message-action acknowledgements — batch 176
 
 - Corrected the prior independent MessageActionBloc finding: its redaction interface returns void, not bool. Reply/edit/forward return nullable MessageEntity. Six tests reproduced success being emitted for null and empty-ID receipts. These now follow failure handling with no automatic resend; valid receipt success cases are preserved and their old null fixtures corrected.
