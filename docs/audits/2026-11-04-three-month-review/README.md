@@ -407,3 +407,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `95d6c9ac428caca3d337c2f9f552afb6cc1649b1` is pushed with remote parity verified. MSG-001 records the next confirmed gap: attachment scheduling notices still precede draft-storage acknowledgement. Unknown persistence/transport outcomes and device acceptance remain separate. No device operation or release upload.
 
 - Wallet host integration: 129 passed (`/tmp/n42-create-ack-host-tests.log`); dependency lock changes only the Chat reference.
+
+
+## Batch 45 — scheduled attachment persistence acknowledgement (2026-11-06)
+
+- The common local image/video/file scheduling method now waits for draft persistence before returning to success notices. It rechecks page/login validity after that await. A rejected acknowledgement retains its local file because storage failure may be uncertain. A closed controller is rejected before event enqueue and that new unreferenced file is removed.
+- Edited-image scheduling failure no longer enters the editor-error fallback that could schedule the unedited original again. Other editor failures retain the existing fallback. Expired-page/account paths suppress stale success and error UI.
+- 106 page/file-lifecycle/BLoC tests pass (`/tmp/n42-attachment-ack-final.log`). Original-image scheduling tests exercise delayed acknowledgement, rejection, login invalidation before and after enqueue, page disposal, file retention and absence of duplicate events. Scoped source analysis is clean (`/tmp/n42-attachment-ack-analyze.log`). These are automated local tests, not live media/device acceptance.
+- Chat `5d9b8c9e82f317204221c2776d78ef068e9f6252` is pushed and remote parity verified. This closes the attachment-success-before-storage gap from batch 44. MSG-001 retains safe reconciliation of files after uncertain writes, legacy recovery and distributed/remote outcomes. No release upload or device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-attachment-ack-host-tests.log`); lockfile changes only the Chat reference.
