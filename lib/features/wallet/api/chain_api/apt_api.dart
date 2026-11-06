@@ -46,11 +46,16 @@ class AptApi {
     String tokenName = '',
   }) async {
     try {
-      final coinType = contract == ''
+      // This endpoint takes the asset itself, not its CoinStore resource tag.
+      // Keep the legacy explicit Celer symbol path for existing callers.
+      final assetType = contract.isEmpty
           ? '0x1::aptos_coin::AptosCoin'
-          : '$contract::celer_coin_manager::$tokenName';
+          : tokenName.isNotEmpty && !contract.contains('::')
+          ? '$contract::celer_coin_manager::$tokenName'
+          : contract;
       final uri =
-          '${url}accounts/$address/balance/0x1::coin::CoinStore<$coinType>';
+          '${url}accounts/${Uri.encodeComponent(address)}/balance/'
+          '${Uri.encodeComponent(assetType)}';
       final data = await _get(uri);
       return MessageModel()..data = parseUint64(data);
     } catch (e) {

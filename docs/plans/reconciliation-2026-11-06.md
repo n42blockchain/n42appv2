@@ -103,6 +103,8 @@ Batch 83 preserves uint64 amount/gas values over the Dart/native bridge and remo
 
 Batch 84 fixes Aptos ledger root routing and preserves RPC uint64 sequence/timestamps through expiry calculation and native fields. API/sender 65 tests pass. Balance asset paths, token/lifecycle/network validation and live acceptance remain open.
 
+Batch 85 fixes Aptos balance asset paths, reproduced against a public testnet account (old path reported zero; correct path was funded). All 75 API/sender tests and scoped analysis pass. Token/FA signing and full lifecycle acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

@@ -7,6 +7,49 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 
 void main() {
+  for (final asset in [
+    ('', '', '0x1::aptos_coin::AptosCoin'),
+    ('0x42::usd_coin::USDC', '', '0x42::usd_coin::USDC'),
+    ('0xabc', '', '0xabc'),
+    ('0x42', 'USDC', '0x42::celer_coin_manager::USDC'),
+    (
+      '0x42::pool::Share<0x1::aptos_coin::AptosCoin>',
+      '',
+      '0x42::pool::Share<0x1::aptos_coin::AptosCoin>',
+    ),
+  ]) {
+    for (final isTest in [false, true]) {
+      test('balance uses asset tag ${asset.$3} testnet=$isTest', () async {
+        var calls = 0;
+        final api = AptApi(
+          isTest: isTest,
+          read: (endpoint) async {
+            calls++;
+            final uri = Uri.parse(endpoint);
+            expect(uri.host, contains(isTest ? 'testnet' : 'mainnet'));
+            expect(uri.pathSegments, [
+              'v1',
+              'accounts',
+              '0x1',
+              'balance',
+              asset.$3,
+            ]);
+            expect(uri.query, isEmpty);
+            expect(uri.fragment, isEmpty);
+            return '123456789';
+          },
+        );
+        final result = await api.getBalance(
+          '0x1',
+          contract: asset.$1,
+          tokenName: asset.$2,
+        );
+        expect(result.error, false);
+        expect(result.data, BigInt.from(123456789));
+        expect(calls, 1);
+      });
+    }
+  }
   for (final value in ['18446744073709551615', '9007199254740993', '0', 42]) {
     test('REST uint64 stays exact: $value', () async {
       final api = AptApi(
