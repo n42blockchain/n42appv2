@@ -288,39 +288,72 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       return;
     }
 
-    final txData = await provider.buildTransaction();
-    if (txData == null ||
-        !_ownerCurrent() ||
-        !provider.isTransactionCurrent(revision)) {
+    String? currentPath() {
+      try {
+        final coinInfo = walletProvider.walletMap[widget.chainSymbol];
+        if (coinInfo == null) return null;
+        final pathMap = coinInfo['baseInfo']['path'] as Map<String, dynamic>;
+        return getPathWithIndex(
+          pathMap['legacy'] ?? "m/44'/60'/0'/0/0",
+          coinInfo['pathIndex'] ?? 0,
+        );
+      } catch (_) {
+        return null;
+      }
+    }
+
+    final path = currentPath();
+    if (path == null) {
+      provider.setError('Chain not supported');
       return;
     }
+    bool signingCurrent() =>
+        _ownerCurrent() &&
+        provider.isTransactionCurrent(revision) &&
+        currentPath() == path &&
+        (walletInfo.mnemonic ?? '') == mnemonic &&
+        (walletInfo.privateKey ?? '') == privateKey;
+    bool checkSigningCurrent() {
+      if (signingCurrent()) return true;
+      if (_ownerCurrent() && provider.isTransactionCurrent(revision)) {
+        provider.setError('Wallet signing configuration changed');
+      }
+      return false;
+    }
+
+    final txData = await provider.buildTransaction();
+    if (txData == null || !checkSigningCurrent()) return;
 
     provider.setSigningState();
 
     try {
-      final coinInfo = walletProvider.walletMap[widget.chainSymbol];
-      if (coinInfo == null) {
-        provider.setError('Chain not supported');
+      final trustdart = Trustdart();
+      // EVM batch transfers use Ethereum address derivation, including custom
+      // network symbols, with the exact path captured before the build await.
+      final derived = await trustdart.generateAddress(
+        'ETH',
+        path,
+        'legacy',
+        mnemonic: privateKey.isEmpty ? mnemonic : '',
+        pk: privateKey,
+      );
+      if (!checkSigningCurrent()) return;
+      final address = derived['legacy'];
+      if (address is! String ||
+          !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address) ||
+          address.toLowerCase() != widget.fromAddress.trim().toLowerCase()) {
+        provider.setError('Signing key does not match sender address');
         return;
       }
-
-      final pathMap = coinInfo['baseInfo']['path'] as Map<String, dynamic>;
-      final pathIndex = coinInfo['pathIndex'] ?? 0;
-      final path = getPathWithIndex(
-        pathMap['legacy'] ?? "m/44'/60'/0'/0/0",
-        pathIndex,
-      );
-
-      final trustdart = Trustdart();
       final signedTx = await trustdart.signTransaction(
         widget.chainSymbol,
         path,
         txData,
-        mnemonic: mnemonic,
+        mnemonic: privateKey.isEmpty ? mnemonic : '',
         pk: privateKey,
       );
 
-      if (!_ownerCurrent() || !provider.isTransactionCurrent(revision)) return;
+      if (!checkSigningCurrent()) return;
       if (signedTx.isEmpty) {
         provider.setError(l10n.g_key_175);
         return;
@@ -328,7 +361,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
 
       final success = await provider.broadcastTransaction(
         signedTx,
-        isOwnerCurrent: _ownerCurrent,
+        isOwnerCurrent: signingCurrent,
       );
 
       if (success && mounted && _ownerCurrent()) {

@@ -18,6 +18,11 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Batch-transfer account binding — batch 115
+
+- The page now verifies the derived signing address against the confirmed sender and binds the pre-build path, credentials, owner and transaction revision across asynchronous work. The same capability check reaches provider/journal broadcasting. Wrong-key behavior was reproduced against prior source; the fixed real-page and related suites pass 52 tests, with clean scoped analysis.
+- Evidence: `/tmp/n42-batch-signer-b115-before.log`, `/tmp/n42-batch-signer-b115-final.log`, `/tmp/n42-batch-signer-b115-analysis.log`. These are controlled local tests, not live batch payments. Non-EVM sender/AA and other old-branch differences still require reconciliation. Current-source release and native provider acceptance remain open.
+
 ### EVM account-binding follow-up — batch 113
 
 - The EVM portion of the missed security branch is now ported to current sender code: capture owner/key before serialization, validate the derived sender address, and check owner/credentials across RPC, native signing and persistence awaits. Ethereum address derivation preserves custom-network support. Existing exact amounts/fees/nonce/history behavior remains covered.
