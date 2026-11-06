@@ -1330,7 +1330,30 @@ extension WalletCorePlugin {
         return Data(hexString: h) ?? Data()
     }
 
+    // Validate the shared wire contract before native casts or key access.
+    private func validStellarSigningInput(_ txData: [String: Any]) -> Bool {
+        func positive(_ value: Any?, max: Int64) -> Bool {
+            guard let text = value as? String, !text.isEmpty,
+                  text.utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+                  let number = Int64(text), number > 0, number <= max,
+                  String(number) == text else { return false }
+            return true
+        }
+        guard let recipient = txData["toAddress"] as? String, !recipient.isEmpty,
+              positive(txData["amount"], max: Int64.max),
+              positive(txData["sequence"], max: Int64.max),
+              positive(txData["fee"], max: Int64(Int32.max)) else { return false }
+        if let value = txData["memo"] {
+            guard let memo = value as? String, memo.utf8.count <= 28 else { return false }
+        }
+        if let value = txData["passphrase"] {
+            guard let network = value as? String, !network.isEmpty else { return false }
+        }
+        return true
+    }
+
     func signStellarTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        guard validStellarSigningInput(txData) else { return nil }
         guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.stellar, path: path, privateKey: pk) else {
             return nil
         }

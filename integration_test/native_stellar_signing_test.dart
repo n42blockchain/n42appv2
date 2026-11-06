@@ -43,4 +43,44 @@ void main() {
     }
     expect(signatures[0], isNot(signatures[1]));
   });
+  testWidgets('NATIVE-XLM-02 malformed requests fail without native crash', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: Scaffold()));
+    final address = await sdk.generateAddress(
+      'XLM',
+      "m/44'/148'/1'",
+      'legacy',
+      mnemonic: mnemonic,
+    );
+    final valid = <String, dynamic>{
+      'toAddress': address['legacy'],
+      'amount': '12500000',
+      'fee': '100',
+      'sequence': '8',
+      'memo': 'invoice 42',
+    };
+    final cases = <Map<String, dynamic>>[
+      for (final field in ['toAddress', 'amount', 'fee', 'sequence'])
+        {...valid}..remove(field),
+      {...valid, 'fee': 100},
+      {...valid, 'amount': '9223372036854775808'},
+      {...valid, 'sequence': '-1'},
+      {...valid, 'memo': '😀' * 8},
+      {...valid, 'passphrase': false},
+    ];
+    for (final data in cases) {
+      expect(
+        await sdk.signTransaction('XLM', path, data, mnemonic: mnemonic),
+        isEmpty,
+      );
+    }
+    expect(
+      await sdk.signTransaction('XLM', path, {
+        ...valid,
+        'memo': '😀' * 7,
+      }, mnemonic: mnemonic),
+      isNotEmpty,
+    );
+  });
 }

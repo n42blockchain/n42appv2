@@ -1327,7 +1327,30 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         }
     }
 
+    private fun validStellarSigningInput(txData: Map<String, Any>): Boolean {
+        fun positive(value: Any?, max: Long): Boolean {
+            val text = value as? String ?: return false
+            if (text.isEmpty() || !text.all { it in '0'..'9' }) return false
+            val number = text.toLongOrNull() ?: return false
+            return number > 0 && number <= max && number.toString() == text
+        }
+        val recipient = txData["toAddress"] as? String ?: return false
+        if (recipient.isEmpty() || !positive(txData["amount"], Long.MAX_VALUE) ||
+            !positive(txData["sequence"], Long.MAX_VALUE) ||
+            !positive(txData["fee"], Int.MAX_VALUE.toLong())) return false
+        if (txData.containsKey("memo")) {
+            val memo = txData["memo"] as? String ?: return false
+            if (memo.toByteArray(Charsets.UTF_8).size > 28) return false
+        }
+        if (txData.containsKey("passphrase")) {
+            val network = txData["passphrase"] as? String ?: return false
+            if (network.isEmpty()) return false
+        }
+        return true
+    }
+
     private fun signStellarTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
+        if (!validStellarSigningInput(txData)) return null
         val privateKey = pk ?: wallet?.getKey(CoinType.STELLAR, path) ?: return null
 
         val toAddress: String = txData["toAddress"] as String

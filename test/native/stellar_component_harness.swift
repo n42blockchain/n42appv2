@@ -25,9 +25,19 @@ import WalletCore
             precondition(plugin.signStellarTransaction(wallet: nil, path: path, txData: data, pk: key) == signed)
             var invalid = data; invalid["toAddress"] = "invalid"
             precondition(plugin.signStellarTransaction(wallet: wallet, path: path, txData: invalid, pk: nil) == nil)
+            for field in ["toAddress", "amount", "fee", "sequence"] {
+                var missing = data; missing.removeValue(forKey: field)
+                precondition(plugin.signStellarTransaction(wallet: wallet, path: path, txData: missing, pk: nil) == nil)
+            }
+            var overflow = data; overflow["fee"] = "2147483648"
+            precondition(plugin.signStellarTransaction(wallet: wallet, path: path, txData: overflow, pk: nil) == nil)
+            var memo = data; memo["memo"] = String(repeating: "😀", count: 8)
+            precondition(plugin.signStellarTransaction(wallet: wallet, path: path, txData: memo, pk: nil) == nil)
+            memo["memo"] = String(repeating: "😀", count: 7)
+            precondition(!(plugin.signStellarTransaction(wallet: wallet, path: path, txData: memo, pk: nil) ?? "").isEmpty)
             signatures.append(signed)
         }
         precondition(signatures[0] != signatures[1], "Network domain must change the signature")
-        print("Stellar native signing: 9 checks passed")
+        print("Stellar native signing: 23 checks passed")
     }
 }

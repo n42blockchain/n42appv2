@@ -9,7 +9,7 @@ Inspection on 2026-11-06 found eight tracked files with an unfinished Cardano ha
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
 | Cardano submission recovery | Complete batch 127 validation/delivery; then wire durable journal/history and unknown-outcome UI. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
-| Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Native malformed inputs and reserve-aware amount handling remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
+| Other chain signing | Batch 128 repairs the XLM fee/account/network contract with native evidence. Batch 129 adds native malformed-input rejection. Reserve-aware amount handling and recovery remain open. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
 | Native social login and Matrix | Google native code exchange defaults to disabled in ID Hub source; verify deployed capability and Google/Apple/Facebook native flows with same-DID Matrix identity before enabling. Existing Web login evidence is insufficient. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No store-console verification or upload was done in this inspection. |
 | Chat recovery | Explicit legacy ownership/import, damaged-record repair UI, retention/export and process-crash/cross-process boundaries remain open. |
@@ -33,6 +33,13 @@ Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub i
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Stellar native input validation — batch 129
+
+- Both native signers now validate before key access/casts: required recipient, canonical positive signed-64-bit amount/sequence, positive signed-32-bit fee (existing SDK representation), optional typed network and UTF-8 memo no longer than 28 bytes. Missing/malformed/overflow values fail without reaching forced casts. Missing optional memo/network retain legacy behavior and custom network strings remain supported.
+- Production Swift and Kotlin validators each pass 72 host cases (`/tmp/n42-xlm-b129-input.log`, exit 0), including numeric boundaries/types, leading zeros, Unicode digits, missing fields and Chinese/emoji byte limits. Updated real Swift component executes 23 checks (`/tmp/n42-xlm-b129-swift.log`); Android debug build/install plus both real MethodChannel/JNI tests pass (`/tmp/n42-xlm-b129-android.log`, exit 0). Nine Android txhash_null warnings are intentional malformed-input cases. Scoped Dart analysis is clean (`/tmp/n42-xlm-b129-analysis.log`).
+- Memo bound verified against Stellar's official XDR: https://github.com/stellar/stellar-xdr/blob/master/Stellar-transaction.x (`Memo` text<28>). Valid 28-byte emoji memo signs; oversized memo is rejected, never truncated. Real tests use public fixture keys and no RPC/broadcast. Simulators/emulators stopped afterward; no physical device or release operation.
+- This closes the identified native malformed-input crash path. Reserve-aware spendable balance, dynamic fee selection, other memo variants, durable uncertain-submission handling and live acceptance remain open. Host compiler/plugin migration warnings remain; no validation failure.
 
 ### Stellar native signing repair — batch 128
 

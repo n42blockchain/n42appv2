@@ -15,7 +15,7 @@ def main():
     args = parser.parse_args()
     source = (ROOT / 'ios/Runner/WalletCorePlugin+Signing.swift').read_text()
     methods = '\n'.join(declaration(source, 'func ' + name + '(').replace('private func', 'func', 1)
-        for name in ['resolveSigningPrivateKey', 'signStellarTransaction'])
+        for name in ['validStellarSigningInput', 'resolveSigningPrivateKey', 'signStellarTransaction'])
     with tempfile.TemporaryDirectory(prefix='n42-stellar-native-') as temp:
         temp = Path(temp)
         bridge = temp / 'Bridge.swift'
