@@ -12,7 +12,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 149
+## Current interruption inventory — through batch 150
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -44,6 +44,13 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Recovery file-adapter acceptance — batch 150
+
+- Chat test commit 241a7746 exercises the actual FilePickerDarwin / PlatformFile / XFile read path with temporary disk files. Only the native chooser response is mocked; the page receives no injected byte callback. Five scenarios verify valid JSON preview, picker cancellation, missing file, oversized metadata and a >8 MiB real file falsely reporting one byte. Invalid/cancelled reads never call the import writer.
+- All 62 scheduled-page tests pass (/tmp/n42-chat-b150-tests.log); final scoped test analysis clean (/tmp/n42-chat-b150-analysis-final.log). file_picker_darwin is an explicit dev dependency at the already-resolved version. No production files changed, so the wallet's eb86e75e immutable pin remains valid and unchanged; no redundant host rebuild or release was run for these test-only changes.
+- This closes the injected-byte-only test gap, not native system-dialog/document-provider permission acceptance. iCloud, Android SAF, OS share delivery, process/device durability, manual repair/re-enqueue, legacy ownership and retention remain open. The temporary fixtures are deleted by test teardown.
+
 
 ### Confirmed portable Chat recovery import UI — batch 149
 
