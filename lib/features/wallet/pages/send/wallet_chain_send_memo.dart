@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/xlm_api.dart';
+import 'package:n42_wallet/features/wallet/utils/stellar/spendable_balance.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -40,6 +42,7 @@ part 'wallet_chain_send_memo_widgets.dart';
 /// 则捕获异常并友好提示。
 class WalletChainSendMemo extends ConsumerStatefulWidget {
   final CoinModel coinModel;
+  final XlmApi? stellarApi;
   final Future<SendResult> Function(SendParams)? transactionSender;
   final Future<int> Function(TransationRecordModel)? persistTransaction;
   final Future<bool> Function(TransationRecordModel)?
@@ -49,6 +52,7 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
     this.coinModel, {
     super.key,
     this.transactionSender,
+    this.stellarApi,
     this.persistTransaction,
     this.markTransactionDispatch,
     this.releaseUnsubmittedTransaction,
@@ -89,7 +93,10 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo>
           onTap: closeKeyboard,
           child: Stack(
             children: [
-              Positioned.fill(child: SingleChildScrollView(child: buildForm())),
+              Positioned.fill(
+                bottom: ScreenUtil().setWidth(148.0) + 1,
+                child: SingleChildScrollView(child: buildForm()),
+              ),
               buildSendButton(),
             ],
           ),

@@ -61,18 +61,79 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     await loadBalance();
   }
 
+  StellarSpendableBalance? _stellarFunds;
+  (String, String, bool)? _stellarQuoteContext;
+  StellarSpendableBalance? get _currentStellarFunds =>
+      _stellarQuoteContext ==
+          (
+            RecentAddressService.currentUser,
+            widget.coinModel.address.toString(),
+            widget.coinModel.isTest,
+          )
+      ? _stellarFunds
+      : null;
+  int _balanceVersion = 0;
+  bool get _isStellarNative =>
+      widget.coinModel.config.coinType == 'XLM' &&
+      !widget.coinModel.config.isContract;
+
   Future<void> loadBalance() async {
-    setState(() => load = Load.loading);
-    final ok = await fetchCoinBalance(
-      widget.coinModel,
-      ref.read(wapBridgeProvider),
-      getToken: false,
-    );
-    if (!mounted) return;
-    if (!ok) {
-      errorMessage = S.current.g_key_t_44;
-      ToastUtils.show(S.current.g_key_t_44);
+    final version = ++_balanceVersion;
+    final owner = RecentAddressService.currentUser;
+    final address = widget.coinModel.address.toString();
+    final isTest = widget.coinModel.isTest;
+    bool current() =>
+        mounted &&
+        version == _balanceVersion &&
+        RecentAddressService.currentUser == owner &&
+        widget.coinModel.address.toString() == address &&
+        widget.coinModel.isTest == isTest;
+    setState(() {
+      load = Load.loading;
+      _stellarFunds = null;
+    });
+    var ok = false;
+    try {
+      ok = await fetchCoinBalance(
+        widget.coinModel,
+        ref.read(wapBridgeProvider),
+        getToken: false,
+      );
+      if (!current()) return;
+      if (_isStellarNative) {
+        final api = widget.stellarApi ?? XlmApi();
+        final account = await api.getAccount(address, isTest: isTest);
+        if (!current()) return;
+        if (account.error ||
+            account.data is! Map ||
+            account.data['account_id'] != address) {
+          throw const FormatException('Stellar account quote mismatch');
+        }
+        final ledger = await api.getLatestLedger(isTest: isTest);
+        if (!current()) return;
+        if (ledger.error) {
+          throw const FormatException('Stellar ledger unavailable');
+        }
+        final funds = StellarSpendableBalance.parse(account.data, ledger.data);
+        _stellarFunds = funds;
+        _stellarQuoteContext = (owner, address, isTest);
+        totalGasPrice = funds.fee;
+        ok = true;
+      }
+    } catch (_) {
+      if (!current()) return;
+      ok = false;
+    } finally {
+      if (mounted && version == _balanceVersion && !current()) {
+        setState(() {
+          load = Load.finish;
+          errorMessage = S.current.g_audit_quote_changed;
+        });
+      }
     }
+    if (!current()) return;
+    errorMessage = ok ? '' : S.current.g_key_t_44;
+    if (!ok) ToastUtils.show(S.current.g_key_t_44);
     setState(() => load = Load.finish);
   }
 
@@ -102,8 +163,15 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       setState(() {});
       return;
     }
-    if (widget.coinModel.coin['isContract'] != true &&
-        valueBi + totalGasPrice > widget.coinModel.balance) {
+    if (_isStellarNative && _currentStellarFunds == null) {
+      amountError = S.of(context).g_audit_quote_changed;
+      setState(() {});
+      return;
+    }
+    if ((_isStellarNative && valueBi > _currentStellarFunds!.spendable) ||
+        (!_isStellarNative &&
+            widget.coinModel.coin['isContract'] != true &&
+            valueBi + totalGasPrice > widget.coinModel.balance)) {
       amountError = S.of(context).g_key_47;
       setState(() {});
       return;
@@ -168,12 +236,21 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       setState(() => load = Load.finish);
       return;
     }
+    if (_isStellarNative && _currentStellarFunds == null) {
+      setState(() {
+        load = Load.finish;
+        amountError = S.of(context).g_audit_quote_changed;
+      });
+      return;
+    }
 
     final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
-        : widget.coinModel.balance;
+        : (_isStellarNative
+              ? _currentStellarFunds!.balance
+              : widget.coinModel.balance);
 
-    if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
+    if (totalGasPrice > uBalance || uBalance == BigInt.zero) {
       ToastUtils.show(S.current.g_key_47);
       setState(() => load = Load.finish);
       return;
@@ -262,6 +339,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           decimals: decimals,
           path: path,
           sendMax: false,
+          expectedFeeBaseUnits: _isStellarNative ? trModel.gasPrice : null,
           isTest: widget.coinModel.isTest,
           contractAddress: trModel.contract,
           tokenDecimals: 0,
@@ -403,7 +481,18 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   void maxTag() {
-    if (widget.coinModel.config.isContract) {
+    if (_isStellarNative) {
+      final funds = _currentStellarFunds;
+      if (funds == null || funds.spendable <= BigInt.zero) {
+        amountError = funds == null
+            ? S.of(context).g_audit_quote_changed
+            : S.of(context).g_key_47;
+        setState(() {});
+        return;
+      }
+      transferValue = funds.spendable;
+      valueCtrl.text = toEther(transferValue.toString(), 7).toString();
+    } else if (widget.coinModel.config.isContract) {
       valueCtrl.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {

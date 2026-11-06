@@ -113,6 +113,10 @@ class XlmSender implements ChainSender {
     } on FormatException catch (error) {
       return SendResult.fail(error.message);
     }
+    if (params.expectedFeeBaseUnits != null &&
+        params.expectedFeeBaseUnits != funds.fee) {
+      return SendResult.fail(S.current.g_audit_quote_changed);
+    }
     // Only an explicit full-balance request can be reduced automatically.
     // An ordinary payment retains the exact user-entered amount.
     final valuePrice = params.sendMax && requested == funds.balance

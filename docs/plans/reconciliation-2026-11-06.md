@@ -2,14 +2,14 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 143
+## Current interruption inventory — through batch 144
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
 | ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Batch 139 releases exact reservations on explicit no-broadcast results. Batch 143 adds durable prepared/dispatching phases and recovers new tracked prepared rows on the next explicit send. Legacy/dispatching orphans, other entry points and physical process-crash acceptance remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
-| Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Fee/max confirmation UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
+| Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Batch 144 aligns XLM fee/Max UI with checked account/ledger data and binds the reviewed fee to signing. ADA fee/max UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
 | Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership/import, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export is implemented in batch 141; real OS share-sheet delivery remains unverified. |
@@ -34,6 +34,15 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### XLM available amount and reviewed fee — batch 144
+
+- The Memo page previously used a generic fixed fee and total balance for XLM Max, while the sender rejected amounts above account-reserve/liability-adjusted spendable balance. The page now reads the exact Horizon account and ledger, validates account identity and uses StellarSpendableBalance for the displayed fee, Max and amount validation. No data or malformed/foreign data leaves quote-dependent actions unavailable; a localized Refresh control permits retry.
+- Quotes are bound to account namespace/address/network, cleared when refreshing, and rejected after context changes. A late result cannot restore an obsolete quote. An interrupted load restores the ability to refresh. The source amount remains exact decimal text with sendMax=false; the confirmation record's fee is passed to XlmSender, which rejects any changed fee before signing or broadcasting using the existing localized quote-changed message.
+- New page tests first exposed an invalid short synthetic address and then a real layout issue: the fixed bottom send bar intercepted the scrolled Refresh control. The fixture uses a realistic-length address, and the scroll viewport now excludes the fixed bar. Real scroll/tap retry tests pass; no forced off-screen taps are used.
+- Final sender/Stellar utility/Memo suites: 343 pass (/tmp/n42-quote-b144-broad.log). This includes wrong/malformed/failed quotes, insufficient spendable balance, network changes, refresh recovery, exact fee forwarding, and changed-fee rejection with zero signatures/broadcasts. Earlier focused evidence: /tmp/n42-quote-b144-fixed.log. Scoped analysis: /tmp/n42-quote-b144-analysis-final.log.
+- This uses the current ledger base fee, not a surge-pricing or inclusion guarantee. ADA fee/Max, native-asset change and real account/device acceptance remain open. No live transfer or release operation; no fresh full-suite coverage claim.
+
 
 ### Durable ADA/XLM preparation and dispatch phases — batch 143
 

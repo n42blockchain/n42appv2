@@ -243,7 +243,9 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] as int? ?? 0)
         : (widget.coinModel.coin['decimals'] as int? ?? 0);
-    final feeText = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
+    final feeText = _isStellarNative && _currentStellarFunds == null
+        ? '—'
+        : '${toEther(totalGasPrice.toString(), decimals)} $coinType';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -280,6 +282,13 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
             ),
           ),
         NonEvmFeeCompact(feeText: feeText, onTap: null),
+        if (_isStellarNative)
+          TextButton.icon(
+            key: const ValueKey('stellar-refresh-quote'),
+            onPressed: load == Load.loading ? null : loadBalance,
+            icon: const Icon(Icons.refresh),
+            label: Text(S.of(context).g_key_bridge_refresh),
+          ),
       ],
     );
   }

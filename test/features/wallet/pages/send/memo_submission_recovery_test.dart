@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/transaction_pr
 import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
+import '../../../../helpers/stellar_quote_api.dart';
 
 class _Wallet extends WalletActionProvider {
   @override
@@ -70,7 +71,8 @@ void main() {
         ..to1 = 'GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
         ..price = BigInt.from(12500000)
         ..coin = coin.coin
-        ..coinMiniName = 'XLM';
+        ..coinMiniName = 'XLM'
+        ..gasPrice = BigInt.from(100);
       final projection = _Records()
         ..throwOnAdd = scenario == 'projection failure';
       final noBroadcast = [
@@ -101,6 +103,7 @@ void main() {
         wrapForTest(
           WalletChainSendMemo(
             coin,
+            stellarApi: FakeStellarQuoteApi(),
             persistTransaction: (tr) async {
               saves++;
               expect(tr.txHash, 'ab' * 32);
@@ -132,6 +135,7 @@ void main() {
             transactionSender: (params) async {
               submissions++;
               expect(params.decimalAmountOverride, '1.25');
+              expect(params.expectedFeeBaseUnits, BigInt.from(100));
               try {
                 await params.beforeBroadcast!('ab' * 32);
               } catch (_) {

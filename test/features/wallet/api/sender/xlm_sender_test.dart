@@ -285,6 +285,36 @@ void main() {
       }
     });
   }
+  for (final reviewedFee in [50, 100, 300]) {
+    test('reviewed fee $reviewedFee must match the signing fee', () async {
+      final api = _Api();
+      final signer = _Signer();
+      final owner = Object();
+      final result =
+          await XlmSender(
+            api: api,
+            trustdart: signer,
+            ownerIdentity: () => owner,
+            readMnemonic: () => 'fixture mnemonic',
+          ).send(
+            SendParams(
+              coinType: 'XLM',
+              fromAddress: 'GCONFIRMED',
+              toAddress: 'GRECIPIENT',
+              amount: 1.25,
+              decimals: 7,
+              path: "m/44'/148'/2'",
+              expectedFeeBaseUnits: BigInt.from(reviewedFee),
+            ),
+          );
+      expect(result.success, reviewedFee == 100);
+      expect(signer.signatures, reviewedFee == 100 ? 1 : 0);
+      expect(api.broadcasts, reviewedFee == 100 ? 1 : 0);
+      if (reviewedFee != 100) {
+        expect(result.error, S.current.g_audit_quote_changed);
+      }
+    });
+  }
   for (final scenario in [
     'accepted',
     'dispatch failure',

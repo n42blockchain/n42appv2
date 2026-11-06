@@ -48,6 +48,10 @@ class SendParams {
   // 18 位代币 MAX 全额从 BigInt 降级 double 会上浮、被误判余额不足(第三轮 P1)。
   final BigInt? tokenValueWeiOverride;
 
+  /// Stellar: the fee shown in the user's confirmation, in stroops.
+  /// A different network fee requires another review, never silent adjustment.
+  final BigInt? expectedFeeBaseUnits;
+
   /// Original display-unit decimal text for requests that must not pass through
   /// binary floating point before a chain sender converts it to base units.
   final String? decimalAmountOverride;
@@ -89,6 +93,7 @@ class SendParams {
     this.valueWeiOverride,
     this.tokenValueWeiOverride,
     this.decimalAmountOverride,
+    this.expectedFeeBaseUnits,
     this.beforeBroadcast,
     this.onBroadcastStarting,
   });
