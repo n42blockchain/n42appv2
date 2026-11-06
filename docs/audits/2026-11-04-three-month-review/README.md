@@ -847,3 +847,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Authentication is represented by the route return value; the injected sender stops before signing/broadcast. This verifies page orchestration, not native password/biometric checks or settled payments. The first run exposed missing chain IDs in the test coin fixture; populated both network IDs and reran.
 - Final page suite: 23 passed. Scoped analysis and formatting pass. Logs: /tmp/n42-apt-route-b97.log and /tmp/n42-apt-route-b97-analysis.log. No runtime code changed. Batch 95 remains the last full-suite source snapshot.
 - Post-submit durable receipt/unknown-outcome recovery, generic Coin support, gas simulation and the other open maturity tasks remain unfinished. No device operation or release upload.
+
+
+## Batch 98 — retain accepted Aptos records after leaving the page (2026-11-06)
+
+- Removed the post-submit mounted-only early return that dropped accepted transaction records when the page was disposed. Persist the captured original record before any current-page/provider update. UI and recent-address updates require the same user, storage owner, wallet identity/index, source and network; recent address uses the submitted recipient.
+- Serialize page signing and retain an accepted-hash guard. Concurrent calls and retries after an accepted result/storage failure cannot submit again through that page instance. Nonpositive insert IDs are failures; retain the hash in the visible storage error. This is not a durable pre-broadcast journal or a restart-safe unknown-outcome guard.
+- Three delayed-sender regressions cover disposal, wallet switching and failed record persistence; verify original record identity/hash, one submission and no stale-page error. Existing confirmation/amount tests remain. Final page suite: 26 passed; scoped analysis clean. Logs: /tmp/n42-apt-receipt-b98.log and /tmp/n42-apt-receipt-b98-analysis.log. Corrected the test provider's uninitialized wallet index to a real selected index; production ownership validation remains intact.
+- Persistence is injected for these lifecycle tests, not exercised against a real database. Process crash before/while saving, RPC submission timeout, reopening/restart recovery and live-chain finality remain open. No physical device, real transaction or release upload.

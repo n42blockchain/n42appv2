@@ -44,10 +44,12 @@ class WalletChainSendApt extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? initialToAddress;
   final ChainSender? sender;
+  final Future<int> Function(TransationRecordModel)? transactionWriter;
   const WalletChainSendApt(
     this.coinModel, {
     this.initialToAddress,
     this.sender,
+    this.transactionWriter,
     super.key,
   });
 

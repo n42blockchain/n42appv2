@@ -6,6 +6,8 @@ part of 'wallet_chain_send_apt.dart';
 /// loading, gas fetching, input validation, and transaction submission.
 mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   CoinModel? chainModel;
+  bool _signing = false;
+  String? _acceptedHash;
 
   Regular? _logicRegular;
   Regular get regular => _logicRegular ??= Regular();
@@ -282,6 +284,27 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     final recentAddressOwner = trModel.userUuid.isNotEmpty
         ? trModel.userUuid
         : RecentAddressService.currentUser;
+    if (!mounted || _signing || _acceptedHash != null) return;
+    final storageOwner = AppGlobals.walletStorageUuid;
+    Object? currentWalletIdentity() {
+      final wallet = ref.read(wapBridgeProvider);
+      return wallet.isWalletReady ? wallet.walletInfo : null;
+    }
+
+    final walletIdentity = currentWalletIdentity();
+    bool ownerIsCurrent() =>
+        mounted &&
+        AppGlobals.walletStorageUuid == storageOwner &&
+        (AppGlobals.userInfo?.uuid ?? '') == trModel.userUuid &&
+        ref.read(wapBridgeProvider).walletIndex == trModel.walletIndex &&
+        identical(currentWalletIdentity(), walletIdentity) &&
+        widget.coinModel.address == trModel.from1 &&
+        widget.coinModel.isTest == (trModel.isTest == 1);
+    if (!ownerIsCurrent()) return;
+    final writeRecord =
+        widget.transactionWriter ??
+        (record) => AppDatabase().insertTransationRecord(record);
+    _signing = true;
     bool completedWithExit = false;
     try {
       final coinType = widget.coinModel.config.coinType;
@@ -322,29 +345,36 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         ),
       );
 
-      if (!mounted) return;
       if (result.success) {
         trModel.txHash = result.txHash ?? '';
-        trModel.trId = await AppDatabase().insertTransationRecord(trModel);
-        if (!mounted) return;
+        _acceptedHash = trModel.txHash;
+        trModel.trId = await writeRecord(trModel);
+        if (trModel.trId <= 0) throw StateError('Transaction was not saved');
+        if (!ownerIsCurrent()) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
         await RecentAddressService.save(
           coinType,
-          toTextEditingController.text.trim(),
+          trModel.to1,
           userUuid: recentAddressOwner,
         );
-        if (!mounted) return;
+        if (!mounted || !ownerIsCurrent()) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
       } else {
+        if (!ownerIsCurrent()) return;
         errorMessage = result.error ?? '';
         ToastUtils.show(errorMessage);
       }
     } catch (e) {
-      errorMessage = e.toString();
-      ToastUtils.show(e.toString());
+      if (ownerIsCurrent()) {
+        errorMessage = _acceptedHash == null
+            ? e.toString()
+            : '${S.current.g_key_nft_41}: $_acceptedHash. $e';
+        ToastUtils.show(errorMessage);
+      }
     } finally {
+      _signing = false;
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});
     }

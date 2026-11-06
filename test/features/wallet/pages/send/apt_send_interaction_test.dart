@@ -18,15 +18,21 @@ import '../../../../helpers/widget_test_helpers.dart';
 class _CapturingSender implements ChainSender {
   SendParams? params;
   int calls = 0;
+  Completer<SendResult>? pending;
   @override
   Future<SendResult> send(SendParams params) async {
     calls++;
     this.params = params;
-    return const SendResult.fail('fixture stop before signing');
+    return pending == null
+        ? const SendResult.fail('fixture stop before signing')
+        : await pending!.future;
   }
 }
 
 class _OfflineWalletProvider extends WalletActionProvider {
+  _OfflineWalletProvider() {
+    walletIndex = 0;
+  }
   @override
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel) async => false;
 }
@@ -218,6 +224,66 @@ void main() {
       }
       expect(state.load, Load.finish);
       expect(find.byType(WalletBaseSend), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final change in ['disposed', 'wallet', 'save failure']) {
+    testWidgets('accepted Aptos transfer survives $change without resend', (
+      tester,
+    ) async {
+      final sender = _CapturingSender()..pending = Completer<SendResult>();
+      final coin = makeCoin();
+      final saved = <TransationRecordModel>[];
+      await tester.pumpWidget(
+        wrapForTest(
+          WalletChainSendApt(
+            coin,
+            sender: sender,
+            transactionWriter: (record) async {
+              saved.add(record);
+              if (change == 'save failure')
+                throw StateError('storage unavailable');
+              return 42;
+            },
+          ),
+          overrides: [
+            wapBridgeProvider.overrideWith((ref) => _OfflineWalletProvider()),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      final dynamic state = tester.state(find.byType(WalletChainSendApt));
+      final record = TransationRecordModel()
+        ..from1 = coin.address.toString()
+        ..to1 = '0x2'
+        ..price = BigInt.one;
+      final sending = state.signTx(record) as Future<void>;
+      await state.signTx(record);
+      expect(sender.calls, 1);
+      if (change == 'disposed') {
+        await tester.pumpWidget(const SizedBox.shrink());
+      } else if (change == 'wallet') {
+        state.ref.read(wapBridgeProvider).walletIndex = 1;
+      }
+      sender.pending!.complete(SendResult.ok('0x${'ab' * 32}'));
+      await sending;
+      await tester.pumpAndSettle();
+      expect(saved, hasLength(1));
+      expect(saved.single.txHash, '0x${'ab' * 32}');
+      expect(saved.single.walletIndex, 0);
+      expect(saved.single.to1, '0x2');
+      if (change != 'disposed') {
+        if (change == 'wallet') {
+          expect(state.errorMessage, isEmpty);
+          state.ref.read(wapBridgeProvider).walletIndex = 0;
+        } else {
+          expect(state.errorMessage, contains('storage unavailable'));
+          expect(state.errorMessage, contains('0x${'ab' * 32}'));
+        }
+        await state.signTx(record);
+        expect(sender.calls, 1);
+      }
       expect(tester.takeException(), isNull);
     });
   }
