@@ -2,7 +2,7 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 141
+## Current interruption inventory — through batch 142
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -34,6 +34,15 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Reject stale terminal-history overwrites — batch 142
+
+- Real SQLite regression reproduced six failures: after a committed ADA/XLM success/failure, delayed polling could write pending or a conflicting terminal status; two competing terminal writes both reported success. Before-fix evidence: /tmp/n42-history-b142-before.log.
+- The shared non-BTC receipt update now checks pending-or-same-state in the SQL update predicate. Delayed pending/conflicting terminal results cannot overwrite a stored terminal state. Same-terminal refreshes still support background queue cleanup. Unknown state values are rejected. This is not a reorg/finality policy; a future explicit chain reconciliation must not reuse this polling update as a rollback operation.
+- Both ordinary polling paths now update a candidate record and change visible state only after persistence accepts the result in the current session. Rejected updates preserve the prior model state and emit no success/failure notification.
+- Targeted SQLite/reopen/session/ADA/XLM/Memo page tests: 68 pass; scoped analysis clean. Logs: /tmp/n42-history-b142-final.log and /tmp/n42-history-b142-analysis.log. All wallet data/provider suites and transaction-helper tests: 247 pass (/tmp/n42-history-b142-broad.log). These overlap the targeted suites; counts are not additive.
+- Durable crash/orphan recovery, request coalescing, BTC confirmation semantics and live/device/release acceptance remain open. No automatic resend or removal of uncertain records was added.
+
 
 ### Confirmed portable Chat recovery export — batch 141
 

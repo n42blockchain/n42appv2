@@ -280,9 +280,16 @@ extension TransactionRecordDao on AppDatabase {
     // another owner's record merely because it describes the same transaction.
     final values = Map<String, Object?>.from(trm.toMapDb());
     final recordId = trm.trId;
+    final state = values['state'];
+    if (![0, 1, 2].contains(state)) return 0;
+    // Background and explicit refresh may finish out of order. A pending or
+    // conflicting response must not downgrade an already persisted terminal
+    // result. Same-terminal refreshes remain idempotent for queue cleanup.
+
     final where =
         'txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? '
-        'AND coinId=? AND from1=? AND isTest=? AND contract=?';
+        'AND coinId=? AND from1=? AND isTest=? AND contract=? '
+        'AND (state=0 OR state=?)';
     final args = <Object?>[
       values['txHash'],
       values['userUuid'],
@@ -292,6 +299,7 @@ extension TransactionRecordDao on AppDatabase {
       values['from1'],
       values['isTest'],
       values['contract'],
+      state,
     ];
     final db = await database;
     return db.update(

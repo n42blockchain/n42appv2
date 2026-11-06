@@ -10,6 +10,7 @@ import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.d
 
 class _Connection implements Database {
   int writes = 0;
+  int updatedRows = 1;
   Completer<void>? gate;
   @override
   Future<int> update(
@@ -21,7 +22,7 @@ class _Connection implements Database {
   }) async {
     writes++;
     await gate?.future;
-    return 1;
+    return updatedRows;
   }
 
   @override
@@ -218,6 +219,35 @@ void main() {
         user = 'bob';
         db.connection.gate!.complete();
         expect(await pending, isNull);
+      },
+    );
+  }
+  for (final returning in [false, true]) {
+    test(
+      'rejected stale receipt preserves visible state return=$returning',
+      () async {
+        final db = _Database();
+        db.connection.updatedRows = 0;
+        final resolver = _Resolver()..result.complete(2);
+        final provider = TransactionRecordItemProvider(
+          database: db,
+          resolver: resolver,
+          userUuid: () => 'alice',
+        );
+        addTearDown(provider.dispose);
+        final tx = TransationRecordModel()
+          ..userUuid = 'alice'
+          ..state = 1;
+        var notifications = 0;
+        provider.addListener(() => notifications++);
+        if (returning) {
+          expect(await provider.checkUndoneTrReturn(tx), isNull);
+        } else {
+          await provider.checkUndoneTr(tx);
+        }
+        expect(tx.state, 1);
+        expect(notifications, 0);
+        expect(db.connection.writes, 1);
       },
     );
   }

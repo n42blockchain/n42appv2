@@ -178,9 +178,11 @@ class TransactionRecordItemProvider with ChangeNotifier {
     // -1 = RPC 错误，无法判断状态，跳过本次
     if (resolved == -1 || resolved == 0) return;
 
-    trm.state = resolved;
-    final updated = await db.updateTransationRecordTxhash(trm);
+    final candidate = TransationRecordModel.fromMap(trm.toMap())
+      ..state = resolved;
+    final updated = await db.updateTransationRecordTxhash(candidate);
     if (!_isCurrent(session) || updated == 0) return;
+    trm.state = resolved;
 
     if (resolved == 1) {
       ToastUtils.show(S.current.g_key_140);
@@ -210,17 +212,12 @@ class TransactionRecordItemProvider with ChangeNotifier {
     final int resolved = await _resolver.resolveState(trm);
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
 
-    // -1 = RPC 错误，无法判断状态
-    if (resolved == -1) return null;
-    if (resolved == 0) {
-      final updated = await db.updateTransationRecordTxhash(trm);
-      if (!_isCurrent(session) || updated == 0) return null;
-      return trm;
-    }
-
-    trm.state = resolved;
-    final updated = await db.updateTransationRecordTxhash(trm);
+    if (![0, 1, 2].contains(resolved)) return null;
+    final candidate = TransationRecordModel.fromMap(trm.toMap())
+      ..state = resolved;
+    final updated = await db.updateTransationRecordTxhash(candidate);
     if (!_isCurrent(session) || updated == 0) return null;
+    trm.state = resolved;
     return trm;
   }
 

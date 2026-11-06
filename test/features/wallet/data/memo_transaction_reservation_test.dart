@@ -170,6 +170,54 @@ void main() {
       });
     }
   }
+  for (final chain in ['ADA', 'XLM']) {
+    for (final terminal in [1, 2]) {
+      test(
+        '$chain late polling cannot overwrite terminal state $terminal',
+        () async {
+          final original = record(chain);
+          original.trId = await db.reserveMemoTransaction(original);
+          final late = TransationRecordModel.fromMap(original.toMap());
+          original.state = terminal;
+          expect(await db.updateTransationRecordTxhash(original), 1);
+          await connection.close();
+          connection = await databaseFactoryFfi.openDatabase(
+            '${directory.path}/history.db',
+          );
+          db = _Database(connection);
+          for (final staleState in [0, terminal == 1 ? 2 : 1]) {
+            late.state = staleState;
+            late.errorMessage = 'stale response';
+            expect(await db.updateTransationRecordTxhash(late), 0);
+            final stored = (await connection.query('TransationRecord')).single;
+            expect(stored['state'], terminal);
+            expect(stored['errorMessage'], original.errorMessage);
+          }
+          // Rechecking the same terminal result can still drain background queues.
+          expect(await db.updateTransationRecordTxhash(original), 1);
+        },
+      );
+    }
+    test(
+      '$chain competing receipt writes accept only one terminal result',
+      () async {
+        final original = record(chain);
+        original.trId = await db.reserveMemoTransaction(original);
+        final success = TransationRecordModel.fromMap(original.toMap())
+          ..state = 1;
+        final failure = TransationRecordModel.fromMap(original.toMap())
+          ..state = 2;
+        final updates = await Future.wait([
+          db.updateTransationRecordTxhash(success),
+          _Database(connection).updateTransationRecordTxhash(failure),
+        ]);
+        expect(updates.reduce((a, b) => a + b), 1);
+        final stored = (await connection.query('TransationRecord')).single;
+        expect(stored['state'], updates.first == 1 ? 1 : 2);
+      },
+    );
+  }
+
   test('invalid reservation creates no history', () async {
     for (final tx in [
       record('BTC'),
