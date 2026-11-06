@@ -12,7 +12,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 150
+## Current interruption inventory — through batch 151
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -44,6 +44,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Structured recovery inspection — batch 151
+
+- Chat 630d1cbd adds a bounded inspection report and a Details action in the saved-copy preview. The page rereads the exact intact copy under the current account before opening a virtualized list. Valid text can be selected/copied; malformed siblings remain failure rows. Logout dismisses the view. Original saved bytes are unchanged.
+- Report checks copy integrity, root/room/record shape, room identity and duplicate identities, including malformed siblings sharing an ID. Limits are explicit (8 MiB / 10,000 entries); truncated inspection is not reported complete. Existing draft types, receipts, uncertain delivery, retry fields and payloads remain intact. No enqueue/send or attachment reconstruction occurs. Parsed data and imported receipts are not authenticated proof that a message is safe to resend.
+- 129 related tests pass (/tmp/n42-chat-b151-final.log). Final parser/page rerun: 73 pass (/tmp/n42-chat-b151-verified.log); scoped analysis clean (/tmp/n42-chat-b151-analysis-final.log). The wallet pins the reviewed Chat revision; 7 host fixture/asset tests pass (/tmp/n42-chat-b151-host.log). This strengthens manual inspection/text extraction, not full automatic repair or restored delivery.
+- Next: explicit reviewed recovery scheduling with duplicate-delivery treatment, legacy ownership and attachment availability. Native provider/device acceptance and other maturity scopes remain open.
+
 
 ### Recovery file-adapter acceptance — batch 150
 
