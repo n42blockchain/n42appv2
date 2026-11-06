@@ -84,6 +84,13 @@ import WalletCore
         for key in ["amount", "fee", "change", "available"] {
             precondition(maxReadOnly[key] == maximum[key])
         }
+        // Max fills an exact amount in the form; confirmation plans an ordinary
+        // transfer of that amount, never a mutable send-all instruction.
+        var fixedMax = metadata
+        fixedMax["useMaxAmount"] = false
+        fixedMax["amount"] = maxReadOnly["amount"]!
+        precondition(plugin.planCardanoTransaction(txData: fixedMax) == maxReadOnly)
+        count += 1
         precondition(plugin.planCardanoTransaction(txData: invalidAddress) == nil)
         precondition(plugin.planCardanoTransaction(txData: insufficient) == nil)
         count += 12

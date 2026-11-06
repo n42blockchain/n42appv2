@@ -2,14 +2,24 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 145
+## Repeat inspection — interrupted batch 146 (implementation now verified below)
+
+- Fresh fetch confirms wallet HEAD `6e986f9a1` equals origin/master (0 ahead / 0 behind). Version is 2.5.3+73265. This proves committed-source parity, not a current release.
+- One concrete interrupted implementation remains in the working directory: five modified ADA/Memo sender/page files plus two new Cardano quote/plan files. These are not committed, pushed or behavior-tested. Preserve them and finish their tests before release.
+- Source review found an unresolved asynchronous boundary: Send and Max validate the recipient before the quote helper snapshots the form. A form/account change during address validation can bind an old normalized recipient to a newer form snapshot. Capture and recheck the form/account context across that await before accepting the quote. Add ordinary/Max, stale-form, fee-change and zero-broadcast regressions.
+- Chat worktree has only its existing coverage/lcov.info modification; no additional interrupted source edit was found there. Its current recovery/import and operational acceptance gaps remain in OPEN_ISSUES.md.
+- Recounted all 13 auxiliary wallet worktrees: seven dirty ancestor heads, five clean non-ancestor heads and one clean ancestor head. None was deleted or merged. An ancestor HEAD does not make uncommitted files disposable.
+- Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
+- Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
+
+## Current interruption inventory — through batch 146
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
 | ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Batch 139 releases exact reservations on explicit no-broadcast results. Batch 143 adds durable prepared/dispatching phases and recovers new tracked prepared rows on the next explicit send. Legacy/dispatching orphans, other entry points and physical process-crash acceptance remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
-| Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Batch 144 aligns XLM fee/Max UI with checked account/ledger data and binds the reviewed fee to signing. ADA fee/max UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
+| Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Batch 144 aligns XLM fee/Max UI with checked account/ledger data and binds the reviewed fee to signing. Batch 146 connects ADA quotes/Max and reviewed fees. Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
 | Chat recovery | Intact recovery-copy deletion is implemented and integrated in batch 140. Legacy ownership/import, damaged-record repair, retention policy and process-crash/cross-process boundaries remain open. Portable export is implemented in batch 141; real OS share-sheet delivery remains unverified. |
@@ -34,6 +44,15 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### ADA quote, Max and reviewed fee integration — batch 146
+
+- Completes the interrupted quote service and typed native plan parser, and connects them to the real Memo page. Max validates a recipient and uses ADA-only selected inputs, exact native fee and fixed decimal amount. Ordinary Send obtains a fresh quote before opening confirmation; unavailable or stale quotes cannot proceed. Token-bearing inputs stay untouched; native-token change is not implemented by this batch.
+- Form/account/network/wallet identity is rechecked across asynchronous recipient validation and after confirmation. Quote results also bind to the opening form; late Max results cannot overwrite edited inputs. The sender replans before signing, rejects a changed reviewed fee, then checks the actual signed fee before any broadcast. Reviewed amounts remain exact with sendMax=false.
+- Final combined Cardano utility/service, all sender and Memo/XLM page regressions: 400 pass, log /tmp/n42-b146-final.log. Includes real confirmation-route amount/fee checks, cancellation, changed form rejection, expected-fee forwarding, malformed plan accounting, token input exclusion, stale results and zero-broadcast fee mismatches. Scoped analysis is clean: /tmp/n42-b146-analysis-final.log.
+- Native iOS WalletCore simulator harness: 29 checks pass, /tmp/n42-b146-native.log, including Max-to-fixed-amount fee equivalence. Temporary simulator was shut down. No real key, broadcast, physical-device acceptance or release upload. This is targeted evidence; the full-suite coverage baseline remains batch 140.
+- Remaining: ADA native-token change, wider UTxO selection/pagination and live network/device acceptance; other outstanding scopes in the table remain open.
+
 
 ### Key-free native Cardano transaction planning — batch 145
 

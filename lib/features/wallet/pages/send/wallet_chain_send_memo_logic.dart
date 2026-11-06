@@ -61,6 +61,70 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     await loadBalance();
   }
 
+  bool get _isCardanoNative =>
+      widget.coinModel.config.coinType == 'ADA' &&
+      !widget.coinModel.config.isContract;
+  CardanoTransferPlan? _cardanoPlan;
+  Object? _cardanoContext;
+  int _cardanoVersion = 0;
+  CardanoTransferPlan? get _currentCardanoPlan =>
+      _cardanoContext == _formContext ? _cardanoPlan : null;
+
+  Future<bool> prepareCardanoQuote(
+    String recipient, {
+    bool maximum = false,
+  }) async {
+    final version = ++_cardanoVersion;
+    final openingForm = _formContext;
+    final contextKey = (
+      RecentAddressService.currentUser,
+      widget.coinModel.address.toString(),
+      widget.coinModel.isTest,
+      toCtrl.text,
+      valueCtrl.text,
+    );
+    bool current() =>
+        mounted &&
+        version == _cardanoVersion &&
+        openingForm == _formContext &&
+        contextKey ==
+            (
+              RecentAddressService.currentUser,
+              widget.coinModel.address.toString(),
+              widget.coinModel.isTest,
+              toCtrl.text,
+              valueCtrl.text,
+            );
+    _cardanoPlan = null;
+    try {
+      final plan = await (widget.cardanoQuotes ?? CardanoQuoteService()).quote(
+        sender: contextKey.$2,
+        recipient: recipient,
+        amount: transferValue,
+        isTest: contextKey.$3,
+        maximum: maximum,
+        isCurrent: current,
+      );
+      if (!current()) return false;
+      if (maximum) {
+        transferValue = plan.amount;
+        valueCtrl.text = toEther(plan.amount.toString(), 6).toString();
+      }
+      _cardanoPlan = plan;
+      _cardanoContext = _formContext;
+      totalGasPrice = plan.fee;
+      errorMessage = '';
+      amountError = '';
+      setState(() {});
+      return true;
+    } catch (_) {
+      if (current()) {
+        setState(() => errorMessage = S.of(context).g_audit_quote_changed);
+      }
+      return false;
+    }
+  }
+
   StellarSpendableBalance? _stellarFunds;
   (String, String, bool)? _stellarQuoteContext;
   StellarSpendableBalance? get _currentStellarFunds =>
@@ -170,6 +234,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     }
     if ((_isStellarNative && valueBi > _currentStellarFunds!.spendable) ||
         (!_isStellarNative &&
+            !_isCardanoNative &&
             widget.coinModel.coin['isContract'] != true &&
             valueBi + totalGasPrice > widget.coinModel.balance)) {
       amountError = S.of(context).g_key_47;
@@ -219,6 +284,19 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     setState(() {});
   }
 
+  // Bind all asynchronous preparation and confirmation to the opening form.
+  Object get _formContext => (
+    RecentAddressService.currentUser,
+    ref.read(wapBridgeProvider).walletIndex,
+    widget.coinModel,
+    widget.coinModel.address.toString(),
+    widget.coinModel.isTest,
+    widget.coinModel.config.coinType,
+    toCtrl.text,
+    valueCtrl.text,
+    memoCtrl.text,
+  );
+
   Future<void> sendTransaction() async {
     if (load == Load.loading) {
       ToastUtils.show('loading');
@@ -230,8 +308,16 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
 
     setState(() => load = Load.loading);
 
+    final openingForm = _formContext;
     final String? toAddr = await toAddressCheck(toCtrl.text);
     if (!mounted) return;
+    if (openingForm != _formContext) {
+      setState(() {
+        load = Load.finish;
+        errorMessage = S.of(context).g_audit_quote_changed;
+      });
+      return;
+    }
     if (toAddr == null) {
       setState(() => load = Load.finish);
       return;
@@ -244,11 +330,19 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       return;
     }
 
+    if (_isCardanoNative && !await prepareCardanoQuote(toAddr)) {
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
+    if (!mounted) return;
+
     final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : (_isStellarNative
               ? _currentStellarFunds!.balance
-              : widget.coinModel.balance);
+              : (_isCardanoNative
+                    ? _currentCardanoPlan!.available
+                    : widget.coinModel.balance));
 
     if (totalGasPrice > uBalance || uBalance == BigInt.zero) {
       ToastUtils.show(S.current.g_key_47);
@@ -289,6 +383,13 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         false;
 
     if (!mounted) return;
+    if (openingForm != _formContext) {
+      setState(() {
+        load = Load.finish;
+        errorMessage = S.of(context).g_audit_quote_changed;
+      });
+      return;
+    }
     if (confirmed) {
       await signTx(trModel);
     } else {
@@ -339,7 +440,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           decimals: decimals,
           path: path,
           sendMax: false,
-          expectedFeeBaseUnits: _isStellarNative ? trModel.gasPrice : null,
+          expectedFeeBaseUnits: (_isStellarNative || _isCardanoNative)
+              ? trModel.gasPrice
+              : null,
           isTest: widget.coinModel.isTest,
           contractAddress: trModel.contract,
           tokenDecimals: 0,
@@ -480,7 +583,26 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     return keywords.any(lower.contains);
   }
 
-  void maxTag() {
+  Future<void> maxTag() async {
+    if (_isCardanoNative) {
+      if (load == Load.loading) return;
+      setState(() => load = Load.loading);
+      try {
+        final openingForm = _formContext;
+        final recipient = await toAddressCheck(toCtrl.text);
+        if (!mounted) return;
+        if (openingForm != _formContext) {
+          setState(() => errorMessage = S.of(context).g_audit_quote_changed);
+          return;
+        }
+        if (recipient != null) {
+          await prepareCardanoQuote(recipient, maximum: true);
+        }
+      } finally {
+        if (mounted) setState(() => load = Load.finish);
+      }
+      return;
+    }
     if (_isStellarNative) {
       final funds = _currentStellarFunds;
       if (funds == null || funds.spendable <= BigInt.zero) {

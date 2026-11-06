@@ -1,3 +1,5 @@
+import 'package:n42_wallet/features/wallet/services/cardano_quote_service.dart';
+import 'package:n42_wallet/features/wallet/utils/cardano/transfer_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xlm_api.dart';
 import 'package:n42_wallet/features/wallet/utils/stellar/spendable_balance.dart';
@@ -43,6 +45,7 @@ part 'wallet_chain_send_memo_widgets.dart';
 class WalletChainSendMemo extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final XlmApi? stellarApi;
+  final CardanoQuoteService? cardanoQuotes;
   final Future<SendResult> Function(SendParams)? transactionSender;
   final Future<int> Function(TransationRecordModel)? persistTransaction;
   final Future<bool> Function(TransationRecordModel)?
@@ -53,6 +56,7 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
     super.key,
     this.transactionSender,
     this.stellarApi,
+    this.cardanoQuotes,
     this.persistTransaction,
     this.markTransactionDispatch,
     this.releaseUnsubmittedTransaction,

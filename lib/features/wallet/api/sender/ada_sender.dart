@@ -11,6 +11,8 @@ import 'package:n42_wallet/features/wallet/api/chain_api/ada_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
+import 'package:n42_wallet/features/wallet/utils/cardano/transfer_plan.dart';
+
 import 'chain_sender.dart';
 import '../../utils/cardano/signing_inputs.dart';
 import '../../utils/cardano/signed_transfer.dart';
@@ -167,6 +169,23 @@ class AdaSender implements ChainSender {
       'returnMetadata': true,
     };
 
+    if (params.expectedFeeBaseUnits != null) {
+      try {
+        final plan = CardanoTransferPlan.parse(
+          await _trustdart.planCardanoTransaction(
+            {...signMap}..remove('returnMetadata'),
+          ),
+          requested: valuePrice,
+          available: chainBalance,
+          sendMax: useMaxAmount,
+        );
+        if (plan.fee != params.expectedFeeBaseUnits) {
+          return SendResult.fail(S.current.g_audit_quote_changed);
+        }
+      } catch (_) {
+        return SendResult.fail(S.current.g_audit_quote_changed);
+      }
+    }
     if (!signerIsCurrent()) {
       return const SendResult.fail('Wallet signing context changed');
     }
@@ -217,6 +236,10 @@ class AdaSender implements ChainSender {
       );
     } on FormatException catch (error) {
       return SendResult.fail(error.message);
+    }
+    if (params.expectedFeeBaseUnits != null &&
+        signed.fee != params.expectedFeeBaseUnits) {
+      return SendResult.fail(S.current.g_audit_quote_changed);
     }
     final actualAmount = toEther(
       signed.amount.toString(),

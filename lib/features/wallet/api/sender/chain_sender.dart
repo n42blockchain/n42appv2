@@ -48,7 +48,7 @@ class SendParams {
   // 18 位代币 MAX 全额从 BigInt 降级 double 会上浮、被误判余额不足(第三轮 P1)。
   final BigInt? tokenValueWeiOverride;
 
-  /// Stellar: the fee shown in the user's confirmation, in stroops.
+  /// ADA/XLM: fee shown in confirmation, in lovelace/stroops.
   /// A different network fee requires another review, never silent adjustment.
   final BigInt? expectedFeeBaseUnits;
 

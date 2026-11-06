@@ -243,7 +243,9 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] as int? ?? 0)
         : (widget.coinModel.coin['decimals'] as int? ?? 0);
-    final feeText = _isStellarNative && _currentStellarFunds == null
+    final feeText =
+        (_isStellarNative && _currentStellarFunds == null) ||
+            (_isCardanoNative && _currentCardanoPlan == null)
         ? '—'
         : '${toEther(totalGasPrice.toString(), decimals)} $coinType';
 

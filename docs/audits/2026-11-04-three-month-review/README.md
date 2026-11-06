@@ -1214,3 +1214,10 @@ Memo XLM quoting now uses checked account/ledger balance, reserve, selling liabi
 ## Batch 145 — native Cardano planning without signing
 
 Added iOS/Android planning channels and a strict Dart entry point for public ADA-only transaction inputs. No key resolution, signature or broadcast occurs. Real simulator WalletCore tests match ordinary/Max plans with the existing signing result; explicit address validation rejects input that WalletCore planning alone accepted. Native iOS: 28 checks; Swift/Kotlin wire fixtures: 67 each; Dart bridge/utilities/sender: 87 pass, scoped analysis clean. Logs and Android compilation status are in the reconciliation. ADA quote/confirmation/Max integration remains open; this groundwork does not establish installed-app, device, Android runtime or live-transfer acceptance.
+
+
+## Batch 146 — ADA quote and confirmation integration
+
+Completed the interrupted native quote service/plan parser and Memo fee/Max integration. Quotes bind to the opening form and account; address-validation and confirmation awaits reject changed inputs. Signing enforces both the pre-sign planned fee and the signed fee against the reviewed value, with fixed exact amounts. ADA-only selected inputs remain the supported boundary.
+
+Validation: 400 combined service/parser/sender/Memo regressions pass (/tmp/n42-b146-final.log); scoped analysis clean (/tmp/n42-b146-analysis-final.log); real iOS WalletCore simulator harness 29 checks pass (/tmp/n42-b146-native.log), including Max-to-fixed-amount equivalence. Simulator shut down. No live transaction or new release. Native-token change, broader input discovery and device/live acceptance remain open. See the current reconciliation inventory for all remaining work.

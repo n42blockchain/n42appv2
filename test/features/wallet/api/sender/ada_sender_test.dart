@@ -85,6 +85,25 @@ class _Signer extends Trustdart {
   VoidCallback? onDerive;
   VoidCallback? onSign;
   int signatures = 0;
+  String quoteFee = '200000';
+  VoidCallback? onPlan;
+  bool brokenQuote = false;
+  @override
+  Future<Map<String, dynamic>> planCardanoTransaction(
+    Map<String, dynamic> txData,
+  ) async {
+    onPlan?.call();
+    if (brokenQuote) return {};
+    final amount = BigInt.parse(txData['amount'] as String);
+    return {
+      'amount': amount.toString(),
+      'fee': quoteFee,
+      'change': (BigInt.from(10000000) - amount - BigInt.parse(quoteFee))
+          .toString(),
+      'available': '10000000',
+    };
+  }
+
   bool invalidPlan = false;
   String? derivedMnemonic;
   String? derivedKey;
@@ -145,6 +164,47 @@ void main() {
   setUpAll(() async {
     await S.load(const Locale('en'));
   });
+  for (final scenario in [
+    'same fee',
+    'new fee',
+    'malformed',
+    'signed fee differs',
+    'owner changes',
+  ]) {
+    test('reviewed fee: $scenario', () async {
+      Object owner = Object();
+      final signer = _Signer();
+      final api = _Api();
+      final expected = scenario == 'signed fee differs' ? 100000 : 200000;
+      if (scenario == 'new fee') signer.quoteFee = '300000';
+      if (scenario == 'signed fee differs') signer.quoteFee = '100000';
+      if (scenario == 'malformed') signer.brokenQuote = true;
+      if (scenario == 'owner changes') signer.onPlan = () => owner = Object();
+      final sender = AdaSender(
+        api: api,
+        trustdart: signer,
+        ownerIdentity: () => owner,
+        readMnemonic: () => 'fixture mnemonic',
+      );
+      final result = await sender.send(
+        SendParams(
+          coinType: 'ADA',
+          fromAddress: 'addr_confirmed',
+          toAddress: 'addr_recipient',
+          amount: 1.25,
+          decimals: 6,
+          path: "m/1852'/1815'/0'/0/2",
+          expectedFeeBaseUnits: BigInt.from(expected),
+        ),
+      );
+      expect(result.success, scenario == 'same fee');
+      expect(api.broadcasts, scenario == 'same fee' ? 1 : 0);
+      expect(
+        signer.signatures,
+        ['same fee', 'signed fee differs'].contains(scenario) ? 1 : 0,
+      );
+    });
+  }
   for (final scenario in [
     'mnemonic',
     'private key',
