@@ -67,6 +67,17 @@ class AptSender implements ChainSender {
     }
 
     final isContract = params.contractAddress.isNotEmpty;
+    final assetParts = params.contractAddress.split('::');
+    if (isContract &&
+        (assetParts.length != 3 ||
+            !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(assetParts[0]) ||
+            !RegExp(r'^[A-Za-z_][A-Za-z0-9_]*$').hasMatch(assetParts[1]) ||
+            !RegExp(r'^[A-Za-z_][A-Za-z0-9_]*$').hasMatch(assetParts[2]) ||
+            params.contractAddress.contains(RegExp(r'\s')))) {
+      return const SendResult.fail(
+        'Aptos coin transfer requires a complete non-generic asset type',
+      );
+    }
     final gas = getCoinGas(coinType, contract: isContract);
     final aptApi = _apiFactory(params.isTest);
 
@@ -122,6 +133,21 @@ class AptSender implements ChainSender {
       }
     }
 
+    if (isContract) {
+      if (valuePrice > chainBalance) {
+        return const SendResult.fail('Insufficient Aptos token balance');
+      }
+      final nativeBalance = await aptApi.getBalance(params.fromAddress);
+      if (nativeBalance.error) {
+        return SendResult.fail(nativeBalance.data?.toString());
+      }
+      if (nativeBalance.data is! BigInt || nativeBalance.data < totalGasPrice) {
+        return const SendResult.fail(
+          'Insufficient APT balance for transaction fees',
+        );
+      }
+    }
+
     // Get account sequence and ledger timestamp
     final sequenceNumber = await aptApi.getAccountInfo(params.fromAddress);
     if (sequenceNumber.error) {
@@ -152,9 +178,9 @@ class AptSender implements ChainSender {
       'toAddress': params.toAddress,
       'SequenceNumber': sequence.toString(),
       'fromAddress': params.fromAddress,
-      'contractAddress': params.contractAddress,
-      'contractModule': '',
-      'contractName': '',
+      'contractAddress': isContract ? assetParts[0] : '',
+      'contractModule': isContract ? assetParts[1] : '',
+      'contractName': isContract ? assetParts[2] : '',
       'gasUnitPrice': gasPrice.toString(),
       'maxGasAmount': gas,
       'expirationTimestampSecs': lt.toString(),

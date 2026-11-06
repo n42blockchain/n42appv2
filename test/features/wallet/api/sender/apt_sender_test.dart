@@ -13,6 +13,8 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 class _Api extends AptApi {
   BigInt price = BigInt.from(7);
   BigInt balance = BigInt.from(10000000);
+  BigInt? nativeBalance;
+  final List<String> balanceAssets = [];
   dynamic chainId = 1;
   int? expectedChain;
   dynamic sequence = BigInt.zero;
@@ -26,7 +28,12 @@ class _Api extends AptApi {
     String address, {
     String contract = '',
     String tokenName = '',
-  }) async => MessageModel()..data = balance;
+  }) async {
+    balanceAssets.add(contract);
+    return MessageModel()
+      ..data = contract.isEmpty ? (nativeBalance ?? balance) : balance;
+  }
+
   @override
   Future<MessageModel> getGasPrice() async {
     priceReads++;
@@ -141,6 +148,77 @@ void main() {
         },
       );
     }
+  }
+  for (final scenario in ['enough', 'token-short', 'fee-short']) {
+    test('coin asset mapping and separate balances: $scenario', () async {
+      final api = _Api()
+        ..balance = BigInt.from(scenario == 'token-short' ? 99 : 100)
+        ..nativeBalance = BigInt.from(scenario == 'fee-short' ? 69999 : 70000);
+      final signer = _Signer();
+      await AptSender(
+        ownerIdentity: () => 'owner',
+        trustdart: signer,
+        apiFactory: (_) => api,
+      ).send(
+        SendParams(
+          coinType: 'APT',
+          fromAddress: 'owner',
+          toAddress: 'recipient',
+          amount: 100,
+          decimals: 8,
+          tokenDecimals: 0,
+          path: '',
+          privateKey: 'public-test-only',
+          contractAddress: '0x2a::usd::USDC',
+          tokenValueWeiOverride: BigInt.from(100),
+          sendMax: true,
+        ),
+      );
+      expect(api.balanceAssets.first, '0x2a::usd::USDC');
+      if (scenario == 'enough') {
+        expect(api.balanceAssets, ['0x2a::usd::USDC', '']);
+        expect(signer.received!['contractAddress'], '0x2a');
+        expect(signer.received!['contractModule'], 'usd');
+        expect(signer.received!['contractName'], 'USDC');
+        expect(signer.received!['amount'], '100');
+      } else {
+        expect(signer.received, isNull);
+      }
+      expect(api.submits, 0);
+    });
+  }
+  for (final asset in [
+    '0x2a',
+    '0xgg::usd::USDC',
+    '0x2a::usd::',
+    '0x2a::u sd::USDC',
+    '0x2a::usd::USDC\n',
+    '0x2a::usd::USDC<0x1::aptos_coin::AptosCoin>',
+  ]) {
+    test('unsupported asset never reaches signing: $asset', () async {
+      final api = _Api();
+      final signer = _Signer();
+      final result =
+          await AptSender(
+            ownerIdentity: () => 'owner',
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
+            SendParams(
+              coinType: 'APT',
+              fromAddress: 'owner',
+              toAddress: 'recipient',
+              amount: 1,
+              decimals: 8,
+              path: '',
+              privateKey: 'public-test-only',
+              contractAddress: asset,
+            ),
+          );
+      expect(result.success, false);
+      expect(api.balanceAssets, isEmpty);
+      expect(signer.received, isNull);
+    });
   }
   for (final phase in ['unchanged', 'ledger', 'signer']) {
     test('owner binding across $phase await', () async {
@@ -280,7 +358,7 @@ void main() {
               tokenDecimals: 6,
               path: '',
               privateKey: 'public-test-only',
-              contractAddress: token ? '0x1' : '',
+              contractAddress: token ? '0x2a::usd::USDC' : '',
               valueWeiOverride: token ? BigInt.from(123) : exact,
               tokenValueWeiOverride: token ? exact : BigInt.from(123),
             ),
@@ -312,7 +390,7 @@ void main() {
           tokenDecimals: 6,
           path: '',
           privateKey: 'public-test-only',
-          contractAddress: token ? '0x1' : '',
+          contractAddress: token ? '0x2a::usd::USDC' : '',
         ),
       );
       expect(signer.received!['amount'], token ? '1234567' : '123456700');
