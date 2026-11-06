@@ -13,12 +13,16 @@ class AptPendingSubmission {
   final String hash;
   final BigInt sequence;
   final BigInt? expirationSeconds;
+
+  /// False only when the durable journal proves dispatch has not started.
+  final bool submissionAttempted;
   const AptPendingSubmission(
     this.chainId,
     this.sender,
     this.hash,
     this.sequence, {
     this.expirationSeconds,
+    this.submissionAttempted = true,
   });
 }
 
@@ -55,6 +59,8 @@ class AptSubmissionJournal {
     if (data is! Map ||
         data['chainId'] != chain ||
         data['sender'] != _address(sender) ||
+        (data.containsKey('submissionAttempted') &&
+            data['submissionAttempted'] is! bool) ||
         data['hash'] is! String ||
         data['hash'].length != 66 ||
         !RegExp(r'^0x[0-9a-f]{64}$').hasMatch(data['hash'])) {
@@ -65,6 +71,7 @@ class AptSubmissionJournal {
       _address(sender),
       data['hash'],
       AptApi.parseUint64(data['sequence']),
+      submissionAttempted: data['submissionAttempted'] as bool? ?? true,
       expirationSeconds: data['expirationSeconds'] == null
           ? null
           : AptApi.parseUint64(data['expirationSeconds']),
@@ -119,34 +126,50 @@ class AptSubmissionJournal {
         );
       }
     }
-    final record = AptPendingSubmission(
+    var record = AptPendingSubmission(
       chainId,
       _address(sender),
       AptApi.transactionHash(signedTx),
       sequence,
       expirationSeconds: expirationSeconds,
+      submissionAttempted: false,
     );
     if (!isCurrent()) {
       throw StateError('Aptos owner changed before persistence');
     }
-    await beforePersist?.call(record);
-    if (!isCurrent()) {
-      throw StateError('Aptos owner changed before persistence');
-    }
-    await _storage.write(
+    Future<void> persist(bool attempted) => _storage.write(
       key: _key(chainId, sender),
       value: jsonEncode({
         'chainId': chainId,
         'sender': record.sender,
         'hash': record.hash,
         'sequence': sequence.toString(),
+        'submissionAttempted': attempted,
         if (expirationSeconds != null)
           'expirationSeconds': expirationSeconds.toString(),
       }),
     );
+    // Reserve recovery before touching the separate history database. A crash
+    // during that write is locally recoverable even if no history row exists.
+    await persist(false);
     if (!isCurrent()) {
-      // No submission was attempted. A failed deletion remains safely locked.
-      await _storage.delete(key: _key(chainId, sender));
+      throw StateError('Aptos owner changed before history persistence');
+    }
+    await beforePersist?.call(record);
+    if (!isCurrent()) {
+      throw StateError('Aptos owner changed before submission');
+    }
+    // Persist the uncertain state BEFORE calling the network. Never downgrade
+    // after this write: even an acknowledgement failure may have stored it.
+    await persist(true);
+    record = AptPendingSubmission(
+      record.chainId,
+      record.sender,
+      record.hash,
+      record.sequence,
+      expirationSeconds: record.expirationSeconds,
+    );
+    if (!isCurrent()) {
       throw StateError('Aptos owner changed before submission');
     }
     // Any error from here leaves the original record in durable storage.
@@ -165,6 +188,15 @@ class AptSubmissionJournal {
   }) => TransferSerializer.run(_key(chainId, sender), () async {
     final record = await pending(chainId, sender);
     if (record == null) return null;
+    if (!record.submissionAttempted) {
+      final receipt = AptTransactionReceipt(
+        record.hash,
+        AptTransactionStatus.notSubmitted,
+      );
+      await saveResult(record, receipt);
+      await _storage.delete(key: _key(chainId, sender));
+      return receipt;
+    }
     final result = await api.getTransactionReceipt(
       hash: record.hash,
       sender: record.sender,

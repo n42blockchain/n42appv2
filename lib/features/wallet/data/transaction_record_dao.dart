@@ -135,14 +135,18 @@ extension TransactionRecordDao on AppDatabase {
     });
   }
 
-  /// Complete only existing original records, never invent a payment on recovery.
+  /// Complete existing records; never invent a payment on recovery.
+  /// A proven unsubmitted reservation removes only local pending history so
+  /// a later retry with identical signed bytes cannot inherit a failed state.
   Future<void> completeAptTransactionRecord({
     required int chainId,
     required String sender,
     required String hash,
     required bool success,
+    bool neverSubmitted = false,
   }) async {
-    if (chainId < 1 ||
+    if ((neverSubmitted && success) ||
+        chainId < 1 ||
         chainId > 255 ||
         !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(sender) ||
         sender.contains(RegExp(r'\s')) ||
@@ -162,7 +166,18 @@ extension TransactionRecordDao on AppDatabase {
         whereArgs: args,
       );
       if (rows.isEmpty) {
+        // A prepared journal can survive a crash before the history insert.
+        if (neverSubmitted) return;
         throw StateError('Original Aptos transaction record is missing');
+      }
+      if (neverSubmitted) {
+        if (rows.any((row) => row['state'] != 0)) {
+          throw StateError(
+            'Unsubmitted Aptos reservation has terminal history',
+          );
+        }
+        await txn.delete('TransationRecord', where: where, whereArgs: args);
+        return;
       }
       if (rows.any((row) => row['state'] != 0 && row['state'] != state)) {
         throw StateError('Conflicting Aptos execution result');

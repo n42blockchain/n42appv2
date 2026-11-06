@@ -5,7 +5,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 ## Latest verified baseline — batch 105
 
 - Wallet runtime source `0f9ed4f7a`: fresh full regression **6,565 passed, 0 failed, no skips reported**; coverage **72.86%** (101,372/139,128), unchanged 70% gate passes. Falcon native tests executed. Full analysis: no errors/warnings, 68 infos; Python scripts 49 pass; wallet/Chat localization integrity passes. Full source and log hashes are in audit batch 105.
-- Aptos journal/sender/recovery-page wiring and signed-expiry recovery are implemented through batches 103–104. Earlier statements that these are unwired are superseded. Legacy expiry-less records, SQLite/secure-storage crash windows, non-page callers without history, cross-process coordination, generic Coin, gas simulation and live/device acceptance remain open.
+- Aptos journal/sender/recovery-page wiring and signed-expiry recovery are implemented through batches 103–104. Earlier statements that these are unwired are superseded. Batch 107 below closes the new-submission history/journal reservation window. Older orphan history, legacy expiry-less records, non-page callers without history, cross-process coordination, generic Coin, gas simulation and live/device acceptance remain open.
 - Other remaining work is unchanged: native social login/Matrix acceptance and disabled native Google exchange, Meta public availability, current-source release, Chat legacy/corrupt draft recovery, broader security/AA/hardware review, editorial/RTL work, dependency holds and old worktree reconciliation. Full wallet tests do not replace standalone Chat regression or production acceptance.
 
 ## Historical full-regression follow-up inspection
@@ -170,6 +170,8 @@ Batch 103 supersedes the unwired journal statements: AptSender and the actual Ap
 Batch 104 adds expired-unexecuted recovery for new signed-metadata-bound records: chain time past expiry plus unchanged account sequence at a pinned ledger version, followed by history persistence before unlock. All 172 related tests pass. Legacy records without expiry, storage crash windows and live/device acceptance remain open; no automatic resubmission.
 
 Batch 106 pins Chat 3197dc77 after fixing damaged scheduled-delivery state parsing and receipt writes. Chat 204 related tests and wallet 3 integration fixtures pass. Old-draft ownership confirmation/import and damaged-record recovery UI remain open; batch 105 full regression predates this dependency update.
+
+Batch 107 reserves a durable unsubmitted Aptos record before history insertion and marks possible dispatch before network access. Refresh locally reconciles proven unsubmitted reservations, deleting only matching pending history; legacy/uncertain records still require the existing receipt/expiry path. All 185 API/sender/journal/page/SQLite tests pass; scoped analysis clean. Older orphan history and physical process-kill/cross-process acceptance remain open. No automatic resend or fresh full-suite/release claim.
 
 ## Still open, in execution order
 

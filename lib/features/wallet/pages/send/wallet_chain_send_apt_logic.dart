@@ -60,6 +60,9 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
               sender: pending.sender,
               hash: pending.hash,
               success: receipt.status == AptTransactionStatus.succeeded,
+              neverSubmitted:
+                  !pending.submissionAttempted &&
+                  receipt.status == AptTransactionStatus.notSubmitted,
             ),
       );
       if (mounted &&

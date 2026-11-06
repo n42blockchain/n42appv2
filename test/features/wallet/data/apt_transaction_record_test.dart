@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
@@ -14,11 +18,13 @@ class _Database extends AppDatabase {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   sqfliteFfiInit();
   late Directory directory;
   late Database connection;
   late String path;
   setUp(() async {
+    FlutterSecureStorage.setMockInitialValues({});
     directory = await Directory.systemTemp.createTemp('n42-apt-history-');
     path = '${directory.path}/history.db';
     connection = await databaseFactoryFfi.openDatabase(path);
@@ -48,6 +54,123 @@ void main() {
     ..to1 = '0x2'
     ..price = BigInt.from(123)
     ..txHash = '0x${'ab' * 32}';
+
+  test(
+    'never-submitted recovery permits absent history but preserves conflicts',
+    () async {
+      final db = _Database(connection);
+      final hash = record().txHash;
+      await db.completeAptTransactionRecord(
+        chainId: 1,
+        sender: '0x1',
+        hash: hash,
+        success: false,
+        neverSubmitted: true,
+      );
+      expect(await connection.query('TransationRecord'), isEmpty);
+      await expectLater(
+        db.completeAptTransactionRecord(
+          chainId: 1,
+          sender: '0x1',
+          hash: hash,
+          success: false,
+        ),
+        throwsStateError,
+      );
+      await expectLater(
+        db.completeAptTransactionRecord(
+          chainId: 1,
+          sender: '0x1',
+          hash: hash,
+          success: true,
+          neverSubmitted: true,
+        ),
+        throwsArgumentError,
+      );
+      await db.saveAptTransactionRecord(record());
+      await db.completeAptTransactionRecord(
+        chainId: 1,
+        sender: '0x1',
+        hash: hash,
+        success: false,
+        neverSubmitted: true,
+      );
+      expect(await connection.query('TransationRecord'), isEmpty);
+      await db.completeAptTransactionRecord(
+        chainId: 1,
+        sender: '0x1',
+        hash: hash,
+        success: false,
+        neverSubmitted: true,
+      );
+      await db.saveAptTransactionRecord(record()..state = 1);
+      await expectLater(
+        db.completeAptTransactionRecord(
+          chainId: 1,
+          sender: '0x1',
+          hash: hash,
+          success: false,
+          neverSubmitted: true,
+        ),
+        throwsStateError,
+      );
+      expect((await connection.query('TransationRecord')).single['state'], 1);
+    },
+  );
+
+  for (final historyWritten in [false, true]) {
+    test(
+      'restart recovers unsubmitted reservation history=$historyWritten',
+      () async {
+        final journal = AptSubmissionJournal();
+        final hash = AptApi.transactionHash('00ff');
+        await expectLater(
+          journal.broadcast(
+            chainId: 1,
+            sender: '0x1',
+            sequence: BigInt.zero,
+            signedTx: '00ff',
+            isCurrent: () => true,
+            beforePersist: (pending) async {
+              expect(pending.submissionAttempted, false);
+              if (historyWritten) {
+                await _Database(connection)
+                    .saveAptTransactionRecord(record()..txHash = pending.hash);
+              }
+              throw StateError('interrupted before dispatch');
+            },
+            send: (_) async => fail('unexpected broadcast'),
+          ),
+          throwsStateError,
+        );
+        await connection.close();
+        connection = await databaseFactoryFfi.openDatabase(path);
+        final receipt = await AptSubmissionJournal().reconcile(
+          chainId: 1,
+          sender: '0x1',
+          api: AptApi(
+            read: (_) async => fail('unsubmitted recovery must not need RPC'),
+          ),
+          saveResult: (pending, receipt) =>
+              _Database(connection).completeAptTransactionRecord(
+                chainId: pending.chainId,
+                sender: pending.sender,
+                hash: pending.hash,
+                success: false,
+                neverSubmitted:
+                    !pending.submissionAttempted &&
+                    receipt.status == AptTransactionStatus.notSubmitted,
+              ),
+        );
+        expect(receipt!.status, AptTransactionStatus.notSubmitted);
+        expect(await journal.pending(1, '0x1'), isNull);
+        expect(await connection.query('TransationRecord'), isEmpty);
+        await _Database(connection)
+            .saveAptTransactionRecord(record()..txHash = hash);
+        expect((await connection.query('TransationRecord')).single['state'], 0);
+      },
+    );
+  }
 
   test('concurrent writes and reopen reuse the original row', () async {
     final ids = await Future.wait(

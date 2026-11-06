@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import '../../../native/aptos_reference_vectors.dart';
 
@@ -19,6 +20,29 @@ class _FailingStorage extends FlutterSecureStorage {
     AppleOptions? mOptions,
     WindowsOptions? wOptions,
   }) async => throw StateError('durable storage unavailable');
+}
+
+class _PhaseStorage extends FlutterSecureStorage {
+  final bool commitBeforeFailure;
+  int writes = 0;
+  _PhaseStorage(this.commitBeforeFailure);
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    writes++;
+    if (writes != 2 || commitBeforeFailure) {
+      await super.write(key: key, value: value);
+    }
+    if (writes == 2) throw StateError('lost storage acknowledgement');
+  }
 }
 
 void main() {
@@ -56,6 +80,116 @@ void main() {
               'version': '1',
             },
           },
+  );
+
+  test(
+    'history failure survives restart and finalizes locally before unlock',
+    () async {
+      final journal = AptSubmissionJournal();
+      await expectLater(
+        journal.broadcast(
+          chainId: 1,
+          sender: '0x1',
+          sequence: BigInt.zero,
+          signedTx: '00ff',
+          isCurrent: () => true,
+          beforePersist: (record) async {
+            expect(
+              (await AptSubmissionJournal().pending(
+                1,
+                '0x1',
+              ))!.submissionAttempted,
+              false,
+            );
+            throw StateError('history insert interrupted');
+          },
+          send: (_) async => fail('must not broadcast'),
+        ),
+        throwsStateError,
+      );
+      var rpcCalls = 0;
+      final offline = AptApi(
+        read: (_) async {
+          rpcCalls++;
+          throw StateError('offline');
+        },
+      );
+      await expectLater(
+        AptSubmissionJournal().reconcile(
+          chainId: 1,
+          sender: '0x1',
+          api: offline,
+          saveResult: (_, receipt) async {
+            expect(receipt.status, AptTransactionStatus.notSubmitted);
+            throw StateError('history completion failed');
+          },
+        ),
+        throwsStateError,
+      );
+      expect(await journal.pending(1, '0x1'), isNotNull);
+      final receipt = await AptSubmissionJournal().reconcile(
+        chainId: 1,
+        sender: '0x1',
+        api: offline,
+        saveResult: (record, receipt) async {
+          expect(record.submissionAttempted, false);
+          expect(await journal.pending(1, '0x1'), isNotNull);
+        },
+      );
+      expect(receipt!.status, AptTransactionStatus.notSubmitted);
+      expect(await journal.pending(1, '0x1'), isNull);
+      expect(rpcCalls, 0);
+    },
+  );
+  for (final committed in [false, true]) {
+    test(
+      'dispatch-state write failure committed=$committed never sends',
+      () async {
+        final journal = AptSubmissionJournal(storage: _PhaseStorage(committed));
+        await expectLater(
+          send(journal, dispatch: (_) async => fail('must not send')),
+          throwsStateError,
+        );
+        final pending = (await AptSubmissionJournal().pending(1, '0x1'))!;
+        expect(pending.submissionAttempted, committed);
+        var saved = false;
+        final receipt = await journal.reconcile(
+          chainId: 1,
+          sender: '0x1',
+          api: AptApi(read: (_) async => throw StateError('offline')),
+          saveResult: (_, _) async {
+            saved = true;
+          },
+        );
+        expect(saved, !committed);
+        expect(
+          receipt?.status,
+          committed ? null : AptTransactionStatus.notSubmitted,
+        );
+        expect(await journal.pending(1, '0x1'), committed ? isNotNull : isNull);
+      },
+    );
+  }
+  test(
+    'legacy journal remains uncertain and malformed phase fails closed',
+    () async {
+      const storage = FlutterSecureStorage();
+      final journal = AptSubmissionJournal();
+      await send(journal);
+      final key = 'n42.apt.pending.v1.1.0x${'0' * 63}1';
+      final data =
+          jsonDecode((await storage.read(key: key))!) as Map<String, dynamic>;
+      data.remove('submissionAttempted');
+      await storage.write(key: key, value: jsonEncode(data));
+      expect((await journal.pending(1, '0x1'))!.submissionAttempted, true);
+      for (final malformed in [null, 'false', 0]) {
+        data['submissionAttempted'] = malformed;
+        final raw = jsonEncode(data);
+        await storage.write(key: key, value: raw);
+        await expectLater(journal.pending(1, '0x1'), throwsStateError);
+        expect(await storage.read(key: key), raw);
+      }
+    },
   );
 
   test(
@@ -164,23 +298,26 @@ void main() {
     );
     expect(calls, 0);
   });
-  test('owner loss after durable write cancels without dispatch', () async {
-    var checks = 0;
-    var calls = 0;
-    final journal = AptSubmissionJournal();
-    await expectLater(
-      send(
-        journal,
-        current: () => ++checks == 1,
-        dispatch: (_) async {
-          calls++;
-        },
-      ),
-      throwsStateError,
-    );
-    expect(calls, 0);
-    expect(await journal.pending(1, '0x1'), isNull);
-  });
+  test(
+    'owner loss after reservation preserves local recovery without dispatch',
+    () async {
+      var checks = 0;
+      var calls = 0;
+      final journal = AptSubmissionJournal();
+      await expectLater(
+        send(
+          journal,
+          current: () => ++checks == 1,
+          dispatch: (_) async {
+            calls++;
+          },
+        ),
+        throwsStateError,
+      );
+      expect(calls, 0);
+      expect((await journal.pending(1, '0x1'))!.submissionAttempted, false);
+    },
+  );
   test('two instances serialize equivalent account addresses', () async {
     final entered = Completer<void>();
     final release = Completer<void>();

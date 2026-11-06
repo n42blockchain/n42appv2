@@ -126,7 +126,7 @@ void main() {
     expect(saved, hasLength(1));
   });
   test(
-    'failed history persistence prevents submission and leaves no journal',
+    'failed history persistence prevents submission and preserves recovery',
     () async {
       final api = _Api();
       final signer = _Signer()

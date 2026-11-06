@@ -15,7 +15,7 @@ typedef AptTransactionSubmit = Future<dynamic> Function(
   required bool enableRetry,
 });
 
-enum AptTransactionStatus { pending, succeeded, failed, expired }
+enum AptTransactionStatus { pending, succeeded, failed, expired, notSubmitted }
 
 class AptTransactionReceipt {
   final String hash;
