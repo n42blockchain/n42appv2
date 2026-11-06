@@ -550,3 +550,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Parse stored history strictly before save/clear so empty, malformed or invalid-shape records cannot be silently replaced. Reads still return an empty list for corrupt data; a dedicated recovery/error UI remains open. Failed auxiliary save returns false, preventing accepted transactions from entering callers' retryable payment-error paths. Explicit clear still reports corruption.
 - Release the serialization Future when idle. The first broader run stalled in a send-guard widget test; it was stopped and is not acceptance evidence. After removing the retained initial/completed Future, the complete send and send-page suites passed: 144 tests, no failures. Scoped service/test analysis reports no issues. Logs: /tmp/n42-send-history-regression-final.log and /tmp/n42-history-analysis-final.log.
 - These are automated local checks. Cross-process storage, recoverable corrupt/legacy history UI, durable transaction restart recovery, native/provider/device acceptance and release delivery remain open.
+
+
+## Batch 61 — recent-recipient read failure and stale-result UI (2026-11-06)
+
+- RecentAddressBar opts into strict history reads and shows a localized failure/retry control; missing history still hides the bar. Retry never deletes or repairs stored data implicitly. Optional advisory history reads retain their existing behavior so malformed recents do not block a transfer.
+- Number each load and bind it to identity and chain. Older success/failure callbacks cannot overwrite a new list. Suppress outdated selections before a parent rebuild, reload on identity/chain widget updates and ignore completion after disposal.
+- Related service/Sui/UI regressions: 45 passed. After adding the identity-switch case, all six bar tests passed, including real corrupt preferences, retry-to-selection, late old-chain success/failure, identity switch and disposal. Scoped analysis has no issues. Logs: /tmp/n42-recent-retry.log, /tmp/n42-recent-retry-final.log and /tmp/n42-recent-retry-analysis-final.log.
+- Corrupt/legacy record repair/import and cross-process coordination remain open; retry only retries reading. No physical-device acceptance, provider authorization or release upload performed.

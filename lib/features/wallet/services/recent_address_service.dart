@@ -178,12 +178,13 @@ class RecentAddressService {
     String coinType, {
     int maxCount = 5,
     String? userUuid,
+    bool reportReadErrors = false,
   }) async {
     final user = userUuid ?? currentUser;
     if (user.isEmpty) return [];
     final pending = _pending;
     if (pending != null) await pending;
-    final all = await _readAll(user);
+    final all = await _readAll(user, strict: reportReadErrors);
     if (userUuid == null && user != currentUser) return [];
     final list = all[coinType] ?? [];
     // 存储时已按时间倒序排列（save 总是插到头部），直接截取

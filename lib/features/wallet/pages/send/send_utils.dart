@@ -229,10 +229,12 @@ Future<void> showAddressPickerSheet(
 class RecentAddressBar extends StatefulWidget {
   final String coinType;
   final ValueChanged<String> onSelected;
+  final Future<List<RecentAddressEntry>> Function(String)? historyLoader;
 
   const RecentAddressBar({
     required this.coinType,
     required this.onSelected,
+    this.historyLoader,
     super.key,
   });
 
@@ -243,6 +245,9 @@ class RecentAddressBar extends StatefulWidget {
 class _RecentAddressBarState extends State<RecentAddressBar> {
   List<RecentAddressEntry> _entries = [];
   String? _loadedUser;
+  int _request = 0;
+  bool _failed = false;
+  bool _loading = false;
 
   @override
   void initState() {
@@ -261,19 +266,53 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
   }
 
   Future<void> _load() async {
+    final request = ++_request;
     final user = RecentAddressService.currentUser;
-    final list = await RecentAddressService.load(widget.coinType, maxCount: 5);
-    if (mounted && user == RecentAddressService.currentUser) {
-      setState(() {
-        _entries = list;
-        _loadedUser = user;
-      });
+    final coin = widget.coinType;
+    setState(() {
+      _loadedUser = user;
+      _loading = true;
+      _failed = false;
+      _entries = [];
+    });
+    bool current() =>
+        mounted &&
+        request == _request &&
+        user == RecentAddressService.currentUser &&
+        coin == widget.coinType;
+    try {
+      final list =
+          await (widget.historyLoader?.call(coin) ??
+              RecentAddressService.load(
+                coin,
+                maxCount: 5,
+                reportReadErrors: true,
+              ));
+      if (current()) setState(() => _entries = list);
+    } catch (_) {
+      if (current()) setState(() => _failed = true);
+    } finally {
+      if (current()) setState(() => _loading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_entries.isEmpty || _loadedUser != RecentAddressService.currentUser) {
+    if (_loadedUser != RecentAddressService.currentUser) {
+      return const SizedBox.shrink();
+    }
+    if (_failed || _loading) {
+      return TextButton.icon(
+        onPressed: _loading ? null : _load,
+        icon: Icon(_failed ? Icons.refresh : Icons.history),
+        label: Text(
+          _failed
+              ? '${S.of(context).g_key_5} ${S.of(context).g_key_retry}'
+              : S.of(context).g_key_coin_search_recent,
+        ),
+      );
+    }
+    if (_entries.isEmpty) {
       return const SizedBox.shrink();
     }
 
