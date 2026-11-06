@@ -73,7 +73,8 @@ int getCoinGas(String coinType, {bool contract = false}) {
     case CoinType.KSM:
       return 1;
     case CoinType.APT:
-      return 100;
+      // Gas units, not the historical 100-octa unit-price default.
+      return 10000;
     case CoinType.ZIL:
       return contract ? 8000 : 1;
     default:

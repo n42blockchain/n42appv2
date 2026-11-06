@@ -8,31 +8,33 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
-import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 
 /// Aptos chain sender.
 class AptSender implements ChainSender {
   final Map<String, dynamic>? _defaultChainConfig;
-  final _tokenViewApi = TokenViewApi();
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
+  final AptApi Function(bool isTest) _apiFactory;
 
-  AptSender({Map<String, dynamic>? chainConfig})
-    : _defaultChainConfig = chainConfig;
+  AptSender({
+    Map<String, dynamic>? chainConfig,
+    Trustdart? trustdart,
+    AptApi Function(bool isTest)? apiFactory,
+  }) : _defaultChainConfig = chainConfig,
+       _trustdart = trustdart ?? Trustdart(),
+       _apiFactory = apiFactory ?? ((isTest) => AptApi(isTest: isTest));
 
   @override
   Future<SendResult> send(SendParams params) async {
     final coinType = params.coinType.toUpperCase();
     final isContract = params.contractAddress.isNotEmpty;
     final gas = getCoinGas(coinType, contract: isContract);
-    final aptApi = AptApi(isTest: params.isTest);
+    final aptApi = _apiFactory(params.isTest);
 
     // Get balance
     final mm = await aptApi.getBalance(
@@ -46,15 +48,12 @@ class AptSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg =
-        await _tokenViewApi.getGasPrice(
-          BlockchainType.Aptos.name,
-          coinType,
-          isTest: false,
-        ) ??
-        MessageModel.error();
+    final mmg = await aptApi.getGasPrice();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
+    if (gasPrice <= BigInt.zero || gasPrice > BigInt.from(0x7fffffffffffffff)) {
+      return const SendResult.fail('Invalid Aptos gas unit price');
+    }
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
     BigInt valuePrice = ethToWeiString(
@@ -110,8 +109,8 @@ class AptSender implements ChainSender {
       'contractAddress': params.contractAddress,
       'contractModule': '',
       'contractName': '',
-      'gasUnitPrice': gas,
-      'maxGasAmount': totalGasPrice.toInt(),
+      'gasUnitPrice': gasPrice.toInt(),
+      'maxGasAmount': gas,
       'expirationTimestampSecs': lt,
       'chainId': chainId,
     };

@@ -145,8 +145,8 @@ void main() {
       expect(getCoinGas('FIL'), 10000000);
     });
 
-    test('APT → 100', () {
-      expect(getCoinGas('APT'), 100);
+    test('APT gas-unit budget → 10000', () {
+      expect(getCoinGas('APT'), 10000);
     });
 
     test('ZIL contract=false → 1', () {
