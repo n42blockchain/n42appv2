@@ -38,6 +38,20 @@ const _chains = [
     method: 'near_signAndSendTransaction',
     result: 'submitted-hash',
   ),
+  (
+    ns: 'sui',
+    chain: 'sui:mainnet',
+    type: 'SUI',
+    blockchain: 'Sui',
+    address: '0xdef456',
+    method: 'sui_signAndExecuteTransaction',
+    result: <String, dynamic>{
+      'digest': 'submitted-hash',
+      'effects': {
+        'status': {'status': 'success'},
+      },
+    },
+  ),
 ];
 
 class _Signer extends WalletConnectProvider {
@@ -69,6 +83,19 @@ class _Signer extends WalletConnectProvider {
       rpcStarted.complete();
     }
     return rpc?.future ?? Future.value(MessageModel()..data = 'submitted-hash');
+  }
+
+  @override
+  Future<MessageModel> broadcastSuiTransaction(
+    String transactionBlock,
+    String signature, {
+    required bool isTest,
+  }) {
+    expect(transactionBlock, 'cmF3');
+    submissions.add((CoinType.SUI, signature, isTest));
+    if (!rpcStarted.isCompleted) rpcStarted.complete();
+    return rpc?.future ??
+        Future.value(MessageModel()..data = _chains.last.result);
   }
 
   @override
@@ -247,7 +274,7 @@ void main() {
           () async {
             final chain = c.ns == 'aptos'
                 ? (requestIsTest ? 'aptos:2' : 'aptos:1')
-                : (requestIsTest ? 'near:testnet' : 'near:mainnet');
+                : '${c.ns}:${requestIsTest ? 'testnet' : 'mainnet'}';
             provider.coinModels = [
               sessionCoin(
                   type: c.type,
@@ -460,7 +487,9 @@ void main() {
           provider.rpc!.complete(
             MessageModel()
               ..error = failed
-              ..data = failed ? 'old RPC failure' : 'submitted-hash',
+              ..data = failed
+                  ? 'old RPC failure'
+                  : (c.ns == 'sui' ? c.result : 'submitted-hash'),
           );
           await operation;
           expect(provider.walletConnectState, WalletConnectState.transactionOK);
@@ -484,7 +513,9 @@ void main() {
         final replacement = WalletKitFake();
         provider.signClient = replacement;
         supersede();
-        provider.rpc!.complete(MessageModel()..data = 'submitted-hash');
+        provider.rpc!.complete(
+          MessageModel()..data = c.ns == 'sui' ? c.result : 'submitted-hash',
+        );
         await operation;
         expect(client.responses.single.$2.result, c.result);
         expect(replacement.responses, isEmpty);

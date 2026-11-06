@@ -22,6 +22,8 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Still open, in execution order
 
+- New confirmed Sui gap (batches 53–54): RPC argument order/receipt validation and WalletConnect execution orchestration are repaired (973 related tests passed). Both native platforms still lack `WC_SUI` handling; iOS forced casts can crash on raw requests. Next implement and independently verify the raw signing branch, then reconcile ordinary Sui sender/native fields and output. Do not treat mocked Dart tests as a working native Sui flow.
+
 | Priority | Work | Current evidence and next step |
 | --- | --- | --- |
 | P0 | Native Google/Apple/Facebook acceptance | Provider clients, Hub routes, app adapters and layout are implemented. Three real Web providers passed twice with revocation. Native Google exchange is still disabled; first/repeat/cancel/account-switch native authorization, Android browser handoff and same-DID Matrix login need end-to-end acceptance. Keep distinct from Web success. |

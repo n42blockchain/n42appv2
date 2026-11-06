@@ -682,7 +682,7 @@ void main() {
         ..coinModelsIndex = 0
         ..actionData = _request('sui_signTransaction', {
           'transactionBlock': 'original-sui-block',
-        });
+        }, chain: 'sui:mainnet');
 
       await provider.transactionSignTap();
 

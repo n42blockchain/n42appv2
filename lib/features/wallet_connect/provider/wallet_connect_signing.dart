@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -631,6 +632,7 @@ mixin WalletConnectSigning
   Future<void> _handleSuiTransaction(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
+    final responseClient = signClient!;
     final requestParams = eventData.params! as Map;
     // DApp sends base64-encoded transaction block
     final txBlock =
@@ -644,6 +646,7 @@ mixin WalletConnectSigning
       );
       return;
     }
+    final requestIsTest = _requestTestNetwork(CoinType.SUI, eventData.chainId);
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
     requireCurrent();
@@ -659,6 +662,7 @@ mixin WalletConnectSigning
       mnemonic: credentials.mnemonic,
       pk: credentials.privateKey,
     );
+    requireCurrent();
     if (signedResult.isEmpty) {
       viewStateDeal(
         WalletConnectState.error,
@@ -666,16 +670,40 @@ mixin WalletConnectSigning
       );
       return;
     }
-    // signedResult is base64(flag+sig+pubkey) as returned by native code
-    await signClient!.respondSessionRequest(
+    Object result = {"signature": signedResult, "transactionBlock": txBlock};
+    if (eventData.method == "sui_signAndExecuteTransaction") {
+      final response = await broadcastSuiTransaction(
+        txBlock,
+        signedResult,
+        isTest: requestIsTest,
+      );
+      if (response.error) {
+        if (!_signingContextIsCurrent(requireCurrent)) return;
+        viewStateDeal(
+          WalletConnectState.error,
+          params: response.data?.toString() ?? 'Broadcast failed',
+        );
+        return;
+      }
+      result = response.data;
+    }
+    // A confirmed submission belongs to its original request/client even if a
+    // later UI request replaced it. Never reset that newer preview.
+    await responseClient.respondSessionRequest(
       topic: eventData.topic,
       response: wallet_connect.JsonRpcResponse(
         id: eventData.id,
-        result: {"signature": signedResult, "transactionBlock": txBlock},
+        result: result,
       ),
     );
-    _completeSigningRequest(eventData);
+    _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
+
+  Future<MessageModel> broadcastSuiTransaction(
+    String transactionBlock,
+    String signature, {
+    required bool isTest,
+  }) => SuiApi(isTest: isTest).submit(transactionBlock, signature);
 
   Future<void> _handleNearTransaction(
     wallet_connect.SessionRequestEvent eventData,
@@ -779,8 +807,12 @@ mixin WalletConnectSigning
 
   bool _requestTestNetwork(CoinType type, String chainId) =>
       switch ((type, chainId)) {
-        (CoinType.APT, 'aptos:1') || (CoinType.NEAR, 'near:mainnet') => false,
-        (CoinType.APT, 'aptos:2') || (CoinType.NEAR, 'near:testnet') => true,
+        (CoinType.APT, 'aptos:1') ||
+        (CoinType.NEAR, 'near:mainnet') ||
+        (CoinType.SUI, 'sui:mainnet') => false,
+        (CoinType.APT, 'aptos:2') ||
+        (CoinType.NEAR, 'near:testnet') ||
+        (CoinType.SUI, 'sui:testnet') => true,
         _ => throw ArgumentError.value(
           chainId,
           'chainId',
