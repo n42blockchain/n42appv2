@@ -3,9 +3,10 @@ import 'dart:convert';
 /// Checked amounts returned by the native planner used for this signature.
 class CardanoSignedTransfer {
   final String encoded;
+  final String txHash;
   final BigInt amount;
   final BigInt fee;
-  CardanoSignedTransfer._(this.encoded, this.amount, this.fee);
+  CardanoSignedTransfer._(this.encoded, this.txHash, this.amount, this.fee);
 
   factory CardanoSignedTransfer.parse(
     String raw, {
@@ -30,7 +31,10 @@ class CardanoSignedTransfer {
     final change = integer('change');
     final used = integer('available');
     final encoded = data['encoded'];
-    if (encoded is! String ||
+    final txHash = data['txHash'];
+    if (txHash is! String ||
+        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(txHash) ||
+        encoded is! String ||
         !RegExp(r'^0x([0-9a-fA-F]{2})+$').hasMatch(encoded) ||
         amount <= BigInt.zero ||
         fee <= BigInt.zero ||
@@ -43,6 +47,6 @@ class CardanoSignedTransfer {
         'Cardano signing plan does not match request',
       );
     }
-    return CardanoSignedTransfer._(encoded, amount, fee);
+    return CardanoSignedTransfer._(encoded, txHash.toLowerCase(), amount, fee);
   }
 }

@@ -13,6 +13,10 @@ class _Api extends AdaApi {
   _Api({super.projectId = 'fixture-project'});
   VoidCallback? onAccount;
   int broadcasts = 0;
+  bool errorResult = false;
+  bool throwsOnSend = false;
+  String hash = 'ab' * 32;
+  VoidCallback? onSend;
   int reads = 0;
   bool? testnet;
   @override
@@ -68,8 +72,11 @@ class _Api extends AdaApi {
   }) async {
     expect(txXdr, '0x00ff');
     broadcasts++;
+    onSend?.call();
+    if (throwsOnSend) throw StateError('lost response');
+    if (errorResult) return MessageModel.error()..data = 'offline';
     testnet = isTest;
-    return MessageModel()..data = 'accepted-hash';
+    return MessageModel()..data = hash;
   }
 }
 
@@ -124,6 +131,7 @@ class _Signer extends Trustdart {
         : BigInt.parse(txData['amount'] as String);
     return jsonEncode({
       'encoded': '0x00ff',
+      'txHash': 'ab' * 32,
       'amount': invalidPlan ? '1' : amount.toString(),
       'fee': '200000',
       'change': (BigInt.from(9800000) - amount).toString(),
@@ -256,7 +264,7 @@ void main() {
             : 0,
       );
       if (success) {
-        expect(result.txHash, 'accepted-hash');
+        expect(result.txHash, 'ab' * 32);
         expect(signer.derivedPath, "m/1852'/1815'/0'/0/2");
         expect(
           signer.derivedMnemonic,
@@ -290,6 +298,56 @@ void main() {
       ].contains(scenario)) {
         expect(api.reads, 0);
       }
+    });
+  }
+  for (final scenario in [
+    'accepted',
+    'persist failure',
+    'owner during persist',
+    'transport error',
+    'transport throw',
+    'foreign hash',
+  ]) {
+    test('submission recovery: $scenario', () async {
+      Object owner = Object();
+      final api = _Api()
+        ..errorResult = scenario == 'transport error'
+        ..throwsOnSend = scenario == 'transport throw'
+        ..hash = scenario == 'foreign hash' ? 'cd' * 32 : 'ab' * 32;
+      final saved = <String>[];
+      api.onSend = () => expect(saved, ['ab' * 32]);
+      final sender = AdaSender(
+        api: api,
+        trustdart: _Signer(),
+        ownerIdentity: () => owner,
+        readMnemonic: () => 'fixture mnemonic',
+      );
+      final result = await sender.send(
+        SendParams(
+          coinType: 'ADA',
+          fromAddress: 'addr_confirmed',
+          toAddress: 'addr_recipient',
+          amount: 1.25,
+          decimals: 6,
+          path: "m/1852'/1815'/0'/0/2",
+          beforeBroadcast: (hash) async {
+            saved.add(hash);
+            if (scenario == 'persist failure') {
+              throw StateError('storage failed');
+            }
+            if (scenario == 'owner during persist') owner = Object();
+          },
+        ),
+      );
+      final aborted = [
+        'persist failure',
+        'owner during persist',
+      ].contains(scenario);
+      expect(saved, ['ab' * 32]);
+      expect(api.broadcasts, aborted ? 0 : 1);
+      expect(result.success, scenario == 'accepted');
+      expect(result.txHash, aborted ? null : 'ab' * 32);
+      if (!aborted) expect(result.actualAmount, 1.25);
     });
   }
 }

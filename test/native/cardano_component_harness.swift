@@ -59,6 +59,7 @@ import WalletCore
         let ordinaryJSON = plugin.signCardanoTransaction(wallet: wallet, path: path, txData: metadata, pk: nil)!
         let ordinary = try! JSONSerialization.jsonObject(with: Data(ordinaryJSON.utf8)) as! [String: String]
         precondition(ordinary["encoded"] == signed && ordinary["amount"] == String(plan.amount))
+        precondition(ordinary["txHash"] == reference.txID.hexString && reference.txID.count == 32)
         precondition(ordinary["fee"] == String(plan.fee) && ordinary["change"] == String(plan.change))
         metadata["useMaxAmount"] = true; metadata["amount"] = "10000000"
         let maxJSON = plugin.signCardanoTransaction(wallet: wallet, path: path, txData: metadata, pk: nil)!
@@ -70,7 +71,7 @@ import WalletCore
         maxInput.plan = maxPlan
         let maxReference: CardanoSigningOutput = AnySigner.sign(input: maxInput, coin: .cardano)
         precondition(maxReference.error == .ok && maximum["encoded"] == "0x" + maxReference.encoded.hexString)
-        count += 5
+        count += 6
         print("Cardano native signing: \(count) checks passed")
     }
 }

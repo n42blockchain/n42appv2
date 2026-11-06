@@ -2,6 +2,22 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+## Current interruption inventory — after batch 126
+
+Inspection on 2026-11-06 found eight tracked files with an unfinished Cardano hash/submission patch (batch 127), not a clean finished task. Its earlier Dart run completed with 121 passing tests. Batch 127 below now closes native validation and implementation delivery; full recovery remains open.
+
+| Remaining scope | Concrete next acceptance or implementation |
+| --- | --- |
+| Cardano submission recovery | Complete batch 127 validation/delivery; then wire durable journal/history and unknown-outcome UI. Optional beforeBroadcast alone is not durable recovery. Legacy SendResult.toMessageModel loses the uncertain hash. |
+| Other chain signing | Confirmed XLM sends integer fee while Swift/Kotlin cast String; repair this crash path first. Verify VET native payload and EGLD signer binding against actual native execution; preserve existing chain features. |
+| Native social login and Matrix | Google native code exchange defaults to disabled in ID Hub source; verify deployed capability and Google/Apple/Facebook native flows with same-DID Matrix identity before enabling. Existing Web login evidence is insufficient. |
+| Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No store-console verification or upload was done in this inspection. |
+| Chat recovery | Explicit legacy ownership/import, damaged-record repair UI, retention/export and process-crash/cross-process boundaries remain open. |
+| Dependency and localization | Resolve recorded dependency compatibility holds; finish editorial/RTL and UI review. Generated-key integrity does not prove translation quality. |
+| Retained worktrees | 13 auxiliary wallet trees: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Preserve local files and compare patches before merge/removal. |
+
+Fresh fetch at inspection: wallet 269ea4930 equals origin/master (0/0). ID Hub is clean at 7c0dd68; wallet Chat dependency is pinned to 798d20f55faf49c1bd3ff4dd5a67e254bd453df6. Chat task worktree is at 31714c7b: only OPEN_ISSUES.md differs from the wallet pin; its local coverage/lcov.info modification is preserved. Four baseline untracked paths remain untouched. This inspection covers wallet and directly linked records; it is not a fresh acceptance of every sibling project's earlier plans. Historical batches below describe their source at that time and must not be treated as the current missing-work list.
+
 ## Latest verified full-regression baseline — batch 112
 
 - Wallet runtime source `05eda1c6c`: fresh full regression **6,607 passed, 0 failed, no skips**; coverage **72.89%** (101,500/139,253), unchanged 70% gate passes. Falcon native tests executed. Full analysis: no errors/warnings, 68 infos; Python scripts 49 pass; wallet/Chat localization integrity passes. Chat `798d20f5`: 7,962 pass, four external-fixture skips, raw coverage 70.93%. Full source and log hashes are in audit batch 112. Batch 113 EVM runtime changes have targeted evidence below, not a repeated full-suite result.
@@ -17,6 +33,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Cardano pre-broadcast hash and uncertain submission — batch 127
+
+- Completed the interrupted patch: both native bridges return the SDK transaction ID, Dart validates it and calls beforeBroadcast before submission. Persistence callback failure or changed owner prevents broadcast; transport errors and foreign response IDs preserve the original hash as an uncertain result without retry.
+- Validation: 121 Dart tests, 19 real Swift/WalletCore checks and both Android MethodChannel/JNI tests pass. Scoped analysis is clean. Logs: `/tmp/n42-ada-hash-b127.log`, `/tmp/n42-ada-hash-b127-swift.log`, `/tmp/n42-ada-hash-b127-android.log`, `/tmp/n42-ada-hash-b127-analysis.log`.
+- The SDK hash is not independently recomputed from CBOR. The callback remains optional; durable journal/history/UI recovery and legacy result conversion remain open. Only simulators/emulators were used and stopped. No physical device, live transaction or release.
 
 ### Android Cardano real bridge — batch 126
 

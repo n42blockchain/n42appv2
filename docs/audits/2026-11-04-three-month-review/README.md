@@ -1092,3 +1092,10 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Final current-source Android debug build/install and both real native integration tests pass, exit 0 (`/tmp/n42-cardano-b126-android-fixed.log`). Expected txhash_null warnings are the eight negative signing cases. This confirms ordinary/max planning works through the real Android bridge; it is not independent signature conformance or live settlement. Scoped Dart analysis clean (`/tmp/n42-cardano-b126-analysis.log`); whitespace check passes.
 - Used only read-only/no-snapshot-save Pixel_8_API_36 emulator on port 5556. Initial emulator launch failed because the downloaded emulator directory lacks system images; supplying the existing SDK root fixed it. Emulator explicitly stopped afterward. Attached physical phone was not operated. Existing KGP migration and Facebook Windows plugin warnings remain.
 - Remaining: full transfer UI/fee confirmation, testnet address behavior, current protocol parameters, multi-asset change and durable unknown-submission recovery. No production release, TestFlight upload or live transaction.
+
+
+## Batch 127 — preserve Cardano signed hash before submission (2026-11-06)
+
+- Completed the interrupted patch: both native bridges return the SDK transaction ID, Dart validates it and calls beforeBroadcast before submission. Persistence callback failure or changed owner prevents broadcast; transport errors and foreign response IDs preserve the original hash as an uncertain result without retry.
+- Validation: 121 Dart tests, 19 real Swift/WalletCore checks and both Android MethodChannel/JNI tests pass. Scoped analysis is clean. Logs: `/tmp/n42-ada-hash-b127.log`, `/tmp/n42-ada-hash-b127-swift.log`, `/tmp/n42-ada-hash-b127-android.log`, `/tmp/n42-ada-hash-b127-analysis.log`.
+- The SDK hash is not independently recomputed from CBOR. The callback remains optional; durable journal/history/UI recovery and legacy result conversion remain open. Only simulators/emulators were used and stopped. No physical device, live transaction or release.

@@ -218,17 +218,41 @@ class AdaSender implements ChainSender {
     } on FormatException catch (error) {
       return SendResult.fail(error.message);
     }
-    final sendMm = await adaApi.sendTransaction(
-      signed.encoded,
-      isTest: params.isTest,
-    );
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-    return SendResult.ok(
-      sendMm.data?.toString(),
-      actualAmount: toEther(
-        signed.amount.toString(),
-        params.decimals,
-      ).toDouble(),
-    );
+    final actualAmount = toEther(
+      signed.amount.toString(),
+      params.decimals,
+    ).toDouble();
+    try {
+      await params.beforeBroadcast?.call(signed.txHash);
+    } catch (_) {
+      return const SendResult.fail(
+        'Unable to preserve transaction before submission',
+      );
+    }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
+    }
+    try {
+      final sendMm = await adaApi.sendTransaction(
+        signed.encoded,
+        isTest: params.isTest,
+      );
+      if (sendMm.error ||
+          sendMm.data is! String ||
+          (sendMm.data as String).toLowerCase() != signed.txHash) {
+        return SendResult.uncertain(
+          signed.txHash,
+          'Cardano submission status is unknown; check the original transaction',
+          actualAmount: actualAmount,
+        );
+      }
+      return SendResult.ok(signed.txHash, actualAmount: actualAmount);
+    } catch (_) {
+      return SendResult.uncertain(
+        signed.txHash,
+        'Cardano submission status is unknown; check the original transaction',
+        actualAmount: actualAmount,
+      );
+    }
   }
 }

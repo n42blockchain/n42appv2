@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/wallet/utils/cardano/signed_transfer.dart';
 void main() {
   Map<String, dynamic> result() => {
     'encoded': '0x00ff',
+    'txHash': 'ab' * 32,
     'amount': '2000000',
     'fee': '200000',
     'change': '7800000',
@@ -33,7 +34,14 @@ void main() {
     );
     expect(signed.amount, BigInt.from(9800000));
   });
-  for (final field in ['amount', 'fee', 'change', 'available', 'encoded']) {
+  for (final field in [
+    'amount',
+    'fee',
+    'change',
+    'available',
+    'encoded',
+    'txHash',
+  ]) {
     test('missing $field rejects before submission', () {
       expect(() => parse(result()..remove(field)), throwsFormatException);
     });
@@ -44,6 +52,7 @@ void main() {
     'change': '7800001',
     'available': '10000001',
     'encoded': '0x0',
+    'txHash': 'ab',
   }.entries) {
     test('invalid ${entry.key} fails', () {
       expect(

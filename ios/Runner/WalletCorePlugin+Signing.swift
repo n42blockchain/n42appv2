@@ -1511,8 +1511,10 @@ extension WalletCorePlugin {
             return nil
         }
         if txData["returnMetadata"] as? Bool == true {
+            guard output.txID.count == 32 else { return nil }
             let result: [String: String] = [
                 "encoded": "0x" + output.encoded.hexString,
+                "txHash": output.txID.hexString,
                 "amount": String(plan.amount), "fee": String(plan.fee),
                 "change": String(plan.change), "available": String(plan.availableAmount),
             ]
