@@ -161,6 +161,31 @@ class Trustdart {
   );
 
   /// signs a transaction
+  /// Plan an ADA-only transfer without credentials, signing or broadcasting.
+  Future<Map<String, dynamic>> planCardanoTransaction(
+    Map<String, dynamic> txData,
+  ) async {
+    const fields = {
+      'utxos',
+      'ttl',
+      'toAddress',
+      'amount',
+      'changeAddress',
+      'useMaxAmount',
+    };
+    if (txData.keys.any((key) => !fields.contains(key))) {
+      throw ArgumentError('Unsupported Cardano planning field');
+    }
+    // Snapshot nested inputs before the platform await.
+    final snapshot = jsonDecode(jsonEncode(txData)) as Map<String, dynamic>;
+    final result = await _channel.invokeMapMethod<String, dynamic>(
+      'planCardanoTransaction',
+      {'txData': snapshot},
+    );
+    if (result == null) throw StateError('Cardano planning unavailable');
+    return result;
+  }
+
   Future<String> signTransaction(
     String coin,
     String path,

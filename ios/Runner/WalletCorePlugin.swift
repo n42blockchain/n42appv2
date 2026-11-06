@@ -272,6 +272,15 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
 
         // ── Transaction signing ───────────────────────────────────────────
 
+        case "planCardanoTransaction":
+            guard let args = call.arguments as? [String: Any],
+                  let txData = args["txData"] as? [String: Any],
+                  let plan = planCardanoTransaction(txData: txData) else {
+                result(FlutterError(code: "invalid_cardano_plan", message: "Unable to plan Cardano transfer", details: nil))
+                return
+            }
+            result(plan)
+
         case "signTransaction":
             guard let args = call.arguments as? [String: Any],
                   let coin = args["coin"] as? String,

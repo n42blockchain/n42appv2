@@ -81,6 +81,7 @@ class TrustdartPlugin: FlutterPlugin, MethodCallHandler {
             "getWalletInfoWithKeyStore" -> keyHandler.handleGetWalletInfoWithKeyStore(call, result)
 
             // ── Transaction signing ──────────────────────────────────────
+            "planCardanoTransaction"        -> txHandler.handlePlanCardanoTransaction(call, result)
             "signTransaction"              -> txHandler.handleSignTransaction(call, result)
             "signTransaction_g"            -> txHandler.handleSignTransactionG(call, result)
             "signTransaction_btc_p2wsh"    -> txHandler.handleSignTransactionBtcP2wsh(call, result)

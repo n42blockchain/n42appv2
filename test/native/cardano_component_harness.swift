@@ -39,7 +39,15 @@ import WalletCore
         let plan: CardanoTransactionPlan = AnySigner.plan(input: input, coin: .cardano)
         precondition(plan.error == .ok && plan.amount == 2000000 && plan.fee > 0)
         precondition(plan.amount + plan.fee + plan.change == plan.availableAmount)
-        var count = 6
+        let readOnly = plugin.planCardanoTransaction(txData: payload)!
+        precondition(readOnly == ["amount": String(plan.amount), "fee": String(plan.fee),
+                                  "change": String(plan.change), "available": String(plan.availableAmount)])
+        var foreignInput = payload
+        foreignInput["changeAddress"] = recipient
+        precondition(plugin.planCardanoTransaction(txData: foreignInput) == nil)
+        var missingChange = payload; missingChange.removeValue(forKey: "changeAddress")
+        precondition(plugin.planCardanoTransaction(txData: missingChange) == nil)
+        var count = 9
         for field in ["amount", "ttl", "toAddress", "utxos"] {
             var invalid = payload; invalid.removeValue(forKey: field)
             precondition(plugin.signCardanoTransaction(wallet: wallet, path: path, txData: invalid, pk: nil) == nil)
@@ -71,7 +79,14 @@ import WalletCore
         maxInput.plan = maxPlan
         let maxReference: CardanoSigningOutput = AnySigner.sign(input: maxInput, coin: .cardano)
         precondition(maxReference.error == .ok && maximum["encoded"] == "0x" + maxReference.encoded.hexString)
-        count += 6
+        metadata.removeValue(forKey: "returnMetadata")
+        let maxReadOnly = plugin.planCardanoTransaction(txData: metadata)!
+        for key in ["amount", "fee", "change", "available"] {
+            precondition(maxReadOnly[key] == maximum[key])
+        }
+        precondition(plugin.planCardanoTransaction(txData: invalidAddress) == nil)
+        precondition(plugin.planCardanoTransaction(txData: insufficient) == nil)
+        count += 12
         print("Cardano native signing: \(count) checks passed")
     }
 }

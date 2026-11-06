@@ -2,7 +2,7 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 144
+## Current interruption inventory — through batch 145
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -34,6 +34,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Key-free native Cardano transaction planning — batch 145
+
+- Added a separate planCardanoTransaction channel on iOS/Android and a Dart bridge for ADA-only public input data. It does not resolve wallet credentials, generate a signature or invoke a broadcast API. Dart rejects unsupported top-level fields (including key/mnemonic fields), snapshots nested public data before the platform await and exposes planning failures instead of inventing a fee.
+- Native planners reuse the checked wire format, require all inputs to belong to the change address and validate both addresses. Real WalletCore testing showed that planning alone could accept an invalid recipient that signing later rejects; explicit native address validation closes that mismatch.
+- iOS simulator native harness: 28 checks pass, including ordinary/Max amount/fee/change/available equality with existing real WalletCore signing. Existing Swift and Kotlin wire validation: 67 cases each pass. Dart bridge/Cardano utility/sender suites: 87 pass, scoped analysis clean. Logs: /tmp/n42-cardano-b145-native-final.log, /tmp/n42-cardano-b145-input.log, /tmp/n42-cardano-b145-dart.log, /tmp/n42-cardano-b145-analysis.log. These are component/channel-fixture checks, not an installed-app/device/live transfer acceptance.
+- This is the prerequisite for ADA fee/Max UI: the page quote, review binding and signed-result fee/amount consistency still need integration. Android :app:compileDebugKotlin --offline passes with JDK 17 (649 tasks, 111 executed; /tmp/n42-cardano-b145-android.log). Existing plugin/deprecation warnings remain; no Android runtime test was performed. ADA native-token change and production/device/release acceptance remain open; no wallet key is needed by the new planner.
+
 
 ### XLM available amount and reviewed fee — batch 144
 

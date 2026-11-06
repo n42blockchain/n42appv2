@@ -1210,3 +1210,7 @@ SQLite v9 preserves old rows with an unknown phase and adds opt-in reserved/disp
 ## Batch 144 — XLM fee and Max match signing constraints
 
 Memo XLM quoting now uses checked account/ledger balance, reserve, selling liabilities and base fee. Cached quotes are account/address/network-bound and invalidated while refreshing; errors can be retried through a localized control. Max and validation use the same spendable-balance model as signing. The reviewed fee is passed to XlmSender and a changed fee aborts before signature or broadcast. The fixed send bar no longer obscures the scroll viewport. All 343 sender/Stellar/Memo regressions pass (/tmp/n42-quote-b144-broad.log); scope and initial fixture/layout findings are in the reconciliation. Surge pricing, ADA fee/Max, device/live transfers and releases remain open.
+
+## Batch 145 — native Cardano planning without signing
+
+Added iOS/Android planning channels and a strict Dart entry point for public ADA-only transaction inputs. No key resolution, signature or broadcast occurs. Real simulator WalletCore tests match ordinary/Max plans with the existing signing result; explicit address validation rejects input that WalletCore planning alone accepted. Native iOS: 28 checks; Swift/Kotlin wire fixtures: 67 each; Dart bridge/utilities/sender: 87 pass, scoped analysis clean. Logs and Android compilation status are in the reconciliation. ADA quote/confirmation/Max integration remains open; this groundwork does not establish installed-app, device, Android runtime or live-transfer acceptance.

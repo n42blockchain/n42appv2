@@ -1534,6 +1534,43 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         return true
     }
 
+    fun handlePlanCardanoTransaction(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val txData = call.argument<Map<String, Any>>("txData")
+            val plan = txData?.let { planCardanoTransaction(it) }
+            if (plan == null) result.error("invalid_cardano_plan", "Unable to plan Cardano transfer", null)
+            else result.success(plan)
+        } catch (_: Exception) {
+            result.error("invalid_cardano_plan", "Unable to plan Cardano transfer", null)
+        }
+    }
+
+    // Does not resolve keys or invoke AnySigner.sign.
+    private fun planCardanoTransaction(txData: Map<String, Any>): Map<String, String>? {
+        if (!validCardanoSigningInput(txData)) return null
+        val change = txData["changeAddress"] as? String ?: return null
+        if (change.isEmpty() || !CoinType.CARDANO.validate(change) ||
+            !CoinType.CARDANO.validate(txData["toAddress"] as String)) return null
+        val utxos = txData["utxos"] as List<Map<String, Any>>
+        if (utxos.any { it["address"] != change }) return null
+        val input = Cardano.SigningInput.newBuilder().setTtl((txData["ttl"] as String).toLong())
+        for (utxo in utxos) {
+            input.addUtxos(Cardano.TxInput.newBuilder()
+                .setOutPoint(Cardano.OutPoint.newBuilder()
+                    .setTxHash(ByteString.copyFrom(Numeric.hexStringToByteArray(utxo["txHash"] as String)))
+                    .setOutputIndex((utxo["outputIndex"] as Number).toLong()))
+                .setAddress(change).setAmount((utxo["amount"] as String).toLong()))
+        }
+        input.setTransferMessage(Cardano.Transfer.newBuilder()
+            .setToAddress(txData["toAddress"] as String).setChangeAddress(change)
+            .setAmount((txData["amount"] as String).toLong())
+            .setUseMaxAmount(txData["useMaxAmount"] as? Boolean ?: false))
+        val plan = AnySigner.plan(input.build(), CoinType.CARDANO, Cardano.TransactionPlan.parser())
+        if (plan.errorValue != 0 || plan.amount <= 0 || plan.fee <= 0) return null
+        return mapOf("amount" to plan.amount.toString(), "fee" to plan.fee.toString(),
+            "change" to plan.change.toString(), "available" to plan.availableAmount.toString())
+    }
+
     private fun signCardanoTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
         if (!validCardanoSigningInput(txData)) return null
         val privateKey = pk ?: wallet?.getKey(CoinType.CARDANO, path) ?: return null

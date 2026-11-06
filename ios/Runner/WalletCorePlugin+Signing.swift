@@ -1500,6 +1500,37 @@ extension WalletCorePlugin {
         return true
     }
 
+    // Read-only planning: no wallet or private key is required or accessed.
+    func planCardanoTransaction(txData: [String: Any]) -> [String: String]? {
+        guard validCardanoSigningInput(txData),
+              let change = txData["changeAddress"] as? String, !change.isEmpty,
+              AnyAddress.isValid(string: change, coin: .cardano),
+              AnyAddress.isValid(string: txData["toAddress"] as! String, coin: .cardano),
+              let utxos = txData["utxos"] as? [[String: Any]],
+              utxos.allSatisfy({ $0["address"] as? String == change }) else { return nil }
+        let input = CardanoSigningInput.with {
+            $0.ttl = UInt64(txData["ttl"] as! String)!
+            $0.utxos = utxos.map { utxo in CardanoTxInput.with {
+                $0.outPoint = CardanoOutPoint.with {
+                    $0.txHash = hexStrToData(utxo["txHash"] as! String)
+                    $0.outputIndex = UInt64(utxo["outputIndex"] as! Int)
+                }
+                $0.address = change
+                $0.amount = UInt64(utxo["amount"] as! String)!
+            }}
+            $0.transferMessage = CardanoTransfer.with {
+                $0.toAddress = txData["toAddress"] as! String
+                $0.changeAddress = change
+                $0.amount = UInt64(txData["amount"] as! String)!
+                $0.useMaxAmount = txData["useMaxAmount"] as? Bool ?? false
+            }
+        }
+        let plan: CardanoTransactionPlan = AnySigner.plan(input: input, coin: .cardano)
+        guard plan.error == .ok, plan.amount > 0, plan.fee > 0 else { return nil }
+        return ["amount": String(plan.amount), "fee": String(plan.fee),
+                "change": String(plan.change), "available": String(plan.availableAmount)]
+    }
+
     func signCardanoTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
         guard validCardanoSigningInput(txData) else { return nil }
         guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.cardano, path: path, privateKey: pk) else {
