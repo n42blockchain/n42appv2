@@ -226,3 +226,13 @@ against the dedicated native configuration. No signed build or real-user provide
 login was run. The Meta console still requires app icon, privacy URL, deletion
 instructions and category, plus its testing/review requirements before publication.
 Server identity/session implementation and deployment remain outstanding.
+
+## 2026-11-06: native Hub client integration
+
+- Chat dependency: `53d709d46093dca6a9a4151230d22152ad0aeb48`.
+- Opt-in build setting: `N42_NATIVE_AUTH_URL` (unset by default). This connects iOS Apple and Facebook Limited Login to the dedicated N42 backend, not the legacy gateway.
+- Flow: server challenge → native OIDC proof → isolated Hub session → same-DID Matrix credentials → Chat token login. Temporary Hub grants are revoked after the Matrix exchange. Requests carrying proofs/tokens refuse redirects. Cancellation, stale account/logout context and missing ID tokens do not fall back to legacy account lookup.
+- Plugin checks: 126 targeted tests passed; targeted analysis passed with informational lints. This includes the actual BLoC success path and existing configuration, SDK, API and wallet-login regressions.
+- Remaining: Google authorization-code handoff, Android Facebook and Apple/Web UI handoff, deployed callbacks, provider and physical-device acceptance. Google `google_sign_in` 7.2.0 documents exactly-once initialization, so setting a new nonce by repeated singleton initialization is not supported. This build setting does not enable those unfinished paths.
+- Production enablement is still off. Registered provider clients and mocked tests do not prove deployed login readiness.
+- Host checks: 62 initialization/social-configuration tests passed; analysis of `chat_initialization.dart` found no issues. Only the pinned Chat Git ref changed in `pubspec.lock`.

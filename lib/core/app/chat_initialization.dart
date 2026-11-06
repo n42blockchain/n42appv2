@@ -246,6 +246,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           telegramBotId: chatSocialAuthConfig.telegramBotId.isEmpty
               ? null
               : chatSocialAuthConfig.telegramBotId,
+          // Opt in only after provider and Matrix deployment acceptance.
+          n42NativeAuthUrl: normalizedEnv(
+            const String.fromEnvironment('N42_NATIVE_AUTH_URL'),
+          ),
           socialAuthBaseUrl: chatSocialAuthConfig.socialAuthBaseUrl.isEmpty
               ? null
               : chatSocialAuthConfig.socialAuthBaseUrl,
