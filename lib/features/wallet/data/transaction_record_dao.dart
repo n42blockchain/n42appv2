@@ -135,6 +135,47 @@ extension TransactionRecordDao on AppDatabase {
     });
   }
 
+  /// Complete only existing original records, never invent a payment on recovery.
+  Future<void> completeAptTransactionRecord({
+    required int chainId,
+    required String sender,
+    required String hash,
+    required bool success,
+  }) async {
+    if (chainId < 1 ||
+        chainId > 255 ||
+        !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(sender) ||
+        sender.contains(RegExp(r'\s')) ||
+        !RegExp(r'^0x[0-9a-fA-F]{64}$').hasMatch(hash) ||
+        hash.length != 66) {
+      throw ArgumentError('Invalid Aptos recovery identity');
+    }
+    final canonical = '0x${sender.substring(2).toLowerCase().padLeft(64, '0')}';
+    const where = 'coinMiniName=? AND coinId=? AND from1=? AND txHash=?';
+    final args = ['APT', chainId, canonical, hash.toLowerCase()];
+    final state = success ? 1 : 2;
+    final db = await database;
+    await db.transaction((txn) async {
+      final rows = await txn.query(
+        'TransationRecord',
+        where: where,
+        whereArgs: args,
+      );
+      if (rows.isEmpty) {
+        throw StateError('Original Aptos transaction record is missing');
+      }
+      if (rows.any((row) => row['state'] != 0 && row['state'] != state)) {
+        throw StateError('Conflicting Aptos execution result');
+      }
+      await txn.update(
+        'TransationRecord',
+        {'state': state},
+        where: where,
+        whereArgs: args,
+      );
+    });
+  }
+
   //修改交易记录
   Future<int> updateTransationRecord(TransationRecordModel trm) async {
     final db = await database;

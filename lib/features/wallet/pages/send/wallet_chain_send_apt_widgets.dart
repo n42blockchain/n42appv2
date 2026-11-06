@@ -277,7 +277,13 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
-              onPressed: sendTransaction,
+              onPressed:
+                  _checkingPending ||
+                      _pendingLoadError ||
+                      _pendingSubmission != null ||
+                      _acceptedHash != null
+                  ? null
+                  : sendTransaction,
               loading: isLoading,
             ),
           ),

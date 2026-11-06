@@ -1,5 +1,11 @@
 import 'dart:io';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'dart:async';
+
+import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -50,7 +56,10 @@ class _FailFastHttpOverrides extends HttpOverrides {
 }
 
 void main() {
-  setUp(() => HttpOverrides.global = _FailFastHttpOverrides());
+  setUp(() {
+    HttpOverrides.global = _FailFastHttpOverrides();
+    FlutterSecureStorage.setMockInitialValues({});
+  });
   tearDown(() => HttpOverrides.global = null);
 
   CoinModel makeCoin({BigInt? balance}) => CoinModel()
@@ -224,6 +233,86 @@ void main() {
       }
       expect(state.load, Load.finish);
       expect(find.byType(WalletBaseSend), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final outcome in [
+    'success',
+    'failed',
+    'pending',
+    'offline',
+    'save failure',
+  ]) {
+    testWidgets('reopened page reconciles $outcome without sending again', (
+      tester,
+    ) async {
+      final coin = makeCoin();
+      final journal = AptSubmissionJournal();
+      final pending = await journal.broadcast(
+        chainId: 1,
+        sender: coin.address.toString(),
+        sequence: BigInt.zero,
+        signedTx: '00ff',
+        isCurrent: () => true,
+        send: (_) async {},
+      );
+      var saved = 0;
+      final sender = _CapturingSender();
+      final api = AptApi(
+        read: (url) async {
+          if (outcome == 'offline') throw const SocketException('offline');
+          if (url.endsWith('/v1/')) {
+            return {'chain_id': 1, 'ledger_timestamp': '1000000'};
+          }
+          return {
+            'type': outcome == 'pending'
+                ? 'pending_transaction'
+                : 'user_transaction',
+            'hash': pending.hash,
+            'sender': pending.sender,
+            'sequence_number': '0',
+            if (outcome != 'pending') ...{
+              'version': '1',
+              'success': outcome != 'failed',
+            },
+          };
+        },
+      );
+      await tester.pumpWidget(
+        wrapForTest(
+          WalletChainSendApt(
+            coin,
+            sender: sender,
+            submissionJournal: AptSubmissionJournal(),
+            recoveryApi: api,
+            recoveryWriter: (original, receipt) async {
+              saved++;
+              expect(original.hash, pending.hash);
+              expect(await journal.pending(1, pending.sender), isNotNull);
+              if (outcome == 'save failure') throw StateError('disk');
+            },
+          ),
+          overrides: [
+            wapBridgeProvider.overrideWith((ref) => _OfflineWalletProvider()),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text(pending.hash), findsOneWidget);
+      final dynamic state = tester.state(find.byType(WalletChainSendApt));
+      await state.sendTransaction();
+      expect(sender.calls, 0);
+      await tester.tap(find.byKey(const ValueKey('apt-recovery-refresh')));
+      await tester.pumpAndSettle();
+      final terminal = outcome == 'success' || outcome == 'failed';
+      expect(
+        await journal.pending(1, pending.sender),
+        terminal ? isNull : isNotNull,
+      );
+      expect(find.text(pending.hash), terminal ? findsNothing : findsOneWidget);
+      expect(saved, outcome == 'offline' || outcome == 'pending' ? 0 : 1);
+      expect(sender.calls, 0);
       expect(tester.takeException(), isNull);
     });
   }

@@ -121,6 +121,49 @@ void main() {
       throwsStateError,
     );
   });
+  test(
+    'recovery completes only original matching history and is idempotent',
+    () async {
+      final database = _Database(connection);
+      final original = record();
+      await database.saveAptTransactionRecord(original);
+      await database.saveAptTransactionRecord(record()..coinId = 2);
+      for (var i = 0; i < 2; i++) {
+        await database.completeAptTransactionRecord(
+          chainId: 1,
+          sender: '0x1',
+          hash: original.txHash,
+          success: true,
+        );
+      }
+      final rows = await connection.query(
+        'TransationRecord',
+        orderBy: 'coinId',
+      );
+      expect(rows.map((r) => r['state']).toList(), [1, 0]);
+      expect(rows.first['userUuid'], 'alice');
+      expect(rows.first['price'], '123');
+      await expectLater(
+        database.completeAptTransactionRecord(
+          chainId: 1,
+          sender: '0x1',
+          hash: original.txHash,
+          success: false,
+        ),
+        throwsStateError,
+      );
+      await expectLater(
+        database.completeAptTransactionRecord(
+          chainId: 1,
+          sender: '0x2',
+          hash: original.txHash,
+          success: true,
+        ),
+        throwsStateError,
+      );
+    },
+  );
+
   test('invalid identity cannot create a row', () async {
     for (final r in [
       record()..txHash = '',

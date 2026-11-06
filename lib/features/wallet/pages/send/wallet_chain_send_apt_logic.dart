@@ -8,6 +8,76 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   CoinModel? chainModel;
   bool _signing = false;
   String? _acceptedHash;
+  AptPendingSubmission? _pendingSubmission;
+  bool _checkingPending = false;
+  bool _pendingLoadError = false;
+  AptSubmissionJournal get _journal =>
+      widget.submissionJournal ?? AptSubmissionJournal();
+  int get _selectedChain =>
+      resolveChainConfigIdOrNull(
+        widget.coinModel.coin,
+        isTest: widget.coinModel.isTest,
+      ) ??
+      (widget.coinModel.isTest ? 0 : 1);
+
+  Future<void> refreshPending() async {
+    if (!mounted || _checkingPending) return;
+    final chain = _selectedChain;
+    final sender = widget.coinModel.address.toString();
+    setState(() => _checkingPending = true);
+    try {
+      final record = await _journal.pending(chain, sender);
+      if (!mounted ||
+          chain != _selectedChain ||
+          sender != widget.coinModel.address) {
+        return;
+      }
+      setState(() {
+        _pendingSubmission = record;
+        _pendingLoadError = false;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _pendingLoadError = true);
+    } finally {
+      if (mounted) setState(() => _checkingPending = false);
+    }
+  }
+
+  Future<void> recoverPending() async {
+    if (!mounted || _checkingPending) return;
+    final chain = _selectedChain;
+    final sender = widget.coinModel.address.toString();
+    setState(() => _checkingPending = true);
+    try {
+      final receipt = await _journal.reconcile(
+        chainId: chain,
+        sender: sender,
+        api: widget.recoveryApi ?? AptApi(isTest: widget.coinModel.isTest),
+        saveResult:
+            widget.recoveryWriter ??
+            (pending, receipt) => AppDatabase().completeAptTransactionRecord(
+              chainId: pending.chainId,
+              sender: pending.sender,
+              hash: pending.hash,
+              success: receipt.status == AptTransactionStatus.succeeded,
+            ),
+      );
+      if (mounted &&
+          chain == _selectedChain &&
+          sender == widget.coinModel.address &&
+          receipt != null &&
+          receipt.status != AptTransactionStatus.pending) {
+        _acceptedHash = null;
+      }
+    } catch (_) {
+      if (mounted) _pendingLoadError = true;
+    } finally {
+      if (mounted) {
+        setState(() => _checkingPending = false);
+        await refreshPending();
+      }
+    }
+  }
 
   Regular? _logicRegular;
   Regular get regular => _logicRegular ??= Regular();
@@ -170,6 +240,14 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   Future<void> sendTransaction() async {
     if (load == Load.loading) {
       ToastUtils.show('loading');
+      return;
+    }
+    await refreshPending();
+    if (!mounted ||
+        _checkingPending ||
+        _pendingLoadError ||
+        _pendingSubmission != null ||
+        _acceptedHash != null) {
       return;
     }
     closeKeyboard();
@@ -341,7 +419,17 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
               : null,
           memo: trModel.message,
           privateKey: widget.coinModel.privateKey,
-          chainConfig: widget.coinModel.coin,
+          chainConfig: Map<String, dynamic>.from(widget.coinModel.coin),
+          beforeBroadcast: (hash) async {
+            if (!ownerIsCurrent()) {
+              throw StateError('Wallet changed before Aptos persistence');
+            }
+            trModel.txHash = hash;
+            trModel.trId = await writeRecord(trModel);
+            if (trModel.trId <= 0) {
+              throw StateError('Transaction was not saved');
+            }
+          },
         ),
       );
 
@@ -362,6 +450,9 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
         completedWithExit = true;
         Navigator.pop(context);
       } else {
+        if (result.txHash != null) _acceptedHash = result.txHash;
+        if (!ownerIsCurrent()) return;
+        await refreshPending();
         if (!ownerIsCurrent()) return;
         errorMessage = result.error ?? '';
         ToastUtils.show(errorMessage);

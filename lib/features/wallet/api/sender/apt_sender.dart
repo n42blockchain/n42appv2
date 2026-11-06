@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
 
 import 'chain_sender.dart';
+import '../../services/apt_submission_journal.dart';
 
 /// Aptos chain sender.
 class AptSender implements ChainSender {
@@ -21,6 +22,7 @@ class AptSender implements ChainSender {
   final Trustdart _trustdart;
   final AptApi Function(bool isTest) _apiFactory;
   final Object? Function() _ownerIdentity;
+  final AptSubmissionJournal _journal;
 
   static Object? _currentOwner() {
     try {
@@ -41,10 +43,12 @@ class AptSender implements ChainSender {
     Trustdart? trustdart,
     AptApi Function(bool isTest)? apiFactory,
     Object? Function()? ownerIdentity,
+    AptSubmissionJournal? journal,
   }) : _defaultChainConfig = chainConfig,
        _trustdart = trustdart ?? Trustdart(),
        _apiFactory = apiFactory ?? ((isTest) => AptApi(isTest: isTest)),
-       _ownerIdentity = ownerIdentity ?? _currentOwner;
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _journal = journal ?? AptSubmissionJournal();
 
   @override
   Future<SendResult> send(SendParams params) async {
@@ -66,6 +70,20 @@ class AptSender implements ChainSender {
       return const SendResult.fail('Invalid Aptos chain ID');
     }
 
+    try {
+      final pending = await _journal.pending(chainId, params.fromAddress);
+      if (pending != null) {
+        return SendResult.uncertain(
+          pending.hash,
+          'Reconcile the original Aptos transaction',
+        );
+      }
+    } catch (e) {
+      return SendResult.fail(e.toString());
+    }
+    if (!ownerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Aptos signing');
+    }
     final isContract = params.contractAddress.isNotEmpty;
     final isFungibleAsset =
         isContract &&
@@ -232,8 +250,31 @@ class AptSender implements ChainSender {
     if (!ownerIsCurrent()) {
       return const SendResult.fail('Wallet changed before Aptos submission');
     }
-    final sendMm = await aptApi.sendTxHash(signStr);
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-    return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);
+    String? dispatchedHash;
+    try {
+      final record = await _journal.broadcast(
+        chainId: chainId,
+        sender: params.fromAddress,
+        sequence: sequence,
+        signedTx: signStr,
+        isCurrent: ownerIsCurrent,
+        beforePersist: (record) async =>
+            params.beforeBroadcast?.call(record.hash),
+        send: (record) async {
+          dispatchedHash = record.hash;
+          final result = await aptApi.sendTxHash(signStr);
+          if (result.error || result.data != record.hash) {
+            throw StateError('Aptos submission outcome is unconfirmed');
+          }
+        },
+      );
+      return SendResult.ok(record.hash, actualAmount: adjustedAmount);
+    } on AptSubmissionPending catch (e) {
+      return SendResult.uncertain(e.submission.hash, e.message);
+    } catch (e) {
+      return dispatchedHash == null
+          ? SendResult.fail(e.toString())
+          : SendResult.uncertain(dispatchedHash, e.toString());
+    }
   }
 }

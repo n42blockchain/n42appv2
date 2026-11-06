@@ -71,6 +71,7 @@ class AptSubmissionJournal {
     required String signedTx,
     required Future<void> Function(AptPendingSubmission) send,
     required bool Function() isCurrent,
+    Future<void> Function(AptPendingSubmission)? beforePersist,
   }) => TransferSerializer.run(_key(chainId, sender), () async {
     final existing = await pending(chainId, sender);
     if (existing != null) throw AptSubmissionPending(existing);
@@ -81,6 +82,10 @@ class AptSubmissionJournal {
       AptApi.transactionHash(signedTx),
       sequence,
     );
+    if (!isCurrent()) {
+      throw StateError('Aptos owner changed before persistence');
+    }
+    await beforePersist?.call(record);
     if (!isCurrent()) {
       throw StateError('Aptos owner changed before persistence');
     }

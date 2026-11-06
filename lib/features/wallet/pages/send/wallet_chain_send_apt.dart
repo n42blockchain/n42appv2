@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
@@ -44,11 +45,18 @@ class WalletChainSendApt extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? initialToAddress;
   final ChainSender? sender;
+  final AptSubmissionJournal? submissionJournal;
+  final AptApi? recoveryApi;
+  final Future<void> Function(AptPendingSubmission, AptTransactionReceipt)?
+  recoveryWriter;
   final Future<int> Function(TransationRecordModel)? transactionWriter;
   const WalletChainSendApt(
     this.coinModel, {
     this.initialToAddress,
     this.sender,
+    this.submissionJournal,
+    this.recoveryApi,
+    this.recoveryWriter,
     this.transactionWriter,
     super.key,
   });
@@ -67,6 +75,7 @@ class _WalletChainSendAptState extends ConsumerState<WalletChainSendApt>
       toTextEditingController.text = widget.initialToAddress!;
     }
     initData();
+    refreshPending();
   }
 
   @override
@@ -81,6 +90,22 @@ class _WalletChainSendAptState extends ConsumerState<WalletChainSendApt>
   Widget coinTypeWidget() {
     return Column(
       children: [
+        if (_pendingSubmission != null || _pendingLoadError)
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(S.of(context).g_key_bridge_tx_pending),
+                if (_pendingSubmission != null)
+                  SelectableText(_pendingSubmission!.hash),
+                TextButton(
+                  key: const ValueKey('apt-recovery-refresh'),
+                  onPressed: _checkingPending ? null : recoverPending,
+                  child: Text(S.of(context).g_key_bridge_refresh),
+                ),
+              ],
+            ),
+          ),
         RecentAddressBar(
           coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
