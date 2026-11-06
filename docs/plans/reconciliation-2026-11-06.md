@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Filter cleared history from search — batch 183
+
+- Production search now uses the same account/room clear boundary as the timeline. Scoped and global searches, archive merge and chat-search pagination filter cleared timestamps. Responses are discarded after client/account/token/device/server changes; corrupt boundary records fail closed.
+- Six new real-preferences cases cover recreated stores, live/archive sources, other rooms/accounts, pagination, delayed account change and corrupt records. Search repository/store/BLoC/event/state suites: **168 pass**, exit 0 (/tmp/n42-chat-b183-final.log). Scoped analysis: zero errors/warnings, five constructor style infos (/tmp/n42-chat-b183-analysis.log). Chat `d3d872ae81e1b050c3fe29e9e772aa2fcc24ab88` is pushed and pinned. Dependency resolution changes only Chat; all three wallet host fixtures pass (/tmp/n42-wallet-b183-host.log).
+- Existing displayed search results are not actively invalidated by a later clear. Concurrent multi-room boundary changes, limited-source underfill, thread/preview visibility and cross-process/device acceptance remain open. This filters local visibility; it does not erase archives or server messages. Native login, recovery, dependency, payment and current-source release acceptance remain active. No fresh full-suite coverage or release claim.
+
 ### Persist account-scoped local timeline clearing — batch 182
 
 - Production ChatBloc factory now injects ChatHistoryClearStore. Owner/room hashes isolate records; serialized monotonic boundaries, strict decoding, reload and checked platform acknowledgement reject failed/corrupt writes. Initialization loads the boundary before cache display; refresh, pagination and stream updates apply it, and paging stops at the boundary. Clear confirmation now waits for persistence; failure retains the timeline and shows the existing localized save-failure message.
