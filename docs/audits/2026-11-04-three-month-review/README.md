@@ -379,3 +379,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `792173289f4c3e35e56907065555015e691e0031` is pushed. An existing record after an unconfirmed remote send still does not prove that the event was never delivered; remote-outcome recovery remains MSG-001, together with legacy draft recovery and cross-device/process acceptance. No release upload or device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-cancel-missing-host-tests.log`). Dependency resolution changed only the Chat Git reference in the lockfile.
+
+
+## Batch 42 — preserve scheduled server acceptance before local sync (2026-11-06)
+
+- Interruption inspection found three uncommitted implementation/test files. Scheduled sends could receive a server event ID but lose that acknowledgement when local echo was missing. The repository now returns a minimal acceptance receipt for explicit transaction IDs without waiting for local message/profile lookup. Sender identity is captured before dispatch. Ordinary sends retain local lookup; null/empty event IDs remain unconfirmed.
+- Text/mention/poll/GIF/sticker/image/video/file adapter tests cover stable retry IDs and unavailable local echo. Repository and scheduling suites passed 611 tests (`/tmp/n42-scheduled-ack-verified.log`); after the final await correction, both changed test suites passed 30 tests (`/tmp/n42-scheduled-ack-final-tests.log`). Source analysis has no errors/warnings and four informational diagnostics (`/tmp/n42-scheduled-ack-final-analyze.log`).
+- Chat `cd21a9c31010bd6160a044ce34273c2715128817` is pushed and remote parity verified. MSG-001 retains genuinely unknown transport outcomes, crash-before-cleanup, legacy recovery and cross-device/process acceptance. This receipt is not recipient delivery/read evidence. No device operation or release upload.
+
+- Wallet host integration: 129 passed (`/tmp/n42-scheduled-ack-host-tests.log`); dependency resolution changes only the Chat Git reference.

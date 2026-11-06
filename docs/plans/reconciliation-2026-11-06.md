@@ -4,10 +4,10 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
-- Wallet `b8ee625ad` matches freshly fetched `origin/master` (0 ahead / 0 behind). Tracked wallet sources are clean; four previously recorded untracked paths remain preserved.
-- Chat task worktree `.tmp-worktrees/n42-chat-native-hub-20261106` is now clean at pushed `79217328`. The interrupted account-isolation patch is completed; the wallet pin is updated to the same source.
+- At the start of this inspection, wallet `eb05473d9` matched freshly fetched `origin/master` (0 ahead / 0 behind). Four previously recorded untracked paths remain preserved. Batch 42 completes the interrupted Chat acknowledgement patch and updates the host pin.
+- Chat task worktree `.tmp-worktrees/n42-chat-native-hub-20261106` is now at pushed `cd21a9c3`. Account isolation and the interrupted server-acknowledgement patch are completed; the wallet pin is updated to the same source.
 - The earlier run (171 passed / 2 failed) is superseded by `/tmp/n42-owner-broad-final.log`: 3,398 passed, plus four client/token-switch transport checks in `/tmp/n42-owner-session-tests.log`. Analyzer reports no errors/warnings and ten informational diagnostics. Batch 36 records scope and limitations.
-- Legacy unattributed drafts remain preserved and unsent. A user-confirmed recovery flow, cross-device/process coordination and server-outcome recovery (batches 37–38 guard login origins; batch 40 coordinates send/cancel across BLoCs and standalone pages in the same isolate; batch 41 prevents missing-record cancellation success claims) and live-server acceptance remain open in MSG-001.
+- Legacy unattributed drafts remain preserved and unsent. A user-confirmed recovery flow, cross-device/process coordination and server-outcome recovery (batches 37–38 guard login origins; batch 40 coordinates send/cancel across BLoCs and standalone pages in the same isolate; batch 41 prevents missing-record cancellation success claims; batch 42 preserves known server acceptance independently of local sync) and live-server acceptance remain open in MSG-001.
 - Thirteen auxiliary wallet worktrees were inspected again: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. None was removed or merged by this inspection.
 
 ## Still open, in execution order
@@ -26,7 +26,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 Non-ancestor clean branches checked with `git cherry HEAD <branch>`: dependency-completion has 114 patch-unique commits; main-flow-audit 3; test-audit 1; coverage-70 58. Detached ui-token-baseline is also non-ancestor. These counts do not prove missing functionality: rewritten history, later rewrites and superseding fixes require file/behavior comparison before any merge or deletion. No worktree was removed.
 
-Root has only the three old untracked plan files and the unused `packages/n42_chat` directory. Actual Chat dependency is immutable Git pin `d141cbc3`; its task worktree contains the unfinished nine-file account-isolation change described above. ID Hub is clean at `7c0dd68`. The later interrupted Aptos integration is recorded in batch 31; it must not be confused with a completed release. N42-rs has a modified fleet-test result file, preserved without alteration.
+Root has only the three old untracked plan files and the unused `packages/n42_chat` directory. Actual Chat dependency is immutable Git pin `cd21a9c3`; the previously unfinished account-isolation and server-acknowledgement changes are now completed. ID Hub is clean at `7c0dd68`. The later interrupted Aptos integration is recorded in batch 31; it must not be confused with a completed release. N42-rs has a modified fleet-test result file, preserved without alteration.
 
 ## Completed work that must not be reopened as missing
 
