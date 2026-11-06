@@ -57,6 +57,13 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 
 ## Latest interruption check
 
+### Continuous EGLD page/sender/database recovery — batch 164
+
+- Added an integration regression through the real Memo page signTx, EgldSender, local hash validator, file-backed SQLite reservation/dispatch methods and MultiversX receipt resolver. Native signing replays public WalletCore fixtures; network/account/configuration and UI projection are controlled. No live signing key or broadcast.
+- Mainnet/testnet each exercise success/failure receipt resolution. The first simulated POST times out only after the database holds the original hash and dispatching phase. The page is removed, SQLite is closed/reopened, then a new page attempts the same transfer through the actual sender. Both attempts reach signing, but exactly one POST occurs. Unknown lookup keeps the reservation; a verified terminal original receipt updates history and permits a subsequent explicit reservation.
+- Four pipeline tests pass (/tmp/n42-wallet-b164-pipeline-final.log). Initial run failed only because the test environment lacked the Fluttertoast native channel; added an explicit platform stub and retained real sender/database assertions. Scoped analysis clean (/tmp/n42-wallet-b164-analysis-final.log).
+- Evidence is continuous local component integration, not an OS-killed application, real provider/network finality or device acceptance. Existing EGLD orphan policy, other entry points, native Android runtime and signed release boundaries remain open. No production code changed in this batch; batch 163 targeted suite and batch 160 earlier full coverage retain their own scopes.
+
 ### EGLD durable Memo submission and receipt lookup — batch 163
 
 - Connected EGLD to the existing Memo-page beforeBroadcast/onBroadcastStarting hooks and atomic history reservation. Persist the local hash before dispatch, mark dispatch before POST, retain ambiguous results, and release only an exact notSubmitted reservation. Existing pending sender/account/network records prevent a new page from broadcasting a duplicate; new reserved-but-not-dispatched rows retain the existing recoverable phase semantics.
