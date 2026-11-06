@@ -186,12 +186,16 @@ class XlmSender implements ChainSender {
     try {
       await params.beforeBroadcast?.call(signed.txHash);
     } catch (_) {
-      return const SendResult.fail(
+      return SendResult.notSubmitted(
+        signed.txHash,
         'Unable to preserve transaction before submission',
       );
     }
     if (!signerIsCurrent()) {
-      return const SendResult.fail('Wallet signing context changed');
+      return SendResult.notSubmitted(
+        signed.txHash,
+        'Wallet signing context changed',
+      );
     }
     try {
       final result = await xlmApi.sendTransaction(

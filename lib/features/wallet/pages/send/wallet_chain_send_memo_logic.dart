@@ -221,6 +221,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
 
   bool _signing = false;
   String? _preparedHash;
+  TransationRecordModel? _preparedRecord;
 
   Future<int> _persistTransaction(TransationRecordModel record) =>
       widget.persistTransaction?.call(record) ??
@@ -290,6 +291,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                     throw StateError('Transaction was not saved');
                   }
                   _preparedHash = hash;
+                  _preparedRecord = TransationRecordModel.fromMap(
+                    trModel.toMap(),
+                  );
                   if (!mounted ||
                       RecentAddressService.currentUser != recentAddressOwner) {
                     throw StateError('Wallet context changed');
@@ -301,6 +305,24 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
 
       if (blockedByPending) {
         if (mounted) ToastUtils.show(S.current.g_key_bridge_tx_pending);
+        return;
+      }
+      if (result.definitelyNotSubmitted) {
+        final original = _preparedRecord;
+        if (original != null && result.txHash == _preparedHash) {
+          final released =
+              await (widget.releaseUnsubmittedTransaction?.call(original) ??
+                  AppDatabase().releaseUnsubmittedMemoTransaction(original));
+          if (released) {
+            _preparedRecord = null;
+            _preparedHash = null;
+            trModel.trId = 0;
+            trModel.txHash = '';
+          }
+        }
+        if (mounted) {
+          ToastUtils.show(result.error ?? S.current.g_key_bridge_tx_pending);
+        }
         return;
       }
       if (result.success ||

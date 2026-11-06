@@ -92,21 +92,32 @@ class SendParams {
 /// Result of a send operation.
 class SendResult {
   final bool success;
+  final bool definitelyNotSubmitted;
   final String? txHash;
   final double? actualAmount; // after fee deduction when sendMax=true
   final String? error;
 
   const SendResult.ok(this.txHash, {this.actualAmount})
     : success = true,
+      definitelyNotSubmitted = false,
       error = null;
   const SendResult.fail(this.error)
     : success = false,
+      definitelyNotSubmitted = false,
       txHash = null,
       actualAmount = null;
 
   /// Broadcast may have been accepted. Query this hash; do not sign again.
   const SendResult.uncertain(this.txHash, this.error, {this.actualAmount})
-    : success = false;
+    : success = false,
+      definitelyNotSubmitted = false;
+
+  /// The sender stopped before invoking its broadcast API. Only this explicit
+  /// result, with the original hash, permits releasing a local reservation.
+  const SendResult.notSubmitted(this.txHash, this.error)
+    : success = false,
+      definitelyNotSubmitted = true,
+      actualAmount = null;
 
   /// Convert to legacy MessageModel for compatibility.
   MessageModel toMessageModel() {

@@ -33,6 +33,11 @@ class _Records extends TransactionRecordItemProvider {
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
   for (final scenario in [
+    'not submitted',
+    'release refused',
+    'release error',
+    'abort foreign hash',
+    'dispose before abort',
     'unknown',
     'success',
     'in flight duplicate',
@@ -66,6 +71,18 @@ void main() {
         ..coinMiniName = 'XLM';
       final projection = _Records()
         ..throwOnAdd = scenario == 'projection failure';
+      final noBroadcast = [
+        'not submitted',
+        'release refused',
+        'release error',
+        'abort foreign hash',
+        'dispose before abort',
+      ].contains(scenario);
+      final released = [
+        'not submitted',
+        'dispose before abort',
+      ].contains(scenario);
+      var releases = 0;
       var saves = 0;
       var broadcasts = 0;
       var submissions = 0;
@@ -87,6 +104,15 @@ void main() {
               }
               return scenario == 'zero save ID' ? 0 : 42;
             },
+            releaseUnsubmittedTransaction: (tr) async {
+              releases++;
+              expect(tr.trId, 42);
+              expect(tr.txHash, 'ab' * 32);
+              if (scenario == 'release error') {
+                throw StateError('Disk unavailable');
+              }
+              return scenario != 'release refused';
+            },
             transactionSender: (params) async {
               submissions++;
               expect(params.decimalAmountOverride, '1.25');
@@ -94,6 +120,14 @@ void main() {
                 await params.beforeBroadcast!('ab' * 32);
               } catch (_) {
                 return const SendResult.fail('Storage failed');
+              }
+              if (noBroadcast) {
+                if (!prepared.isCompleted) prepared.complete();
+                if (scenario == 'dispose before abort') await ack.future;
+                return SendResult.notSubmitted(
+                  scenario == 'abort foreign hash' ? 'cd' * 32 : 'ab' * 32,
+                  'Cancelled before broadcast',
+                );
               }
               broadcasts++;
               prepared.complete();
@@ -117,7 +151,8 @@ void main() {
       await tester.pumpAndSettle();
       final dynamic state = tester.state(find.byType(WalletChainSendMemo));
       final Future<void> pending = state.signTx(record) as Future<void>;
-      if (scenario == 'dispose before ack') {
+      if (scenario == 'dispose before ack' ||
+          scenario == 'dispose before abort') {
         await tester.pump();
         await prepared.future;
         await tester.pumpWidget(const SizedBox.shrink());
@@ -138,12 +173,18 @@ void main() {
         'pending reservation',
       ].contains(scenario);
       expect(saves, 1);
-      expect(broadcasts, failed ? 0 : 1);
-      expect(record.trId, failed ? 0 : 42);
-      expect(record.txHash, 'ab' * 32);
-      if (!failed) {
+      expect(broadcasts, failed || noBroadcast ? 0 : 1);
+      expect(releases, noBroadcast && scenario != 'abort foreign hash' ? 1 : 0);
+      expect(record.trId, failed || released ? 0 : 42);
+      expect(record.txHash, released ? '' : 'ab' * 32);
+      if (!failed && !released) {
         await state.signTx(record);
         expect(submissions, 1);
+      }
+      if (scenario == 'not submitted') {
+        await state.signTx(record);
+        expect(submissions, 2);
+        expect(broadcasts, 0);
       }
       expect(tester.takeException(), isNull);
     });

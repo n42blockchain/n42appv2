@@ -120,6 +120,37 @@ extension TransactionRecordDao on AppDatabase {
     });
   }
 
+  /// Release only the exact pending row after a sender proves no broadcast API
+  /// was invoked. Timeout/not-found is never sufficient evidence for this call.
+  Future<bool> releaseUnsubmittedMemoTransaction(
+    TransationRecordModel record,
+  ) async {
+    final values = Map<String, Object?>.from(record.toMapDb());
+    final id = record.trId;
+    final hash = values['txHash'] as String;
+    if (id <= 0 ||
+        !{'ADA', 'XLM'}.contains(values['coinMiniName']) ||
+        hash.length != 64 ||
+        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash)) {
+      return false;
+    }
+    final db = await database;
+    final removed = await db.delete(
+      'TransationRecord',
+      where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0',
+      whereArgs: [
+        id,
+        hash,
+        values['userUuid'],
+        values['walletIndex'],
+        values['coinMiniName'],
+        values['from1'],
+        values['isTest'],
+      ],
+    );
+    return removed == 1;
+  }
+
   /// Idempotent Aptos history persistence for submission/recovery retries.
   /// Snapshot caller-owned state before opening the database asynchronously.
   Future<int> saveAptTransactionRecord(TransationRecordModel record) async {

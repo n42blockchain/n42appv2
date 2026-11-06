@@ -2,13 +2,13 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 138
+## Current interruption inventory — through batch 139
 
 Fresh inspection on 2026-11-06 found two modified runtime files and two untracked tests left by the interrupted Stellar recovery work. The previous inventory still described batch 126 and incorrectly presented later-completed implementation as missing. Batches 127–133 are committed; batch 134 below closes the remaining local patch after validation.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
-| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Unsubmitted-record repair, other entry points and process-crash recovery remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
+| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Batch 139 releases exact reservations on explicit no-broadcast results. Crash/orphan repair, other entry points and process-crash recovery remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
 | Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Fee/max confirmation UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
@@ -34,6 +34,13 @@ Fresh fetch before this batch: wallet e2d3b9330 equals origin/master (0/0). ID H
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Release proven-unsubmitted Memo reservations — batch 139
+
+- Added SendResult.notSubmitted as an explicit sender guarantee: the broadcast API was never invoked. ADA/XLM return it with the original local hash only when the beforeBroadcast callback aborts or the signer context changes before dispatch. Ordinary fail and uncertain outcomes do not carry this guarantee; broadcast attempts remain uncertain on errors.
+- Memo pages keep a snapshot of the persisted row and release it only for a matching explicit notSubmitted result. The DAO delete requires the exact row ID/hash/account/wallet/chain/sender/network and pending state. Successful cleanup clears the page reservation so a later explicit user action can retry; no automatic resend. Cleanup still runs after page disposal. Different hashes, terminal rows, refused cleanup and disk errors retain the reservation.
+- 324 regressions pass across the complete sender directory, wallet data and Memo widget suite (/tmp/n42-memo-b139-final.log, exit 0). Sender fixtures prove zero broadcast calls for aborts and retain uncertain flags after transport invocation. SQLite tests preserve foreign/terminal records. Widget tests cover retry after cleanup, late-disposal cleanup, refusal, storage error, foreign hash and no cleanup for uncertain results. Two brace-style infos were fixed; final scoped analysis clean (/tmp/n42-memo-b139-analysis-clean.log).
+- This repairs cancellations with a live, explicit no-broadcast result. A process crash before that proof is consumed, a database write that succeeds but loses its returned ID, and older orphan reservations still require durable phase/recovery work. Do not infer non-broadcast from absence on the network. No physical-device, live transfer or release operation.
 
 ### Atomic Memo-page broadcast reservation — batch 138
 

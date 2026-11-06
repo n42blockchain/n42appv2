@@ -132,6 +132,44 @@ void main() {
       },
     );
   }
+  for (final chain in ['ADA', 'XLM']) {
+    test('$chain release targets only original pending identity', () async {
+      final original = record(chain);
+      original.trId = await db.reserveMemoTransaction(original);
+      for (final change in [
+        {'userUuid': 'bob'},
+        {'walletIndex': 99},
+        {'txHash': 'cd' * 32},
+        {'isTest': 1},
+        {'from1': 'other'},
+        {'trId': 0},
+      ]) {
+        expect(
+          await db.releaseUnsubmittedMemoTransaction(
+            TransationRecordModel.fromMap({...original.toMap(), ...change}),
+          ),
+          isFalse,
+        );
+      }
+      expect(await connection.query('TransationRecord'), hasLength(1));
+      expect(await db.releaseUnsubmittedMemoTransaction(original), isTrue);
+      expect(await connection.query('TransationRecord'), isEmpty);
+      expect(await db.reserveMemoTransaction(record(chain)), greaterThan(0));
+    });
+    for (final terminal in [1, 2]) {
+      test('$chain release preserves terminal state $terminal', () async {
+        final original = record(chain);
+        original.trId = await db.reserveMemoTransaction(original);
+        original.state = terminal;
+        await db.updateTransationRecordTxhash(original);
+        expect(await db.releaseUnsubmittedMemoTransaction(original), isFalse);
+        expect(
+          (await connection.query('TransationRecord')).single['state'],
+          terminal,
+        );
+      });
+    }
+  }
   test('invalid reservation creates no history', () async {
     for (final tx in [
       record('BTC'),

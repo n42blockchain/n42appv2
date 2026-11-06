@@ -328,7 +328,8 @@ void main() {
       expect(saved, ['ab' * 32]);
       expect(api.broadcasts, aborted ? 0 : 1);
       expect(result.success, scenario == 'accepted');
-      expect(result.txHash, aborted ? null : 'ab' * 32);
+      expect(result.txHash, 'ab' * 32);
+      expect(result.definitelyNotSubmitted, aborted);
       if (!aborted) expect(result.actualAmount, 1.25);
     });
   }
