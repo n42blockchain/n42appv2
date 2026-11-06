@@ -10,13 +10,69 @@ import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 
 /// MultiversX (EGLD) sender.
 class EgldSender implements ChainSender {
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
+  final Future<dynamic> Function(String url) _getAccount;
+  final Future<dynamic> Function(String url, String signed) _broadcast;
+
+  EgldSender({
+    Trustdart? trustdart,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+    Future<dynamic> Function(String url)? getAccount,
+    Future<dynamic> Function(String url, String signed)? broadcast,
+  }) : _trustdart = trustdart ?? Trustdart(),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic,
+       _getAccount = getAccount ?? _loadAccount,
+       _broadcast = broadcast ?? _submit;
+
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<dynamic> _loadAccount(String url) => BaseApi.requestEmptyH.get(
+    url,
+    params: {},
+    defaultReturn: false,
+    header: _header,
+  );
+
+  static Future<dynamic> _submit(String url, String signed) =>
+      BaseApi.requestEmptyH.post(
+        url,
+        params: {},
+        data: signed,
+        defaultReturn: false,
+        header: _header,
+        enableRetry: false,
+      );
 
   static const _mainnetUrl = 'https://api.multiversx.com';
   static const _testnetUrl = 'https://testnet-api.multiversx.com';
@@ -26,23 +82,46 @@ class EgldSender implements ChainSender {
 
   @override
   Future<SendResult> send(SendParams params) async {
-    final base = _base(params.isTest);
-
-    // Get account info (nonce + balance)
-    MessageModel mmAccount;
+    final Object? owner;
+    final String? mnemonic;
     try {
-      final data = await BaseApi.requestEmptyH.get(
-        '$base/accounts/${params.fromAddress}',
-        params: {},
-        defaultReturn: false,
-        header: _header,
-      );
-      mmAccount = MessageModel()..data = data;
-    } catch (e) {
-      return SendResult.fail(e.toString());
+      owner = _ownerIdentity();
+      mnemonic = params.privateKey == null ? _readMnemonic() : null;
+    } catch (_) {
+      return const SendResult.fail('Wallet is not ready');
+    }
+    bool signerIsCurrent() {
+      try {
+        return _ownerIdentity() == owner &&
+            (params.privateKey != null ||
+                (owner != null && mnemonic == _readMnemonic()));
+      } catch (_) {
+        return false;
+      }
     }
 
-    final accountData = mmAccount.data as Map<String, dynamic>;
+    if (!signerIsCurrent() ||
+        (params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+      return const SendResult.fail('Wallet signing context is unavailable');
+    }
+    final base = _base(params.isTest);
+    final Map<String, dynamic> accountData;
+    try {
+      final data = await _getAccount('$base/accounts/${params.fromAddress}');
+      if (!signerIsCurrent()) {
+        return const SendResult.fail('Wallet signing context changed');
+      }
+      if (data is! Map<String, dynamic> ||
+          data['nonce'] is! int ||
+          (data['nonce'] as int) < 0 ||
+          data['balance'] is! String ||
+          !RegExp(r'^[0-9]+$').hasMatch(data['balance'] as String)) {
+        return const SendResult.fail('Invalid account response');
+      }
+      accountData = data;
+    } catch (_) {
+      return const SendResult.fail('Unable to load account');
+    }
     final nonce = accountData['nonce'] as int? ?? 0;
     final balanceStr = accountData['balance']?.toString() ?? '0';
     final chainBalance = BigInt.tryParse(balanceStr) ?? BigInt.zero;
@@ -76,48 +155,54 @@ class EgldSender implements ChainSender {
     }
 
     final signMap = <String, dynamic>{
-      'nonce': nonce,
-      'value': valuePrice.toString(),
-      'receiver': params.toAddress,
-      'gasLimit': gasLimit,
-      'gasPrice': gasPrice,
-      'chainID': params.isTest ? 'T' : '1',
-      'version': 1,
+      'nonce': nonce.toString(),
+      'amount': valuePrice.toString(),
+      'toAddress': params.toAddress,
+      'gasLimit': gasLimit.toString(),
+      'gasPrice': gasPrice.toString(),
+      'chainId': params.isTest ? 'T' : '1',
+      'version': '1',
       'data': params.memo ?? '',
     };
 
-    String signStr;
-    if (params.privateKey == null) {
-      if (!AppGlobals.appContext.mounted) {
-        return const SendResult.fail('Context is no longer valid');
+    final String signStr;
+    try {
+      final derived = await _trustdart.generateAddress(
+        CoinType.EGLD.name,
+        params.path,
+        'legacy',
+        mnemonic: mnemonic ?? '',
+        pk: params.privateKey ?? '',
+        isTest: params.isTest,
+      );
+      if (!signerIsCurrent()) {
+        return const SendResult.fail('Wallet signing context changed');
+      }
+      final address = derived['legacy'];
+      if (address is! String ||
+          address.isEmpty ||
+          address != params.fromAddress) {
+        return const SendResult.fail('Signing key does not match sender');
       }
       signStr = await _trustdart.signTransaction(
         CoinType.EGLD.name,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: mnemonic ?? '',
+        pk: params.privateKey ?? '',
       );
-    } else {
-      signStr = await _trustdart.signTransaction(
-        CoinType.EGLD.name,
-        params.path,
-        signMap,
-        pk: params.privateKey!,
-      );
+    } catch (_) {
+      return const SendResult.fail('Unable to sign transaction');
+    }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet signing context changed');
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
     // Broadcast
     try {
-      final data = await BaseApi.requestEmptyH.post(
-        '$base/transactions',
-        params: {},
-        data: signStr,
-        defaultReturn: false,
-        header: _header,
-        enableRetry: false,
-      );
+      final data = await _broadcast('$base/transactions', signStr);
       final txHash = (data as Map<String, dynamic>)['txHash']?.toString();
       if (txHash == null || txHash.isEmpty) {
         return SendResult.fail(data['error']?.toString() ?? 'Broadcast failed');

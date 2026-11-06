@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 155
+## Current interruption inventory — through batch 156
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -54,6 +54,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### EGLD signing context and native payload — batch 156
+
+- Source inspection found EGLD loaded the current mnemonic only after its account RPC and never bound the signing key to the requested sender. Capture the owner and credential before awaiting, recheck after RPC/address derivation/signing, and derive the exact sender from the same path and credential before signing. Wallet/key changes, address mismatch and native failures do not broadcast. Explicit private-key sends do not read the current mnemonic.
+- iOS and Android MultiversX signing handlers both require toAddress/amount/chainId and string nonce/gasPrice/gasLimit/version. The old Dart sender used receiver/value/chainID and integer fields. Corrected the payload to the actual native contract and added a real Trustdart MethodChannel boundary test with a controlled native response.
+- Account responses now require a nonnegative integer nonce and decimal-string balance; malformed responses cannot silently sign nonce zero. Existing network selection, memo, precise decimal amounts, Max fee subtraction and no-retry submission behavior are retained.
+- EGLD and VET targeted suites: 41 pass (/tmp/n42-wallet-b156-final.log). Scoped analysis clean (/tmp/n42-wallet-b156-analysis-final.log). Tests include account/key changes across RPC, derivation and signing, mismatched/empty addresses, private keys, native failures, malformed account data, insufficient balance, exact decimals and Max. Native cryptography and RPC are fixtures; no live funds or installed-device acceptance.
+- Remaining EGLD scope: dynamic/network fee and memo gas validation, broadcast ambiguity/durable recovery, token transfers and real native/on-chain acceptance. The prior Android build predates this change and is not a release of this revision.
 
 ### Android native-login build and live capabilities — batch 155
 
