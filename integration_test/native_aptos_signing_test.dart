@@ -7,6 +7,8 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
 
 import '../test/native/aptos_reference_vectors.dart';
+import '../test/native/aptos_coin_reference_vectors.dart' as coin;
+import '../test/native/aptos_fa_reference_vectors.dart' as fa;
 
 /// Public test keys, synthetic transactions, no network or broadcast.
 void main() {
@@ -16,7 +18,13 @@ void main() {
     (tester) async {
       await tester.pumpWidget(const MaterialApp(home: Scaffold()));
       final sdk = Trustdart();
-      for (final vector in aptosReferenceVectors) {
+      for (final vector in [
+        ...aptosReferenceVectors,
+        ...coin.aptosReferenceVectors,
+        ...fa.aptosReferenceVectors,
+      ]) {
+        final isToken = vector['token'] == true;
+        final isFA = vector['fa'] == true;
         final raw = vector['raw']! as String;
         final key = base64Encode(hexToBytes(vector['seed']! as String));
         final chain = vector['chain']! as int;
@@ -56,6 +64,7 @@ void main() {
           );
         }
         final transfer = {
+          'type': isFA ? 'APT_FA_TRANSFER' : 'APT_TRANSFER',
           'fromAddress': '0x${raw.substring(0, 64)}',
           'toAddress': '0x2',
           'amount': 1,
@@ -64,9 +73,9 @@ void main() {
           'maxGasAmount': 10000,
           'expirationTimestampSecs': 2000000000,
           'chainId': chain,
-          'contractAddress': '',
-          'contractModule': '',
-          'contractName': '',
+          'contractAddress': isToken || isFA ? '0x2a' : '',
+          'contractModule': isToken ? 'usd' : '',
+          'contractName': isToken ? 'USDC' : '',
         };
         final ordinary = await sdk.signTransaction(
           'APT',
@@ -75,6 +84,56 @@ void main() {
           pk: key,
         );
         expect(ordinary.replaceFirst(RegExp(r'^0x'), ''), expected);
+        final strings = Map<String, Object>.from(transfer);
+        for (final field in [
+          'amount',
+          'SequenceNumber',
+          'gasUnitPrice',
+          'maxGasAmount',
+          'expirationTimestampSecs',
+        ]) {
+          strings[field] = transfer[field].toString();
+        }
+        expect(
+          (await sdk.signTransaction(
+            'APT',
+            '',
+            strings,
+            pk: key,
+          )).replaceFirst(RegExp(r'^0x'), ''),
+          expected,
+        );
+        final maxRaw = hexToBytes(raw);
+        maxRaw.fillRange(32, 40, 255);
+        maxRaw.fillRange(maxRaw.length - 33, maxRaw.length - 25, 255);
+        final maxSigned = await sdk.signTransaction('APT', '', {
+          ...strings,
+          'amount': '18446744073709551615',
+          'SequenceNumber': '18446744073709551615',
+        }, pk: key);
+        final maxRawSigned = await sdk.signTransaction('APT', '', {
+          ...request,
+          'encodedTransaction': base64Encode(maxRaw),
+        }, pk: key);
+        expect(maxSigned, isNotEmpty);
+        expect(maxSigned, maxRawSigned);
+        expect(
+          maxSigned.replaceFirst(RegExp(r'^0x'), ''),
+          startsWith(
+            maxRaw.map((b) => b.toRadixString(16).padLeft(2, '0')).join(),
+          ),
+        );
+        if (isToken || isFA) {
+          for (final invalid in ['0xgg', '0x1::coin::Token', '0x2a\n']) {
+            expect(
+              await sdk.signTransaction('APT', '', {
+                ...transfer,
+                'contractAddress': invalid,
+              }, pk: key),
+              isEmpty,
+            );
+          }
+        }
         for (final field in [
           'amount',
           'SequenceNumber',
