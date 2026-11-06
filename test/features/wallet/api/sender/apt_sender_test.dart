@@ -9,6 +9,7 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class _Api extends AptApi {
   BigInt price = BigInt.from(7);
+  BigInt balance = BigInt.from(10000000);
   int priceReads = 0;
   int submits = 0;
   @override
@@ -16,7 +17,7 @@ class _Api extends AptApi {
     String address, {
     String contract = '',
     String tokenName = '',
-  }) async => MessageModel()..data = BigInt.from(10000000);
+  }) async => MessageModel()..data = balance;
   @override
   Future<MessageModel> getGasPrice() async {
     priceReads++;
@@ -56,6 +57,62 @@ class _Signer extends Trustdart {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => S.load(const Locale('en')));
+  for (final token in [false, true]) {
+    for (final exact in [
+      BigInt.parse('9007199254740993'),
+      BigInt.zero,
+      -BigInt.one,
+    ]) {
+      test(
+        'exact amount takes precedence token=$token amount=$exact',
+        () async {
+          final api = _Api()..balance = BigInt.parse('9007199255740993');
+          final signer = _Signer();
+          await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+            SendParams(
+              coinType: 'APT',
+              fromAddress: 'owner',
+              toAddress: 'recipient',
+              amount: 1,
+              decimals: 8,
+              tokenDecimals: 6,
+              path: '',
+              privateKey: 'public-test-only',
+              contractAddress: token ? '0x1' : '',
+              valueWeiOverride: token ? BigInt.from(123) : exact,
+              tokenValueWeiOverride: token ? exact : BigInt.from(123),
+            ),
+          );
+          if (exact > BigInt.zero) {
+            expect(signer.received!['amount'], exact.toInt());
+          } else {
+            expect(signer.received, isNull);
+          }
+          expect(api.submits, 0);
+        },
+      );
+    }
+    test('decimal text uses asset decimals token=$token', () async {
+      final api = _Api()..balance = BigInt.from(1000000000);
+      final signer = _Signer();
+      await AptSender(trustdart: signer, apiFactory: (_) => api).send(
+        SendParams(
+          coinType: 'APT',
+          fromAddress: 'owner',
+          toAddress: 'recipient',
+          amount: 9,
+          decimalAmountOverride: '1.234567',
+          decimals: 8,
+          tokenDecimals: 6,
+          path: '',
+          privateKey: 'public-test-only',
+          contractAddress: token ? '0x1' : '',
+        ),
+      );
+      expect(signer.received!['amount'], token ? 1234567 : 123456700);
+      expect(api.submits, 0);
+    });
+  }
   for (final price in [BigInt.zero, -BigInt.one, BigInt.one << 63]) {
     test('invalid gas price stops before signing: $price', () async {
       final api = _Api()..price = price;

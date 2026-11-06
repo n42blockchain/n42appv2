@@ -56,10 +56,18 @@ class AptSender implements ChainSender {
     }
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(
-      params.amountDecimalString,
-      params.decimals,
-    );
+    final exactAmount = isContract
+        ? params.tokenValueWeiOverride
+        : params.valueWeiOverride;
+    BigInt valuePrice =
+        exactAmount ??
+        ethToWeiString(
+          params.amountDecimalString,
+          isContract ? params.tokenDecimals : params.decimals,
+        );
+    if (valuePrice <= BigInt.zero) {
+      return const SendResult.fail('Invalid Aptos transfer amount');
+    }
     double adjustedAmount = params.amount;
 
     if (!isContract) {
