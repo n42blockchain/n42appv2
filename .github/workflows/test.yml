@@ -89,14 +89,16 @@ jobs:
         run: flutter pub get
 
       - name: Run iOS Simulator
-        uses: futureware-tech/simulator-action@v3
-        with:
-          model: 'iPhone 14'
+        run: |
+          xcrun simctl list devices available --json > "$RUNNER_TEMP/ios-simulators.json"
+          IOS_SIMULATOR_ID=$(python3 scripts/select_ios_simulator.py < "$RUNNER_TEMP/ios-simulators.json")
+          xcrun simctl bootstatus "$IOS_SIMULATOR_ID" -b
+          echo "IOS_SIMULATOR_ID=$IOS_SIMULATOR_ID" >> "$GITHUB_ENV"
 
       - name: Run integration tests (iOS)
         run: |
           flutter test integration_test/ \
-            --device-id iPhone \
+            --device-id "$IOS_SIMULATOR_ID" \
             --reporter expanded \
             --no-pub
 

@@ -56,6 +56,8 @@ Batch 68 executes the two previously skipped Falcon suites using a freshly built
 
 Batch 69 fixes confirmed GitHub CI blockers in the release-builder test fixture (missing capability-manifest dependency and outdated mocked iOS SDK). All 42 Python tests, localization audit, full formatting and static analysis gates pass locally; analysis has 68 infos and no errors/warnings. Remote rerun and downstream native/coverage/build jobs still need observed success.
 
+Batch 70 confirms remote abc826f0f analysis/localization/format gates and Linux native Falcon step passed (CI run 42220187074). Fixed the separate iOS test job's unavailable hard-coded iPhone 14 by selecting a valid simulator from simctl JSON and passing its exact UDID. All 46 script tests pass locally; hosted iOS execution and downstream coverage/build acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
