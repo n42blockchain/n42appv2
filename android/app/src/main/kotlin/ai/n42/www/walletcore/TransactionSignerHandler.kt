@@ -1290,6 +1290,10 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
     private fun signSuiTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String {
         val privateKey = pk ?: wallet!!.getKey(CoinType.SUI, path)
 
+        if (txData["type"] == "WC_SUI") {
+            return SuiRawTransactionSigner.sign(txData["transaction"] as? String, privateKey) ?: ""
+        }
+
         val referenceGasPrice: Long = (txData["referenceGasPrice"] as Number).toLong()
         val gasBudget: Long = (txData["gasBudget"] as Number).toLong()
         val toAddress: String = txData["toAddress"] as String

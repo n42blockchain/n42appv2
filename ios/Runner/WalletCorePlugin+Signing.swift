@@ -1101,10 +1101,30 @@ extension WalletCorePlugin {
         return output.encoded.hexString
       }
 
+    private func signWalletConnectSui(_ encoded: String, privateKey: PrivateKey) -> String? {
+        guard let raw = Data(base64Encoded: encoded), !raw.isEmpty,
+              raw.base64EncodedString() == encoded else { return nil }
+        let input = SuiSigningInput.with {
+            $0.privateKey = privateKey.data
+            $0.signDirectMessage = SuiSignDirect.with { $0.unsignedTxMsg = encoded }
+        }
+        let output: SuiSigningOutput = AnySigner.sign(input: input, coin: .sui)
+        guard output.error == .ok, output.unsignedTx == encoded,
+              let signature = Data(base64Encoded: output.signature),
+              signature.count == 97, signature.first == 0,
+              signature.suffix(32) == privateKey.getPublicKeyEd25519().data else { return nil }
+        return output.signature
+    }
+
     func signSuiTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
         guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.sui, path: path, privateKey: privateKey) else {
             return nil
+        }
+
+        if txData["type"] as? String == "WC_SUI" {
+            guard let encoded = txData["transaction"] as? String else { return nil }
+            return signWalletConnectSui(encoded, privateKey: pk)
         }
 
         let referenceGasPrice : UInt64 = txData["referenceGasPrice"] as! UInt64

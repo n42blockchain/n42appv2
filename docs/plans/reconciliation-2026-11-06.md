@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Still open, in execution order
 
-- New confirmed Sui gap (batches 53–54): RPC argument order/receipt validation and WalletConnect execution orchestration are repaired (973 related tests passed). Both native platforms still lack `WC_SUI` handling; iOS forced casts can crash on raw requests. Next implement and independently verify the raw signing branch, then reconcile ordinary Sui sender/native fields and output. Do not treat mocked Dart tests as a working native Sui flow.
+- Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Next reconcile ordinary Sui sender/native fields and output; do not treat component tests as a complete wallet flow.
 
 | Priority | Work | Current evidence and next step |
 | --- | --- | --- |
