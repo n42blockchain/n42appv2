@@ -242,8 +242,9 @@ void main() {
             sender: sender,
             transactionWriter: (record) async {
               saved.add(record);
-              if (change == 'save failure')
+              if (change == 'save failure') {
                 throw StateError('storage unavailable');
+              }
               return 42;
             },
           ),
