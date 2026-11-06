@@ -582,3 +582,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - A controller-local account/room/draft receipt cache prevents repeat dispatch while that controller survives a failed receipt write plus failed cleanup. Accepted drafts display Sent and reject cancellation, including stale standalone cancellation checks.
 - Entity/storage/BLoC/page regressions: 93 passed; explicit double-write-failure/cancellation test: 1 passed. Wallet host contracts: 3 passed. Scoped Chat analysis has six existing infos and no errors/warnings. Logs: /tmp/n42-chat-receipt-tests.log, /tmp/n42-chat-receipt-live.log, /tmp/n42-chat-receipt-host.log.
 - Remaining: crash between server acceptance and receipt persistence, restart after both writes fail, cross-controller/process coordination during storage failure, manual reconciliation and live-server/device acceptance. No exactly-once claim for those windows, no TestFlight upload.
+
+
+## Batch 65 — shared scheduled receipts across controllers (2026-11-06)
+
+- Integrated Chat be58a08acbdfd351d9ad401ec2c1248b81ac2460. The account/room/draft operation coordinator retains accepted receipts across controller disposal and lease release. Receipts clear only after acknowledged local cleanup. Recreated controllers do not resend after both receipt persistence and cleanup fail.
+- Cancellation checks the shared receipt under the operation lease. Standalone pages reject stale cancellation after acceptance and display Sent on reopening, with cancellation disabled.
+- Wallet host contracts: 3 passed (/tmp/n42-shared-receipt-host.log). Lockfile changes only the Chat revision. Flutter reports the existing Windows Facebook plugin metadata warning; Windows acceptance is not claimed.
+- Chat entity/storage/service/BLoC/page regressions: 98 passed. Scoped analysis: six existing infos, no errors/warnings. Logs: /tmp/n42-shared-receipt-final.log and /tmp/n42-shared-receipt-analysis.log.
+- Same-isolate recovery only. Process termination before receipt persistence, multiple processes/devices, manual reconciliation and live acceptance remain open. No physical-device test or TestFlight upload.
