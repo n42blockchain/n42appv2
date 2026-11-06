@@ -26,6 +26,12 @@ func unhex(_ value: String) -> Data {
             let params: [String: Any] = ["type":"WC_APT", "encodedTransaction":raw.base64EncodedString(), "chainId":chain]
             let actual = plugin.signAptosTransaction(wallet:nil,path:"",txData:params,privateKey:key)
             precondition(actual == vector["signed"] as? String, "Node signature/authenticator mismatch")
+            if vector["generic"] as? Bool == true {
+                precondition(plugin.signWalletConnectAptos(raw,chain:chain == 1 ? 2 : 1,privateKey:key) == nil)
+                precondition(plugin.signWalletConnectAptos(raw,chain:chain,privateKey:PrivateKey(data:Data(repeating:2,count:32))!) == nil)
+                for length in 0..<67 { precondition(plugin.signWalletConnectAptos(Data(raw.prefix(length)),chain:chain,privateKey:key) == nil) }
+                continue
+            }
             let isFA = vector["fa"] as? Bool ?? false
             let isToken = vector["token"] as? Bool ?? false
             let transfer: [String: Any] = [

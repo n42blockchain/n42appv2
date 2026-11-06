@@ -3,6 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
@@ -15,6 +18,7 @@ import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.
 
 import 'chain_sender.dart';
 import '../../services/apt_submission_journal.dart';
+import '../../utils/aptos/coin_transfer.dart';
 
 /// Aptos chain sender.
 class AptSender implements ChainSender {
@@ -89,9 +93,25 @@ class AptSender implements ChainSender {
         isContract &&
         RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(params.contractAddress) &&
         !params.contractAddress.contains(RegExp(r'\s'));
+    AptosCoinType? genericCoin;
+    if (isContract &&
+        !isFungibleAsset &&
+        params.contractAddress.contains('<')) {
+      try {
+        genericCoin = AptosCoinType.parse(params.contractAddress);
+      } on FormatException catch (e) {
+        return SendResult.fail(e.message);
+      }
+      if (chainId != 1 && chainId != 2) {
+        return const SendResult.fail(
+          'Generic Aptos Coin signing supports mainnet and testnet',
+        );
+      }
+    }
     final assetParts = params.contractAddress.split('::');
     if (isContract &&
         !isFungibleAsset &&
+        genericCoin == null &&
         (assetParts.length != 3 ||
             !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(assetParts[0]) ||
             !RegExp(r'^[A-Za-z_][A-Za-z0-9_]*$').hasMatch(assetParts[1]) ||
@@ -211,6 +231,25 @@ class AptSender implements ChainSender {
       'chainId': chainId,
     };
 
+    Uint8List? genericRaw;
+    if (genericCoin != null) {
+      try {
+        genericRaw = genericCoin.transfer(
+          sender: params.fromAddress,
+          recipient: params.toAddress,
+          sequence: sequence,
+          amount: valuePrice,
+          maxGas: BigInt.from(gas),
+          gasPrice: gasPrice,
+          expiration: lt,
+          chainId: chainId,
+        );
+      } on FormatException catch (e) {
+        return SendResult.fail(e.message);
+      }
+      signMap['type'] = 'WC_APT';
+      signMap['encodedTransaction'] = base64Encode(genericRaw);
+    }
     if (!ownerIsCurrent()) {
       return const SendResult.fail('Wallet changed before Aptos signing');
     }
@@ -235,6 +274,19 @@ class AptSender implements ChainSender {
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
+
+    if (genericRaw != null) {
+      final expected = genericRaw
+          .map((b) => b.toRadixString(16).padLeft(2, '0'))
+          .join();
+      final signed = signStr.replaceFirst(RegExp(r'^0[xX]'), '').toLowerCase();
+      if (signed.length != expected.length + 198 ||
+          !signed.startsWith(expected)) {
+        return const SendResult.fail(
+          'Signed Aptos transfer differs from approved transaction',
+        );
+      }
+    }
 
     // Validate signature
     final sigResult = SignatureValidator.validateSignedTransaction(

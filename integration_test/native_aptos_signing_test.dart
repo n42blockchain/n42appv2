@@ -9,6 +9,7 @@ import 'package:web3dart/web3dart.dart' show hexToBytes;
 import '../test/native/aptos_reference_vectors.dart';
 import '../test/native/aptos_coin_reference_vectors.dart' as coin;
 import '../test/native/aptos_fa_reference_vectors.dart' as fa;
+import '../test/native/aptos_generic_reference_vectors.dart' as generic;
 
 /// Public test keys, synthetic transactions, no network or broadcast.
 void main() {
@@ -22,6 +23,7 @@ void main() {
         ...aptosReferenceVectors,
         ...coin.aptosReferenceVectors,
         ...fa.aptosReferenceVectors,
+        ...generic.aptosReferenceVectors,
       ]) {
         final isToken = vector['token'] == true;
         final isFA = vector['fa'] == true;
@@ -63,6 +65,7 @@ void main() {
             isEmpty,
           );
         }
+        if (vector['generic'] == true) continue;
         final transfer = {
           'type': isFA ? 'APT_FA_TRANSFER' : 'APT_TRANSFER',
           'fromAddress': '0x${raw.substring(0, 64)}',

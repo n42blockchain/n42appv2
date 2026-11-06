@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import '../../../../native/aptos_generic_reference_vectors.dart' as generic;
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -263,7 +267,7 @@ void main() {
     '0x2a::usd::',
     '0x2a::u sd::USDC',
     '0x2a::usd::USDC\n',
-    '0x2a::usd::USDC<0x1::aptos_coin::AptosCoin>',
+    '0x2a::usd::USDC<0x1::aptos_coin::AptosCoin',
   ]) {
     test('unsupported asset never reaches signing: $asset', () async {
       final api = _Api();
@@ -290,6 +294,82 @@ void main() {
       expect(signer.received, isNull);
     });
   }
+  for (final chain in [1, 2]) {
+    test('generic Coin signs complete BCS on chain $chain', () async {
+      final vector = generic.aptosReferenceVectors[chain - 1];
+      final api = _Api()
+        ..price = BigInt.from(100)
+        ..chainId = chain;
+      final signer = _Signer()..signed = vector['signed'] as String;
+      final result =
+          await AptSender(
+            ownerIdentity: () => 'owner',
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
+            SendParams(
+              coinType: 'APT',
+              fromAddress: '0x${(vector['raw'] as String).substring(0, 64)}',
+              toAddress: '0x2',
+              amount: 1,
+              decimals: 0,
+              tokenDecimals: 0,
+              path: '',
+              privateKey: 'fixture',
+              contractAddress:
+                  '0x2a::vault::Share<0x2a::usd::USDC,vector<u64>>',
+              tokenValueWeiOverride: BigInt.one,
+              isTest: chain == 2,
+              chainConfig: {'chainId': 1, 'chainId_test': 2},
+            ),
+          );
+      expect(result.success, true, reason: result.error);
+      expect(result.txHash, vector['transactionHash']);
+      expect(signer.received!['type'], 'WC_APT');
+      expect(
+        base64Decode(signer.received!['encodedTransaction'] as String)
+            .map((b) => b.toRadixString(16).padLeft(2, '0'))
+            .join(),
+        vector['raw'],
+      );
+      expect(api.submits, 1);
+    });
+  }
+  for (final sameLength in [false, true]) {
+    test('generic Coin rejects signer payload replacement sameLength=$sameLength', () async {
+      final api = _Api()..price = BigInt.from(100);
+      final signer = _Signer()
+        ..signed =
+            (sameLength ? generic.aptosReferenceVectors : aptosReferenceVectors)
+                    .first['signed']
+                as String;
+      final result =
+          await AptSender(
+            ownerIdentity: () => 'owner',
+            trustdart: signer,
+            apiFactory: (_) => api,
+          ).send(
+            SendParams(
+              coinType: 'APT',
+              fromAddress:
+                  '0x${(aptosReferenceVectors.first['raw'] as String).substring(0, 64)}',
+              toAddress: '0x3',
+              amount: 1,
+              decimals: 0,
+              tokenDecimals: 0,
+              path: '',
+              privateKey: 'fixture',
+              contractAddress:
+                  '0x2a::vault::Share<0x2a::usd::USDC,vector<u64>>',
+              tokenValueWeiOverride: BigInt.one,
+            ),
+          );
+      expect(result.success, false);
+      expect(signer.received, isNotNull);
+      expect(api.submits, 0);
+    });
+  }
+
   test(
     'FA metadata routes to the native FA payload with separate fees',
     () async {
