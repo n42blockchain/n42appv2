@@ -388,3 +388,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `cd21a9c31010bd6160a044ce34273c2715128817` is pushed and remote parity verified. MSG-001 retains genuinely unknown transport outcomes, crash-before-cleanup, legacy recovery and cross-device/process acceptance. This receipt is not recipient delivery/read evidence. No device operation or release upload.
 
 - Wallet host integration: 129 passed (`/tmp/n42-scheduled-ack-host-tests.log`); dependency resolution changes only the Chat Git reference.
+
+
+## Batch 43 — scheduled picker short-screen accessibility (2026-11-06)
+
+- The schedule sheet now scrolls instead of overflowing. Existing localized options remain intact. Tonight is omitted once its 20:00 time has passed; quick selections recheck future time at tap to reject a preset that expired while the sheet stayed open.
+- Five widget tests passed (`/tmp/n42-picker-tests.log`), including English/German/Arabic/Chinese at 320x480 with 2x text and opening the custom date dialog. The same tests against previous source reproduced four overflows of 213–795px (`/tmp/n42-picker-baseline.log`). The preset test uses current wall time; it does not exhaustively simulate midnight/DST boundaries. Scoped analysis reports no issues (`/tmp/n42-picker-analyze.log`).
+- Chat `31e8a8ca1f000d98c5155ba83940d2f835a28f5c` is pushed. QA-006 retains other UI literal and device/editorial review. No release upload or physical-device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-picker-host-tests.log`); lockfile changes only the Chat reference.
