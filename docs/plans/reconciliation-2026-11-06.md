@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Roll back rejected reactions without reverting newer state — batch 179
+
+- False/exception responses left optimistic add/remove state displayed. Capture original and optimistic emoji entries; on failure in the same session restore only the unchanged entry while retaining current message fields, other emoji, new arrivals and newer server entries.
+- Four rejection cases fail before repair; five new tests include newer-server-state preservation. BLoC/extended/event suites: **345 pass**, exit 0 (/tmp/n42-chat-b179-final.log); scoped analysis clean (/tmp/n42-chat-b179-analysis.log). Before-fix evidence: /tmp/n42-chat-b179-before.log. Chat `537d246ea12fa1f3288246c6e4368f2211f5970a` is pushed and pinned. Dependency resolution changed only Chat; all three wallet host tests pass (/tmp/n42-wallet-b179-host.log).
+- Concurrent operations on the same emoji, ambiguous transport outcomes, disposal cancellation races, repository transitions and broader login/recovery/dependency/payment/release acceptance remain open. No fresh full suite, live message, device or release claim.
+
 ### Isolate reaction, receipt, typing and resend operations — batch 178
 
 - Six failures reproduced delayed reaction/read/typing dispatch into a new room, stale resend success/error changing its deletion tracking or error, and false resend acknowledgement hiding the failed message. Capture room/account generation, use the immutable originating room and check after preparation/completion. False resend results now fail before updating retry/deletion sets.
