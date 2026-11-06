@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
@@ -212,4 +214,20 @@ wc.SessionData approvedEvmSession(String topic, String address) {
       ),
     },
   );
+}
+
+/// Structurally valid test-only RawTransaction with an empty script payload.
+String aptosRawFixture(String address, {int chain = 1}) {
+  final hex = address.replaceFirst(RegExp(r'^0[xX]'), '').padLeft(64, '0');
+  return base64Encode([
+    for (var i = 0; i < 64; i += 2)
+      int.parse(hex.substring(i, i + 2), radix: 16),
+    ...List.filled(8, 0),
+    0,
+    0,
+    0,
+    0,
+    ...List.filled(24, 0),
+    chain,
+  ]);
 }

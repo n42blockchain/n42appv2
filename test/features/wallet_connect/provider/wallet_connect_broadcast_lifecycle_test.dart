@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -173,6 +174,42 @@ void main() {
     expect(provider.walletConnectState, WalletConnectState.error);
   });
 
+  for (final invalid in [
+    'bad encoding',
+    'wrong sender',
+    'wrong chain',
+    'trailing data',
+  ]) {
+    test('Aptos $invalid cannot reach native signing', () async {
+      final c = _chains[1];
+      var raw = aptosRawFixture(c.address);
+      if (invalid == 'bad encoding') raw = '!!!';
+      if (invalid == 'wrong sender') raw = aptosRawFixture('0x2');
+      if (invalid == 'wrong chain') raw = aptosRawFixture(c.address, chain: 2);
+      if (invalid == 'trailing data') {
+        raw = base64Encode([...base64Decode(raw), 0]);
+      }
+      provider.coinModels = [
+        sessionCoin(type: c.type, blockchain: c.blockchain, address: c.address)
+          ..coin['path'] = {'legacy': "m/44'/0'/0'"},
+      ];
+      provider.coinModelsIndex = 0;
+      client.activeSessions['request-topic'] = _session(
+        c.ns,
+        c.chain,
+        c.address,
+        c.method,
+      );
+      provider.actionData = sessionRequest(c.method, {
+        'encodedTransaction': raw,
+      }, chain: c.chain);
+      await provider.transactionSignTap();
+      expect(nativeCalls, 0);
+      expect(provider.submissions, isEmpty);
+      expect(provider.walletConnectState, WalletConnectState.error);
+    });
+  }
+
   for (final chain in [
     'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ',
     'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K',
@@ -228,7 +265,9 @@ void main() {
               c.method,
             );
             provider.actionData = sessionRequest(c.method, {
-              'transaction': 'cmF3',
+              'transaction': c.ns == 'aptos'
+                  ? aptosRawFixture(c.address, chain: requestIsTest ? 2 : 1)
+                  : 'cmF3',
             }, chain: chain);
             final operation = provider.transactionSignTap();
             await nativeStarted.future;
@@ -277,7 +316,7 @@ void main() {
         c.method,
       );
       provider.actionData = sessionRequest(c.method, {
-        'transaction': 'cmF3',
+        'transaction': c.ns == 'aptos' ? aptosRawFixture(c.address) : 'cmF3',
       }, chain: c.chain);
       return provider.transactionSignTap();
     }

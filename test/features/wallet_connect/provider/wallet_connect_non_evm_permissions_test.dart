@@ -307,7 +307,9 @@ void main() {
                 ? <String, dynamic>{'transaction': <String, dynamic>{}}
                 : 'Zml4dHVyZQ==',
             'transaction': 'cmF3',
-            'encodedTransaction': 'cmF3',
+            'encodedTransaction': c.ns == 'aptos'
+                ? aptosRawFixture(c.address)
+                : 'cmF3',
             'transactionBlock': 'cmF3',
             'transactions': ['cmF3'],
           }, chain: c.chain);
@@ -397,7 +399,9 @@ void main() {
                   ? <String, dynamic>{}
                   : 'Zml4dHVyZQ==',
               'transaction': 'cmF3',
-              'encodedTransaction': 'cmF3',
+              'encodedTransaction': c.ns == 'aptos'
+                  ? aptosRawFixture(c.address)
+                  : 'cmF3',
               'transactionBlock': 'cmF3',
               'transactions': ['cmF3'],
             }, chain: c.chain);

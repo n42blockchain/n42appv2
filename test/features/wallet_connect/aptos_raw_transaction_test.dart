@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet_connect/validation/aptos_raw_transaction.dart';
@@ -37,6 +38,34 @@ AptosRawTransaction parse(
 );
 
 void main() {
+  test('independent Node transfer vectors parse without changing bytes', () {
+    final vectors = jsonDecode(
+      File('test/fixtures/aptos/raw_signing_vectors.json').readAsStringSync(),
+    ) as List;
+    for (final v in vectors) {
+      final hex = v['raw'] as String;
+      final transaction = AptosRawTransaction.parse(
+        '0x$hex',
+        expectedSender: '0x${hex.substring(0, 64)}',
+        expectedChainId: v['chain'] as int,
+      );
+      expect(
+        transaction.bytes
+            .map((b) => b.toRadixString(16).padLeft(2, '0'))
+            .join(),
+        hex,
+      );
+      expect(
+        () => AptosRawTransaction.parse(
+          '0x${v['signed']}',
+          expectedSender: transaction.sender,
+          expectedChainId: transaction.chainId,
+        ),
+        throwsFormatException,
+      );
+    }
+  });
+
   final payloads = <String, List<int>>{
     'entry': [2, ...entry()],
     'script': [0, 1, 42, 0, 2, 0, 7, 5, 1],

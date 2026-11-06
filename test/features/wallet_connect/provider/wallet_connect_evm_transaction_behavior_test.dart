@@ -643,13 +643,16 @@ void main() {
       () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(_trustdartChannel, null),
     );
-    final aptosCoin = sessionCoin(type: 'APT', blockchain: 'Aptos')
-      ..coin['path'] = {'legacy': "m/44'/637'/0'/0'"};
+    final aptosCoin = sessionCoin(
+      type: 'APT',
+      blockchain: 'Aptos',
+      address: '0x1',
+    )..coin['path'] = {'legacy': "m/44'/637'/0'/0'"};
     provider
       ..coinModels = [aptosCoin]
       ..coinModelsIndex = 0
       ..actionData = _request('aptos_signTransaction', {
-        'transaction': 'encoded-aptos-transaction',
+        'transaction': aptosRawFixture('0x1'),
       }, chain: 'aptos:1');
 
     await provider.transactionSignTap();

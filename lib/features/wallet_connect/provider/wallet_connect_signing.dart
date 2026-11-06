@@ -19,6 +19,8 @@ import 'package:web3dart/web3dart.dart' as web3;
 import 'package:web3dart/web3dart.dart' show bytesToHex;
 import 'package:wallet/wallet.dart' as wallet_types;
 
+import '../validation/aptos_raw_transaction.dart';
+
 /// Mixin: WalletConnect signing handlers for messages and transactions.
 mixin WalletConnectSigning
     on ChangeNotifier, WalletConnectConnection, WalletConnectSession {
@@ -558,6 +560,11 @@ mixin WalletConnectSigning
       return;
     }
     final requestIsTest = _requestTestNetwork(CoinType.APT, eventData.chainId);
+    final rawTransaction = AptosRawTransaction.parse(
+      rawTx,
+      expectedSender: cm.address,
+      expectedChainId: requestIsTest ? 2 : 1,
+    );
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
     requireCurrent();
@@ -565,7 +572,11 @@ mixin WalletConnectSigning
       cm.config.pathForAddrType(cm.addrType)!,
       cm.pathIndex,
     );
-    final txData = {"type": "WC_APT", "encodedTransaction": rawTx};
+    final txData = {
+      "type": "WC_APT",
+      "encodedTransaction": base64Encode(rawTransaction.bytes),
+      "chainId": rawTransaction.chainId,
+    };
     final signedHex = await trustdart.signTransaction(
       CoinType.APT.name,
       path,

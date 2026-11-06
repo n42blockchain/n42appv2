@@ -1,0 +1,20 @@
+// Public deterministic fixture; Node/OpenSSL is independent of WalletCore.
+const c = require('node:crypto');
+const seed = Buffer.alloc(32, 1);
+const key = c.createPrivateKey({key: Buffer.concat([Buffer.from('302e020100300506032b657004220420','hex'), seed]), format:'der', type:'pkcs8'});
+const pub = c.createPublicKey(key).export({format:'der',type:'spki'}).subarray(-32);
+const hash = bytes => c.createHash('sha3-256').update(bytes).digest();
+const sender = hash(Buffer.concat([pub, Buffer.from([0])]));
+const u64 = n => {const b=Buffer.alloc(8); b.writeBigUInt64LE(BigInt(n)); return b;};
+const text = s => Buffer.concat([Buffer.from([s.length]), Buffer.from(s)]);
+const address = n => Buffer.concat([Buffer.alloc(31), Buffer.from([n])]);
+const payload = Buffer.concat([Buffer.from([2]), address(1), text('aptos_account'), text('transfer'),
+  Buffer.from([0,2,32]),address(2),Buffer.from([8]),u64(1)]);
+console.log(JSON.stringify([1,2].map(chain => {
+ const raw=Buffer.concat([sender,u64(0),payload,u64(10000),u64(100),u64(2000000000),Buffer.from([chain])]);
+ const message=Buffer.concat([hash(Buffer.from('APTOS::RawTransaction')),raw]);
+ const signature=c.sign(null,message,key);
+ if(!c.verify(null,message,c.createPublicKey(key),signature)) throw Error('reference verify failed');
+ const signed=Buffer.concat([raw,Buffer.from([0,32]),pub,Buffer.from([64]),signature]);
+ return {seed:seed.toString('hex'),raw:raw.toString('hex'),chain,signed:signed.toString('hex')};
+})));

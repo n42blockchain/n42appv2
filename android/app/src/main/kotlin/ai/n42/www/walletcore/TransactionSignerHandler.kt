@@ -1232,6 +1232,18 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
     private fun signAptosTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String {
         val privateKey = pk ?: wallet!!.getKey(CoinType.APTOS, path)
 
+        if (txData["type"] == "WC_APT") {
+            val encoded = txData["encodedTransaction"] as? String ?: return ""
+            val chain = txData["chainId"] as? Int ?: return ""
+            if (encoded.length > 90_000) return ""
+            return try {
+                val raw = java.util.Base64.getDecoder().decode(encoded)
+                AptosRawTransactionSigner.sign(raw, chain, privateKey)?.let {
+                    Numeric.toHexString(it)
+                } ?: ""
+            } catch (_: Exception) { "" }
+        }
+
         val gasUnitPrice: Long = txData["gasUnitPrice"] as Long
         val maxGasAmount: Long = txData["maxGasAmount"] as Long
         val expirationTimestampSecs: Long = txData["expirationTimestampSecs"] as Long

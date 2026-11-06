@@ -1019,10 +1019,35 @@ extension WalletCorePlugin {
         return output.encoded.hexString
       }
 
+    // The host validates complete BCS structure before dispatch. Bind the native
+    // key and chain again, sign the original bytes, and append an Ed25519 authenticator.
+    private func signWalletConnectAptos(_ raw: Data, chain: Int, privateKey: PrivateKey) -> String? {
+        guard raw.count >= 67, raw.count <= 65_536, (1...2).contains(chain),
+              raw.last == UInt8(chain) else { return nil }
+        let publicKey = privateKey.getPublicKeyEd25519()
+        let publicBytes = publicKey.data
+        guard publicBytes.count == 32,
+              raw.prefix(32) == Hash.sha3_256(data: publicBytes + Data([0])) else { return nil }
+        let message = Hash.sha3_256(data: Data("APTOS::RawTransaction".utf8)) + raw
+        guard let signature = privateKey.sign(digest: message, curve: .ed25519),
+              signature.count == 64,
+              publicKey.verify(signature: signature, message: message) else { return nil }
+        // TransactionAuthenticator::Ed25519, length-prefixed public key/signature.
+        return (raw + Data([0, 32]) + publicBytes + Data([64]) + signature).hexString
+    }
+
     func signAptosTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
         guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.aptos, path: path, privateKey: privateKey) else {
             return nil
+        }
+
+        if txData["type"] as? String == "WC_APT" {
+            guard let encoded = txData["encodedTransaction"] as? String,
+                  encoded.utf8.count <= 90_000,
+                  let raw = Data(base64Encoded: encoded),
+                  let chain = txData["chainId"] as? Int else { return nil }
+            return signWalletConnectAptos(raw, chain: chain, privateKey: pk)
         }
 
         let gasUnitPrice : UInt64 = txData["gasUnitPrice"] as! UInt64
