@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 165
+## Current interruption inventory — through batch 167
 
 The interrupted patches through batch 159 are committed. Batch 160 revalidated the complete current wallet source after the Chat recovery and EGLD signing changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -56,6 +56,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Bind text dispatch to its original context — batch 167
+
+- Reproduced three failures before the fix: room change during settings lookup, A-to-B-to-A during that lookup, and a late receipt updating the new room. Text sends now capture room generation, reply target, translation settings and mentions before awaits. Configured account lifecycle and Matrix client identity are checked before dispatch and after async work; initialize/dispose invalidate the old generation. A newer reply target is not cleared by the older reply completing.
+- Preparation/settings failures now reject the existing preflight handshake so composer recovery can preserve input. Admission is delayed until preparation is complete. Already dispatched calls are not cancelled and ambiguous delivery is not treated as safe to resend.
+- BLoC/composer/event/state regression: 351 pass (/tmp/n42-chat-b167-final.log). Same-account replacement test additionally asserts admission was pending before generation replacement; focused rerun passes (/tmp/n42-chat-b167-generation.log). Initial translation fixture required a detectLanguage stub; corrected before the final suite. Scoped analysis: zero errors/warnings, nine existing informational lints (/tmp/n42-chat-b167-analysis-final.log); new brace lint corrected.
+- Chat ae456361a39519585f7687da35c1a5633ecbc67b is pushed and pinned in the wallet. pub get changes only the Chat ref. All three wallet host fixture tests pass (/tmp/n42-wallet-b167-host.log). No real message, device test or release upload. Generic send uncertainty, other async media/command paths, rich recovery and native/provider/release work remain open. Earlier full-wallet coverage is still batch 160, not this patch.
+
 
 ### Preserve drafts after local send rejection — batch 166
 
