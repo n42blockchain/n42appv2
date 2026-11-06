@@ -20,6 +20,7 @@ Then fill:
 ```xcconfig
 N42_CHAT_GOOGLE_CLIENT_ID = your-google-ios-client-id.apps.googleusercontent.com
 N42_CHAT_GOOGLE_SERVER_CLIENT_ID = your-google-web-client-id.apps.googleusercontent.com
+N42_CHAT_GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.your-google-ios-client-id
 
 N42_CHAT_TWITTER_API_KEY = your-twitter-api-key
 N42_CHAT_TWITTER_API_SECRET = your-twitter-api-secret
@@ -33,25 +34,17 @@ N42_CHAT_WECHAT_UNIVERSAL_LINK = https://your.domain.com/app/
 
 Required:
 
-- Replace `ios/Runner/GoogleService-Info.plist` with one that contains:
-  - `CLIENT_ID`
-  - `REVERSED_CLIENT_ID`
-- Add `REVERSED_CLIENT_ID` to `CFBundleURLTypes` in `ios/Runner/Info.plist`
+- Register an iOS OAuth client for N42's `ai.n42.www` bundle and a server/web client.
+- Fill all three Google values in the ignored local xcconfig. The registered
+  URL scheme must be the reversal of the **iOS** client ID.
+- `Runner/Info.plist` now consumes `N42_CHAT_GOOGLE_REVERSED_CLIENT_ID`; do not add
+  a duplicate URL entry. The checked-in fallback is inert and will not enable login.
+- A Firebase plist is also accepted for the iOS client ID if it contains `CLIENT_ID`,
+  but its matching URL scheme still needs configuration. The current Firebase
+  plist has no OAuth client ID.
 
-Minimal URL scheme entry:
-
-```xml
-<dict>
-  <key>CFBundleTypeRole</key>
-  <string>Editor</string>
-  <key>CFBundleURLName</key>
-  <string>google-signin</string>
-  <key>CFBundleURLSchemes</key>
-  <array>
-    <string>com.googleusercontent.apps.xxxxx</string>
-  </array>
-</dict>
-```
+See [the current acceptance record](testing/social-login-2026-11-05/README.md)
+for Apple, Facebook Limited Login, embedded-wallet setup and remaining checks.
 
 ## 3. Twitter / X
 

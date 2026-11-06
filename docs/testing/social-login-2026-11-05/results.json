@@ -1,0 +1,23 @@
+{
+  "host_tests": {
+    "passed": 56,
+    "log": "/tmp/n42-social-accepted-host-tests.log"
+  },
+  "chat_tests": {
+    "passed": 67,
+    "log": "/tmp/n42-social-chat-tests.log"
+  },
+  "ios_debug_build": {
+    "passed": true,
+    "signed": false,
+    "log": "/tmp/n42-social-ios-build.log"
+  },
+  "scoped_analysis": {
+    "issues": 0,
+    "log": "/tmp/n42-social-scoped-final.log"
+  },
+  "live_provider_authorization": false,
+  "testflight_upload": false,
+  "historical_sessions_checked": 49,
+  "google_console": "Blocked by owner two-step-verification requirement"
+}
