@@ -57,6 +57,13 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 
 ## Latest interruption check
 
+### EGLD local recovery hash foundation — batch 161
+
+- Confirmed the sender currently depends on a returned RPC hash and reports broadcast exceptions as generic failures. Durable recovery needs the original signed transaction hash before dispatch; ordinary JSON hashing is incorrect.
+- Added EgldTransactionHash for ordinary WalletCore JSON using MultiversX Protobuf field numbers, sign/magnitude amount encoding, nonce-zero omission and Blake2b-256. Existing bech32/pointycastle dependencies are reused. Exact JSON integers, canonical amount/base64, address bytes/checksum, signature shape and supported fields are checked; unsupported guardian/relayer/username fields fail rather than being dropped.
+- Cross-checked 11 deterministic vectors against isolated official @multiversx/sdk-core 16.0.0; generator and fixtures are committed. 46 tests pass (/tmp/n42-wallet-b161-hash.log), including malformed/missing fields and JSON ordering. Fixture regeneration is byte-identical. Signatures are synthetic public bytes, not valid signed-network transaction evidence.
+- This is a prerequisite component, not completed broadcast recovery. Next: bind native output to reviewed inputs, invoke local-hash preparation/dispatch callbacks, integrate EGLD with the Memo reservation and receipt-query paths, then test timeout/reopen/concurrent-page behavior. Sender behavior is unchanged in this batch. Batch 160 remains the full-suite evidence for its earlier source.
+
 ### Current-source full regression and interruption reconciliation — batch 160
 
 - Reused the running full suite instead of launching a duplicate. Source `534fbb6e4`: 7,128 visible tests pass, zero failures/skips, process exit 0, machine success true. Fresh LCOV 103,201/140,287 lines = 73.5641934%; 70% gate passes without exclusions or threshold changes. N42_PQ_LIBRARY points to the built host Falcon dylib.

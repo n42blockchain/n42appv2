@@ -1,0 +1,172 @@
+{
+  "sdk": "@multiversx/sdk-core@16.0.0",
+  "vectors": [
+    {
+      "name": "ordinary",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "b9e60f8e14b74a7f648ab24370f231c579f273a5087311b2e90787459f251dc5"
+    },
+    {
+      "name": "zero",
+      "transaction": {
+        "nonce": 0,
+        "value": "0",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "79e894f217a504f4a57f147776a6bf9b3feb3ad9cc89bf39546941a0e434b9a7"
+    },
+    {
+      "name": "large-value",
+      "transaction": {
+        "nonce": 7,
+        "value": "100000000000000000001",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "db305d315660ec40fcc20a977bd232000b9fc0fc5a5a3c264d612f069d863d84"
+    },
+    {
+      "name": "unicode-data",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "data": "5Lya6K6uIPCfpoo=",
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "08297f7cd6c03aafb9a190ee0acc9922885058db88e8a0ede53c3c9bba22484d"
+    },
+    {
+      "name": "testnet",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "T",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "1c39c88ea5d43572bb87a8bf60eeb3d3f126d0057efc8486e578fcea5049053b"
+    },
+    {
+      "name": "devnet",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "D",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "dcf373c0bef042c26e82804536a01c80f6711274ed1763a941f8065f271bbfd2"
+    },
+    {
+      "name": "nonce-varint",
+      "transaction": {
+        "nonce": 16384,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "b0eaf2836bb46bb8b1d2262cf167cdbcfd53eaa6f446e7b89c401e038a6511c4"
+    },
+    {
+      "name": "hash-sign-option",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 2,
+        "options": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "8cbb73409a2913fbdbe8c51cee7aebdd69cdcc0d55de2227e56e1c68a61c54d5"
+    },
+    {
+      "name": "different-signature",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 1,
+        "signature": "05050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505"
+      },
+      "hash": "e4341144d4c8c4687cc8d3f41faae98181acda1e1426012d34f51cf6699dc376"
+    },
+    {
+      "name": "different-sender",
+      "transaction": {
+        "nonce": 7,
+        "value": "1000000000000000000",
+        "receiver": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "sender": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "gasPrice": 1000000000,
+        "gasLimit": 50000,
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "6147023d1ed60c451baaba29155235f84a3d4f293d2b708ecaade89adbf6dd32"
+    },
+    {
+      "name": "max-safe-integer",
+      "transaction": {
+        "nonce": 9007199254740991,
+        "value": "1000000000000000000",
+        "receiver": "erd1qgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqjv7g5k",
+        "sender": "erd1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqsl6e0p7",
+        "gasPrice": 1000000000,
+        "gasLimit": 9007199254740991,
+        "chainID": "1",
+        "version": 1,
+        "signature": "03030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303030303"
+      },
+      "hash": "fb91af2c737ce45e41d0a520d24b2dcb1c96577f62f9421feac771225b0f2f83"
+    }
+  ]
+}
