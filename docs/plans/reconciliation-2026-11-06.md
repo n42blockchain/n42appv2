@@ -2,6 +2,16 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+## Fresh interruption check — batch 153 findings (resolved below)
+
+- Fresh fetch: wallet `61bcab349` and Chat `a05cdcdd` both match their upstream branches (0 ahead / 0 behind). Wallet has no tracked implementation edits; the four baseline untracked paths remain untouched.
+- Chat has four modified page files and one new `recovered_composer_text.dart` entity. These implement a partial recovery-to-composer route but are uncommitted, unpinned and not behavior-verified. Existing `coverage/lcov.info` changes are separate and preserved.
+- Fresh scoped Dart analysis fails: `scheduled_messages_page.dart:344` references undefined `S.scheduledRecoveryComposerHint`. Four brace-style infos also remain. No ARB/generated localization definition exists for that getter. Next work must complete all locale entries, generate localization, verify explicit confirmation, account/room isolation, stale-input preservation and no automatic send, then commit Chat and update the wallet pin. Do not release this working tree as complete.
+- Recounted 13 auxiliary wallet worktrees: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. No removal or merge was performed. Uncommitted files and unique patches need review before cleanup.
+- ID Hub source still defaults `googleNativeCodeEnabled` to false; this does not establish the deployed setting. Native Google/Apple/Facebook plus same-DID Matrix acceptance, Meta public-review/deletion and a signed release of current source remain unclosed.
+- Older open scopes remain: ADA multi-asset change and uncertain submission recovery, IAP fulfilment/account binding/refund, payment-provider production acceptance, dependency compatibility holds and editorial/RTL review. Real-device acceptance remains deferred by the user.
+- Mintus release 3211 and Web deployment are supported by its existing release record only. No fresh Apple processing/tester-visibility or live Web acceptance check was made. The latest full-wallet test evidence still belongs to batch 140, not the unfinished batch 153.
+
 ## Repeat inspection — interrupted batch 146 (implementation now verified below)
 
 - Fresh fetch confirms wallet HEAD `6e986f9a1` equals origin/master (0 ahead / 0 behind). Version is 2.5.3+73265. This proves committed-source parity, not a current release.
@@ -12,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 152
+## Current interruption inventory — through batch 153
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -44,6 +54,13 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Reviewed recovery text to composer — batch 153
+
+- Completed the interrupted Chat route in b6ff2c465937982551fb84c44e672bc17676614a. A valid text entry for the current room has an Edit action and explicit warning/confirmation. Reread the exact intact recovery copy and account before returning the text through chat details. The composer appends it only when owner, room, input revision and opening controller value still match. It preserves existing draft text and never sends or enqueues the recovered record.
+- Added the missing warning in all 26 locales and regenerated localization. Attachments, mentions and timers are explicitly excluded; users must check previous delivery before sending. Invalid/foreign-room/media entries cannot use this text action.
+- Relevant recovery page, actual composer, parser and chat-detail suites: 124 pass; scoped analysis clean. Logs: /tmp/n42-chat-b153-final.log and /tmp/n42-chat-b153-analysis.log. Initial verification exposed an ambiguous Cancel test locator and an incorrect parser test path; both corrected before the passing run.
+- Wallet immutable Chat pin updated. All 7 host Chat fixture/asset tests pass (/tmp/n42-chat-b153-host.log). Continuous installed-app navigation, actual OS/device operations, explicit rescheduling, duplicate-delivery treatment, legacy ownership and rich-content recovery remain open. Earlier full-suite evidence remains scoped to its original source; no release or real message was sent.
 
 ### Account-scoped composer drafts — batch 152
 
