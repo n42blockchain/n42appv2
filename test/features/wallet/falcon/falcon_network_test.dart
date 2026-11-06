@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -98,6 +99,49 @@ void main() {
       }
     });
   });
+  for (final mutateBeforeRpc in [false, true]) {
+    test(
+      'submission snapshots signature before RPC awaits: early=$mutateBeforeRpc',
+      () async {
+        final entered = Completer<void>();
+        final resume = Completer<void>();
+        final signature = Uint8List.fromList(sig);
+        final expectedRaw = bytesToHex(
+          tx.encodeSigned(signature),
+          include0x: true,
+        );
+        String? submittedRaw;
+        final delayed = FalconNetwork((method, params) async {
+          if (method == 'n42_getPQCapabilities') {
+            entered.complete();
+            await resume.future;
+          }
+          if (method == 'eth_sendRawTransaction') {
+            submittedRaw = params.single as String;
+          }
+          return network.rpc(method, params);
+        });
+        final submission = delayed.submit(
+          tx,
+          signature,
+          crypto,
+          isOwnerCurrent: () => true,
+        );
+        if (mutateBeforeRpc) signature.fillRange(0, signature.length, 0);
+        await entered.future.timeout(const Duration(seconds: 3));
+        if (!mutateBeforeRpc) signature.fillRange(0, signature.length, 0);
+        resume.complete();
+        final hash = await submission;
+        expect(submittedRaw, expectedRaw);
+        expect(
+          hash,
+          bytesToHex(keccak256(hexToBytes(expectedRaw)), include0x: true),
+        );
+        expect(sends, 1);
+      },
+    );
+  }
+
   test('disabled, wrong algorithm, encoding, mode, chain and protocol reject before send', () async {
     for (final item in <String, Object?>{
       'enabled': false,

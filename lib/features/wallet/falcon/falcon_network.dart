@@ -125,42 +125,48 @@ final class FalconNetwork {
     Uint8List signature,
     FalconCrypto crypto, {
     required bool Function() isOwnerCurrent,
-  }) => TransferSerializer.run('falcon:${tx.chainId}:${tx.sender}', () async {
-    if (!crypto.verify(tx.publicKey, tx.digest, signature)) {
-      throw StateError('Invalid Falcon signature');
-    }
-    await validate(tx);
-    if (!isOwnerCurrent()) {
-      throw StateError('Wallet owner changed');
-    }
-    final raw = tx.encodeSigned(signature);
-    final hash = bytesToHex(keccak256(raw), include0x: true);
-    await _storage.write(
-      key: _slot(tx),
-      value: jsonEncode({
-        'chainId': '${tx.chainId}',
-        'sender': tx.sender,
-        'nonce': '${tx.nonce}',
-        'hash': hash,
-        'state': 'pending',
-      }),
-    );
-    // Any error after this point keeps the pending record. A timeout, 5xx,
-    // malformed response or RPC rejection is never an instruction to resend.
-    if (!isOwnerCurrent()) {
-      await _storage.delete(key: _slot(tx));
-      throw StateError('Wallet owner changed before broadcast');
-    }
-    final returned = await rpc('eth_sendRawTransaction', [
-      bytesToHex(raw, include0x: true),
-    ]);
-    if (returned is! String || returned.toLowerCase() != hash) {
-      throw StateError(
-        'Submission outcome unknown; reconcile the original hash',
+  }) {
+    // Snapshot before queueing or RPC awaits; verification and broadcast must
+    // use the same bytes even if the caller reuses its buffer.
+    final signedBytes = Uint8List.fromList(signature);
+    return TransferSerializer.run('falcon:${tx.chainId}:${tx.sender}', () async {
+      if (!crypto.verify(tx.publicKey, tx.digest, signedBytes)) {
+        throw StateError('Invalid Falcon signature');
+      }
+      await validate(tx);
+      if (!isOwnerCurrent()) {
+        throw StateError('Wallet owner changed');
+      }
+      final raw = tx.encodeSigned(signedBytes);
+      final hash = bytesToHex(keccak256(raw), include0x: true);
+      await _storage.write(
+        key: _slot(tx),
+        value: jsonEncode({
+          'chainId': '${tx.chainId}',
+          'sender': tx.sender,
+          'nonce': '${tx.nonce}',
+          'hash': hash,
+          'state': 'pending',
+        }),
       );
-    }
-    return hash;
-  });
+      // Any error after this point keeps the pending record. A timeout, 5xx,
+      // malformed response or RPC rejection is never an instruction to resend.
+      if (!isOwnerCurrent()) {
+        await _storage.delete(key: _slot(tx));
+        throw StateError('Wallet owner changed before broadcast');
+      }
+      final returned = await rpc('eth_sendRawTransaction', [
+        bytesToHex(raw, include0x: true),
+      ]);
+      if (returned is! String || returned.toLowerCase() != hash) {
+        throw StateError(
+          'Submission outcome unknown; reconcile the original hash',
+        );
+      }
+      return hash;
+    });
+  }
+
   Future<String> reconcile(FalconTransaction tx) =>
       reconcileAccount(tx.chainId, tx.sender);
   Future<String> reconcileAccount(BigInt chainId, String sender) =>

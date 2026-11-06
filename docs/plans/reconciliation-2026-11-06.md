@@ -58,6 +58,8 @@ Batch 69 fixes confirmed GitHub CI blockers in the release-builder test fixture 
 
 Batch 70 confirms remote abc826f0f analysis/localization/format gates and Linux native Falcon step passed (CI run 42220187074). Fixed the separate iOS test job's unavailable hard-coded iPhone 14 by selecting a valid simulator from simctl JSON and passing its exact UDID. All 46 script tests pass locally; hosted iOS execution and downstream coverage/build acceptance remain open.
 
+Batch 71 fixes Falcon submission's mutable-signature window by snapshotting before serializer/RPC awaits. Both early and in-flight buffer mutations preserve the original signed transaction; all 18 native Flutter tests and 1 Rust test pass. Remote iOS simulator selection/boot has succeeded, but integration/coverage completion remains unverified.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.

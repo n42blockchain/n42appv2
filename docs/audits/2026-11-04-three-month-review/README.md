@@ -634,3 +634,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Workflow boots/waits with simctl bootstatus -b and passes the selected UDID to Flutter, replacing the ambiguous --device-id iPhone. Test selection and assertions remain unchanged.
 - All 46 Python script tests pass; workflow YAML parses and exact-UDID wiring is checked. Read-only local simctl inventory selected iPhone Duo on iOS 27.1. No simulator was booted locally and no physical device was touched. Evidence: /tmp/n42-simulator-selection-b70.log and /tmp/n42-ci-ios-simulator-b70.log.
 - Hosted execution of the new selector and actual iOS integration/build acceptance remain open. The next push supersedes the still-running CI revision; do not mark its unfinished root coverage/build jobs passed.
+
+
+## Batch 71 — bind Falcon submission to immutable signature bytes (2026-11-06)
+
+- Found that FalconNetwork.submit verified the caller-owned Uint8List, awaited capability/nonce/balance RPC checks, then encoded that same mutable list. A caller mutation could change the submitted signature after successful verification and leave an invalid transaction in the pending-reconciliation flow.
+- Copy the signature synchronously before entering TransferSerializer. Verification and signed-transaction encoding both use the private snapshot; owner checks, nonce/balance validation and durable pending-record rules are unchanged.
+- Real native regressions mutate the input immediately after submit and while capability RPC is suspended. Both assert the exact originally signed raw bytes, original transaction hash and one broadcast. Rust 1 test and all 18 native Flutter tests pass; scoped analysis has no issues. Logs: /tmp/n42-falcon-snapshot-b71-final.log and /tmp/n42-falcon-snapshot-b71-analysis.log. RPC/storage are test doubles; no chain/device acceptance implied.
+- Remote c773951f2 inspection: Tests run 42220949489 confirms selected iOS simulator boot succeeded and iOS integration began; widget job passed. CI run 42220949592 passed analysis, four backend jobs and configured security scan and reached coverage after the Falcon step. Unit/Android/iOS/coverage were still running; none is claimed complete. A later commit may supersede the cancellable CI run, and acceptance must follow the new revision.
