@@ -93,7 +93,13 @@ void main() {
         case 'eth_blockNumber':
           return head;
         case 'eth_getBlockByNumber':
-          return {'hash': '0x${(forked ? 'bb' : 'aa') * 32}'};
+          return {
+            'hash': '0x${(forked ? 'bb' : 'aa') * 32}',
+            'number': params.first,
+            'transactions': [
+              bytesToHex(keccak256(tx.encodeSigned(sig)), include0x: true),
+            ],
+          };
         default:
           throw StateError(method);
       }
@@ -276,6 +282,51 @@ void main() {
       expect(await network.reconcile(tx), 'confirmed');
       expect(await network.pending(tx), isNull);
       expect(sends, 1);
+    },
+  );
+  test(
+    'inconsistent block evidence preserves pending and prevents resubmission',
+    () async {
+      final hash = await network.submit(
+        tx,
+        sig,
+        crypto,
+        isOwnerCurrent: () => true,
+      );
+      receipt = {
+        'transactionHash': hash,
+        'blockHash': '0x${'aa' * 32}',
+        'blockNumber': '0x10',
+        'status': '0x1',
+      };
+      for (final evidence in <Map<String, Object?>>[
+        {
+          'number': '0x11',
+          'transactions': [hash],
+        },
+        {'number': '0x10', 'transactions': <String>[]},
+        {
+          'number': '0x10',
+          'transactions': ['0x${'bb' * 32}'],
+        },
+        {'number': '0x10', 'transactions': null},
+      ]) {
+        final inconsistent = FalconNetwork((method, params) async {
+          if (method == 'eth_getBlockByNumber') {
+            return {'hash': '0x${'aa' * 32}', ...evidence};
+          }
+          return network.rpc(method, params);
+        });
+        expect(await inconsistent.reconcile(tx), 'pending');
+        expect((await inconsistent.pending(tx))?['hash'], hash);
+        await expectLater(
+          inconsistent.submit(tx, sig, crypto, isOwnerCurrent: () => true),
+          throwsA(isA<FalconSubmissionPending>()),
+        );
+        expect(sends, 1);
+      }
+      expect(await network.reconcile(tx), 'confirmed');
+      expect(await network.pending(tx), isNull);
     },
   );
   test(

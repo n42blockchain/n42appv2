@@ -199,6 +199,9 @@ final class FalconNetwork {
         ]);
         if (block is! Map ||
             block['hash'] != receipt['blockHash'] ||
+            quantity(block['number']) != blockNumber ||
+            block['transactions'] is! List ||
+            !(block['transactions'] as List).contains(record['hash']) ||
             head < blockNumber + BigInt.from(11)) {
           return 'pending';
         }
