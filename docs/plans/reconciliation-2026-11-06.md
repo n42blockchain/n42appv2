@@ -12,6 +12,14 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Current inspection — batch 72
+
+- Finished the interrupted Falcon page owner-guard patch and its real-native widget regression. Rust 1 / Flutter 19 pass; scoped analysis is clean. See audit batch 72.
+- Current Chat dependency remains 716eac2cd7730869162f18db47bd95b79644520c. Older pin/root-state statements below are historical snapshots. Four pre-existing untracked paths remain preserved.
+- Rechecked worktrees: seven dirty ancestor, five clean non-ancestor, one clean ancestor. No deletion or merge.
+- Still open: native provider/Matrix end-to-end acceptance and disabled Google native exchange; Meta public review/deletion; current-source release; Chat corrupt/legacy repair and crash recovery; remaining chain/AA/hardware audit; module localization/RTL review; dependency holds; worktree reconciliation. Physical-device QA remains deferred.
+- Latest observed CI is incomplete: analysis, backend contracts, configured security and widgets pass; root coverage, unit and mobile integration were running. Existing full-suite counts remain historical batch 67 evidence, not fresh coverage or release results.
+
 ### Recheck at wallet c1aa17a90 (superseded by batch 56)
 
 - Fresh fetch confirms master is 0 ahead / 0 behind origin/master. The ordinary Sui transfer follow-up is interrupted: seven tracked files are modified and two implementation files are untracked (SuiTransferParameters.kt and sui_transaction_message.dart). These changes are not committed, pushed or accepted. Preserve them for the next implementation batch.

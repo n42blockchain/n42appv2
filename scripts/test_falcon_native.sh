@@ -21,9 +21,7 @@ cargo build --locked --release --manifest-path "$CRATE_DIR/Cargo.toml" \
 export N42_PQ_LIBRARY="$TARGET_DIR/$HOST_TARGET/release/$LIBRARY_NAME"
 [[ -f "$N42_PQ_LIBRARY" ]] || { echo 'Host Falcon library is missing' >&2; exit 1; }
 cd "$ROOT_DIR"
-"$FLUTTER_BIN" test --no-pub \
-  test/features/wallet/falcon/falcon_native_test.dart \
-  test/features/wallet/falcon/falcon_network_test.dart
+"$FLUTTER_BIN" test --no-pub test/features/wallet/falcon/
 # Subsequent CI coverage runs must also execute these tests rather than skip.
 if [[ -n "${GITHUB_ENV:-}" ]]; then
   printf 'N42_PQ_LIBRARY=%s\n' "$N42_PQ_LIBRARY" >> "$GITHUB_ENV"

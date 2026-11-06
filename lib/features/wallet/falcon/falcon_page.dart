@@ -16,8 +16,10 @@ class FalconPage extends StatefulWidget {
     super.key,
     required this.walletScope,
     required this.isOwnerCurrent,
+    this.vaultFactory,
   });
   final String walletScope;
+  final FalconVault Function(String scope)? vaultFactory;
   final bool Function() isOwnerCurrent;
   @override
   State<FalconPage> createState() => _FalconPageState();
@@ -54,9 +56,13 @@ class _FalconPageState extends State<FalconPage> {
 
   Future<void> load() async {
     try {
-      vault = FalconVault(FalconCrypto.mobile(), widget.walletScope);
+      vault =
+          widget.vaultFactory?.call(widget.walletScope) ??
+          FalconVault(FalconCrypto.mobile(), widget.walletScope);
       final key = await vault!.publicKey();
-      if (mounted) setState(() => publicKey = key);
+      if (mounted && widget.isOwnerCurrent()) {
+        setState(() => publicKey = key);
+      }
     } catch (_) {
       if (mounted) setState(() => status = 'Falcon native library unavailable');
     }
@@ -244,7 +250,9 @@ class _FalconPageState extends State<FalconPage> {
                       : () => run(() async {
                           await vault!.create();
                           final p = await vault!.publicKey();
-                          if (mounted) setState(() => publicKey = p);
+                          if (mounted && widget.isOwnerCurrent()) {
+                            setState(() => publicKey = p);
+                          }
                         }),
                   child: Text(t('Create Falcon account', '创建 Falcon 账户')),
                 ),
@@ -303,7 +311,9 @@ class _FalconPageState extends State<FalconPage> {
                         final blob = await vault!.backup(
                           fields['backupPassword']!.text,
                         );
-                        if (mounted) setState(() => output = blob);
+                        if (mounted && widget.isOwnerCurrent()) {
+                          setState(() => output = blob);
+                        }
                       }),
                 child: Text(t('Export encrypted backup', '导出加密备份')),
               ),
@@ -324,7 +334,9 @@ class _FalconPageState extends State<FalconPage> {
                           fields['backupPassword']!.text,
                         );
                         final p = await vault!.publicKey();
-                        if (mounted) setState(() => publicKey = p);
+                        if (mounted && widget.isOwnerCurrent()) {
+                          setState(() => publicKey = p);
+                        }
                       }),
                 child: Text(t('Restore Falcon account', '恢复 Falcon 账户')),
               ),
@@ -350,8 +362,13 @@ class _FalconPageState extends State<FalconPage> {
               if (output != null) ...[
                 SelectableText(output!),
                 TextButton(
-                  onPressed: () =>
-                      Clipboard.setData(ClipboardData(text: output!)),
+                  onPressed: () {
+                    if (busy || !widget.isOwnerCurrent()) return;
+                    final result = output;
+                    if (result != null) {
+                      Clipboard.setData(ClipboardData(text: result));
+                    }
+                  },
                   child: Text(t('Copy result', '复制结果')),
                 ),
               ],
