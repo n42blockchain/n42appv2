@@ -574,3 +574,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - The due query and locked current-draft lookup both enforce the latest deadline. Existing payload, schedule and stable transaction ID are preserved. Queue cards show retry time using existing localization/date formatting.
 - Chat entity/storage/BLoC/page run: 91 passed. Final page: 18 passed; final storage: 7 passed. Wallet host contracts: 3 passed. Scoped source analysis: six existing infos, no errors/warnings. Logs: /tmp/n42-chat-backoff-tests.log, /tmp/n42-chat-backoff-page.log, /tmp/n42-chat-backoff-storage-final.log, /tmp/n42-chat-backoff-host.log.
 - Known-acceptance cleanup/crash recovery, explicit manual reconciliation, cross-process coordination and live background/device acceptance remain open. The active-client timer is not an operating-system background delivery guarantee. No TestFlight upload.
+
+
+## Batch 64 — accepted scheduled-message receipt recovery (2026-11-06)
+
+- Integrated pushed Chat d21963727c9d8e3538d5ac9760e20c7f43011282. All scheduled message send paths return a nonempty repository receipt ID. Persist acceptance before local deletion; restored accepted drafts retry cleanup without another network send. Acceptance clears unconfirmed/backoff state and cannot be downgraded by an unconfirmed-attempt update.
+- A controller-local account/room/draft receipt cache prevents repeat dispatch while that controller survives a failed receipt write plus failed cleanup. Accepted drafts display Sent and reject cancellation, including stale standalone cancellation checks.
+- Entity/storage/BLoC/page regressions: 93 passed; explicit double-write-failure/cancellation test: 1 passed. Wallet host contracts: 3 passed. Scoped Chat analysis has six existing infos and no errors/warnings. Logs: /tmp/n42-chat-receipt-tests.log, /tmp/n42-chat-receipt-live.log, /tmp/n42-chat-receipt-host.log.
+- Remaining: crash between server acceptance and receipt persistence, restart after both writes fail, cross-controller/process coordination during storage failure, manual reconciliation and live-server/device acceptance. No exactly-once claim for those windows, no TestFlight upload.

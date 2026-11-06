@@ -44,6 +44,8 @@ Batch 62 integrates Chat 99f5fce1: unconfirmed scheduled attempts persist and ap
 
 Batch 63 adds persisted scheduled retry deadlines with bounded backoff and rechecks the current draft under its operation lock. Chat 91 tests, final page/storage 18/7 and wallet host 3 pass. Known-acceptance crash recovery, manual reconciliation and live/background acceptance remain open.
 
+Batch 64 persists server receipts before scheduled-draft cleanup and skips resending accepted drafts after controller recreation. Chat 93+1 and host 3 tests pass. Crash-before-persistence and cross-controller/process storage-failure windows remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
