@@ -233,6 +233,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ? trModel.userUuid
         : RecentAddressService.currentUser;
     bool completedWithExit = false;
+    bool blockedByPending = false;
     try {
       final coinType = widget.coinModel.config.coinType;
       // 派生参数必须跟随发起账户：token 模型的 addrType/pathIndex 复制自其所
@@ -277,7 +278,14 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                     throw StateError('Wallet context changed');
                   }
                   trModel.txHash = hash;
-                  trModel.trId = await _persistTransaction(trModel);
+                  try {
+                    trModel.trId =
+                        await (widget.persistTransaction?.call(trModel) ??
+                            AppDatabase().reserveMemoTransaction(trModel));
+                  } on PendingMemoTransactionException {
+                    blockedByPending = true;
+                    rethrow;
+                  }
                   if (trModel.trId <= 0) {
                     throw StateError('Transaction was not saved');
                   }
@@ -291,6 +299,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ),
       );
 
+      if (blockedByPending) {
+        if (mounted) ToastUtils.show(S.current.g_key_bridge_tx_pending);
+        return;
+      }
       if (result.success ||
           (_preparedHash != null && result.txHash == _preparedHash)) {
         // A returned hash cannot replace the durable original submission ID.
@@ -301,7 +313,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         if (trModel.trId == 0) {
           trModel.trId = await _persistTransaction(trModel);
         }
-        if (!mounted || RecentAddressService.currentUser != recentAddressOwner) {
+        if (!mounted ||
+            RecentAddressService.currentUser != recentAddressOwner) {
           return;
         }
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
@@ -327,7 +340,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ToastUtils.show(friendly);
       }
     } catch (e) {
-      errorMessage = e.toString();
+      errorMessage = blockedByPending
+          ? S.current.g_key_bridge_tx_pending
+          : e.toString();
       if (mounted) ToastUtils.show(errorMessage);
     } finally {
       _signing = false;

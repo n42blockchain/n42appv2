@@ -1,0 +1,147 @@
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
+import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+
+class _Database extends AppDatabase {
+  _Database(this.connection);
+  final Database connection;
+  @override
+  Future<Database> get database async => connection;
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  sqfliteFfiInit();
+  late Directory directory;
+  late Database connection;
+  late _Database db;
+  setUp(() async {
+    directory = await Directory.systemTemp.createTemp('memo-reservation-');
+    connection = await databaseFactoryFfi.openDatabase(
+      '${directory.path}/history.db',
+    );
+    final columns = TransationRecordModel()
+        .toMapDb()
+        .keys
+        .map(
+          (key) =>
+              '$key ${['coinId', 'state', 'isTest', 'walletIndex'].contains(key) ? 'INTEGER' : 'TEXT'}',
+        )
+        .join(', ');
+    await connection.execute(
+      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns)',
+    );
+    db = _Database(connection);
+  });
+  tearDown(() async {
+    await connection.close();
+    await directory.delete(recursive: true);
+  });
+  TransationRecordModel record(String chain, {String hash = 'ab'}) =>
+      TransationRecordModel()
+        ..coinMiniName = chain
+        ..from1 = 'sender'
+        ..userUuid = 'alice'
+        ..txHash = hash * 32;
+
+  for (final chain in ['ADA', 'XLM']) {
+    for (final sameHash in [false, true]) {
+      test(
+        '$chain simultaneous reservations sameHash=$sameHash allow one broadcast',
+        () async {
+          var broadcasts = 0;
+          var blocked = 0;
+          Future<void> send(
+            _Database database,
+            TransationRecordModel tx,
+          ) async {
+            try {
+              tx.trId = await database.reserveMemoTransaction(tx);
+              broadcasts++;
+            } on PendingMemoTransactionException {
+              blocked++;
+            }
+          }
+
+          await Future.wait([
+            send(db, record(chain)),
+            send(
+              _Database(connection),
+              record(chain, hash: sameHash ? 'ab' : 'cd'),
+            ),
+          ]);
+          expect(broadcasts, 1);
+          expect(blocked, 1);
+          expect(await connection.query('TransationRecord'), hasLength(1));
+        },
+      );
+    }
+    test(
+      '$chain reopen keeps reservation until original receipt resolves',
+      () async {
+        final original = record(chain);
+        original.trId = await db.reserveMemoTransaction(original);
+        await connection.close();
+        connection = await databaseFactoryFfi.openDatabase(
+          '${directory.path}/history.db',
+        );
+        db = _Database(connection);
+        await expectLater(
+          db.reserveMemoTransaction(record(chain, hash: 'cd')),
+          throwsA(isA<PendingMemoTransactionException>()),
+        );
+        original.state = 1;
+        expect(await db.updateTransationRecordTxhash(original), 1);
+        expect(
+          await db.reserveMemoTransaction(record(chain, hash: 'cd')),
+          greaterThan(0),
+        );
+        final rows = await connection.query('TransationRecord');
+        expect(rows, hasLength(2));
+        expect(rows.first['txHash'], 'ab' * 32);
+        expect(rows.first['state'], 1);
+      },
+    );
+    test(
+      '$chain sender reservation spans wallet aliases but isolates users and networks',
+      () async {
+        await db.reserveMemoTransaction(record(chain));
+        await expectLater(
+          db.reserveMemoTransaction(record(chain)..walletIndex = 8),
+          throwsA(isA<PendingMemoTransactionException>()),
+        );
+        expect(
+          await db.reserveMemoTransaction(record(chain)..userUuid = 'bob'),
+          greaterThan(0),
+        );
+        expect(
+          await db.reserveMemoTransaction(record(chain)..isTest = 1),
+          greaterThan(0),
+        );
+        expect(
+          await db.reserveMemoTransaction(
+            record(chain)..from1 = 'other-sender',
+          ),
+          greaterThan(0),
+        );
+        expect(await connection.query('TransationRecord'), hasLength(4));
+      },
+    );
+  }
+  test('invalid reservation creates no history', () async {
+    for (final tx in [
+      record('BTC'),
+      record('ADA')..txHash = 'bad',
+      record('XLM')..state = 1,
+      record('ADA')..isTest = 2,
+      record('XLM')..from1 = '',
+    ]) {
+      await expectLater(db.reserveMemoTransaction(tx), throwsArgumentError);
+    }
+    expect(await connection.query('TransationRecord'), isEmpty);
+  });
+}

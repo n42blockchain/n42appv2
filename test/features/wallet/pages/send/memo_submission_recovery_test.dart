@@ -1,3 +1,5 @@
+import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ void main() {
     'foreign hash',
     'zero save ID',
     'storage failure',
+    'pending reservation',
     'projection failure',
     'dispose before ack',
   ]) {
@@ -76,6 +79,9 @@ void main() {
               saves++;
               expect(tr.txHash, 'ab' * 32);
               expect(broadcasts, 0);
+              if (scenario == 'pending reservation') {
+                throw const PendingMemoTransactionException();
+              }
               if (scenario == 'storage failure') {
                 throw StateError('Disk failed');
               }
@@ -126,7 +132,11 @@ void main() {
       }
       await pending;
       await tester.pumpAndSettle();
-      final failed = ['zero save ID', 'storage failure'].contains(scenario);
+      final failed = [
+        'zero save ID',
+        'storage failure',
+        'pending reservation',
+      ].contains(scenario);
       expect(saves, 1);
       expect(broadcasts, failed ? 0 : 1);
       expect(record.trId, failed ? 0 : 42);

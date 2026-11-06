@@ -3,6 +3,11 @@ import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.d
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:sqflite/sqflite.dart';
 
+/// An unresolved submission already reserves this account/sender/network.
+class PendingMemoTransactionException implements Exception {
+  const PendingMemoTransactionException();
+}
+
 /// 本地交易记录（含 BTC UTXO 记录）的类型化 DAO。
 ///
 /// 以 extension 挂在 [AppDatabase] 上：表 schema 归 sqlite 模块集中管理，
@@ -76,6 +81,43 @@ extension TransactionRecordDao on AppDatabase {
       trm.toMapDb(),
       conflictAlgorithm: ConflictAlgorithm.rollback,
     );
+  }
+
+  /// Atomically reserve ADA/XLM history before any broadcast. A new page or
+  /// process must not bypass an existing unresolved submission. Even an equal
+  /// hash is rejected: it may already have been broadcast by the other caller.
+  Future<int> reserveMemoTransaction(TransationRecordModel record) async {
+    final values = Map<String, Object?>.from(record.toMapDb());
+    final hash = values['txHash'] as String;
+    if (!{'ADA', 'XLM'}.contains(values['coinMiniName']) ||
+        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash) ||
+        hash.length != 64 ||
+        (values['from1'] as String).isEmpty ||
+        ![0, 1].contains(values['isTest']) ||
+        values['state'] != 0) {
+      throw ArgumentError('Invalid memo transaction reservation');
+    }
+    final db = await database;
+    return db.transaction((txn) async {
+      final pending = await txn.query(
+        'TransationRecord',
+        columns: ['trId'],
+        where: 'userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0',
+        whereArgs: [
+          values['userUuid'],
+          values['coinMiniName'],
+          values['from1'],
+          values['isTest'],
+        ],
+        limit: 1,
+      );
+      if (pending.isNotEmpty) throw const PendingMemoTransactionException();
+      return txn.insert(
+        'TransationRecord',
+        values,
+        conflictAlgorithm: ConflictAlgorithm.rollback,
+      );
+    });
   }
 
   /// Idempotent Aptos history persistence for submission/recovery retries.
