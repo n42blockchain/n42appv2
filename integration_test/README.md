@@ -52,6 +52,25 @@ flutter test --no-pub --no-uninstall --reporter expanded \
 The test name and output explicitly exclude Chat in that mode. The default
 continues to include the authenticated Chat flow.
 
+## Native Cardano simulator check
+
+`native_cardano_signing_test.dart` exercises the real MethodChannel and WalletCore
+with a public BIP39 fixture and synthetic UTxOs. It verifies ordinary hex/metadata
+parity, checked amount/fee/change plans, max-send conservation, and malformed or
+failed signing rejection. It makes no RPC calls, persists no wallet and does not
+broadcast. Prefer a disposable emulator and pass its explicit ID; never let
+Flutter select an attached personal phone automatically.
+
+```bash
+flutter test integration_test/native_cardano_signing_test.dart \
+  -d emulator-5556 --no-pub --reporter expanded
+```
+
+The separate `scripts/test_cardano_native.py --simulator SIMULATOR_UDID` checks
+extracted production Swift methods against installed WalletCore frameworks.
+Neither check proves live settlement, full transfer-page behavior or independent
+cryptographic conformance. Physical-device authorization remains separate.
+
 ## Local proxy configuration
 
 `ProxyConfig` reads `PROXY_BASE_URL` and `PROXY_AUTH_TOKEN` from Dart compile

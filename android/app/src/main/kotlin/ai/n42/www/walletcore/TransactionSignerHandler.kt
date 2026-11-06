@@ -1552,7 +1552,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         }
 
         if (txData["returnMetadata"] == true) {
-            return JSONObject().put("encoded", Numeric.toHexString(output.encoded.toByteArray()))
+            return JSONObject().put("encoded", "0x" + Numeric.toHexString(output.encoded.toByteArray()).removePrefix("0x"))
                 .put("amount", plan.amount.toString()).put("fee", plan.fee.toString())
                 .put("change", plan.change.toString()).put("available", plan.availableAmount.toString())
                 .toString()

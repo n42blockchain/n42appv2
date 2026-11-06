@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Android Cardano real bridge — batch 126
+
+- Current-source Android debug build/install plus both MethodChannel/JNI integration tests pass: ordinary and max plans, canonical metadata/raw compatibility, and invalid input/SDK failure rejection. Fixed Android's unprefixed metadata encoding while retaining legacy raw behavior.
+- Failure/final logs: `/tmp/n42-cardano-b126-android.log`, `/tmp/n42-cardano-b126-android-fixed.log`; scoped analysis clean. Only read-only emulator-5556 was used and stopped; attached physical phone untouched. UI fee confirmation, testnet handling, multi-asset change and durable recovery remain open.
+
+
 ### Cardano native planning and max result — batch 125
 
 - Replaced the sender's fixed fee subtraction with native SDK planning. Both bridges sign the same plan they report; Dart checks conservation, exact normal amounts and zero-change/full-balance max before submitting. Actual amount is returned from the signed plan. Legacy native callers keep hex responses unless metadata is requested.
