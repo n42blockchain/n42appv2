@@ -566,3 +566,11 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Known server acceptance followed only by cleanup failure does not set a new unconfirmed flag. Existing flags can remain if a later accepted retry fails cleanup; the status is not proof that nothing was delivered. Automatic timer retry behavior is unchanged.
 - Chat entity/storage/BLoC/page suites: 89 passed; accepted-cleanup distinction: 1 passed. Wallet host component contracts: 3 passed. Scoped Chat analysis has six existing infos, no errors/warnings. Locale validation confirmed 26 nonempty values without placeholders. Logs: /tmp/n42-chat-delivery-tests.log, /tmp/n42-chat-delivery-cleanup.log, /tmp/n42-chat-delivery-host.log.
 - Remaining MSG-001 work includes retry backoff, manual reconciliation, known-acceptance crash recovery, legacy recovery, cross-process coordination and live-device acceptance. Updating the immutable host pin is not a release upload.
+
+
+## Batch 63 — persisted scheduled-message retry pacing (2026-11-06)
+
+- Pinned pushed Chat 2976c659032248945c0e34113c6b2bcddac7cf94. Failed/unconfirmed attempts retain a bounded failure count and UTC retry deadline. Delays are 1, 2, 4, 8, 16 and 30 minutes, then capped at 30; the minute timer may dispatch later. Reloading storage or recreating a BLoC does not reset that deadline.
+- The due query and locked current-draft lookup both enforce the latest deadline. Existing payload, schedule and stable transaction ID are preserved. Queue cards show retry time using existing localization/date formatting.
+- Chat entity/storage/BLoC/page run: 91 passed. Final page: 18 passed; final storage: 7 passed. Wallet host contracts: 3 passed. Scoped source analysis: six existing infos, no errors/warnings. Logs: /tmp/n42-chat-backoff-tests.log, /tmp/n42-chat-backoff-page.log, /tmp/n42-chat-backoff-storage-final.log, /tmp/n42-chat-backoff-host.log.
+- Known-acceptance cleanup/crash recovery, explicit manual reconciliation, cross-process coordination and live background/device acceptance remain open. The active-client timer is not an operating-system background delivery guarantee. No TestFlight upload.
