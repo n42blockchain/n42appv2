@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+import 'dart:convert';
+
+import 'package:pointycastle/digests/sha3.dart';
 
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
@@ -99,21 +102,40 @@ class AptApi {
     }
   }
 
+  static Uint8List _signedBytes(String signedHex) {
+    final hex = signedHex.startsWith('0x') || signedHex.startsWith('0X')
+        ? signedHex.substring(2)
+        : signedHex;
+    if (hex.isEmpty ||
+        hex.length.isOdd ||
+        !RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex) ||
+        hex.contains(RegExp(r'\s'))) {
+      throw const FormatException('Invalid Aptos signed transaction');
+    }
+    return Uint8List.fromList([
+      for (var i = 0; i < hex.length; i += 2)
+        int.parse(hex.substring(i, i + 2), radix: 16),
+    ]);
+  }
+
+  /// Hash the signed user-transaction envelope, not the raw signing message.
+  /// This is a deterministic identifier, not signature or BCS validation.
+  static String transactionHash(String signedHex) =>
+      _hashSignedBytes(_signedBytes(signedHex));
+
+  static String _hashSignedBytes(Uint8List bytes) {
+    final domain = SHA3Digest(256)
+        .process(Uint8List.fromList(utf8.encode('APTOS::Transaction')));
+    final hash = SHA3Digest(256)
+        .process(Uint8List.fromList([...domain, 0, ...bytes]));
+    return '0x${hash.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join()}';
+  }
+
   /// Native signers return hex; the REST BCS endpoint requires raw bytes.
   Future<MessageModel> sendTxHash(String signedHex) async {
     try {
-      final hex = signedHex.startsWith('0x') || signedHex.startsWith('0X')
-          ? signedHex.substring(2)
-          : signedHex;
-      if (hex.isEmpty ||
-          hex.length.isOdd ||
-          !RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex)) {
-        return MessageModel.error()..data = 'Invalid Aptos signed transaction';
-      }
-      final bytes = Uint8List(hex.length ~/ 2);
-      for (var i = 0; i < bytes.length; i++) {
-        bytes[i] = int.parse(hex.substring(i * 2, i * 2 + 2), radix: 16);
-      }
+      final bytes = _signedBytes(signedHex);
+      final expectedHash = _hashSignedBytes(bytes);
       const header = <String, dynamic>{
         'content-type': 'application/x.aptos.signed_transaction+bcs',
       };
@@ -136,12 +158,13 @@ class AptApi {
           data['hash'] is! String ||
           (data['hash'] as String).length != 66 ||
           !RegExp(r'^0x[0-9a-fA-F]{64}$').hasMatch(data['hash'] as String) ||
+          (data['hash'] as String).toLowerCase() != expectedHash ||
           (data.containsKey('success') && data['success'] != true)) {
         return MessageModel.error()
           ..data = 'Invalid or failed Aptos submission response';
       }
       // A hash acknowledges submission; it is not proof of final execution.
-      return MessageModel()..data = data['hash'];
+      return MessageModel()..data = expectedHash;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }

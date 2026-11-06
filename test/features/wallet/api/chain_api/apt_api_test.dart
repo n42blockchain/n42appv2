@@ -3,10 +3,38 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../../../native/aptos_reference_vectors.dart' as native;
+import '../../../../native/aptos_coin_reference_vectors.dart' as coin;
+import '../../../../native/aptos_fa_reference_vectors.dart' as fa;
+
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 
 void main() {
+  for (final vector in [
+    ...native.aptosReferenceVectors,
+    ...coin.aptosReferenceVectors,
+    ...fa.aptosReferenceVectors,
+  ]) {
+    test(
+      'signed transaction hash matches independent vector ${vector['transactionHash']}',
+      () {
+        expect(
+          AptApi.transactionHash(vector['signed'] as String),
+          vector['transactionHash'],
+        );
+      },
+    );
+  }
+  test('unrelated but well-formed RPC hash is rejected', () async {
+    final api = AptApi(
+      submit: (_, _, {required header, required enableRetry}) async => {
+        'hash': '0x${'ab' * 32}',
+      },
+    );
+    expect((await api.sendTxHash('00ff')).error, isTrue);
+  });
   for (final asset in [
     ('', '', '0x1::aptos_coin::AptosCoin'),
     ('0x42::usd_coin::USDC', '', '0x42::usd_coin::USDC'),
@@ -98,7 +126,7 @@ void main() {
       expect((await api.getGasPrice()).error, true);
     });
   }
-  final hash = '0x${List.filled(64, 'a').join()}';
+  final hash = AptApi.transactionHash('00ff');
   for (final encoded in ['00aBff', '0x00aBff', '0X00aBff']) {
     for (final isTest in [false, true]) {
       test('native hex $encoded sends bytes on testnet=$isTest', () async {
@@ -115,12 +143,17 @@ void main() {
               'application/x.aptos.signed_transaction+bcs',
             );
             expect(enableRetry, isFalse);
-            return {'type': 'pending_transaction', 'hash': hash};
+            return {
+              'type': 'pending_transaction',
+              'hash': AptApi.transactionHash(encoded)
+                  .toUpperCase()
+                  .replaceFirst('0X', '0x'),
+            };
           },
         );
         final result = await api.sendTxHash(encoded);
         expect(result.error, isFalse);
-        expect(result.data, hash);
+        expect(result.data, AptApi.transactionHash(encoded));
         expect(calls, 1);
       });
     }
@@ -197,7 +230,9 @@ void main() {
       );
       received.complete(bytes);
       request.response.headers.contentType = ContentType.json;
-      request.response.write(jsonEncode({'hash': hash}));
+      request.response.write(
+        jsonEncode({'hash': AptApi.transactionHash('00017f80ff')}),
+      );
       await request.response.close();
     });
     final api = AptApi(
