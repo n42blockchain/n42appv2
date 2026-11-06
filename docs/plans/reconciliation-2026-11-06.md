@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 172
+## Current interruption inventory — through batch 173
 
 The interrupted patches through batch 159 are committed. Batch 172 revalidated wallet source 5cb2b8a7b after the latest Chat session-isolation and EGLD recovery changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -65,6 +65,15 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Repair composer button handling and verify Chat full regression — batch 173
+
+- Initial standalone Chat suite at dcd7d49e: 8,100 pass / 4 external-fixture skips / 1 failure, exit 1. The media-page mock lacked isClosed. Completing that mock and adding closed-state button coverage exposed a production issue: ChatInputBar cleared the parent controller after ChatPage rejected the send; the second clear could also invalidate preflight-recovery revisions.
+- Added default-compatible clearTextOnSend, disabled only by ChatPage, which already owns admission/clearing/recovery. Real send-button tests prove closed state keeps input and local preflight rejection restores it without another clear. Original whitespace/non-empty assertions remain enabled. Media-page/composer suites: 80 pass (/tmp/n42-chat-b173-fix.log); scoped analysis zero errors/warnings, two pre-existing infos. Production fix ca0a2049fed97df53a15d5a3d9243260d4754036 is pushed and pinned in the wallet; only that dependency changed during pub get. All three wallet host fixture tests pass (/tmp/n42-wallet-b173-host.log).
+- Full Chat rerun at ca0a2049: **8,103 passed / 0 failed / 4 skipped**, zero errors, Flutter exit 0 and final machine success true. Fresh raw coverage: **102,018 / 143,474 = 71.1055662%**, unchanged 70% gate passes. Full analysis exits 0 with --no-fatal-infos: zero errors/warnings, 345 infos. Skips explicitly require media corpus, disposable registration URL, disposable QA account state and live-media invite/login fixtures.
+- Evidence: /tmp/n42-chat-full-b173.jsonl (initial failed run), /tmp/n42-chat-full-b173-fixed.jsonl, /tmp/n42-chat-b173-lcov.info, /tmp/n42-chat-b173-tests.json, /tmp/n42-chat-b173-coverage.json, /tmp/n42-chat-b173-fixed-analysis.log. SHA-256 fixed test log: 2c713e25e8bda95d754e2b59d32cd7e41678320ae4166b9ef115e4f138c4d25c; LCOV: 9c56dc1fc0a40970a21b254dc6bc6665d7eed244abcd8973308949ae3d7f2fc4. Chat's pre-existing dirty coverage file is restored byte-for-byte from /tmp/n42-chat-b173-existing-lcov.info.
+- This supersedes standalone Chat batch 112, not live homeserver/device/provider or release acceptance. Wallet full baseline remains batch 172 at 5cb2b8a7b; this later dependency fix has host-scoped validation. Remaining poll/account/recovery edges, native social/Matrix, Meta publication, dependencies/editorial review, IAP/payment, retained worktrees and signed release are unchanged. No fresh release upload or production-message send.
+
 
 ### Reject stale translation and detection results — batch 171
 

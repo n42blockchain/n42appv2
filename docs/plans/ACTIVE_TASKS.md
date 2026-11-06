@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Standalone Chat verification (batch 173): source `ca0a2049` passes 8,103 tests with zero failures and four explicit external-fixture skips; coverage 71.1056%. Includes the real send-button draft-preservation repair. Current wallet dependency is pinned to this fix; the earlier wallet full-suite result remains scoped to its recorded source.
+
 > Latest verification (batch 172): wallet source `5cb2b8a7b` passes 7,271 tests with zero failures/skips; coverage 73.5942% passes the existing 70% gate. Older dated coverage/release statements below are historical, not the current baseline. Open feature and external acceptance items remain active. See [current reconciliation](reconciliation-2026-11-06.md).
 
 更新：2026-11-06。最近几天的当前状态、遗漏和续做顺序见[任务核对](reconciliation-2026-11-06.md)。以下 10 月及更早表格和执行记录为历史快照，不代表当前依赖、覆盖率或发布状态。
