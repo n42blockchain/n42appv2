@@ -1492,7 +1492,7 @@ extension WalletCorePlugin {
             })
         }
 
-        var input = CardanoSigningInput.with {
+        let input = CardanoSigningInput.with {
             $0.ttl = ttl
             $0.privateKey = [privateKey.data]
             $0.utxos = utxoList
@@ -1504,7 +1504,7 @@ extension WalletCorePlugin {
             }
         }
         let output: CardanoSigningOutput = AnySigner.sign(input: input, coin: CoinType.cardano)
-        if !output.errorMessage.isEmpty {
+        if output.error != .ok || !output.errorMessage.isEmpty || output.encoded.isEmpty {
             return nil
         }
         return "0x" + output.encoded.hexString

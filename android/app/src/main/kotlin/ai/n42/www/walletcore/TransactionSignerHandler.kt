@@ -1544,7 +1544,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
 
         val output = AnySigner.sign(inputBuilder.build(), CoinType.CARDANO, Cardano.SigningOutput.parser())
 
-        if (output.errorMessage.isNotEmpty()) {
+        if (output.errorValue != 0 || output.errorMessage.isNotEmpty() || output.encoded.isEmpty) {
             return null
         }
 

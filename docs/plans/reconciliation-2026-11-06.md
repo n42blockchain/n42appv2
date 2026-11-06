@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Real Swift Cardano signing — batch 123
+
+- The normalized payload now has executable Swift/WalletCore evidence: 13 component checks pass on the N42 simulator, including signing, direct SDK equivalence, key-source parity, fee/change balance and rejected invalid requests. A reproduced invalid-recipient failure led to explicit SDK error-enum/nonempty-encoding checks in both native bridges.
+- Evidence: `/tmp/n42-cardano-signing-b123.log` (reproduced failure), `/tmp/n42-cardano-signing-b123-final.log` (13 passed), `/tmp/n42-cardano-input-b123.log` (Swift/Kotlin validators 67 each). Simulator returned to shutdown. Android actual signing/full App dispatch and device/network acceptance remain open, as do send-max reporting, multi-asset change and recovery.
+
+
 ### Cardano TTL and normalized inputs — batch 122
 
 - Sender now provides checked native UTxO fields and TTL derived from the selected node's slot. Funding uses selected input value, not the aggregate address balance. Token-bearing inputs remain unspent until native multi-asset change is implemented; insufficient eligible funds reports that limitation.
