@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Isolate reaction, receipt, typing and resend operations — batch 178
+
+- Six failures reproduced delayed reaction/read/typing dispatch into a new room, stale resend success/error changing its deletion tracking or error, and false resend acknowledgement hiding the failed message. Capture room/account generation, use the immutable originating room and check after preparation/completion. False resend results now fail before updating retry/deletion sets.
+- BLoC/extended/event suites: **340 pass**, exit 0 (/tmp/n42-chat-b178-final.log); scoped analysis clean (/tmp/n42-chat-b178-analysis.log). Before-fix evidence: /tmp/n42-chat-b178-before.log. Existing privacy controls and normal reaction behavior remain tested. Chat `2842ad0c706a32f0ab980a2d607ceba766a9c758` is pushed and pinned. Dependency resolution changed only Chat; all three wallet host tests pass (/tmp/n42-wallet-b178-host.log).
+- Remaining: reaction rejection rollback/concurrent toggles, disposal cancellation races, repository-internal transitions and broader login/recovery/dependency/payment/release acceptance. No live messages, fresh full suite, device or release claim.
+
 ### Bind reply preparation and completion to the originating session — batch 177
 
 - Five tests reproduced stale reply dispatch after settings loading, old success/error state writes after a room round trip, clearing a newer reply target and accepting a null receipt. Capture room/account generation and mentions before awaits; recheck before dispatch/completion; require a nonempty receipt and clear only the matching reply target.
