@@ -350,3 +350,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `cc05a316ebcd0104b047b625e5b4fb246cc9a196` is pushed. This closes the queued-UI and standalone-page generation gaps recorded in batch 37. Legacy unowned draft recovery, process/device coordination, and races with already-dispatched SDK work remain in MSG-001. No device installation or TestFlight upload.
 
 - Wallet host integration: 129 passed at the exact Chat pin (`/tmp/n42-origin-host-tests.log`). Only the Chat reference changed in the lockfile.
+
+
+## Batch 39 — scheduled-page localization and accessible layout (2026-11-06)
+
+- Added title, empty-state, scheduling hint, cancellation result and created-time resources to all 26 Chat catalogs and regenerated localization classes. Type/member/poll/timer labels reuse existing localized resources; stored payloads, transaction IDs and account isolation are unchanged.
+- Dates convert to local time and use Material locale formatting with the device 12/24-hour preference. Empty descriptions wrap without fixed-line truncation. A verified German 320px/2x-text overflow was fixed by placing cancellation below the date instead of competing for row width. Lists remain pull-refreshable when short/empty.
+- 21 page/localization tests passed (`/tmp/n42-scheduled-localization-verified.log`), including generated strings for every locale, placeholder preservation, English/Chinese/German/Arabic narrow large-text layout and cancellation, Arabic directionality and English 12-hour display. All 26 new resource sets have nonempty values and the required time placeholder. Scoped analyzer: no issues (`/tmp/n42-scheduled-l10n-analyze.log`).
+- Chat `0f253a97491d273be9e757d73ff220d747092f95` is pushed. Other scheduling pickers/snackbars and module literal candidates remain QA-006; native-speaker review and physical-device acceptance remain open. No new TestFlight upload or device install.
+
+- Wallet host integration: 129 passed (`/tmp/n42-scheduled-l10n-host-tests.log`). The lockfile changes only the Chat pin.
