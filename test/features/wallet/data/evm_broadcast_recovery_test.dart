@@ -22,6 +22,18 @@ class _Database extends AppDatabase {
 
 class _Signer extends Trustdart {
   @override
+  Future<Map> generateAddress(
+    String coin,
+    String path,
+    String addressType, {
+    String mnemonic = '',
+    String passphrase = '',
+    String pk = '',
+    bool isImport = false,
+    bool isTest = false,
+  }) async => {'legacy': '0x${'1' * 40}'};
+
+  @override
   Future<String> signTransaction(
     String coin,
     String path,

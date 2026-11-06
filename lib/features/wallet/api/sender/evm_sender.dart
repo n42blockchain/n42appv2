@@ -35,22 +35,78 @@ class EvmSender implements ChainSender {
   final _tokenViewApi = TokenViewApi();
   final Trustdart _trustdart;
   final _dataUtils = DataUtils();
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
 
-  EvmSender({Map<String, dynamic>? chainConfig, Trustdart? trustdart})
-    : _defaultChainConfig = chainConfig,
-      _trustdart = trustdart ?? Trustdart();
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  EvmSender({
+    Map<String, dynamic>? chainConfig,
+    Trustdart? trustdart,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+  }) : _defaultChainConfig = chainConfig,
+       _trustdart = trustdart ?? Trustdart(),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic;
 
   @override
   Future<SendResult> send(SendParams params) {
+    // Capture before the serializer can await another transaction. Never read
+    // a replacement account's signing material after network requests.
+    final Object? owner;
+    final String? mnemonic;
+    try {
+      owner = _ownerIdentity();
+      mnemonic = params.privateKey == null ? _readMnemonic() : null;
+    } catch (_) {
+      return Future.value(const SendResult.fail('Wallet is not ready'));
+    }
+    bool signerIsCurrent() {
+      try {
+        return _ownerIdentity() == owner &&
+            (params.privateKey != null ||
+                (owner != null && mnemonic == _readMnemonic()));
+      } catch (_) {
+        return false;
+      }
+    }
+
     // 同一地址的发送串行化：nonce 从查询（pending tag）到广播之间没有
     // 互斥，快速双击/自动重试会拿到同一 nonce 各自签名广播（双花）。
     return TransferSerializer.run(
       '${params.coinType}:${params.fromAddress}',
-      () => _sendSerialized(params),
+      () => _sendSerialized(params, mnemonic, signerIsCurrent),
     );
   }
 
-  Future<SendResult> _sendSerialized(SendParams params) async {
+  Future<SendResult> _sendSerialized(
+    SendParams params,
+    String? mnemonic,
+    bool Function() signerIsCurrent,
+  ) async {
     final coinType = params.coinType;
     final chainConfig = params.chainConfig ?? _defaultChainConfig;
     // CoinModel stores baseInfo itself, while other callers may pass a full
@@ -313,6 +369,8 @@ class EvmSender implements ChainSender {
       contractAddress: params.contractAddress,
       isTest: params.isTest,
       privateKey: params.privateKey,
+      mnemonic: mnemonic,
+      signerIsCurrent: signerIsCurrent,
       message: params.memo,
       calldata: params.calldata,
       rpc: rpcOverride,
@@ -320,6 +378,9 @@ class EvmSender implements ChainSender {
     );
     if (signResult is SendResult) return signResult;
 
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before broadcast');
+    }
     final signStr = signResult as String;
 
     // Validate signature
@@ -345,6 +406,10 @@ class EvmSender implements ChainSender {
           'Could not save the transaction before broadcast',
         );
       }
+    }
+
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before broadcast');
     }
 
     // MEV 保护：高风险交易（DEX swap/授权/大额转账）在支持的链（当前仅主网
@@ -378,6 +443,14 @@ class EvmSender implements ChainSender {
         }
         return SendResult.ok(txHash, actualAmount: adjustedValue);
       } catch (_) {
+        // A private submission can have reached the network even on timeout.
+        if (!signerIsCurrent()) {
+          return SendResult.uncertain(
+            localHash ?? '0x${bytesToHex(keccak256(hexToBytes(signStr)))}',
+            'Wallet changed after broadcast attempt',
+            actualAmount: adjustedValue,
+          );
+        }
         // 落到下方普通 RPC 广播兜底。
       }
     }
@@ -426,6 +499,8 @@ class EvmSender implements ChainSender {
     String contractAddress = '',
     bool isTest = false,
     String? privateKey,
+    required String? mnemonic,
+    required bool Function() signerIsCurrent,
     String? message,
     String? calldata,
     String? rpc,
@@ -485,16 +560,43 @@ class EvmSender implements ChainSender {
       'is1559': get1559WithChainSymbol(coinType) ? 'true' : 'false',
     };
 
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before signing');
+    }
+    if ((privateKey ?? mnemonic ?? '').trim().isEmpty) {
+      return const SendResult.fail('Signing key is unavailable');
+    }
+    final Map derived;
+    try {
+      // EVM networks share Ethereum's address derivation. Native symbol
+      // registries need not contain a user-added network; keep its exact path.
+      derived = await _trustdart.generateAddress(
+        CoinType.ETH.name,
+        path,
+        'legacy',
+        mnemonic: privateKey == null ? mnemonic! : '',
+        pk: privateKey ?? '',
+        isTest: isTest,
+      );
+    } catch (_) {
+      return const SendResult.fail('Unable to verify signing address');
+    }
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before signing');
+    }
+    final address = derived['legacy'];
+    if (address is! String ||
+        !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address) ||
+        address.toLowerCase() != fromAddress.trim().toLowerCase()) {
+      return const SendResult.fail('Signing key does not match sender address');
+    }
     String signStr;
     if (privateKey == null) {
-      if (!AppGlobals.appContext.mounted) {
-        return SendResult.fail('Context is no longer valid');
-      }
       signStr = await _trustdart.signTransaction(
         coinType,
         path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: mnemonic!,
       );
     } else {
       signStr = await _trustdart.signTransaction(

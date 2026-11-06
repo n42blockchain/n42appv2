@@ -2,9 +2,9 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Latest verified baseline — batch 105
+## Latest verified full-regression baseline — batch 112
 
-- Wallet runtime source `0f9ed4f7a`: fresh full regression **6,565 passed, 0 failed, no skips reported**; coverage **72.86%** (101,372/139,128), unchanged 70% gate passes. Falcon native tests executed. Full analysis: no errors/warnings, 68 infos; Python scripts 49 pass; wallet/Chat localization integrity passes. Full source and log hashes are in audit batch 105.
+- Wallet runtime source `05eda1c6c`: fresh full regression **6,607 passed, 0 failed, no skips**; coverage **72.89%** (101,500/139,253), unchanged 70% gate passes. Falcon native tests executed. Full analysis: no errors/warnings, 68 infos; Python scripts 49 pass; wallet/Chat localization integrity passes. Chat `798d20f5`: 7,962 pass, four external-fixture skips, raw coverage 70.93%. Full source and log hashes are in audit batch 112. Batch 113 EVM runtime changes have targeted evidence below, not a repeated full-suite result.
 - Aptos journal/sender/recovery-page wiring and signed-expiry recovery are implemented through batches 103–104. Earlier statements that these are unwired are superseded. Batch 107 below closes the new-submission history/journal reservation window. Older orphan history, legacy expiry-less records, non-page callers without history, cross-process coordination, gas simulation and live/device acceptance remain open. Batch 108 below implements bounded generic Coin signing on chain 1/2.
 - Other remaining work is unchanged: native social login/Matrix acceptance and disabled native Google exchange, Meta public availability, current-source release, Chat legacy/corrupt draft recovery, broader security/AA/hardware review, editorial/RTL work, dependency holds and old worktree reconciliation. Full wallet tests do not replace standalone Chat regression or production acceptance.
 
@@ -18,7 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
-### Current inspection — batch 112 complete
+### EVM account-binding follow-up — batch 113
+
+- The EVM portion of the missed security branch is now ported to current sender code: capture owner/key before serialization, validate the derived sender address, and check owner/credentials across RPC, native signing and persistence awaits. Ethereum address derivation preserves custom-network support. Existing exact amounts/fees/nonce/history behavior remains covered.
+- 202 targeted sender/data/EVM tests pass; scoped analysis clean. Evidence: `/tmp/n42-evm-owner-b113-final.log`, `/tmp/n42-evm-owner-b113-analysis.log`. Native calls use controlled fixtures; no real payment/device acceptance. Non-EVM/batch/AA and other old-branch guards still need comparison/porting; keep the worktree. The deep-link test timing improvement remains open.
+
+### Full-regression inspection — batch 112 complete
 
 - Fresh fetch: wallet `05eda1c6cdf24fcae523896a959d158837a91110` equals `origin/master`; no tracked edits were left interrupted. Chat is clean at `798d20f55faf49c1bd3ff4dd5a67e254bd453df6`. The four baseline untracked wallet paths remain preserved.
 - Current wallet analysis completed with no errors/warnings and 68 infos; Python script tests passed 49/49 and wallet/resolved-Chat localization integrity passed. Logs: `/tmp/n42-wallet-b112-analysis.log`, `/tmp/n42-wallet-b112-scripts.log`, `/tmp/n42-wallet-b112-l10n.log`.

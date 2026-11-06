@@ -11,6 +11,27 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 class _FakeSigner extends Trustdart {
   final payloads = <Map<String, dynamic>>[];
+  final signingMnemonics = <String>[];
+  final derivationCoins = <String>[];
+  String derivedAddress = '0x0000000000000000000000000000000000000001';
+  Future<void> Function()? onDerive;
+  Future<void> Function()? onSign;
+
+  @override
+  Future<Map> generateAddress(
+    String coin,
+    String path,
+    String addressType, {
+    String mnemonic = '',
+    String passphrase = '',
+    String pk = '',
+    bool isImport = false,
+    bool isTest = false,
+  }) async {
+    derivationCoins.add(coin);
+    await onDerive?.call();
+    return {'legacy': derivedAddress};
+  }
 
   @override
   Future<String> signTransaction(
@@ -22,6 +43,8 @@ class _FakeSigner extends Trustdart {
     String passphrase = '',
   }) async {
     payloads.add(Map<String, dynamic>.from(txData));
+    signingMnemonics.add(mnemonic);
+    await onSign?.call();
     // SignatureValidator only performs structural validation here. Broadcast
     // remains on the local fixture RPC, so no real transaction is created.
     return 'f8${List.filled(100, '0').join()}';
@@ -38,6 +61,7 @@ class _RpcFixture {
   int chainId = 1;
   String broadcastHash = '0xfixturehash';
   bool dropBroadcastResponse = false;
+  void Function(String method)? onRequest;
 
   Future<void> start() async {
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
@@ -47,6 +71,7 @@ class _RpcFixture {
       ) as Map<String, dynamic>;
       final method = body['method'] as String;
       methods.add(method);
+      onRequest?.call(method);
       if (method == 'eth_estimateGas') {
         estimates.add(
           Map<String, dynamic>.from((body['params'] as List).first as Map),
@@ -81,6 +106,8 @@ class _RpcFixture {
 }
 
 SendParams _params({
+  String coinType = 'ETH',
+  String? privateKey = 'fixture-key',
   double amount = 1,
   int decimals = 18,
   String contract = '',
@@ -92,7 +119,7 @@ SendParams _params({
   required String rpc,
   Future<void> Function(String)? beforeBroadcast,
 }) => SendParams(
-  coinType: 'ETH',
+  coinType: coinType,
   fromAddress: '0x0000000000000000000000000000000000000001',
   toAddress: '0x0000000000000000000000000000000000000002',
   amount: amount,
@@ -101,7 +128,7 @@ SendParams _params({
   contractAddress: contract,
   tokenDecimals: tokenDecimals,
   calldata: calldata,
-  privateKey: 'fixture-key',
+  privateKey: privateKey,
   chainConfig: {'chainId': 1, 'service': rpc},
   nonceOverride: BigInt.zero,
   valueWeiOverride: exact,
@@ -128,6 +155,135 @@ void main() {
     addTearDown(() => rpc.server.close(force: true));
     signer = _FakeSigner();
     sender = EvmSender(trustdart: signer);
+  });
+
+  for (final address in [
+    '',
+    'not-an-address',
+    '0x0000000000000000000000000000000000000002',
+  ]) {
+    test('rejects signer address mismatch: $address', () async {
+      signer.derivedAddress = address;
+      final result = await sender.send(_params(rpc: rpc.url));
+      expect(result.success, isFalse);
+      expect(result.error, 'Signing key does not match sender address');
+      expect(signer.payloads, isEmpty);
+      expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+    });
+  }
+
+  test('custom EVM networks use Ethereum address derivation', () async {
+    final result = await sender.send(_params(rpc: rpc.url, coinType: 'N42'));
+    expect(result.success, isTrue);
+    expect(signer.derivationCoins, ['ETH']);
+    expect(signer.payloads, hasLength(1));
+  });
+
+  test('derivation failure never reaches signing or submission', () async {
+    signer.onDerive = () async => throw StateError('native unavailable');
+    final result = await sender.send(_params(rpc: rpc.url));
+    expect(result.error, 'Unable to verify signing address');
+    expect(signer.payloads, isEmpty);
+    expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+  });
+
+  test('mnemonic sender uses the captured matching account', () async {
+    sender = EvmSender(
+      trustdart: signer,
+      ownerIdentity: () => 'owner-A',
+      readMnemonic: () => 'fixture mnemonic A',
+    );
+    final result = await sender.send(_params(rpc: rpc.url, privateKey: null));
+    expect(result.success, isTrue);
+    expect(signer.signingMnemonics, ['fixture mnemonic A']);
+  });
+
+  for (final switchOwner in [true, false]) {
+    test(
+      'RPC await rejects changed ${switchOwner ? 'owner' : 'credentials'}',
+      () async {
+        var owner = 'owner-A';
+        var mnemonic = 'fixture mnemonic A';
+        sender = EvmSender(
+          trustdart: signer,
+          ownerIdentity: () => owner,
+          readMnemonic: () => mnemonic,
+        );
+        rpc.onRequest = (_) {
+          if (switchOwner) owner = 'owner-B';
+          mnemonic = 'fixture mnemonic B';
+        };
+        final result = await sender.send(
+          _params(rpc: rpc.url, privateKey: null),
+        );
+        expect(result.success, isFalse);
+        expect(result.error, 'Wallet changed before signing');
+        expect(signer.payloads, isEmpty);
+        expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+      },
+    );
+  }
+
+  for (final phase in ['derive', 'sign', 'persist']) {
+    test('account switch during $phase prevents later dispatch', () async {
+      var owner = 'owner-A';
+      sender = EvmSender(trustdart: signer, ownerIdentity: () => owner);
+      Future<void> changeOwner() async {
+        owner = 'owner-B';
+      }
+
+      if (phase == 'derive') signer.onDerive = changeOwner;
+      if (phase == 'sign') signer.onSign = changeOwner;
+      final result = await sender.send(
+        _params(
+          rpc: rpc.url,
+          beforeBroadcast: phase == 'persist' ? (_) => changeOwner() : null,
+        ),
+      );
+      expect(result.success, isFalse);
+      expect(result.error, contains('Wallet changed'));
+      expect(signer.payloads.length, phase == 'derive' ? 0 : 1);
+      expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+    });
+  }
+
+  test(
+    'queued transfer retains its original owner before serialization',
+    () async {
+      var owner = 'owner-A';
+      sender = EvmSender(trustdart: signer, ownerIdentity: () => owner);
+      final persisted = Completer<void>();
+      final release = Completer<void>();
+      final first = sender.send(
+        _params(
+          rpc: rpc.url,
+          beforeBroadcast: (_) async {
+            persisted.complete();
+            await release.future;
+          },
+        ),
+      );
+      await persisted.future;
+      final queued = sender.send(_params(rpc: rpc.url));
+      owner = 'owner-B';
+      release.complete();
+      expect((await first).success, isFalse);
+      expect((await queued).success, isFalse);
+      expect(signer.payloads, hasLength(1));
+      expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
+    },
+  );
+
+  test('mnemonic without an active owner cannot sign', () async {
+    sender = EvmSender(
+      trustdart: signer,
+      ownerIdentity: () => null,
+      readMnemonic: () => 'orphan fixture',
+    );
+    final result = await sender.send(_params(rpc: rpc.url, privateKey: null));
+    expect(result.success, isFalse);
+    expect(signer.payloads, isEmpty);
+    expect(rpc.methods, isNot(contains('eth_sendRawTransaction')));
   });
 
   test(
