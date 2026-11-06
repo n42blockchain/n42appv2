@@ -93,15 +93,18 @@ class _Provider extends WalletConnectProvider {
 
 const _trustdartChannel = MethodChannel('trustdart');
 
-wc.SessionRequestEvent _request(String method, dynamic params) =>
-    wc.SessionRequestEvent(
-      84,
-      'evm-request-topic',
-      method,
-      'eip155:1',
-      params,
-      wc.TransportType.relay,
-    );
+wc.SessionRequestEvent _request(
+  String method,
+  dynamic params, {
+  String chain = 'eip155:1',
+}) => wc.SessionRequestEvent(
+  84,
+  'evm-request-topic',
+  method,
+  chain,
+  params,
+  wc.TransportType.relay,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -617,7 +620,7 @@ void main() {
       ..coinModelsIndex = 0
       ..actionData = _request('solana_signTransaction', {
         'transaction': 'cmF3LXRyYW5zYWN0aW9u',
-      });
+      }, chain: 'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ');
 
     await provider.transactionSignTap();
 

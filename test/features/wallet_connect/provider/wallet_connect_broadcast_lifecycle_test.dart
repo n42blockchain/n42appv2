@@ -44,6 +44,7 @@ class _Signer extends WalletConnectProvider {
   String owner = 'fixture-owner';
   bool disposed = false;
   final submissions = <(CoinType, String, bool)>[];
+  String? submittedChain;
   Completer<MessageModel>? rpc;
   final rpcStarted = Completer<void>();
   @override
@@ -59,7 +60,9 @@ class _Signer extends WalletConnectProvider {
     CoinType type,
     String signedTransaction, {
     required bool isTest,
+    String? sessionChainId,
   }) {
+    submittedChain = sessionChainId;
     submissions.add((type, signedTransaction, isTest));
     if (!rpcStarted.isCompleted) {
       rpcStarted.complete();
@@ -145,6 +148,58 @@ void main() {
       'fixture',
     ]);
     provider.walletConnectState = WalletConnectState.messageSignOK;
+  }
+
+  test('unsupported Solana chain is rejected before native signing', () async {
+    final c = _chains.first;
+    const chain = 'solana:unknown';
+    provider.coinModels = [
+      sessionCoin(type: c.type, blockchain: c.blockchain, address: c.address)
+        ..coin['path'] = {'legacy': "m/44'/0'/0'"},
+    ];
+    provider.coinModelsIndex = 0;
+    client.activeSessions['request-topic'] = _session(
+      c.ns,
+      chain,
+      c.address,
+      c.method,
+    );
+    provider.actionData = sessionRequest(c.method, {
+      'transaction': 'cmF3',
+    }, chain: chain);
+    await provider.transactionSignTap();
+    expect(nativeCalls, 0);
+    expect(provider.submissions, isEmpty);
+    expect(provider.walletConnectState, WalletConnectState.error);
+  });
+
+  for (final chain in [
+    'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ',
+    'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K',
+  ]) {
+    test('Solana submits the approved request chain $chain', () async {
+      final c = _chains.first;
+      provider.coinModels = [
+        sessionCoin(type: c.type, blockchain: c.blockchain, address: c.address)
+          ..coin['path'] = {'legacy': "m/44'/0'/0'"},
+      ];
+      provider.coinModelsIndex = 0;
+      client.activeSessions['request-topic'] = _session(
+        c.ns,
+        chain,
+        c.address,
+        c.method,
+      );
+      provider.actionData = sessionRequest(c.method, {
+        'transaction': 'cmF3',
+      }, chain: chain);
+      final operation = provider.transactionSignTap();
+      await nativeStarted.future;
+      native.complete('signed');
+      await operation;
+      expect(provider.submittedChain, chain);
+      expect(provider.submissions, hasLength(1));
+    });
   }
 
   for (final c in _chains) {

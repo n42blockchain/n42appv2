@@ -350,6 +350,7 @@ mixin WalletConnectSigning
     wallet_connect.SessionRequestEvent eventData,
   ) async {
     final responseClient = signClient!;
+    final requestChainId = eventData.chainId;
     final requestParams = eventData.params! as Map;
     // DApp sends a base64-encoded serialized transaction
     final rawTxBase64 = requestParams["transaction"] as String? ?? '';
@@ -361,6 +362,8 @@ mixin WalletConnectSigning
       );
       return;
     }
+    // Reject unsupported chains before credentials or native signing.
+    SolApi.walletConnectRpcUrl(requestChainId);
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
     final credentials = await getCurrentWalletCredentials();
     requireCurrent();
@@ -399,6 +402,7 @@ mixin WalletConnectSigning
         CoinType.SOL,
         signedTxBase64,
         isTest: cm.isTest,
+        sessionChainId: requestChainId,
       );
       if (result.error) {
         if (!_signingContextIsCurrent(requireCurrent)) return;
@@ -761,15 +765,17 @@ mixin WalletConnectSigning
   }
 
   /// Submission boundary for deterministic lifecycle tests. Serialized Solana
-  /// uses base64; endpoint selection retains its existing behavior.
+  /// uses base64 and the approved request chain, never the UI network toggle.
   Future<MessageModel> broadcastNonEvmTransaction(
     CoinType type,
     String signedTransaction, {
     required bool isTest,
+    String? sessionChainId,
   }) => switch (type) {
     CoinType.SOL => SolApi().sendTransaction(
       signedTransaction,
       encoding: 'base64',
+      walletConnectChainId: sessionChainId ?? '',
     ),
     CoinType.APT => AptApi(isTest: isTest).sendTxHash(signedTransaction),
     CoinType.NEAR => NearApi(isTest: isTest).sendTransaction(signedTransaction),

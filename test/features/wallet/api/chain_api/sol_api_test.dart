@@ -20,6 +20,47 @@ void main() {
       },
     );
   });
+  for (final route in [
+    (
+      'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ',
+      'https://api.mainnet-beta.solana.com',
+    ),
+    (
+      'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K',
+      'https://api.devnet.solana.com',
+    ),
+  ]) {
+    for (final isTest in [true, false]) {
+      test(
+        'WalletConnect ${route.$1} overrides UI test mode $isTest',
+        () async {
+          result = 'signature';
+          final response = await api.sendTransaction(
+            'signed',
+            encoding: 'base64',
+            isTest: isTest,
+            walletConnectChainId: route.$1,
+          );
+          expect(response.error, isFalse);
+          expect(calls.single.$1, route.$2);
+          expect(calls.single.$3, isFalse);
+          expect(calls.single.$2['params'], [
+            'signed',
+            {'encoding': 'base64'},
+          ]);
+        },
+      );
+    }
+  }
+  test('unknown WalletConnect chain never falls back to mainnet', () async {
+    final response = await api.sendTransaction(
+      'signed',
+      walletConnectChainId: 'solana:unknown',
+    );
+    expect(response.error, isTrue);
+    expect(calls, isEmpty);
+  });
+
   for (final isTest in [true, false]) {
     test(
       'native balance uses selected RPC and returns exact integer $isTest',

@@ -16,6 +16,23 @@ class SolApi {
   final SolRpcRequest? request;
   SolApi({this.request});
 
+  /// Explicit routing for the Solana chains advertised by this wallet.
+  /// Devnet is distinct from the ordinary wallet's Testnet mode.
+  static String walletConnectRpcUrl(String chainId) => switch (chainId) {
+    'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ' => RequestUrl().getUrl2(
+      CoinType.SOL.name,
+      'rpc',
+      isTest: false,
+    ),
+    'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K' =>
+      'https://api.devnet.solana.com',
+    _ => throw ArgumentError.value(
+      chainId,
+      'chainId',
+      'Unsupported Solana chain',
+    ),
+  };
+
   /// 获取账号信息
   Future<MessageModel> getAccountInfo(
     String address, {
@@ -154,6 +171,7 @@ class SolApi {
     String signMessage, {
     bool isTest = false,
     String encoding = 'base58',
+    String? walletConnectChainId,
   }) async {
     if (encoding != 'base58' && encoding != 'base64') {
       return MessageModel()
@@ -169,6 +187,7 @@ class SolApi {
         ],
         isTest: isTest,
         enableRetry: false,
+        walletConnectChainId: walletConnectChainId,
       ),
     );
   }
@@ -178,6 +197,7 @@ class SolApi {
     dynamic value, {
     bool? isTest,
     bool enableRetry = true,
+    String? walletConnectChainId,
   }) async {
     try {
       final postData = {
@@ -186,11 +206,9 @@ class SolApi {
         'params': value,
         'id': AppGlobals.nextId,
       };
-      final url = RequestUrl().getUrl2(
-        CoinType.SOL.name,
-        'rpc',
-        isTest: isTest,
-      );
+      final url = walletConnectChainId != null
+          ? walletConnectRpcUrl(walletConnectChainId)
+          : RequestUrl().getUrl2(CoinType.SOL.name, 'rpc', isTest: isTest);
       final rpcRequest = request;
       final data = rpcRequest != null
           ? await rpcRequest(url, postData, enableRetry: enableRetry)
