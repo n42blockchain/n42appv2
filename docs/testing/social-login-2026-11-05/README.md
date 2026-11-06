@@ -14,6 +14,8 @@ N42 wallet host only; 11x and Mintus were read-only references. Their public cap
 
 ## Configuration still required
 
+The live registration update below supersedes the earlier missing-Google-client and MFA observations. Registration is not backend or real-login acceptance.
+
 ### App/Chat identity
 
 1. Register N42's iOS OAuth client for `ai.n42.www` and the Android signing certificate/package. Firebase configuration files in this checkout contain no Google OAuth client IDs; they are not sufficient to enable login.
@@ -68,3 +70,65 @@ This is **login/recovery integration, not production payment acceptance**. The e
 - `e26f09c14`: native app login configuration and immutable Chat dependency.
 - `2c405bacd`: social wallet provider registration, Facebook, session isolation and UI recovery.
 - The debug app was built at `2.5.3+73121` before commit hooks incremented the development build number. Subsequent runtime changes were formatting only. No TestFlight artifact was produced.
+
+
+## Live registration update — 2026-11-05
+
+The owner completed Google two-step verification. The console now permits access
+to `coherent-window-511904-h1` (11X Club). N42's Firebase project
+`n42app-2c9be` still requires additional access. The user confirmed N42-only scope
+and `https://n42.world` as its Web origin, then authorized the separate Google
+Web and Android registrations. The existing 11X Web client was retained.
+
+| N42 client | Client ID prefix (all end in `.apps.googleusercontent.com`) | Binding |
+| --- | --- | --- |
+| iOS | `86606369466-cngdfceh70c1mjrvg2a48tkl4h3rn17o` | `ai.n42.www`, team `CFRXH38L48`, store `6738644072` |
+| Web/server | `86606369466-a6heb4762hoke2cte8s1kq97to4pijk3` | JavaScript origin `https://n42.world` |
+| Android Release | `86606369466-04f5alkovev0a4n5gj4mu1msk5ap93vo` | `ai.n42.www`, local release certificate |
+| Android Debug | `86606369466-spjg0eqvge93f82abn7mm3rsmdfjo0sg` | `ai.n42.www`, local debug certificate |
+
+Android SHA-1 registrations were checked against `:app:signingReport`:
+
+- Release: `BB:DB:5C:75:6E:B2:76:1D:96:9E:A6:5D:64:0F:32:91:26:02:5D:E6`.
+- Debug: `6A:76:27:48:F6:6F:52:68:B0:5A:71:B7:79:73:43:1D:27:B4:67:AE`.
+- Google Play app-signing certificate is not yet verified; these registrations
+  do not establish Play-distributed build support.
+
+The iOS plist was downloaded and its bundle/client/reversed-client values checked.
+The Web JSON is protected at `~/.config/n42/secrets/google-web-client.json` (0600,
+parent 0700); do not commit or print its secret. The downloaded JSON also has 0600
+permissions. Only public client IDs were placed in ignored local
+`ios/Flutter/ChatSocialAuth.xcconfig` and `android/local.properties`. Other machines
+and CI still need these public values configured; no credential was added to Git.
+
+The Web registration currently has **no redirect URIs**. It supports the registered
+JavaScript origin and acts as the native server client identifier. A future
+server authorization-code flow must implement and register its exact callback.
+The site currently serves static content; a HEAD probe of
+`/v1/auth/n42/capabilities` returned 404. No login UI, callback, account service,
+Web deployment or authenticated session is claimed from this registration.
+The provider consent branding remains that of the shared Cloud project.
+
+New verification:
+
+- Platform configuration tests: 34 passed (`/tmp/n42-google-registration-tests.log`).
+- Xcode Debug build settings resolve the N42 iOS ID, reversed scheme and new
+  N42 Web/server ID (`/tmp/n42-google-config-settings.log`); this was not a new app build.
+- Gradle Debug and Release resource generation passed
+  (`/tmp/n42-google-android-res.log`); both XML resources match the Web/server ID.
+- Live Google list contains all four N42 clients and the unchanged 11X Web client.
+
+Apple console: team `CFRXH38L48`, N42 `ai.n42.www` already has Sign In with Apple
+selected and is a primary App ID. The Services IDs list contains only Club and
+Mintus entries; N42 needs its own Services ID and server configuration for
+Web/Android browser authorization. No Apple identifiers or keys were changed.
+
+Meta console: opening the existing N42 App ID `903080600916838` redirects to the
+app list; the current account sees only Mintus and 11X Club. The user was asked to
+provide access to the existing N42 app, or choose a new app with migration review.
+Do not silently replace the app ID or assume that Club approval covers N42.
+
+Remaining: external N42 backend verification and existing account mapping;
+Google consent branding review; Apple Web/Android service and callback;
+Meta app access/configuration and Limited Login verification; Web login UI and
+server deployment; real provider authorization and first/repeat login acceptance.

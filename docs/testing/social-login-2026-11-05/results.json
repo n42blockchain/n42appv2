@@ -19,5 +19,21 @@
   "live_provider_authorization": false,
   "testflight_upload": false,
   "historical_sessions_checked": 49,
-  "google_console": "Blocked by owner two-step-verification requirement"
+  "google_console": "Accessible after owner enabled MFA; four N42 clients registered",
+  "google_registration": {
+    "web_origin": "https://n42.world",
+    "clients": [
+      "ios",
+      "web",
+      "android_release",
+      "android_debug"
+    ],
+    "platform_configuration_tests_passed": 34,
+    "ios_build_settings_verified": true,
+    "android_debug_release_resources_verified": true,
+    "play_signing_verified": false,
+    "web_login_deployed": false
+  },
+  "apple_console": "N42 primary App ID enabled; N42 Services ID absent",
+  "meta_console": "Current account cannot access existing N42 app; owner decision pending"
 }
