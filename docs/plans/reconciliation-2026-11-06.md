@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 154
+## Current interruption inventory — through batch 155
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -54,6 +54,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Android native-login build and live capabilities — batch 155
+
+- Read-only live GET https://n42.world/v1/auth/n42/capabilities returns google_native_code=false, native_oidc_providers=[apple, facebook], web_providers=[google, apple, facebook]. This confirms the deployed Google-native gate is closed; no server setting was changed. Web availability does not establish native provider/Matrix acceptance.
+- Android local server-client configuration matches the dedicated N42 Web OAuth client. An initial ad hoc presence check failed to trim property-name whitespace and falsely reported it absent; corrected comparison and the compiled APK resource both confirm presence. No credentials/configuration were changed or printed.
+- Source fd5fe815c, Chat production pin b6ff2c46: Flutter 3.47.8, JDK 21, `flutter build apk --debug --no-pub --target-platform android-arm64 --dart-define=N42_NATIVE_AUTH_URL=https://n42.world` completed with exit 0 in 107.4 seconds. Artifact build/app/outputs/flutter-apk/app-debug.apk is ai.n42.www 2.5.3 (73274), target SDK 36, 714898505 bytes. SHA-256 29de39c62cd728b71445ac865496189924ad04e2c2951a096e7929a8010eac10. apksigner verify passes. Flutter arm64 and Falcon native libraries are packaged. Debug packaging still contains additional dependency ABIs; this is not a size-optimized release.
+- Chat native API/BLoC suite: 16 pass (/tmp/n42-chat-b155-native.log). Build log: /tmp/n42-wallet-b155-android.log. Existing future built-in-Kotlin migration and Windows Facebook plugin warnings remain; they did not fail this Android build.
+- No installation, real provider login, same-DID Matrix acceptance, release signing, TestFlight upload or production deployment was performed. Native Google activation still needs acceptance before enabling. Earlier release/native acceptance gaps remain open.
 
 ### Continuous recovery navigation acceptance — batch 154
 
