@@ -331,3 +331,12 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Still open in MSG-001: user-confirmed legacy recovery, same-user re-login intent generations, cross-process/device scheduling and live-server acceptance. Retaining legacy data is not a completed migration or exactly-once guarantee. No device installation or release upload performed.
 
 - Chat `1a5acbdc0185c8479573dd20420e72623ae7c740` is pushed and pinned. Wallet host integration: 129 passed (`/tmp/n42-owner-host-tests.log`); pub get changed only the Chat lockfile reference. Final scoped source analyzer: no errors/warnings, ten informational diagnostics (`/tmp/n42-owner-analyze-verified.log`). Existing Facebook Windows metadata warning remains.
+
+
+## Batch 37 — scheduled-operation login generations (2026-11-06)
+
+- Production ChatBloc now receives the auth lifecycle and captures its opaque generation before asynchronous scheduled work. Matching Matrix user/client/token values alone no longer allow an operation from a previous login to continue after a same-account re-login. Configured lifecycle capture failures do not fall back to identity-only matching.
+- Extended BLoC suite: 52 passed. Paired tests keep the client, user, device and token unchanged: replacing the generation rejects the pending due queue without sending/deleting; preserving the generation sends and removes the confirmed draft. Log: `/tmp/n42-scheduled-generation-final.log`. Scoped analyzer has no errors/warnings and six constructor-style info diagnostics (`/tmp/n42-scheduled-generation-analyze.log`).
+- Chat `3ce77c7a2b2cd896ee114df25296b0c21b6bb198` is pushed. Still open: UI intents originating before handler entry and standalone scheduled-page same-user re-login need their own generation binding; legacy draft recovery and live/cross-device scheduling remain in MSG-001. No new release/device acceptance is implied.
+
+- Wallet host integration: 129 passed at the exact Chat pin (`/tmp/n42-generation-host-tests.log`); pub get changed only that pin in the lockfile.
