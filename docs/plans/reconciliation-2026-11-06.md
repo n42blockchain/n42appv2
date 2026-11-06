@@ -22,7 +22,7 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 - Rechecked ID Hub source: googleNativeCodeEnabled still defaults to false. Actual deployed settings and native provider/Matrix acceptance were not probed. Signed current-source release/TestFlight, Meta public availability, dependency holds, localization editorial/RTL and older IAP/payment requirements remain open.
 - Adjacent Mintus record `../minto/docs/qa/2026-11-06-release-3211.md` supersedes the 3210 snapshot below: it records upload acceptance at 0.2.4 (3211), source 94a24d26, followed by merchant Web deployment 9bcdceff to staging/production. Apple processing completion, tester visibility and device acceptance are still unverified. Native share-HTTPS scanning and the new-Token per-holder cumulative interest ceiling remain open. This inspection read records, not live deployment/store state.
 
-## Current interruption inventory — through batch 170
+## Current interruption inventory — through batch 171
 
 The interrupted patches through batch 159 are committed. Batch 160 revalidated the complete current wallet source after the Chat recovery and EGLD signing changes. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
@@ -56,6 +56,14 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Reject stale translation and detection results — batch 171
+
+- Six regressions reproduce old translation success/error after a room round trip, clear, or clear-and-retry. Per-message request identity and room/account generation now guard repository completion and queued TranslationCompleted events. Clearing invalidates the request and removes its pending flag; old completion cannot overwrite the retry or clear its loading state. Room initialization releases the request map.
+- Auto/recipient language detection checks captured context and current settings and carries that check into queued events; auto detection errors are caught. A delayed preference-save completion cannot launch language detection for a new room. Default event constructors/equality remain compatible. Existing provider requests are not cancelled.
+- Final BLoC/event/composer suites: 336 pass (/tmp/n42-chat-b171-complete.log), including six old-request cases, four detection mode/switch cases and one delayed preference-save case. Before-fix evidence: /tmp/n42-chat-b171-before.log. Scoped analysis: zero errors/warnings and six pre-existing constructor infos (/tmp/n42-chat-b171-analysis-final.log).
+- Chat dcd7d49e328474a65fddb103f382862fcb67dd9e is pushed and pinned. Dependency resolution changed only the Chat ref; all three wallet host fixture tests pass (/tmp/n42-wallet-b171-host.log). Remaining: poll callbacks, message-edit and same-generation preference/detection ordering, preferences storage account scope, live provider/device and release acceptance. No real messages or release upload. Full-wallet coverage remains batch 160 for its earlier source.
+
 
 ### Bind background room settings to their session — batch 170
 
