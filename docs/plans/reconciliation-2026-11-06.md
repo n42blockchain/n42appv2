@@ -18,7 +18,16 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
-### Current inspection — after batch 96
+### Current inspection — after batch 106
+
+- Fresh fetch confirms wallet `8a8de601d` equals `origin/master` (0 ahead / 0 behind). No tracked edits were interrupted; the four existing untracked paths remain preserved. Version is 2.5.3+73221. Chat worktree is clean and both manifest and lockfile pin `3197dc770bdf6bf326e4a4e68d66fdc40fee9353`.
+- Batch 106 is committed and pushed, not awaiting delivery. Its 204 Chat tests and 3 host fixtures are targeted evidence; the latest wallet full run remains batch 105 at the earlier source. No new full regression or release was performed in this inspection.
+- Hosted source `8a8de601d`: HIG audit and Performance Benchmark succeeded; Tests `42244820289` was in progress and CI Pipeline `42244820415` pending. This is a snapshot, not a hosted all-green result.
+- All 13 auxiliary worktrees were inspected again: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. No work was deleted or merged; patch-level reconciliation remains open.
+- The former “current inspection” after batch 96 was stale. Its proposed confirmation-route and journal integration tasks are already implemented in batches 97–104. They must not be restarted as missing implementations.
+- Actual remaining implementation: Chat explicit legacy ownership/import and damaged-record recovery UI; Aptos two-store crash windows, legacy expiry-less recovery and non-page history recovery; generic Coin/gas simulation and broader chain/AA/hardware audit. Remaining acceptance/delivery: native providers and Matrix identity, Meta review/deletion process, current-source builds/TestFlight, editorial/RTL review and dependency holds. Physical-device acceptance remains deferred.
+
+### Historical inspection — after batch 96
 
 - Fresh fetch confirms wallet `9a2a7a9389bd6cf211e54d1b33a3559b75bf78f7` equals `origin/master` (0 ahead / 0 behind). No tracked edits were left interrupted. The same four baseline untracked paths remain; no deletion or merge was performed.
 - Rechecked Chat `d387fca6` and ID Hub `7c0dd68`: both clean. Wallet pubspec and lockfile resolve the same Chat revision. All 13 auxiliary wallet worktrees remain: seven dirty ancestor heads, five clean non-ancestor heads, one clean ancestor head. Ancestor status does not make uncommitted work safe to delete.
@@ -180,7 +189,7 @@ Batch 106 pins Chat 3197dc77 after fixing damaged scheduled-delivery state parsi
 
 Non-ancestor clean branches checked with `git cherry HEAD <branch>`: dependency-completion has 114 patch-unique commits; main-flow-audit 3; test-audit 1; coverage-70 58. Detached ui-token-baseline is also non-ancestor. These counts do not prove missing functionality: rewritten history, later rewrites and superseding fixes require file/behavior comparison before any merge or deletion. No worktree was removed.
 
-Root has only the three old untracked plan files and the unused `packages/n42_chat` directory. Actual Chat dependency is immutable Git pin `fd519bff`; the previously unfinished account-isolation and server-acknowledgement changes are now completed. ID Hub is clean at `7c0dd68`. The later interrupted Aptos integration is recorded in batch 31; it must not be confused with a completed release. N42-rs has a modified fleet-test result file, preserved without alteration.
+Historical snapshot (superseded by the current inspection above): root has only the three old untracked plan files and the unused `packages/n42_chat` directory. Actual Chat dependency is immutable Git pin `fd519bff`; the previously unfinished account-isolation and server-acknowledgement changes are now completed. ID Hub is clean at `7c0dd68`. The later interrupted Aptos integration is recorded in batch 31; it must not be confused with a completed release. N42-rs has a modified fleet-test result file, preserved without alteration.
 
 ## Completed work that must not be reopened as missing
 
