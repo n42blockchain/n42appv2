@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Cardano native input hardening — batch 120
+
+- Both native Cardano signers now reject malformed wire input before key access/forced casts. Missing TTL, list-valued UTxO amounts, malformed outpoints, overflow, fractional/Boolean indices and duplicate inputs are covered. Production Swift/Kotlin validators compile and each pass the same 67 host fixtures (`/tmp/n42-cardano-native-b120.log`).
+- This prevents the identified malformed-input crash path; it does **not** complete ADA transfers. Next: Dart TTL/UTxO normalization, preservation of native assets, fee/change/network correctness and binary CBOR submission, followed by real native signing tests. EGLD binding and other open work remain pending. No device/release acceptance.
+
+
 ### Cardano signer follow-up and native blocker — batch 119
 
 - ADA credentials are now captured before RPC; derived sender and owner/key continuity are checked before broadcast. 18 new fixture scenarios; 246 sender-directory tests pass. Analysis has no errors/warnings and one style info. Evidence: `/tmp/n42-ada-b119-regression.log`, `/tmp/n42-ada-b119-analysis.log`.

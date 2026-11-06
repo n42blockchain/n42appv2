@@ -1474,8 +1474,36 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         return Numeric.toHexString(output.encoded.toByteArray())
     }
 
+    private fun validCardanoSigningInput(txData: Map<String, Any>): Boolean {
+        fun positive(value: Any?): Boolean {
+            val text = value as? String ?: return false
+            val number = text.toLongOrNull() ?: return false
+            return number > 0 && number.toString() == text
+        }
+        if ((txData["toAddress"] as? String).isNullOrEmpty() ||
+            !positive(txData["amount"]) || !positive(txData["ttl"])) return false
+        val utxos = txData["utxos"] as? List<*> ?: return false
+        if (utxos.isEmpty()) return false
+        val seen = mutableSetOf<String>()
+        for (raw in utxos) {
+            val utxo = raw as? Map<*, *> ?: return false
+            val hash = utxo["txHash"] as? String ?: return false
+            if (!Regex("[0-9a-fA-F]{64}").matches(hash)) return false
+            val index = when (val value = utxo["outputIndex"]) {
+                is Int -> value.toLong()
+                is Long -> value
+                else -> return false
+            }
+            if (index < 0 || index > 0xffffffffL || !positive(utxo["amount"]) ||
+                (utxo["address"] as? String).isNullOrEmpty() ||
+                !seen.add("${hash.lowercase()}:$index")) return false
+        }
+        return true
+    }
+
     private fun signCardanoTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
-        val privateKey = pk ?: wallet!!.getKey(CoinType.CARDANO, path)
+        if (!validCardanoSigningInput(txData)) return null
+        val privateKey = pk ?: wallet?.getKey(CoinType.CARDANO, path) ?: return null
 
         val toAddress: String = txData["toAddress"] as String
         val amount: Long = (txData["amount"] as String).toLong()

@@ -1439,7 +1439,35 @@ extension WalletCorePlugin {
         return "0x" + output.encoded.hexString
     }
 
+    // Shared wire contract with Android. Validate before any cast or key access.
+    private func validCardanoSigningInput(_ txData: [String: Any]) -> Bool {
+        func positive(_ value: Any?) -> Bool {
+            guard let text = value as? String,
+                  !text.isEmpty, text.utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+                  let number = Int64(text), number > 0,
+                  String(number) == text else { return false }
+            return true
+        }
+        guard let recipient = txData["toAddress"] as? String, !recipient.isEmpty,
+              positive(txData["amount"]), positive(txData["ttl"]),
+              let utxos = txData["utxos"] as? [[String: Any]], !utxos.isEmpty else { return false }
+        var seen = Set<String>()
+        for utxo in utxos {
+            guard let hash = utxo["txHash"] as? String, hash.utf8.count == 64,
+                  hash.utf8.allSatisfy({ ($0 >= 48 && $0 <= 57) || ($0 >= 65 && $0 <= 70) || ($0 >= 97 && $0 <= 102) }),
+                  let index = utxo["outputIndex"] as? NSNumber,
+                  CFGetTypeID(index) != CFBooleanGetTypeID(),
+                  !["f", "d"].contains(String(cString: index.objCType)),
+                  let parsedIndex = UInt32(index.stringValue),
+                  positive(utxo["amount"]),
+                  let address = utxo["address"] as? String, !address.isEmpty,
+                  seen.insert("\(hash.lowercased()):\(parsedIndex)").inserted else { return false }
+        }
+        return true
+    }
+
     func signCardanoTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        guard validCardanoSigningInput(txData) else { return nil }
         guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.cardano, path: path, privateKey: pk) else {
             return nil
         }
