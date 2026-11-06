@@ -115,7 +115,9 @@ Future<void> main() async {
   syncRpcOverridesToChainUrlMap();
   registerHostNavigation();
   initAppConfig();
-  const MpcLoginConfig().register(isMobile: Platform.isIOS || Platform.isAndroid);
+  const MpcLoginConfig().register(
+    isMobile: Platform.isIOS || Platform.isAndroid,
+  );
   RequestUrl.initializeApiKeys();
 
   final previousFlutterErrorHandler = FlutterError.onError;
