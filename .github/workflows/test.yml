@@ -123,6 +123,9 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Prepare synthetic Firebase resources
+        run: python3 scripts/prepare_ci_firebase.py
+
       - name: Run iOS Simulator
         run: |
           xcrun simctl list devices available --json > "$RUNNER_TEMP/ios-simulators.json"
@@ -170,6 +173,9 @@ jobs:
 
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Prepare synthetic Firebase resources
+        run: python3 scripts/prepare_ci_firebase.py
 
       - name: Enable KVM
         run: |

@@ -76,6 +76,8 @@ Batch 75 integrates Chat d387fca6: reject explicit scheduled-message room mismat
 
 Batch 76 fixes Tests workflow backlog/observability: superseded same-ref runs cancel, jobs have explicit limits, failure logs are archived, and summaries report actual unit/widget/iOS/Android outcomes. Local YAML/shell/outcome checks pass; hosted completion remains open.
 
+Batch 77 addresses the confirmed hosted iOS missing-GoogleService-Info.plist build failure. Mobile test jobs now generate synthetic, non-service Firebase resources only on hosted CI and refuse overwriting existing configuration. All 49 script tests pass; remote builds and real Firebase/provider acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; next verify Android JNI and node/app acceptance. Do not treat component tests as a complete wallet flow.
