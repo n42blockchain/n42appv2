@@ -397,3 +397,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `31e8a8ca1f000d98c5155ba83940d2f835a28f5c` is pushed. QA-006 retains other UI literal and device/editorial review. No release upload or physical-device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-picker-host-tests.log`); lockfile changes only the Chat reference.
+
+
+## Batch 44 — scheduled text persistence acknowledgement (2026-11-06)
+
+- Both text scheduling entrances previously cleared the composer immediately after enqueueing an event. They now wait for a completion result from draft persistence. Failed writes and rejected events preserve the original text. Successful persistence clears only the unchanged composer under the same page login origin; edits during the await survive. Pending text submissions are mutually excluded in the page.
+- The completion result describes durable draft storage, not message delivery. A stored draft still completes true if later preview/session checks stop UI updates; the page independently rejects stale origins. Existing account-scoped storage and stable send transaction IDs are unchanged.
+- 102 BLoC/page/input tests pass (`/tmp/n42-create-ack-final.log`), including held-write acknowledgement, failed writes, preserved edits, relogin, duplicate submission and the actual long-press picker path. 152 event tests pass (`/tmp/n42-create-ack-events.log`). Scoped source analysis has no errors/warnings and six existing informational diagnostics (`/tmp/n42-create-ack-analyze.log`).
+- Chat `95d6c9ac428caca3d337c2f9f552afb6cc1649b1` is pushed with remote parity verified. MSG-001 records the next confirmed gap: attachment scheduling notices still precede draft-storage acknowledgement. Unknown persistence/transport outcomes and device acceptance remain separate. No device operation or release upload.
+
+- Wallet host integration: 129 passed (`/tmp/n42-create-ack-host-tests.log`); dependency lock changes only the Chat reference.
