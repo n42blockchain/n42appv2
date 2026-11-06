@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -9,7 +11,24 @@ class AdaApi {
   static const _coinType = CoinType.ADA;
 
   final String projectId;
-  AdaApi({required this.projectId});
+  final Future<dynamic> Function(
+    String url,
+    Uint8List bytes, {
+    required Map<String, dynamic> header,
+    required bool enableRetry,
+  })?
+  _submit;
+
+  AdaApi({
+    required this.projectId,
+    Future<dynamic> Function(
+      String url,
+      Uint8List bytes, {
+      required Map<String, dynamic> header,
+      required bool enableRetry,
+    })?
+    submit,
+  }) : _submit = submit;
 
   String _base(bool isTest) =>
       RequestUrl().getUrl2(_coinType.name, 'rpc', isTest: isTest);
@@ -63,14 +82,38 @@ class AdaApi {
     bool isTest = false,
   }) async {
     try {
-      final data = await BaseApi.requestEmptyH.post(
-        '${_base(isTest)}/tx/submit',
-        params: {},
-        data: txCborHex,
-        defaultReturn: false,
-        header: {'Content-Type': 'application/cbor', 'project_id': projectId},
-        enableRetry: false,
-      );
+      final hex = txCborHex.startsWith('0x')
+          ? txCborHex.substring(2)
+          : txCborHex;
+      if (hex.isEmpty ||
+          hex.length.isOdd ||
+          !RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex)) {
+        return _err('Invalid signed Cardano transaction encoding');
+      }
+      final bytes = Uint8List(hex.length ~/ 2);
+      for (var i = 0; i < bytes.length; i++) {
+        bytes[i] = int.parse(hex.substring(i * 2, i * 2 + 2), radix: 16);
+      }
+      // The native bridge returns hex, but Blockfrost accepts raw CBOR bytes.
+      // Keep replay disabled: a lost response does not mean rejection.
+      final header = <String, dynamic>{
+        'content-type': 'application/cbor',
+        'project_id': projectId,
+      };
+      final url = '${_base(isTest)}/tx/submit';
+      final data = _submit != null
+          ? await _submit(url, bytes, header: header, enableRetry: false)
+          : await BaseApi.requestEmptyH.post(
+              url,
+              params: {},
+              data: bytes,
+              defaultReturn: false,
+              header: header,
+              enableRetry: false,
+            );
+      if (data is! String || !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(data)) {
+        return _err('Invalid Cardano submission response; status is unknown');
+      }
       return MessageModel()..data = data;
     } catch (e) {
       return _err(e);

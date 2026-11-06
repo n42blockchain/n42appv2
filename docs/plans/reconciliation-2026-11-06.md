@@ -18,6 +18,12 @@ Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent
 
 ## Latest interruption check
 
+### Cardano binary submission — batch 121
+
+- AdaApi now decodes native hex to binary CBOR before HTTP submission, validates encoding before network access, retains disabled retries and rejects malformed success IDs. Official Blockfrost OpenAPI confirms the binary upload contract. A local HTTP server verifies actual request bytes and headers.
+- API/sender tests: 39 passed (`/tmp/n42-ada-cbor-b121.log`); analysis has no errors/warnings and one style info. Remaining ADA work: TTL/UTxO normalization, native assets, fees/change/network, real native signing and durable unknown-submission handling. Provider/device/settlement acceptance remains unverified.
+
+
 ### Cardano native input hardening — batch 120
 
 - Both native Cardano signers now reject malformed wire input before key access/forced casts. Missing TTL, list-valued UTxO amounts, malformed outpoints, overflow, fractional/Boolean indices and duplicate inputs are covered. Production Swift/Kotlin validators compile and each pass the same 67 host fixtures (`/tmp/n42-cardano-native-b120.log`).
