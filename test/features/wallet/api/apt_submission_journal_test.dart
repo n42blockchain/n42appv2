@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import '../../../native/aptos_reference_vectors.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
@@ -56,6 +58,73 @@ void main() {
           },
   );
 
+  test(
+    'signed expiry survives reload and unlocks only after saved expired result',
+    () async {
+      final vector = aptosReferenceVectors.first;
+      final signed = vector['signed'] as String;
+      final sender = '0x${(vector['raw'] as String).substring(0, 64)}';
+      final journal = AptSubmissionJournal();
+      final expiry = BigInt.from(2000000000);
+      await journal.broadcast(
+        chainId: 1,
+        sender: sender,
+        sequence: BigInt.zero,
+        signedTx: signed,
+        expirationSeconds: expiry,
+        isCurrent: () => true,
+        send: (_) async {},
+      );
+      expect(
+        (await AptSubmissionJournal().pending(1, sender))!.expirationSeconds,
+        expiry,
+      );
+      var saved = 0;
+      final result = await AptSubmissionJournal().reconcile(
+        chainId: 1,
+        sender: sender,
+        api: AptApi(
+          read: (url) async {
+            if (url.endsWith('/v1/')) {
+              return {
+                'chain_id': 1,
+                'ledger_timestamp': '2000000001000000',
+                'ledger_version': '99',
+              };
+            }
+            if (url.contains('by_hash')) throw StateError('not found');
+            expect(Uri.parse(url).queryParameters['ledger_version'], '99');
+            return {'sequence_number': '0'};
+          },
+        ),
+        saveResult: (_, receipt) async {
+          saved++;
+          expect(receipt.status, AptTransactionStatus.expired);
+        },
+      );
+      expect(result!.status, AptTransactionStatus.expired);
+      expect(saved, 1);
+      expect(await journal.pending(1, sender), isNull);
+    },
+  );
+  test('expiry metadata cannot differ from signed transaction', () async {
+    final vector = aptosReferenceVectors.first;
+    final journal = AptSubmissionJournal();
+    final sender = '0x${(vector['raw'] as String).substring(0, 64)}';
+    await expectLater(
+      journal.broadcast(
+        chainId: 1,
+        sender: sender,
+        sequence: BigInt.zero,
+        signedTx: vector['signed'] as String,
+        expirationSeconds: BigInt.one,
+        isCurrent: () => true,
+        send: (_) async => fail('must not submit'),
+      ),
+      throwsFormatException,
+    );
+    expect(await journal.pending(1, sender), isNull);
+  });
   test(
     'timeout persists before dispatch and blocks another instance',
     () async {

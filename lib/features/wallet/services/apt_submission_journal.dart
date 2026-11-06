@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../wallet_connect/validation/aptos_raw_transaction.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../api/chain_api/apt_api.dart';
@@ -10,12 +12,14 @@ class AptPendingSubmission {
   final String sender;
   final String hash;
   final BigInt sequence;
+  final BigInt? expirationSeconds;
   const AptPendingSubmission(
     this.chainId,
     this.sender,
     this.hash,
-    this.sequence,
-  );
+    this.sequence, {
+    this.expirationSeconds,
+  });
 }
 
 class AptSubmissionPending extends StateError {
@@ -61,6 +65,9 @@ class AptSubmissionJournal {
       _address(sender),
       data['hash'],
       AptApi.parseUint64(data['sequence']),
+      expirationSeconds: data['expirationSeconds'] == null
+          ? null
+          : AptApi.parseUint64(data['expirationSeconds']),
     );
   }
 
@@ -69,6 +76,7 @@ class AptSubmissionJournal {
     required String sender,
     required BigInt sequence,
     required String signedTx,
+    BigInt? expirationSeconds,
     required Future<void> Function(AptPendingSubmission) send,
     required bool Function() isCurrent,
     Future<void> Function(AptPendingSubmission)? beforePersist,
@@ -76,11 +84,47 @@ class AptSubmissionJournal {
     final existing = await pending(chainId, sender);
     if (existing != null) throw AptSubmissionPending(existing);
     AptApi.parseUint64(sequence);
+    if (expirationSeconds != null) {
+      AptApi.parseUint64(expirationSeconds);
+      // Current native transfer signers emit a single Ed25519 authenticator:
+      // variant 0, key vector(32), signature vector(64). Bind recovery metadata
+      // to these actual signed bytes before trusting expiry for release.
+      final hex = signedTx.replaceFirst(RegExp(r'^0[xX]'), '');
+      if (hex.length < 198 ||
+          hex.length.isOdd ||
+          RegExp(r'[^0-9a-fA-F]').hasMatch(hex)) {
+        throw const FormatException('Invalid Aptos signed envelope');
+      }
+      final auth = hex.substring(hex.length - 198).toLowerCase();
+      if (!auth.startsWith('0020') || auth.substring(68, 70) != '40') {
+        throw const FormatException('Unsupported Aptos recovery authenticator');
+      }
+      final raw = AptosRawTransaction.parse(
+        '0x${hex.substring(0, hex.length - 198)}',
+        expectedSender: sender,
+        expectedChainId: chainId,
+      ).bytes;
+      BigInt uint64(int start) {
+        var value = BigInt.zero;
+        for (var i = 7; i >= 0; i--) {
+          value = (value << 8) | BigInt.from(raw[start + i]);
+        }
+        return value;
+      }
+
+      if (uint64(32) != sequence ||
+          uint64(raw.length - 9) != expirationSeconds) {
+        throw const FormatException(
+          'Aptos recovery metadata differs from signed bytes',
+        );
+      }
+    }
     final record = AptPendingSubmission(
       chainId,
       _address(sender),
       AptApi.transactionHash(signedTx),
       sequence,
+      expirationSeconds: expirationSeconds,
     );
     if (!isCurrent()) {
       throw StateError('Aptos owner changed before persistence');
@@ -96,6 +140,8 @@ class AptSubmissionJournal {
         'sender': record.sender,
         'hash': record.hash,
         'sequence': sequence.toString(),
+        if (expirationSeconds != null)
+          'expirationSeconds': expirationSeconds.toString(),
       }),
     );
     if (!isCurrent()) {
@@ -125,10 +171,27 @@ class AptSubmissionJournal {
       sequence: record.sequence,
       chainId: record.chainId,
     );
-    if (result.error || result.data is! AptTransactionReceipt) return null;
-    final receipt = result.data as AptTransactionReceipt;
-    if (receipt.hash != record.hash) return null;
-    if (receipt.status == AptTransactionStatus.pending) return receipt;
+    AptTransactionReceipt? receipt =
+        !result.error && result.data is AptTransactionReceipt
+        ? result.data as AptTransactionReceipt
+        : null;
+    if (receipt != null && receipt.hash != record.hash) return null;
+    if (receipt == null || receipt.status == AptTransactionStatus.pending) {
+      final expiry = record.expirationSeconds;
+      if (expiry == null ||
+          !await api.isExpiredWithoutExecution(
+            sender: record.sender,
+            sequence: record.sequence,
+            expirationSeconds: expiry,
+            chainId: record.chainId,
+          )) {
+        return receipt;
+      }
+      receipt = AptTransactionReceipt(
+        record.hash,
+        AptTransactionStatus.expired,
+      );
+    }
     await saveResult(record, receipt);
     await _storage.delete(key: _key(chainId, sender));
     return receipt;

@@ -256,6 +256,7 @@ class AptSender implements ChainSender {
         chainId: chainId,
         sender: params.fromAddress,
         sequence: sequence,
+        expirationSeconds: lt,
         signedTx: signStr,
         isCurrent: ownerIsCurrent,
         beforePersist: (record) async =>

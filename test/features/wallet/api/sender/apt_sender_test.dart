@@ -19,7 +19,7 @@ class _Api extends AptApi {
   dynamic chainId = 1;
   int? expectedChain;
   dynamic sequence = BigInt.zero;
-  dynamic timestamp = BigInt.from(2000000000000000);
+  dynamic timestamp = BigInt.from(1999999940000000);
   int priceReads = 0;
   int submits = 0;
   bool submissionTimeout = false;
@@ -87,46 +87,44 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => S.load(const Locale('en')));
   setUp(() => FlutterSecureStorage.setMockInitialValues({}));
-  test(
-    'timeout reopens as pending without signing or broadcasting again',
-    () async {
-      final api = _Api()..submissionTimeout = true;
-      final signer = _Signer()
-        ..signed = aptosReferenceVectors.first['signed'] as String;
-      final saved = <String>[];
-      final params = SendParams(
-        coinType: 'APT',
-        fromAddress: '0x1',
-        toAddress: '0x2',
-        amount: 1,
-        decimals: 0,
-        path: '',
-        privateKey: 'fixture',
-        beforeBroadcast: (hash) async {
-          saved.add(hash);
-        },
-      );
-      final first = await AptSender(
-        ownerIdentity: () => 'owner',
-        trustdart: signer,
-        apiFactory: (_) => api,
-      ).send(params);
-      expect(first.success, false);
-      expect(first.txHash, AptApi.transactionHash(signer.signed));
-      expect(saved, [first.txHash]);
-      expect(api.submits, 1);
-      final nextSigner = _Signer();
-      final next = await AptSender(
-        ownerIdentity: () => 'owner',
-        trustdart: nextSigner,
-        apiFactory: (_) => api,
-      ).send(params);
-      expect(next.txHash, first.txHash);
-      expect(nextSigner.received, isNull);
-      expect(api.submits, 1);
-      expect(saved, hasLength(1));
-    },
-  );
+  test('timeout reopens as pending without signing or broadcasting again', () async {
+    final api = _Api()..submissionTimeout = true;
+    final signer = _Signer()
+      ..signed = aptosReferenceVectors.first['signed'] as String;
+    final saved = <String>[];
+    final params = SendParams(
+      coinType: 'APT',
+      fromAddress:
+          '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
+      toAddress: '0x2',
+      amount: 1,
+      decimals: 0,
+      path: '',
+      privateKey: 'fixture',
+      beforeBroadcast: (hash) async {
+        saved.add(hash);
+      },
+    );
+    final first = await AptSender(
+      ownerIdentity: () => 'owner',
+      trustdart: signer,
+      apiFactory: (_) => api,
+    ).send(params);
+    expect(first.success, false);
+    expect(first.txHash, AptApi.transactionHash(signer.signed));
+    expect(saved, [first.txHash]);
+    expect(api.submits, 1);
+    final nextSigner = _Signer();
+    final next = await AptSender(
+      ownerIdentity: () => 'owner',
+      trustdart: nextSigner,
+      apiFactory: (_) => api,
+    ).send(params);
+    expect(next.txHash, first.txHash);
+    expect(nextSigner.received, isNull);
+    expect(api.submits, 1);
+    expect(saved, hasLength(1));
+  });
   test(
     'failed history persistence prevents submission and leaves no journal',
     () async {
@@ -141,7 +139,7 @@ void main() {
           ).send(
             SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: '0x2',
               amount: 1,
               decimals: 0,
@@ -168,7 +166,7 @@ void main() {
     ).send(
       const SendParams(
         coinType: 'APT',
-        fromAddress: '0x1',
+        fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
         toAddress: 'recipient',
         amount: 1,
         decimals: 0,
@@ -200,7 +198,7 @@ void main() {
           ).send(
             SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 1,
               decimals: 0,
@@ -234,7 +232,7 @@ void main() {
       ).send(
         SendParams(
           coinType: 'APT',
-          fromAddress: '0x1',
+          fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
           toAddress: 'recipient',
           amount: 100,
           decimals: 8,
@@ -278,7 +276,7 @@ void main() {
           ).send(
             SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 1,
               decimals: 8,
@@ -306,7 +304,7 @@ void main() {
       ).send(
         SendParams(
           coinType: 'APT',
-          fromAddress: '0x1',
+          fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
           toAddress: 'recipient',
           amount: 100,
           decimals: 8,
@@ -341,7 +339,7 @@ void main() {
           ).send(
             const SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 1,
               decimals: 0,
@@ -365,7 +363,7 @@ void main() {
         ).send(
           const SendParams(
             coinType: 'APT',
-            fromAddress: '0x1',
+            fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
             toAddress: 'recipient',
             amount: 1,
             decimals: 0,
@@ -396,7 +394,7 @@ void main() {
             ).send(
               const SendParams(
                 coinType: 'APT',
-                fromAddress: '0x1',
+                fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
                 toAddress: 'recipient',
                 amount: 1,
                 decimals: 0,
@@ -422,7 +420,7 @@ void main() {
           ).send(
             const SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 1,
               decimals: 0,
@@ -456,7 +454,7 @@ void main() {
           ).send(
             SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 1,
               decimals: 8,
@@ -487,7 +485,7 @@ void main() {
       ).send(
         SendParams(
           coinType: 'APT',
-          fromAddress: '0x1',
+          fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
           toAddress: 'recipient',
           amount: 9,
           decimalAmountOverride: '1.234567',
@@ -514,7 +512,7 @@ void main() {
           ).send(
             const SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 1,
               decimals: 0,
@@ -548,7 +546,7 @@ void main() {
           final result = await sender.send(
             SendParams(
               coinType: 'APT',
-              fromAddress: '0x1',
+              fromAddress: '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
               toAddress: 'recipient',
               amount: 10000000,
               decimals: 0,

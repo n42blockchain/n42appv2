@@ -35,6 +35,69 @@ void main() {
     );
     expect((await api.sendTxHash('00ff')).error, isTrue);
   });
+  group('expired unexecuted transaction', () {
+    for (final scenario in [
+      'expired',
+      'equal time',
+      'before expiry',
+      'consumed',
+      'behind sequence',
+      'wrong chain',
+      'missing version',
+      'offline',
+    ]) {
+      test(scenario, () async {
+        final reads = <String>[];
+        final api = AptApi(
+          read: (url) async {
+            reads.add(url);
+            if (scenario == 'offline') throw const SocketException('offline');
+            if (url.endsWith('/v1/')) {
+              return {
+                'chain_id': scenario == 'wrong chain' ? 2 : 1,
+                if (scenario != 'missing version')
+                  'ledger_version': '9007199254740993',
+                'ledger_timestamp': scenario == 'equal time'
+                    ? '10000000'
+                    : scenario == 'before expiry'
+                    ? '9000000'
+                    : '11000000',
+              };
+            }
+            expect(
+              Uri.parse(url).queryParameters['ledger_version'],
+              '9007199254740993',
+            );
+            return {
+              'sequence_number': scenario == 'consumed'
+                  ? '8'
+                  : scenario == 'behind sequence'
+                  ? '6'
+                  : '7',
+            };
+          },
+        );
+        expect(
+          await api.isExpiredWithoutExecution(
+            sender: '0x1',
+            sequence: BigInt.from(7),
+            expirationSeconds: BigInt.from(10),
+            chainId: 1,
+          ),
+          scenario == 'expired',
+        );
+        if ([
+          'equal time',
+          'before expiry',
+          'wrong chain',
+          'missing version',
+          'offline',
+        ].contains(scenario)) {
+          expect(reads, hasLength(1));
+        }
+      });
+    }
+  });
   group('receipt recovery identity', () {
     final hash = '0x${'ab' * 32}';
     final sequence = BigInt.parse('9007199254740993');

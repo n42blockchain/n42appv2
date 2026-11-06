@@ -152,6 +152,8 @@ Batch 102 connects an idempotent Aptos history writer to the existing page. Five
 
 Batch 103 supersedes the unwired journal statements: AptSender and the actual Aptos page now persist before submission, block new sends on pending state, and reconcile through a localized Refresh action with idempotent history completion. All 102 combined regressions and scoped analysis pass. Expired/unsubmitted records, two-store crash windows, non-page history recovery, cross-process/device/live acceptance remain open; no automatic resend on not-found.
 
+Batch 104 adds expired-unexecuted recovery for new signed-metadata-bound records: chain time past expiry plus unchanged account sequence at a pinned ledger version, followed by history persistence before unlock. All 172 related tests pass. Legacy records without expiry, storage crash windows and live/device acceptance remain open; no automatic resubmission.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

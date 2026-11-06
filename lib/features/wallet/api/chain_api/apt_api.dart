@@ -15,7 +15,7 @@ typedef AptTransactionSubmit = Future<dynamic> Function(
   required bool enableRetry,
 });
 
-enum AptTransactionStatus { pending, succeeded, failed }
+enum AptTransactionStatus { pending, succeeded, failed, expired }
 
 class AptTransactionReceipt {
   final String hash;
@@ -169,6 +169,44 @@ class AptApi {
         );
     } catch (e) {
       return MessageModel.error()..data = e.toString();
+    }
+  }
+
+  /// A committed ledger past expiry plus unchanged sequence proves this
+  /// sequence-based transaction did not execute at that version. Never use the
+  /// device clock or an unversioned account read for this decision.
+  Future<bool> isExpiredWithoutExecution({
+    required String sender,
+    required BigInt sequence,
+    required BigInt expirationSeconds,
+    required int chainId,
+  }) async {
+    try {
+      if (chainId < 1 ||
+          chainId > 255 ||
+          !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(sender) ||
+          sender.contains(RegExp(r'\s'))) {
+        return false;
+      }
+      parseUint64(sequence);
+      parseUint64(expirationSeconds);
+      if (expirationSeconds == BigInt.zero) return false;
+      final ledger = await _get(url);
+      if (ledger is! Map ||
+          ledger['chain_id'] is! int ||
+          ledger['chain_id'] != chainId) {
+        return false;
+      }
+      final version = parseUint64(ledger['ledger_version']);
+      final timestamp = parseUint64(ledger['ledger_timestamp']);
+      if (timestamp <= expirationSeconds * BigInt.from(1000000)) return false;
+      final account = await _get(
+        '${url}accounts/$sender?ledger_version=$version',
+      );
+      return account is Map &&
+          parseUint64(account['sequence_number']) == sequence;
+    } catch (_) {
+      return false;
     }
   }
 
