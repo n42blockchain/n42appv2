@@ -427,3 +427,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `de975306fc078e6de22b607139a8fa86e5cb9622` is pushed with remote parity verified. This does not establish GIF selection restoration after persistence failure, distributed exactly-once delivery or device acceptance. Remaining boundaries stay in MSG-001. No release upload or device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-rich-ack-host-tests.log`); the lockfile changes only the Chat reference.
+
+
+## Batch 47 — GIF scheduling failure retains selection context (2026-11-06)
+
+- The GIF sheet now accepts a persistence callback. The wallet Chat page supplies the account-bound rich-draft path before the sheet closes. Rejection or cancelled date selection leaves the original picker/search intact; acknowledged storage closes without returning a selection for a second dispatch. Pending attempts ignore repeated long presses and immediate-selection callbacks. Closing the page before acknowledgement does not access disposed context.
+- Legacy callers without the callback still receive their immediate or scheduled selection result. Existing search timeout/retry and request-generation behavior remain unchanged.
+- 63 combined page/GIF lifecycle tests passed (`/tmp/n42-gif-ack-final.log`); the final 12-test GIF suite also covers legacy return compatibility (`/tmp/n42-gif-ack-compat.log`). Scoped analysis reports no issues (`/tmp/n42-gif-ack-analyze.log`).
+- Chat `ff8c43685664e30a69e6b444e3a75034b681be28` is pushed with remote parity verified. This closes the GIF picker retention gap from batch 46. Unknown persistence reconciliation, distributed delivery and device/provider acceptance remain MSG-001 boundaries. No release upload or physical-device operation.
+
+- Wallet host integration: 129 passed (`/tmp/n42-gif-ack-host-tests.log`); the lockfile changes only the Chat reference.
