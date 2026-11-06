@@ -81,9 +81,18 @@ class AptApi {
     }
   }
 
-  Future<MessageModel> getServiceInfo() async {
+  Future<MessageModel> getServiceInfo({int? expectedChainId}) async {
     try {
       final data = await _get(url);
+      if (expectedChainId != null) {
+        if (expectedChainId < 1 ||
+            expectedChainId > 255 ||
+            data is! Map ||
+            data['chain_id'] is! int ||
+            data['chain_id'] != expectedChainId) {
+          return MessageModel.error()..data = 'Aptos RPC chain ID mismatch';
+        }
+      }
       return MessageModel()..data = parseUint64(data['ledger_timestamp']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();

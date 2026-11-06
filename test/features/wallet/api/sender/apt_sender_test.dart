@@ -10,6 +10,8 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 class _Api extends AptApi {
   BigInt price = BigInt.from(7);
   BigInt balance = BigInt.from(10000000);
+  dynamic chainId = 1;
+  int? expectedChain;
   dynamic sequence = BigInt.zero;
   dynamic timestamp = BigInt.from(2000000000000000);
   int priceReads = 0;
@@ -30,8 +32,13 @@ class _Api extends AptApi {
   Future<MessageModel> getAccountInfo(String address) async =>
       MessageModel()..data = sequence;
   @override
-  Future<MessageModel> getServiceInfo() async =>
-      MessageModel()..data = timestamp;
+  Future<MessageModel> getServiceInfo({int? expectedChainId}) async {
+    expectedChain = expectedChainId;
+    return AptApi(
+      read: (_) async => {'chain_id': chainId, 'ledger_timestamp': timestamp},
+    ).getServiceInfo(expectedChainId: expectedChainId);
+  }
+
   @override
   Future<MessageModel> sendTxHash(String signedHex) async {
     submits++;
@@ -107,6 +114,28 @@ void main() {
         expect(api.submits, 0);
       });
     }
+  }
+  for (final reported in [null, 2, 0, 256, '1', true, 1.5]) {
+    test('wrong or malformed RPC chain blocks signing: $reported', () async {
+      final api = _Api()..chainId = reported;
+      final signer = _Signer();
+      final result = await AptSender(trustdart: signer, apiFactory: (_) => api)
+          .send(
+            const SendParams(
+              coinType: 'APT',
+              fromAddress: 'owner',
+              toAddress: 'recipient',
+              amount: 1,
+              decimals: 0,
+              path: '',
+              privateKey: 'public-test-only',
+            ),
+          );
+      expect(result.success, false);
+      expect(api.expectedChain, 1);
+      expect(signer.received, isNull);
+      expect(api.submits, 0);
+    });
   }
   for (final token in [false, true]) {
     for (final exact in [
@@ -192,7 +221,9 @@ void main() {
       test(
         'Aptos price and gas units stay distinct on testnet=$isTest price=$price',
         () async {
-          final api = _Api()..price = BigInt.from(price);
+          final api = _Api()
+            ..price = BigInt.from(price)
+            ..chainId = isTest ? 2 : 1;
           final signer = _Signer();
           final sender = AptSender(
             trustdart: signer,
@@ -226,6 +257,7 @@ void main() {
             (10000000 - price * 10000).toString(),
           );
           expect(signer.received!['chainId'], isTest ? 2 : 1);
+          expect(api.expectedChain, isTest ? 2 : 1);
           expect(api.submits, 0);
         },
       );

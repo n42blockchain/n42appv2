@@ -94,7 +94,22 @@ class AptSender implements ChainSender {
       return SendResult.fail(sequenceNumber.data?.toString());
     }
 
-    final ledgerTimestamp = await aptApi.getServiceInfo();
+    final int? resolvedChainId = resolveChainConfigIdOrNull(
+      params.chainConfig ?? _defaultChainConfig,
+      isTest: params.isTest,
+    );
+    // Aptos 测试网 chain_id=2；缺配置时回退 1 签出的交易在主网合法，拒发。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
+    if (chainId < 1 || chainId > 255) {
+      return const SendResult.fail('Invalid Aptos chain ID');
+    }
+
+    final ledgerTimestamp = await aptApi.getServiceInfo(
+      expectedChainId: chainId,
+    );
     if (ledgerTimestamp.error) {
       return SendResult.fail(ledgerTimestamp.data?.toString());
     }
@@ -110,16 +125,6 @@ class AptSender implements ChainSender {
     } on FormatException {
       return const SendResult.fail('Invalid Aptos account or ledger response');
     }
-
-    final int? resolvedChainId = resolveChainConfigIdOrNull(
-      params.chainConfig ?? _defaultChainConfig,
-      isTest: params.isTest,
-    );
-    // Aptos 测试网 chain_id=2；缺配置时回退 1 签出的交易在主网合法，拒发。
-    if (params.isTest && resolvedChainId == null) {
-      return SendResult.fail('Missing testnet chain ID for $coinType');
-    }
-    final chainId = resolvedChainId ?? 1;
 
     final signMap = <String, dynamic>{
       'amount': valuePrice.toString(),
