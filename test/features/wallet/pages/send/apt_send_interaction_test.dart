@@ -3,10 +3,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_apt.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
+
+class _CapturingSender implements ChainSender {
+  SendParams? params;
+  @override
+  Future<SendResult> send(SendParams params) async {
+    this.params = params;
+    return const SendResult.fail('fixture stop before signing');
+  }
+}
 
 class _OfflineWalletProvider extends WalletActionProvider {
   @override
@@ -62,6 +73,41 @@ void main() {
     state.totalGasPrice = BigInt.from(10000);
     expect(tester.takeException(), isNull);
     return state;
+  }
+
+  for (final token in [false, true]) {
+    testWidgets('confirmed integer reaches sender exactly token=$token', (
+      tester,
+    ) async {
+      final sender = _CapturingSender();
+      final coin = makeCoin();
+      coin.coin['decimals'] = token ? 6 : 8;
+      coin.coin['isContract'] = token;
+      coin.coin['contract'] = token ? '0x42::usd::USDC' : '';
+      await tester.pumpWidget(
+        wrapForTest(
+          WalletChainSendApt(coin, sender: sender),
+          overrides: [
+            wapBridgeProvider.overrideWith((ref) => _OfflineWalletProvider()),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      final dynamic state = tester.state(find.byType(WalletChainSendApt));
+      final exact = BigInt.parse('9007199254740993');
+      final record = TransationRecordModel()
+        ..from1 = coin.address.toString()
+        ..to1 = '0x2'
+        ..contract = token ? '0x42::usd::USDC' : ''
+        ..price = exact;
+      await state.signTx(record);
+      await tester.pumpAndSettle();
+      expect(sender.params, isNotNull);
+      expect(sender.params!.tokenDecimals, token ? 6 : 8);
+      expect(sender.params!.valueWeiOverride, token ? null : exact);
+      expect(sender.params!.tokenValueWeiOverride, token ? exact : null);
+      expect(tester.takeException(), isNull);
+    });
   }
 
   testWidgets(

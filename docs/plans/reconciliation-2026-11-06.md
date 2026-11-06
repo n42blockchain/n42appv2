@@ -113,6 +113,8 @@ Batch 88 captures Aptos send ownership and checks it before native credential ac
 
 Batch 89 snapshots Aptos chain configuration before RPC awaits so mutable maps cannot retarget an in-flight signature. All 90 API/sender regressions and scoped analysis pass; full CI and transaction lifecycle acceptance remain open.
 
+Batch 90 fixes Aptos page dispatch so confirmed integer amounts reach native/token sender overrides unchanged and token decimals are preserved. All 47 page/sender regressions and scoped analysis pass. Native token/FA mapping and full lifecycle acceptance remain open.
+
 ## Still open, in execution order
 
 - Sui follow-up (batches 53–55): RPC/receipt validation and WalletConnect execution orchestration are repaired (973 related tests). Both platforms now implement `WC_SUI`; actual Swift signing matches four independent vectors, Android Debug compilation and three JVM validation tests pass. Full BCS semantic review, Android JNI signing and live-node/app acceptance remain open. Batch 56 reconciles ordinary sender/native fields and output; Android JNI component signing is now verified by batch 79; next verify full node/app/session acceptance. Do not treat component tests as a complete wallet flow.

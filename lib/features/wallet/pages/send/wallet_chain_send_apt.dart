@@ -42,7 +42,13 @@ part 'wallet_chain_send_apt_widgets.dart';
 class WalletChainSendApt extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? initialToAddress;
-  const WalletChainSendApt(this.coinModel, {this.initialToAddress, super.key});
+  final ChainSender? sender;
+  const WalletChainSendApt(
+    this.coinModel, {
+    this.initialToAddress,
+    this.sender,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletChainSendApt> createState() => _WalletChainSendAptState();

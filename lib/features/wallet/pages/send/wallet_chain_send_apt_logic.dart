@@ -261,25 +261,29 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       final decimals =
           (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-      final result = await SenderFactory.instance
-          .getSender(coinType)
-          .send(
-            SendParams(
-              coinType: coinType,
-              fromAddress: trModel.from1,
-              toAddress: trModel.to1,
-              amount: toEther(trModel.price.toString(), decimals).toDouble(),
-              decimals: decimals,
-              path: path,
-              sendMax: false,
-              isTest: widget.coinModel.isTest,
-              contractAddress: trModel.contract,
-              tokenDecimals: 0,
-              memo: trModel.message,
-              privateKey: widget.coinModel.privateKey,
-              chainConfig: widget.coinModel.coin,
-            ),
-          );
+      final sender =
+          widget.sender ?? SenderFactory.instance.getSender(coinType);
+      final result = await sender.send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: trModel.from1,
+          toAddress: trModel.to1,
+          amount: toEther(trModel.price.toString(), decimals).toDouble(),
+          decimals: decimals,
+          path: path,
+          sendMax: false,
+          isTest: widget.coinModel.isTest,
+          contractAddress: trModel.contract,
+          tokenDecimals: decimals,
+          valueWeiOverride: trModel.contract.isEmpty ? trModel.price : null,
+          tokenValueWeiOverride: trModel.contract.isNotEmpty
+              ? trModel.price
+              : null,
+          memo: trModel.message,
+          privateKey: widget.coinModel.privateKey,
+          chainConfig: widget.coinModel.coin,
+        ),
+      );
 
       if (!mounted) return;
       if (result.success) {
