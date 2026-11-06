@@ -44,11 +44,13 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
   final Future<int> Function(TransationRecordModel)? persistTransaction;
   final Future<bool> Function(TransationRecordModel)?
   releaseUnsubmittedTransaction;
+  final Future<bool> Function(TransationRecordModel)? markTransactionDispatch;
   const WalletChainSendMemo(
     this.coinModel, {
     super.key,
     this.transactionSender,
     this.persistTransaction,
+    this.markTransactionDispatch,
     this.releaseUnsubmittedTransaction,
   });
 

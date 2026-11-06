@@ -86,9 +86,14 @@ void main() {
       path,
       options: OpenDatabaseOptions(
         version: 7,
-        onCreate: (db, _) => db.execute(
-          'CREATE TABLE AddressBook(id INTEGER PRIMARY KEY, coinIcon TEXT, coinName TEXT, address TEXT, name TEXT, desc TEXT)',
-        ),
+        onCreate: (db, _) async {
+          await db.execute(
+            'CREATE TABLE TransationRecord(trId INTEGER PRIMARY KEY)',
+          );
+          await db.execute(
+            'CREATE TABLE AddressBook(id INTEGER PRIMARY KEY, coinIcon TEXT, coinName TEXT, address TEXT, name TEXT, desc TEXT)',
+          );
+        },
       ),
     );
     await old.insert('AddressBook', entry('legacy-private', 'BTC').toJson());

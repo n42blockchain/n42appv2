@@ -34,6 +34,8 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
   for (final scenario in [
     'not submitted',
+    'dispatch rejected',
+    'dispatch error',
     'release refused',
     'release error',
     'abort foreign hash',
@@ -78,10 +80,17 @@ void main() {
         'abort foreign hash',
         'dispose before abort',
       ].contains(scenario);
+      final dispatchAbort = [
+        'dispatch rejected',
+        'dispatch error',
+      ].contains(scenario);
       final released = [
+        'dispatch rejected',
+        'dispatch error',
         'not submitted',
         'dispose before abort',
       ].contains(scenario);
+      final dispatchChecks = <(int, String, int)>[];
       var releases = 0;
       var saves = 0;
       var broadcasts = 0;
@@ -103,6 +112,13 @@ void main() {
                 throw StateError('Disk failed');
               }
               return scenario == 'zero save ID' ? 0 : 42;
+            },
+            markTransactionDispatch: (tr) async {
+              dispatchChecks.add((tr.trId, tr.txHash, broadcasts));
+              if (scenario == 'dispatch error') {
+                throw StateError('Dispatch store unavailable');
+              }
+              return scenario != 'dispatch rejected';
             },
             releaseUnsubmittedTransaction: (tr) async {
               releases++;
@@ -129,6 +145,14 @@ void main() {
                   'Cancelled before broadcast',
                 );
               }
+              try {
+                await params.onBroadcastStarting!('ab' * 32);
+              } catch (_) {
+                return SendResult.notSubmitted(
+                  'ab' * 32,
+                  'Dispatch not recorded',
+                );
+              }
               broadcasts++;
               prepared.complete();
               if ([
@@ -153,14 +177,28 @@ void main() {
       final Future<void> pending = state.signTx(record) as Future<void>;
       if (scenario == 'dispose before ack' ||
           scenario == 'dispose before abort') {
-        await tester.pump();
-        await prepared.future;
+        for (var i = 0; i < 10 && !prepared.isCompleted; i++) {
+          await tester.pump();
+        }
+        expect(
+          prepared.isCompleted,
+          isTrue,
+          reason:
+              'submissions=$submissions saves=$saves broadcasts=$broadcasts error=${state.errorMessage}',
+        );
         await tester.pumpWidget(const SizedBox.shrink());
         ack.complete();
       }
       if (scenario == 'in flight duplicate') {
-        await tester.pump();
-        await prepared.future;
+        for (var i = 0; i < 10 && !prepared.isCompleted; i++) {
+          await tester.pump();
+        }
+        expect(
+          prepared.isCompleted,
+          isTrue,
+          reason:
+              'submissions=$submissions saves=$saves broadcasts=$broadcasts error=${state.errorMessage}',
+        );
         await state.signTx(record);
         expect(submissions, 1);
         ack.complete();
@@ -172,9 +210,17 @@ void main() {
         'storage failure',
         'pending reservation',
       ].contains(scenario);
+      for (final check in dispatchChecks) {
+        expect(check, (42, 'ab' * 32, 0));
+      }
       expect(saves, 1);
-      expect(broadcasts, failed || noBroadcast ? 0 : 1);
-      expect(releases, noBroadcast && scenario != 'abort foreign hash' ? 1 : 0);
+      expect(broadcasts, failed || noBroadcast || dispatchAbort ? 0 : 1);
+      expect(
+        releases,
+        (noBroadcast || dispatchAbort) && scenario != 'abort foreign hash'
+            ? 1
+            : 0,
+      );
       expect(record.trId, failed || released ? 0 : 42);
       expect(record.txHash, released ? '' : 'ab' * 32);
       if (!failed && !released) {

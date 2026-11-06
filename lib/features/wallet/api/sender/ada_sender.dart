@@ -237,6 +237,20 @@ class AdaSender implements ChainSender {
       );
     }
     try {
+      await params.onBroadcastStarting?.call(signed.txHash);
+    } catch (_) {
+      return SendResult.notSubmitted(
+        signed.txHash,
+        'Unable to record transaction dispatch',
+      );
+    }
+    if (!signerIsCurrent()) {
+      return SendResult.notSubmitted(
+        signed.txHash,
+        'Wallet signing context changed',
+      );
+    }
+    try {
       final sendMm = await adaApi.sendTransaction(
         signed.encoded,
         isTest: params.isTest,

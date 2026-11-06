@@ -60,7 +60,7 @@ class AppDatabase {
     final path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 8, // v8: account-scoped address book
+      version: 9, // v9: durable memo dispatch phase
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute(
@@ -82,7 +82,8 @@ class AppDatabase {
           "testnetUri text," //测试网地址
           "userUuid text," //用户uuid
           "walletIndex int," //钱包id
-          "message TEXT" //消息
+          "message TEXT," //消息
+          "memoDispatchPhase TEXT"
           ")",
         );
         //交易记录 btc
@@ -283,6 +284,12 @@ class AppDatabase {
               buy_time_ms INTEGER NOT NULL
             )
           ''');
+        }
+        if (oldVersion < 9) {
+          // NULL on legacy rows means unknown, never proof of non-submission.
+          await db.execute(
+            'ALTER TABLE TransationRecord ADD COLUMN memoDispatchPhase TEXT',
+          );
         }
         if (oldVersion < 8) {
           // Old rows have no trustworthy owner. Preserve them without exposing

@@ -33,7 +33,7 @@ void main() {
         )
         .join(', ');
     await connection.execute(
-      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns)',
+      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT)',
     );
     db = _Database(connection);
   });
@@ -214,6 +214,101 @@ void main() {
         expect(updates.reduce((a, b) => a + b), 1);
         final stored = (await connection.query('TransationRecord')).single;
         expect(stored['state'], updates.first == 1 ? 1 : 2);
+      },
+    );
+  }
+
+  for (final chain in ['ADA', 'XLM']) {
+    test(
+      '$chain prepared crash can retry after reopen without broadcasting old row',
+      () async {
+        final original = record(chain);
+        original.trId = await db.reserveMemoTransaction(
+          original,
+          trackDispatch: true,
+        );
+        await connection.close();
+        connection = await databaseFactoryFfi.openDatabase(
+          '${directory.path}/history.db',
+        );
+        db = _Database(connection);
+        final retry = record(chain, hash: 'cd');
+        retry.trId = await db.reserveMemoTransaction(
+          retry,
+          trackDispatch: true,
+        );
+        expect(await db.markMemoTransactionDispatch(original), isFalse);
+        expect(await db.markMemoTransactionDispatch(retry), isTrue);
+        expect(await db.markMemoTransactionDispatch(retry), isFalse);
+        await expectLater(
+          db.reserveMemoTransaction(record(chain), trackDispatch: true),
+          throwsA(isA<PendingMemoTransactionException>()),
+        );
+        final rows = await connection.query('TransationRecord');
+        expect(rows, hasLength(1));
+        expect(rows.single['txHash'], 'cd' * 32);
+        expect(rows.single['memoDispatchPhase'], 'dispatching');
+      },
+    );
+    for (final phase in [null, 'dispatching', 'unknown']) {
+      test('$chain recovery preserves ambiguous phase $phase', () async {
+        final original = record(chain);
+        original.trId = await db.reserveMemoTransaction(original);
+        await connection.update('TransationRecord', {
+          'memoDispatchPhase': phase,
+        });
+        await expectLater(
+          db.reserveMemoTransaction(
+            record(chain, hash: 'cd'),
+            trackDispatch: true,
+          ),
+          throwsA(isA<PendingMemoTransactionException>()),
+        );
+        expect(await db.markMemoTransactionDispatch(original), isFalse);
+        expect(
+          (await connection.query('TransationRecord')).single['txHash'],
+          original.txHash,
+        );
+      });
+    }
+    test(
+      '$chain reservation and dispatch race permits at most one broadcast',
+      () async {
+        var broadcasts = 0;
+        Future<void> attempt(String hash) async {
+          final tx = record(chain, hash: hash);
+          try {
+            tx.trId = await db.reserveMemoTransaction(tx, trackDispatch: true);
+            if (await db.markMemoTransactionDispatch(tx)) broadcasts++;
+          } on PendingMemoTransactionException {
+            /* already dispatching */
+          }
+        }
+
+        await Future.wait([attempt('ab'), attempt('cd')]);
+        expect(broadcasts, 1);
+        expect(await connection.query('TransationRecord'), hasLength(1));
+      },
+    );
+    test(
+      '$chain recovery preserves other accounts, networks and resolved rows',
+      () async {
+        final original = record(chain);
+        original.trId = await db.reserveMemoTransaction(
+          original,
+          trackDispatch: true,
+        );
+        final other = record(chain)..userUuid = 'bob';
+        await db.reserveMemoTransaction(other, trackDispatch: true);
+        final net = record(chain)..isTest = 1;
+        await db.reserveMemoTransaction(net, trackDispatch: true);
+        original.state = 1;
+        await db.updateTransationRecordTxhash(original);
+        await db.reserveMemoTransaction(
+          record(chain, hash: 'cd'),
+          trackDispatch: true,
+        );
+        expect(await connection.query('TransationRecord'), hasLength(4));
       },
     );
   }

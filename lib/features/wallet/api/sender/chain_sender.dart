@@ -56,6 +56,10 @@ class SendParams {
   /// Throwing aborts submission. No private key or signed bytes are passed.
   final Future<void> Function(String txHash)? beforeBroadcast;
 
+  /// ADA/XLM only: persist the dispatch phase after preparation and before the
+  /// network call. Throwing aborts this attempt without invoking the API.
+  final Future<void> Function(String txHash)? onBroadcastStarting;
+
   String get amountDecimalString => decimalAmountOverride ?? amount.toString();
 
   const SendParams({
@@ -86,6 +90,7 @@ class SendParams {
     this.tokenValueWeiOverride,
     this.decimalAmountOverride,
     this.beforeBroadcast,
+    this.onBroadcastStarting,
   });
 }
 

@@ -302,6 +302,8 @@ void main() {
   }
   for (final scenario in [
     'accepted',
+    'dispatch failure',
+    'owner during dispatch',
     'persist failure',
     'owner during persist',
     'transport error',
@@ -310,12 +312,16 @@ void main() {
   ]) {
     test('submission recovery: $scenario', () async {
       Object owner = Object();
+      var dispatchRecorded = false;
       final api = _Api()
         ..errorResult = scenario == 'transport error'
         ..throwsOnSend = scenario == 'transport throw'
         ..hash = scenario == 'foreign hash' ? 'cd' * 32 : 'ab' * 32;
       final saved = <String>[];
-      api.onSend = () => expect(saved, ['ab' * 32]);
+      api.onSend = () {
+        expect(saved, ['ab' * 32]);
+        expect(dispatchRecorded, isTrue);
+      };
       final sender = AdaSender(
         api: api,
         trustdart: _Signer(),
@@ -330,6 +336,15 @@ void main() {
           amount: 1.25,
           decimals: 6,
           path: "m/1852'/1815'/0'/0/2",
+          onBroadcastStarting: (hash) async {
+            expect(hash, 'ab' * 32);
+            expect(saved, ['ab' * 32]);
+            if (scenario == 'dispatch failure') {
+              throw StateError('dispatch storage failed');
+            }
+            if (scenario == 'owner during dispatch') owner = Object();
+            dispatchRecorded = true;
+          },
           beforeBroadcast: (hash) async {
             saved.add(hash);
             if (scenario == 'persist failure') {
@@ -340,6 +355,8 @@ void main() {
         ),
       );
       final aborted = [
+        'dispatch failure',
+        'owner during dispatch',
         'persist failure',
         'owner during persist',
       ].contains(scenario);

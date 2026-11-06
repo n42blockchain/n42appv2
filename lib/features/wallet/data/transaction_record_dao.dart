@@ -86,7 +86,10 @@ extension TransactionRecordDao on AppDatabase {
   /// Atomically reserve ADA/XLM history before any broadcast. A new page or
   /// process must not bypass an existing unresolved submission. Even an equal
   /// hash is rejected: it may already have been broadcast by the other caller.
-  Future<int> reserveMemoTransaction(TransationRecordModel record) async {
+  Future<int> reserveMemoTransaction(
+    TransationRecordModel record, {
+    bool trackDispatch = false,
+  }) async {
     final values = Map<String, Object?>.from(record.toMapDb());
     final hash = values['txHash'] as String;
     if (!{'ADA', 'XLM'}.contains(values['coinMiniName']) ||
@@ -99,6 +102,23 @@ extension TransactionRecordDao on AppDatabase {
     }
     final db = await database;
     return db.transaction((txn) async {
+      if (trackDispatch) {
+        // Only callers wired to markMemoTransactionDispatch may create this
+        // phase. A concurrent old caller cannot broadcast after removal: its
+        // exact-row dispatch transition will fail.
+        await txn.delete(
+          'TransationRecord',
+          where: 'userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0 AND memoDispatchPhase=?',
+          whereArgs: [
+            values['userUuid'],
+            values['coinMiniName'],
+            values['from1'],
+            values['isTest'],
+            'reserved',
+          ],
+        );
+        values['memoDispatchPhase'] = 'reserved';
+      }
       final pending = await txn.query(
         'TransationRecord',
         columns: ['trId'],
@@ -118,6 +138,34 @@ extension TransactionRecordDao on AppDatabase {
         conflictAlgorithm: ConflictAlgorithm.rollback,
       );
     });
+  }
+
+  /// Persist possible dispatch before invoking the network. Failure or a lost
+  /// acknowledgement must abort that invocation; an unknown phase is not safe.
+  Future<bool> markMemoTransactionDispatch(TransationRecordModel record) async {
+    final values = Map<String, Object?>.from(record.toMapDb());
+    final id = record.trId;
+    if (id <= 0 || !{'ADA', 'XLM'}.contains(values['coinMiniName'])) {
+      return false;
+    }
+    final db = await database;
+    return await db.update(
+          'TransationRecord',
+          {'memoDispatchPhase': 'dispatching'},
+          where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND isTest=? AND state=0 AND memoDispatchPhase=?',
+          whereArgs: [
+            id,
+            values['txHash'],
+            values['userUuid'],
+            values['walletIndex'],
+            values['coinMiniName'],
+            values['coinId'],
+            values['from1'],
+            values['isTest'],
+            'reserved',
+          ],
+        ) ==
+        1;
   }
 
   /// Release only the exact pending row after a sender proves no broadcast API

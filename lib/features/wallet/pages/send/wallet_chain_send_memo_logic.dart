@@ -272,6 +272,25 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
             trModel.price.toString(),
             decimals,
           ).toString(),
+          onBroadcastStarting: {'ADA', 'XLM'}.contains(coinType)
+              ? (hash) async {
+                  final original = _preparedRecord;
+                  if (!mounted ||
+                      RecentAddressService.currentUser != recentAddressOwner ||
+                      original == null ||
+                      hash != _preparedHash) {
+                    throw StateError('Transaction preparation changed');
+                  }
+                  final marked =
+                      await (widget.markTransactionDispatch?.call(original) ??
+                          AppDatabase().markMemoTransactionDispatch(original));
+                  if (!marked ||
+                      !mounted ||
+                      RecentAddressService.currentUser != recentAddressOwner) {
+                    throw StateError('Transaction dispatch was not recorded');
+                  }
+                }
+              : null,
           beforeBroadcast: {'ADA', 'XLM'}.contains(coinType)
               ? (hash) async {
                   if (!mounted ||
@@ -282,7 +301,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                   try {
                     trModel.trId =
                         await (widget.persistTransaction?.call(trModel) ??
-                            AppDatabase().reserveMemoTransaction(trModel));
+                            AppDatabase().reserveMemoTransaction(
+                              trModel,
+                              trackDispatch: true,
+                            ));
                   } on PendingMemoTransactionException {
                     blockedByPending = true;
                     rethrow;

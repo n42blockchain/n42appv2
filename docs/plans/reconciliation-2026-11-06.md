@@ -2,13 +2,13 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
-## Current interruption inventory — through batch 142
+## Current interruption inventory — through batch 143
 
 The interrupted patches through batch 139 are committed. Batch 140 revalidated the complete wallet source and then integrated the next Chat recovery-copy change with separate host tests. Current full-regression evidence and the remaining boundaries are below; historical batches must not be mistaken for current missing-work lists.
 
 | Remaining scope | Concrete next acceptance or implementation |
 | --- | --- |
-| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Batch 139 releases exact reservations on explicit no-broadcast results. Crash/orphan repair, other entry points and process-crash recovery remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
+| ADA/XLM submission recovery | Memo-page pre-broadcast history and same-page duplicate protection are implemented. Batch 134 adds Stellar receipt lookup and file-database reopen evidence. Batch 135 adds ADA status lookup and database reopen evidence. Batch 138 adds an atomic ADA/XLM Memo-page reservation across page instances. Batch 139 releases exact reservations on explicit no-broadcast results. Batch 143 adds durable prepared/dispatching phases and recovers new tracked prepared rows on the next explicit send. Legacy/dispatching orphans, other entry points and physical process-crash acceptance remain open. The unused SendResult.toMessageModel helper is not the current submission path. |
 | Other chain signing | Preserve ADA/XLM native repairs through batch 133. Continue VET/EGLD binding, AA/hardware permissions and remaining chain semantics. Fee/max confirmation UI, Stellar surge pricing and ADA multi-asset change remain unclosed. |
 | Native social login and Matrix | ID Hub source still defaults googleNativeCodeEnabled to false. Verify deployed capability and Google/Apple/Facebook native first/repeat/cancel/account-switch flows with same-DID Matrix identity. Web login evidence is not native acceptance. |
 | Provider and release delivery | Meta public review/deletion process and a signed release from current source remain unclosed in the ledger. No fresh store-console verification or upload in this inspection. |
@@ -34,6 +34,15 @@ Batch 140 delivery: wallet integration commit 042d4755a matches origin/master (0
 - Chat fixture fix `334dc927` is pushed and pinned by the wallet; subsequent Chat `20d1b065` changes only the verification ledger. Full-suite reruns passed: wallet **6,310 passed / 2 skipped / 0 failed**, Chat **7,915 passed / 4 skipped / 0 failed** (`/tmp/n42-wallet-full-fixtures-fixed-20261106.log`, `/tmp/n42-chat-full-fixtures-fixed-20261106.log`). Wallet skips require N42_PQ_LIBRARY; Chat skips require disposable-account/corpus fixtures. Scoped Dart analysis passed with no issues. No fresh coverage was measured. Native-provider acceptance, Meta publication and a release from current source remain open.
 
 ## Latest interruption check
+
+### Durable ADA/XLM preparation and dispatch phases — batch 143
+
+- SQLite v9 adds nullable memoDispatchPhase. Fresh Memo-page ADA/XLM reservations opt into reserved; a second durable transition to dispatching is required immediately before the sender calls its network API. Both native sender paths recheck signing ownership after this final await. Failed/refused phase storage aborts without invoking the network.
+- On the next explicit send, one database transaction can remove an older reserved row in the same account/sender/chain/network and insert the replacement. The old in-flight sender must transition its exact original row before dispatch, so deletion/replacement prevents it from broadcasting. NULL legacy, unknown and dispatching rows still block a fresh send. Other accounts/networks and terminal history are preserved. There is no timeout/not-found based deletion or automatic resend.
+- This closes the tracked preparation-to-dispatch orphan window, including database reopen and a lost reservation acknowledgement. It does not clear ambiguity after dispatching is persisted, even if a process dies before the actual API call. Recovery is on explicit retry, not an automatic startup deletion; old pending records without phases remain untouched.
+- Focused migration/reopen/race/sender/page/address-book tests: 112 passed before adding two final page dispatch-failure cases. The final combined wallet data/provider/sender/Memo/address-book suites pass 547 tests (/tmp/n42-phase-b143-broad.log), including those cases. The v8 upgrade fixture preserves existing unknown rows; the v7 address-book fixture now includes its historical transaction table. Initial page tests exposed a guarded assertion inside an async callback; assertions now check recorded callback data outside pump, and bounded waits fail explicitly instead of hanging. Logs: /tmp/n42-phase-b143-page.log, /tmp/n42-phase-b143-final.log.
+- Database base tests: 9 pass (/tmp/n42-phase-b143-db.log); scoped analysis clean (/tmp/n42-phase-b143-analysis-final.log). Physical process termination/cross-process race, real ADA/XLM transfers, other entry points, legacy orphans and new signed release acceptance remain open. No live transfer, device or release operation was performed.
+
 
 ### Reject stale terminal-history overwrites — batch 142
 

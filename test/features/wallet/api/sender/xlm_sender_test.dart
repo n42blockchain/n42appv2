@@ -287,6 +287,8 @@ void main() {
   }
   for (final scenario in [
     'accepted',
+    'dispatch failure',
+    'owner during dispatch',
     'persist failure',
     'owner change',
     'timeout',
@@ -295,12 +297,16 @@ void main() {
   ]) {
     test('submission recovery $scenario', () async {
       Object owner = Object();
+      var dispatchRecorded = false;
       final saved = <String>[];
       final api = _Api()
         ..submissionThrows = scenario == 'timeout'
         ..submissionError = scenario == 'error'
         ..hash = scenario == 'foreign hash' ? 'cd' * 32 : 'ab' * 32
-        ..onSend = () => expect(saved, ['ab' * 32]);
+        ..onSend = () {
+          expect(saved, ['ab' * 32]);
+          expect(dispatchRecorded, isTrue);
+        };
       final sender = XlmSender(
         api: api,
         trustdart: _Signer(),
@@ -315,6 +321,15 @@ void main() {
           amount: 1.25,
           decimals: 7,
           path: "m/44'/148'/2'",
+          onBroadcastStarting: (hash) async {
+            expect(hash, 'ab' * 32);
+            expect(saved, ['ab' * 32]);
+            if (scenario == 'dispatch failure') {
+              throw StateError('dispatch storage failed');
+            }
+            if (scenario == 'owner during dispatch') owner = Object();
+            dispatchRecorded = true;
+          },
           beforeBroadcast: (hash) async {
             saved.add(hash);
             if (scenario == 'persist failure') {
@@ -324,7 +339,12 @@ void main() {
           },
         ),
       );
-      final aborted = ['persist failure', 'owner change'].contains(scenario);
+      final aborted = [
+        'persist failure',
+        'owner change',
+        'dispatch failure',
+        'owner during dispatch',
+      ].contains(scenario);
       expect(saved, ['ab' * 32]);
       expect(api.broadcasts, aborted ? 0 : 1);
       expect(result.success, scenario == 'accepted');
