@@ -446,3 +446,13 @@ These are changed-file inventory counts, not counts of remaining defects or sema
 - Chat `08614fdf666c018c59d988b8a0f6d6d0cddb438e` is pushed with remote parity verified. MSG-001 retains persistent failure UI/backoff, orphan reconciliation and ownership/reference checks before existing post-success/cancellation file cleanup. This batch does not certify shared-file cleanup safety, distributed delivery or device acceptance. No release upload or device operation.
 
 - Wallet host integration: 129 passed (`/tmp/n42-recoverable-attachment-host-tests.log`); dependency resolution changes only the Chat reference.
+
+
+## Batch 49 — owned and reference-aware scheduled attachment cleanup (2026-11-06)
+
+- Removed direct BLoC deletion of arbitrary payload paths. Single-draft removal now cleans eligible files after durable preference acknowledgement under the shared scheduled-store lock, including standalone-page cancellation. All account namespaces and legacy queues are scanned first; corrupt queues and unresolved references defer cleanup.
+- Only regular files directly under application-support scheduled_attachments qualify. Root/leaf symlinks, external paths and parent traversal are preserved; resolved aliases in other queues protect the target. New persisted attachments use UUID filenames. Cleanup failure does not turn an acknowledged draft cancellation into a false failure. Logs omit corrupt queue contents.
+- 153 storage/concurrency/account/BLoC/page tests passed (`/tmp/n42-cleanup-final.log`); after final lint/log adjustments, 15 focused cleanup/removal tests passed (`/tmp/n42-cleanup-focused-final.log`). Tests include durable-write rejection, cross-account/room/legacy references, symlinks/aliases, missing references and corrupt queues. Scoped analysis has no errors/warnings and six existing informational diagnostics (`/tmp/n42-cleanup-analyze.log`).
+- Chat `2b32b5cbbc714ca958fb0efbbabeedbcfc4e5dda` is pushed with remote parity verified. This protects same-isolate application operations; independent processes and hostile external filesystem mutation are not covered. Historical orphan/deferred files and room-wide clearing/logout cleanup still need reconciliation. No device operation or release upload.
+
+- Wallet host integration: 129 passed (`/tmp/n42-cleanup-host-tests.log`); the lockfile changes only the Chat reference.
