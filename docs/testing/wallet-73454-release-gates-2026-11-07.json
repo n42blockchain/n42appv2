@@ -1,0 +1,39 @@
+{
+  "candidate": "2.5.4+73454",
+  "source": "0746c88a10fc038373b1863faa777da297ee5712",
+  "ipaSha256": "4d33df8b0267926cbf9f0ae9994fe8e54b9a78ac1f749b9941cd4359b4a7187f",
+  "fullCi": {
+    "run": 42411468479,
+    "source": "7fa420b6b",
+    "conclusion": "success",
+    "walletPassed": 7796,
+    "coveragePercent": 73.9785448421291,
+    "allJobsPassed": true
+  },
+  "currentNativeConfirmation": {
+    "run": 42415656801,
+    "source": "805898176f8301052413a3ab27b67aa6b67e8db2",
+    "conclusion": "success",
+    "passed": 11,
+    "failed": 0,
+    "skipped": 1,
+    "scope": "Android emulator wallet forms/create/import/home/history/account switch; funded N42 transfer remains skipped",
+    "logSha256": "6fcfee7adccc83ee3930b7a8150836ce025512ef8af6111834a924f839178f1b"
+  },
+  "currentChat": {
+    "source": "5f8db7df",
+    "passed": 8627,
+    "failed": 0,
+    "skipped": 4
+  },
+  "packageChecks": 50,
+  "packagedAuthChecks": 14,
+  "modelBundles": 10,
+  "modelFiles": 86,
+  "delivery": "Transporter Delivered, 2026-11-07 16:48 America/Toronto; App Store Connect lists 73454 as processing",
+  "physicalDeviceQa": "deferred",
+  "uploadAccepted": true,
+  "appleProcessingComplete": false,
+  "internalTesterAvailabilityVerified": false,
+  "testNotesSaved": false
+}
