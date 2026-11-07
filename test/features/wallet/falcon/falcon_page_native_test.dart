@@ -173,9 +173,11 @@ void main() {
     );
     await tester.runAsync(() async {
       await tester.tap(find.text('Export encrypted backup'));
-      final deadline = DateTime.now().add(const Duration(seconds: 20));
+      // This asserts ownership, not KDF performance. Keep the real 310,000
+      // iterations and allow for CPU contention in the full native suite.
+      final elapsed = Stopwatch()..start();
       while (find.text('Copy result').evaluate().isEmpty) {
-        if (DateTime.now().isAfter(deadline)) {
+        if (elapsed.elapsed > const Duration(seconds: 90)) {
           fail('Backup export did not finish');
         }
         await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -196,5 +198,5 @@ void main() {
     await tester.tap(find.text('Copy result'));
     expect(clipboardWrites, 1);
     await tester.pumpWidget(const SizedBox());
-  });
+  }, timeout: const Timeout(Duration(minutes: 2)));
 }

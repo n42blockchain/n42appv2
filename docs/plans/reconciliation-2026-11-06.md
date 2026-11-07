@@ -1,6 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Integrate sender fixes and triage full-suite KDF timeout — batch 204
+
+- Wallet batch 200 is terminal on unchanged `f565df6d2`: **7,292 pass / 1 fail / 0 skips**, test process/gate exit 1. Coverage **103,388/140,477 = 73.5978132%** passes its independent 70% gate; the full run is **not accepted**. Original LCOV was restored byte-for-byte (`fc972c1f9f23b4c0e64cee44ccdd63b7bbb84d2d6a24808d0ba7336b417029b9`). Evidence `/tmp/n42-wallet-b200-result.json`, `-tests.json`, `-coverage.json`; log SHA-256 `044ba102224cc49457ee206dbc6249aa16565efadf4532b8222a4996bdf277a9`, LCOV `1309afc10aeaad17431dac02ada98d8c1fcb1d9f372af0c684b5f3c6dfd33631`.
+- Failure was the real Falcon backup page ownership test reaching its internal 20-second export wait, then failing to find the result control. The unchanged case independently passes in about seven seconds (`/tmp/n42-wallet-b203-falcon-triage.log`). CPU contention is a plausible explanation, not a proven runtime defect. This is an ownership test, not a KDF latency benchmark: retain the real 310,000-iteration encryption, increase the bounded wait to 90 seconds using a monotonic Stopwatch, and set an explicit two-minute test timeout. Both native Falcon page tests pass (`/tmp/n42-wallet-b204-falcon.log`), including a successful copy followed by blocked stale-owner copy. Production crypto/security checks are unchanged.
+- Fast-forwarded master to both already-pushed sender fixes, `654539b90` and `10cb980d4`. Removed only this round's clean `n42appv2-sol-sender-account-20261106` worktree after confirming no process uses it; its pushed branch and evidence remain. There are **12 auxiliary wallet worktrees** again. Baseline untracked files and other worktrees remain preserved.
+- Chat batch 199 remains active on pinned `8c5202ab`; do not change its source until the final archive/gates. The failed wallet run predates the two sender fixes and cannot establish their full acceptance. A new fixed-source wallet full run follows this integration/fixture commit; native/provider, release, chain recovery and other documented feature gaps remain open. No build/upload/live payment or physical-device acceptance is claimed.
+
 ### Algorand sender/API contract and signer isolation — batch 203
 
 - Follow-up inspection found the sender cast the real account-balance Map to BigInt, always queried mainnet balance, and used TOKEN where both Swift/Kotlin signing bridges require Asset for ASA transfers. A regression using the production balance response shape reproduced the type error (`/tmp/n42-wallet-b203-before.log`, exit 1). Added injectable existing API/signer dependencies rather than altering their public contracts.
