@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-07",
+  "scope": "CreateFinish rejects a missing mnemonic for a newly created signing wallet",
+  "before": {
+    "passed": 9,
+    "failed": 1,
+    "failure": "null mnemonic reached the save callback"
+  },
+  "after": {
+    "passed": 10,
+    "failed": 0,
+    "cases": [
+      "null",
+      "empty",
+      "whitespace",
+      "watch-only and private-key exceptions",
+      "save failure",
+      "import rejection",
+      "loading until persistence"
+    ]
+  },
+  "limitation": "Widget regression; not full native wallet creation or backup acceptance. This change is newer than TestFlight 73425."
+}

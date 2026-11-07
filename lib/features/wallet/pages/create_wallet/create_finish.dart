@@ -74,7 +74,7 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       if (widget.createMetod == 'Create' &&
           !_wInfo!.watchOnly &&
           !_wInfo!.hasPrivateKey &&
-          _wInfo!.mnemonic?.trim().isEmpty == true) {
+          (_wInfo!.mnemonic?.trim().isEmpty ?? true)) {
         throw StateError('Wallet mnemonic generation failed');
       }
       if (_wInfo!.walletName == "") {
