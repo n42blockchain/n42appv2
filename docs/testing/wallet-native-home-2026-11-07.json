@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-07",
+  "baseSource": "86cf96582966eeaf9b5d15bc4543029877c8152b",
+  "fixtureSha256": "5bec39be56096e8097424fef63df6a1f4af38b2a9c7bc8f2f4b38f26c7b564a2",
+  "final": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "scope": "Targeted WLT-02 native import, encrypted storage/reload, actual WalletPage initWallet, native ETH address derivation, read-only loopback RPC 1 ETH and wallet name display"
+  },
+  "fixture": [
+    "Disposable simulator only; public BIP39 test vector; never funded",
+    "Single ETH chain registry and market data isolated in fixture and registry restored",
+    "Real transaction provider queries only unique QA owner",
+    "No initializeWalletForTest hook used; no seeded runtime coin list",
+    "Owned wallet namespaces and mnemonic keys deleted; other namespaces compared unchanged"
+  ],
+  "attempts": [
+    {
+      "result": "failed",
+      "reason": "ProviderScope override count changed; corrected by unmounting import page before creating home scope"
+    },
+    {
+      "result": "failed",
+      "reason": "Test name exceeded production 12-character limit; use legal name and assert persisted name and UI without changing product limit"
+    },
+    {
+      "result": "passed"
+    }
+  ],
+  "logSha256": {
+    "n42-native-home-local-20261107.log": "998cdd346f15e18085c8c943fbf111dd5cef4cf2fe7d33200e3ec6dda37eb23b",
+    "n42-native-home-local2-20261107.log": "06473e8345d9696284c2a0b3c1ecc4a9293b51c1b363107544a282d304b6ae54",
+    "n42-native-home-local3-20261107.log": "0496e891d15a380dc4f8c82114b6c42a2f3c2b685605a450d5186e7152fc37ca"
+  },
+  "remaining": [
+    "Multi-chain and physical-device acceptance",
+    "Progressive balance rendering and account-switch UI",
+    "Transaction history and funded transfer",
+    "Global wallet notifier is not initialized in this fixture; logs warning. Direct stored wallet/home provider path passed, not global notifier integration"
+  ],
+  "previousIpaPreserved": {
+    "path": "build/release-preserved/73425-20261107",
+    "sha256": "ece9ac9b766f01e0466b23072c70974d05ad91ae4bd0646fdf338dc347b56bdb"
+  },
+  "sourceNote": "Fixture changes were uncommitted during the run; their SHA-256 is recorded. A concurrent documentation commit bumped only the build number; application runtime code was unchanged."
+}

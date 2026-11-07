@@ -32,10 +32,6 @@ void main() {
 
 const _pendingWalletCases = <_PendingDeviceCase>[
   _PendingDeviceCase(
-    'WLT-02 imports a disposable mnemonic wallet',
-    'Requires complete address initialization and wallet-home acceptance.',
-  ),
-  _PendingDeviceCase(
     'WLT-14 displays progressively loaded wallet balances',
     'Requires a deterministic fake RPC connected to the device build.',
   ),

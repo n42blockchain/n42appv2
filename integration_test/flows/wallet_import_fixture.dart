@@ -18,6 +18,15 @@ import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_one
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_three.dart';
 import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
+import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
+import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
+import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 import '../../test/helpers/widget_test_helpers.dart';
 
@@ -27,12 +36,26 @@ const _publicPhrase =
     'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
 
 class _ImportFixtureStore extends WalletActionProvider {
-  _ImportFixtureStore(this.owner) {
+  _ImportFixtureStore(this.owner)
+    : super(
+        marketApi: _FixtureMarket(),
+        stablecoinPriceRequest: (_) async => null,
+      ) {
     buildwallet = true;
   }
   final String owner;
   @override
   String get userUUID => owner;
+}
+
+class _FixtureMarket extends MarketApi {
+  @override
+  Future<Map<String, dynamic>> getWalletCoinsInfo(String coins) async => {
+    'error': false,
+    'data': [
+      {'coin': 'ETH', 'price': 1},
+    ],
+  };
 }
 
 void registerWalletImportFixture() {
@@ -85,6 +108,40 @@ void registerWalletImportFixture() {
             derived['legacy']?.toString().toLowerCase(),
             '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf',
           );
+        }
+        if (mode == 'mnemonic') {
+          final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+          addTearDown(() => server.close(force: true));
+          server.listen((request) async {
+            final body =
+                jsonDecode(await utf8.decoder.bind(request).join()) as Map;
+            final method = body['method'];
+            request.response.headers.contentType = ContentType.json;
+            request.response.write(
+              jsonEncode({
+                'jsonrpc': '2.0',
+                'id': body['id'],
+                if (method == 'eth_getBalance')
+                  'result': '0xde0b6b3a7640000'
+                else
+                  'error': {'code': -32601, 'message': 'Read-only fixture'},
+              }),
+            );
+            await request.response.close();
+          });
+          final originalChains = chainUrlMap;
+          final eth = jsonDecode(
+            jsonEncode(originalChains['ETH']),
+          ) as Map<String, dynamic>;
+          final base = eth['baseInfo'] as Map;
+          base['service'] = 'http://127.0.0.1:${server.port}';
+          base['service_test'] = base['service'];
+          eth['mainnets'] = <String, dynamic>{};
+          eth['testnets'] = <dynamic>[];
+          chainUrlMap = {'ETH': eth};
+          addTearDown(() {
+            chainUrlMap = originalChains;
+          });
         }
         final owner = 'n42-native-qa-${DateTime.now().microsecondsSinceEpoch}';
         final store = _ImportFixtureStore(owner);
@@ -178,7 +235,7 @@ void registerWalletImportFixture() {
           await _wait(tester, find.byType(CreatePassword));
         }
         for (final entry in [
-          (0, 'Native QA Import'),
+          (0, 'Native QA'),
           (1, 'QaImport123!'),
           (2, 'QaImport123!'),
         ]) {
@@ -199,6 +256,7 @@ void registerWalletImportFixture() {
         expect(store.walletInfoLsit, hasLength(1));
         final wallet = store.walletInfoLsit.single;
         expect(wallet.walletUuid, owner);
+        expect(wallet.walletName, 'Native QA');
         expect(
           privateKey
               ? wallet.privateKey == encodedKey
@@ -221,6 +279,49 @@ void registerWalletImportFixture() {
               : restarted.walletInfoLsit.single.mnemonic == expectedPhrase,
           isTrue,
         );
+        if (mode == 'mnemonic') {
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pumpAndSettle();
+          // Mirror the host's transaction provider without accessing user history.
+          final transactions = TransactionRecordItemProvider(
+            userUuid: () => owner,
+            sessionIdentity: () => owner,
+          );
+          globalTripInstance = transactions;
+          addTearDown(transactions.dispose);
+          restarted.buildwallet = false;
+          final connections = WalletConnectProvider();
+          await tester.pumpWidget(
+            wrapForTest(
+              const WalletPage(),
+              overrides: [
+                wapBridgeProvider.overrideWith((ref) => restarted),
+                wcpBridgeProvider.overrideWith((ref) => connections),
+              ],
+            ),
+          );
+          for (var attempt = 0; attempt < 600; attempt++) {
+            await tester.pump(const Duration(milliseconds: 100));
+            if (restarted.coinList.any(
+              (coin) => coin.balance == BigInt.parse('1000000000000000000'),
+            )) {
+              break;
+            }
+          }
+          expect(restarted.isWalletReady, isTrue);
+          final eth = restarted.coinList.singleWhere(
+            (coin) => coin.config.coinType == 'ETH',
+          );
+          expect(
+            eth.address.toString().toLowerCase(),
+            '0x9858effd232b4033e47d90003d41ec34ecaeda94',
+          );
+          expect(eth.balance == BigInt.parse('1000000000000000000'), isTrue);
+          expect(find.byType(WalletBoard), findsOneWidget);
+          expect(find.text('Native QA'), findsWidgets);
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pumpAndSettle();
+        }
         expect(tester.takeException(), isNull);
       },
       skip: !_enabled,
