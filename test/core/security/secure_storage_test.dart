@@ -33,6 +33,27 @@ void main() {
     expect(await storage.getUuid(), isNull);
   });
 
+  test(
+    'deleting an auth profile preserves wallet recovery credentials',
+    () async {
+      await storage.saveUserInfo({'uuid': 'qa-owner'});
+      await storage.saveUuid('qa-owner');
+      await storage.saveMnemonic(
+        walletId: 'qa-wallet',
+        mnemonic: 'synthetic-phrase',
+      );
+      await storage.savePrivateKey(
+        address: 'qa-address',
+        privateKey: 'synthetic-key',
+      );
+      await storage.deleteUserInfo();
+      expect(await storage.getUserInfo(), isNull);
+      expect(await storage.getUuid(), 'qa-owner');
+      expect(await storage.getMnemonic('qa-wallet'), 'synthetic-phrase');
+      expect(await storage.getPrivateKey('qa-address'), 'synthetic-key');
+    },
+  );
+
   test('profile JSON preserves Unicode and absent data returns null', () async {
     expect(await storage.getUserInfo(), isNull);
     final user = {

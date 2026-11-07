@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-07",
+  "baseSource": "70e3577f1863dbbb93a093ae1cc90629d43d69da",
+  "files": {
+    "integration_test/flows/wallet_login_fixture.dart": "f274e6b86ca99a2d18c48dfecd138d4e38e2f12b6c3fb7d5284f8b2a2833bfc9",
+    "lib/features/wallet/provider/legacy_wallet_adapter.dart": "cac1966f1c17cb981a8a42cba76acbeaad261db00fa3ba09dd20e1f66ab9b79b",
+    "lib/core/security/secure_storage.dart": "3a8377b9bed421bc7cc8208d65d8470d768169d658721be302dd9a3fa80c3733"
+  },
+  "native": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "unitRegression": {
+    "passed": 294,
+    "failed": 0,
+    "scope": "Secure storage and wallet provider suites",
+    "logSha256": "93909d394219fb9fa6348cab65b8d42b48228e1f5d2b9362000e11b00219f1ed"
+  },
+  "accepted": [
+    "Actual AppGlobals.login for two synthetic UUIDs, not an overridden WalletActionProvider userUUID",
+    "Native auth UUID/profile and SecurePreferences userInfo plus currentUserProvider all select account B",
+    "Actual LegacyWalletActionProviderAdapter, WalletServiceImpl and walletListProvider reload separate encrypted wallet namespaces",
+    "Actual WalletPage pull-to-refresh delays account A response containing 9 ETH until account B has 2 ETH",
+    "After old response completion, rendered WalletBoard amount, runtime balance, wallet map and root wallet list still belong to B",
+    "Refuse pre-existing host credentials before any writes; cleanup removes only written profile/UUID/preferences and owned namespaces; pre-existing wallet namespaces compared unchanged"
+  ],
+  "supportChanges": [
+    "Adapter accepts optional existing market dependencies; production defaults retained",
+    "Narrow deleteUserInfo removes auth profile without clearUserData and without deleting wallet recovery keys; unit test preserves mnemonic/private-key credentials"
+  ],
+  "analysis": "Final source: no issues found",
+  "logSha256": "0db9e2164904931a70c000b52c1b59699ff48de4e418a1d847ad3a883f953351",
+  "boundaries": [
+    "Synthetic identities run the real client login handler; remote authentication/token validation and Google/Apple/Facebook consent are not accepted",
+    "Read-only ETH RPC and deterministic market; no signature or broadcast",
+    "No physical-device, public network or other-chain acceptance",
+    "Existing global transaction provider may be reused by full wallet suite; transaction background tracking is not part of this scenario"
+  ],
+  "qualityTestsPassed": 8
+}

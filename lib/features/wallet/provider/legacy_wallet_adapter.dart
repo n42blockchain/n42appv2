@@ -37,7 +37,11 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
   late final ProviderSubscription<int> _selectedIndexSubscription;
   late final ProviderSubscription<int> _miningIndexSubscription;
 
-  LegacyWalletActionProviderAdapter(this._container) {
+  LegacyWalletActionProviderAdapter(
+    this._container, {
+    super.marketApi,
+    super.stablecoinPriceRequest,
+  }) {
     _initSubscriptions();
     _syncFromRiverpod();
   }

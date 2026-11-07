@@ -125,6 +125,11 @@ class SecureStorage {
     return _readJson<Map<String, dynamic>>(_keyUserInfo, 'user info');
   }
 
+  /// Delete the auth profile without removing wallet credentials.
+  Future<void> deleteUserInfo() async {
+    await _storage.delete(key: _keyUserInfo);
+  }
+
   // ==================== 钱包凭证 ====================
 
   /// 保存钱包信息

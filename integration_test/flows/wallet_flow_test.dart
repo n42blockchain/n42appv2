@@ -10,6 +10,7 @@ import 'wallet_form_cases.dart';
 import 'wallet_import_fixture.dart';
 import 'wallet_send_fixture.dart';
 import 'wallet_history_fixture.dart';
+import 'wallet_login_fixture.dart';
 
 /// Device flows that require an isolated wallet fixture and a controllable RPC.
 ///
@@ -23,6 +24,7 @@ void main() {
   registerWalletImportFixture();
   registerWalletSendFixture();
   registerWalletHistoryFixture();
+  registerWalletLoginFixture();
 
   for (final testCase in _pendingWalletCases) {
     final displayName = '${testCase.name} [BLOCKED: ${testCase.blocker}]';
@@ -33,10 +35,6 @@ void main() {
 }
 
 const _pendingWalletCases = <_PendingDeviceCase>[
-  _PendingDeviceCase(
-    'WLT-14 refreshes balances without stale account data',
-    'Native wallet selection and delayed-response isolation pass; cross-login account replacement remains unverified.',
-  ),
   _PendingDeviceCase(
     'TX-06 sends a disposable testnet transaction',
     'Requires an approved funded testnet wallet and controllable RPC.',
