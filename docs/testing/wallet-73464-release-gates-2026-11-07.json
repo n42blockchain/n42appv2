@@ -46,5 +46,12 @@
   "appleProcessingComplete": false,
   "internalTesterAvailabilityVerified": false,
   "physicalDeviceQa": "deferred",
-  "status": "Verified candidate held pending current CI; not uploaded"
+  "status": "HELD: missing SQLCipher native asset; do not upload",
+  "releaseBlocked": true,
+  "chatCrypto": {
+    "passed": false,
+    "failure": "export:_sqlite3_key",
+    "binding": "sqlite3.framework/sqlite3",
+    "evidence": "build/release-evidence/wallet-73464-chat-crypto-hold.json"
+  }
 }

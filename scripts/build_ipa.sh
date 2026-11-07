@@ -190,6 +190,7 @@ xcodebuild -exportArchive \
 
 echo ""
 python3 scripts/release/wallet_capability_manifest.py --artifact build/ios/ipa/N42Wallet.ipa --require-source build/release-evidence/wallet-ipa-source.json --output build/release-evidence/wallet-ipa.json
+python3 scripts/release/verify_ios_chat_crypto.py --ipa build/ios/ipa/N42Wallet.ipa --output build/release-evidence/wallet-ipa-chat-crypto.json
 python3 scripts/release/verify_ios_social_auth.py \
   --ipa build/ios/ipa/N42Wallet.ipa \
   --google-plist ios/Runner/GoogleService-Info.plist \

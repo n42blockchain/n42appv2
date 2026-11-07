@@ -6,6 +6,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import '../../test/core/storage/chat_sqlcipher_runtime_test.dart'
+    as chat_crypto;
+
 import 'wallet_form_cases.dart';
 import 'wallet_import_fixture.dart';
 import 'wallet_send_fixture.dart';
@@ -20,6 +23,7 @@ import 'wallet_login_fixture.dart';
 /// without exposing mnemonic phrases or broadcasting unintended transactions.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  chat_crypto.main();
   registerWalletFormCases();
   registerWalletImportFixture();
   registerWalletSendFixture();

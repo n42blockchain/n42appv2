@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-07",
+  "blockedCandidate": "2.5.4+73464",
+  "finding": {
+    "entrypointHookConfigurationMissing": true,
+    "ipaSqliteBinding": "sqlite3.framework/sqlite3",
+    "keyExportMissing": true,
+    "beforeRuntimeTestsFailed": 3,
+    "archiveFailsClosedInsteadOfOpeningPlaintext": true
+  },
+  "repair": {
+    "android": "Reuse packaged libsqlcipher.so with source system/name sqlcipher",
+    "otherNativePlatforms": "sqlite3 checksum-pinned SQLCipher build",
+    "noUserDatabaseDeletionOrReset": true,
+    "releaseGate": "Inspect the exact IPA native-asset library for sqlite3_open_v2/key/rekey exports"
+  },
+  "verification": {
+    "hostDatabaseAndChatTestsPassed": 38,
+    "databaseCases": [
+      "main isolate cipher_version",
+      "background isolate cipher_version",
+      "legacy plaintext export retains original data",
+      "encrypted reopen/wrong-key rejection"
+    ],
+    "pythonReleaseChecksPassed": 18,
+    "oldCandidateRejectedByNewGate": true
+  },
+  "remaining": [
+    "Rebuild and inspect iOS IPA with repaired native asset",
+    "Run Android native suite with four real database checks",
+    "Full wallet regression and current-source CI after hook repair",
+    "Physical-device/installed-user continuity acceptance remains separate"
+  ],
+  "upstream": "https://github.com/simolus3/sqlite3.dart/blob/main/sqlite3/doc/hook.md"
+}

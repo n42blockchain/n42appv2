@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.5.4+73465
+version: 2.5.4+73466
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -233,6 +233,18 @@ flutter:
     # Keep the compatibility copies in sync with the resolved Git dependency.
     - assets/stickers/openmoji/
     - assets/stickers/lottie/
+
+# The entrypoint selects native assets for every dependency and isolate.
+# Android already packages SQLCipher through sqflite_sqlcipher; reuse it.
+# Other native targets use sqlite3's checksum-pinned SQLCipher build.
+hooks:
+  user_defines:
+    sqlite3:
+      source:
+        android: system
+        default: sqlcipher
+      name:
+        android: sqlcipher
 
 flutter_intl:
   enabled: true
