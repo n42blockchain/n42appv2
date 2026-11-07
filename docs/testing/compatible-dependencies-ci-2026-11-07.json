@@ -1,0 +1,59 @@
+{
+  "run": "https://github.com/n42blockchain/n42appv2/actions/runs/42379157589",
+  "source_commit": "42e74e2403fdd62c28e0381d5b22fd7ef1e6a365",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "Backend contracts (backend/swap)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Backend contracts (backend/social-auth)",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83d\udcca Code Analysis",
+      "conclusion": "success"
+    },
+    {
+      "name": "Backend contracts (backend/loyalty)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Backend contracts (backend/livekit-jwt)",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83d\udd12 Security Scan",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83e\uddea Tests & Coverage",
+      "conclusion": "success"
+    },
+    {
+      "name": "\u26a1 Performance Regression",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83c\udf4e Build iOS",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83e\udd16 Build Android",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83d\udccb CI Summary",
+      "conclusion": "success"
+    }
+  ],
+  "wallet_coverage": {
+    "hit": 104320,
+    "found": 141223,
+    "percent": 73.8689873462538,
+    "threshold": 70
+  },
+  "raw_log_sha256": "543bfdf153d75dcf8c7e59f1009842de2532f439f0407a9f309aa23633464412",
+  "scope": "Eight compatible lockfile updates; SDK 15 Chat baseline. Matrix 16 is a separate candidate. Build success is not native business-flow acceptance. Synthetic startup benchmark does not establish actual startup performance."
+}
