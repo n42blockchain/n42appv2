@@ -84,8 +84,9 @@ void registerWalletSendFixture() {
       final dynamic state = tester.state(find.byType(WalletChainSend));
       for (var i = 0; i < 300; i++) {
         await tester.pump(const Duration(milliseconds: 100));
-        if (state.load == Load.finish && methods.contains('eth_gasPrice'))
+        if (state.load == Load.finish && methods.contains('eth_gasPrice')) {
           break;
+        }
       }
       expect(state.load, Load.finish);
       expect(coin.balance, BigInt.parse('1000000000000000000'));
