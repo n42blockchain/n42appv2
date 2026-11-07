@@ -1,6 +1,6 @@
 # 当前任务与验收台账
 
-> Latest release and gate snapshot: [current acceptance](reconciliation-2026-11-06.md#current-acceptance-snapshot--2026-11-07). Internal TestFlight 2.5.4 (73423) is Testing; full CI 42376481517 is green. SDK 15 recovery now passes 30/30 and its group load passes 20×10,000. Native suites remain partial (Android 30 passed/15 skipped/two failed; iOS 28/15/four). SDK 16 host/native gates remain open.
+> Latest release and gate snapshot: [current acceptance](reconciliation-2026-11-06.md#current-acceptance-snapshot--2026-11-07). Internal TestFlight 2.5.4 (73425) is Testing in t1 and its notes are saved. Full CI 42398101409 passes (7,775 wallet tests; 8,594 Chat tests/five explicit skips; 73.918091% wallet coverage). Current repair confirmation 42405518584 and native home confirmation 42406471346 are running. SDK 16 isolated thirty-recovery and native import/home evidence are linked in the current snapshot; physical and production acceptance remain distinct.
 
 > Current status — 2026-11-07: production Matrix upgrade to Tuwunel 1.9.4 is complete; public version was rechecked successfully. Backup, restore rehearsal and cutover evidence: [Matrix upgrade](../testing/matrix-upgrade-2026-11-06.md). Authenticated E2EE/media/push/calls/recovery acceptance remains open. Historical batch notices below describe their observation time and do not override this status.
 
