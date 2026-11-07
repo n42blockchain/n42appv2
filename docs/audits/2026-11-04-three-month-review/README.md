@@ -1644,3 +1644,7 @@ Selected-network FINAL receipt queries now resolve the persisted NEAR row only w
 ### Batch 220 — NEAR confirmation consistency
 
 Replaced the memo page's fixed gas-unit-as-fee display with network-priced reserve preparation. Max preserves storage reserve, and sender enforces the reviewed reserve before signing. Conservative 300 TGas remains; exact protocol fee estimation is explicitly unfinished. Evidence and limitations are recorded in the reconciliation.
+
+### Batch 221 — NEAR Android native execution
+
+Current production MethodChannel/JNI signer passes actual emulator integration: exact Swift reference bytes, independent SHA256/Ed25519 verification, derived key and 12 invalid-input cases. Build/install/test exits zero. This closes component execution only; no broadcast, physical-device or full payment acceptance. See reconciliation for logs.

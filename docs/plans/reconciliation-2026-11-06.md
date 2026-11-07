@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Execute NEAR Android MethodChannel and WalletCore JNI — batch 221
+
+- Added `integration_test/native_near_signing_test.dart` using the public BIP39 fixture and synthetic transaction from the independently CryptoKit-verified Swift reference. The test invokes the actual Trustdart MethodChannel and Android production handler, builds against WalletCore 4.8.7 and compares signed bytes with the reference. Independently recomputes SHA256 and verifies the returned Ed25519 signature in Dart; derived implicit account must match the embedded public key.
+- Current-source Android debug build/install and both integration tests pass, exit 0 (`/tmp/n42-wallet-b221-native-ready.log`). The second case rejects 12 malformed/missing/type/overflow/account/hash/amount inputs without crashing, then signs the valid fixture again. Expected native error warnings belong to those negative cases, not failed tests. Scoped analysis is clean (`/tmp/n42-wallet-b221-analysis.log`).
+- Used only a temporary read-only Pixel_8_API_36 emulator at emulator-5556; stopped after the terminal result. The attached physical phone was not used. Initial launch raced emulator startup and exited with no supported device; retained `/tmp/n42-wallet-b221-native.log`, then reran after the emulator appeared. No live RPC, transaction broadcast, real wallet import, TestFlight or production acceptance.
+- This closes the NEAR Android JNI component gap listed in earlier batches. Full app confirmation-to-network/payment flow, account lifecycle, exact protocol fees, real-node/device acceptance, independent RPC trust and a new signed release remain open. The 73325 release predates these changes.
+
+
 ### Bind NEAR confirmation to the sender's fee reserve — batch 220
 
 - Found the memo page displayed a fixed gas-unit count as if it were a base-unit fee, while NearSender multiplies a 300 TGas reserve by network gas price. Added confirmation-time NEAR balance/storage/gas-price preparation and a shared reserve constant. Max now subtracts storage plus that same fee reserve; ordinary sends preserve the requested amount. Stale form/network/account context and balance refresh invalidate quotes, query failure prevents confirmation and displays the existing localized quote error.
