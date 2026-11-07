@@ -1,0 +1,14 @@
+{
+  "platform": "android-api36-arm64",
+  "passed": 9,
+  "skipped": 0,
+  "failed": 0,
+  "exit_code": 0,
+  "model_download_passed": true,
+  "concurrent_downloads_passed": true,
+  "log_sha256": "62ac21e486a09fbc28446c4a8ae773e346b3219f562011cc65fee30493323de7",
+  "scope": "Dedicated disposable local Android API 36 arm64 emulator, real native plugins.",
+  "boundary": "Physical device and public user conversations not tested. API 30 CI timeout remains separate and is being retried.",
+  "runtime_source_commit": "c574b5402f1281f14168332b93adfafd7c755fa9",
+  "runtime_lib_tree": "b6f7987010d7e2bf2d751c026b9c8cae54fb30a2"
+}

@@ -1,0 +1,14 @@
+{
+  "platform": "ios-simulator",
+  "passed": 9,
+  "skipped": 0,
+  "failed": 0,
+  "exit_code": 0,
+  "model_download_passed": true,
+  "concurrent_downloads_passed": true,
+  "log_sha256": "abee1cbe221a79a382416d4a4f53640b08e673529354fe780a971e568c88aa49",
+  "scope": "CI iOS simulator job 128446048545, Matrix 16 candidate graph.",
+  "boundary": "Physical device and public user conversations not tested. API 30 CI timeout remains separate and is being retried.",
+  "run": "https://github.com/n42blockchain/n42appv2/actions/runs/42386885934",
+  "source_commit": "359e93890a7857427fea8f1145c3be790f2e2e04"
+}
