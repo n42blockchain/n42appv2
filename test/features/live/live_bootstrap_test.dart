@@ -77,6 +77,40 @@ void main() {
     },
   );
 
+  for (final replaced in [false, true]) {
+    test(
+      'late guest failure preserves only current auth: replaced=$replaced',
+      () async {
+        final auth = _Auth();
+        final pending = Completer<AuthResult>();
+        var loggedIn = false;
+        when(() => auth.isLoggedIn).thenAnswer((_) => loggedIn);
+        when(
+          () => auth.registerAnonymously(
+            homeserver: any(named: 'homeserver'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) => pending.future);
+        GetIt.instance.registerSingleton<IAuthRepository>(auth);
+        final login = ensureAnonymousLogin();
+        loggedIn = true;
+        if (replaced) {
+          await GetIt.instance.unregister<IAuthRepository>();
+          final replacement = _Auth();
+          when(() => replacement.isLoggedIn).thenReturn(true);
+          GetIt.instance.registerSingleton<IAuthRepository>(replacement);
+        }
+        final expectation = replaced
+            ? expectLater(login, throwsStateError)
+            : expectLater(login, completes);
+        pending.complete(
+          AuthResult.failure('superseded', type: AuthErrorType.rateLimited),
+        );
+        await expectation;
+      },
+    );
+  }
+
   test('failed registration does not prevent a later retry', () async {
     final auth = _Auth();
     var calls = 0;

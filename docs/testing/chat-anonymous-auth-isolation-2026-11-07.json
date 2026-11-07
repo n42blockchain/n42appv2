@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-07",
+  "chatRef": "fca10b9ec50899fcfb0cb211cdac8e5e882214dc",
+  "changes": [
+    "Registration shares the authentication mutex with login and restore.",
+    "Anonymous username preflight is invalidated by intervening authentication.",
+    "AuthBloc retains an already authenticated current user after stale guest failure.",
+    "Live bootstrap accepts a current logged-in repository after superseded guest registration; replacement repositories do not inherit old failures."
+  ],
+  "verification": {
+    "reproducedBeforeFix": [
+      "Password login proceeded during pending registration.",
+      "Delayed anonymous availability started registration after normal login.",
+      "Late anonymous failure replaced authenticated AuthBloc with error.",
+      "Live bootstrap rejected a current authenticated account after stale guest failure."
+    ],
+    "chatAuthAndSessionTestsPassed": 100,
+    "hostLiveTestsPassed": 76,
+    "chatScopedAnalysis": "10 existing info diagnostics; no errors or warnings",
+    "hostScopedAnalysis": "No issues found"
+  },
+  "remaining": [
+    "Post-registration guest nickname changes and stale success after session replacement.",
+    "Full suite for this new dependency pin.",
+    "Native and physical live login/media acceptance."
+  ],
+  "releaseBoundary": "Post-73454 source changes; not included in the already delivered TestFlight binary."
+}

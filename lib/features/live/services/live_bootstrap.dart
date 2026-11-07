@@ -79,6 +79,13 @@ Future<void> _doAnonymousLogin(IAuthRepository auth) async {
     password: pw,
   );
   if (!res.success) {
+    // A normal login can supersede guest registration while it is awaiting
+    // username availability. Only the currently registered repository counts.
+    if (GetIt.instance.isRegistered<IAuthRepository>() &&
+        identical(GetIt.instance<IAuthRepository>(), auth) &&
+        auth.isLoggedIn) {
+      return;
+    }
     throw StateError('匿名登录失败: ${res.errorMessage ?? 'unknown'}');
   }
 }
