@@ -20,5 +20,17 @@
     "Physical devices deferred",
     "No signing or broadcast; no funds",
     "Actual run contains seven skips; two fulfilled placeholders removed only after the run"
-  ]
+  ],
+  "remoteConfirmation": {
+    "run": 42404295970,
+    "job": 128498558323,
+    "source": "aa5f8b9beeac05b10f192c08ad68a6bbb626d34c",
+    "status": "completed",
+    "conclusion": "success",
+    "passed": 8,
+    "failed": 0,
+    "skipped": 7,
+    "scope": "Forms, native mnemonic/private-key import storage and send validation; predates creation/backup and wallet-home additions",
+    "logSha256": "88fcf77d7519b15626a040044f2cd211e425975b1cbcca68682faaf614552a87"
+  }
 }
