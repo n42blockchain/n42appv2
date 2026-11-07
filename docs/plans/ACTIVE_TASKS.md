@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batches 259–263 integrated: restore preview confirmation and account provenance through queued/service work. 101 backup/BLoC and 51 host tests pass; pin cc68fddd. Password input, localization, device interaction, write rollback, ownership and full-history acceptance remain open.
+
 > Batch 258 integrated: preview/restore retain incomplete-backup warnings. 82 backup, 15 BackupBloc and 51 host tests pass; pin 0c4028d9. Preview display/localization, full history, ownership and live acceptance remain open.
 
 > Batch 257 integrated: full backup read errors now produce result/manifest warnings. 82 backup, four final-source focused and 51 host tests pass; pin f22caa0a. Restore/preview warning propagation and full-history limits remain open.

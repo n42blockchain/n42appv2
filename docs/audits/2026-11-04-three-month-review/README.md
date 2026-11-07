@@ -1879,3 +1879,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Preview now carries filtered/deduplicated manifest warning strings. Restore imports them and supplies an incomplete-backup warning when hasReadErrors is true. Eighty-two backup tests and 15 BackupBloc tests pass; scoped service analysis has six infos, no errors/warnings.
 - Existing BackupBloc composes result warnings into successMessage; the restore page displays that message. This source path is verified, but device display, preview warning presentation and localization remain open.
 - Wallet pins 0c4028d9f2f87717d7951289dcd783074c34634c; 51 host tests pass (`/tmp/n42-wallet-b258-host.log`). Full-history loading, ownership, backend upgrade rehearsal and other maturity requirements remain open.
+
+### Restore confirmation and account provenance — batches 259–263 (2026-11-07)
+
+- File selection now reads preview and requires confirmation showing room names/date/warnings. Picker, preview and confirmation bind to the opening account lifecycle; the origin predicate travels through the queued event and service checks. The service checks after file/normalization reads, around settings writes and progress callbacks. BLoC suppresses stale result/exception content.
+- 101 combined backup/BLoC tests pass (`/tmp/n42-chat-b263.log`). Scoped analysis has seven infos, no errors/warnings. Tests cover stale confirmation origin and account mutations at three progress stages; they do not establish complete picker/dialog device interaction.
+- Chat cc68fddda7ce6c0266ac880bd009764a6ef4c88a. Remaining: encrypted-file password input, preview localization, device interaction, rollback of already-started writes, account ownership of backup contents, full-history limits and backend rehearsal.
