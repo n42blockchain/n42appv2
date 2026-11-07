@@ -8,6 +8,7 @@ import 'package:integration_test/integration_test.dart';
 
 import 'wallet_form_cases.dart';
 import 'wallet_import_fixture.dart';
+import 'wallet_send_fixture.dart';
 
 /// Device flows that require an isolated wallet fixture and a controllable RPC.
 ///
@@ -19,6 +20,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   registerWalletFormCases();
   registerWalletImportFixture();
+  registerWalletSendFixture();
 
   for (final testCase in _pendingWalletCases) {
     final displayName = '${testCase.name} [BLOCKED: ${testCase.blocker}]';
