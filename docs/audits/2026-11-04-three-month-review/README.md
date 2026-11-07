@@ -1927,3 +1927,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Preview now shares declared-owner validation and restoration warning extraction. Explicit mismatch is refused before the confirmation dialog; ownerless legacy previews expose ownership warnings through the existing warning display.
 - Generated account/server mismatch fixtures and an independent encrypted legacy fixture verify preview behavior. Ninety-two backup tests pass (`/tmp/n42-chat-b275.log`); service analysis has six infos, no errors/warnings.
 - Chat 0f4205a7ea5209f86f4b95eade37b1ce129b9f7b. Localized ownership explanations, complete real-file UI/device restoration, legacy consent policy, metadata authenticity, full history and account isolation remain open.
+
+### Integrate unknown export owner warnings — batch 276 (2026-11-07)
+
+- Full/incremental exports now warn explicitly when account userId/homeserver is unavailable. The file is retained, but current declared-owner validation refuses restore until its ownership problem is resolved.
+- Three generated invalid-owner cases assert the export warning; 92 backup tests pass (`/tmp/n42-chat-b276-final.log`). Service analysis has six infos, no errors/warnings. Chat 44f589be29d93e21f449f1a5172749764aed5552.
+- Unknown-owner export policy/resolution, localized warnings, complete real-file UI/device restoration, legacy consent, full history and account isolation remain open. A warning is not a completed recovery mechanism.

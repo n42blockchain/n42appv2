@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate unknown export owner warnings — batch 276 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b276-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Full/incremental exports now warn explicitly when account userId/homeserver is unavailable. The file is retained, but current declared-owner validation refuses restore until its ownership problem is resolved.
+- Three generated invalid-owner cases assert the export warning; 92 backup tests pass (`/tmp/n42-chat-b276-final.log`). Service analysis has six infos, no errors/warnings. Chat 44f589be29d93e21f449f1a5172749764aed5552.
+- Unknown-owner export policy/resolution, localized warnings, complete real-file UI/device restoration, legacy consent, full history and account isolation remain open. A warning is not a completed recovery mechanism.
+
+
 ### Integrate preview ownership preflight — batch 275 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b275-host.log`); manifest/lock/cache resolve the immutable Chat commit.

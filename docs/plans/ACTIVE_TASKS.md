@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 276 integrated: unknown account owner now produces an export warning rather than clean success. 92 backup and 51 host tests pass; pin 44f589be. Safe recovery of unknown-owner files, localization, full history/isolation and live acceptance remain open.
+
 > Batch 275 integrated: restore preview refuses declared-owner mismatch and displays legacy ownership warnings. 92 backup and 51 host tests pass; pin 0f4205a7. Real-file UI/device restoration, localization, full history/isolation and live acceptance remain open.
 
 > Batch 274 integrated: archive restore retains manifest and legacy ownership warnings. Independent encrypted fixture/SQLite and 92 backup tests pass; 51 host tests pass, pin 4b0c60bf. Legacy consent, localization, full history/isolation and live acceptance remain open.
