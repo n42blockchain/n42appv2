@@ -370,35 +370,30 @@ extension WalletActionProviderWallet on WalletActionProvider {
 
   ///添加钱包
   Future<void> addWalletInfo(WalletInfo info) async {
-    try {
-      final ownerUuid = walletDataOwnerUuid;
-      if (ownerUuid != userUUID) return;
-      info.walletUuid = ownerUuid;
-      // 克隆一份数据，不污染数据源（存储时不保存助记词）
-      final newWalletInfo = WalletInfo.fromJson(info.toJson());
-      _walletInfoLsit.add(info);
-      walletIndex = _walletInfoLsit.length - 1;
-      if (walletMiningIndex == -1) {
-        walletMiningIndex = walletIndex;
-      }
-      await saveWalletInfo(newWalletInfo, walletIndex, isNewWallet: true);
-      // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
-      if (info.hasMnemonic) {
-        final walletId = _secureWalletId(
-          info,
-          walletIndex,
-          walletDataOwnerUuid,
-        );
-        await SecureStorage().saveMnemonic(
-          walletId: walletId,
-          mnemonic: info.mnemonic!,
-        );
-      }
-      initWallet(shouldInitCoinInfo: true);
-      refresh();
-    } catch (e) {
-      ToastUtils.show(e.toString());
+    final ownerUuid = walletDataOwnerUuid;
+    if (ownerUuid != userUUID ||
+        (info.walletUuid?.isNotEmpty == true && info.walletUuid != ownerUuid)) {
+      throw StateError('Wallet owner changed before creation');
     }
+    info.walletUuid = ownerUuid;
+    // 克隆一份数据，不污染数据源（存储时不保存助记词）
+    final newWalletInfo = WalletInfo.fromJson(info.toJson());
+    _walletInfoLsit.add(info);
+    walletIndex = _walletInfoLsit.length - 1;
+    if (walletMiningIndex == -1) {
+      walletMiningIndex = walletIndex;
+    }
+    await saveWalletInfoOrThrow(newWalletInfo, walletIndex, isNewWallet: true);
+    // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
+    if (info.hasMnemonic) {
+      final walletId = _secureWalletId(info, walletIndex, walletDataOwnerUuid);
+      await SecureStorage().saveMnemonic(
+        walletId: walletId,
+        mnemonic: info.mnemonic!,
+      );
+    }
+    initWallet(shouldInitCoinInfo: true);
+    refresh();
   }
 
   /// 添加观察钱包（Watch-only）

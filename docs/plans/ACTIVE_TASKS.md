@@ -363,3 +363,5 @@
 Mnemonic import now discards stale submit and clipboard validation results when the input changes. Clipboard candidates are validated before being placed in the form, so a late rejection cannot clear manual input. The focused interaction suite passes 10 tests, including delayed success/rejection cases. This is widget-level evidence; disposable-wallet native end-to-end flows remain open.
 
 Native CI also has an allowlisted `mlkit` manual suite that enables model-download and concurrency cases. Android acceptance run: https://github.com/n42blockchain/n42appv2/actions/runs/42385227597 (started, no acceptance result recorded yet).
+
+Wallet creation failure follow-up: the finish page now uses an error state for rejected imports and failed saves. The provider creation path uses `saveWalletInfoOrThrow`, propagates storage failures, and rejects drafts owned by another account before mutation. The provider/account-isolation and completion-page suites pass 21 tests. This does not establish atomic rollback across wallet metadata and mnemonic storage; that boundary still requires fault-injection acceptance.

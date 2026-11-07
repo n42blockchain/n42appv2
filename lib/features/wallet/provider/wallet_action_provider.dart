@@ -10,7 +10,6 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/network/external_http.dart';

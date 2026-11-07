@@ -75,6 +75,37 @@ void main() {
     AppGlobals.userInfo = previousUser;
   });
 
+  test('wallet creation propagates storage failure to its caller', () async {
+    FlutterSecureStoragePlatform.instance = _WalletStoragePlatform(
+      {},
+      failingReadKey: 'walletInfo',
+    );
+    await expectLater(
+      store.addWalletInfo(
+        WalletInfo(
+          walletName: 'Synthetic failed wallet',
+          walletUuid: accountUuid,
+          coinInfo: <String, dynamic>{},
+        ),
+      ),
+      throwsStateError,
+    );
+  });
+
+  test('wallet creation rejects a draft from another account', () async {
+    final initialCount = store.walletInfoLsit.length;
+    await expectLater(
+      store.addWalletInfo(
+        WalletInfo(
+          walletName: 'Synthetic stale draft',
+          walletUuid: 'another-account',
+        ),
+      ),
+      throwsStateError,
+    );
+    expect(store.walletInfoLsit.length, initialCount);
+  });
+
   test(
     'new account creates its own wallet and preserves anonymous wallet',
     () async {
