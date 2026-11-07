@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 239: obsolete native message signatures no longer reach WalletConnect after captured session/request/account changes. 24 pre-fix failures, 988 directory tests and 269 final-source scoped tests pass. Empty native signature handling and non-EVM derived-key binding remain next, alongside broader release/lifecycle acceptance.
+
+
 > Batch 238: WalletConnect coin lists now use completed wallet-build provenance; stale account/list contexts reject signing and refresh only from a ready source. 1,226 provider/WalletConnect tests pass, seven new origin/recovery cases. Non-EVM derived-key review, native/device acceptance, archive lifecycle and release remain open.
 
 

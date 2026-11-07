@@ -511,4 +511,78 @@ void main() {
     expect(provider.walletConnectState, WalletConnectState.messageSignOK);
     expect(client.responses.single.$2.error?.code, 4100);
   });
+  for (final c in _chains.where(
+    (c) => c.methods.any((m) => m.endsWith('Message')),
+  )) {
+    final method = c.methods.firstWhere((m) => m.endsWith('Message'));
+    for (final mutation in [
+      'revoked',
+      'wallet',
+      'owner',
+      'request',
+      'disconnect',
+      'client',
+    ]) {
+      test(
+        '$method does not deliver a native signature after $mutation',
+        () async {
+          final signer = provider as _Signer;
+          final started = Completer<void>();
+          final pending = Completer<String>();
+          const channel = MethodChannel('trustdart');
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (call) {
+                started.complete();
+                return pending.future;
+              });
+          addTearDown(
+            () => TestDefaultBinaryMessengerBinding
+                .instance
+                .defaultBinaryMessenger
+                .setMockMethodCallHandler(channel, null),
+          );
+          provider.coinModels = [
+            sessionCoin(
+              type: c.type,
+              blockchain: c.blockchain,
+              address: c.address,
+            )..coin['path'] = {'legacy': "m/44'/0'/0'"},
+          ];
+          provider.coinModelsIndex = 0;
+          client.activeSessions['request-topic'] = _session(
+            c.ns,
+            c.chain,
+            c.address,
+            c.methods,
+          );
+          provider.actionData = sessionRequest(method, {
+            c.field: c.address,
+            'message': 'Zml4dHVyZQ==',
+          }, chain: c.chain);
+          final operation = provider.messageSignTap();
+          await started.future;
+          final replacement = WalletKitFake();
+          if (mutation == 'revoked') client.activeSessions.clear();
+          if (mutation == 'wallet') signer.walletIndex++;
+          if (mutation == 'owner') signer.owner = 'other';
+          if (mutation == 'request') {
+            provider.actionData = sessionRequest(
+              method,
+              {},
+              chain: c.chain,
+              id: 999,
+            );
+          }
+          if (mutation == 'disconnect') {
+            await provider.viewStateDeal(WalletConnectState.disconnect);
+          }
+          if (mutation == 'client') provider.signClient = replacement;
+          pending.complete('fixture-signature');
+          await operation;
+          expect(client.responses, isEmpty);
+          expect(replacement.responses, isEmpty);
+        },
+      );
+    }
+  }
 }

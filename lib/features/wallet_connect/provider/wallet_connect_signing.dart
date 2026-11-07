@@ -34,6 +34,7 @@ mixin WalletConnectSigning
 
   Future<void> messageSignTap() async {
     final requestSnapshot = actionData;
+    void Function()? requireMessageCurrent;
     try {
       if (walletConnectState == WalletConnectState.messageSign) return;
       final eventData = requestSnapshot as wallet_connect.SessionRequestEvent;
@@ -81,6 +82,7 @@ mixin WalletConnectSigning
           return;
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
+        requireMessageCurrent = requireCurrent;
         final credentials = await getCurrentWalletCredentials();
         requireCurrent();
         final path = getPathWithIndex(
@@ -108,6 +110,7 @@ mixin WalletConnectSigning
           return;
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
+        requireMessageCurrent = requireCurrent;
         final credentials = await getCurrentWalletCredentials();
         requireCurrent();
         final path = getPathWithIndex(
@@ -121,6 +124,7 @@ mixin WalletConnectSigning
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
+        requireCurrent();
         await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
@@ -128,7 +132,7 @@ mixin WalletConnectSigning
             result: {"signature": sig},
           ),
         );
-        _completeSigningRequest(eventData);
+        _completeSigningRequest(eventData, requireCurrent: requireCurrent);
         return;
       } else if (eventData.method == "sui_signMessage") {
         final requestParams = eventData.params! as Map;
@@ -142,6 +146,7 @@ mixin WalletConnectSigning
           return;
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
+        requireMessageCurrent = requireCurrent;
         final credentials = await getCurrentWalletCredentials();
         requireCurrent();
         final path = getPathWithIndex(
@@ -155,6 +160,7 @@ mixin WalletConnectSigning
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
+        requireCurrent();
         await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
@@ -162,7 +168,7 @@ mixin WalletConnectSigning
             result: {"signature": sig},
           ),
         );
-        _completeSigningRequest(eventData);
+        _completeSigningRequest(eventData, requireCurrent: requireCurrent);
         return;
       } else if (eventData.method == "solana_signMessage") {
         final requestParams = eventData.params! as Map;
@@ -178,6 +184,7 @@ mixin WalletConnectSigning
           return;
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
+        requireMessageCurrent = requireCurrent;
         final credentials = await getCurrentWalletCredentials();
         requireCurrent();
         final path = getPathWithIndex(
@@ -192,6 +199,7 @@ mixin WalletConnectSigning
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
+        requireCurrent();
         await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
@@ -199,7 +207,7 @@ mixin WalletConnectSigning
             result: {"signature": sig},
           ),
         );
-        _completeSigningRequest(eventData);
+        _completeSigningRequest(eventData, requireCurrent: requireCurrent);
         return;
       } else if (eventData.method == "eth_sign") {
         // eth_sign signs arbitrary data and can be exploited to phish
@@ -236,6 +244,7 @@ mixin WalletConnectSigning
         }
       }
 
+      requireMessageCurrent?.call();
       await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
@@ -243,8 +252,12 @@ mixin WalletConnectSigning
           result: signedDataHex,
         ),
       );
-      _completeSigningRequest(eventData);
+      _completeSigningRequest(eventData, requireCurrent: requireMessageCurrent);
     } catch (e) {
+      if (requireMessageCurrent != null &&
+          !_signingContextIsCurrent(requireMessageCurrent)) {
+        return;
+      }
       if (!identical(actionData, requestSnapshot) ||
           walletConnectState == WalletConnectState.disconnect) {
         return;

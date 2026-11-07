@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Suppress obsolete native message signatures — batch 239
+
+- Inspection of non-EVM signer paths found the pre-native session guard was not reused after awaiting the native signature. **24 delayed-native tests fail before repair** (`/tmp/n42-wallet-b239-before.log`): TRON/Aptos/Sui/Solana messages could deliver signatures after revocation, wallet/account/request changes, disconnect or replacement of the WalletKit client.
+- Preserve the captured guard through native completion, check it before sending a response, and use it before resetting the signing UI after response delivery. Obsolete errors do not alter the new context. Already-started native signing/response operations cannot be rolled back by this guard.
+- **988 WalletConnect directory tests pass** (`/tmp/n42-wallet-b239-final.log`). After simplifying redundant nullable checks and removing a no-op EVM edit, **269 final-source non-EVM permission/lifecycle tests pass** (`/tmp/n42-wallet-b239-final-scoped.log`). Initial analyzer warnings in the new checks were corrected; final analysis recorded separately. No actual native signature, relay traffic or live account acceptance claimed.
+- Derived-key/address binding still needs non-EVM review. Inspection also confirms Trustdart.signMessage returns an empty string on native errors and the message handler can still return that as a successful result; add explicit failure handling next. Cross-platform message encoding semantics remain outside this completion claim. Old-worktree signer reconciliation, native login, archive lifecycle and release remain open.
+
+
 ### Bind WalletConnect coin lists to completed wallet builds — batch 238
 
 - Added an upstream signing-model capture that records the build's data owner, selected index, wallet object and model set. A new/failed/in-progress build cannot supply a signing snapshot; account or wallet changes invalidate it. Build completion and post-notification work check the captured owner. Existing init rollback restores the prior origin alongside its models, which remains unusable for a different wallet.
