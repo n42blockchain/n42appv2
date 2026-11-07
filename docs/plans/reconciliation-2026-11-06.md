@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Revalidate history before publishing an initialized thread — batch 193
+
+- Reproduced old replies returning when local history is cleared during awaited root lookup, and initial history bypassing a failed final visibility read. Subscribe to clear notifications before loading; revalidate root/replies together after root lookup and repeat when a notification invalidates an in-flight visibility result. Retain messages newer than the cutoff.
+- Three new regression cases and related thread suites: **45 pass**, exit 0 (`/tmp/n42-chat-b193-final.log`). Scoped analysis: zero errors/warnings, nine infos (`/tmp/n42-chat-b193-analysis.log`). The initial fixture compilation argument and a mistyped suite path were corrected; the account-switch test now excludes the legitimate initialization filter call when asserting no post-switch work. Behavior failures before repair are recorded in `/tmp/n42-chat-b193-before.log`.
+- Chat `cafd5210b43826a181fc476b6eb5def1482f6825` is pushed on `fix/thread-init-history-20261106` from an isolated clean worktree. Wallet dependency resolution changes only Chat; all three host fixture tests pass (`/tmp/n42-wallet-b193-host.log`). The original Chat worktree remains at `90271407` while its batch 192 full regression runs; fast-forward that branch only after the run ends and coverage is archived/restored. Do not attribute the older full run to this fix.
+- Independently completed wallet baseline checks at `f5a940ccb`: 43 bridge/host tests, 49 Python tests and localization audit pass (`/tmp/n42-wallet-b192-bridge.log`, `-python.log`, `-localization.log`). These do not replace native/device acceptance. Remaining Chat search/preview invalidation, redaction synchronization, refresh recovery and cursor retention bounds, plus native login, wallet recovery, dependency, payment and release work remain open.
+
+
 ## Interruption check — 2026-11-06, after batch 191
 
 - Fresh fetch: wallet `66fc50b8a` and Chat `90271407` are both 0 ahead / 0 behind their upstreams. Wallet tracked files are clean; the three existing untracked plans and `packages/n42_chat/` remain preserved. Chat has only its existing coverage-file modification. No uncommitted production patch was found in these two active worktrees.
