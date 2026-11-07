@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "runtimeBaseline": "SDK 15, separate from Matrix 16 candidate",
+  "jobs": [
+    {
+      "platform": "android",
+      "runId": 42378760982,
+      "jobId": 128421733988,
+      "sourceCommit": "8a2d9dee6",
+      "passed": 30,
+      "skipped": 15,
+      "failed": 2,
+      "wholeJobPassed": false,
+      "installInsufficientStorageOccurrences": 0,
+      "privateLogSha256": "448d8c1049ea9081e3ccea35e22f65b79b58b2d0d2e2e9e532236e6912abbe6d",
+      "walletFlowPlaceholders": [
+        "TX-04 rejects invalid recipient addresses",
+        "TX-05 rejects invalid and over-balance amounts",
+        "TX-06 sends a disposable testnet transaction",
+        "TX-10 displays a deterministic gas estimate",
+        "TX-13 displays transaction history",
+        "WLT-01 creates and backs up a disposable wallet",
+        "WLT-01 validates wallet password requirements",
+        "WLT-02 imports a disposable mnemonic wallet",
+        "WLT-02 rejects invalid mnemonic formats",
+        "WLT-02 validates wallet name input",
+        "WLT-03 imports a disposable private-key wallet",
+        "WLT-14 displays progressively loaded wallet balances",
+        "WLT-14 refreshes balances without stale account data"
+      ],
+      "otherSkips": "two opt-in MLKit model download/concurrency cases",
+      "failureScope": "two missing-chat-credential cases"
+    },
+    {
+      "platform": "ios",
+      "runId": 42374095584,
+      "jobId": 128408032706,
+      "sourceCommit": "e59fb4503",
+      "passed": 28,
+      "skipped": 15,
+      "failed": 4,
+      "wholeJobPassed": false,
+      "installInsufficientStorageOccurrences": 0,
+      "privateLogSha256": "61b6557f74460c3cb4236f9e98358b0ca66e9fcef87df7bf824ae1d5f0a39f61",
+      "walletFlowPlaceholders": [
+        "TX-04 rejects invalid recipient addresses",
+        "TX-05 rejects invalid and over-balance amounts",
+        "TX-06 sends a disposable testnet transaction",
+        "TX-10 displays a deterministic gas estimate",
+        "TX-13 displays transaction history",
+        "WLT-01 creates and backs up a disposable wallet",
+        "WLT-01 validates wallet password requirements",
+        "WLT-02 imports a disposable mnemonic wallet",
+        "WLT-02 rejects invalid mnemonic formats",
+        "WLT-02 validates wallet name input",
+        "WLT-03 imports a disposable private-key wallet",
+        "WLT-14 displays progressively loaded wallet balances",
+        "WLT-14 refreshes balances without stale account data"
+      ],
+      "otherSkips": "two opt-in MLKit model download/concurrency cases",
+      "failureScope": "two missing-chat-credential cases and two scanner-start timeout cases"
+    }
+  ],
+  "androidStorage": {
+    "configured": "16G",
+    "initialAvailableKiB": 16001736,
+    "apkBytes": 774001691,
+    "requiredInstallReserveKiB": 2036011,
+    "installFailureResolvedInThisRun": true
+  },
+  "remaining": [
+    "13 device-wallet flow placeholders need implementation; they are not accepted passes",
+    "two real chat/account fixtures not configured",
+    "iOS scanner running-state failures still need state diagnosis or device acceptance",
+    "two MLKit network/model opt-ins not exercised in this suite"
+  ],
+  "boundaries": [
+    "these native suites failed overall",
+    "physical-device QA deferred by user",
+    "not Matrix 16 native runtime acceptance"
+  ]
+}
