@@ -1,0 +1,11 @@
+{
+  "runtime_source_commit": "c574b5402f1281f14168332b93adfafd7c755fa9",
+  "test_source_sha256": "5157c4b30eead6334ee64fe98126b05664463db7ac0ccbfe45791f8a4e4925fe",
+  "device": "Dedicated disposable Android API 36 arm64 emulator, emulator-5586",
+  "passed": 3,
+  "skipped": 10,
+  "failed": 0,
+  "exit_code": 0,
+  "log_sha256": "4c7d8c880cabe5fd53d9c3ac3b2f83d8b168e79215a28ab24594b5934e7f156b",
+  "scope": "Actual compiled Android app, real ImportOne/CreatePassword pages and real native mnemonic validation; synthetic fixtures and controlled framework test keyboard. Native IME keystrokes, persistence/signing and remaining ten skipped flows are not accepted."
+}

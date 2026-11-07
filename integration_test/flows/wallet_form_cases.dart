@@ -13,7 +13,20 @@ import '../../test/helpers/widget_test_helpers.dart';
 // Real form, disposable in-memory provider, invalid inputs only. No persistence,
 // key generation, network calls or signing is reached by these cases.
 void registerWalletFormCases() {
+  void useControlledKeyboard() {
+    // enterText injects framework editing values, not Android IME keystrokes.
+    // Keep both sides on the test input channel so the real IME cannot commit
+    // its previous value when focus moves. This suite tests form validation;
+    // real keyboard/IME behavior remains a separate device acceptance item.
+    final input = TestWidgetsFlutterBinding.instance.testTextInput;
+    if (!input.isRegistered) {
+      input.register();
+      addTearDown(input.unregister);
+    }
+  }
+
   Future<void> open(WidgetTester tester) async {
+    useControlledKeyboard();
     final store = WalletActionProvider();
     await tester.pumpWidget(
       wrapForTest(
@@ -27,13 +40,21 @@ void registerWalletFormCases() {
   Future<void> enter(WidgetTester tester, int field, String value) async {
     final target = find.byType(TextField).at(field);
     await tester.ensureVisible(target);
+    // A real Android IME can attach after showKeyboard returns. Settle focus
+    // before injecting the fixture, then deliver it before dismissing the IME.
+    await tester.showKeyboard(target);
+    await tester.pumpAndSettle();
     await tester.enterText(target, value);
+    await tester.pumpAndSettle();
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.pumpAndSettle();
     expect(
       tester.widget<TextField>(target).controller!.text == value,
       isTrue,
-      reason: 'Synthetic field $field did not retain the entered fixture.',
+      reason:
+          'Synthetic field $field did not retain the entered fixture '
+          '(length ${tester.widget<TextField>(target).controller!.text.length}, '
+          'expected ${value.length}).',
     );
   }
 
@@ -57,6 +78,7 @@ void registerWalletFormCases() {
   }
 
   testWidgets('WLT-02 rejects invalid mnemonic formats', (tester) async {
+    useControlledKeyboard();
     await tester.runAsync(
       () => Clipboard.setData(const ClipboardData(text: '')),
     );
