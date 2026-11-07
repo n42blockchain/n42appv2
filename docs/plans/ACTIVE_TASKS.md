@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 237: exact WalletConnect chain selection replaces namespace-only routing. Eight pre-fix failures reproduced; 960 directory tests pass, scoped analysis clean. Wallet-switch coin-list ownership requires upstream rebuild-origin tracking; old-worktree signer reconciliation and release remain open.
+
+
 > Batch 236: recovered omitted WalletConnect EVM key/address binding and selected derivation-path capture. Three pre-fix failures reproduced; 948 WalletConnect tests pass. Old-worktree non-EVM/coin-list and ordinary-sender comparisons remain open; no release or live acceptance.
 
 

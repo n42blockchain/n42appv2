@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Strict WalletConnect chain selection — batch 237
+
+- Follow-up on old-worktree reconciliation found web3clientInitFromChainId accepted any non-EVM reference sharing a namespace, treated unknown namespaces as EVM, ignored extra chain segments and threw for missing references. **Eight pre-fix failures** reproduced (`/tmp/n42-wallet-b237-before.log`).
+- Reuse exact coinModelFind chain matching before selecting any model/key. Unsupported chains leave selection/client untouched and return failure; supported non-EVM chains still avoid EVM key loading. Added four positive alternate-network cases to retain Solana devnet, Aptos/Sui/NEAR testnet behavior.
+- **960 WalletConnect directory tests pass** (`/tmp/n42-wallet-b237-final.log`, exit 0); scoped analysis clean (`/tmp/n42-wallet-b237-analysis.log`); diff check passes. No native/live network transaction or release validation inferred.
+- Wallet-switch coin-list ownership remains open. Inspection confirms the legacy adapter updates walletIndex separately from async coin rebuilding, so merely stamping the current index on cached coins is insufficient. Need authoritative list-origin tracking/rebuild verification before adopting the old branch's index-only refresh. Non-EVM derived-signer binding and ordinary sender patch reconciliation also remain open; preserve the old worktree. No deployment/upload or physical-device action.
+
+
 ### Reconcile omitted WalletConnect key binding — batch 236
 
 - Comparison with old worktree commit c88c1f433 found missing EVM initialization behavior. Current lifecycle generations existed, but loaded keys were not checked against the configured wallet address; mnemonic derivation still forced legacy paths, and cached/in-flight contexts omitted address type, derivation path and coin type.

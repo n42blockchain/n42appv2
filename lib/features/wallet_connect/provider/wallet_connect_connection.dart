@@ -335,101 +335,29 @@ mixin WalletConnectConnection on ChangeNotifier {
   }
 
   Future<bool> web3clientInitFromChainId(String chainStr) async {
-    final namespace = chainStr.split(':')[0];
-
-    // Solana: no web3client needed, just locate the coin model
-    if (namespace == 'solana') {
-      final idx = coinModels.indexWhere(
-        (cm) => cm.config.blockchainType == BlockchainType.Solana.name,
+    final namespace = chainStr.split(':').first;
+    // Use the same exact chain IDs as session/proposal resolution. A namespace
+    // prefix alone must not turn an unknown network into a configured signer.
+    final model = coinModelFind(chainStr);
+    if (model == null) {
+      final label = switch (namespace) {
+        'solana' => 'Solana',
+        'tron' => 'Tron',
+        'aptos' => 'Aptos',
+        'sui' => 'Sui',
+        'near' => 'NEAR',
+        _ => null,
+      };
+      viewStateDeal(
+        WalletConnectState.error,
+        params: label == null ? 'Error' : '$label chain not configured',
       );
-      if (idx == -1) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'Solana chain not configured',
-        );
-        return false;
-      }
-      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
-      return true;
-    }
-
-    // Tron: no web3client needed, just locate the coin model
-    if (namespace == 'tron') {
-      final idx = coinModels.indexWhere(
-        (cm) => cm.config.blockchainType == BlockchainType.Tron.name,
-      );
-      if (idx == -1) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'Tron chain not configured',
-        );
-        return false;
-      }
-      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
-      return true;
-    }
-
-    // Aptos: no web3client needed
-    if (namespace == 'aptos') {
-      final idx = coinModels.indexWhere(
-        (cm) => cm.config.blockchainType == BlockchainType.Aptos.name,
-      );
-      if (idx == -1) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'Aptos chain not configured',
-        );
-        return false;
-      }
-      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
-      return true;
-    }
-
-    // Sui: no web3client needed
-    if (namespace == 'sui') {
-      final idx = coinModels.indexWhere(
-        (cm) => cm.config.blockchainType == BlockchainType.Sui.name,
-      );
-      if (idx == -1) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'Sui chain not configured',
-        );
-        return false;
-      }
-      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
-      return true;
-    }
-
-    // NEAR: no web3client needed
-    if (namespace == 'near') {
-      final idx = coinModels.indexWhere(
-        (cm) => cm.config.blockchainType == BlockchainType.Near.name,
-      );
-      if (idx == -1) {
-        viewStateDeal(
-          WalletConnectState.error,
-          params: 'NEAR chain not configured',
-        );
-        return false;
-      }
-      if (coinModelsIndex != idx) setCoinModelsIndex(idx);
-      return true;
-    }
-
-    // EIP-155 (Ethereum): use web3client
-    final chainId = chainStr.split(':')[1];
-    final chainIndex = coinModels.indexWhere((cm) {
-      if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
-        return false;
-      }
-      final id = (cm.isTest ? cm.config.chainIdTest : cm.config.chainId)
-          .toString();
-      return id == chainId;
-    });
-    if (chainIndex == -1) {
-      viewStateDeal(WalletConnectState.error, params: 'Error');
       return false;
+    }
+    final chainIndex = coinModels.indexOf(model);
+    if (namespace != 'eip155') {
+      if (coinModelsIndex != chainIndex) setCoinModelsIndex(chainIndex);
+      return true;
     }
     final needsReinit =
         coinModelsIndex != chainIndex ||

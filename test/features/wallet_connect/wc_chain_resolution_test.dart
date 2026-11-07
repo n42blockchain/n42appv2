@@ -156,4 +156,49 @@ void main() {
       expect(provider.web3client, isNull);
     },
   );
+  for (final chain in [
+    'solana:unknown',
+    'tron:unknown',
+    'aptos:99',
+    'sui:devnet',
+    'near:unknown',
+    'unknown:1',
+    'eip155',
+    'eip155:1:extra',
+  ]) {
+    test('unsupported chain $chain cannot select a signer', () async {
+      provider.coinModels = [
+        sessionCoin(address: '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf'),
+        sessionCoin(type: 'SOL', blockchain: 'Solana'),
+        sessionCoin(type: 'TRX', blockchain: 'Tron'),
+        sessionCoin(type: 'APT', blockchain: 'Aptos'),
+        sessionCoin(type: 'SUI', blockchain: 'Sui'),
+        sessionCoin(type: 'NEAR', blockchain: 'Near'),
+      ];
+      provider.coinModelsIndex = 0;
+      expect(await provider.web3clientInitFromChainId(chain), isFalse);
+      expect(provider.coinModelsIndex, 0);
+      expect(provider.keyInitializations, 0);
+      expect(provider.web3client, isNull);
+    });
+  }
+
+  for (final (chain, type, blockchain) in [
+    ('solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K', 'SOL', 'Solana'),
+    ('aptos:2', 'APT', 'Aptos'),
+    ('sui:testnet', 'SUI', 'Sui'),
+    ('near:testnet', 'NEAR', 'Near'),
+  ]) {
+    test(
+      'supported alternate network $chain retains native signing selection',
+      () async {
+        final coin = sessionCoin(type: type, blockchain: blockchain);
+        provider.coinModels = [sessionCoin(), coin];
+        provider.coinModelsIndex = 0;
+        expect(await provider.web3clientInitFromChainId(chain), isTrue);
+        expect(provider.coinModelsIndex, 1);
+        expect(provider.keyInitializations, 0);
+      },
+    );
+  }
 }
