@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-07",
+  "baseSource": "14678c158116403882533b9466421e0d95193ec7",
+  "fixtureSha256": "63899d634e91068325e0bfbd4ee056711ad74ff4005d3b3f8be089739e7d9de0",
+  "final": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "scenario": [
+    "Actual mnemonic import and WalletPage initialization",
+    "Read-only second watch-only wallet persisted under the same disposable owner",
+    "Pull-to-refresh gesture holds old wallet RPC response",
+    "Open actual wallet selector and tap QA Other",
+    "New selected wallet obtains 2 ETH; release old response containing 9 ETH",
+    "After old response is processed, selected address, runtime balance, wallet map and rendered WalletBoard accountPrice remain 2 ETH/value 2"
+  ],
+  "runs": [
+    {
+      "result": "passed",
+      "scope": "Selection, runtime and persistence assertions"
+    },
+    {
+      "result": "passed",
+      "scope": "Adds rendered WalletBoard amount assertion"
+    }
+  ],
+  "logSha256": {
+    "n42-native-switch-local.log": "a1f71a68525ac3630a0701f994c34b03d62b55f892de59df6cd303debeec237a",
+    "n42-native-switch-local2.log": "6411c967e24cc0cf3bed9eaef4d1d39791fa821298aa331ea8149d5f8f5c8643"
+  },
+  "boundaries": [
+    "Same authenticated owner, two wallets; cross-login owner replacement remains pending",
+    "Global wallet notifier not initialized; direct native storage and actual home provider exercised",
+    "Single ETH chain, simulated read-only RPC; no signing or broadcast",
+    "Physical device deferred"
+  ]
+}

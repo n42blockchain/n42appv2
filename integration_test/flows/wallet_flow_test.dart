@@ -33,7 +33,7 @@ void main() {
 const _pendingWalletCases = <_PendingDeviceCase>[
   _PendingDeviceCase(
     'WLT-14 refreshes balances without stale account data',
-    'Requires a deterministic fake RPC connected to the device build.',
+    'Native wallet selection and delayed-response isolation pass; cross-login account replacement remains unverified.',
   ),
   _PendingDeviceCase(
     'TX-13 displays transaction history',

@@ -21,6 +21,7 @@ import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart'
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
@@ -112,10 +113,18 @@ void registerWalletImportFixture() {
         }
         final initialBalanceRelease = Completer<void>();
         final initialBalanceRequested = Completer<void>();
+        final staleBalanceRequested = Completer<void>();
+        final staleBalanceRelease = Completer<void>();
+        final staleBalanceReturned = Completer<void>();
+        var holdOldRefresh = false;
+        const secondAddress = '0x2222222222222222222222222222222222222222';
         addTearDown(() {
           if (!initialBalanceRelease.isCompleted) {
             initialBalanceRelease.complete();
           }
+        });
+        addTearDown(() {
+          if (!staleBalanceRelease.isCompleted) staleBalanceRelease.complete();
         });
         if (mode == 'mnemonic') {
           final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
@@ -131,18 +140,44 @@ void registerWalletImportFixture() {
               }
               await initialBalanceRelease.future;
             }
+            final params = body['params'];
+            final address = params is List && params.isNotEmpty
+                ? params.first
+                : null;
+            final stale =
+                method == 'eth_getBalance' &&
+                holdOldRefresh &&
+                address != secondAddress;
+            if (stale) {
+              if (!staleBalanceRequested.isCompleted) {
+                staleBalanceRequested.complete();
+              }
+              await staleBalanceRelease.future;
+            }
+            final units =
+                BigInt.from(
+                  address == secondAddress
+                      ? 2
+                      : stale
+                      ? 9
+                      : 1,
+                ) *
+                BigInt.from(10).pow(18);
             request.response.headers.contentType = ContentType.json;
             request.response.write(
               jsonEncode({
                 'jsonrpc': '2.0',
                 'id': body['id'],
                 if (method == 'eth_getBalance')
-                  'result': '0xde0b6b3a7640000'
+                  'result': '0x${units.toRadixString(16)}'
                 else
                   'error': {'code': -32601, 'message': 'Read-only fixture'},
               }),
             );
             await request.response.close();
+            if (stale && !staleBalanceReturned.isCompleted) {
+              staleBalanceReturned.complete();
+            }
           });
           final originalChains = chainUrlMap;
           final eth = jsonDecode(
@@ -351,6 +386,84 @@ void registerWalletImportFixture() {
           expect(eth.balance == BigInt.parse('1000000000000000000'), isTrue);
           expect(find.byType(WalletBoard), findsOneWidget);
           expect(find.text('Native QA'), findsWidgets);
+          final second =
+              WalletInfo(
+                  walletName: 'QA Other',
+                  walletUuid: owner,
+                  password: '0',
+                  mnemonic: '',
+                  timestamp: '${DateTime.now().microsecondsSinceEpoch}',
+                  coinInfo: jsonDecode(
+                    jsonEncode(chainUrlMap),
+                  ) as Map<String, dynamic>,
+                )
+                ..watchOnly = true
+                ..watchAddress = secondAddress;
+          await restarted.saveWalletInfoOrThrow(second, 1, isNewWallet: true);
+          restarted.walletInfoLsit.add(second);
+          await restarted.saveWalletInfoOrThrow(
+            restarted.walletInfoLsit.first,
+            0,
+          );
+          restarted.refresh();
+          await tester.pump();
+          holdOldRefresh = true;
+          await tester.drag(
+            find.byType(CustomScrollView),
+            const Offset(0, 400),
+          );
+          for (
+            var attempt = 0;
+            attempt < 300 && !staleBalanceRequested.isCompleted;
+            attempt++
+          ) {
+            await tester.pump(const Duration(milliseconds: 100));
+          }
+          expect(staleBalanceRequested.isCompleted, isTrue);
+          await tester.tap(find.text('Native QA').first);
+          await _wait(tester, find.text('QA Other'));
+          await tester.tap(find.text('QA Other').last);
+          for (var attempt = 0; attempt < 600; attempt++) {
+            await tester.pump(const Duration(milliseconds: 100));
+            if (restarted.walletIndex == 1 &&
+                restarted.coinList.any(
+                  (coin) =>
+                      coin.balance == BigInt.from(2) * BigInt.from(10).pow(18),
+                )) {
+              break;
+            }
+          }
+          expect(restarted.walletIndex, 1);
+          expect(restarted.walletName, 'QA Other');
+          staleBalanceRelease.complete();
+          for (
+            var attempt = 0;
+            attempt < 300 && !staleBalanceReturned.isCompleted;
+            attempt++
+          ) {
+            await tester.pump(const Duration(milliseconds: 100));
+          }
+          expect(staleBalanceReturned.isCompleted, isTrue);
+          for (var attempt = 0; attempt < 20; attempt++) {
+            await tester.pump(const Duration(milliseconds: 100));
+          }
+          final selected = restarted.coinList.singleWhere(
+            (coin) => coin.config.coinType == 'ETH',
+          );
+          expect(selected.address, secondAddress);
+          expect(
+            selected.balance == BigInt.from(2) * BigInt.from(10).pow(18),
+            isTrue,
+          );
+          expect(
+            restarted.walletMap['ETH']['baseInfo']['balance'],
+            '2000000000000000000',
+          );
+          expect(find.text('QA Other'), findsWidgets);
+          expect(
+            tester.widget<WalletBoard>(find.byType(WalletBoard)).accountPrice,
+            2,
+          );
           await tester.pumpWidget(const SizedBox.shrink());
           await tester.pumpAndSettle();
         }
