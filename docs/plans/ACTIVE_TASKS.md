@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 213: NEAR iOS/Android native parameter validation added before casts/key access; Swift/Kotlin each pass 96 boundary cases. Actual Swift signing and invalid-input rejection pass. Android JNI and full app/live acceptance remain open; 73325 predates these changes.
+
 > Batch 212: NEAR ordinary sender identity, access-key failure handling and native wire encoding repaired; 44 related tests and real Swift/WalletCore component signing pass. Fee/reserve, Android JNI, unknown outcomes and live acceptance remain open. The already built 73325 IPA does not include this later runtime fix.
 
 > Batch 211 supersedes the pending full-run/release notes below: wallet `4b1f38aec` passed 7,335 tests, zero failures/skips, coverage 73.6573%; Chat `8c5202ab` passed 8,230 tests with four external skips, coverage 71.3931%. Release `cbbe308d6` / 2.5.3+73325 is signed and passes packaged-provider checks. Release fixes are merged and pushed to master. Upload remains pending N42-authorized Transporter access; no TestFlight processing/tester claim. See [release evidence](../releases/testflight-20261106-73325.md).

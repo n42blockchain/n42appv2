@@ -18,6 +18,13 @@ struct NearComponentHarness {
             "blockHash": String(repeating: "02", count: 32),
             "amount": "010000a1edccce1bc2d3000000000000"
         ]
+        precondition(plugin.signNearTransaction(wallet: nil, path: path, txData: input, pk: nil) == nil)
+        for field in ["signerId", "receiverId", "nonce", "blockHash", "amount"] {
+            var missing = input; missing.removeValue(forKey: field)
+            precondition(plugin.signNearTransaction(wallet: wallet, path: path, txData: missing, pk: nil) == nil)
+            var wrong = input; wrong[field] = 123
+            precondition(plugin.signNearTransaction(wallet: wallet, path: path, txData: wrong, pk: nil) == nil)
+        }
         let signed = plugin.signNearTransaction(wallet: wallet, path: path, txData: input, pk: nil)!
         precondition(plugin.signNearTransaction(wallet: nil, path: path, txData: input, pk: key) == signed)
         let bytes = Array(Data(base64Encoded: signed)!)

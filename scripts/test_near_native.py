@@ -16,7 +16,7 @@ def main():
     args = parser.parse_args()
     source = (ROOT / 'ios/Runner/WalletCorePlugin+Signing.swift').read_text()
     methods = '\n'.join(declaration(source, 'func ' + name + '(').replace('private func', 'func', 1)
-        for name in ['hexStrToData', 'resolveSigningPrivateKey', 'signNearTransaction'])
+        for name in ['validNearSigningInput', 'hexStrToData', 'resolveSigningPrivateKey', 'signNearTransaction'])
     with tempfile.TemporaryDirectory(prefix='n42-near-native-') as temp:
         temp = Path(temp)
         bridge = temp / 'Bridge.swift'

@@ -1612,3 +1612,7 @@ Chat batch 195 (`930690d1`) ended exit 1: 8,222 passed, eight failures, four ext
 ## Batch 212 — NEAR sender and native contract
 
 Two pre-fix regressions reproduced missing native signer fields and signing after failed access-key lookup. Captured credentials/owner checks, native field/encoding compatibility, exact u128 amount and full-access authorization are repaired. 44 related Dart tests and actual Swift/WalletCore component signing with independent CryptoKit verification pass. See reconciliation batch 212 for source references, failed fixture correction, logs and the remaining fee/reserve, Android, uint64, RPC and uncertain-outcome boundaries. Release 73325 does not contain this fix.
+
+## Batch 213 — NEAR native input boundary
+
+Swift/Kotlin now reject missing or malformed account, nonce, hash and amount before casts/key access; missing wallet and Wallet Core failure return nil/null. Each host validator passes 96 shared vectors. The actual Swift signer preserves valid Borsh output and independent CryptoKit verification, and rejects missing/wrong fields without crashing. Android compileDebugKotlin passes offline with JDK 21 (649 tasks, 1m14s). Logs are `/tmp/n42-wallet-b213-{input-final,native-final,android}.log`. Android JNI, full App/live flows and broader fee/reserve/recovery remain open; signed release 73325 predates this work.

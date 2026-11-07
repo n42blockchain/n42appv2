@@ -1423,7 +1423,26 @@ extension WalletCorePlugin {
         return "0x" + output.encoded.hexString
     }
 
+    private func validNearSigningInput(_ txData: [String: Any]) -> Bool {
+        func account(_ value: Any?) -> Bool {
+            guard let text = value as? String, (2...64).contains(text.utf8.count) else { return false }
+            return text.range(of: "^[a-z0-9]+([._-][a-z0-9]+)*$", options: .regularExpression) != nil
+                && text.utf8.allSatisfy { (97...122).contains($0) || (48...57).contains($0) || [45, 46, 95].contains($0) }
+        }
+        func hex(_ value: Any?, bytes: Int) -> Bool {
+            guard let text = value as? String, text.utf8.count == bytes * 2 else { return false }
+            return text.utf8.allSatisfy { (48...57).contains($0) || (65...70).contains($0) || (97...102).contains($0) }
+        }
+        guard account(txData["signerId"]), account(txData["receiverId"]),
+              hex(txData["blockHash"], bytes: 32), hex(txData["amount"], bytes: 16),
+              let text = txData["nonce"] as? String,
+              text.utf8.allSatisfy({ (48...57).contains($0) }),
+              let nonce = Int64(text), nonce > 0, String(nonce) == text else { return false }
+        return true
+    }
+
     func signNearTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        guard validNearSigningInput(txData) else { return nil }
         guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.near, path: path, privateKey: pk) else {
             return nil
         }
@@ -1448,6 +1467,7 @@ extension WalletCorePlugin {
             $0.privateKey = privateKey.data
         }
         let output: NEARSigningOutput = AnySigner.sign(input: input, coin: CoinType.near)
+        guard output.error == .ok, !output.signedTransaction.isEmpty else { return nil }
         return output.signedTransaction.base64EncodedString()
     }
 

@@ -1422,8 +1422,25 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         return Numeric.toHexString(output.encoded.toByteArray())
     }
 
+    private fun validNearSigningInput(txData: Map<String, Any>): Boolean {
+        fun account(value: Any?): Boolean {
+            val text = value as? String ?: return false
+            return text.length in 2..64 && Regex("[a-z0-9]+([._-][a-z0-9]+)*").matches(text)
+        }
+        fun hex(value: Any?, bytes: Int): Boolean {
+            val text = value as? String ?: return false
+            return text.length == bytes * 2 && text.all { it in '0'..'9' || it in 'a'..'f' || it in 'A'..'F' }
+        }
+        val nonce = txData["nonce"] as? String ?: return false
+        val number = nonce.toLongOrNull() ?: return false
+        return account(txData["signerId"]) && account(txData["receiverId"]) &&
+            hex(txData["blockHash"], 32) && hex(txData["amount"], 16) &&
+            nonce.all { it in '0'..'9' } && number > 0 && number.toString() == nonce
+    }
+
     private fun signNearTransaction(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
-        val privateKey = pk ?: wallet!!.getKey(CoinType.NEAR, path)
+        if (!validNearSigningInput(txData)) return null
+        val privateKey = pk ?: wallet?.getKey(CoinType.NEAR, path) ?: return null
 
         val signerId: String = txData["signerId"] as String
         val receiverId: String = txData["receiverId"] as String
@@ -1449,6 +1466,7 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             .build()
 
         val output = AnySigner.sign(input, CoinType.NEAR, NEAR.SigningOutput.parser())
+        if (output.errorValue != 0 || output.signedTransaction.isEmpty) return null
         return aBase64.encodeToString(output.signedTransaction.toByteArray(), aBase64.NO_WRAP)
     }
 

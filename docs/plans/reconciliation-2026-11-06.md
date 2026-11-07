@@ -1,6 +1,16 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Validate NEAR native input before casts and key access — batch 213
+
+- Both native handlers previously force-cast required fields; Android additionally dereferenced a missing wallet. Added Swift/Kotlin validation before key access: account identifiers, canonical positive nonce within the current signed-Long bridge capacity, exact 32-byte hash and exact 16-byte amount. Missing credentials return nil/null. Wallet Core errors or empty signed output no longer become nominal signing results.
+- Account syntax follows the [NEAR account-id implementation](https://raw.githubusercontent.com/near/near-account-id/master/src/validation.rs): 2–64 ASCII characters with nonadjacent internal separators. Named and implicit accounts remain valid. Matching host fixtures include wrong types, missing fields, numeric bounds, Unicode/newlines, invalid hex and both size bounds. Swift and Kotlin each pass **96 cases** (`/tmp/n42-wallet-b213-input-final.log`). These are executions of extracted production validators, not JNI signing tests.
+- Actual current Swift bridge still produces a transaction whose Borsh fields, exact amount and signature pass independent inspection; missing/wrong-type input and missing credentials now return nil without crashing (`/tmp/n42-wallet-b213-native-final.log`). The harness includes the newly added production validator.
+- Android `:app:compileDebugKotlin --offline --no-daemon` passes with JDK 21, exit 0, 649 tasks in 1m14s (`/tmp/n42-wallet-b213-android.log`). The initial Android Studio JBR path was absent; the existing Homebrew JDK 21 was used. Existing Gradle/plugin deprecation warnings remain. This compiles the modified production handler but does not execute Android JNI.
+- Native runtime changes are newer than release 73325. Android JNI execution, full Flutter channel flows, real-node/device acceptance, fee/reserve and unknown-outcome recovery remain open. No full app acceptance is inferred from a component harness.
+
+
+
 ### Repair NEAR sender identity and native wire contract — batch 212
 
 - Reproduced two failures before repair: the ordinary sender supplied `fromAddress`/`toAddress`, integer nonce and decimal/base58 values while both native handlers require `signerId`/`receiverId`, decimal-string nonce and hex bytes; a failed access-key lookup still signed with nonce zero. Original failure log `/tmp/n42-wallet-b212-before.log`.
