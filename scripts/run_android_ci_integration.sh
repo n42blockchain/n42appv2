@@ -12,8 +12,12 @@ fi
 flutter build apk --debug --no-pub \
   --target integration_test/chat_scanner_camera_device_test.dart
 apk_bytes=$(wc -c < build/app/outputs/flutter-apk/app-debug.apk)
-available_kb=$(adb shell df -k /data | tr -d '\r' | awk 'NR == 2 { print $4 }')
+disk_report=$(adb shell df -k /data | tr -d '\r')
+printf '%s\n' "$disk_report"
+available_kb=$(printf '%s\n' "$disk_report" | awk 'NR == 2 { print $4 }')
 required_kb=$(( (apk_bytes * 2 + 536870912 + 1023) / 1024 ))
+printf 'CI APK size=%s bytes; /data available=%s KiB; install reserve=%s KiB\n' \
+  "$apk_bytes" "$available_kb" "$required_kb"
 if [[ ! "$available_kb" =~ ^[0-9]+$ ]] || (( available_kb < required_kb )); then
   printf 'Insufficient emulator /data space: available=%s KiB required=%s KiB\n' \
     "$available_kb" "$required_kb" >&2

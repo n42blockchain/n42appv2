@@ -7,7 +7,7 @@ This snapshot supersedes historical batch observations below. The overall maturi
 | Gate | Current evidence | Remaining boundary |
 | --- | --- | --- |
 | Production Matrix upgrade | Tuwunel 1.9.4, running/healthy; [upgrade record](../testing/matrix-upgrade-2026-11-06.md) | Production authenticated E2EE, push and calls acceptance |
-| Wallet and Chat full CI | Run 42372264075 green; wallet 7,744 passed, Chat 8,561 passed/eight skipped; wallet coverage 73.868987%; both native builds pass | Native integration run 42374095584 still running; follow-up CI 42376481517 still running |
+| Wallet and Chat full CI | Run 42372264075 green; wallet 7,744 passed, Chat 8,561 passed/eight skipped; wallet coverage 73.868987%; both native builds pass | Native run 42374095584 Android failed (23 passed/two skipped/seven failures: credentials and install storage); iOS remains running. Follow-up CI 42376481517 still running |
 | Internal TestFlight | 2.5.4 (73423), t1 group Testing; installed version observed; [release](../releases/testflight-20261107-73423.md) | Functional device QA deferred; external beta review not claimed |
 | MPC EVM transfer path | Canonical signing, normal EVM routing and actual disposable Anvil native/ERC20 receipts/balance deltas pass | Real social-provider signing, public network and device flows |
 | Isolated Matrix encryption | Multi-client encryption/revocation, one key recovery and real repository account-switch smoke pass | Thirty-recovery batch is live; production/device recovery and push |
@@ -1493,3 +1493,10 @@ Repeat inspection found newer records that supersede the earlier deployment gap:
 - [Current social login evidence](../testing/social-login-2026-11-05/README.md)
 
 Older IAP delivery and payment-provider plans remain historical open work; they are not newly discovered November interruptions. This reconciliation does not silently expand the current login task into those implementations.
+
+
+### Android integration storage follow-up — 2026-11-07
+
+Job 128408032719 reached actual native cases: 23 passed, two skipped and seven failed. Two chat cases require unconfigured N42_E2E_CHAT credentials; later cases could not load because package installation returned INSTALL_FAILED_INSUFFICIENT_STORAGE despite the configured 8G AVD. These are not accepted skipped passes. The CI emulator now requests 16G and logs the real /data capacity, APK size and install reserve. No user installation or runtime app code is changed.
+
+A manual android_only input runs the same complete Android suite in a separate concurrency group, preserving the active iOS run. Default push/PR/full manual execution retains every platform and rejects any non-success. Four executable summary tests confirm failure handling and explicit partial-run scope. All 73 script regressions pass. Actual 16G emulator acceptance remains pending.
