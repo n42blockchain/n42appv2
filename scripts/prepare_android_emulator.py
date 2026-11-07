@@ -8,6 +8,8 @@ import time
 
 PACKAGES = (
     ('emulator', 'emulator/emulator'),
+    # Matches the pinned Flutter 3.47.8 FlutterExtension.ndkVersion.
+    ('ndk;28.2.13676358', 'ndk/28.2.13676358/source.properties'),
     ('system-images;android-30;google_apis;x86_64',
      'system-images/android-30/google_apis/x86_64/package.xml'),
 )

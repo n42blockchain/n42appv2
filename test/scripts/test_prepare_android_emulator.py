@@ -43,7 +43,7 @@ class PrepareEmulatorTest(unittest.TestCase):
             module.prepare(self.root, {}, run=self.runner())
         self.assertEqual(self.calls, [])
 
-    def test_both_exact_packages_are_prepared(self):
+    def test_required_packages_are_prepared(self):
         module.prepare(self.root, ENV, run=self.runner(), sleep=self.sleeps.append)
         self.assertEqual([call[3] for call in self.calls],
                          [package for package, _ in module.PACKAGES])
@@ -55,7 +55,7 @@ class PrepareEmulatorTest(unittest.TestCase):
         module.prepare(self.root, ENV, run=self.runner(1), sleep=self.sleeps.append)
         self.assertFalse((self.root / '.temp/PackageOperation1').exists())
         self.assertTrue(keep.exists())
-        self.assertEqual(len(self.calls), 3)
+        self.assertEqual(len(self.calls), len(module.PACKAGES) + 1)
         self.assertEqual(self.sleeps, [2])
 
     def test_failure_stops_after_three_attempts(self):
@@ -66,7 +66,7 @@ class PrepareEmulatorTest(unittest.TestCase):
 
     def test_corrupt_zip_warning_is_not_success_even_with_exit_zero(self):
         module.prepare(self.root, ENV, run=self.runner(1, True), sleep=self.sleeps.append)
-        self.assertEqual(len(self.calls), 3)
+        self.assertEqual(len(self.calls), len(module.PACKAGES) + 1)
 
     def test_download_timeout_is_bounded(self):
         def timeout(args, **kwargs):
