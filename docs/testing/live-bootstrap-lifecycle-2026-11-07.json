@@ -1,0 +1,22 @@
+{
+  "scope": "Wallet live bootstrap lifecycle",
+  "before": "Completed anonymous login Future stayed cached across logout and repository replacement; three focused regressions failed",
+  "fix": [
+    "Only share active login within the same auth repository",
+    "Clear success and failure Futures with identity guards so old completion cannot clear new login",
+    "Clear completed initialization Future and consult current SDK initialization state",
+    "Generate anonymous password with 32 bytes from Random.secure instead of timestamp/nonsecure PRNG"
+  ],
+  "validation": {
+    "liveModuleTestsPassed": 71,
+    "failed": 0,
+    "scopedAnalysis": "No issues found",
+    "testLogSha256": "35d9474322dd81eb2a9650d01139d27799a592c425e053e973bf7eada56e7439"
+  },
+  "unverified": [
+    "Real anonymous registration on production",
+    "Physical-device logout/relogin",
+    "Account switch during underlying repository mutation"
+  ],
+  "release": "Not included in uploaded 73424"
+}

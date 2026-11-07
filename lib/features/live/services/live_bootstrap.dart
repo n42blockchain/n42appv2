@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:get_it/get_it.dart';
@@ -14,6 +15,7 @@ const String liveHomeserver = 'https://m.si46.world';
 // 必须共享同一个进行中的 Future，否则会重复匿名注册、产生多个账户/身份。
 Future<void>? _readyFuture;
 Future<void>? _loginFuture;
+IAuthRepository? _loginAuth;
 
 /// 确保 n42_chat 已初始化（弹幕 + LiveKit 配置发现来源）。
 ///
@@ -22,6 +24,7 @@ Future<void>? _loginFuture;
 Future<void> ensureLiveChatReady() {
   final existing = _readyFuture;
   if (existing != null) return existing;
+  if (N42Chat.isInitialized) return Future<void>.value();
   final f = N42Chat.initialize(
     N42ChatConfig(
       defaultHomeserver: liveHomeserver,
@@ -32,9 +35,11 @@ Future<void> ensureLiveChatReady() {
   _readyFuture = f;
   unawaited(
     f.then(
-      (_) {},
+      (_) {
+        if (identical(_readyFuture, f)) _readyFuture = null;
+      },
       onError: (Object _, StackTrace _) {
-        _readyFuture = null;
+        if (identical(_readyFuture, f)) _readyFuture = null;
       },
     ),
   );
@@ -46,26 +51,29 @@ Future<void> ensureLiveChatReady() {
 ///
 /// 单飞：并发调用只触发一次匿名注册，避免重复建号。
 Future<void> ensureAnonymousLogin() {
+  final auth = GetIt.instance<IAuthRepository>();
   final existing = _loginFuture;
-  if (existing != null) return existing;
-  final f = _doAnonymousLogin();
+  if (existing != null && identical(_loginAuth, auth)) return existing;
+  final f = _doAnonymousLogin(auth);
+  _loginAuth = auth;
   _loginFuture = f;
+  void clear() {
+    if (!identical(_loginFuture, f)) return;
+    _loginFuture = null;
+    _loginAuth = null;
+  }
+
   unawaited(
-    f.then(
-      (_) {},
-      onError: (Object _, StackTrace _) {
-        _loginFuture = null;
-      },
-    ),
+    f.then((_) => clear(), onError: (Object _, StackTrace _) => clear()),
   );
   return f;
 }
 
-Future<void> _doAnonymousLogin() async {
-  final auth = GetIt.instance<IAuthRepository>();
+Future<void> _doAnonymousLogin(IAuthRepository auth) async {
   if (auth.isLoggedIn) return;
+  final random = Random.secure();
   final pw =
-      'live_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1 << 31)}';
+      'live_${base64UrlEncode(List<int>.generate(32, (_) => random.nextInt(256)))}';
   final res = await auth.registerAnonymously(
     homeserver: liveHomeserver,
     password: pw,
