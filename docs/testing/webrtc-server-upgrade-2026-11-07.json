@@ -39,14 +39,28 @@
     "clientVersions": {
       "livekit_client": "2.13.2",
       "flutter_webrtc": "1.6.3"
+    },
+    "externalTurn": {
+      "tlsVerified": true,
+      "authenticatedAllocation": true,
+      "peerPermissionCreated": true,
+      "publicStunDatagramRoundTripViaRelay": true,
+      "allocationReleased": true,
+      "actualAudioVideo": false
     }
   },
   "rollback": "Controlled remote snapshots and old image IDs retained under /home/ubuntu/.config/n42/webrtc-upgrade-20261107; no secrets committed",
   "unverified": [
     "Authenticated production token issuance",
     "Bilateral audio/video and screen share",
-    "External authenticated TURN allocation and actual UDP relay",
     "Native background, lock screen and reconnect",
-    "Standalone authorization room membership enforcement requires compatible homeserver application-service wiring; latest version alone does not establish it"
-  ]
+    "Standalone authorization room membership enforcement requires compatible homeserver application-service wiring; latest version alone does not establish it",
+    "Actual audio/video decoding and sustained packet flow; STUN relay round trip is transport evidence only"
+  ],
+  "networkRepair": {
+    "observed": "Route table 1042 existed but no source rule selected it; relay traffic from 172.30.42.2 used backend eth0 instead of gateway tunnel",
+    "action": "Reran existing idempotent /usr/local/sbin/n42-turn-network up",
+    "verified": "ip route get from 172.30.42.2 now selects n42-turn table 1042; existing service enabled and active; external TURN data round trip passes",
+    "scope": "Only existing TURN source-address policy restored; no broad firewall relaxation"
+  }
 }
