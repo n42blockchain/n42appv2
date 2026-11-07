@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-07",
+  "serverVersion": "1.13.11",
+  "result": {
+    "passed": true,
+    "checks": [
+      {
+        "publish": true,
+        "outcome": "server track_published acknowledgement"
+      },
+      {
+        "publish": false,
+        "outcome": "server NOT_ALLOWED acknowledgement"
+      }
+    ],
+    "scope": "Raw SFU signaling only, no SDK permission precheck, no media or Matrix issuer authorization"
+  },
+  "ownedRoomDeleted": true,
+  "exitCode": 0,
+  "security": "Unique owned room, two synthetic identities, five-minute room-scoped tokens minted remotely and retained only in memory. No microphone, camera, chat messages or RTP media sent. Server credentials remain remote.",
+  "logSha256": "2d5b95cb7ab2c7b7e93ef2187de10ecc2baa925ed977e512fe78044d7a5eaed4",
+  "scriptSha256": "68688c57bef1f3159e222c725c3a2846f8f1051b58db126adaf65ea12a4a0c67",
+  "boundaries": [
+    "Does not test Matrix OpenID, room membership or the production issuer role decision",
+    "Does not establish that every reachable issuer prevents a viewer from obtaining a broader token",
+    "Does not add Flutter/native device or media E2EE acceptance"
+  ]
+}

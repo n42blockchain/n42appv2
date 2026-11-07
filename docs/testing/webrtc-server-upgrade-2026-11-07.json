@@ -1,6 +1,6 @@
 {
   "date": "2026-11-07",
-  "status": "deployed; media acceptance pending",
+  "status": "deployed; synthetic media and raw SFU grant enforcement passed; native and Matrix authorization acceptance pending",
   "services": {
     "livekit": {
       "from": "1.9.11",
@@ -47,15 +47,23 @@
       "publicStunDatagramRoundTripViaRelay": true,
       "allocationReleased": true,
       "actualAudioVideo": false
-    }
+    },
+    "rawSignalPublishGrants": {
+      "publisherAcknowledged": true,
+      "viewerNotAllowedAcknowledged": true,
+      "noSdkPermissionPrecheck": true,
+      "evidence": "webrtc-raw-grants-2026-11-07.json"
+    },
+    "syntheticMediaEvidence": "webrtc-synthetic-media-2026-11-07.json"
   },
   "rollback": "Controlled remote snapshots and old image IDs retained under /home/ubuntu/.config/n42/webrtc-upgrade-20261107; no secrets committed",
   "unverified": [
-    "Authenticated production token issuance",
-    "Bilateral audio/video and screen share",
-    "Native background, lock screen and reconnect",
-    "Standalone authorization room membership enforcement requires compatible homeserver application-service wiring; latest version alone does not establish it",
-    "Actual audio/video decoding and sustained packet flow; STUN relay round trip is transport evidence only"
+    "Authenticated production token issuance and room-membership rejection",
+    "Consistent N42 creator/viewer publish policy across every reachable issuer",
+    "Flutter/native bilateral audio/video and screen share; Python synthetic media is accepted separately",
+    "Native background, lock screen, reconnect and sustained calls",
+    "Media E2EE",
+    "Standalone authorization membership enforcement requires compatible homeserver application-service wiring; an SDK/service version upgrade alone does not establish it"
   ],
   "networkRepair": {
     "observed": "Route table 1042 existed but no source rule selected it; relay traffic from 172.30.42.2 used backend eth0 instead of gateway tunnel",
