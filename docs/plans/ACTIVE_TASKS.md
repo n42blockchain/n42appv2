@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 203: Algorand sender balance/API shape, selected-network routing, ASA native dispatch and signer isolation are repaired on the isolated branch (63 related tests). Native validity-window/full-width integer and live acceptance remain open. Main full regressions still apply only to their captured source commits.
+
 > Batch 202: Solana signer/address binding and account-switch guards are verified in an isolated branch (125 related tests). Integration is pending the fixed-head wallet/Chat full runs. Batch 196 reduced old auxiliary worktrees to 12; batch 202 adds one temporary active worktree. Older worktree counts and full-suite records below remain historical.
 
 > Batch 199: Chat batch 195 finished with 8,222 passing tests, eight mock-fixture failures and four external skips; coverage 71.3688%, but full verification failed. Fixture repaired at wallet-pinned `8c5202ab`; 25 draft cases and three host checks pass. A fresh Chat full run is active. Earlier running/pin statements below are historical.

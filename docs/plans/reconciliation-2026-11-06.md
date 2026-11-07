@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Algorand sender/API contract and signer isolation — batch 203
+
+- Follow-up inspection found the sender cast the real account-balance Map to BigInt, always queried mainnet balance, and used TOKEN where both Swift/Kotlin signing bridges require Asset for ASA transfers. A regression using the production balance response shape reproduced the type error (`/tmp/n42-wallet-b203-before.log`, exit 1). Added injectable existing API/signer dependencies rather than altering their public contracts.
+- Account balances now retain the minimum reserve; ASA amount checks use the asset balance while fees use native ALGO. MAX subtracts reserve and fee, exact integer overrides reach the signer, and the returned display amount derives from those units. All balance/parameter/submission calls use the selected network. ASA dispatch uses Asset and strict decimal asset IDs. Empty/malformed signatures and empty receipts fail; both iOS plain hex and Android 0x-prefixed bytes remain accepted.
+- Captures account identity/mnemonic before awaits, derives/checks sender address, rejects account/material changes before signing and after signing, and prevents overlapping sends on the same sender instance. Existing native bridge signed-Long amount/asset and signed-Int fee/round limits are checked before dispatch; these are implementation limits, not protocol limits. This does not add automatic resubmission after uncertain network outcomes.
+- Final sender/factory/send-page regression: **63 pass**, exit 0 (`/tmp/n42-wallet-b203-final4.log`); final scoped analysis reports no issues (`/tmp/n42-wallet-b203-analysis-final4.log`). Covers native/ASA, both network routes, reserve-aware MAX, exact amount with non-finite display input, wrong signer, account switches, invalid parameters/signatures/receipt, same-owner mnemonic replacement and duplicate-send suppression. Native bridge full-width integers, round-plus-fee validity-window calculation, chain/genesis identity checks, dynamic fee sizing, native cryptographic execution and live-node/device acceptance remain open; no chain-wide production acceptance claimed.
+- Committed separately on the existing isolated Solana-fix branch; main wallet/Chat full runners keep their original source identity. Merge/integration remains pending their terminal results. This is a concrete missing sender implementation, not completion of the old main-flow-audit branch reconciliation.
+
 ### Solana sender identity and asynchronous account isolation — batch 202
 
 - Compared the three patch-unique commits on the old main-flow-audit branch. This is not yet a complete semantic reconciliation of that branch. A current production gap was confirmed in SolSender: it did not derive/check the signing address, and it read the active mnemonic after network awaits. A mismatched-key regression returned success before the fix (`/tmp/n42-wallet-b202-before.log`, exit 1).
