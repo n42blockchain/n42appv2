@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-07",
+  "baseSource": "be6972c81b148edea38bc2b889f69f65968ee0d8",
+  "fixtureSha256": "3e4d5139b84c9f2457d4a97a1f8bcc1a1f06e929eeb8fca38d5ec58a3643c916",
+  "targetedResult": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "accepted": [
+    "Production transaction history repository and actual TransactionHistoryList render native SQLite rows",
+    "Independent temporary DB copies production table DDL only; no production records copied",
+    "Four seeded records distinguish owner, address and network",
+    "First account displays exactly its 1 ETH record",
+    "CurrentUserNotifier state change shows second account 7 ETH record and removes old owner record; address/network decoys never render",
+    "Temporary DB closed, deleted and absence asserted"
+  ],
+  "logSha256": "6420de23fef33bba299fc60de879a9bf9e640548238f9542fb9ed10d4127d799",
+  "boundaries": [
+    "Synthetic account state with in-memory preferences; no real login/provider session accepted",
+    "No production history synchronization, explorer/RPC indexing or funded transactions",
+    "ETH scope only; BTC and other native chain UI acceptance remain open",
+    "Physical device deferred"
+  ]
+}
