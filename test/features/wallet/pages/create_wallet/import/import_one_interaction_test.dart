@@ -211,6 +211,28 @@ void main() {
     expect(inputText(tester), syntheticPhrase);
   });
 
+  for (final accepted in [true, false]) {
+    testWidgets(
+      'late clipboard validation ($accepted) preserves manual input',
+      (tester) async {
+        clipboard = syntheticPhrase;
+        validationGate = Completer<bool>();
+        await openImport(tester);
+        await enterPhrase(tester, 'manual replacement phrase');
+        validationGate!.complete(accepted);
+        await tester.pumpAndSettle();
+
+        expect(inputText(tester), 'manual replacement phrase');
+        expect(find.byType(CreatePassword), findsNothing);
+        expect(toasts, isEmpty);
+        validationGate = null;
+        await submit(tester);
+        await tester.pumpAndSettle();
+        expect(validationRequests.last, 'manual replacement phrase');
+      },
+    );
+  }
+
   testWidgets('invalid phrase stays on the import page', (tester) async {
     mnemonicIsValid = false;
     await openImport(tester);

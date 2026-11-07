@@ -357,3 +357,9 @@
 - Release 2.5.4+73423 was built from b09755b71 and delivered through Transporter at 08:19 local time. IPA checks: 50 signing/platform/version and 14 native login configuration checks passed. Main app/extension versions match; ten archive model bundles match prepared resources. Details: docs/releases/testflight-20261107-73423.md. Apple processing completion, tester access and physical-device/provider acceptance remain open; physical-device QA is deferred.
 - No lib/assets/ios/android/packages/plugins runtime source differs between the green CI source and the uploaded source. Newer follow-up exports both native crypto loader variables; 69 script tests and 24 explicit-library macOS crypto tests pass. CI 42376481517 at 556b89205 is running to verify this configuration on Linux. Do not transfer its pending result into the prior green run.
 - Native Tests 42374095584 unit/widget jobs pass; iOS/Android integration jobs remain running. The independent 30-device recovery process remains live under unmodified server rate limits; no 30/30 acceptance is claimed. Do not restart it merely because an observation expires.
+
+## Import validation follow-up — 2026-11-07
+
+Mnemonic import now discards stale submit and clipboard validation results when the input changes. Clipboard candidates are validated before being placed in the form, so a late rejection cannot clear manual input. The focused interaction suite passes 10 tests, including delayed success/rejection cases. This is widget-level evidence; disposable-wallet native end-to-end flows remain open.
+
+Native CI also has an allowlisted `mlkit` manual suite that enables model-download and concurrency cases. Android acceptance run: https://github.com/n42blockchain/n42appv2/actions/runs/42385227597 (started, no acceptance result recorded yet).

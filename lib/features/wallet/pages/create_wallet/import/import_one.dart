@@ -27,31 +27,44 @@ class _ImportOneState extends ConsumerState<ImportOne>
   TextEditingController inputEditingController = TextEditingController();
   String inputMW = "";
   String errorMessage = "";
+  int _inputRevision = 0;
 
   void checkInput(String value) {
     final words = value.trim().split(RegExp(r'\s+')).where((w) => w.isNotEmpty);
     setState(() {
+      _inputRevision++;
       inputMW = words.join(" ").toLowerCase();
     });
   }
 
   Future<void> handlerCopyText() async {
+    final revision = _inputRevision;
     ClipboardData? clipboardData = await Clipboard.getData(
       Clipboard.kTextPlain,
     );
     final text = clipboardData?.text;
     unawaited(Clipboard.setData(const ClipboardData(text: "")));
-    if (!mounted || text == null || text == "null" || text.isEmpty) return;
+    if (!mounted ||
+        revision != _inputRevision ||
+        text == null ||
+        text == "null" ||
+        text.isEmpty) {
+      return;
+    }
     try {
-      checkInput(text);
-      bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
-      if (!mounted) return;
-      if (checkMnemonic) {
-        inputEditingController.text = inputMW;
-      } else {
-        inputMW = "";
-      }
-      setState(() {});
+      final candidate = text
+          .trim()
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .join(' ')
+          .toLowerCase();
+      final checkMnemonic = await Trustdart().checkMnemonic(candidate);
+      if (!mounted || revision != _inputRevision || !checkMnemonic) return;
+      setState(() {
+        _inputRevision++;
+        inputMW = candidate;
+        inputEditingController.text = candidate;
+      });
     } catch (e) {
       assert(() {
         AppLogger.w('ImportOne', 'checkMnemonic failed: $e');
@@ -88,8 +101,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
   Future<void> _onSubmit() async {
     if (inputMW.isEmpty) return;
     final submittedMnemonic = inputMW;
+    final revision = _inputRevision;
     bool checkMnemonic = await Trustdart().checkMnemonic(submittedMnemonic);
-    if (!mounted || inputMW != submittedMnemonic) return;
+    if (!mounted || revision != _inputRevision) return;
     if (!checkMnemonic) {
       errorMessage = S.of(context).w_key_12;
       setState(() {});
