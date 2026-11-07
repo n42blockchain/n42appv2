@@ -1,0 +1,38 @@
+{
+  "run": 42405518584,
+  "testJob": 128502906517,
+  "source": "86cf96582966eeaf9b5d15bc4543029877c8152b",
+  "testJobConclusion": "success",
+  "overallRun": "in_progress",
+  "wallet": {
+    "passed": 7795,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0
+  },
+  "chat": {
+    "passed": 8594,
+    "failed": 0,
+    "skipped": 5
+  },
+  "coverage": {
+    "hit": 104541,
+    "found": 141316,
+    "percent": 73.97676130091426,
+    "threshold": 70,
+    "passed": true
+  },
+  "logSha256": "063bb1a019917de4f84c606b38db44a2103bd51e25d0c6d4800a7d7410ea1b92",
+  "scope": "Runtime missing mnemonic/address and delayed wallet balance fixes. Later native fixtures, adapter injection parameters and profile cleanup API are not covered by this source. Native builds/performance still running at observation.",
+  "completedGates": [
+    "analysis",
+    "four backend modules",
+    "tests and coverage",
+    "security",
+    "performance"
+  ],
+  "pendingGates": [
+    "Android build",
+    "iOS build"
+  ]
+}
