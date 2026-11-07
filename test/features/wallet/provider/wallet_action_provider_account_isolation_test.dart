@@ -19,10 +19,12 @@ class _WalletStoragePlatform extends TestFlutterSecureStoragePlatform {
     super.data, {
     this.failingReadKey,
     this.failingWriteKey,
+    this.onWalletWrite,
   });
 
   final String? failingReadKey;
   final String? failingWriteKey;
+  final void Function()? onWalletWrite;
 
   @override
   Future<void> write({
@@ -31,6 +33,7 @@ class _WalletStoragePlatform extends TestFlutterSecureStoragePlatform {
     required Map<String, String> options,
   }) async {
     if (key == failingWriteKey) throw StateError('synthetic write failure');
+    if (key == 'walletInfo') onWalletWrite?.call();
     await super.write(key: key, value: value, options: options);
   }
 
@@ -138,6 +141,44 @@ void main() {
         persisted[accountUuid]['wallet'][0]['mnemonic'],
         generatedMnemonic,
       );
+      final restarted = WalletActionProvider()..buildwallet = true;
+      await restarted.getWalletInfo();
+      expect(restarted.walletInfoLsit, hasLength(1));
+      expect(restarted.walletInfoLsit.single.mnemonic, generatedMnemonic);
+      expect(restarted.walletInfoLsit.single.timestamp, timestamp);
+    },
+  );
+
+  test(
+    'account switch during persistence never publishes the old draft',
+    () async {
+      final storage = _WalletStoragePlatform(
+        {},
+        onWalletWrite: () {
+          AppGlobals.userInfo = UserInfo(uuid: 'synthetic-other-account');
+        },
+      );
+      FlutterSecureStoragePlatform.instance = storage;
+      await expectLater(
+        store.addWalletInfo(
+          WalletInfo(
+            walletName: 'Synthetic interrupted draft',
+            walletUuid: accountUuid,
+            timestamp: 'synthetic-account-switch',
+            mnemonic: generatedMnemonic,
+            coinInfo: <String, dynamic>{},
+          ),
+        ),
+        throwsStateError,
+      );
+      expect(store.walletInfoLsit, isEmpty);
+      final raw = await storage.read(key: 'walletInfo', options: {});
+      final persisted = jsonDecode(raw!) as Map<String, dynamic>;
+      expect(persisted.keys, [accountUuid]);
+      AppGlobals.userInfo = UserInfo(uuid: accountUuid);
+      final restarted = WalletActionProvider()..buildwallet = true;
+      await restarted.getWalletInfo();
+      expect(restarted.walletInfoLsit.single.mnemonic, generatedMnemonic);
     },
   );
 
