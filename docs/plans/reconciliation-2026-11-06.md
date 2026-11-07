@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Restore omitted group member-count refresh — batch 235
+
+- Old-worktree reconciliation found Chat 5e23bcf5 was never incorporated in the current lineage. Its two count regressions fail before repair (`/tmp/n42-chat-b235-before.log`). Restored authoritative group refresh after member loading and after invitation/removal/settings return; detail/list/title now consume refreshed counts. Page callbacks capture session/room, and refresh revisions reject obsolete responses. Group member loads also reject completion after a newer load or details navigation.
+- Chat `86891d07f6b09b68c8a05a4af8b94a1eb79d7f99` committed/pushed. **105 group/settings/composer tests pass**, including three added stale-response/fallback cases (`/tmp/n42-chat-b235-final.log`). Scoped analysis has no errors/warnings and one preexisting constructor-style info (`/tmp/n42-chat-b235-analysis-final.log`). Removed unrelated formatter churn; existing coverage artifact preserved.
+- Wallet pub get exits zero; lock diff only changes Chat ref and package_config resolves that exact cache. **51 host checks pass** (`/tmp/n42-wallet-b235-host.log`). These fixture/SSO checks are not real-device acceptance. This postdates batch 234 full regression; no claim of a newer full suite or release.
+- The omitted member-count behavior is restored. Keep the old main-flow-audit worktree until its other two signer patches have a complete semantic reconciliation. Live homeserver count propagation, native login, archive account partition/backup ownership, continuous redactions and new release remain open. No live message, deployment or upload.
+
+
 ### Current-source full regression and interrupted-work check — batch 234
 
 - Wallet source `07ab42be08f7c02d81c56c000a365851b82fb0f9`: **7,505 pass, 0 failures, 0 skips**; coverage 103,909/140,858 = 73.768618%. Test and both quality gates exit 0; source unchanged and original coverage restored byte-for-byte. Log SHA-256 `1edfd1fd1a1c25cfb313c96334ccf95fa7573818767e5d7955ef628b1c17a8ca`; measured LCOV SHA-256 `5d892fe7b41c405d8fcd1bf83087fd46e45a640ceed116b325a98297695898b3`. Terminal evidence `/tmp/n42-wallet-b234-result.json`, with matching tests/coverage reports.

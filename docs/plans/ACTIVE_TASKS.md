@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 235: omitted group member-count refresh restored with stale/session guards. Chat 86891d07 passes 105 related tests; 51 wallet host checks pass. Remaining old-worktree signer reconciliation, native login, archive lifecycle and new release stay open. Batch 234 full results apply to the preceding source.
+
+
 > Batch 234: fixed-source full regressions accepted: wallet 07ab42be0, 7,505 pass / zero failures or skips, 73.768618% coverage; Chat 4b8ab5b2, 8,314 pass / zero failures / four external skips, 71.493947%. Source and coverage preservation verified. Old-worktree comparison found missing group-member-count refresh; restore next without discarding other work. Native login, archive ownership and release remain open.
 
 
