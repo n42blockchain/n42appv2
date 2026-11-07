@@ -1,0 +1,10 @@
+{
+  "source_commit": "3a9030913",
+  "command": "flutter analyze --no-pub --no-fatal-infos",
+  "exit_code": 0,
+  "infos": 78,
+  "warnings": 0,
+  "errors": 0,
+  "log_sha256": "67343ce254e43da043c615f7695f75d39f5a60d2debba3ecf464cab432d6b358",
+  "scope": "Whole wallet analysis after Matrix 16.0.1 and compatible dependencies are integrated with creation/import fixes. Tests/builds are separate gates."
+}
