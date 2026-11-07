@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Anonymous authentication isolation — 2026-11-07: wallet pins Chat `644fd852`. Registration/login exclusion, stale guest preflight, authenticated UI retention and session-bound guest nickname completion are integrated. Full Chat regression passes 8,635 tests with zero failures/four skips; 76 wallet live tests pass. This is post-73454 source work, not a new TestFlight release. [Evidence](../testing/chat-anonymous-auth-isolation-2026-11-07.json). Full wallet CI and native/physical acceptance remain open.
+
 > Current internal Beta — 2026-11-07: [73454](../releases/testflight-20261107-73454.md) is Testing in t1 (16 testers, 46 builds); notes are saved and exact text survives reload. Signed package checks, 8627 current Chat tests/four skips, eleven current Android wallet tests/one funded-transfer skip and earlier-source full CI 42411468479 pass. Latest full remote CI 42417927415 is running; physical/production acceptance remains separate.
 
 > Release hold — 2026-11-07: [73453](../releases/testflight-20261107-73453.md) built successfully but is not approved for upload. The Chat full suite at 52cd2e81 found a scheduled-preview refresh defect (8622 pass/1 fail/4 skip). The fix passes 71 focused BLoC tests and 8627 full Chat tests/four skips; replacement 73454 is uploaded and processing.
