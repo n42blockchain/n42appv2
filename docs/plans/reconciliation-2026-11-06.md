@@ -1,6 +1,15 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Full regression failure triage and fixture repair — batch 199
+
+- Batch 195 completed on unchanged Chat `930690d1`: **8,222 pass / 8 fail / 4 skips**, process exit 1, strict test gate fails. Coverage 102,749/143,969 = **71.3688363%**, independently above 70%; this does not make the full run accepted. All eight failures were draft-recovery route tests returning null from an unstubbed MockBloc.captureCurrentSession, preventing settings navigation. Added a room/account/closed-bound callback to the fixture; production guards are unchanged. All 25 composer-draft tests pass (`/tmp/n42-chat-b199-drafts.log`).
+- Failed full-run evidence: `/tmp/n42-chat-b195-result.json`, `-tests.json`, `-coverage.json`, `-full.jsonl`, `-lcov.info`. Log SHA-256 `82d8bce5653ba4eaca183622ca6df07b37fbd9076bd0f3988b4561bc77e1fd1f`; LCOV SHA-256 `314a21a30009004766e5b47cd4fccc8af9fe897e12b4861e6d482d119d6f806e`. Preserved original coverage restored to `c7e9bebef9c2dbb69d6b298f9161b1043e99939e7f40b7bf46bff6e69153ffde`.
+- Chat fixture repair `8c5202ab19fd0ce6ffb5888d034f6308291f31cc` is pushed and pinned by wallet; dependency resolution changes only Chat, and three host fixture tests pass (`/tmp/n42-wallet-b199-host.log`). New full Chat run is active with concurrency 2 and automatic archive/restore (`/tmp/n42-chat-b199-run.py`, `-running.json`, eventual `-result.json`). Require its terminal gates before accepting full verification; do not add isolated passes to a failed run and call it green.
+- Four explicit skips remain: live UIA registration/login cleanup, manifested image corpus, sequential-account device/offline decryption and live media smoke. These external/device requirements remain unverified.
+- Wallet baseline `044054ada`: full analysis zero errors/warnings, 75 infos; 49 Python tests and localization audit pass (`/tmp/n42-wallet-b199-analysis.log`, `-python.log`, `-localization.log`). Host Falcon Rust source is unchanged since the last full baseline; existing macOS arm64 dylib SHA-256 `a2befdb8ed3e94333c87ded191fcad1279956c79c4e8dd139803c438587f3349` is available for the next full wallet run so its native suites do not skip. No current-source wallet full result or release acceptance yet.
+
+
 ### Return account persistence acknowledgement to callers — batch 198
 
 - CurrentUserNotifier.setUser previously discarded the secure-preferences write Future, so callers could not await persistence or catch its asynchronous failure. It now returns Future<void>; the existing immediate in-memory update remains, while completion waits for the write. Updated all three production call sites: AppGlobals.login awaits it, startup sync includes it in Future.wait, and email synchronization includes it alongside its existing writes without inserting an extra wait between dispatches.

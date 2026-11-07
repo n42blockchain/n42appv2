@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 199: Chat batch 195 finished with 8,222 passing tests, eight mock-fixture failures and four external skips; coverage 71.3688%, but full verification failed. Fixture repaired at wallet-pinned `8c5202ab`; 25 draft cases and three host checks pass. A fresh Chat full run is active. Earlier running/pin statements below are historical.
+
 > Batch 195: Chat `930690d1` is now integrated into the usual branch and wallet. The stalled batch 192 run was explicitly terminated and is not accepted. A fresh full run of `930690d1` with concurrency 2 is active; require its terminal result and gates before claiming success.
 
 > Batch 194 supersedes the pin below: current wallet dependency is Chat `930690d1`. Thread initialization visibility and first-load retry are repaired with focused regression evidence in the reconciliation. The terminated batch 192 run was scoped to `90271407`; it did not cover these newer fixes.
