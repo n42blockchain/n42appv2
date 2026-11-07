@@ -297,3 +297,9 @@
 - 旧转账入口歧义保护 `9c32edc55`：24项相关测试通过，定向分析无问题；多网络同名资产在发送器前拒绝，单匹配行为保持。
 - 未改变余额查询/代币列表；旧入口显式网络选择仍待确认页接线。下一步P10e/P11账户和授权复核。
 - 未跑全量覆盖率、未操作真实资产或发布新包，70%覆盖率目标仍开放。
+
+
+### 2026-11-07 iOS simulator runtime gap
+
+- Full app compiles, but installation on isolated iOS 27.1 simulator fails: x86_64 app versus arm64-only installed runtimes. MLImage arm64 binary targets iOS device; existing exclusions preserve MLKit features.
+- Keep open: obtain compatible MLKit simulator binaries or runtime, then repeat install/cold-launch/login UI. Do not disable features or count compilation as runtime acceptance. Evidence: docs/testing/ios-integration-2026-11-07.md.

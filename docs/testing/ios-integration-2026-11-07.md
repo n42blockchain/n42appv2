@@ -12,3 +12,11 @@ Nonfatal warnings identify plugins that need future Swift Package Manager adopti
 
 Local log: `/tmp/n42-ios-simulator-20261107.log`.
 Log SHA-256: `337a7a559090d61f32d5c09e6cc69ff2f4192ce6cce1788edbf96b08aaa7d998`.
+
+## Runtime follow-up: simulator installation failed
+
+Created isolated simulator `N42-Maturity-20261107`, UDID `33DFE233-5879-4F3D-AF79-BDFC43035F02`, iPhone Duo / iOS 27.1. Boot completed. Installing the complete artifact failed with IXUserPresentableErrorDomain code 4: Runner contains iOS-simulator x86_64 code, incompatible with this runtime. Launch consequently failed because the app was not installed. No cold-start or login UI acceptance is claimed. The simulator was shut down after the probe; existing devices and data were not modified.
+
+`file Runner.app/Runner` confirms x86_64. `simctl list runtimes -j` reports only arm64 for every locally installed runtime (26.2, 26.4, 26.5, 27.0, 27.1). Podfile and Runner build settings exclude simulator arm64 to retain Google MLKit. MLImage.framework has x86_64 and arm64 archives, but `otool -l -arch arm64` reports LC_BUILD_VERSION platform 2 (iOS device), not platform 7 (iOS simulator). An arm64 slice alone therefore does not establish simulator compatibility.
+
+Open integration gap: full-feature app cannot run on this host's installed simulators. Next resolve MLKit's simulator binary compatibility without deleting camera/scan features, or use a compatible runtime; physical-device acceptance remains separately deferred. Do not treat the preceding successful x86_64 compilation as a runnable arm64 simulator build. No dependency or product feature was removed.
