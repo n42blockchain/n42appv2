@@ -44,5 +44,17 @@
     "path": "build/release-preserved/73425-20261107",
     "sha256": "ece9ac9b766f01e0466b23072c70974d05ad91ae4bd0646fdf338dc347b56bdb"
   },
-  "sourceNote": "Fixture changes were uncommitted during the run; their SHA-256 is recorded. A concurrent documentation commit bumped only the build number; application runtime code was unchanged."
+  "sourceNote": "Fixture changes were uncommitted during the run; their SHA-256 is recorded. A concurrent documentation commit bumped only the build number; application runtime code was unchanged.",
+  "remoteConfirmation": {
+    "run": 42406471346,
+    "job": 128505161213,
+    "source": "2fce38d44e6508fae08c8ff74a00125623956a6e",
+    "status": "completed",
+    "conclusion": "success",
+    "passed": 9,
+    "failed": 0,
+    "skipped": 4,
+    "scope": "Native import/home, creation/backup, private-key storage and send form checks; predates later progressive/wallet-switch/history additions",
+    "logSha256": "7db6812be87b5636bbc666a877186d4fc8eca1015836918b7be56e9e1661e572"
+  }
 }
