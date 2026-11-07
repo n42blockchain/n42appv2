@@ -1,0 +1,17 @@
+{
+  "platform": "Owned Android API 36 arm64 emulator-5586",
+  "targetedPassed": 3,
+  "targetedSkipped": 0,
+  "targetedFailed": 0,
+  "exit_code": 0,
+  "firstLocalAttempt": {
+    "passed": 5,
+    "failed": 2,
+    "skipped": 10,
+    "cause": "Unchanged initial zero did not invoke onChanged; gas fixture incorrectly assumed 21000 instead of existing 50000 default"
+  },
+  "correction": "Submit invalid amounts through the actual Send button; retain input/error/no-broadcast checks. Assert existing initial gas policy: 50000 x 2 Gwei = 0.0001 ETH. Product code unchanged.",
+  "scope": "Native real send form with selected synthetic wallet and loopback RPC; no keys, persistence or broadcast. Controlled keyboard; not real IME or funded transfer. Other four native component cases were not repeated in the targeted pass. Ten full-flow placeholders remain pending remote confirmation.",
+  "fixture_sha256": "4d5370bdf7c933fa3dc69c753d69efa73075b2e5a2657ee76a2f4445e900ab1a",
+  "log_sha256": "2156bbd780a49d20216d818298b625bd923e5ff46077dd03a95a1be53daf0bdc"
+}

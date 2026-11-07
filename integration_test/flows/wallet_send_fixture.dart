@@ -137,13 +137,22 @@ void registerWalletSendFixture() {
       } else if (scenario == 'amount') {
         for (final value in ['0', '2', '0.0000000000000000001']) {
           await enter(SendAmountWidget, value);
-          expect(state.amountErrorMessage, isNotEmpty);
+          // The initial zero text is unchanged by enterText; submitting must
+          // validate it just as a user pressing Send would.
+          await tester.ensureVisible(find.text(S.current.g_key_48));
+          await tester.tap(find.text(S.current.g_key_48));
+          await tester.pumpAndSettle();
+          expect(
+            state.amountErrorMessage,
+            isNotEmpty,
+            reason: 'Expected validation for synthetic amount $value',
+          );
           expect(find.text(state.amountErrorMessage as String), findsWidgets);
         }
       } else {
-        expect(state.gas, BigInt.from(21000));
-        expect(state.totalGasPrice, BigInt.from(42000000000000));
-        expect(find.textContaining('0.000042'), findsWidgets);
+        expect(state.gas, BigInt.from(50000));
+        expect(state.totalGasPrice, BigInt.from(100000000000000));
+        expect(find.textContaining('0.0001'), findsWidgets);
       }
       expect(find.byType(WalletChainSend), findsOneWidget);
       expect(
