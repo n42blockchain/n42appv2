@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-07",
+  "exit_code": 0,
+  "serverVersion": "1.13.11",
+  "sdk": "Python livekit 1.2.1",
+  "result": {
+    "clients": 2,
+    "generatedAudioSecondsPerClient": 6,
+    "received": [
+      {
+        "audio": 754,
+        "nonzeroAudio": 754,
+        "video": 106,
+        "nonblackVideo": 106
+      },
+      {
+        "audio": 784,
+        "nonzeroAudio": 769,
+        "video": 112,
+        "nonblackVideo": 112
+      }
+    ],
+    "scope": "Synthetic Python SFU audio/video; not Flutter, Matrix authorization, microphone/camera, E2EE or background acceptance"
+  },
+  "ownedRoomDeleted": true,
+  "firstAttempt": "Media passed, cleanup lacked the API room-create permission. Owned room was separately deleted; corrected run exited zero and deleted its own room.",
+  "log_sha256": "96154c6286a1bb7b355cf7597e274afc878d34b2725a059bf159025558bbc179",
+  "script_sha256": "e81e9d2bbc254b83736e37969c3a6beb335a6e4eb655921e012bb5f82931eb00",
+  "security": "Two synthetic identities, unique owned QA room, five-minute room-limited participant tokens minted in memory, generated media only, no microphone/camera/chat accessed. Server API credentials remain remote.",
+  "unverified": [
+    "Flutter native client interoperability",
+    "MatrixRTC OpenID authorization and membership rejection",
+    "Media E2EE",
+    "Physical device audio/video/background behavior",
+    "Sustained calls and reconnect"
+  ]
+}
