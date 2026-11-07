@@ -10,6 +10,8 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:wallet/wallet.dart' show EthereumAddress, EtherAmount;
+import 'package:n42_wallet/features/wallet/mpc/mpc_evm_transaction_signer.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/mev_protection.dart';
@@ -37,6 +39,7 @@ class EvmSender implements ChainSender {
   final _dataUtils = DataUtils();
   final Object? Function() _ownerIdentity;
   final String? Function() _readMnemonic;
+  final MpcEvmTransactionSigner? _mpcSigner;
 
   static Object? _currentOwner() {
     try {
@@ -67,25 +70,48 @@ class EvmSender implements ChainSender {
     Trustdart? trustdart,
     Object? Function()? ownerIdentity,
     String? Function()? readMnemonic,
+    MpcEvmTransactionSigner? mpcSigner,
   }) : _defaultChainConfig = chainConfig,
        _trustdart = trustdart ?? Trustdart(),
+       _mpcSigner = mpcSigner,
        _ownerIdentity = ownerIdentity ?? _currentOwner,
        _readMnemonic = readMnemonic ?? _currentMnemonic;
 
   @override
   Future<SendResult> send(SendParams params) {
+    if (_mpcSigner != null &&
+        (params.privateKey != null || params.beforeBroadcast == null)) {
+      return Future.value(
+        const SendResult.fail(
+          'MPC transfers require durable broadcast persistence and no local key',
+        ),
+      );
+    }
+    final mpcAddress = _mpcSigner?.provider.currentAddress;
     // Capture before the serializer can await another transaction. Never read
     // a replacement account's signing material after network requests.
     final Object? owner;
     final String? mnemonic;
     try {
       owner = _ownerIdentity();
-      mnemonic = params.privateKey == null ? _readMnemonic() : null;
+      mnemonic = _mpcSigner == null && params.privateKey == null
+          ? _readMnemonic()
+          : null;
     } catch (_) {
       return Future.value(const SendResult.fail('Wallet is not ready'));
     }
     bool signerIsCurrent() {
       try {
+        if (_mpcSigner != null) {
+          return _ownerIdentity() == owner &&
+              _mpcSigner.isCurrent() &&
+              _mpcSigner.provider.isLoggedIn &&
+              mpcAddress != null &&
+              _mpcSigner.provider.currentAddress?.toLowerCase() ==
+                  mpcAddress.toLowerCase() &&
+              mpcAddress.toLowerCase() ==
+                  params.fromAddress.trim().toLowerCase();
+        }
         return _ownerIdentity() == owner &&
             (params.privateKey != null ||
                 (owner != null && mnemonic == _readMnemonic()));
@@ -562,6 +588,40 @@ class EvmSender implements ChainSender {
 
     if (!signerIsCurrent()) {
       return const SendResult.fail('Wallet changed before signing');
+    }
+    if (_mpcSigner != null) {
+      if (nonceBig < BigInt.zero || nonceBig > BigInt.from(9007199254740991)) {
+        return const SendResult.fail('Invalid MPC transaction nonce');
+      }
+      try {
+        final recipient = EthereumAddress.fromHex(toAddress);
+        final isToken = contractAddress.isNotEmpty;
+        if (isToken && strip0x(calldata ?? '').isNotEmpty) {
+          return const SendResult.fail('Ambiguous MPC token calldata');
+        }
+        final data = isToken
+            ? hexToBytes(
+                'a9059cbb${bytesToHex(recipient.value).padLeft(64, '0')}'
+                '${valuePrice.toRadixString(16).padLeft(64, '0')}',
+              )
+            : hexToBytes(messageHex);
+        final typed = get1559WithChainSymbol(coinType);
+        final transaction = Transaction(
+          from: EthereumAddress.fromHex(fromAddress),
+          to: isToken ? EthereumAddress.fromHex(contractAddress) : recipient,
+          nonce: nonceBig.toInt(),
+          maxGas: gasLimit,
+          value: EtherAmount.inWei(isToken ? BigInt.zero : valuePrice),
+          data: data,
+          gasPrice: typed ? null : EtherAmount.inWei(gasPrice),
+          maxFeePerGas: typed ? EtherAmount.inWei(gasPrice) : null,
+          maxPriorityFeePerGas: typed ? EtherAmount.inWei(gasPrice2) : null,
+        );
+        final signed = await _mpcSigner.sign(transaction, chainId: chainId);
+        return '0x${bytesToHex(signed)}';
+      } catch (_) {
+        return const SendResult.fail('MPC transaction signing failed');
+      }
     }
     if ((privateKey ?? mnemonic ?? '').trim().isEmpty) {
       return const SendResult.fail('Signing key is unavailable');
