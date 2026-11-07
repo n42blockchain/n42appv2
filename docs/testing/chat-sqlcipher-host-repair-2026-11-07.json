@@ -23,13 +23,24 @@
       "encrypted reopen/wrong-key rejection"
     ],
     "pythonReleaseChecksPassed": 18,
-    "oldCandidateRejectedByNewGate": true
+    "oldCandidateRejectedByNewGate": true,
+    "repairedIpa": {
+      "build": 73466,
+      "exactDartLibrary": "sqlcipher.framework/sqlcipher",
+      "cryptoChecksPassed": 9,
+      "signatureVersionArchitectureChecksPassed": 50
+    },
+    "fullWallet": {
+      "passed": 7781,
+      "failed": 0,
+      "skipped": 3,
+      "coveragePercent": 73.73355693775164
+    }
   },
   "remaining": [
-    "Rebuild and inspect iOS IPA with repaired native asset",
     "Run Android native suite with four real database checks",
-    "Full wallet regression and current-source CI after hook repair",
-    "Physical-device/installed-user continuity acceptance remains separate"
+    "Physical-device/installed-user continuity acceptance remains separate",
+    "Current-source remote CI 42425633295"
   ],
   "upstream": "https://github.com/simolus3/sqlite3.dart/blob/main/sqlite3/doc/hook.md"
 }

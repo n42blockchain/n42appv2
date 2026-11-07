@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Candidate 73466 — 2026-11-07: built from SQLCipher repair `5d3730e3c`, preserved with verified digest. All 50 package, nine exact-library crypto and 14 login-resource checks pass; ten model bundles/86 files match. Complete local wallet regression: 7,781 pass/three native skips, 73.733557% coverage. Android run 42425303197 and full CI 42425633295 target this source and remain pending. **73464 stays HELD; neither package has been uploaded.** [Current candidate](../releases/testflight-20261107-73466.md).
+
 > RELEASE HOLD — 2026-11-07: **73464 must not be delivered.** Its Dart native manifest selects ordinary SQLite, and the new exact-library export check rejects it. Chat archive correctly refuses this engine. Entrypoint hooks now select SQLCipher, and real main/background/encryption/legacy-export checks pass. Android native suite and IPA builder now include dedicated checks. A new candidate plus native/current-source CI verification is required. [Repair evidence](../testing/chat-sqlcipher-host-repair-2026-11-07.json).
 
 > Candidate 73464 — 2026-11-07: signed IPA built from `03a8d87b2`, Chat `bb628eab`. All 50 package checks, 14 login-resource checks and ten model bundles/86 file comparisons pass; APFS preservation and digest verified. Current CI 42422731742 is still running, so no upload. Earlier Android native run 42421253719 passes eleven cases/one funded-transfer skip. [Candidate and limits](../releases/testflight-20261107-73464.md).
