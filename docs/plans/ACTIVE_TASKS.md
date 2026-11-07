@@ -1,6 +1,6 @@
 # 当前任务与验收台账
 
-> Batch 193 supersedes the pin below: current wallet dependency is Chat `cafd5210`. Thread initialization visibility is repaired with 45 related tests. The batch 192 full run remains scoped to `90271407`, not this newer fix.
+> Batch 194 supersedes the pin below: current wallet dependency is Chat `930690d1`. Thread initialization visibility and first-load retry are repaired with focused regression evidence in the reconciliation. The batch 192 full run remains scoped to `90271407`, not these newer fixes.
 
 > Current source check (2026-11-06): wallet `66fc50b8a` pins Chat `90271407613989ccc27e159903382857c3848338`. Both match their fetched upstreams. Chat batch 192 full regression is still running; do not report it as passed. Batch 173 (Chat `ca0a2049`, 8,103 passed / four external skips, 71.1056% coverage) is a historical full-suite baseline, not the current dependency. See the current reconciliation for remaining work and evidence boundaries.
 

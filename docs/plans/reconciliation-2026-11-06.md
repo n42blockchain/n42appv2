@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Recover from initial thread load failure — batch 194
+
+- First-load failure previously displayed only an error, leaving no way to recover in the page. Added the existing localized Retry control when no history is displayed. Reinitialize root/history/subscriptions without clearing the composer or sending it. Retry events reject in-flight duplicate loading, mismatched thread identity and expired captured account/session.
+- Real-page/pagination/lifecycle/event suites: **43 pass**, exit 0. Additional duplicate/stale-thread and account-session checks: **16 pass**, exit 0 (overlapping suites, not additive unique counts). Scoped analysis zero errors/warnings, ten infos. Logs: `/tmp/n42-chat-b194-final.log`, `/tmp/n42-chat-b194-guards.log`, `/tmp/n42-chat-b194-analysis.log`. Missing-button failure was reproduced; test cleanup now closes an unlistened stream without awaiting it.
+- Chat `930690d101890d90443882d43b5f1278e9aea186` is pushed on the isolated `fix/thread-init-history-20261106` branch and pinned by the wallet. Only Chat changes during dependency resolution; all three wallet host fixtures pass (`/tmp/n42-wallet-b194-host.log`). Original Chat batch 192 remains at `90271407`, with its runner confirmed alive and no final result; do not restart merely because output pauses. Preserve the pending archive/restore and fast-forward steps from batch 193.
+- Populated-history refresh/recovery and other Chat/native/login/wallet/dependency/payment/release acceptance remain open. No real message dispatch or device/release claim.
+
+
 ### Revalidate history before publishing an initialized thread — batch 193
 
 - Reproduced old replies returning when local history is cleared during awaited root lookup, and initial history bypassing a failed final visibility read. Subscribe to clear notifications before loading; revalidate root/replies together after root lookup and repeat when a notification invalidates an in-flight visibility result. Retain messages newer than the cutoff.
