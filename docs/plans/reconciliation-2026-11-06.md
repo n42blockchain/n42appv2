@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Prevent stale Chat searches from replacing current intent — batch 224
+
+- Reviewed the actual wallet-pinned Chat source, preserving its pre-existing modified coverage artifact. SearchBloc previously allowed cross-event completions after ClearSearch or global/room scope changes; repeated pagination could run concurrently. Added intent generations at event receipt (before debounce), guards on queued aliases and global/room/history result application, close invalidation and pagination single-flight.
+- Chat `a8a87226efae3eb70a9ee9725575a7932cbee54d` is committed/pushed on the existing integration branch. **40 search tests pass**, including seven new lifecycle cases; scoped analysis is clean (`/tmp/n42-chat-b224-final.log`, `/tmp/n42-chat-b224-analysis.log`). Initial command used the wrong relative path for the new test and failed; corrected path and completed final suite, no missing-test run accepted.
+- Wallet pubspec and lock now pin that exact commit; pub get exits zero and package_config resolves its Git cache. Only the Chat ref changes in pubspec.lock. **51 host initialization/SSO/device-fixture contract tests pass** (`/tmp/n42-wallet-b224-host.log`, exit 0). These contract checks are not physical-device tests. Chat source/upstream match; unrelated dirty coverage remains untouched.
+- MSG-001 in Chat OPEN_ISSUES remains authoritative. Proactive history-clear/account invalidation, delete-history completion races, old redactions, loaded-history/cursor behavior and live/device verification remain open. The older Chat full-suite baseline at 8c5202ab is not a full regression of this newer source. No deployment or release upload in this batch.
+
+
 ### Match the complete stored transfer before dispatch or release — batch 223
 
 - Reproduced eight SQLite failures across ADA/XLM/EGLD/NEAR: dispatch accepted a copied record with a different receiver/amount/contract, while unsubmitted release also omitted coinId. Hash/row/owner checks alone did not reject these altered caller records. Failure evidence: `/tmp/n42-wallet-b223-before.log` (61 pass, eight failures).

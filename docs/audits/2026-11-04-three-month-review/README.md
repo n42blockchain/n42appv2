@@ -1656,3 +1656,7 @@ Snapshot derivation/key/precision/contract values instead of relying on mutable 
 ### Batch 223 — exact stored memo intent
 
 Fixed conditional dispatch/release SQL accepting altered recipient/amount/contract records; release also now binds coinId. Eight pre-fix failures across ADA/XLM/EGLD/NEAR become part of 124 passing SQLite/history/widget tests. No migration, live transfer or release upload.
+
+### Batch 224 — Chat search lifecycle
+
+Integrated Chat a8a87226: intent generations guard stale global/room/history display completions and single-flight pagination. 40 Chat search tests and 51 host checks pass; scoped Chat analysis clean. Remaining MSG-001 boundaries are recorded in the Chat issue ledger. No fresh full-suite or release claim.
