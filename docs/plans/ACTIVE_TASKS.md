@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Candidate 73464 — 2026-11-07: signed IPA built from `03a8d87b2`, Chat `bb628eab`. All 50 package checks, 14 login-resource checks and ten model bundles/86 file comparisons pass; APFS preservation and digest verified. Current CI 42422731742 is still running, so no upload. Earlier Android native run 42421253719 passes eleven cases/one funded-transfer skip. [Candidate and limits](../releases/testflight-20261107-73464.md).
+
 > Sticker isolation batch integrated — 2026-11-07: wallet pins Chat `bb628eab`, including installed/recent reads, usage writes, upload completion and legacy media/fallback send guards. Full Chat regression passes 8,651 tests/four skips; 110 host checks pass. Earlier-source full CI 42417927415 is now successful across every job, including iOS/Android builds; its source predates this batch. Android native run 42421253719 remains in progress at earlier host source 9e607d5b8. [Evidence](../testing/chat-sticker-account-isolation-2026-11-07.json). No new TestFlight release or physical acceptance is claimed.
 
 > Sticker mutation completion — 2026-11-07: wallet now pins Chat `cd91a9e6`. Install/uninstall stop after account replacement and reject stale success; stable operations remain covered. Full Chat suite passes 8,641 tests/four skips; host live/sticker/initialization suite passes 110 tests. [Evidence](../testing/chat-sticker-account-isolation-2026-11-07.json). Earlier-source remote CI 42417927415 passes 7,796 wallet tests; native builds remain separate. New source is not yet in TestFlight.

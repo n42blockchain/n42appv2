@@ -1,0 +1,50 @@
+{
+  "candidate": "2.5.4+73464",
+  "source": "03a8d87b2bba016ac0f0e4552fe186715caff05a",
+  "chatRef": "bb628eab047c8532ba1a5eb3c9e1e347562aa6cf",
+  "ipaSha256": "0e78d78f0674abf73a48a53a61b9e826c1053edf05a0cbeac738a0693513944e",
+  "buildExit": 0,
+  "buildSourceStable": true,
+  "artifactVerified": true,
+  "packageChecks": 50,
+  "packagedAuthChecks": 14,
+  "modelBundles": 10,
+  "modelFiles": 86,
+  "modelArchiveAndIpaBytesMatch": true,
+  "chatFull": {
+    "passed": 8651,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0
+  },
+  "hostIntegration": {
+    "passed": 110,
+    "failed": 0
+  },
+  "earlierLocalWalletFull": {
+    "source": "d5c010c98",
+    "passed": 7777,
+    "failed": 0,
+    "skipped": 3,
+    "coveragePercent": 73.73355693775164
+  },
+  "earlierNativeAndroid": {
+    "run": 42421253719,
+    "source": "9e607d5b8a7bb3d48bbf1f3c6f7ae3e90b7cc6d9",
+    "conclusion": "success",
+    "passed": 11,
+    "skipped": 1,
+    "remaining": "Funded N42 TX-06; requires verified RPC/client and disposable funded account."
+  },
+  "currentFullCi": {
+    "run": 42422731742,
+    "source": "03a8d87b2bba016ac0f0e4552fe186715caff05a",
+    "status": "tests/coverage in progress; analysis/security/four backend modules passed"
+  },
+  "preservation": "build/release-preserved/73464-20261107",
+  "uploadAccepted": false,
+  "appleProcessingComplete": false,
+  "internalTesterAvailabilityVerified": false,
+  "physicalDeviceQa": "deferred",
+  "status": "Verified candidate held pending current CI; not uploaded"
+}
