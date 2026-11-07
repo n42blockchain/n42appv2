@@ -4,9 +4,10 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 /// NEAR Protocol API
 class NearApi {
   final bool isTest;
+  final Future<dynamic> Function(String, Map<String, dynamic>)? request;
   late final String _baseUrl;
 
-  NearApi({this.isTest = false}) {
+  NearApi({this.isTest = false, this.request}) {
     _baseUrl = isTest
         ? 'https://rpc.testnet.near.org'
         : 'https://rpc.mainnet.near.org';
@@ -26,6 +27,7 @@ class NearApi {
 
   /// 发送 JSON-RPC 请求，返回原始响应 Map
   Future<dynamic> _rpcPost(Map<String, dynamic> body) async {
+    if (request != null) return request!(_baseUrl, body);
     return BaseApi.requestEmptyH.post(
       _baseUrl,
       params: {},
@@ -66,6 +68,70 @@ class NearApi {
       'finality': 'final',
       'account_id': accountId,
     }, (r) => BigInt.parse(r['amount'] ?? '0'));
+  }
+
+  /// Account amount and liquid storage reserve at the same finalized block.
+  /// Keep getBalance's existing display contract unchanged.
+  Future<MessageModel> getTransferBalance(String accountId) async {
+    try {
+      BigInt integer(dynamic value) {
+        final text = value is String || value is int ? value.toString() : '';
+        if (!RegExp(r'^[0-9]+$').hasMatch(text)) {
+          throw const FormatException('Invalid NEAR balance field');
+        }
+        return BigInt.parse(text);
+      }
+
+      final response = await _rpcPost(
+        _rpcBody('query', {
+          'request_type': 'view_account',
+          'finality': 'final',
+          'account_id': accountId,
+        }),
+      );
+      if (response is! Map || response['result'] is! Map) {
+        throw const FormatException('Missing NEAR account');
+      }
+      final account = response['result'] as Map;
+      final amount = integer(account['amount']);
+      final locked = integer(account['locked']);
+      final storage = integer(account['storage_usage']);
+      final block = account['block_hash'];
+      if (block is! String || block.isEmpty) {
+        throw const FormatException('Missing finalized block');
+      }
+      final configResponse = await _rpcPost(
+        _rpcBody('EXPERIMENTAL_protocol_config', {'block_id': block}),
+      );
+      if (configResponse is! Map || configResponse['result'] is! Map) {
+        throw const FormatException('Missing NEAR protocol configuration');
+      }
+      final config = configResponse['result']['runtime_config'];
+      if (config is! Map) {
+        throw const FormatException('Missing NEAR runtime configuration');
+      }
+      final price = integer(config['storage_amount_per_byte']);
+      if (price <= BigInt.zero) {
+        throw const FormatException('Invalid NEAR storage price');
+      }
+      // NEP-448 exempts accounts using at most 770 bytes. Above that limit,
+      // all storage is billable; locked staking balance also covers storage.
+      final required = storage <= BigInt.from(770)
+          ? BigInt.zero
+          : storage * price;
+      final reserve = required > locked ? required - locked : BigInt.zero;
+      if (amount >= (BigInt.one << 128) ||
+          locked >= (BigInt.one << 128) ||
+          required >= (BigInt.one << 128) ||
+          storage >= (BigInt.one << 64)) {
+        throw const FormatException('NEAR balance field overflow');
+      }
+      return MessageModel()
+        ..data = {'balance': amount, 'storageReserve': reserve};
+    } catch (_) {
+      return MessageModel.error()
+        ..data = 'Unable to determine NEAR spendable balance';
+    }
   }
 
   /// Get access key (for nonce)

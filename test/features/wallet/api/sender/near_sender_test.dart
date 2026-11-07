@@ -15,6 +15,8 @@ MessageModel ok(dynamic value) => MessageModel()..data = value;
 
 class Api extends NearApi {
   int sends = 0;
+  BigInt reserve = BigInt.zero;
+  bool balanceError = false;
   Object nonce = 3;
   Object permission = 'FullAccess';
   String block = Base58Encode(List.filled(32, 2));
@@ -25,10 +27,12 @@ class Api extends NearApi {
   VoidCallback? onKey;
   Completer<void>? gate;
   @override
-  Future<MessageModel> getBalance(String accountId) async {
+  Future<MessageModel> getTransferBalance(String accountId) async {
     onBalance?.call();
     if (gate != null) await gate!.future;
-    return ok(BigInt.from(10).pow(26));
+    return balanceError
+        ? MessageModel.error()
+        : ok({'balance': BigInt.from(10).pow(26), 'storageReserve': reserve});
   }
 
   @override
@@ -89,7 +93,12 @@ class Signer extends Trustdart {
   }
 }
 
-SendParams params({String? key = 'fixture-key', BigInt? exact}) => SendParams(
+SendParams params({
+  String? key = 'fixture-key',
+  BigInt? exact,
+  bool max = false,
+}) => SendParams(
+  sendMax: max,
   coinType: 'NEAR',
   fromAddress: 'alice.near',
   toAddress: 'bob.near',
@@ -250,5 +259,38 @@ void main() {
     await first;
     expect(signer.signs, 1);
     expect(api.sends, 1);
+  });
+  test('Max keeps both storage reserve and the fee reserve', () async {
+    final api = Api()..reserve = BigInt.from(10).pow(24);
+    final signer = Signer();
+    await NearSender(
+      trustdart: signer,
+      apiFactory: (_) => api,
+    ).send(params(exact: BigInt.from(10).pow(26), max: true));
+    final encoded = RegExp(r'..')
+        .allMatches(signer.payload!['amount'] as String)
+        .map((m) => m.group(0)!)
+        .toList()
+        .reversed
+        .join();
+    expect(
+      BigInt.parse(encoded, radix: 16),
+      BigInt.from(10).pow(26) - api.reserve - BigInt.from(300000000000000),
+    );
+    expect(api.sends, 1);
+  });
+  test('ordinary transfer cannot consume storage reserve', () async {
+    final api = Api()..reserve = BigInt.from(10).pow(26);
+    final signer = Signer();
+    await NearSender(trustdart: signer, apiFactory: (_) => api).send(params());
+    expect(signer.signs, 0);
+    expect(api.sends, 0);
+  });
+  test('missing spendable balance blocks signing', () async {
+    final api = Api()..balanceError = true;
+    final signer = Signer();
+    await NearSender(trustdart: signer, apiFactory: (_) => api).send(params());
+    expect(signer.signs, 0);
+    expect(api.sends, 0);
   });
 }

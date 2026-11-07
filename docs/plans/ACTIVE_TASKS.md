@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 214: NEAR transfer/Max now retains storage stake using same-final-block account/config data. Display balance contract is unchanged; 71 related tests and public read-only RPC schema verification pass. Precise fee/reserve preview, JNI/live/device and uncertain-outcome recovery remain open.
+
 > Batch 213: NEAR iOS/Android native parameter validation added before casts/key access; Swift/Kotlin each pass 96 boundary cases. Actual Swift signing and invalid-input rejection pass. Android JNI and full app/live acceptance remain open; 73325 predates these changes.
 
 > Batch 212: NEAR ordinary sender identity, access-key failure handling and native wire encoding repaired; 44 related tests and real Swift/WalletCore component signing pass. Fee/reserve, Android JNI, unknown outcomes and live acceptance remain open. The already built 73325 IPA does not include this later runtime fix.

@@ -1,6 +1,17 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Reserve NEAR storage stake before transfer — batch 214
+
+- Previous ordinary/Max sends compared amount plus fee only with raw account amount, ignoring storage staking. Added a separate transfer-balance query while retaining `getBalance`'s existing raw-amount display contract. Query finalized account data, then fetch the storage price from `EXPERIMENTAL_protocol_config` at that exact block hash; do not mix latest configuration with an unrelated account snapshot.
+- Follow the [nearcore storage-stake check](https://raw.githubusercontent.com/near/nearcore/master/runtime/runtime/src/verifier.rs): accounts using at most 770 bytes are exempt; larger accounts reserve all billable bytes times the network price, less locked staking balance, floored at zero. Locked stake is never added to liquid spendable balance. Missing/malformed fields, pricing failures and overflows reject preparation instead of assuming zero reserve.
+- Ordinary transfers cannot consume the reserve; Max subtracts storage plus the existing gas reserve before creating the exact native amount. **71 API/sender/factory cases pass**, including 770/771 boundary, locked coverage, both networks, matching-block requests, failures, exact Max and unchanged balance display (`/tmp/n42-wallet-b214-final2.log`).
+- Final scoped analysis reports no issues (`/tmp/n42-wallet-b214-analysis-final.log`); diff formatting passes.
+- Read-only mainnet RPC probe against the public `near` account confirmed account field types and the storage-price response at the account block (protocol 88): `/tmp/n42-wallet-b214-rpc-schema.json`. No wallet credentials, signatures or transactions were used; this is API-schema evidence, not payment acceptance.
+- Fee modeling remains incomplete: the existing conservative 300 TGas reserve is unchanged, so Max is not claimed optimal. State changes after the snapshot, precise confirmation/fee binding, Android JNI, unknown-submission recovery and live/device acceptance remain open. Release 73325 does not contain this newer runtime fix.
+
+
+
 ### Validate NEAR native input before casts and key access — batch 213
 
 - Both native handlers previously force-cast required fields; Android additionally dereferenced a missing wallet. Added Swift/Kotlin validation before key access: account identifiers, canonical positive nonce within the current signed-Long bridge capacity, exact 32-byte hash and exact 16-byte amount. Missing credentials return nil/null. Wallet Core errors or empty signed output no longer become nominal signing results.

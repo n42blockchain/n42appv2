@@ -1616,3 +1616,7 @@ Two pre-fix regressions reproduced missing native signer fields and signing afte
 ## Batch 213 — NEAR native input boundary
 
 Swift/Kotlin now reject missing or malformed account, nonce, hash and amount before casts/key access; missing wallet and Wallet Core failure return nil/null. Each host validator passes 96 shared vectors. The actual Swift signer preserves valid Borsh output and independent CryptoKit verification, and rejects missing/wrong fields without crashing. Android compileDebugKotlin passes offline with JDK 21 (649 tasks, 1m14s). Logs are `/tmp/n42-wallet-b213-{input-final,native-final,android}.log`. Android JNI, full App/live flows and broader fee/reserve/recovery remain open; signed release 73325 predates this work.
+
+## Batch 214 — NEAR storage reserve
+
+Separate transfer balance now uses finalized account data and storage price at the same block, preserves NEP-448 exemption and locked-stake coverage, and blocks ordinary/Max spending of reserved funds. Existing raw display balance remains unchanged. 71 API/sender/factory tests pass; public mainnet RPC read-only schema check succeeds. This does not optimize the existing gas reserve or establish payment/JNI/device acceptance. See reconciliation for logs and remaining boundaries. Release 73325 predates this change.

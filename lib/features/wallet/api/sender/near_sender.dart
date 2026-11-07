@@ -112,9 +112,15 @@ class NearSender implements ChainSender {
     final publicKey = 'ed25519:${Base58Encode(keyBytes)}';
 
     // Get balance
-    final mmb = await nearApi.getBalance(params.fromAddress);
+    final mmb = await nearApi.getTransferBalance(params.fromAddress);
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
-    final chainBalance = mmb.data as BigInt;
+    final accountBalance = mmb.data as Map;
+    final chainBalance = accountBalance['balance'] as BigInt;
+    final storageReserve = accountBalance['storageReserve'] as BigInt;
+    final available = chainBalance - storageReserve;
+    if (storageReserve < BigInt.zero || available <= BigInt.zero) {
+      return SendResult.fail(S.current.g_key_wallet_m5('NEAR'));
+    }
     if (chainBalance == BigInt.zero) {
       return SendResult.fail(S.current.g_key_wallet_m5('NEAR'));
     }
@@ -140,17 +146,18 @@ class NearSender implements ChainSender {
       return const SendResult.fail('Invalid NEAR amount');
     }
 
-    if (valuePrice == chainBalance && params.sendMax) {
-      if (totalGas >= valuePrice) {
+    if (params.sendMax &&
+        (valuePrice == chainBalance || valuePrice == available)) {
+      if (totalGas >= available) {
         return SendResult.fail(S.current.g_key_wallet_m5('NEAR'));
       }
-      valuePrice = valuePrice - totalGas;
+      valuePrice = available - totalGas;
       adjustedAmount = toEther(
         valuePrice.toString(),
         params.decimals,
       ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGas + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero || totalGas + valuePrice > available) {
       return SendResult.fail(S.current.g_key_wallet_m5('NEAR'));
     }
 
