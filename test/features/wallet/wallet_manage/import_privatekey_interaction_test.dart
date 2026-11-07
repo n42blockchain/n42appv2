@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/pages/create_wallet/create_password.dart';
 
 import '../../../helpers/widget_test_helpers.dart';
 
@@ -42,7 +44,14 @@ void main() {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await tester.pumpWidget(wrapForTest(const ImportPrivatekey()));
+    await tester.pumpWidget(
+      wrapForTest(
+        const ImportPrivatekey(),
+        overrides: [
+          wapBridgeProvider.overrideWith((ref) => WalletActionProvider()),
+        ],
+      ),
+    );
     await tester.pumpAndSettle();
   }
 
@@ -99,6 +108,33 @@ void main() {
     expect(tester.takeException(), isNull);
     await drainToast(tester);
   });
+  testWidgets('valid native address preserves private-key password setup', (
+    tester,
+  ) async {
+    messenger.setMockMethodCallHandler(trustdart, (call) async {
+      nativeCalls.add(call.method);
+      if (call.method == 'generateAddress') {
+        return {'legacy': '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf'};
+      }
+      if (call.method == 'validateAddress') return true;
+      throw PlatformException(code: 'unexpected-native-call');
+    });
+    await open(tester);
+    await tester.enterText(
+      find.byType(TextField),
+      '${List.filled(63, '0').join()}1',
+    );
+    await submit(tester);
+    expect(find.byType(CreatePassword), findsOneWidget);
+    expect(nativeCalls, [
+      'generateAddress',
+      'validateAddress',
+      'generateAddress',
+    ]);
+    expect(toasts, isEmpty);
+    expect(tester.takeException(), isNull);
+  });
+
   for (final address in <Object?>[null, '', '   ', 42]) {
     testWidgets(
       'invalid native address ($address) cannot advance a base58 import',

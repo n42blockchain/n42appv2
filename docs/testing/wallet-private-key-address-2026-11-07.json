@@ -16,5 +16,11 @@
       42
     ]
   },
-  "limitation": "Widget tests mock the native SDK. Full native private-key import, secure persistence, and wallet home acceptance remain pending. This fix is newer than TestFlight 73425."
+  "limitation": "Widget tests mock the native SDK. Full native private-key import, secure persistence, and wallet home acceptance remain pending. This fix is newer than TestFlight 73425.",
+  "positiveCompatibility": {
+    "passed": 8,
+    "failed": 0,
+    "scope": "Mocked native valid address preserves password setup; invalid addresses still rejected",
+    "fixtureCorrection": "Initialize isolated wallet provider instead of the app global adapter"
+  }
 }
