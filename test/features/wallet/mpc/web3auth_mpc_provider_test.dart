@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:web3dart/web3dart.dart';
+import 'package:wallet/wallet.dart' show EthereumAddress, EtherAmount;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/mpc/mpc_provider.dart';
@@ -139,6 +140,54 @@ void main() {
       );
     },
   );
+
+  for (final chainId in [1, 8453]) {
+    test(
+      'typed ERC20 transaction binds chain $chainId and current signer',
+      () async {
+        await provider.login(MpcLoginType.google);
+        final transaction = Transaction(
+          to: EthereumAddress.fromHex('0x${'35' * 20}'),
+          nonce: 7,
+          maxGas: 65000,
+          maxFeePerGas: EtherAmount.inWei(BigInt.from(3000000000)),
+          maxPriorityFeePerGas: EtherAmount.inWei(BigInt.from(1000000000)),
+          value: EtherAmount.zero(),
+          data: hexToBytes('a9059cbb${'00' * 12}${'12' * 20}${'00' * 31}01'),
+        );
+        final preimage = transaction.getUnsignedSerialized(chainId: chainId);
+        expect(preimage.first, 2);
+        String recover(Uint8List payload, MpcSignResult signed) {
+          final signature = MsgSignature(
+            bytesToUnsignedInt(signed.signature.sublist(0, 32)),
+            bytesToUnsignedInt(signed.signature.sublist(32, 64)),
+            signed.signature[64],
+          );
+          return bytesToHex(
+            keccak256(ecRecover(keccak256(payload), signature)).sublist(12),
+          );
+        }
+
+        final initial = await provider.signTransaction(preimage);
+        expect(recover(preimage, initial).toLowerCase(), address.toLowerCase());
+        final otherChain = transaction.getUnsignedSerialized(
+          chainId: chainId + 1,
+        );
+        expect(
+          recover(otherChain, initial).toLowerCase(),
+          isNot(address.toLowerCase()),
+        );
+        loginKey = '2'.padLeft(64, '0');
+        final replacement = await provider.login(MpcLoginType.facebook);
+        final next = await provider.signTransaction(preimage);
+        expect(
+          recover(preimage, next).toLowerCase(),
+          replacement.address.toLowerCase(),
+        );
+        expect(next.signature, isNot(orderedEquals(initial.signature)));
+      },
+    );
+  }
 
   test('logout clears signing access', () async {
     await provider.login(MpcLoginType.google);
