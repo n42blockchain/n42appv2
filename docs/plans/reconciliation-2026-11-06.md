@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Apply clear boundaries to threads and single-message previews — batch 184
+
+- Production MessageRepositoryImpl now filters thread fetch/pagination, root lists, thread subscriptions and watchMessage (including thread-root fallback and single-message previews) through the durable owner/room boundary. Cleared single-message results emit null; later replies remain visible. Session identity is checked across pending reads and subscriptions reread the boundary for each update.
+- Eight new cases cover cleared/root/new messages, pagination, roots, owner isolation, pending account changes, repeated stream updates, corruption and single previews. Repository/thread suites: **55 pass**, exit 0 (/tmp/n42-chat-b184-final.log). Final scoped analysis: zero errors/warnings, five infos (/tmp/n42-chat-b184-analysis-final.log). An initial incorrect DI insertion was corrected before integration. Chat `d266c29f17cd6688b8382baa5417cc2446436d48` is pushed and pinned. Dependency resolution changes only Chat; all three wallet host fixtures pass (/tmp/n42-wallet-b184-host.log).
+- Remaining: existing page state is not proactively invalidated. ThreadState.copyWith retains its root when passed null; ThreadBloc initialization and session races need follow-up. Conversation summaries, media/files and clock skew remain open. This is local read visibility, not server deletion/archive erasure. Native login, recovery, dependencies, payments, full regression and current-source release acceptance remain active; no device/live/release claim.
+
 ### Filter cleared history from search — batch 183
 
 - Production search now uses the same account/room clear boundary as the timeline. Scoped and global searches, archive merge and chat-search pagination filter cleared timestamps. Responses are discarded after client/account/token/device/server changes; corrupt boundary records fail closed.
