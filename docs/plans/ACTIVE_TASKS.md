@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 250: real SDK/SQLite tests confirm restricted sync retains the session and simulated unlock resumes it; 99 related tests pass. Runtime pin unchanged. Initial-sync recovery UX, live E2EE and upgrade rehearsal remain open.
+
 > Batch 249: Matrix locked/deactivated login and restore errors retained without destructive logout. Chat a3e2ea87; 97 Chat and 51 host tests pass. Server remains Tuwunel 1.9.3; 1.9.4 sync compatibility and backup/restore rehearsal remain open.
 
 > Batch 248: archive export no longer loses timestamp ties; 92 Chat and 51 host tests pass, pin 8136c112. Backend upgrade added to active scope: live Tuwunel 1.9.3, candidate 1.9.4, frontend SDK 15.0.0. Compatibility/rehearsal/deployment remain open; see testing/matrix-upgrade-2026-11-06.md.

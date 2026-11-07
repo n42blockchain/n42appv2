@@ -1830,3 +1830,8 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Six pre-fix failures reproduced; 97 Chat repository/bloc tests pass (`/tmp/n42-chat-b249-after.log`). Scoped analysis has 11 existing infos, no errors/warnings. Wallet resolves the exact new cache; 51 host tests pass (`/tmp/n42-wallet-b249-host.log`).
 - Sync-time locking/unlocking, UIAA, E2EE and isolated backup/restore rehearsal remain open. These login tests do not prove production upgrade compatibility. See testing/matrix-upgrade-2026-11-06.md.
 
+### Verify restricted-session SDK sync — batch 250
+
+- Added real Matrix SDK 15.0.0 sync-loop coverage using temporary SQLite and a simulated HTTP peer. Locked/deactivated errors preserve session fields, stored client row and an account-data marker; no logout or session-clear events. Simulated unlocking resumes sync on the same token.
+- 99 combined SDK/repository/bloc tests pass (`/tmp/n42-chat-b250-final.log`); new-test analysis clean. Initial fixture logged an unhandled keys/query request internally; final fixture handles that endpoint and rejects unexpected requests explicitly.
+- No production code changed and the wallet runtime pin remains a3e2ea87. No live server upgrade, cryptographic key recovery, or device acceptance claimed. Initial-sync restriction UX and backend backup/restore rehearsal remain open.

@@ -1,5 +1,12 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Verify restricted-session SDK sync — batch 250
+
+- Added real Matrix SDK 15.0.0 sync-loop coverage using temporary SQLite and a simulated HTTP peer. Locked/deactivated errors preserve session fields, stored client row and an account-data marker; no logout or session-clear events. Simulated unlocking resumes sync on the same token.
+- 99 combined SDK/repository/bloc tests pass (`/tmp/n42-chat-b250-final.log`); new-test analysis clean. Initial fixture logged an unhandled keys/query request internally; final fixture handles that endpoint and rejects unexpected requests explicitly.
+- No production code changed and the wallet runtime pin remains a3e2ea87. No live server upgrade, cryptographic key recovery, or device acceptance claimed. Initial-sync restriction UX and backend backup/restore rehearsal remain open.
+
+
 ### Matrix account restriction compatibility — batch 249
 
 - Live read-only federation probe still reports Tuwunel 1.9.3; official latest stable is 1.9.4. No server restart or upgrade performed.
