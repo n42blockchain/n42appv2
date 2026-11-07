@@ -162,10 +162,11 @@ jobs:
           from urllib.parse import urljoin, urlparse, unquote
           source = pathlib.Path(unquote(urlparse(urljoin(config_path.as_uri(), chat['rootUri'])).path))
           lock = pathlib.Path('pubspec.lock').read_text()
-          block = re.search(r'^  n42_chat:\n(.*?)(?=^  \w+:)', lock, re.M | re.S).group(1)
+          block = re.search(r'^  n42_chat:\n(.*?)(?=^  \w+:|\Z)', lock, re.M | re.S).group(1)
           assert re.search(r'^    source: git$', block, re.M), 'Chat must resolve from Git'
           revision = re.search(r'resolved-ref: ["\']?([0-9a-f]{40})', block).group(1)
-          declared = re.search(r'ref: ([0-9a-f]{40})', pathlib.Path('pubspec.yaml').read_text()).group(1)
+          declaration = re.search(r'^  n42_chat:\n(.*?)(?=^  \w+:|^\S|\Z)', pathlib.Path('pubspec.yaml').read_text(), re.M | re.S).group(1)
+          declared = re.search(r'^      ref: ([0-9a-f]{40})\s*$', declaration, re.M).group(1)
           assert revision == declared, (revision, declared)
           checkout = subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip()
           assert checkout == revision, (checkout, revision)
