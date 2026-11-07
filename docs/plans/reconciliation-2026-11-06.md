@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Preserve resend identity and media behavior — batch 253 (2026-11-07)
+
+- Seven pre-fix cases reproduced (`/tmp/n42-chat-b253-before.log`) lost transaction/type, foreign or already-sent event replay, stale-token dispatch, duplicate concurrent sends, false success on empty receipt and missing cached-media retry.
+- Sender coalesces concurrent calls per captured session/room/event, checks ownership after room preparation/event lookup and accepts only its own failed non-state events. Original transaction ID (or local event ID fallback) and event type are retained. Uploaded media/GIF content is resent directly; unfinished media uses SDK cached-upload recovery. Empty receipts/failures remain retryable.
+- 41 sender/media/encryption tests pass (`/tmp/n42-chat-b253-final.log`), including remote/encrypted attachment references, explicit retry after failure and missing encryption keys. Scoped analysis has one existing import info and no errors/warnings. Wallet resolves d569b4aa5c4c0d7029b4daa8bbae43149d733f68; 51 host tests pass (`/tmp/n42-wallet-b253-host.log`).
+- Already-dispatched SDK work cannot be recalled. Live encrypted media/cache recovery, server-side idempotency, receiver delivery, backend upgrade rehearsal and other maturity requirements remain unverified/open. No production messages or payments sent.
+
+
 ### Bind automatic retries to their originating session — batch 252 (2026-11-07)
 
 - Four regressions reproduced (`/tmp/n42-chat-b252-before.log`): delayed retry used a new room, leave/return reused stale work, concurrent retry events sent twice, and an old failed request polluted a new room queue.
