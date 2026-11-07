@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 202: Solana signer/address binding and account-switch guards are verified in an isolated branch (125 related tests). Integration is pending the fixed-head wallet/Chat full runs. Batch 196 reduced old auxiliary worktrees to 12; batch 202 adds one temporary active worktree. Older worktree counts and full-suite records below remain historical.
+
 > Batch 199: Chat batch 195 finished with 8,222 passing tests, eight mock-fixture failures and four external skips; coverage 71.3688%, but full verification failed. Fixture repaired at wallet-pinned `8c5202ab`; 25 draft cases and three host checks pass. A fresh Chat full run is active. Earlier running/pin statements below are historical.
 
 > Batch 195: Chat `930690d1` is now integrated into the usual branch and wallet. The stalled batch 192 run was explicitly terminated and is not accepted. A fresh full run of `930690d1` with concurrency 2 is active; require its terminal result and gates before claiming success.

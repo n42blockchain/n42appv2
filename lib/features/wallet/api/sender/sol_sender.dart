@@ -20,17 +20,63 @@ class SolSender implements ChainSender {
   final SolApi _api;
   final Trustdart _trustdart;
   bool _sending = false;
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
 
-  SolSender({SolApi? api, Trustdart? trustdart})
-    : _api = api ?? SolApi(),
-      _trustdart = trustdart ?? Trustdart();
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  SolSender({
+    SolApi? api,
+    Trustdart? trustdart,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+  }) : _api = api ?? SolApi(),
+       _trustdart = trustdart ?? Trustdart(),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic;
 
   @override
   Future<SendResult> send(SendParams params) async {
     if (_sending) return const SendResult.fail('A transfer is already pending');
     _sending = true;
     try {
-      return await _send(params);
+      // Capture before any asynchronous preparation. Never read a replacement
+      // account's mnemonic when a balance, fee or signing request completes.
+      final owner = _ownerIdentity();
+      final mnemonic = params.privateKey == null ? _readMnemonic() : null;
+      bool signerIsCurrent() {
+        try {
+          return _ownerIdentity() == owner &&
+              (params.privateKey != null ||
+                  (owner != null && mnemonic == _readMnemonic()));
+        } catch (_) {
+          return false;
+        }
+      }
+
+      return await _send(params, mnemonic, signerIsCurrent);
     } catch (_) {
       return const SendResult.fail('Unable to prepare or send Solana transfer');
     } finally {
@@ -38,7 +84,11 @@ class SolSender implements ChainSender {
     }
   }
 
-  Future<SendResult> _send(SendParams params) async {
+  Future<SendResult> _send(
+    SendParams params,
+    String? mnemonic,
+    bool Function() signerIsCurrent,
+  ) async {
     final isContract = params.contractAddress.isNotEmpty;
     final exactOverride = isContract
         ? params.tokenValueWeiOverride
@@ -56,6 +106,25 @@ class SolSender implements ChainSender {
     if (valuePrice <= BigInt.zero ||
         valuePrice > (BigInt.one << 64) - BigInt.one) {
       return const SendResult.fail('Invalid transfer amount');
+    }
+    if (!signerIsCurrent() ||
+        (params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+      return const SendResult.fail('Wallet is not ready');
+    }
+    final derived = await _trustdart.generateAddress(
+      CoinType.SOL.name,
+      params.path,
+      'legacy',
+      mnemonic: params.privateKey == null ? mnemonic! : '',
+      pk: params.privateKey ?? '',
+      isTest: params.isTest,
+    );
+    if (!signerIsCurrent() ||
+        derived['legacy'] != params.fromAddress ||
+        params.fromAddress.isEmpty) {
+      return const SendResult.fail(
+        'Signing key does not match the selected wallet',
+      );
     }
     final sourceTokenAccount = isContract
         ? await _trustdart.getPubKeySOL(
@@ -154,13 +223,13 @@ class SolSender implements ChainSender {
     }
 
     Future<String> sign() async {
+      if (!signerIsCurrent()) return '';
       if (params.privateKey == null) {
-        if (!AppGlobals.appContext.mounted) return '';
         return _trustdart.signTransaction(
           CoinType.SOL.name,
           params.path,
           txData,
-          mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+          mnemonic: mnemonic!,
         );
       }
       return _trustdart.signTransaction(
@@ -172,7 +241,9 @@ class SolSender implements ChainSender {
     }
 
     var signStr = await sign();
-    if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
+    if (!signerIsCurrent() || signStr.isEmpty) {
+      return SendResult.fail(S.current.g_key_wallet_m6);
+    }
 
     // Validate signature
     final sigResult = SignatureValidator.validateSignedTransaction(
@@ -211,6 +282,9 @@ class SolSender implements ChainSender {
       return SendResult.fail(S.current.g_key_wallet_m5('SOL'));
     }
 
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before submission');
+    }
     final sendMm = await solApi.sendTransaction(signStr, isTest: params.isTest);
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     final hash = sendMm.data?.toString();

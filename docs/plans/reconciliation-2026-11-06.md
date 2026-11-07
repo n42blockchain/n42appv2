@@ -1,6 +1,15 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Solana sender identity and asynchronous account isolation — batch 202
+
+- Compared the three patch-unique commits on the old main-flow-audit branch. This is not yet a complete semantic reconciliation of that branch. A current production gap was confirmed in SolSender: it did not derive/check the signing address, and it read the active mnemonic after network awaits. A mismatched-key regression returned success before the fix (`/tmp/n42-wallet-b202-before.log`, exit 1).
+- The sender now captures the account identity and mnemonic before preparation, derives the sender from the supplied signing material/path and compares the case-sensitive Solana address, then rechecks account identity/material before signing, after signing and before broadcast. MAX re-signing uses the same captured material. Existing native/SPL amounts, rent, fee and network behavior are retained.
+- Added 13 cases covering wrong-key rejection, account changes during address derivation/balance/signing/fee lookup for both key and mnemonic paths, unchanged mnemonic MAX success, MAX account-switch suppression, same-owner mnemonic replacement and unavailable accounts. Sol sender suite: **54 pass**; combined sender/factory/send-page/RPC suites: **125 pass**, exit 0 (`/tmp/n42-wallet-b202-final.log`, `-related.log`). Scoped final analysis reports no issues (`/tmp/n42-wallet-b202-analysis-final.log`). No live transaction or device acceptance is claimed.
+- Work is isolated on `fix/sol-sender-account-20261106` while wallet batch 200 and Chat batch 199 continue on their original fixed heads. Do not attribute those full results to this new change. Integration remains pending until the original runs finish. Remaining old-branch changes and other chain senders need independent semantic review; this does not close the entire account-switch audit.
+- Release preflight confirmed iOS SDK 27.1 and version gate 2.5.3+73320. The private mode-0600 TestFlight JSON matches Flutter's environment parsing and adds the native-login URL/Facebook iOS flag omitted by the default configuration. Evidence `/tmp/n42-wallet-b201-release-config.json` and `-release-source.json`; no secret values were logged, no backend Google gate changed, and no build or upload was performed. Source manifest is not artifact acceptance.
+
+
 ### Full regression failure triage and fixture repair — batch 199
 
 - Batch 195 completed on unchanged Chat `930690d1`: **8,222 pass / 8 fail / 4 skips**, process exit 1, strict test gate fails. Coverage 102,749/143,969 = **71.3688363%**, independently above 70%; this does not make the full run accepted. All eight failures were draft-recovery route tests returning null from an unstubbed MockBloc.captureCurrentSession, preventing settings navigation. Added a room/account/closed-bound callback to the fixture; production guards are unchanged. All 25 composer-draft tests pass (`/tmp/n42-chat-b199-drafts.log`).

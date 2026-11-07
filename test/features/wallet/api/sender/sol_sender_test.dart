@@ -28,6 +28,8 @@ class FakeSol extends SolApi {
   Completer<void>? gate;
   int sends = 0;
   String? feeMessage;
+  VoidCallback? onBalance;
+  VoidCallback? onFee;
   @override
   Future<MessageModel> getBalance(
     String address,
@@ -35,6 +37,7 @@ class FakeSol extends SolApi {
     bool isTest = false,
   }) async {
     calls.add(('balance:$contract', isTest));
+    onBalance?.call();
     if (gate != null) await gate!.future;
     return failAt == 'balance'
         ? fail()
@@ -77,6 +80,7 @@ class FakeSol extends SolApi {
     bool isTest = false,
   }) async {
     calls.add(('fee', isTest));
+    onFee?.call();
     feeMessage = signMessage;
     return failAt == 'fee' ? fail() : ok(fee);
   }
@@ -98,6 +102,31 @@ class FakeSol extends SolApi {
 class FakeSigner extends Trustdart {
   final payloads = <Map<String, dynamic>>[];
   String output = signed;
+  String address = 'sender';
+  VoidCallback? onDerive;
+  VoidCallback? onSign;
+  String expectedKey = 'fixture-key';
+  final mnemonics = <String>[];
+
+  @override
+  Future<Map> generateAddress(
+    String coin,
+    String path,
+    String addressType, {
+    String mnemonic = '',
+    String passphrase = '',
+    String pk = '',
+    bool isImport = false,
+    bool isTest = false,
+  }) async {
+    expect(coin, 'SOL');
+    expect(addressType, 'legacy');
+    expect(pk, expectedKey);
+    mnemonics.add(mnemonic);
+    onDerive?.call();
+    return {addressType: address};
+  }
+
   String tokenAccount = 'associated-token-account';
   @override
   Future<String> signTransaction(
@@ -109,7 +138,9 @@ class FakeSigner extends Trustdart {
     String passphrase = '',
   }) async {
     expect(coin, 'SOL');
-    expect(pk, 'fixture-key');
+    expect(pk, expectedKey);
+    mnemonics.add(mnemonic);
+    onSign?.call();
     payloads.add(jsonDecode(jsonEncode(txData)) as Map<String, dynamic>);
     return output;
   }
@@ -126,6 +157,7 @@ SendParams params({
   String contract = '',
   BigInt? exact,
   BigInt? exactToken,
+  String? privateKey = 'fixture-key',
 }) => SendParams(
   coinType: 'SOL',
   fromAddress: 'sender',
@@ -137,7 +169,7 @@ SendParams params({
   sendMax: max,
   contractAddress: contract,
   tokenDecimals: 6,
-  privateKey: 'fixture-key',
+  privateKey: privateKey,
   valueWeiOverride: exact,
   tokenValueWeiOverride: exactToken,
 );
@@ -151,6 +183,126 @@ void main() {
     api = FakeSol();
     signer = FakeSigner();
     sender = SolSender(api: api, trustdart: signer);
+  });
+  test('rejects a signing key belonging to another sender', () async {
+    signer.address = 'another-sender';
+    final result = await sender.send(params());
+    expect(result.success, isFalse);
+    expect(signer.payloads, isEmpty);
+    expect(api.sends, 0);
+  });
+  for (final phase in ['derive', 'balance', 'sign', 'fee']) {
+    for (final useMnemonic in [false, true]) {
+      test(
+        'account switch during $phase rejects submission (mnemonic=$useMnemonic)',
+        () async {
+          Object? owner = Object();
+          var mnemonic = 'captured fixture mnemonic';
+          void changeAccount() {
+            owner = Object();
+            mnemonic = 'replacement fixture mnemonic';
+          }
+
+          if (useMnemonic) signer.expectedKey = '';
+          sender = SolSender(
+            api: api,
+            trustdart: signer,
+            ownerIdentity: () => owner,
+            readMnemonic: () => mnemonic,
+          );
+          switch (phase) {
+            case 'derive':
+              signer.onDerive = changeAccount;
+            case 'balance':
+              api.onBalance = changeAccount;
+            case 'sign':
+              signer.onSign = changeAccount;
+            case 'fee':
+              api.onFee = changeAccount;
+          }
+          final result = await sender.send(
+            params(privateKey: useMnemonic ? null : 'fixture-key'),
+          );
+          expect(result.success, isFalse);
+          expect(api.sends, 0);
+          expect(
+            signer.mnemonics,
+            isNot(contains('replacement fixture mnemonic')),
+          );
+          if (phase == 'derive' || phase == 'balance') {
+            expect(signer.payloads, isEmpty);
+          }
+        },
+      );
+    }
+  }
+  test(
+    'mnemonic transfer retains captured signer through MAX resign',
+    () async {
+      final owner = Object();
+      signer.expectedKey = '';
+      sender = SolSender(
+        api: api,
+        trustdart: signer,
+        ownerIdentity: () => owner,
+        readMnemonic: () => 'captured fixture mnemonic',
+      );
+      final result = await sender.send(
+        params(amount: 1, max: true, privateKey: null),
+      );
+      expect(result.success, isTrue);
+      expect(signer.payloads, hasLength(2));
+      expect(signer.mnemonics, everyElement('captured fixture mnemonic'));
+      expect(api.sends, 1);
+    },
+  );
+  test(
+    'MAX fee lookup account switch cannot trigger a second signature',
+    () async {
+      Object owner = Object();
+      sender = SolSender(
+        api: api,
+        trustdart: signer,
+        ownerIdentity: () => owner,
+      );
+      api.onFee = () {
+        owner = Object();
+      };
+      expect(
+        (await sender.send(params(amount: 1, max: true))).success,
+        isFalse,
+      );
+      expect(signer.payloads, hasLength(1));
+      expect(api.sends, 0);
+    },
+  );
+  test('mnemonic changes within the same owner reject submission', () async {
+    final owner = Object();
+    var mnemonic = 'captured fixture mnemonic';
+    signer.expectedKey = '';
+    sender = SolSender(
+      api: api,
+      trustdart: signer,
+      ownerIdentity: () => owner,
+      readMnemonic: () => mnemonic,
+    );
+    api.onBalance = () {
+      mnemonic = 'replacement fixture mnemonic';
+    };
+    expect((await sender.send(params(privateKey: null))).success, isFalse);
+    expect(signer.payloads, isEmpty);
+    expect(api.sends, 0);
+  });
+  test('unavailable mnemonic account fails before network calls', () async {
+    sender = SolSender(
+      api: api,
+      trustdart: signer,
+      ownerIdentity: () => null,
+      readMnemonic: () => 'fixture mnemonic',
+    );
+    expect((await sender.send(params(privateKey: null))).success, isFalse);
+    expect(api.calls, isEmpty);
+    expect(signer.payloads, isEmpty);
   });
   for (final testnet in [true, false]) {
     test('native transfer keeps every RPC on network $testnet', () async {
