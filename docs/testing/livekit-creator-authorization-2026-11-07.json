@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-07",
+  "scope": "N42 legacy token service; not the deployed Element MatrixRTC service",
+  "before": "Three focused failures demonstrated missing full-event request and acceptance of attacker-controlled sender from single-state content",
+  "fix": "Read m.room.create sender from authenticated state-list event envelopes, require empty state key and content field; reject missing creator and malformed/upstream failures",
+  "verification": {
+    "goTestRace": "pass",
+    "goVet": "pass",
+    "realIsolatedProtocol": {
+      "server": "Tuwunel 1.9.4",
+      "roomVersion": "11",
+      "singleStateHasCreator": false,
+      "singleStateHasSender": false,
+      "fullStateSenderMatchesAccount": true,
+      "ownedAccountDeactivated": true
+    }
+  },
+  "productionStatus": "Legacy service remains undeployed; current official endpoint publish-role/membership enforcement still requires separate integration and acceptance"
+}
