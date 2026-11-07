@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-07",
+  "chatSource": "52cd2e8108315615c7c4bf91ebb2a30e88340aad",
+  "reproduced": [
+    "Real SDK avatar upload completed and set profile after token replacement",
+    "Room profile loop wrote a second room under a replacement account"
+  ],
+  "validation": {
+    "focusedClusterPassed": 53,
+    "failed": 0,
+    "nativeAvatarAndDatabasePassed": 6,
+    "analysisNewFindings": 0,
+    "analysisExistingInfos": 2
+  },
+  "preservedBehavior": [
+    "SDK upload success",
+    "SDK failure followed by authenticated fallback success",
+    "Stable-account profile field merge and read",
+    "Stable-account room sync completes all joined rooms"
+  ],
+  "logSha256": {
+    "n42-native-avatar-before.log": "231aeb2563495ce074b71864b6e2778493a77830a6ea6ae1b2f002333f3cb4e4",
+    "n42-native-avatar-final.log": "fdb4173a4f34bcb2bc167081a57c0ad2f158b34c02545d4f178fcf55644579c9",
+    "n42-room-profile-before.log": "9a4bcc88416e63b1ca6de4b369ba27d95aec396e40a5efc9a0ba17ad82d9be51",
+    "n42-profile-cluster-final.log": "9df76c4cf632b22c38798dea75b32ecc7d613fafdd1afdf75b7227f45813eb65",
+    "n42-profile-cluster-analysis-final.log": "b35ab468983eb44eb4769e6c23edf8482cfff11574ea9c98848b7decdb563a04"
+  },
+  "boundaries": [
+    "Transport is mocked with synthetic credentials; native SDK crypto and temporary SQLite are real",
+    "Cannot cancel an already sent original-account HTTP request",
+    "Physical-device, public server and production account acceptance remain open",
+    "Full CI 42411468479 covers an earlier source; current-source full gates and release remain required"
+  ],
+  "hostLiveRegression": {
+    "passed": 74,
+    "failed": 0,
+    "exitCode": 0,
+    "logSha256": "0d8043d648e5a7d9e3e2a8d00a58d0e2ca0713a14928fca3b801f4fb21e79cab"
+  }
+}
