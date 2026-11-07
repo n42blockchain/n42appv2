@@ -479,12 +479,20 @@ jobs:
   # ============================================
   build-ios:
     name: 🍎 Build iOS
-    runs-on: macos-latest
+    runs-on: xcode-27
     needs: [test, security]
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # WalletCore requires Swift 6.4; macos-latest still selects Xcode 26.
+      - name: Select compatible Xcode
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_27.1.app/Contents/Developer
+          xcodebuild -version
+          xcrun swift --version
+          xcrun swift --version | grep -Eq 'Swift version 6\.4([ .]|$)'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
