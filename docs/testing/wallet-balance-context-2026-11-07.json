@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-07",
+  "problem": "A delayed balance response overwrote a newly selected wallet map",
+  "before": {
+    "failed": 1,
+    "expectedNewWalletBalance": "123",
+    "actualNewWalletBalance": "999"
+  },
+  "final": {
+    "providerTestsPassed": 279,
+    "failed": 0,
+    "contextCases": 9,
+    "cases": [
+      "wallet switch",
+      "wallet object replacement at same index",
+      "owner change",
+      "address change",
+      "testnet change",
+      "chain ID change",
+      "contract change",
+      "unchanged success",
+      "unchanged API failure"
+    ]
+  },
+  "fix": "Check captured owner, wallet identity/index, coin data identity, address, network, chain/asset identity and RPC after asynchronous requests, before applying results; includes ALGO token path",
+  "analysis": "No errors or warnings; two existing style infos verified in HEAD constructor and signing snapshot code",
+  "fixtureCorrection": "Intermediate extension had two failing fixture cases because their mutation branches were missing; branches added and all 279 provider tests rerun successfully",
+  "logSha256": "7dc22286bd9f38ce744ec0fde94a77d29973d35ce5b8aac7cbfcfe95bed1137c",
+  "limitations": [
+    "Mocked API delayed-response regression; not native wallet home acceptance",
+    "Direct ALGO and metadata lookup paths have guards but lack equivalent delay-specific acceptance in this batch",
+    "Not included in TestFlight 73425"
+  ]
+}

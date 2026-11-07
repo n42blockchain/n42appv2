@@ -544,8 +544,53 @@ class WalletActionProvider extends ChangeNotifier
     setBalanceTotal(tBalance);
   }
 
+  // Bind each response to the wallet and network that started the request.
+  bool Function() _captureBalanceContext(CoinModel coinModel) {
+    final owner = userUUID;
+    final index = walletIndex;
+    final selected = index >= 0 && index < walletInfoLsit.length
+        ? walletInfoLsit[index]
+        : null;
+    final address = coinModel.address;
+    final testnet = coinModel.isTest;
+    final data = coinModel.coin;
+    final rpc = resolveBalanceRpcOverride(coinModel);
+    final asset = (
+      coinModel.config.coinType,
+      coinModel.config.mKey,
+      coinModel.config.chainId,
+      coinModel.config.chainIdTest,
+      coinModel.config.contract,
+      coinModel.config.contractTest,
+    );
+    return () =>
+        !isDisposed &&
+        userUUID == owner &&
+        walletIndex == index &&
+        identical(
+          selected,
+          index >= 0 && index < walletInfoLsit.length
+              ? walletInfoLsit[index]
+              : null,
+        ) &&
+        identical(data, coinModel.coin) &&
+        coinModel.address == address &&
+        coinModel.isTest == testnet &&
+        (
+              coinModel.config.coinType,
+              coinModel.config.mKey,
+              coinModel.config.chainId,
+              coinModel.config.chainIdTest,
+              coinModel.config.contract,
+              coinModel.config.contractTest,
+            ) ==
+            asset &&
+        resolveBalanceRpcOverride(coinModel) == rpc;
+  }
+
   @override
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel) async {
+    final contextIsCurrent = _captureBalanceContext(coinModel);
     if (coinModel.address == null) {
       debugPrint(
         'WalletActionProvider: Skipping balance fetch for ${coinModel.config.miniName} - address is null',
@@ -581,6 +626,7 @@ class WalletActionProvider extends ChangeNotifier
         contract,
         rpcOverride,
       );
+      if (!contextIsCurrent()) return true;
       if (decimals == null) {
         coinModel.loadError = true;
         return true;
@@ -601,6 +647,7 @@ class WalletActionProvider extends ChangeNotifier
         ) ??
         MessageModel.error();
 
+    if (!contextIsCurrent()) return true;
     _applyMarketPrice(coinModel);
 
     if (mm.error) {

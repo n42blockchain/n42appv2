@@ -319,6 +319,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
   }
 
   Future<bool> getBalanceTokenAlgoWithCoinModel(CoinModel coinModel) async {
+    final contextIsCurrent = _captureBalanceContext(coinModel);
     // address is guaranteed non-null by getBalanceWithCoinModel
     if (getCoinModelWithCoinType(coinModel.config.coinType) == null) {
       coinModel.loadError = true;
@@ -340,6 +341,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
         ) ??
         MessageModel.error();
 
+    if (!contextIsCurrent()) return true;
     if (rBalance.error) {
       coinModel.loadError = true;
       refresh();
