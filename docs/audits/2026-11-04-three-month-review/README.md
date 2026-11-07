@@ -1669,3 +1669,8 @@ Integrated 07e7c2ae: immediate visible search clearing and generation/revision-b
 ### Batch 226 — Account-scoped Chat search history
 
 Chat 7eef1654 removes cross-account shared history storage and serializes same-isolate mutations/reads. Ten storage cases cover separation, legacy history, ordering, session changes, limits and write failures. 55 related Chat tests and scoped analysis pass; wallet pins the exact source and 51 host checks pass. See reconciliation for evidence and remaining boundaries; no full-suite or release claim.
+
+
+### Batch 227 — History revision during global search
+
+Four regressions reproduced old history/error restoration after clear. Revision-aware refresh now preserves current results and drops obsolete history reads/errors. Chat 2f136ef3: 59 related tests and scoped analysis pass; wallet host 51 pass. Global repository session-origin checks remain open; no new release or full-suite claim.

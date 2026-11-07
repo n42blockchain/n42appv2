@@ -1,6 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Preserve current search when history changes — batch 227
+
+- Reproduced four failures: empty/global searches could restore deleted history or report an obsolete read error after ClearSearchHistory. Failure evidence `/tmp/n42-chat-b227-before.log`. Added revision-aware history refresh to PerformSearch without cancelling or discarding current search results; stop retries when the search generation expires. Current-revision errors still propagate.
+- Chat `2f136ef3b5b3c1c8a217aef978afb1d7cd4fec64` is committed/pushed. **59 related tests pass**, scoped analysis clean (`/tmp/n42-chat-b227-final.log`, `/tmp/n42-chat-b227-analysis.log`). Wallet pin/lock/package_config match; pub get exits zero with only Chat ref changed in lock; **51 host checks pass** (`/tmp/n42-wallet-b227-host.log`, exit 0).
+- Further inspection confirms searchGlobal currently lacks a single session-origin guard spanning history save and category awaits. Address that next, along with proactive account/clear invalidation. This batch closes the observed history revision overlap, not all search/account lifecycle behavior. No full regression, release upload, physical-device or live-service acceptance. Baseline local/untracked artifacts are preserved.
+
+
 ### Isolate and serialize Chat search-history storage — batch 226
 
 - Replaced the shared unowned history key with homeserver/user-scoped keys. Legacy history is retained but not assigned to an arbitrary account. Reads and mutations share a FIFO queue across data-source instances in one isolate, with durable reload before access. Captured client/user/server/device/token identity rejects queued stale work and suppresses stale results.

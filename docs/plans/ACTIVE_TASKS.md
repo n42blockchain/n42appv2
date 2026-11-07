@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 227: clear-during-search history races reproduced and repaired; 59 Chat tests and 51 host checks pass. Chat pin 2f136ef3. Next: guard global search across account changes; full regression/native login/release remain open.
+
+
 > Batch 226: Chat search history is scoped to homeserver/user and serialized across same-isolate instances; stale session work and failed writes are guarded. 55 Chat tests and 51 wallet host checks pass. Current pin is 7eef1654; full regression, native login, newer release and remaining MSG-001 work remain open.
 
 > Batch 225: Chat pin 07e7c2ae guards history completions/errors and clears visible results immediately. 46 Chat tests, clean analysis and 51 host checks pass. Repository write concurrency/proactive invalidation and remaining MSG-001 work stay open; no new release.
