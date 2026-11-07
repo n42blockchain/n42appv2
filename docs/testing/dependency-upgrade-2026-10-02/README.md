@@ -1,5 +1,12 @@
 # Dependency upgrade record — started 2026-10-02; status refreshed 2026-10-05
 
+## Wallet Matrix 16 host candidate — 2026-11-07
+
+Isolated branch `chore/wallet-matrix16-20261107` combines the eight compatible lockfile updates with immutable Chat `1e10ad2e78bed3fcb7425e2f078d977d60ec61a8`, resolving Matrix 16.0.1. Normal `flutter pub get` resolves the graph; full host analysis exits 0 with infos only and no errors/warnings. Application lib/ and native source have not been changed to force compatibility. The Chat candidate has 8,596 passing tests/three opt-in live skips, 71.882445% line coverage and an isolated multidevice/revocation/one-recovery protocol pass. Its 20-client load follow-up is still running. These are not host native-build, production or physical-device results.
+
+Host full tests/coverage and Android/iOS builds remain pending on the combined branch. The compatible-only branch is retained as an independent comparison. Neither candidate is integrated into the published SDK 15 Beta 73423. Do not substitute the green SDK 15 CI or the SDK 15 30/30 recovery result for the new host/SDK checks.
+
+
 ## Compatible resolver batch — 2026-11-07 (isolated branch)
 
 Fresh Pub resolver output found eight updates allowed by existing constraints. The isolated `chore/compatible-dependencies-20261107` branch updates only the lockfile graph: flutter_riverpod/riverpod 3.4.3 → 3.5.0, riverpod_annotation 4.0.7 → 4.0.8, pro_image_editor 14.25.0 → 14.25.1, code_assets 2.1.0 → 2.2.0, native_toolchain_c 0.19.5 → 0.19.6, objective_c 9.6.2 → 9.6.3 and permission_handler_windows 0.2.3 → 0.2.4. Application source, the Chat runtime pin and existing native forks remain unchanged. This branch is not integrated or shipped in Beta 73423.
