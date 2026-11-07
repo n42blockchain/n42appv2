@@ -1694,3 +1694,8 @@ Production DI wires authentication and selected-owner history-clear events into 
 ### Batch 231 — Known redactions in archive/search
 
 Two SQLite regressions reproduced redacted insertion and retained plaintext. Archive scans now reconcile SDK-confirmed redactions with FTS cleanup; live searches exclude redacted events. Chat f261cc62 passes 48 related tests; analysis has two existing infos only. Wallet host 51 pass. Continuous redaction synchronization, tombstones, archive account lifecycle and production/release acceptance remain open.
+
+
+### Batch 232 — Durable archive deletion markers
+
+Schema v2 records event IDs atomically with plaintext/FTS deletion; SQL trigger rejects stale reinsertion. Reproduced import resurrection, then passed 53 related tests including real file reopen, upgrade, rollback and existing SQLCipher migrations. Chat 27c4d1a3 integrated; 51 wallet host checks pass. Continuous remote delivery, whole-database replacement, account lifecycle and release acceptance remain open.

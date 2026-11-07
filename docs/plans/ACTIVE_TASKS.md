@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 232: archive v2 persists event-ID deletion markers and atomically removes plaintext/FTS; stale inserts are rejected after reopen. 53 Chat tests and 51 host checks pass; pin 27c4d1a3. Remote delivery, whole-database restore, account lifecycle and release/full regression remain open.
+
+
 > Batch 231: archive scans remove SDK-confirmed redactions from storage/FTS; live search excludes them. 48 Chat tests and 51 host checks pass. Pin f261cc62. Continuous remote redaction synchronization and durable tombstones remain open; no release/full-suite claim.
 
 

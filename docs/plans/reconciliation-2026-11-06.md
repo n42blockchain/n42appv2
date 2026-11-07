@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Persist archive deletion markers against stale imports — batch 232
+
+- Reproduced a stale import restoring deleted plaintext (`/tmp/n42-chat-b232-before.log`). Archive schema v2 adds an event-ID-only marker table and a BEFORE INSERT trigger. The marker and plaintext/FTS removal are one transaction; both explicit redaction/self-destruct cleanup and SDK-confirmed archive scans use this path. Ordinary archive APIs and raw SQL inserts cannot reintroduce marked events.
+- Chat `27c4d1a365a50b971ebebc77b31aa90cf470b100` committed/pushed. **53 related tests pass**, including file reopen, v1 schema upgrade preserving existing history, unloaded-event markers, idempotence, rejected API/raw inserts and rollback after deletion failure (`/tmp/n42-chat-b232-final.log`). Existing SQLCipher migration scenarios pass. Analysis has no errors/warnings and two prior constructor infos (`/tmp/n42-chat-b232-analysis.log`). No generated files were edited; auxiliary SQL schema follows the existing FTS migration pattern.
+- Wallet pub get exits zero, only Chat lock ref changes and exact Git cache verified. **51 host checks pass** (`/tmp/n42-wallet-b232-host.log`, exit 0). Unrelated local artifacts remain preserved.
+- Markers survive normal reopen/inserts inside this archive, not whole-database replacement from an old backup. Continuous remote redaction delivery, archive account lifecycle and real-server acceptance remain open; native login/current-source full regression/new release are still unfinished. No upload, deployment, physical-device or live-message action.
+
+
 ### Reconcile known redactions during archive scans — batch 231
 
 - Reproduced two real-SQLite failures: SDK-redacted events were inserted on first archive and existing plaintext survived subsequent insert-or-ignore scans (`/tmp/n42-chat-b231-before.log`). Archive scans now delete rows for SDK-confirmed redactions before filtering, allowing the existing FTS trigger to remove indexed text; redacted events cannot be archived again by that scan. Metadata updates use actual row counts. Live timeline search excludes redacted events even with a matching stale body.
