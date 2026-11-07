@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.5.3+73407
+version: 2.5.3+73408
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -169,6 +169,8 @@ dependencies:
 # migration. Do not replace it with unpatched upstream v11.
   wallet: any
 dependency_overrides:
+  google_mlkit_commons:
+    path: packages/google_mlkit_commons
   # connectivity_plus 7.3.2 and Chat wakelock_plus 1.8.1 require dbus 0.8.
   dbus: ^0.8.0
   flutter_secure_storage:

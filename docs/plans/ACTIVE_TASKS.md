@@ -303,3 +303,10 @@
 
 - Full app compiles, but installation on isolated iOS 27.1 simulator fails: x86_64 app versus arm64-only installed runtimes. MLImage arm64 binary targets iOS device; existing exclusions preserve MLKit features.
 - Keep open: obtain compatible MLKit simulator binaries or runtime, then repeat install/cold-launch/login UI. Do not disable features or count compilation as runtime acceptance. Evidence: docs/testing/ios-integration-2026-11-07.md.
+
+
+### 2026-11-07 native MLKit runtime follow-up
+
+- Isolated fix/mlkit-pods-simulator-20261107 now retains CocoaPods/Firebase/old plugin APIs, builds and launches on arm64 simulator. Eight real native model tests pass on a clean install, including Spanish model download and inference.
+- Fixed SSZipArchive minizip ABI collision by namespacing its compatibility symbols; local commons fork receives model completion via userInfo and stable model identity. Both override files and native plugin symlink verified.
+- Remaining: device build, concurrent/failure notifications, non-Latin accuracy and real camera/video/chat acceptance. Do not merge or release until required integration gates pass. Evidence: docs/testing/mlkit-cocoapods-simulator-2026-11-07.md.

@@ -1,4 +1,6 @@
 dependency_overrides:
+  google_mlkit_commons:
+    path: packages/google_mlkit_commons
   dbus: ^0.8.0
   # simple_html_css 5 has an outdated xml ^6 cap; XML 7 DOM/event APIs are tested at host call sites.
   xml: ^7.1.0
