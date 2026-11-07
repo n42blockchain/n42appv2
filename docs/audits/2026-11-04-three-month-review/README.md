@@ -1939,3 +1939,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Full export no longer truncates eligible loaded Timeline messages at 1,000. A 1,005-event file fixture verifies message count, file contents and Timeline cleanup. The manifest records historyScope=loadedTimeline.
 - 93 backup tests pass (`/tmp/n42-chat-b277-final.log`); service analysis has six infos, no errors/warnings. Chat 95044c7d0c7bd9c98d070591af52cc9ec1a24191.
 - Remote history pagination, archive merge/completeness, large-history resource bounds, localized scope display and live/device acceptance remain open. Removing this cap does not prove all server history was fetched.
+
+### Integrate optional remote-history export capability — batch 278 (2026-11-07)
+
+- createBackup now supports fetchRemoteHistory (default false). It requests 500-event pages, bounds page count and timeout, detects no progress and retains loaded data with read-error warnings on failure. Session changes abort export and Timeline cleanup remains in finally.
+- Three focused paging cases and 96 backup tests pass (`/tmp/n42-chat-b278-final.log`); service analysis has six infos, no errors/warnings. Manifest distinguishes requestedRemoteHistory from loadedTimeline; neither is full-history proof.
+- Chat 12812f44f429d466cba4ec299e80933fa116218a. UI/default activation, timeout cancellation, memory bounds, archive merge, real homeserver pagination and complete backup acceptance remain open.

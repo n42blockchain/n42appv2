@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate optional remote-history export capability — batch 278 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b278-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- createBackup now supports fetchRemoteHistory (default false). It requests 500-event pages, bounds page count and timeout, detects no progress and retains loaded data with read-error warnings on failure. Session changes abort export and Timeline cleanup remains in finally.
+- Three focused paging cases and 96 backup tests pass (`/tmp/n42-chat-b278-final.log`); service analysis has six infos, no errors/warnings. Manifest distinguishes requestedRemoteHistory from loadedTimeline; neither is full-history proof.
+- Chat 12812f44f429d466cba4ec299e80933fa116218a. UI/default activation, timeout cancellation, memory bounds, archive merge, real homeserver pagination and complete backup acceptance remain open.
+
+
 ### Integrate full-export loaded message retention — batch 277 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b277-host.log`); manifest/lock/cache resolve the immutable Chat commit.
