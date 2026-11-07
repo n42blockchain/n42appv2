@@ -1684,3 +1684,8 @@ Global search and category async boundaries now check captured client/user/token
 ### Batch 229 — Search datasource lifecycle
 
 Session guards now cover directory/public-room responses and timeline/history searches; owned subscriptions are cancelled in finally. Corrected initial fixture setup, then reproduced seven genuine failures on old source. Chat e7031dc5 passes 99 related tests and scoped analysis; wallet host checks 51 pass. Proactive UI invalidation, same-session history changes and release acceptance remain open.
+
+
+### Batch 230 — Proactive visible search invalidation
+
+Production DI wires authentication and selected-owner history-clear events into a dedicated SearchBloc invalidation event. Old results clear without reading another session history; pending requests and debounce cannot restore them. Close releases streams. Chat dbda9b3e passes 42 related tests and scoped analysis; wallet host 51 pass. Server redaction/live account-switch timing and remaining release/full-suite work are not closed.

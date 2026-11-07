@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 230: visible search results now clear on wired authentication and selected-owner durable history-clear events; pending work is invalidated and listeners released. 42 Chat tests and 51 host checks pass. Pin dbda9b3e. Server redactions/remaining history semantics, full regression, native login and release are still open.
+
+
 > Batch 229: datasource search completions/history iteration are session-guarded and owned timelines released. 99 Chat tests, scoped analysis and 51 host checks pass. Pin e7031dc5. Proactive rendered-result invalidation and other lifecycle/release requirements remain open.
 
 

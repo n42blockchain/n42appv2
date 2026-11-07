@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Proactively invalidate visible search results — batch 230
+
+- SearchBloc accepts lifecycle streams and uses a dedicated invalidation event to clear results without loading history. Receipt invalidates both search generation and history revision, so pending requests/errors/debounce cannot restore the prior context. Close cancels listeners. Production DI wires AuthBloc status/user transitions, repository login/current-account invalidation and selected-owner durable chat-history clear events.
+- ChatHistoryClearStore exposes owner notifications while retaining its existing per-room watchers and durable-acknowledgement rules. Cross-instance tests prove another owner's clear leaves results intact, while the selected owner's clear removes them. New searches still work after invalidation.
+- Chat `dbda9b3e25fcf4c1b1bb644c10d988035a88216d` committed/pushed; **42 related tests pass**, including six new invalidation cases; scoped analysis clean (`/tmp/n42-chat-b230-tests.log`, `/tmp/n42-chat-b230-analysis.log`). Wallet pub get exits zero, only Chat lock ref changes, exact Git cache verified; **51 host checks pass** (`/tmp/n42-wallet-b230-host.log`, exit 0).
+- This covers the wired auth and durable-clear events, not server redactions, arbitrary direct SDK mutations or real account-switch UI timing. Remaining history/page semantics, native login, current-source full regression and newer release stay open. No physical-device, live-message, deployment or upload action. Existing unrelated artifacts remain preserved.
+
+
 ### Guard datasource search sessions and release timelines — batch 229
 
 - Directory/public-room responses and room/global timeline searches capture client/user/token/device/server identity. Timeline/history completions and next-room iteration stop on session change; stale partial results are discarded even after errors. Owned timelines cancel subscriptions in finally. Nonpositive message limits do not load timelines.
