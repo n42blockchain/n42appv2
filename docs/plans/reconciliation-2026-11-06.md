@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Carry explicit thread page continuation to the UI — batch 188
+
+- Production handler, data source, repository and ThreadBloc now carry ThreadMessagePage with next_batch. Short/empty pages can continue until the token disappears; state retains/clears it explicitly. A localized Load older messages button allows continuation when the page cannot scroll. Existing list-only host implementations remain compatible; production selects the typed capability.
+- Handler short/empty/exhausted cases, repository cutoff filtering with preserved continuation and real-page empty-to-short-to-exhausted traversal pass with **79 related tests**, exit 0 (/tmp/n42-chat-b188-final.log). Scoped analysis: zero errors/warnings, twelve infos (/tmp/n42-chat-b188-analysis.log). Chat `f22f42c661718759689dacaa12dac7c62621915f` is pushed and pinned. Dependency resolution changes only Chat; three wallet host fixtures pass (/tmp/n42-wallet-b188-host.log).
+- Supersedes production count-based hasMore from batch 187. Remaining: stream snapshots replacing loaded older replies, cursor cycles/retention bounds, initial fallback completeness, proactive clear/account changes and real-homeserver/device acceptance. Legacy list-only hosts still use the count heuristic. Broader native login, wallet recovery/dependencies/payments, full regression and current-source release remain active.
+
 ### Correct thread continuation tokens and overlapping pagination — batch 187
 
 - Found repository event IDs being sent directly as Matrix `from` tokens. Added a separate event-anchor path through the data source; handler resolves anchors to response `next_batch`, scoped by room/root and client/user/token/device/server. Unknown/repeated cursors are rejected, exhausted pages stop, stale-session responses cannot install cursors and failed older-page requests retain their cursor for explicit retry. Existing explicit raw-token callers remain compatible.

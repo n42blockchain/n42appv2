@@ -2079,8 +2079,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: fb351ecf67d3880fc2bc692f032c1b64171abfc2
-      resolved-ref: fb351ecf67d3880fc2bc692f032c1b64171abfc2
+      ref: f22f42c661718759689dacaa12dac7c62621915f
+      resolved-ref: f22f42c661718759689dacaa12dac7c62621915f
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
