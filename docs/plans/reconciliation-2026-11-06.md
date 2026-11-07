@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate export deduplication and partial-page failure evidence — batches 279–280 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b280-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Full export emits each eligible event ID once per room and counts serialized rows. A repeated-event fixture verifies one output row and cleanup. Partial paging failure tests retain loaded data, mark hasReadErrors/warnings and release Timeline while preserving a checksum-valid file.
+- 99 backup tests pass (`/tmp/n42-chat-b280-final.log`); service analysis has six infos, no errors/warnings. Chat db84671c6e5e13b46e337497e8ccb90d71d6a596.
+- Export-boundary defense is not evidence of a production SDK duplicate bug. Integrity is not completeness. Concurrent edits/redactions/ephemeral metadata, remote paging resource limits, archive merge, UI activation and real-server acceptance remain open.
+
+
 ### Integrate optional remote-history export capability — batch 278 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b278-host.log`); manifest/lock/cache resolve the immutable Chat commit.

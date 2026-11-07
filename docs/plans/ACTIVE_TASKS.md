@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batches 279–280 integrated: full export deduplicates eligible event IDs; partial paging failure retains loaded data with warnings. 99 backup and 51 host tests pass; pin db84671c. Concurrency/privacy metadata, memory bounds, archive merge and live full-history acceptance remain open.
+
 > Batch 278 integrated: optional bounded remote-history export capability, default off. Three paging cases, 96 backup and 51 host tests pass; pin 12812f44. UI activation, timeout cancellation, resource bounds, archive merge and live full-history acceptance remain open.
 
 > Batch 277 integrated: full export retains all eligible loaded messages; 1,005-event fixture and 93 backup tests pass. 51 host tests pass; pin 95044c7d. Remote history pagination, archive merge, resource bounds and complete backup acceptance remain open.

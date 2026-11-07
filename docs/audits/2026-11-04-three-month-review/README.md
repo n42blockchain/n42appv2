@@ -1945,3 +1945,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - createBackup now supports fetchRemoteHistory (default false). It requests 500-event pages, bounds page count and timeout, detects no progress and retains loaded data with read-error warnings on failure. Session changes abort export and Timeline cleanup remains in finally.
 - Three focused paging cases and 96 backup tests pass (`/tmp/n42-chat-b278-final.log`); service analysis has six infos, no errors/warnings. Manifest distinguishes requestedRemoteHistory from loadedTimeline; neither is full-history proof.
 - Chat 12812f44f429d466cba4ec299e80933fa116218a. UI/default activation, timeout cancellation, memory bounds, archive merge, real homeserver pagination and complete backup acceptance remain open.
+
+### Integrate export deduplication and partial-page failure evidence — batches 279–280 (2026-11-07)
+
+- Full export emits each eligible event ID once per room and counts serialized rows. A repeated-event fixture verifies one output row and cleanup. Partial paging failure tests retain loaded data, mark hasReadErrors/warnings and release Timeline while preserving a checksum-valid file.
+- 99 backup tests pass (`/tmp/n42-chat-b280-final.log`); service analysis has six infos, no errors/warnings. Chat db84671c6e5e13b46e337497e8ccb90d71d6a596.
+- Export-boundary defense is not evidence of a production SDK duplicate bug. Integrity is not completeness. Concurrent edits/redactions/ephemeral metadata, remote paging resource limits, archive merge, UI activation and real-server acceptance remain open.
