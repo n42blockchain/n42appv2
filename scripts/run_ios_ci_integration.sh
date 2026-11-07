@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Only preauthorizes the selected disposable CI simulator, never a real device.
 set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/native_ci_suite.sh"
 if [[ "${CI:-}" != "true" ]]; then
   echo 'This helper requires a disposable CI simulator.' >&2
   exit 64
@@ -14,5 +15,5 @@ if [[ "$(xcrun simctl getenv "$IOS_SIMULATOR_ID" SIMULATOR_UDID)" != "$IOS_SIMUL
   exit 64
 fi
 xcrun simctl privacy "$IOS_SIMULATOR_ID" grant camera ai.n42.www
-flutter test integration_test/ --device-id "$IOS_SIMULATOR_ID" \
+flutter test "${native_test_args[@]}" --device-id "$IOS_SIMULATOR_ID" \
   --no-uninstall --no-pub --reporter expanded

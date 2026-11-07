@@ -15,7 +15,7 @@ class NativeCiSummaryTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             summary = Path(directory) / 'summary'
             env = dict(os.environ, GITHUB_STEP_SUMMARY=str(summary),
-                       ANDROID_ONLY=str(android_only).lower(), **results)
+                       ANDROID_ONLY=str(android_only).lower(), N42_NATIVE_SUITE='all', **results)
             result = subprocess.run(['bash', '-e', '-c', script], env=env,
                                     capture_output=True, text=True)
             return result.returncode, summary.read_text()

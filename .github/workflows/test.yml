@@ -11,6 +11,11 @@ on:
         description: Run only the complete Android integration suite
         type: boolean
         default: false
+      native_suite:
+        description: Native suite (MLKit includes model download and concurrency)
+        type: choice
+        options: [all, mlkit]
+        default: all
   push:
     branches: [master, main, develop]
   pull_request:
@@ -29,6 +34,7 @@ defaults:
 
 env:
   FLUTTER_VERSION: '3.47.8'
+  N42_NATIVE_SUITE: ${{ inputs.native_suite || 'all' }}
 
 jobs:
   unit-tests:
@@ -243,6 +249,7 @@ jobs:
         run: |
           {
             echo "## Test Results"
+            printf 'Native suite: %s\n' "$N42_NATIVE_SUITE"
             echo ""
             echo "| Job | Result |"
             echo "|-----|--------|"

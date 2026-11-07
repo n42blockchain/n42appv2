@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Only for the disposable CI emulator. Never pregrant a user's installation.
 set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/native_ci_suite.sh"
 if [[ "${CI:-}" != "true" ]]; then
   echo 'This helper requires a disposable CI emulator.' >&2
   exit 64
@@ -26,4 +27,4 @@ fi
 adb install -r -g build/app/outputs/flutter-apk/app-debug.apk
 adb shell pm grant ai.n42.www android.permission.CAMERA
 # Keep the test installation so subsequent Flutter targets retain the grant.
-flutter test integration_test/ --no-uninstall --no-pub --reporter expanded
+flutter test "${native_test_args[@]}" --no-uninstall --no-pub --reporter expanded
