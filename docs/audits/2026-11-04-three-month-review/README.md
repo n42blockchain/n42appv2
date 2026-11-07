@@ -1679,3 +1679,8 @@ Four regressions reproduced old history/error restoration after clear. Revision-
 ### Batch 228 — Search session origin
 
 Global search and category async boundaries now check captured client/user/token/device/server identity. 25 reproduced aggregation failures; 128 related tests pass including 29 new session cases. Analysis has five pre-existing infos, no errors/warnings. Wallet pins Chat 3c02667b and 51 host checks pass. UI proactive invalidation/datasource lifecycle and release acceptance remain open.
+
+
+### Batch 229 — Search datasource lifecycle
+
+Session guards now cover directory/public-room responses and timeline/history searches; owned subscriptions are cancelled in finally. Corrected initial fixture setup, then reproduced seven genuine failures on old source. Chat e7031dc5 passes 99 related tests and scoped analysis; wallet host checks 51 pass. Proactive UI invalidation, same-session history changes and release acceptance remain open.

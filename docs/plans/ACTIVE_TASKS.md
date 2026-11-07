@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 229: datasource search completions/history iteration are session-guarded and owned timelines released. 99 Chat tests, scoped analysis and 51 host checks pass. Pin e7031dc5. Proactive rendered-result invalidation and other lifecycle/release requirements remain open.
+
+
 > Batch 228: global/category search now rejects changed account origins across awaits; 128 related Chat tests and 51 host checks pass. Pin 3c02667b. Proactive UI invalidation and datasource lifecycle remain open, alongside native login/full regression/release.
 
 

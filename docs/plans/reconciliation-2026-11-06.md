@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Guard datasource search sessions and release timelines — batch 229
+
+- Directory/public-room responses and room/global timeline searches capture client/user/token/device/server identity. Timeline/history completions and next-room iteration stop on session change; stale partial results are discarded even after errors. Owned timelines cancel subscriptions in finally. Nonpositive message limits do not load timelines.
+- Initial test failure was a nested Mocktail stub mistake and is not accepted as defect evidence. Fixed fixtures and reran pre-fix source: seven actual stale-result/continued-query/missing-cleanup failures (`/tmp/n42-chat-b229-before-corrected.log`). Final Chat `e7031dc5cbf28c7132dd64d82d082575bc8ab3ef` passes **99 related tests**, including 10 new datasource cases; scoped analysis clean (`/tmp/n42-chat-b229-final.log`, `/tmp/n42-chat-b229-analysis.log`). Commit pushed and remote parity checked.
+- Wallet pub get exits zero, lock changes only Chat ref and package_config points at the exact cache. **51 host checks pass** (`/tmp/n42-wallet-b229-host.log`, exit 0). Existing local artifacts remain preserved.
+- Remaining: proactive invalidation of rendered results, same-session history/redaction changes and broader search pagination/live/device acceptance. Native login, current-source full regression and a new release remain open. No deployment, upload or live message/transaction.
+
+
 ### Bind search aggregation to the initiating account — batch 228
 
 - Reproduced 25 failures spanning history save plus four category awaits, with client/user/token/device/server replacements (`/tmp/n42-chat-b228-before.log`). Capture one origin for global search and stop after a changed session rather than reading subsequent categories or returning mixed results. Added origin checks around privacy settings, username/ENS, room metadata and archive completion; visibility checks no longer disappear when the optional clear-store is absent.
