@@ -1,0 +1,10 @@
+{
+  "run": 42393129678,
+  "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42393129678",
+  "conclusion": "success",
+  "passed": 4,
+  "skipped": 10,
+  "failed": 0,
+  "scope": "Three native form validation cases and disposable native import form/secure-storage reload/cleanup component. Controlled keyboard; complete wallet flows remain skipped.",
+  "log_sha256": "df9c844063900ee552a6feb5624010463d70d5babd2550d475c2743ce5cde0ce"
+}
