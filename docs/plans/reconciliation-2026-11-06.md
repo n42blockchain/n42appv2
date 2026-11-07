@@ -1,5 +1,22 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+## Current acceptance snapshot — 2026-11-07
+
+This snapshot supersedes historical batch observations below. The overall maturity goal remains active.
+
+| Gate | Current evidence | Remaining boundary |
+| --- | --- | --- |
+| Production Matrix upgrade | Tuwunel 1.9.4, running/healthy; [upgrade record](../testing/matrix-upgrade-2026-11-06.md) | Production authenticated E2EE, push and calls acceptance |
+| Wallet and Chat full CI | Run 42372264075 green; wallet 7,744 passed, Chat 8,561 passed/eight skipped; wallet coverage 73.868987%; both native builds pass | Native integration run 42374095584 still running; follow-up CI 42376481517 still running |
+| Internal TestFlight | 2.5.4 (73423), t1 group Testing; installed version observed; [release](../releases/testflight-20261107-73423.md) | Functional device QA deferred; external beta review not claimed |
+| MPC EVM transfer path | Canonical signing, normal EVM routing and actual disposable Anvil native/ERC20 receipts/balance deltas pass | Real social-provider signing, public network and device flows |
+| Isolated Matrix encryption | Multi-client encryption/revocation, one key recovery and real repository account-switch smoke pass | Thirty-recovery batch is live; production/device recovery and push |
+| Encrypted group load | Three independent clients, 100 mixed events, 300 unique readable deliveries including offline catchup pass | Twenty-client/10,000-event run is live; no full-scale acceptance yet |
+| Image decode CI | Corpus setup added; 200 synthetic still images decode locally, P95 1.055 ms | New workflow execution pending; device/video/HDR and real startup performance |
+
+Host Chat runtime remains pinned to f42bf7ed; newer Chat changes are QA tools/tests/docs and do not change runtime lib/. See Chat OPEN_ISSUES.md for the authoritative unresolved feature ledger. IAP fulfillment, remaining dependency constraints, native provider acceptance and other earlier product requirements are not closed by these checks.
+
+
 ### Integrate duplicate privacy metadata protection — batch 281 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b281-host.log`). Public federation version recheck still reports Tuwunel 1.9.3; no server upgrade/restart performed.
