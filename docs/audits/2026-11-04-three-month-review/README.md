@@ -1903,3 +1903,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Page tests cover valid-account picker cancellation/errors, stale picker errors, preview warnings, cancel/confirm, password input/cancel/confirmation, wrong-password rejection and account invalidation while entering a password. Services/file selection are simulated; tests do not prove real encrypted-file/device restoration.
 - BackupEvent disables Equatable field stringification even when globally enabled, preserving password-sensitive equality. Fifty-five event/BLoC/page tests pass (`/tmp/n42-chat-b270-final.log`); event/test analysis clean. This protects event toString only, not every log or in-memory secret.
 - Chat 9d53b9316aee634d1cd82956a725ffbbae3c24be. Remaining: real encrypted-file UI integration, in-place wrong-password retry UX, localization, backup ownership/full-history and device/backend acceptance.
+
+### Integrate backup ownership checks — batches 271–272 (2026-11-07)
+
+- New full/incremental manifests record account userId and homeserver. Settings restore rejects explicit owner mismatches and declared owners with missing/empty/non-string identity fields before applying settings. Ownerless legacy backups remain compatible with a warning; they are not verified-owned.
+- 91 backup tests pass (`/tmp/n42-chat-b272-final.log`), including generated backups with user/server mismatch and unknown/empty owner. Service analysis has six infos, no errors/warnings.
+- Chat 84c480ab39c265acafd57293ad43f457762d9afb. Remaining: owner display/confirmation, unknown-owner export behavior, archive restore ownership, authenticity of unencrypted manifests, full-history loading, device acceptance and backend rehearsal.

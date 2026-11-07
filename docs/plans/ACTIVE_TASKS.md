@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batches 271–272 integrated: new backup owner metadata, settings-restore mismatch and malformed-owner rejection. 91 backup and 51 host tests pass; pin 84c480ab. Legacy ownership, archive restore, manifest authenticity, full history and live acceptance remain open.
+
 > Batches 266–270 integrated: restore interaction regressions and password-free event debug output. 55 event/BLoC/page and 51 host tests pass; pin 9d53b931. Real encrypted-file UI integration, retry UX, localization, ownership/history and live acceptance remain open.
 
 > Batch 265 integrated: Material rendering fixed on backup cards; 16 page/BLoC and 51 host tests pass, page/test analysis clean. Pin f27226e6. Valid-account password interactions, localization, history/ownership and live acceptance remain open.
