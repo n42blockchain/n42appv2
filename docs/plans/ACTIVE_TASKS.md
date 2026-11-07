@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> 本次中断核对：batch 216 已提交；35 项交易哈希/回执测试复跑通过。钱包及 Chat 先前全量运行均已有终态，不再列作运行中。73325 是未上传的旧候选包，不含 batches 212–216；仍需新包、原生登录验收和上传权限确认。13 个辅助工作树保留（7 个有本地改动，4 个干净但非祖先，2 个干净祖先）。详见[当前核对](reconciliation-2026-11-06.md)。
+
 > Batch 216: NEAR submission success now requires the RPC hash to match the locally hashed signed transaction; 185 related tests and native independent digest fixture pass. Durable pre-submit identity/history recovery and finality remain open. 73325 predates this work.
 
 > Batch 215: NEAR submission rejects malformed/pending receipts instead of claiming success; 169 related cases pass. Local payload/hash binding, durable unknown-outcome recovery and finalized settlement remain open. No real transaction or new release upload.
