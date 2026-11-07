@@ -35,5 +35,13 @@
     "failed": 0,
     "exitCode": 0,
     "logSha256": "d33536ac5df2c153faecf0b9925c20783838e8b4bc26803dd959a1f8cb335f45"
+  },
+  "fullAfter": {
+    "source": "5f8db7df438f200f95e3e7f69b280f4b0b18a6b0",
+    "passed": 8627,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "logSha256": "00400d13a47f2abdb1de2c14983637d59a981af9cdcb40bdd7477d8a56ad5953"
   }
 }
