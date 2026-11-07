@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_form.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -15,6 +16,11 @@ import 'package:n42_wallet/generated/l10n.dart';
 import '../../test/helpers/widget_test_helpers.dart';
 
 const _enabled = bool.fromEnvironment('N42_DISPOSABLE_WALLET_QA');
+
+class _SendFixtureWallet extends WalletActionProvider {
+  @override
+  String get userUUID => 'n42-send-form-qa';
+}
 
 void registerWalletSendFixture() {
   for (final scenario in ['recipient', 'amount', 'gas']) {
@@ -74,7 +80,19 @@ void registerWalletSendFixture() {
       final coin = CoinModel()
         ..coin = Map<String, dynamic>.from(base)
         ..address = '0x1111111111111111111111111111111111111111';
-      final store = WalletActionProvider();
+      // Balance refresh updates the selected wallet's in-memory coin map.
+      // Seed that required context without loading or persisting any account.
+      final store = _SendFixtureWallet();
+      store.walletInfoLsit.add(
+        WalletInfo(
+          walletUuid: store.userUUID,
+          walletName: 'Synthetic Send QA',
+          coinInfo: {
+            'ETH': {'baseInfo': coin.coin},
+          },
+        ),
+      );
+      store.walletIndex = 0;
       await tester.pumpWidget(
         wrapForTest(
           WalletChainSend(coin),

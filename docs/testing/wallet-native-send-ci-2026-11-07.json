@@ -2,8 +2,8 @@
   "run": 42397806375,
   "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42397806375",
   "source": "e5582e6a3e028b3a0ddf2df6f396576d99a06997",
-  "status": "in_progress",
-  "acceptance": "pending",
+  "status": "failure",
+  "acceptance": "pending corrected fixture confirmation",
   "cases": [
     "recipient validation",
     "amount validation and overbalance",
@@ -11,5 +11,11 @@
   ],
   "fixture": "Opt-in virtual-device guard; loopback RPC; public unfunded address, no private key; assert no sign/broadcast requests; restore chain map after each case",
   "remainingFlowPlaceholders": 10,
-  "scopedAnalysis": "No issues found"
+  "scopedAnalysis": "No issues found",
+  "passed": 4,
+  "failed": 3,
+  "skipped": 10,
+  "failure": "All three new cases stopped at the zero balance assertion because the fixture lacked a selected wallet. Original four native cases passed. No recipient/amount/gas acceptance inferred.",
+  "correction": "Seed a selected synthetic in-memory wallet and coin map with matching owner; keep RPC balance/gas reads and all assertions unchanged. No persistence, private key or signing.",
+  "failedLogSha256": "fed750af5f50cdd020015c98413162eaa99cbe67e8faa83bffc2f1db9ed8ebb8"
 }
