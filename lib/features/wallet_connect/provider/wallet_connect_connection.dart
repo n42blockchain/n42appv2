@@ -245,14 +245,17 @@ mixin WalletConnectConnection on ChangeNotifier {
   Future<String?> loadSigningKey(int index, CoinModel cm) async {
     final service = globalProviderContainer.read(walletServiceProvider);
     if (service == null) throw StateError('Wallet service not available');
+    final coinType = cm.config.coinType;
+    final path = cm.config.pathForAddrType(cm.addrType);
+    final pathIndex = cm.pathIndex;
     var key = await service.getPrivateKeyForWallet(index);
     if (key == null) {
       final mnemonic = await service.getMnemonicForWallet(index);
       if (mnemonic != null) {
         key = await trustdart.getPrivateKey(
           mnemonic,
-          cm.config.coinType,
-          getPathWithIndex(cm.config.pathForAddrType('legacy')!, cm.pathIndex),
+          coinType,
+          getPathWithIndex(path!, pathIndex),
         );
       }
     }
@@ -271,6 +274,9 @@ mixin WalletConnectConnection on ChangeNotifier {
       final owner = signingWalletOwner;
       final address = cm.address;
       final pathIndex = cm.pathIndex;
+      final addressType = cm.addrType;
+      final path = cm.config.pathForAddrType(addressType);
+      final coinType = cm.config.coinType;
       final test = cm.isTest;
       final endpoint = test ? cm.config.serviceTest : cm.config.service;
       current = () =>
@@ -282,6 +288,9 @@ mixin WalletConnectConnection on ChangeNotifier {
           identical(coinModels[coinModelsIndex], cm) &&
           cm.address == address &&
           cm.pathIndex == pathIndex &&
+          cm.addrType == addressType &&
+          cm.config.pathForAddrType(addressType) == path &&
+          cm.config.coinType == coinType &&
           cm.isTest == test &&
           (test ? cm.config.serviceTest : cm.config.service) == endpoint;
       candidate = web3.Web3Client(endpoint, Client());
@@ -294,6 +303,14 @@ mixin WalletConnectConnection on ChangeNotifier {
           throw StateError('Invalid private key length');
         }
         final key = web3.EthPrivateKey(Uint8List.fromList(decoded));
+        final configuredAddress = address?.toString().trim() ?? '';
+        if (!RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(configuredAddress) ||
+            key.address.with0x.toLowerCase() !=
+                configuredAddress.toLowerCase()) {
+          throw StateError(
+            'Signing key does not match the selected wallet address',
+          );
+        }
         if (!current()) return false;
         final previous = web3client;
         web3client = candidate;

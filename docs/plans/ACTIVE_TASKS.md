@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 236: recovered omitted WalletConnect EVM key/address binding and selected derivation-path capture. Three pre-fix failures reproduced; 948 WalletConnect tests pass. Old-worktree non-EVM/coin-list and ordinary-sender comparisons remain open; no release or live acceptance.
+
+
 > Batch 235: omitted group member-count refresh restored with stale/session guards. Chat 86891d07 passes 105 related tests; 51 wallet host checks pass. Remaining old-worktree signer reconciliation, native login, archive lifecycle and new release stay open. Batch 234 full results apply to the preceding source.
 
 

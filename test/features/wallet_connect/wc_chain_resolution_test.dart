@@ -45,7 +45,10 @@ void main() {
       '$chain selects its coin without loading an EVM signing key',
       () async {
         final coin = sessionCoin(type: type, blockchain: blockchain);
-        provider.coinModels = [sessionCoin(), coin];
+        provider.coinModels = [
+          sessionCoin(address: '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf'),
+          coin,
+        ];
         provider.coinModelsIndex = 0;
         var notifications = 0;
         provider.addListener(() => notifications++);
@@ -95,8 +98,12 @@ void main() {
   test('EVM requests initialize once per selected chain and reuse the ready client', () async {
     provider.coinModels = [
       sessionCoin(type: 'APT', blockchain: 'Aptos'),
-      sessionCoin(),
-      sessionCoin(type: 'MATIC', chainId: 137),
+      sessionCoin(address: '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf'),
+      sessionCoin(
+        type: 'MATIC',
+        chainId: 137,
+        address: '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf',
+      ),
     ];
     provider.coinModelsIndex = 0;
     expect(await provider.web3clientInitFromChainId('eip155:1'), isTrue);
@@ -112,7 +119,12 @@ void main() {
   test(
     'selected EVM chain with a missing client still initializes signing',
     () async {
-      provider.coinModels = [sessionCoin(isTest: true)];
+      provider.coinModels = [
+        sessionCoin(
+          isTest: true,
+          address: '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf',
+        ),
+      ];
       provider.coinModelsIndex = 0;
       expect(
         await provider.web3clientInitFromChainId('eip155:11155111'),

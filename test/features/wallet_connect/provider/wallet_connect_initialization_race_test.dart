@@ -30,7 +30,9 @@ String _key(int n) => base64Encode(Uint8List(32)..[31] = n);
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   _Provider create() {
-    final coin = sessionCoin();
+    final coin = sessionCoin(
+      address: web3.EthPrivateKey.fromInt(BigInt.one).address.with0x,
+    );
     coin.coin['service'] = 'https://rpc.invalid';
     return _Provider()
       ..coinModels = [coin]
@@ -44,6 +46,9 @@ void main() {
         final provider = create();
         addTearDown(provider.dispose);
         final old = provider.web3clientInit();
+        provider.coinModels.single.address = web3.EthPrivateKey.fromInt(
+          BigInt.two,
+        ).address.with0x;
         final latest = provider.web3clientInit();
         provider.pending[1].complete(_key(2));
         expect(await latest, isTrue);
@@ -73,6 +78,9 @@ void main() {
       expect(await first, isTrue);
       provider.selected = 1;
       expect(() => provider.privateKey, throwsStateError);
+      provider.coinModels.single.address = web3.EthPrivateKey.fromInt(
+        BigInt.two,
+      ).address.with0x;
       final next = provider.web3clientInitFromChainId('eip155:1');
       provider.pending[1].complete(_key(2));
       expect(await next, isTrue);
@@ -96,6 +104,41 @@ void main() {
       provider.pending.single.complete(_key(1));
       expect(await loading, isFalse);
       expect(() => provider.privateKey, throwsStateError);
+    });
+  }
+  test(
+    'mismatched private key never becomes the selected wallet key',
+    () async {
+      final provider = create();
+      addTearDown(provider.dispose);
+      final loading = provider.web3clientInit();
+      provider.pending.single.complete(_key(2));
+      expect(await loading, isFalse);
+      expect(() => provider.privateKey, throwsStateError);
+      expect(provider.web3client, isNull);
+    },
+  );
+  for (final change in ['address type', 'derivation path']) {
+    test('$change invalidates pending and cached signing keys', () async {
+      final provider = create();
+      addTearDown(provider.dispose);
+      final coin = provider.coinModels.single;
+      coin.coin['path'] = {'legacy': "m/44'/60'/0'/0/0"};
+      final first = provider.web3clientInit();
+      provider.pending[0].complete(_key(1));
+      expect(await first, isTrue);
+      if (change == 'address type') coin.addrType = 'segwit';
+      if (change == 'derivation path') {
+        coin.coin['path'] = {'legacy': "m/44'/60'/1'/0/0"};
+      }
+      expect(() => provider.privateKey, throwsStateError);
+      final pending = provider.web3clientInit();
+      if (change == 'address type') coin.addrType = 'legacy';
+      if (change == 'derivation path') {
+        coin.coin['path'] = {'legacy': "m/44'/60'/2'/0/0"};
+      }
+      provider.pending[1].complete(_key(1));
+      expect(await pending, isFalse);
     });
   }
 }

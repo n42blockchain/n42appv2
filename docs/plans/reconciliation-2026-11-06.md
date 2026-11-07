@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Reconcile omitted WalletConnect key binding — batch 236
+
+- Comparison with old worktree commit c88c1f433 found missing EVM initialization behavior. Current lifecycle generations existed, but loaded keys were not checked against the configured wallet address; mnemonic derivation still forced legacy paths, and cached/in-flight contexts omitted address type, derivation path and coin type.
+- Corrected the new test fixture to use the actual path-map schema, then reproduced **three failures** before production changes (`/tmp/n42-wallet-b236-before-corrected.log`): mismatched key accepted, cached key surviving address-type change, and cached key surviving path change. The first fixture run is not the accepted evidence.
+- Initialization now checks a valid configured EVM address against the derived key before caching. Key loading captures the selected address-type path/index/coin before awaits; current-context checks invalidate changes to these fields. Existing decoded-key wiping and candidate-client cleanup remain intact. Valid test fixtures now use addresses corresponding to their deterministic keys rather than unrelated placeholder addresses.
+- **948 WalletConnect directory tests pass** (`/tmp/n42-wallet-b236-final.log`, exit 0), including pending/cached context, request/session, signing, broadcast and UI suites. Scoped analysis checked separately. No live relay, native provider login, real payment or new release acceptance inferred.
+- This recovers part of c88c1f433, not the whole old-worktree reconciliation. Non-EVM derived-signer binding and coin-list refresh on wallet changes still need semantic review; the ordinary-sender patch remains separate. Preserve the old worktree. Archive lifecycle, native login and new release remain open.
+
+
 ### Restore omitted group member-count refresh — batch 235
 
 - Old-worktree reconciliation found Chat 5e23bcf5 was never incorporated in the current lineage. Its two count regressions fail before repair (`/tmp/n42-chat-b235-before.log`). Restored authoritative group refresh after member loading and after invitation/removal/settings return; detail/list/title now consume refreshed counts. Page callbacks capture session/room, and refresh revisions reject obsolete responses. Group member loads also reject completion after a newer load or details navigation.
