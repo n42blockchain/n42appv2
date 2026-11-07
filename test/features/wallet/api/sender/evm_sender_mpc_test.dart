@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 import 'package:n42_wallet/features/wallet/mpc/mpc_provider.dart';
 import 'package:n42_wallet/features/wallet/mpc/mpc_evm_transaction_signer.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 
 class _Provider extends Mock implements MpcProvider {}
 
@@ -46,6 +47,7 @@ void main() {
     methods.clear();
     submitted = persisted = null;
     provider = _Provider();
+    when(() => provider.providerId).thenReturn('fixture');
     when(() => provider.currentAddress).thenReturn(key.address.with0x);
     when(() => provider.isLoggedIn).thenReturn(true);
     when(() => provider.signTransaction(any())).thenAnswer((call) async {
@@ -130,6 +132,74 @@ void main() {
               }
         : null,
   );
+  WalletInfo mpcWallet() => WalletInfo()
+    ..isMpc = true
+    ..mpcProvider = 'fixture'
+    ..mpcUserId = 'fixture-user'
+    ..coinInfo = {
+      'ETH': {'address': key.address.with0x},
+    };
+  EvmSender routed(
+    WalletInfo? Function() readWallet, {
+    MpcProvider? Function(String)? resolve,
+  }) => EvmSender(
+    ownerIdentity: () => 'fixture-owner',
+    readWallet: readWallet,
+    resolveMpcProvider: resolve ?? (_) => provider,
+    readMnemonic: () =>
+        throw StateError('MPC route must not read local secrets'),
+  );
+  test(
+    'normal EVM entry routes the selected MPC wallet through real RPC',
+    () async {
+      final wallet = mpcWallet();
+      final result = await routed(() => wallet).send(params());
+      expect(result.success, isTrue, reason: result.error);
+      expect(result.txHash, persisted);
+      expect(submitted, isNotNull);
+    },
+  );
+  test('wallet switch during routed MPC signing prevents dispatch', () async {
+    var wallet = mpcWallet();
+    final cached = routed(() => wallet);
+    duringSign = () async {
+      wallet = mpcWallet();
+    };
+    expect((await cached.send(params())).success, isFalse);
+    expect(submitted, isNull);
+  });
+  test('wallet metadata mutation during signing prevents dispatch', () async {
+    final wallet = mpcWallet();
+    duringSign = () async {
+      wallet.mpcUserId = 'replacement-user';
+    };
+    expect((await routed(() => wallet).send(params())).success, isFalse);
+    expect(submitted, isNull);
+  });
+  test('unavailable provider never falls back to local signing', () async {
+    final wallet = mpcWallet();
+    expect(
+      (await routed(() => wallet, resolve: (_) => null).send(params())).success,
+      isFalse,
+    );
+    expect(methods, isEmpty);
+    verifyNever(() => provider.signTransaction(any()));
+  });
+  test('a different provider address is rejected before RPC', () async {
+    final wallet = mpcWallet()
+      ..coinInfo = {
+        'ETH': {'address': to},
+      };
+    expect((await routed(() => wallet).send(params())).success, isFalse);
+    expect(methods, isEmpty);
+    verifyNever(() => provider.signTransaction(any()));
+  });
+  test('watch-only MPC metadata cannot authorize signing', () async {
+    final wallet = mpcWallet()..watchOnly = true;
+    expect((await routed(() => wallet).send(params())).success, isFalse);
+    expect(methods, isEmpty);
+    verifyNever(() => provider.signTransaction(any()));
+  });
   for (final token in [false, true]) {
     test(
       'real MPC signed ${token ? 'ERC20' : 'native'} bytes reach RPC after persistence',

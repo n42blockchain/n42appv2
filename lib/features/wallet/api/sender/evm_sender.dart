@@ -12,6 +12,8 @@ import 'package:meta/meta.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:wallet/wallet.dart' show EthereumAddress, EtherAmount;
 import 'package:n42_wallet/features/wallet/mpc/mpc_evm_transaction_signer.dart';
+import 'package:n42_wallet/features/wallet/mpc/mpc_provider.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/mev_protection.dart';
@@ -40,6 +42,18 @@ class EvmSender implements ChainSender {
   final Object? Function() _ownerIdentity;
   final String? Function() _readMnemonic;
   final MpcEvmTransactionSigner? _mpcSigner;
+  final WalletInfo? Function() _readWallet;
+  final MpcProvider? Function(String) _resolveMpcProvider;
+
+  static WalletInfo? _currentWallet() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   static Object? _currentOwner() {
     try {
@@ -71,14 +85,71 @@ class EvmSender implements ChainSender {
     Object? Function()? ownerIdentity,
     String? Function()? readMnemonic,
     MpcEvmTransactionSigner? mpcSigner,
+    WalletInfo? Function()? readWallet,
+    MpcProvider? Function(String)? resolveMpcProvider,
   }) : _defaultChainConfig = chainConfig,
        _trustdart = trustdart ?? Trustdart(),
        _mpcSigner = mpcSigner,
+       _readWallet = readWallet ?? _currentWallet,
+       _resolveMpcProvider =
+           resolveMpcProvider ?? MpcProviderRegistry.instance.get,
        _ownerIdentity = ownerIdentity ?? _currentOwner,
        _readMnemonic = readMnemonic ?? _currentMnemonic;
 
   @override
   Future<SendResult> send(SendParams params) {
+    // Resolve at send time: factory-cached EVM senders outlive wallet switches.
+    if (_mpcSigner == null) {
+      try {
+        final wallet = _readWallet();
+        if (wallet?.isMpc == true) {
+          final selected = wallet!;
+          final providerId = selected.mpcProvider;
+          final userId = selected.mpcUserId;
+          final walletAddress = selected.coinInfo?['ETH']?['address'];
+          if (selected.watchOnly ||
+              providerId == null ||
+              walletAddress is! String ||
+              walletAddress.trim().isEmpty) {
+            return Future.value(
+              const SendResult.fail('MPC wallet identity is unavailable'),
+            );
+          }
+          final provider = _resolveMpcProvider(providerId);
+          if (provider == null ||
+              provider.providerId != providerId ||
+              !provider.isLoggedIn ||
+              provider.currentAddress?.toLowerCase() !=
+                  walletAddress.toLowerCase()) {
+            return Future.value(
+              const SendResult.fail('Sign in to the selected MPC wallet'),
+            );
+          }
+          final owner = _ownerIdentity();
+          bool current() =>
+              identical(_readWallet(), selected) &&
+              _ownerIdentity() == owner &&
+              selected.isMpc &&
+              !selected.watchOnly &&
+              selected.mpcProvider == providerId &&
+              selected.mpcUserId == userId &&
+              selected.coinInfo?['ETH']?['address'] == walletAddress;
+          return EvmSender(
+            chainConfig: _defaultChainConfig,
+            trustdart: _trustdart,
+            ownerIdentity: _ownerIdentity,
+            readMnemonic: _readMnemonic,
+            readWallet: _readWallet,
+            resolveMpcProvider: _resolveMpcProvider,
+            mpcSigner: MpcEvmTransactionSigner(provider, isCurrent: current),
+          ).send(params);
+        }
+      } catch (_) {
+        return Future.value(
+          const SendResult.fail('MPC wallet context is unavailable'),
+        );
+      }
+    }
     if (_mpcSigner != null &&
         (params.privateKey != null || params.beforeBroadcast == null)) {
       return Future.value(
