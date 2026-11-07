@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-07",
+  "baseSource": "2fce38d44e6508fae08c8ff74a00125623956a6e",
+  "testedFixtureSha256": "7f480e4c3d4dc4af370d347a5a035b404435aae52dd4e0b21d8aaf3b1f16af8f",
+  "exitCode": 0,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "scope": "Single ETH chain on disposable Android simulator: actual mnemonic import and WalletPage initialization; hold read-only loopback RPC response, assert wallet ready/WalletBoard visible/zero initial balance, release response, assert 1 ETH and wallet name",
+  "logSha256": "a2fa56ba043798f9e0532750b7c4fd8cc3ca20cfe5f2d63fba7f147e67ac9ab8",
+  "postRunChanges": "Braces only in fixture; remove fulfilled placeholder and update pending-case count",
+  "remaining": [
+    "Multiple chains and production RPC",
+    "Wallet switch UI with delayed old response",
+    "Transaction history",
+    "Funded testnet transfer",
+    "Physical-device acceptance",
+    "Global notifier integration remains outside this fixture"
+  ]
+}

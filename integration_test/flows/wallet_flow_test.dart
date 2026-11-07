@@ -32,10 +32,6 @@ void main() {
 
 const _pendingWalletCases = <_PendingDeviceCase>[
   _PendingDeviceCase(
-    'WLT-14 displays progressively loaded wallet balances',
-    'Requires a deterministic fake RPC connected to the device build.',
-  ),
-  _PendingDeviceCase(
     'WLT-14 refreshes balances without stale account data',
     'Requires a deterministic fake RPC connected to the device build.',
   ),

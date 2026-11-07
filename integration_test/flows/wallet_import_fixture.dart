@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -109,6 +110,13 @@ void registerWalletImportFixture() {
             '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf',
           );
         }
+        final initialBalanceRelease = Completer<void>();
+        final initialBalanceRequested = Completer<void>();
+        addTearDown(() {
+          if (!initialBalanceRelease.isCompleted) {
+            initialBalanceRelease.complete();
+          }
+        });
         if (mode == 'mnemonic') {
           final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
           addTearDown(() => server.close(force: true));
@@ -116,6 +124,13 @@ void registerWalletImportFixture() {
             final body =
                 jsonDecode(await utf8.decoder.bind(request).join()) as Map;
             final method = body['method'];
+            if (method == 'eth_getBalance' &&
+                !initialBalanceRelease.isCompleted) {
+              if (!initialBalanceRequested.isCompleted) {
+                initialBalanceRequested.complete();
+              }
+              await initialBalanceRelease.future;
+            }
             request.response.headers.contentType = ContentType.json;
             request.response.write(
               jsonEncode({
@@ -300,6 +315,23 @@ void registerWalletImportFixture() {
               ],
             ),
           );
+          for (var attempt = 0; attempt < 600; attempt++) {
+            await tester.pump(const Duration(milliseconds: 100));
+            if (restarted.isWalletReady &&
+                initialBalanceRequested.isCompleted) {
+              break;
+            }
+          }
+          expect(initialBalanceRequested.isCompleted, isTrue);
+          expect(restarted.isWalletReady, isTrue);
+          expect(find.byType(WalletBoard), findsOneWidget);
+          expect(
+            restarted.coinList
+                .singleWhere((coin) => coin.config.coinType == 'ETH')
+                .balance,
+            BigInt.zero,
+          );
+          initialBalanceRelease.complete();
           for (var attempt = 0; attempt < 600; attempt++) {
             await tester.pump(const Duration(milliseconds: 100));
             if (restarted.coinList.any(

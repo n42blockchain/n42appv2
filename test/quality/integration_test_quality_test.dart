@@ -90,7 +90,7 @@ void main() {
           r'^  _PendingDeviceCase\(',
           multiLine: true,
         ).allMatches(source).length,
-        4,
+        3,
       );
     });
 
