@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-07",
+  "status": "deployed; media acceptance pending",
+  "services": {
+    "livekit": {
+      "from": "1.9.11",
+      "to": "1.13.11",
+      "digest": "sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+    },
+    "matrixRtcAuthorization": {
+      "from": "0.4.1",
+      "to": "0.9.0",
+      "digest": "sha256:d210fd778ba38b7e42e6fc64e8a24a7d66ccc3b938fb20d73bd713224af2dfea"
+    },
+    "coturn": {
+      "from": "4.7.0",
+      "to": "4.18.0",
+      "digest": "sha256:bbefd3e1fdfdc0d58770fe01b581fd8b00d9f3a5580d00acb77cf719a6bc78e3"
+    }
+  },
+  "adaptation": [
+    "Rename LIVEKIT_ALLOW_HOMESERVERS to LIVEKIT_FULL_ACCESS_HOMESERVERS; retain m.si46.world only",
+    "Replace LK_JWT_PORT with LIVEKIT_JWT_BIND",
+    "Remove legacy false insecure-TLS variable; keep TLS verification enabled",
+    "Keep existing SFU URL, API credentials, ports and TURN configuration",
+    "No client runtime code change required by focused regression"
+  ],
+  "verification": {
+    "isolatedCandidateStartup": true,
+    "activeRoomsBeforeCutover": 0,
+    "activeParticipantsBeforeCutover": 0,
+    "publicSfuHttp": 200,
+    "publicAuthorizationHealthHttp": 200,
+    "allContainersRunning": true,
+    "allRestartCounts": 0,
+    "localTurnAllocateErrorResponse": "0x0113, matching transaction ID; authentication challenge only",
+    "clientFocusedTests": 75,
+    "clientTestExit": 0,
+    "clientVersions": {
+      "livekit_client": "2.13.2",
+      "flutter_webrtc": "1.6.3"
+    }
+  },
+  "rollback": "Controlled remote snapshots and old image IDs retained under /home/ubuntu/.config/n42/webrtc-upgrade-20261107; no secrets committed",
+  "unverified": [
+    "Authenticated production token issuance",
+    "Bilateral audio/video and screen share",
+    "External authenticated TURN allocation and actual UDP relay",
+    "Native background, lock screen and reconnect",
+    "Standalone authorization room membership enforcement requires compatible homeserver application-service wiring; latest version alone does not establish it"
+  ]
+}
