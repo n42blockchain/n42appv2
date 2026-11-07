@@ -1951,3 +1951,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Full export emits each eligible event ID once per room and counts serialized rows. A repeated-event fixture verifies one output row and cleanup. Partial paging failure tests retain loaded data, mark hasReadErrors/warnings and release Timeline while preserving a checksum-valid file.
 - 99 backup tests pass (`/tmp/n42-chat-b280-final.log`); service analysis has six infos, no errors/warnings. Chat db84671c6e5e13b46e337497e8ccb90d71d6a596.
 - Export-boundary defense is not evidence of a production SDK duplicate bug. Integrity is not completeness. Concurrent edits/redactions/ephemeral metadata, remote paging resource limits, archive merge, UI activation and real-server acceptance remain open.
+
+### Integrate duplicate privacy metadata protection — batch 281 (2026-11-07)
+
+- Full/incremental exports snapshot loaded events and exclude every copy of an event ID if any loaded copy has n42.self_destruct. Incremental archive merge also rejects those IDs, so a plain archived copy cannot reintroduce a loaded private event.
+- Four ordering/mode cases and 103 backup tests pass (`/tmp/n42-chat-b281-final.log`); service analysis has six infos, no errors/warnings. Chat 5c3c021979f0b0374119edad8d25bb2955346e09.
+- This covers markers visible in the snapshot. Later privacy changes/redactions, archive-only markers, complete history/account isolation and live/device acceptance remain open.

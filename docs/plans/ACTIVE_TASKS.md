@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 281 integrated: duplicate private-event copies excluded; 103 backup and 51 host tests pass, pin 5c3c0219. Live Matrix recheck still reports Tuwunel 1.9.3; server upgrade has not been performed. Backup/rehearsal/deployment acceptance remains open.
+
 > Batches 279–280 integrated: full export deduplicates eligible event IDs; partial paging failure retains loaded data with warnings. 99 backup and 51 host tests pass; pin db84671c. Concurrency/privacy metadata, memory bounds, archive merge and live full-history acceptance remain open.
 
 > Batch 278 integrated: optional bounded remote-history export capability, default off. Three paging cases, 96 backup and 51 host tests pass; pin 12812f44. UI activation, timeout cancellation, resource bounds, archive merge and live full-history acceptance remain open.

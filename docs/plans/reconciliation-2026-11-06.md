@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate duplicate privacy metadata protection — batch 281 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b281-host.log`). Public federation version recheck still reports Tuwunel 1.9.3; no server upgrade/restart performed.
+
+- Full/incremental exports snapshot loaded events and exclude every copy of an event ID if any loaded copy has n42.self_destruct. Incremental archive merge also rejects those IDs, so a plain archived copy cannot reintroduce a loaded private event.
+- Four ordering/mode cases and 103 backup tests pass (`/tmp/n42-chat-b281-final.log`); service analysis has six infos, no errors/warnings. Chat 5c3c021979f0b0374119edad8d25bb2955346e09.
+- This covers markers visible in the snapshot. Later privacy changes/redactions, archive-only markers, complete history/account isolation and live/device acceptance remain open.
+
+
 ### Integrate export deduplication and partial-page failure evidence — batches 279–280 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b280-host.log`); manifest/lock/cache resolve the immutable Chat commit.
