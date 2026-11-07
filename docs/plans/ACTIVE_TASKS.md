@@ -1,6 +1,6 @@
 # 当前任务与验收台账
 
-> Latest release and gate snapshot: [current acceptance](reconciliation-2026-11-06.md#current-acceptance-snapshot--2026-11-07). Internal TestFlight 2.5.4 (73423) is Testing; full CI 42372264075 is green. Native integration, follow-up CI and live recovery/group-load batches remain open.
+> Latest release and gate snapshot: [current acceptance](reconciliation-2026-11-06.md#current-acceptance-snapshot--2026-11-07). Internal TestFlight 2.5.4 (73423) is Testing; full CI 42376481517 is green. Native integration, follow-up CI and live recovery/group-load batches remain open.
 
 > Current status — 2026-11-07: production Matrix upgrade to Tuwunel 1.9.4 is complete; public version was rechecked successfully. Backup, restore rehearsal and cutover evidence: [Matrix upgrade](../testing/matrix-upgrade-2026-11-06.md). Authenticated E2EE/media/push/calls/recovery acceptance remains open. Historical batch notices below describe their observation time and do not override this status.
 

@@ -1507,3 +1507,10 @@ A manual android_only input runs the same complete Android suite in a separate c
 Chat evidence commit 7de64171 records the completed 20-client/10,000-event run: every recipient has 10,000 unique readable events, including the offline recipient; 100 encrypted file events are included. Total 200,000 verified deliveries, process exit 0. Captured isolated server logs contain zero generated message-canary prefixes. This is not production/push log acceptance or attachment payload download coverage. The dedicated port-18949 server is stopped with its database volume/evidence retained; the independent recovery server continues unchanged. See Chat `docs/testing/local-tuwunel-group-load-2026-11-07.json` and MSG-001.
 
 Compatible dependency work is isolated on `chore/compatible-dependencies-20261107` at 42e74e240. Eight allowed lockfile updates resolve, local full analysis exits 0, and CI 42379157589 is running. It is not merged or present in the uploaded Beta. Major migration constraints remain open.
+
+
+### Latest baseline CI and iOS camera diagnostics — 2026-11-07
+
+CI 42376481517 at 556b89205 is now fully green, including Android/iOS builds. Wallet 7,744 tests pass; Chat 8,579 pass/six skip. The provisioned Linux native key-store restore and all 17 encrypted-send guard cases actually execute and pass. Wallet line coverage is 104,319/141,223 (73.868279%, threshold 70%). This is the SDK 15 baseline, separate from the running dependency/SDK 16 candidates.
+
+Read-only live Actions inspection shows iOS run 42374095584 reached 14 passed/three failed before the next native signing target. The wallet scanner passes its permission check but its controller does not become running within 20 seconds. The existing timeout message lacks state, so the cause is not yet established. Both scanner tests now include initialized/running/starting/camera-count/error-code/lifecycle diagnostics on timeout, preserving their assertions and timeouts. Scoped analysis and eight integration-quality tests pass; actual camera acceptance remains open. Do not label this a confirmed simulator limitation or a runtime fix.

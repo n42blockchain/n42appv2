@@ -35,13 +35,25 @@ void main() {
       final controller = tester
           .widget<MobileScanner>(find.byType(MobileScanner))
           .controller!;
-      await _wait(tester, () => controller.value.isRunning);
+      await _wait(
+        tester,
+        () => controller.value.isRunning,
+        controller: controller,
+      );
 
       for (var i = 0; i < 3; i++) {
         binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
-        await _wait(tester, () => !controller.value.isRunning);
+        await _wait(
+          tester,
+          () => !controller.value.isRunning,
+          controller: controller,
+        );
         binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-        await _wait(tester, () => controller.value.isRunning);
+        await _wait(
+          tester,
+          () => controller.value.isRunning,
+          controller: controller,
+        );
         expect(
           tester.widget<MobileScanner>(find.byType(MobileScanner)).controller,
           same(controller),
@@ -60,7 +72,11 @@ void main() {
   );
 }
 
-Future<void> _wait(WidgetTester tester, bool Function() ready) async {
+Future<void> _wait(
+  WidgetTester tester,
+  bool Function() ready, {
+  MobileScannerController? controller,
+}) async {
   final deadline = DateTime.now().add(const Duration(seconds: 20));
   while (!ready() && DateTime.now().isBefore(deadline)) {
     await tester.pump(const Duration(milliseconds: 250));
@@ -68,6 +84,13 @@ Future<void> _wait(WidgetTester tester, bool Function() ready) async {
   expect(
     ready(),
     isTrue,
-    reason: 'Wallet scanner camera did not reach the expected state',
+    reason:
+        'Wallet scanner camera did not reach the expected state; '
+        'initialized=${controller?.value.isInitialized}, '
+        'running=${controller?.value.isRunning}, '
+        'starting=${controller?.value.isStarting}, '
+        'cameras=${controller?.value.availableCameras}, '
+        'error=${controller?.value.error?.errorCode.name}, '
+        'lifecycle=${WidgetsBinding.instance.lifecycleState?.name}',
   );
 }
