@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+
+### Isolate and serialize Chat search-history storage — batch 226
+
+- Replaced the shared unowned history key with homeserver/user-scoped keys. Legacy history is retained but not assigned to an arbitrary account. Reads and mutations share a FIFO queue across data-source instances in one isolate, with durable reload before access. Captured client/user/server/device/token identity rejects queued stale work and suppresses stale results.
+- False or thrown platform writes restore the optimistic cache and propagate failure; subsequent operations still work. Empty-query SearchBloc reads now catch storage errors. Chat `7eef1654eef6b9da95fd230a49b20e4f8202e75a` is committed/pushed; **55 related tests pass**, including 10 storage cases; scoped analysis is clean (`/tmp/n42-chat-b226-final.log`, `/tmp/n42-chat-b226-analysis.log`).
+- Wallet dependency/lock/package_config resolve the exact new Git cache. Pub get exits zero with only Chat ref changed in the lock; **51 host checks pass** (`/tmp/n42-wallet-b226-host.log`, exit 0). Existing untracked wallet files and Chat coverage changes remain untouched.
+- This closes same-isolate history write ordering and account-key separation, not cross-isolate/process atomicity, global-search/history revision overlap, proactive lifecycle invalidation, full regression or live/device acceptance. Remaining MSG-001 and wallet/native-login/release work stay open. No upload or deployment.
+
 ### Guard Chat search-history presentation across async work — batch 225
 
 - ClearSearch now removes displayed results immediately instead of retaining them while reading history. History view/deletion/clear completions and errors are checked against both their search generation and history revision, stamped at event receipt. A delayed history read cannot restore entries after a clear; old mutation errors cannot replace a newer search. Storage operations are not claimed serialized by these display guards.

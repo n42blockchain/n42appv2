@@ -1664,3 +1664,8 @@ Integrated Chat a8a87226: intent generations guard stale global/room/history dis
 ### Batch 225 — Chat search-history presentation
 
 Integrated 07e7c2ae: immediate visible search clearing and generation/revision-bound history reads, deletions and failures. 46 Chat search tests and 51 host checks pass; final analysis clean. Repository write concurrency and proactive account/clear invalidation remain separate unresolved work.
+
+
+### Batch 226 — Account-scoped Chat search history
+
+Chat 7eef1654 removes cross-account shared history storage and serializes same-isolate mutations/reads. Ten storage cases cover separation, legacy history, ordering, session changes, limits and write failures. 55 related Chat tests and scoped analysis pass; wallet pins the exact source and 51 host checks pass. See reconciliation for evidence and remaining boundaries; no full-suite or release claim.
