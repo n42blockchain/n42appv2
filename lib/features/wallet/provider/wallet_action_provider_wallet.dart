@@ -361,6 +361,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
     );
     wInfo.mnemonic = await Trustdart().generateMnemonic();
     if (ownerUuid != userUUID) return;
+    if (wInfo.mnemonic?.trim().isEmpty != false) {
+      throw StateError('Wallet mnemonic generation failed');
+    }
     wInfo.walletName = "Account${walletInfoLsit.length + 1}";
     wInfo.coinInfo = chainUrlMap;
     wInfo.mainWallet = true;

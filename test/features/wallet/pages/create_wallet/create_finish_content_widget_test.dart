@@ -149,6 +149,52 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('empty generated phrase cannot be saved as a created wallet', (
+    tester,
+  ) async {
+    _setPhoneViewport(tester);
+    var saves = 0;
+    await _pumpFinish(
+      tester,
+      method: 'Create',
+      wallet: _wallet()..mnemonic = '',
+      saveWallet: (_) async {
+        saves++;
+      },
+    );
+    await tester.pumpAndSettle();
+    expect(saves, 0);
+    expect(find.text(S.current.g_key_3), findsOneWidget);
+    expect(find.text(S.current.g_key_wallet_c22), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final watchOnly in [true, false]) {
+    testWidgets(
+      'empty mnemonic preserves ${watchOnly ? 'watch-only' : 'private-key'} wallets',
+      (tester) async {
+        _setPhoneViewport(tester);
+        final wallet = _wallet()..mnemonic = '';
+        wallet.watchOnly = watchOnly;
+        if (!watchOnly) wallet.privateKey = 'synthetic-private-key-fixture';
+        var saves = 0;
+        await _pumpFinish(
+          tester,
+          method: 'Create',
+          wallet: wallet,
+          saveWallet: (_) async {
+            saves++;
+          },
+        );
+        await tester.pumpAndSettle();
+        expect(saves, 1);
+        expect(find.text(S.current.g_key_wallet_c22), findsOneWidget);
+        expect(find.text(S.current.g_key_3), findsNothing);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets('creation stays in loading state until wallet save completes', (
     tester,
   ) async {

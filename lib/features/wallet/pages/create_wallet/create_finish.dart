@@ -71,6 +71,12 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
         _wInfo!.mnemonic = await Trustdart().generateMnemonic();
       }
 
+      if (widget.createMetod == 'Create' &&
+          !_wInfo!.watchOnly &&
+          !_wInfo!.hasPrivateKey &&
+          _wInfo!.mnemonic?.trim().isEmpty == true) {
+        throw StateError('Wallet mnemonic generation failed');
+      }
       if (_wInfo!.walletName == "") {
         _wInfo!.walletName =
             "Account${walletActionProvider.walletInfoLsit.length + 1}";

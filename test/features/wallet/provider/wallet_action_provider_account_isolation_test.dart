@@ -174,6 +174,18 @@ void main() {
     },
   );
 
+  test(
+    'failed native mnemonic generation never persists an empty wallet',
+    () async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(trustdart, (call) async => '');
+      final before = await secureStorage.read(key: 'walletInfo', options: {});
+      await expectLater(store.createWallet(), throwsStateError);
+      expect(store.walletInfoLsit, isEmpty);
+      expect(await secureStorage.read(key: 'walletInfo', options: {}), before);
+    },
+  );
+
   test('wallet creation propagates storage failure to its caller', () async {
     final initialCount = store.walletInfoLsit.length;
     FlutterSecureStoragePlatform.instance = _WalletStoragePlatform(
