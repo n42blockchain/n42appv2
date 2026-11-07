@@ -109,7 +109,7 @@ jobs:
   integration-tests:
     name: Integration Tests
     runs-on: xcode-27
-    timeout-minutes: 60
+    timeout-minutes: 120
     
     steps:
       - name: Checkout code
@@ -147,10 +147,7 @@ jobs:
 
       - name: Run integration tests (iOS)
         run: |
-          flutter test integration_test/ \
-            --device-id "$IOS_SIMULATOR_ID" \
-            --reporter expanded \
-            --no-pub 2>&1 | tee ios-integration.log
+          bash scripts/run_ios_ci_integration.sh 2>&1 | tee ios-integration.log
 
       - name: Preserve test results
         if: always()

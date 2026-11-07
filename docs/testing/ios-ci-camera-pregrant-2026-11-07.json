@@ -1,0 +1,42 @@
+{
+  "uuid": "F6C39737-AFD0-45E8-9E0A-4AEDA045CD8B",
+  "name": "N42-CI-Privacy-Probe-1794055516",
+  "runtime": "iOS 27.1",
+  "owned_by": "current N42 maturity task",
+  "app_absent_before_grant": true,
+  "grant_exit_code": 0,
+  "grant_output": "",
+  "tcc_records": [
+    [
+      "kTCCServiceCamera",
+      "ai.n42.ci.permissionprobe",
+      2
+    ]
+  ],
+  "helper_exit_code": 0,
+  "helper_output": "",
+  "helper_source_sha256": "1232df6a3b91fe3579b84a87fcb06a1097171eac5b64301660101dd644a3c11f",
+  "verified_flutter_arguments": [
+    "test",
+    "integration_test/",
+    "--device-id",
+    "F6C39737-AFD0-45E8-9E0A-4AEDA045CD8B",
+    "--no-uninstall",
+    "--no-pub",
+    "--reporter",
+    "expanded"
+  ],
+  "actual_app_camera_records": [
+    [
+      "kTCCServiceCamera",
+      "ai.n42.www",
+      2
+    ]
+  ],
+  "simulator_deleted_after_probe": true,
+  "physical_device_used": false,
+  "flutter_execution_stubbed": true,
+  "full_native_suite_run": false,
+  "camera_capture_verified": false,
+  "scope": "Real CoreSimulator/TCC preinstall permission and helper command wiring only"
+}
