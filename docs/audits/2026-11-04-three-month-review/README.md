@@ -1885,3 +1885,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - File selection now reads preview and requires confirmation showing room names/date/warnings. Picker, preview and confirmation bind to the opening account lifecycle; the origin predicate travels through the queued event and service checks. The service checks after file/normalization reads, around settings writes and progress callbacks. BLoC suppresses stale result/exception content.
 - 101 combined backup/BLoC tests pass (`/tmp/n42-chat-b263.log`). Scoped analysis has seven infos, no errors/warnings. Tests cover stale confirmation origin and account mutations at three progress stages; they do not establish complete picker/dialog device interaction.
 - Chat cc68fddda7ce6c0266ac880bd009764a6ef4c88a. Remaining: encrypted-file password input, preview localization, device interaction, rollback of already-started writes, account ownership of backup contents, full-history limits and backend rehearsal.
+
+### Integrate encrypted-backup password entry — batch 264 (2026-11-07)
+
+- Supported protected formats now throw typed BackupPasswordRequired. The restore picker prompts only for that type, hides password text, disables correction/suggestions and stops on cancel/empty input or stale account origin. Accepted input is used for preview and confirmed restore.
+- 101 backup service/BLoC tests pass (`/tmp/n42-chat-b264-final.log`), including protected formats, wrong passwords and tamper rejection. Scoped source analysis has six infos, no errors/warnings. This does not prove password-dialog interaction or wrong-password retry UX.
+- Chat 77ff30ea7579afa1af14697a0f8005b8ea9a6d0c. UI/device interaction, wrong-password retry UX, localization, full-history/ownership acceptance and backend rehearsal remain open.

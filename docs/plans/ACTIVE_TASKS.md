@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 264 integrated: encrypted backup password entry precedes preview/confirmation. 101 backup/BLoC and 51 host tests pass; pin 77ff30ea. Dialog interaction, wrong-password retry UX, localization, complete history/ownership and live acceptance remain open.
+
 > Batches 259–263 integrated: restore preview confirmation and account provenance through queued/service work. 101 backup/BLoC and 51 host tests pass; pin cc68fddd. Password input, localization, device interaction, write rollback, ownership and full-history acceptance remain open.
 
 > Batch 258 integrated: preview/restore retain incomplete-backup warnings. 82 backup, 15 BackupBloc and 51 host tests pass; pin 0c4028d9. Preview display/localization, full history, ownership and live acceptance remain open.

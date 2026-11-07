@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate encrypted-backup password entry — batch 264 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b264-host.log`); manifest/lock resolve the immutable Chat commit.
+
+- Supported protected formats now throw typed BackupPasswordRequired. The restore picker prompts only for that type, hides password text, disables correction/suggestions and stops on cancel/empty input or stale account origin. Accepted input is used for preview and confirmed restore.
+- 101 backup service/BLoC tests pass (`/tmp/n42-chat-b264-final.log`), including protected formats, wrong passwords and tamper rejection. Scoped source analysis has six infos, no errors/warnings. This does not prove password-dialog interaction or wrong-password retry UX.
+- Chat 77ff30ea7579afa1af14697a0f8005b8ea9a6d0c. UI/device interaction, wrong-password retry UX, localization, full-history/ownership acceptance and backend rehearsal remain open.
+
+
 ### Restore confirmation and account provenance — batches 259–263 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b263-host.log`); manifest/lock resolve the immutable Chat commit.
