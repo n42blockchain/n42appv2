@@ -32,16 +32,8 @@ void main() {
 
 const _pendingWalletCases = <_PendingDeviceCase>[
   _PendingDeviceCase(
-    'WLT-01 creates and backs up a disposable wallet',
-    'Requires an isolated secure-storage fixture and disposable mnemonic.',
-  ),
-  _PendingDeviceCase(
     'WLT-02 imports a disposable mnemonic wallet',
     'Requires complete address initialization and wallet-home acceptance.',
-  ),
-  _PendingDeviceCase(
-    'WLT-03 imports a disposable private-key wallet',
-    'Requires a secret-safe device fixture for a disposable private key.',
   ),
   _PendingDeviceCase(
     'WLT-14 displays progressively loaded wallet balances',

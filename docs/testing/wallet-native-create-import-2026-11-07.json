@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-07",
+  "source": "c21de0d6eb2d311ea88e48e2c46df459b2961994",
+  "device": "N42_Wallet_QA_20261107 emulator-5586 Android API 36",
+  "exitCode": 0,
+  "passed": 9,
+  "failed": 0,
+  "skipped": 7,
+  "accepted": [
+    "Native mnemonic import and secure persistence/reload",
+    "Public scalar-one private-key derivation and UI import/persistence/reload",
+    "Native mnemonic generation, reveal, ordered backup confirmation, password setup, persistence/reload",
+    "Recipient, amount and gas form checks with loopback RPC"
+  ],
+  "cleanup": "Owned wallet namespaces and mnemonic keys removed; pre-existing namespaces compared unchanged",
+  "logSha256": "eb0614872095d8d552e6125c517d5907f9a9a4c7d708a9ef03e40f67baa00141",
+  "boundaries": [
+    "Wallet home and background address initialization not exercised",
+    "Fixture logs global wallet notifier not initialized; storage assertions passed but home notification not established",
+    "Physical devices deferred",
+    "No signing or broadcast; no funds",
+    "Actual run contains seven skips; two fulfilled placeholders removed only after the run"
+  ]
+}
