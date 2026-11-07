@@ -3,7 +3,7 @@
   "testJob": 128480364304,
   "source": "3f5ac8a271e12cd3d42d83b65d599eb4e70bc2be",
   "testJobConclusion": "success",
-  "overallRun": "in_progress; builds/performance pending",
+  "overallRun": "success",
   "wallet": {
     "passed": 7775,
     "failed": 0,
@@ -30,5 +30,51 @@
     "passed": true
   },
   "log_sha256": "532b1279a7baeb592b669323a33a7cc435eb3e934c20653f3ad1b53e3858dfa5",
-  "scope": "Main unit/widget and resolved Chat checks. Not full native wallet flows, physical QA or production role enforcement."
+  "scope": "Main unit/widget and resolved Chat checks. Not full native wallet flows, physical QA or production role enforcement.",
+  "allJobs": [
+    {
+      "name": "Backend contracts (backend/social-auth)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Backend contracts (backend/swap)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Backend contracts (backend/loyalty)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Backend contracts (backend/livekit-jwt)",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83d\udcca Code Analysis",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83d\udd12 Security Scan",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83e\uddea Tests & Coverage",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83e\udd16 Build Android",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83c\udf4e Build iOS",
+      "conclusion": "success"
+    },
+    {
+      "name": "\u26a1 Performance Regression",
+      "conclusion": "success"
+    },
+    {
+      "name": "\ud83d\udccb CI Summary",
+      "conclusion": "success"
+    }
+  ]
 }

@@ -2,7 +2,7 @@
 
 ## Wallet Matrix 16 integration — 2026-11-07
 
-Immutable Chat `1e10ad2e78bed3fcb7425e2f078d977d60ec61a8` resolves Matrix 16.0.1. The combined candidate CI 42381943230 passed both native builds. Latest CI 42398101409 test job passes 7,775 wallet tests (zero failures/skips), 8,594 Chat tests (five explicit skips), and 73.918091% wallet coverage; its iOS/Android build jobs are still running. Mac Chat validation separately passed 8,596 tests/three skips and 71.882445% coverage. The isolated 20-client/10,000-event load, direct SDK 15→16 SQLite/history upgrade and 30/30 backup-recovery experiments all passed. Thirty valid but incorrect recovery keys were rejected.
+Immutable Chat `1e10ad2e78bed3fcb7425e2f078d977d60ec61a8` resolves Matrix 16.0.1. The combined candidate CI 42381943230 passed both native builds. Latest CI 42398101409 test job passes 7,775 wallet tests (zero failures/skips), 8,594 Chat tests (five explicit skips), and 73.918091% wallet coverage; all its jobs, including iOS/Android builds, now pass. Mac Chat validation separately passed 8,596 tests/three skips and 71.882445% coverage. The isolated 20-client/10,000-event load, direct SDK 15→16 SQLite/history upgrade and 30/30 backup-recovery experiments all passed. Thirty valid but incorrect recovery keys were rejected.
 
 The pin is integrated and included in delivered TestFlight 73424. Candidate 73425 contains subsequent live-lifecycle repairs and is signed/staged but not delivered. Production authenticated business flows and physical-device acceptance remain separate open checks. The isolated comparison checkout was removed after exact lockfile and version-normalized manifest equality, document integration review and open-file checks; its branch and evidence remain available.
 
