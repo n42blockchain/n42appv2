@@ -159,7 +159,7 @@ Future<void> _verifyWalletChainReorder(WidgetTester tester) async {
   await _waitForKey(tester, 'manage_chains_page');
   await _waitForKey(tester, original[0]);
   await _waitForKey(tester, original[2]);
-  await _dragItemDownTwo(
+  await dragReorderItemDownTwo(
     tester,
     itemKey: original[0],
     dragIcon: Icons.drag_handle_rounded,
@@ -172,7 +172,7 @@ Future<void> _verifyWalletChainReorder(WidgetTester tester) async {
   debugPrint('T26_B1 wallet after: ${after.join(' > ')}');
   expect(after, <String>[original[1], original[2], original[0]]);
 
-  await _dragItemToTop(
+  await dragReorderItemToTop(
     tester,
     itemKey: original[0],
     dragIcon: Icons.drag_handle_rounded,
@@ -204,7 +204,7 @@ Future<void> _verifyQuickReplyReorder(WidgetTester tester) async {
     await _waitForKey(tester, 't26_a');
     debugPrint('T26_B1 quick replies before: t26_a > t26_b > t26_c');
 
-    await _dragItemDownTwo(
+    await dragReorderItemDownTwo(
       tester,
       itemKey: 't26_a',
       dragIcon: Icons.drag_handle,
@@ -215,7 +215,7 @@ Future<void> _verifyQuickReplyReorder(WidgetTester tester) async {
     debugPrint('T26_B1 quick replies after: ${afterIds.join(' > ')}');
     expect(afterIds, <String>['t26_b', 't26_c', 't26_a']);
 
-    await _dragItemToTop(
+    await dragReorderItemToTop(
       tester,
       itemKey: 't26_a',
       dragIcon: Icons.drag_handle,
@@ -304,7 +304,7 @@ Future<void> _waitForNativePickerRoundTrip() async {
   fail('Native file picker did not complete an open/cancel round trip.');
 }
 
-Future<void> _dragItemDownTwo(
+Future<void> dragReorderItemDownTwo(
   WidgetTester tester, {
   required String itemKey,
   required IconData dragIcon,
@@ -315,17 +315,22 @@ Future<void> _dragItemDownTwo(
     matching: find.byIcon(dragIcon),
   );
   final destination = find.byKey(ValueKey<String>(thirdItemKey));
-  await tester.ensureVisible(destination);
-  final delta =
-      tester.getCenter(destination) -
-      tester.getCenter(source) +
-      const Offset(0, 24);
+  // Keep the source visible, then settle layout before reading coordinates.
+  // Scrolling the destination without a frame can drag a different row.
+  await tester.ensureVisible(source);
+  await tester.pump();
+  expect(source.hitTestable(), findsOneWidget);
+  expect(destination.hitTestable(), findsOneWidget);
+  final delta = Offset(
+    0,
+    tester.getCenter(destination).dy - tester.getCenter(source).dy + 24,
+  );
   await tester.timedDrag(source, delta, const Duration(milliseconds: 900));
   await tester.pump(const Duration(seconds: 1));
   _expectNoException(tester, 'drag $itemKey down two rows');
 }
 
-Future<void> _dragItemToTop(
+Future<void> dragReorderItemToTop(
   WidgetTester tester, {
   required String itemKey,
   required IconData dragIcon,
@@ -336,10 +341,14 @@ Future<void> _dragItemToTop(
     matching: find.byIcon(dragIcon),
   );
   final destination = find.byKey(ValueKey<String>(topItemKey));
-  final delta =
-      tester.getCenter(destination) -
-      tester.getCenter(source) -
-      const Offset(0, 24);
+  await tester.ensureVisible(destination);
+  await tester.pump();
+  expect(source.hitTestable(), findsOneWidget);
+  expect(destination.hitTestable(), findsOneWidget);
+  final delta = Offset(
+    0,
+    tester.getCenter(destination).dy - tester.getCenter(source).dy - 24,
+  );
   await tester.timedDrag(source, delta, const Duration(milliseconds: 900));
   await tester.pump(const Duration(seconds: 1));
   _expectNoException(tester, 'drag $itemKey back to top');

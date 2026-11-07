@@ -18,16 +18,11 @@ import 'package:flutter_test/flutter_test.dart';
 /// - `onReorderItem` already accounts for the removal, so that compensation
 ///   must be deleted — keeping it drags the item one row short.
 ///
-/// The 3.44 migration removed the compensation from
-/// `WalletActionProviderToken.reorderChain` (wallet 管理链页) and from chat's
-/// quick-replies page. The chat side was confirmed on a physical iPhone in
-/// T26; the wallet side is still `NOT VERIFIED` on device because async
-/// wallet initialisation mutated the source list mid-gesture.
-///
-/// These tests close that gap without a device: they drive a real
-/// [ReorderableListView] so Flutter itself supplies `newIndex`, and assert
-/// that "remove at oldIndex, insert at newIndex" — with **no** compensation —
-/// lands the item where the user dropped it.
+/// The wallet and Chat callbacks use this post-removal index contract.
+/// These tests cover the framework contract only. The real chain page and
+/// native drag helper are covered in manage_chains_page_test.dart, including
+/// long-list scrolling, persisted order and dragging the chain back.
+/// Physical-device acceptance remains separate.
 void main() {
   /// Applies the exact mutation `reorderChain` performs.
   List<String> applyReorder(List<String> items, int oldIndex, int newIndex) {
