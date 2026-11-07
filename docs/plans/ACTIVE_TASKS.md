@@ -316,3 +316,9 @@
 
 - f208ce675 builds unsigned iOS Release for arm64, exit 0; all ten model bundles plus Falcon and namespaced ZIP symbols are present. This is compilation only.
 - Twelve MLKit device payloads match the existing Google distributions after container normalization; FaceDetection, TextRecognitionCommon and Translate still differ. Explain differences or retain original Google device payloads before merge. Device install/signing, real media and full business acceptance remain open. Evidence: docs/testing/mlkit-cocoapods-simulator-2026-11-07.md and mlkit-device-slices-2026-11-07.json.
+
+
+### 2026-11-07 MLKit device payload equivalence resolved
+
+- The three unexplained raw differences above are empty Mach-O load-command metadata replacements or trailing archive padding. Code/data sections, relocations and symbols match. A strict read-only verifier confirms all 15 device payloads after documented container/metadata normalization, with matching SHA-256 values.
+- This supersedes the unexplained binary difference blocker, without rewriting device binaries. Negative/concurrent native notifications, final host regression/review and full physical-device/business acceptance remain open. Evidence: scripts/verify_mlkit_device_payloads.py and docs/testing/mlkit-device-payload-verification-2026-11-07.json.

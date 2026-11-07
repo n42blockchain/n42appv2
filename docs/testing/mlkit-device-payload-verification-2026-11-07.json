@@ -1,0 +1,119 @@
+[
+  {
+    "name": "MLImage",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "749f33059fe43acd81ab5107ba2f286d0f435a31da5af398dc8d9ab04d782652",
+    "normalizedCandidateArm64Sha256": "749f33059fe43acd81ab5107ba2f286d0f435a31da5af398dc8d9ab04d782652",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitCommon",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "b434357fac70bb3208de8a854818c088c9683687f2e9e571ad8b454c7a43e33c",
+    "normalizedCandidateArm64Sha256": "b434357fac70bb3208de8a854818c088c9683687f2e9e571ad8b454c7a43e33c",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitFaceDetection",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "355269973b67e4088551ae9a9dde25b15bcce5aa834201e4e13097ff18e73c5f",
+    "normalizedCandidateArm64Sha256": "355269973b67e4088551ae9a9dde25b15bcce5aa834201e4e13097ff18e73c5f",
+    "normalizations": [
+      {
+        "emptyDataInCodeToVersionMinIPhoneOS": 2848
+      }
+    ]
+  },
+  {
+    "name": "MLKitNaturalLanguage",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "f57de462faf979eafef2cfe6bc7d76b8607203d023ca423b172f02210affbb0a",
+    "normalizedCandidateArm64Sha256": "f57de462faf979eafef2cfe6bc7d76b8607203d023ca423b172f02210affbb0a",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitSegmentationCommon",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "f45b2fe159c8db34e36923cebd3c205141b3b08438db378e1cb9830339feb899",
+    "normalizedCandidateArm64Sha256": "f45b2fe159c8db34e36923cebd3c205141b3b08438db378e1cb9830339feb899",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitSegmentationSelfie",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "d7331f917e2f8456bc642ba6575e0e5fd1bcb0acb40445339960deded1ddae15",
+    "normalizedCandidateArm64Sha256": "d7331f917e2f8456bc642ba6575e0e5fd1bcb0acb40445339960deded1ddae15",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitTextRecognition",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "f2c02845796b902ae44187367f842a84bd57cb75e1843dedf8edcda0042ea471",
+    "normalizedCandidateArm64Sha256": "f2c02845796b902ae44187367f842a84bd57cb75e1843dedf8edcda0042ea471",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitTextRecognitionChinese",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "99232f96fcb60fa0e72a48c9e42074916e5abd6df68bea4921df0888d14f97e4",
+    "normalizedCandidateArm64Sha256": "99232f96fcb60fa0e72a48c9e42074916e5abd6df68bea4921df0888d14f97e4",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitTextRecognitionCommon",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "f2b4fbc37e3df245d7b1f29717a466256d61655099404369bef0a3c5ed78de32",
+    "normalizedCandidateArm64Sha256": "f2b4fbc37e3df245d7b1f29717a466256d61655099404369bef0a3c5ed78de32",
+    "normalizations": [
+      {
+        "emptyDataInCodeToVersionMinIPhoneOS": 2848
+      }
+    ]
+  },
+  {
+    "name": "MLKitTextRecognitionDevanagari",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "dbcd78a689ec4fad79e644339c9ae80ebbbd7bc8941dde0dbce472800bd00b6c",
+    "normalizedCandidateArm64Sha256": "dbcd78a689ec4fad79e644339c9ae80ebbbd7bc8941dde0dbce472800bd00b6c",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitTextRecognitionJapanese",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "73715e0c9ffbffe741a2fefa6119d946330b7c6811657fa630f65eb9a4fa57bd",
+    "normalizedCandidateArm64Sha256": "73715e0c9ffbffe741a2fefa6119d946330b7c6811657fa630f65eb9a4fa57bd",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitTextRecognitionKorean",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "a3b44e7029aef5f89c6e53cb81de657b13c2cb9093b064d18df48e8a38bbf7b2",
+    "normalizedCandidateArm64Sha256": "a3b44e7029aef5f89c6e53cb81de657b13c2cb9093b064d18df48e8a38bbf7b2",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitTranslate",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "1f74cd8c18adf133e195bcb460319d67c055651139b5c67704f2a6fd31c1bd54",
+    "normalizedCandidateArm64Sha256": "1f74cd8c18adf133e195bcb460319d67c055651139b5c67704f2a6fd31c1bd54",
+    "normalizations": [
+      {
+        "trailingNewlinePaddingBytes": 6
+      }
+    ]
+  },
+  {
+    "name": "MLKitVision",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "93bd68b1fed969659d256c0cf815c3cf95693c7e22703eef049f64f078a32bfd",
+    "normalizedCandidateArm64Sha256": "93bd68b1fed969659d256c0cf815c3cf95693c7e22703eef049f64f078a32bfd",
+    "normalizations": []
+  },
+  {
+    "name": "MLKitXenoCommon",
+    "equivalentAfterDocumentedPackagingNormalization": true,
+    "originalArm64Sha256": "b543b985d92db4f7addcd53ac940342111082103e66fb4b7cc50a15196c20cdc",
+    "normalizedCandidateArm64Sha256": "b543b985d92db4f7addcd53ac940342111082103e66fb4b7cc50a15196c20cdc",
+    "normalizations": []
+  }
+]

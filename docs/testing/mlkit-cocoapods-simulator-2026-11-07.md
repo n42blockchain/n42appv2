@@ -41,3 +41,11 @@ Device provenance comparison is retained in mlkit-device-slices-2026-11-07.json.
 
 Build log: /tmp/n42-mlkit-device-release-20261107.log.
 SHA-256: `e34780dd6dafc4a05b6920b0ea3cbcdc38c976c57a3cd808453d0ce6b46c85ba`.
+
+## Device payload differences resolved
+
+The three remaining raw differences are now explained and verified without modifying any binary. FaceDetection and TextRecognitionCommon replace a 16-byte LC_DATA_IN_CODE command whose data table size is zero with LC_VERSION_MIN_IPHONEOS (minimum iOS 15.5, SDK 17.2). Apple's installed loader.h identifies command constants 0x29 and 0x25. Their code/data sections, relocation records and symbol tables compare identically. Translate adds six newline bytes after the original object; all original bytes match.
+
+Added read-only scripts/verify_mlkit_device_payloads.py. It extracts arm64 fat containers and, only where the original is a single Mach-O object, unwraps the repackaged single-member archive. It accepts no more than seven trailing newline bytes and only the exact empty-data-command/version-command replacement observed above. After those restricted normalizations, every other byte must match; otherwise it exits 1. It never rewrites a framework or broadens a version constraint.
+
+Command: python3 scripts/verify_mlkit_device_payloads.py --original-pods /Users/jieliu/Documents/n42/n42appv2/ios/Pods --output docs/testing/mlkit-device-payload-verification-2026-11-07.json. Result: 15/15 match, exit 0. Python compilation and git diff --check pass. The JSON retains original and normalized candidate SHA-256 plus each permitted normalization. This resolves the unexplained-device-payload gate above, not real-device or production business acceptance. Remaining integration work includes negative/concurrent model notification coverage and final host regression/integration review before merging.
