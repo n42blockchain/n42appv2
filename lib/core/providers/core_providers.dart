@@ -51,15 +51,17 @@ final currentUserProvider =
 
 class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
   final SPUtil _spUtil;
+  int _accountRevision = 0;
 
   CurrentUserNotifier(this._spUtil) : super(null) {
     _loadFromStorage();
   }
 
   Future<void> _loadFromStorage() async {
+    final revision = _accountRevision;
     try {
       final userJson = await _spUtil.getUserInfo();
-      if (!mounted) return;
+      if (!mounted || revision != _accountRevision) return;
       if (userJson != null) {
         state = SharedUserInfo.fromJson(userJson);
       }
@@ -70,11 +72,14 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
 
   void setUser(SharedUserInfo user) {
     if (!mounted) return;
+    _accountRevision++;
     state = user;
     _spUtil.saveUserInfoJson(user.toJson());
   }
 
   void clearUser() {
+    if (!mounted) return;
+    _accountRevision++;
     state = null;
   }
 
@@ -134,6 +139,8 @@ final appInitProvider = FutureProvider<void>((ref) async {
   final spUtil = ref.read(spUtilProvider);
   final secureStorage = SecureStorage();
   final currentUserNotifier = ref.read(currentUserProvider.notifier);
+  final accountRevision = currentUserNotifier._accountRevision;
+  final globalUser = AppGlobals.userInfo;
   try {
     // SharedPreferences read should be fast; 5 s timeout guards against edge
     // cases where the platform channel is slow to respond.
@@ -141,7 +148,10 @@ final appInitProvider = FutureProvider<void>((ref) async {
       const Duration(seconds: 5),
       onTimeout: () => null,
     );
-    if (userInfoJson != null) {
+    if (userInfoJson != null &&
+        currentUserNotifier.mounted &&
+        currentUserNotifier._accountRevision == accountRevision &&
+        identical(AppGlobals.userInfo, globalUser)) {
       final userInfo = UserInfo.fromJson(userInfoJson);
       // flutter_secure_storage on Android (custom AES cipher) can block
       // indefinitely when the hardware Keystore is not yet ready (first boot

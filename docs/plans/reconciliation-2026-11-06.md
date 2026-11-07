@@ -1,6 +1,15 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Reconcile old host audit and protect startup account state — batch 196
+
+- Compared the seven files from patch-unique old commit `4f64ed5cf`. Production PhishingDetector is byte-identical in current source; current tests retain cache/blocklist behavior, async deep-link disposal, profile persistence/legacy avatar handling, bridge readiness and WalletConnect null-context behavior. Integration-quality tests use the actual resolved Git dependency rather than the obsolete local mirror. Current six-suite regression: **101 pass**, exit 0 (`/tmp/n42-wallet-b196-old-audit.log`). Patch uniqueness did not mean missing production behavior.
+- The clean old worktree contained ignored evidence. Archived all **431 ignored files/symlinks**, including screenshots, benchmark results and caches, then verified every archive entry against source bytes/link targets. Archive `/Users/jieliu/.codex/worktree-archives/n42appv2-test-audit-20261106/ignored-files.tar.gz`, SHA-256 `93f4b8c8c07d9c9c1cb48b83ad7810ce8c05797657b6187eb7bbd2ca2ca9919f`, private manifest beside it. No process had that worktree as its current directory. Removed only `n42appv2_test_audit_20261004`; retained branch `codex/test-audit-20261004` at `4f64ed5cf`. There are now **12 auxiliary wallet worktrees**, with other dirty/unique trees preserved.
+- This review found a real startup race: late stored-account reads could replace an explicit login or resurrect an account after clear. Three failures reproduced before repair (`/tmp/n42-wallet-b196-before.log`). CurrentUserNotifier now invalidates startup reads on every explicit set/clear and ignores callbacks after disposal. appInitProvider also checks the captured account revision and legacy global-user identity before syncing a delayed startup result.
+- Six new startup/account lifecycle cases plus current provider suite: **17 pass**, exit 0 (`/tmp/n42-wallet-b196-final.log`). Scoped analysis reports no issues (`/tmp/n42-wallet-b196-analysis.log`). Normal uncontested restoration remains covered. This protects these pre-dispatch startup paths; it does not serialize already-started secure-storage writes, complete all AppGlobals login/logout races, or establish native/device authorization acceptance.
+- Chat full batch 195 continues on unchanged `930690d1`; source-specific full result and broader feature/dependency/payment/release gaps remain open.
+
+
 ### Consolidate fixes and recover stalled full verification — batch 195
 
 - Batch 192 stopped advancing while loading `story_entity_test.dart`. Repeated live process checks and one-second runner/compiler samples showed both waiting, with no test child process. The unchanged Story source/tests independently passed 30 cases (`/tmp/n42-chat-b195-story.log`). Explicitly sent SIGTERM to the identified runner; both runner and compiler then exited. This was an intentional termination, not a successful run or an assumed exit after an observation timeout.
