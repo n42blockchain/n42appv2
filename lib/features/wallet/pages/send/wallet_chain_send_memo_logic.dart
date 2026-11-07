@@ -419,6 +419,15 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     widget.coinModel.address.toString(),
     widget.coinModel.isTest,
     widget.coinModel.config.coinType,
+    widget.coinModel.privateKey,
+    widget.coinModel.pathIndex,
+    widget.coinModel.addrType,
+    widget.coinModel.config.pathForAddrType(widget.coinModel.addrType),
+    chainModel?.config.pathForAddrType(widget.coinModel.addrType),
+    widget.coinModel.coin['decimals'],
+    widget.coinModel.coin['isContract'],
+    widget.coinModel.coin['contract'],
+    widget.coinModel.coin['contractTest'],
     toCtrl.text,
     valueCtrl.text,
     memoCtrl.text,
@@ -543,6 +552,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   Future<void> signTx(TransationRecordModel trModel) async {
     if (_signing || _preparedHash != null || !mounted) return;
     _signing = true;
+    final submissionContext = _formContext;
     final recentAddressOwner = trModel.userUuid.isNotEmpty
         ? trModel.userUuid
         : RecentAddressService.currentUser;
@@ -596,6 +606,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
               ? (hash) async {
                   final original = _preparedRecord;
                   if (!mounted ||
+                      submissionContext != _formContext ||
                       RecentAddressService.currentUser != recentAddressOwner ||
                       original == null ||
                       hash != _preparedHash) {
@@ -606,6 +617,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                           AppDatabase().markMemoTransactionDispatch(original));
                   if (!marked ||
                       !mounted ||
+                      submissionContext != _formContext ||
                       RecentAddressService.currentUser != recentAddressOwner) {
                     throw StateError('Transaction dispatch was not recorded');
                   }
@@ -614,6 +626,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           beforeBroadcast: {'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinType)
               ? (hash) async {
                   if (!mounted ||
+                      submissionContext != _formContext ||
                       RecentAddressService.currentUser != recentAddressOwner) {
                     throw StateError('Wallet context changed');
                   }
@@ -637,6 +650,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                     trModel.toMap(),
                   );
                   if (!mounted ||
+                      submissionContext != _formContext ||
                       RecentAddressService.currentUser != recentAddressOwner) {
                     throw StateError('Wallet context changed');
                   }

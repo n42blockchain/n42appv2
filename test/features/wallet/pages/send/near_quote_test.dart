@@ -43,6 +43,12 @@ void main() {
     'insufficient',
     'error',
     'stale',
+    'key',
+    'path',
+    'path template',
+    'address type',
+    'decimals',
+    'contract',
   ]) {
     testWidgets('NEAR quote $scenario', (tester) async {
       final api = Api()..error = scenario == 'error';
@@ -75,12 +81,36 @@ void main() {
       state.transferValue = scenario == 'insufficient'
           ? api.balance
           : BigInt.one;
-      if (scenario == 'stale') api.gate = Completer<void>();
+      final changing = [
+        'stale',
+        'key',
+        'path',
+        'path template',
+        'address type',
+        'decimals',
+        'contract',
+      ].contains(scenario);
+      if (changing) api.gate = Completer<void>();
       final Future<bool> result = state.prepareNearQuote(
         maximum: scenario == 'maximum',
       ) as Future<bool>;
-      if (scenario == 'stale') {
-        state.toCtrl.text = 'other.near';
+      if (changing) {
+        switch (scenario) {
+          case 'key':
+            coin.privateKey = 'public-test-placeholder';
+          case 'path':
+            coin.pathIndex++;
+          case 'path template':
+            coin.coin['path'] = {'legacy': "m/44'/397'/9'"};
+          case 'address type':
+            coin.addrType = 'other';
+          case 'decimals':
+            coin.coin['decimals'] = 18;
+          case 'contract':
+            coin.coin['contract'] = 'token.near';
+          default:
+            state.toCtrl.text = 'other.near';
+        }
         api.gate!.complete();
       }
       expect(await result, ['maximum', 'ordinary'].contains(scenario));

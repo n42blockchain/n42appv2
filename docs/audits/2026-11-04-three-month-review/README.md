@@ -1648,3 +1648,7 @@ Replaced the memo page's fixed gas-unit-as-fee display with network-priced reser
 ### Batch 221 — NEAR Android native execution
 
 Current production MethodChannel/JNI signer passes actual emulator integration: exact Swift reference bytes, independent SHA256/Ed25519 verification, derived key and 12 invalid-input cases. Build/install/test exits zero. This closes component execution only; no broadcast, physical-device or full payment acceptance. See reconciliation for logs.
+
+### Batch 222 — memo confirmation configuration binding
+
+Snapshot derivation/key/precision/contract values instead of relying on mutable model identity. Recheck submission context around preparation and dispatch persistence. 65 quote/recovery/amount widget tests pass, including dispatch-time key changes on three chains. No live transaction or release claim.

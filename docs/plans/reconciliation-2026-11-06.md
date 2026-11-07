@@ -1,5 +1,12 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Bind memo confirmation and dispatch to signing configuration — batch 222
+
+- Review found that the shared memo form context captured the CoinModel reference, but not mutable private-key selection, derivation index/type/path, decimals or contract fields. A changed field on the same model could leave the asynchronous quote/confirmation looking current. Added value snapshots of those fields, including the resolved fallback derivation path; credentials are never logged or persisted by this check.
+- Capture the same form context at submission and revalidate before/after preparation and dispatch persistence. A key change while the dispatch marker is being saved now aborts before the sender can invoke RPC. Keep mounted checks ahead of provider access after awaits. Existing original-row cleanup and unknown-outcome handling remain intact.
+- **65 widget cases pass**, covering NEAR quote mutations of receiver/key/path/index/type/decimals/contract, dispatch-time key changes for XLM/EGLD/NEAR, prior persistence recovery and amount-entry behavior (`/tmp/n42-wallet-b222-final.log`, exit 0). This is local async/confirmation evidence, not native/live transfer acceptance. Precise fee modeling, complete native/provider flows, new release and the broader Chat backlog remain open.
+
+
 ### Execute NEAR Android MethodChannel and WalletCore JNI — batch 221
 
 - Added `integration_test/native_near_signing_test.dart` using the public BIP39 fixture and synthetic transaction from the independently CryptoKit-verified Swift reference. The test invokes the actual Trustdart MethodChannel and Android production handler, builds against WalletCore 4.8.7 and compares signed bytes with the reference. Independently recomputes SHA256 and verifies the returned Ed25519 signature in Dart; derived implicit account must match the embedded public key.

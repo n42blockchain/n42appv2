@@ -50,6 +50,7 @@ void main() {
       'not submitted',
       'dispatch rejected',
       'dispatch error',
+      'dispatch key changed',
       'release refused',
       'release error',
       'abort foreign hash',
@@ -102,10 +103,12 @@ void main() {
         final dispatchAbort = [
           'dispatch rejected',
           'dispatch error',
+          'dispatch key changed',
         ].contains(scenario);
         final released = [
           'dispatch rejected',
           'dispatch error',
+          'dispatch key changed',
           'not submitted',
           'dispose before abort',
         ].contains(scenario);
@@ -137,6 +140,9 @@ void main() {
                 dispatchChecks.add((tr.trId, tr.txHash, broadcasts));
                 if (scenario == 'dispatch error') {
                   throw StateError('Dispatch store unavailable');
+                }
+                if (scenario == 'dispatch key changed') {
+                  coin.privateKey = 'public-test-placeholder';
                 }
                 return scenario != 'dispatch rejected';
               },

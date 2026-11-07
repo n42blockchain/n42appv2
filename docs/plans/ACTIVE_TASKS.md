@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 222: memo confirmation/quotes now track mutable signing configuration; persistence callbacks reject form/key changes before RPC. 65 widget cases pass. Native/live acceptance and broader remaining work are unchanged.
+
 > Batch 221: actual Android NEAR MethodChannel/WalletCore JNI passes two integration cases, including independent signature/reference matching and 12 malformed inputs. Temporary emulator stopped; physical devices untouched. Native component gap closed; full app/live/device, precise fees and new release remain open.
 
 > Batch 220: NEAR confirmation/Max now use storage reserve and network-priced fee reserve; sender rejects reserve changes before signing. This retains the conservative 300 TGas policy, not exact fee estimation or optimal Max. Protocol-derived quoting, native/live/device checks and new release remain open.
