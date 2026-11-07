@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate archive restore ownership — batch 273 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b273-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Settings and archive restore share declared-owner validation. Archive imports reject mismatched user/homeserver before archive service interaction; tests assert zero archive calls on both mismatch cases.
+- 91 backup tests pass (`/tmp/n42-chat-b273-final.log`); scoped service analysis has six infos, no errors/warnings. Chat a4b24d5fb5a3f6cae3b9758a5f4c5ac3d789b23b.
+- Legacy ownerless imports, preview owner display, authenticity of unencrypted metadata, full-history loading and device/backend acceptance remain open. This is not complete account isolation.
+
+
 ### Integrate backup ownership checks — batches 271–272 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b272-host.log`); manifest/lock/cache resolve the immutable Chat commit.

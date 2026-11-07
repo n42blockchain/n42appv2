@@ -1909,3 +1909,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - New full/incremental manifests record account userId and homeserver. Settings restore rejects explicit owner mismatches and declared owners with missing/empty/non-string identity fields before applying settings. Ownerless legacy backups remain compatible with a warning; they are not verified-owned.
 - 91 backup tests pass (`/tmp/n42-chat-b272-final.log`), including generated backups with user/server mismatch and unknown/empty owner. Service analysis has six infos, no errors/warnings.
 - Chat 84c480ab39c265acafd57293ad43f457762d9afb. Remaining: owner display/confirmation, unknown-owner export behavior, archive restore ownership, authenticity of unencrypted manifests, full-history loading, device acceptance and backend rehearsal.
+
+### Integrate archive restore ownership — batch 273 (2026-11-07)
+
+- Settings and archive restore share declared-owner validation. Archive imports reject mismatched user/homeserver before archive service interaction; tests assert zero archive calls on both mismatch cases.
+- 91 backup tests pass (`/tmp/n42-chat-b273-final.log`); scoped service analysis has six infos, no errors/warnings. Chat a4b24d5fb5a3f6cae3b9758a5f4c5ac3d789b23b.
+- Legacy ownerless imports, preview owner display, authenticity of unencrypted metadata, full-history loading and device/backend acceptance remain open. This is not complete account isolation.

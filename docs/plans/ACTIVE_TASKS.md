@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 273 integrated: archive restore shares declared-owner validation; mismatches rejected before archive calls. 91 backup and 51 host tests pass; pin a4b24d5f. Legacy ownership, metadata authenticity, full history and live/device acceptance remain open.
+
 > Batches 271–272 integrated: new backup owner metadata, settings-restore mismatch and malformed-owner rejection. 91 backup and 51 host tests pass; pin 84c480ab. Legacy ownership, archive restore, manifest authenticity, full history and live acceptance remain open.
 
 > Batches 266–270 integrated: restore interaction regressions and password-free event debug output. 55 event/BLoC/page and 51 host tests pass; pin 9d53b931. Real encrypted-file UI integration, retry UX, localization, ownership/history and live acceptance remain open.
