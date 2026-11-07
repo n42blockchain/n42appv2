@@ -152,6 +152,39 @@ void main() {
     },
   );
 
+  testWidgets('editing during validation discards the stale success', (
+    tester,
+  ) async {
+    await openImport(tester);
+    validationGate = Completer<bool>();
+    await enterPhrase(tester, syntheticPhrase);
+    await submit(tester);
+    await enterPhrase(tester, 'different unvalidated phrase');
+    validationGate!.complete(true);
+    await tester.pumpAndSettle();
+
+    expect(validationRequests, [syntheticPhrase]);
+    expect(find.byType(CreatePassword), findsNothing);
+    expect(inputText(tester), 'different unvalidated phrase');
+    expect(toasts, isEmpty);
+  });
+
+  testWidgets('editing during validation discards the stale rejection', (
+    tester,
+  ) async {
+    await openImport(tester);
+    validationGate = Completer<bool>();
+    await enterPhrase(tester, syntheticPhrase);
+    await submit(tester);
+    await enterPhrase(tester, 'replacement phrase');
+    validationGate!.complete(false);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CreatePassword), findsNothing);
+    expect(inputText(tester), 'replacement phrase');
+    expect(toasts, isEmpty);
+  });
+
   testWidgets('manual input normalizes whitespace before import', (
     tester,
   ) async {

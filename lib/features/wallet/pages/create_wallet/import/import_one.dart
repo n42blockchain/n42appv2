@@ -87,8 +87,9 @@ class _ImportOneState extends ConsumerState<ImportOne>
 
   Future<void> _onSubmit() async {
     if (inputMW.isEmpty) return;
-    bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
-    if (!mounted) return;
+    final submittedMnemonic = inputMW;
+    bool checkMnemonic = await Trustdart().checkMnemonic(submittedMnemonic);
+    if (!mounted || inputMW != submittedMnemonic) return;
     if (!checkMnemonic) {
       errorMessage = S.of(context).w_key_12;
       setState(() {});
