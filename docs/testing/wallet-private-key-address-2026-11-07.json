@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-07",
+  "scope": "Private-key import must receive a nonempty string address before continuing to password setup",
+  "before": {
+    "passed": 3,
+    "failed": 1,
+    "failure": "Missing native address allowed navigation instead of an import error"
+  },
+  "after": {
+    "passed": 7,
+    "failed": 0,
+    "rejectedNativeAddresses": [
+      null,
+      "",
+      "   ",
+      42
+    ]
+  },
+  "limitation": "Widget tests mock the native SDK. Full native private-key import, secure persistence, and wallet home acceptance remain pending. This fix is newer than TestFlight 73425."
+}

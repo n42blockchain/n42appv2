@@ -378,7 +378,8 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             isImport: true,
                           );
                           if (!mounted) return;
-                          if (rm['legacy'] != "") {
+                          final address = rm['legacy'];
+                          if (address is String && address.trim().isNotEmpty) {
                             final ksjByte = hexToBytes(keystoreJson);
                             final base64Str = base64Encode(ksjByte);
                             final walletProvider = ref.read(wapBridgeProvider);

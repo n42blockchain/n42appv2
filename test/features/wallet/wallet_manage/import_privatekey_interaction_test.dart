@@ -99,4 +99,27 @@ void main() {
     expect(tester.takeException(), isNull);
     await drainToast(tester);
   });
+  for (final address in <Object?>[null, '', '   ', 42]) {
+    testWidgets(
+      'invalid native address ($address) cannot advance a base58 import',
+      (tester) async {
+        messenger.setMockMethodCallHandler(trustdart, (call) async {
+          nativeCalls.add(call.method);
+          if (call.method == 'generateAddress')
+            return <String, dynamic>{'legacy': address};
+          throw PlatformException(code: 'unexpected-native-call');
+        });
+        await open(tester);
+        await tester.enterText(
+          find.byType(TextField),
+          '11111111111111111111111111111111',
+        );
+        await submit(tester);
+        expect(find.byType(ImportPrivatekey), findsOneWidget);
+        expect(find.text(S.current.g_key_210), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await drainToast(tester);
+      },
+    );
+  }
 }
