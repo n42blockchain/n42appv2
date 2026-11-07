@@ -1,0 +1,10 @@
+{
+  "runtime_source_commit": "3a9030913",
+  "passed": 7754,
+  "skipped": 0,
+  "failed": 0,
+  "exit_code": 0,
+  "native_pq_enabled": true,
+  "log_sha256": "828b530398a606bed20333d07edbf7adb3eb62e2348d26963181d9ddd1df4eb0",
+  "scope": "Full wallet runtime regression after Matrix 16 integration; product lib and dependency graph unchanged during execution. New form test registrations added during this run are verified separately, not included in this count. Not physical-device acceptance."
+}

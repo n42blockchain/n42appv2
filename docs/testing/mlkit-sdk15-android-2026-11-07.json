@@ -1,0 +1,12 @@
+{
+  "conclusion": "success",
+  "headSha": "b7700258ddfe65e61f7d61adb15c6e65657e05da",
+  "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42385227597",
+  "passed": 9,
+  "skipped": 0,
+  "failed": 0,
+  "model_download_test_passed": true,
+  "concurrent_download_test_passed": true,
+  "log_sha256": "39fe8628bfac532e9a64e71186ae31b49ade149b6a25d818ecc837dd21eb68b9",
+  "scope": "Disposable Android emulator, SDK 15 dependency graph. SDK 16/iOS and physical device are separate gates."
+}

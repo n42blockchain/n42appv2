@@ -7,12 +7,21 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(const MethodChannel('trustdart'), (
+          call,
+        ) async {
+          expect(call.method, 'checkMnemonic');
+          return false;
+        });
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
           const MethodChannel('PonnamKarthik/fluttertoast'),
           (_) async => true,
         );
   });
   tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(const MethodChannel('trustdart'), null);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
           const MethodChannel('PonnamKarthik/fluttertoast'),

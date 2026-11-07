@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_one.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_password.dart';
@@ -41,6 +43,32 @@ void registerWalletFormCases() {
     // Let the native toast lifetime end before the next case or disposal.
     await tester.pump(const Duration(seconds: 8));
   }
+
+  testWidgets('WLT-02 rejects invalid mnemonic formats', (tester) async {
+    await tester.runAsync(
+      () => Clipboard.setData(const ClipboardData(text: '')),
+    );
+    final store = WalletActionProvider();
+    await tester.pumpWidget(
+      wrapForTest(
+        const ImportOne(),
+        overrides: [wapBridgeProvider.overrideWith((ref) => store)],
+      ),
+    );
+    await tester.pumpAndSettle();
+    await enter(tester, 0, 'this is not a valid mnemonic');
+    await tester.tap(find.text(S.current.g_key_11));
+    for (var attempt = 0; attempt < 200; attempt++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      if (find.text(S.current.w_key_12).evaluate().isNotEmpty) break;
+    }
+    expect(find.text(S.current.w_key_12), findsOneWidget);
+    expect(find.byType(ImportOne), findsOneWidget);
+    expect(find.byType(CreatePassword), findsNothing);
+    expect(store.walletInfoLsit, isEmpty);
+    expect(tester.takeException(), isNull);
+    await tester.pump(const Duration(seconds: 8));
+  });
 
   testWidgets('WLT-02 validates wallet name input', (tester) async {
     await open(tester);

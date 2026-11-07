@@ -40,10 +40,6 @@ const _pendingWalletCases = <_PendingDeviceCase>[
     'Requires a secret-safe device fixture for a disposable private key.',
   ),
   _PendingDeviceCase(
-    'WLT-02 rejects invalid mnemonic formats',
-    'Requires stable keys and semantics on the real import-wallet form.',
-  ),
-  _PendingDeviceCase(
     'WLT-14 displays progressively loaded wallet balances',
     'Requires a deterministic fake RPC connected to the device build.',
   ),
