@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Preserve incremental history across room scopes and failures — batch 247
+
+- Reproduced three failures (`/tmp/n42-chat-b247-before.log`): switching room subsets or adding rooms reused a previous cutoff, and failed room export silently advanced progress. Checkpoint v3 includes the captured sorted set of actual room IDs plus homeserver/user. Different scopes rescan safely; reordering the same scope retains progress. Older cursors are left untouched but not reused.
+- Timeline, archive and room-export failures now preserve useful partial output with warnings in the result and manifest and do not advance the cutoff. Manifest `hasReadErrors` records observed read failures; it does not assert complete historical coverage. Subsequent successful retries recover old messages.
+- Chat **86 related tests pass** (`/tmp/n42-chat-b247-final.log`) and **six final-source focused tests pass** after making the manifest field explicit (`/tmp/n42-chat-b247-final-scoped.log`). Corrected a nested-mock fixture error before the accepted run. Scoped analysis has no errors/warnings and six existing infos (`/tmp/n42-chat-b247-analysis-final.log`). Chat commit `0e6c720e659490d9c53f30620281b1f7e8076af6` pushed. Wallet pin, lock and package cache match; pub get exits zero. **51 wallet host tests pass** (`/tmp/n42-wallet-b247-host.log`); these fixture/initialization/SSO checks are not device acceptance.
+- Remaining: late-arriving old-timestamp messages, timestamp-tied archive pagination, Timeline history completeness/cleanup, concurrent export progress, archive DB/backup-directory/restore ownership. Native login, signer reconciliation and release/device acceptance remain open. No live-message, real payment, device action or release upload.
+
+
 ### Account-scoped backup cutoffs and export guards — batch 246
 
 - Chat inspection confirmed one global incremental cutoff could skip a different account's history. Eight pre-fix file-behavior tests failed (`/tmp/n42-chat-b246-before.log`). Cursor keys now hash homeserver/user identity; unowned legacy cursors are ignored and unknown identities do not persist cutoffs. Returning to the original account resumes its own cursor.

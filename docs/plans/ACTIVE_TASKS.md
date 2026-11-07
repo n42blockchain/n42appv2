@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 247: incremental checkpoints are account-and-room-set scoped; partial read failures warn without advancing progress. Three pre-fix failures; 86 related and six final-source focused tests pass. Chat pin 0e6c720e. Full account partitioning, pagination/history completeness, native login and release remain open.
+
 > Batch 246: Chat incremental cursors now belong to a homeserver/user; export detects session changes. Eight pre-fix failures; 80 related and 24 final-source focused tests pass. Pin b1a97015. Archive DB/directory and restore ownership remain open; this is not complete account partitioning.
 
 > Batch 245: TRON/Solana/Sui transaction signing now binds selected credentials/path to the approved configured address. 19 pre-fix failures; 1,129 WalletConnect tests pass; scoped analysis clean. Aptos/NEAR proofs, protocol/native acceptance and broader archive/login/release work remain open.
