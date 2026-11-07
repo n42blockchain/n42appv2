@@ -186,6 +186,15 @@ jobs:
           cd "$CHAT_TEST_ROOT"
           flutter pub get
 
+      - name: Build resolved Chat native crypto for Linux tests
+        id: chat_crypto
+        if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
+        run: |
+          python3 scripts/prepare_chat_native_crypto.py \
+            --chat-root "$CHAT_TEST_ROOT" \
+            --target-dir "$RUNNER_TEMP/chat-native-crypto" \
+            --github-env "$GITHUB_ENV"
+
       - name: Analyze the resolved Chat package
         if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
         run: |
@@ -193,7 +202,7 @@ jobs:
           flutter analyze --no-fatal-infos
 
       - name: Test the resolved Chat package
-        if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
+        if: ${{ always() && steps.chat_crypto.outcome == 'success' }}
         run: |
           cd "$CHAT_TEST_ROOT"
           ulimit -n 4096
@@ -235,6 +244,7 @@ jobs:
           path: |
             test_output.txt
             test_results.jsonl
+            ${{ env.CHAT_TEST_ROOT }}/test/goldens/failures/
           retention-days: 7
 
   # ============================================
