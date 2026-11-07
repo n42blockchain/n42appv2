@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 265 integrated: Material rendering fixed on backup cards; 16 page/BLoC and 51 host tests pass, page/test analysis clean. Pin f27226e6. Valid-account password interactions, localization, history/ownership and live acceptance remain open.
+
 > Batch 264 integrated: encrypted backup password entry precedes preview/confirmation. 101 backup/BLoC and 51 host tests pass; pin 77ff30ea. Dialog interaction, wrong-password retry UX, localization, complete history/ownership and live acceptance remain open.
 
 > Batches 259–263 integrated: restore preview confirmation and account provenance through queued/service work. 101 backup/BLoC and 51 host tests pass; pin cc68fddd. Password input, localization, device interaction, write rollback, ownership and full-history acceptance remain open.

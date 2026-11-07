@@ -1891,3 +1891,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Supported protected formats now throw typed BackupPasswordRequired. The restore picker prompts only for that type, hides password text, disables correction/suggestions and stops on cancel/empty input or stale account origin. Accepted input is used for preview and confirmed restore.
 - 101 backup service/BLoC tests pass (`/tmp/n42-chat-b264-final.log`), including protected formats, wrong passwords and tamper rejection. Scoped source analysis has six infos, no errors/warnings. This does not prove password-dialog interaction or wrong-password retry UX.
 - Chat 77ff30ea7579afa1af14697a0f8005b8ea9a6d0c. UI/device interaction, wrong-password retry UX, localization, full-history/ownership acceptance and backend rehearsal remain open.
+
+### Integrate backup page Material fix — batch 265 (2026-11-07)
+
+- Real backup-page widget rendering exposed ListTile/ColoredBox material assertions. Card surfaces now use Material so the configured background does not hide ListTile ink/background rendering.
+- 16 page/BLoC tests pass (`/tmp/n42-chat-b265-related.log`). The page test verifies no file picker opens without an account lifecycle; its final run has no hit-test warning. Page/test analysis clean (`/tmp/n42-chat-b265-analysis.log`).
+- Chat f27226e6bce33a6c75a3749e60d183268c105589. Valid-account file picker, password cancel/wrong-password retry/confirm interaction, localization, full-history/ownership and live/device acceptance remain open.
