@@ -52,8 +52,11 @@ extension WalletActionProviderToken on WalletActionProvider {
     }
     _applyChainOrder();
     final models = _coinModels;
-    bool current() => userUUID == owner && walletIndex == index &&
-        hasAssetVisibilityWallet && identical(walletInfo, wallet) &&
+    bool current() =>
+        userUUID == owner &&
+        walletIndex == index &&
+        hasAssetVisibilityWallet &&
+        identical(walletInfo, wallet) &&
         models.length == _coinModels.length &&
         models.every(_coinModels.contains);
     refresh();
