@@ -15,9 +15,24 @@ import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _WalletStoragePlatform extends TestFlutterSecureStoragePlatform {
-  _WalletStoragePlatform(super.data, {this.failingReadKey});
+  _WalletStoragePlatform(
+    super.data, {
+    this.failingReadKey,
+    this.failingWriteKey,
+  });
 
   final String? failingReadKey;
+  final String? failingWriteKey;
+
+  @override
+  Future<void> write({
+    required String key,
+    required String value,
+    required Map<String, String> options,
+  }) async {
+    if (key == failingWriteKey) throw StateError('synthetic write failure');
+    await super.write(key: key, value: value, options: options);
+  }
 
   @override
   Future<String?> read({
@@ -76,6 +91,7 @@ void main() {
   });
 
   test('wallet creation propagates storage failure to its caller', () async {
+    final initialCount = store.walletInfoLsit.length;
     FlutterSecureStoragePlatform.instance = _WalletStoragePlatform(
       {},
       failingReadKey: 'walletInfo',
@@ -90,7 +106,40 @@ void main() {
       ),
       throwsStateError,
     );
+    expect(store.walletInfoLsit.length, initialCount);
   });
+
+  test(
+    'secondary key failure keeps the draft hidden and recovery data durable',
+    () async {
+      final initialCount = store.walletInfoLsit.length;
+      const timestamp = 'synthetic-secondary-failure';
+      final storage = _WalletStoragePlatform(
+        {},
+        failingWriteKey: 'mnemonic_${accountUuid}_$timestamp',
+      );
+      FlutterSecureStoragePlatform.instance = storage;
+      await expectLater(
+        store.addWalletInfo(
+          WalletInfo(
+            walletName: 'Synthetic recovery draft',
+            walletUuid: accountUuid,
+            timestamp: timestamp,
+            mnemonic: generatedMnemonic,
+            coinInfo: <String, dynamic>{},
+          ),
+        ),
+        throwsStateError,
+      );
+      expect(store.walletInfoLsit.length, initialCount);
+      final raw = await storage.read(key: 'walletInfo', options: {});
+      final persisted = jsonDecode(raw!) as Map<String, dynamic>;
+      expect(
+        persisted[accountUuid]['wallet'][0]['mnemonic'],
+        generatedMnemonic,
+      );
+    },
+  );
 
   test('wallet creation rejects a draft from another account', () async {
     final initialCount = store.walletInfoLsit.length;

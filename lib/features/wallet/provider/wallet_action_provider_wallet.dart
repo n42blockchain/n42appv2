@@ -376,21 +376,29 @@ extension WalletActionProviderWallet on WalletActionProvider {
       throw StateError('Wallet owner changed before creation');
     }
     info.walletUuid = ownerUuid;
-    // 克隆一份数据，不污染数据源（存储时不保存助记词）
+    // Keep the draft out of the visible list until both writes complete.
+    // The secure wallet record retains recovery data if the secondary key
+    // write fails; do not delete that durable record on an uncertain failure.
     final newWalletInfo = WalletInfo.fromJson(info.toJson());
-    _walletInfoLsit.add(info);
-    walletIndex = _walletInfoLsit.length - 1;
-    if (walletMiningIndex == -1) {
-      walletMiningIndex = walletIndex;
+    final newIndex = _walletInfoLsit.length;
+    await saveWalletInfoOrThrow(newWalletInfo, newIndex, isNewWallet: true);
+    if (ownerUuid != userUUID || ownerUuid != walletDataOwnerUuid) {
+      throw StateError('Wallet owner changed during creation');
     }
-    await saveWalletInfoOrThrow(newWalletInfo, walletIndex, isNewWallet: true);
-    // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
     if (info.hasMnemonic) {
-      final walletId = _secureWalletId(info, walletIndex, walletDataOwnerUuid);
+      final walletId = _secureWalletId(info, newIndex, ownerUuid);
       await SecureStorage().saveMnemonic(
         walletId: walletId,
         mnemonic: info.mnemonic!,
       );
+    }
+    if (ownerUuid != userUUID || ownerUuid != walletDataOwnerUuid) {
+      throw StateError('Wallet owner changed during creation');
+    }
+    _walletInfoLsit.add(info);
+    walletIndex = newIndex;
+    if (walletMiningIndex == -1) {
+      walletMiningIndex = walletIndex;
     }
     initWallet(shouldInitCoinInfo: true);
     refresh();
