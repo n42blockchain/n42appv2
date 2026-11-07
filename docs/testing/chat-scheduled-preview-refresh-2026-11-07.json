@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-07",
+  "failedSource": "52cd2e8108315615c7c4bf91ebb2a30e88340aad",
+  "fullBefore": {
+    "passed": 8622,
+    "failed": 1,
+    "skipped": 4,
+    "exitCode": 1
+  },
+  "deterministicBefore": {
+    "passed": 0,
+    "failed": 2
+  },
+  "focusedAfter": {
+    "passed": 71,
+    "failed": 0
+  },
+  "scope": [
+    "Cached initial history, full reload and subscription updates retain local scheduled previews",
+    "Preserve own-account current-room drafts, deduplicate IDs, do not override same-ID server events"
+  ],
+  "logs": {
+    "n42-chat-session-cluster-full-20261107.jsonl": "6dc4369b02c22df39d1a6bee3e497e00567bd4ef905a0d74056bc39d0adf6013",
+    "n42-scheduled-preview-before.log": "3997e82b961377e97e94266e3a170d1f2a72095ed5c68ee5f17cf642d7002fcf",
+    "n42-scheduled-preview-final.log": "0ce9de3f5a99a3d9d30a03fa68a0f09dcc38dfd820d0416e734ba686b256f682"
+  },
+  "remaining": [
+    "Current-source full regression",
+    "Native scheduled-message lifecycle and production acceptance"
+  ],
+  "release": "73453 candidate is held; no TestFlight upload",
+  "chatFixSource": "5f8db7df438f200f95e3e7f69b280f4b0b18a6b0",
+  "hostLiveRegression": {
+    "passed": 74,
+    "failed": 0,
+    "exitCode": 0,
+    "logSha256": "d33536ac5df2c153faecf0b9925c20783838e8b4bc26803dd959a1f8cb335f45"
+  }
+}
