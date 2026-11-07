@@ -7,10 +7,10 @@ This snapshot supersedes historical batch observations below. The overall maturi
 | Gate | Current evidence | Remaining boundary |
 | --- | --- | --- |
 | Production Matrix upgrade | Tuwunel 1.9.4, running/healthy; [upgrade record](../testing/matrix-upgrade-2026-11-06.md) | Production authenticated E2EE, push and calls acceptance |
-| Wallet and Chat full CI | Run 42372264075 green; wallet 7,744 passed, Chat 8,561 passed/eight skipped; wallet coverage 73.868987%; both native builds pass | Native run 42374095584 Android failed (23 passed/two skipped/seven failures: credentials and install storage); iOS remains running. Follow-up CI 42376481517 still running |
+| Wallet and Chat full CI | Run 42376481517 green; wallet 7,744 passed, Chat 8,579 passed/six skipped; wallet coverage 73.868279%; both native builds pass | Native run 42374095584 Android failed (23 passed/two skipped/seven failures: credentials and install storage); iOS remains running. Follow-up CI 42376481517 is now green; candidate CI is tracked separately |
 | Internal TestFlight | 2.5.4 (73423), t1 group Testing; installed version observed; [release](../releases/testflight-20261107-73423.md) | Functional device QA deferred; external beta review not claimed |
 | MPC EVM transfer path | Canonical signing, normal EVM routing and actual disposable Anvil native/ERC20 receipts/balance deltas pass | Real social-provider signing, public network and device flows |
-| Isolated Matrix encryption | Multi-client encryption/revocation, one key recovery and real repository account-switch smoke pass | Thirty-recovery batch is live; production/device recovery and push |
+| Isolated Matrix encryption | SDK 15 multidevice/revocation, 30/30 fresh-database recoveries/wrong-key rejections and real repository account-switch smoke pass | SDK 16 thirty-recovery, production/device recovery, corrupted/interrupted backup and push |
 | Encrypted group load | Twenty independent clients each verify 10,000 unique readable events, including offline catchup: 200,000 deliveries; process exit 0 | Protocol test only; attachment downloads, device UI, push and production remain open |
 | Image decode CI | Corpus setup added; 200 synthetic still images decode locally, P95 1.055 ms | New workflow execution pending; device/video/HDR and real startup performance |
 
@@ -1514,3 +1514,10 @@ Compatible dependency work is isolated on `chore/compatible-dependencies-2026110
 CI 42376481517 at 556b89205 is now fully green, including Android/iOS builds. Wallet 7,744 tests pass; Chat 8,579 pass/six skip. The provisioned Linux native key-store restore and all 17 encrypted-send guard cases actually execute and pass. Wallet line coverage is 104,319/141,223 (73.868279%, threshold 70%). This is the SDK 15 baseline, separate from the running dependency/SDK 16 candidates.
 
 Read-only live Actions inspection shows iOS run 42374095584 reached 14 passed/three failed before the next native signing target. The wallet scanner passes its permission check but its controller does not become running within 20 seconds. The existing timeout message lacks state, so the cause is not yet established. Both scanner tests now include initialized/running/starting/camera-count/error-code/lifecycle diagnostics on timeout, preserving their assertions and timeouts. Scoped analysis and eight integration-quality tests pass; actual camera acceptance remains open. Do not label this a confirmed simulator limitation or a runtime fix.
+
+
+### Recovery completion and SDK 16 host candidate — 2026-11-07
+
+The SDK 15 recovery batch completed with actual exit 0: 30/30 fresh-database correct-key recoveries restore four sessions and decrypt history; 30/30 validly encoded wrong keys are rejected. Chat evidence bce96226 retains source/log hashes and the single M_UNKNOWN_TOKEN cleanup warning. All clients are disposed, but accounts are not deactivated. The owned port-18948 service is stopped with its database retained. Production and the independent port-18949 SDK 16 service are unchanged.
+
+Matrix 16 candidate has 8,596 passing tests/three opt-in live skips, 71.882445% line coverage, 105 packaged-ABI/document checks and a separate actual encryption/revocation/one-recovery protocol pass. Its full 20-client load rerun remains active. Wallet candidate `chore/wallet-matrix16-20261107` at 57458054e pins immutable Chat 1e10ad2e and combines the eight compatible dependency updates. Host resolution and full analysis pass; combined CI 42381943230 is running. This candidate is neither merged nor shipped in Beta 73423. SDK 15 30/30 and load results are not transferred to SDK 16.
