@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-07",
+  "chatSource": "dfca4801301388af49446b9556b668bb66f180cf",
+  "reproducedFailures": {
+    "avatarFollowUp": 3,
+    "customProfileCacheOrWrite": 3,
+    "standardProfileCache": 1
+  },
+  "focusedAuthTests": {
+    "passed": 45,
+    "failed": 0,
+    "analysis": "No issues found"
+  },
+  "behavior": [
+    "Avatar follow-up NFT clearing and profile refresh stop after session replacement or logout",
+    "Standard and custom profile reads reject stale responses before cache writes",
+    "Account-data update rechecks its session before write and cache commit; original user ID captured",
+    "Stable-account field merge, display name, avatar and profile paths remain covered"
+  ],
+  "logSha256": {
+    "n42-avatar-session-before.log": "f7ee447e7d76fc1bdc605bde8ac28c85081ef0920fc959984695603b92cd0e62",
+    "n42-avatar-session-after.log": "72974e37b5679e333da93920b67b4151e918c99604ee3cb97c612761c05e93da",
+    "n42-profile-data-before.log": "575fb940c881de65ea7e0c80375f4856ad1bc0a419c3b13a35a46df9bfc12d66",
+    "n42-standard-profile-before.log": "e37d4dca5c6ec3868f12674c7df4ace6b72e29a23119d6d6752f4f18aa156534",
+    "n42-profile-complete-after.log": "7d8ef5f428804edc7bf9e251c4987a14d6afc34f44f702ec63342b737c8170aa",
+    "n42-profile-complete-analysis.log": "002b0f374e5c6dcd53b745d11e56cc20b4d2ac989ad1e6e691bd557832164022"
+  },
+  "remaining": [
+    "SDK avatar upload fallback session binding",
+    "Poke-text room-loop session binding",
+    "Real-device profile/account-switch acceptance",
+    "Full CI and release packaging for this new dependency pin"
+  ],
+  "hostLiveTests": {
+    "passed": 74,
+    "failed": 0,
+    "exitCode": 0,
+    "logSha256": "d41b9fea156b91fa5cc1ea253745e1b373d8ddc56b0740486433f82f7606d89f"
+  }
+}
