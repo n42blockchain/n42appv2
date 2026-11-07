@@ -1,10 +1,16 @@
 # Dependency upgrade record — started 2026-10-02; status refreshed 2026-10-05
 
+## Wallet Matrix 16 integration — 2026-11-07
+
+Immutable Chat `1e10ad2e78bed3fcb7425e2f078d977d60ec61a8` resolves Matrix 16.0.1. Combined candidate CI 42381943230 passes all jobs, including both native builds. Chat has 8,596 passing full-suite tests/three opt-in skips, 71.882445% coverage, a 20-client/10,000-event load pass, direct SDK 15→16 SQLite/history upgrade proof and isolated multidevice/revocation/one-recovery acceptance. The SDK 16 thirty-recovery experiment remains running.
+
+The pin is now integrated into the active wallet repair branch. A new full wallet regression is required against the latest creation/import fixes. This is not shipped in SDK 15 Beta 73423 and does not establish production authenticated or physical-device acceptance.
+
 ## Compatible resolver batch — 2026-11-07
 
 Fresh Pub resolver output found eight updates allowed by existing constraints. The isolated `chore/compatible-dependencies-20261107` branch updates only the lockfile graph: flutter_riverpod/riverpod 3.4.3 → 3.5.0, riverpod_annotation 4.0.7 → 4.0.8, pro_image_editor 14.25.0 → 14.25.1, code_assets 2.1.0 → 2.2.0, native_toolchain_c 0.19.5 → 0.19.6, objective_c 9.6.2 → 9.6.3 and permission_handler_windows 0.2.3 → 0.2.4. Application source, the Chat runtime pin and existing native forks remain unchanged. This batch is now integrated into the active wallet repair branch after green CI 42379157589. It is not shipped in Beta 73423.
 
-Reviewed package changelogs: Riverpod changes disposal/stream subscription behavior, the image editor fixes video layer end-time visibility, and objective_c changes stream buffering/closure and deployment-target handling. These need regression and native-build acceptance; resolver success alone is insufficient. Local full analysis exits 0 with informational lints and no errors/warnings. Full candidate CI passes, including both native builds and 73.868987% wallet coverage. A fresh full wallet suite is running after integration with the later creation/import fixes; native business-flow acceptance remains open. Matrix 16, Web3Auth 8 and other constrained major upgrades remain separate open work; this batch is not the entire dependency-upgrade task.
+Reviewed package changelogs: Riverpod changes disposal/stream subscription behavior, the image editor fixes video layer end-time visibility, and objective_c changes stream buffering/closure and deployment-target handling. These need regression and native-build acceptance; resolver success alone is insufficient. Local full analysis exits 0 with informational lints and no errors/warnings. Full candidate CI passes, including both native builds and 73.868987% wallet coverage. The post-integration full wallet suite passes 7,733 tests/three local PQ environment skips; the real host PQ suite separately passes 21 tests. native business-flow acceptance remains open. Matrix 16, Web3Auth 8 and other constrained major upgrades remain separate open work; this batch is not the entire dependency-upgrade task.
 
 
 This record covers the host application's pinned Chat map update and the first host dependency batch. The audit is a checkpoint, not a claim that every package is upgraded. The host `pubspec.yaml` and lockfile are the source of truth; `packages/n42_chat/` is a cache mirror and was not edited.
