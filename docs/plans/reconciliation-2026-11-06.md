@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Preserve and revalidate retained thread history — batch 190
+
+- Partial live snapshots now merge by event ID, retain loaded older replies, update duplicates and preserve chronological order. The production repository revalidates all retained roots/replies against local account/room clearing. State can explicitly remove a cleared root. Newer stream revisions supersede delayed results; page/state changes during visibility reads cause revalidation instead of lost history.
+- Initialization captures a repository session guard; subsequent cross-account updates/sends are rejected. Six merge cases, real-store filtering/session checks and updated older-reply preservation expectations pass with **83 related tests**, exit 0 (/tmp/n42-chat-b190-final.log). Scoped analysis: zero errors/warnings, twelve infos (/tmp/n42-chat-b190-analysis-final.log). Chat `8b1935d423893342067ba1b879d926b3e85a4dfd` is pushed and pinned. Only Chat changes during dependency resolution; three wallet host fixtures pass (/tmp/n42-wallet-b190-host.log).
+- Remaining: proactive clear/account invalidation without incoming updates, older redactions outside the latest snapshot, refresh replacement of loaded pages, visibility-failure recovery and cursor retention bounds. Native login, wallet recovery/dependencies/payments, full regression and current-source release acceptance remain open. No live/device/release claim.
+
 ### Reject malformed and cyclic thread pages — batch 189
 
 - Required chunk/event identity and continuation shape are validated; damaged pages are rejected rather than skipping entries or masquerading as exhaustion. Session/room/root-scoped continuation edges reject multi-step cycles while preserving valid explicit retries. Invalid limits/empty tokens fail before network access. Initial local fallback is limited to M_UNRECOGNIZED; permission, network and parsing failures remain visible.
