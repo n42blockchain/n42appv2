@@ -105,8 +105,9 @@ void main() {
       (tester) async {
         messenger.setMockMethodCallHandler(trustdart, (call) async {
           nativeCalls.add(call.method);
-          if (call.method == 'generateAddress')
+          if (call.method == 'generateAddress') {
             return <String, dynamic>{'legacy': address};
+          }
           throw PlatformException(code: 'unexpected-native-call');
         });
         await open(tester);
