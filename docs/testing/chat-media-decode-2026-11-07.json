@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "passed": true,
+  "samples": 200,
+  "p95Microseconds": 1055,
+  "manifestSha256": "3528bcd51d59bb9cfa29659893c23c94c2d12ca08599852133e9d10f300f2b69",
+  "measurementsSha256": "6acb7dcf13c332e84ec27c3a24687ae6468ad3b37ec9cd62cdde46c9b4cc40af",
+  "environment": "Flutter host test / synthetic still images",
+  "limitations": "RSS snapshots are not peak RSS; no video, HDR/P3 color accuracy, network or production failure-rate evidence.",
+  "ciExecution": "pending; workflow now generates corpus before Chat tests and uploads measurements"
+}

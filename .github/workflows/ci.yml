@@ -206,7 +206,18 @@ jobs:
         run: |
           cd "$CHAT_TEST_ROOT"
           ulimit -n 4096
+          export N42_MEDIA_CORPUS="$RUNNER_TEMP/chat-media-corpus"
+          dart run tool/weekly_benchmark/generate_image_corpus.dart "$N42_MEDIA_CORPUS"
           flutter test test/ --concurrency=4
+
+      - name: Preserve Chat image decode measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chat-media-decode-results
+          path: ${{ runner.temp }}/chat-media-corpus/decode-results.json
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Generate coverage report
         if: ${{ always() && steps.root_tests.outcome == 'success' }}
