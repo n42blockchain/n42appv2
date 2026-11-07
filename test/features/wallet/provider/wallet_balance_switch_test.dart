@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart'
 
 class _DelayedBalances extends TokenViewApi {
   final result = Completer<MessageModel?>();
+  var balanceCalls = 0;
   @override
   Future<MessageModel?> getBalance(
     String blockchain,
@@ -18,7 +19,17 @@ class _DelayedBalances extends TokenViewApi {
     bool returnDouble = false,
     bool isTest = false,
     String? rpc,
-  }) => result.future;
+  }) {
+    balanceCalls++;
+    return result.future;
+  }
+}
+
+class _DelayedMetadata extends _DelayedBalances {
+  final decimals = Completer<int?>();
+  @override
+  Future<int?> getErc20Decimals(String contractAddress, String rpcUrl) =>
+      decimals.future;
 }
 
 class _Wallet extends WalletActionProvider {
@@ -102,5 +113,54 @@ void main() {
       }
       if (change == 'unchanged') expect(oldCoin.balance, BigInt.from(999));
     });
+  }
+  for (final metadata in [true, false]) {
+    for (final switched in [true, false]) {
+      test(
+        '${metadata ? 'metadata' : 'ALGO'} response preserves wallet context (switch=$switched)',
+        () async {
+          final api = metadata ? _DelayedMetadata() : _DelayedBalances();
+          final wallet = _Wallet(api);
+          addTearDown(wallet.dispose);
+          final coin = CoinModel()
+            ..coin = {
+              'coinType': metadata ? 'ETH' : 'ALGO',
+              'blockchainType': metadata ? 'Ethereum' : 'Algorand',
+              'isContract': true,
+              'canEdit': true,
+              'balance': '0',
+              'decimals': 18,
+              'mKey': 'asset',
+              'contract': '0x3333333333333333333333333333333333333333',
+            }
+            ..address = '0x1111111111111111111111111111111111111111';
+          wallet.coinModels.add(CoinModel()..coin = {'coinType': 'ALGO'});
+          wallet.walletInfoLsit.addAll([
+            WalletInfo(walletUuid: wallet.userUUID, coinInfo: {}),
+            WalletInfo(walletUuid: wallet.userUUID, coinInfo: {}),
+          ]);
+          wallet.walletIndex = 0;
+          final pending = wallet.getBalanceWithCoinModel(coin);
+          if (switched) wallet.walletIndex = 1;
+          if (metadata) {
+            (api as _DelayedMetadata).decimals.complete(6);
+            api.result.complete(MessageModel()..data = BigInt.from(123));
+          } else {
+            api.result.complete(
+              MessageModel()..data = {'balance': BigInt.from(123), 'code': 1},
+            );
+          }
+          await pending;
+          expect(coin.coin['balance'], switched ? '0' : '123');
+          if (metadata) {
+            expect(coin.coin['decimals'], switched ? 18 : 6);
+            expect(coin.coin['decimals_verified'], switched ? isNull : isTrue);
+            expect(api.balanceCalls, switched ? 0 : 1);
+          } else {
+            expect(coin.other is AlgoModel, !switched);
+          }
+        },
+      );
+    }
   }
 }

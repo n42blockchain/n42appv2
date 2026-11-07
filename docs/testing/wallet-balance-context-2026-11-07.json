@@ -28,7 +28,18 @@
   "logSha256": "7dc22286bd9f38ce744ec0fde94a77d29973d35ce5b8aac7cbfcfe95bed1137c",
   "limitations": [
     "Mocked API delayed-response regression; not native wallet home acceptance",
-    "Direct ALGO and metadata lookup paths have guards but lack equivalent delay-specific acceptance in this batch",
     "Not included in TestFlight 73425"
-  ]
+  ],
+  "branchAcceptance": {
+    "focusedPassed": 13,
+    "failed": 0,
+    "additionalCases": [
+      "ERC20 metadata delayed with wallet switch",
+      "ERC20 metadata unchanged succeeds and fetches balance",
+      "ALGO token delayed with wallet switch",
+      "ALGO token unchanged applies code and balance"
+    ],
+    "analysis": "No issues found",
+    "logSha256": "25c2615cecc3a0b74dbbe603238dfcd3abbc2da8621f736d8e508828b2057098"
+  }
 }
