@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Interrupted-work check and Sui message binding — batch 242
+
+- Found two unfinished tracked files from interrupted Sui message-key binding. The completed directory log reports **1,049 passing WalletConnect tests** (`/tmp/n42-wallet-b242-final.log`), including 17 added Sui cases. Seven mismatched derivation cases failed before the repair (`/tmp/n42-wallet-b242-before.log`). Scoped analysis was rerun after fixing one braces-style info.
+- Sui now derives the selected address from the same captured credentials/path used for message signing. Bounded hexadecimal comparison preserves uppercase and leading-zero aliases; invalid, overlong and different addresses fail before signing. Existing account/request/session guards remain. This is mocked native-boundary evidence, not live signature acceptance; Aptos rotated accounts require separate proof.
+- Fetch confirmed master and origin/master were equal before closeout. Thirteen auxiliary worktrees remain registered. No tree or preexisting untracked plan/package was removed; unique ordinary-sender and remaining WalletConnect behavior still require semantic comparison.
+- Remaining work is not a single unfinished patch: (1) ordinary/non-EVM signer reconciliation and protocol acceptance; (2) Chat archive account partition/backup ownership and remote-redaction lifecycle; (3) native Google/Apple/Facebook and public Meta acceptance; (4) current-source full regression, fresh release and upload/processing/tester evidence; (5) explicit dependency/localization holds and safe worktree cleanup. See the detailed matrix below. Earlier passing full suites apply only to their recorded source revisions.
+- The signed 73325 artifact is historical and unuploaded; it predates batches 212–242. Physical-device QA remains deferred. No browser/provider or live server state was refreshed in this check; adjacent-product records below remain historical evidence, not new deployment verification.
+
 ### Bind TRON and Solana message keys to approved addresses — batch 241
 
 - **12 pre-fix failures reproduced** (`/tmp/n42-wallet-b241-before.log`): a different, empty, missing, wrong-type, failed or case-changed derived address did not prevent message signing. These cases cover TRON/Solana only, whose configured address can be compared directly to the native derivation result.

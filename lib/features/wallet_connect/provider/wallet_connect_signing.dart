@@ -151,7 +151,10 @@ mixin WalletConnectSigning
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         requireMessageCurrent = requireCurrent;
-        final credentials = await getCurrentWalletCredentials();
+        final credentials = await _addressBoundMessageCredentials(
+          cm,
+          requireCurrent,
+        );
         requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
@@ -927,7 +930,7 @@ mixin WalletConnectSigning
     }
   }
 
-  /// TRON/Solana addresses are verified with the same captured key material
+  /// TRON/Solana/Sui addresses are verified with the same captured key material
   /// and derivation path passed to message signing. Do not apply this equality
   /// rule to named/rotated accounts without their chain-specific key proof.
   Future<({String mnemonic, String privateKey})>
@@ -956,7 +959,21 @@ mixin WalletConnectSigning
     );
     requireCurrent();
     final address = derived[coin.addrType];
-    if (address is! String || address.isEmpty || address != coin.address) {
+    final expected = coin.address;
+    bool matches() {
+      if (address is! String || expected is! String || address.isEmpty) {
+        return false;
+      }
+      if (coin.config.coinType != CoinType.SUI.name) return address == expected;
+      // Preserve the same bounded hex identity rules used by Sui sessions.
+      final hex = RegExp(r'^0[xX][0-9a-fA-F]{1,64}$');
+      return hex.hasMatch(address) &&
+          hex.hasMatch(expected) &&
+          BigInt.parse(address.substring(2), radix: 16) ==
+              BigInt.parse(expected.substring(2), radix: 16);
+    }
+
+    if (!matches()) {
       throw StateError(
         'Signing key does not match the selected wallet address',
       );

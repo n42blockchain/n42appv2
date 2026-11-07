@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 242 interruption check: Sui message-key binding recovered; 1,049 WalletConnect tests pass. Remaining signer/worktree reconciliation, archive ownership, native login, current-source regression and fresh release are explicitly open. See [current reconciliation](reconciliation-2026-11-06.md). Historical batch notices below are not a cumulative current TODO list.
+
 > Batch 241: TRON/Solana message signing now verifies the derived address with identical captured key material and path. 12 pre-fix failures; 1,032 directory tests and 313 final-source scoped tests pass; analysis clean. Other non-EVM account models, native parity/device validation and broader release/lifecycle work remain open.
 
 

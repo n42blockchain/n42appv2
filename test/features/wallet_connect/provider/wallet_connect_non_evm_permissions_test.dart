@@ -651,7 +651,9 @@ void main() {
       );
     }
   }
-  for (final c in _chains.where((c) => c.type == 'TRX' || c.type == 'SOL')) {
+  for (final c in _chains.where(
+    (c) => c.type == 'TRX' || c.type == 'SOL' || c.type == 'SUI',
+  )) {
     final method = c.methods.firstWhere((m) => m.endsWith('Message'));
     for (final mismatch in [
       'different',
@@ -659,7 +661,8 @@ void main() {
       'missing',
       'wrong-type',
       'exception',
-      'case',
+      if (c.type != 'SUI') 'case',
+      if (c.type == 'SUI') ...['too-wide', 'bad-hex'],
     ]) {
       test(
         '$method refuses $mismatch derived address before message signing',
@@ -678,6 +681,8 @@ void main() {
                       'empty' => '',
                       'wrong-type' => 12,
                       'case' => c.address.toLowerCase(),
+                      'too-wide' => '0x${'0' * 65}def456',
+                      'bad-hex' => '0xZZZ',
                       _ => 'another-address',
                     },
                   };
@@ -717,7 +722,9 @@ void main() {
       );
     }
   }
-  for (final c in _chains.where((c) => c.type == 'TRX' || c.type == 'SOL')) {
+  for (final c in _chains.where(
+    (c) => c.type == 'TRX' || c.type == 'SOL' || c.type == 'SUI',
+  )) {
     final method = c.methods.firstWhere((m) => m.endsWith('Message'));
     for (final scenario in [
       'wallet',
@@ -727,6 +734,7 @@ void main() {
       'request',
       'valid-key',
       'valid-mnemonic',
+      if (c.type == 'SUI') ...['valid-uppercase', 'valid-padded'],
       'empty',
     ]) {
       test('$method binds derivation and signing across $scenario', () async {
@@ -796,7 +804,13 @@ void main() {
             id: 999,
           );
         }
-        pending.complete({'legacy': c.address});
+        pending.complete({
+          'legacy': switch (scenario) {
+            'valid-uppercase' => '0X${c.address.substring(2).toUpperCase()}',
+            'valid-padded' => '0x${c.address.substring(2).padLeft(64, '0')}',
+            _ => c.address,
+          },
+        });
         await operation;
         if (scenario.startsWith('valid')) {
           expect(calls.map((call) => call.method), [
@@ -808,7 +822,7 @@ void main() {
           }
           expect(
             calls.last.arguments['mnemonic'],
-            scenario == 'valid-key' ? '' : 'fixture mnemonic',
+            scenario == 'valid-mnemonic' ? 'fixture mnemonic' : '',
           );
           expect(client.responses.single.$2.error, isNull);
         } else {
