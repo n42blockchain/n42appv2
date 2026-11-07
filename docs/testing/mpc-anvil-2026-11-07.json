@@ -1,0 +1,27 @@
+{
+  "chain_id": 31337,
+  "node_version": "anvil/v1.5.1",
+  "native_tx": "0x8f996dae5b0747bd3f0abc77c127b05850c222c095b5194384fef1756bbdbabc",
+  "token_deployment_tx": "0x2dd8cbb9662560331852df69369d95d3c131e827e34beef7725e77cfcaa756b1",
+  "token_tx": "0x63a9718ebcd2c0a3630c51c28e9dcf21cec912ae585d984cb0c2bf00e0c450bf",
+  "native_and_token_exact_units": "1000000000000000001",
+  "mined_receipts": 3,
+  "durable_transfer_hashes": 2,
+  "native_fee_accounting_checked": true,
+  "erc20_sender_recipient_balances_checked": true,
+  "passed": true,
+  "scope": "owned Anvil and deterministic provider; not live social-provider or public-network acceptance",
+  "exit_code": 0,
+  "source_sha256": "afde2e42ccf631dabdc853d16be8eea6d19dabf489356b2aee07b3c001df2063",
+  "runner_sha256": "6e7fcfcfc12184144256894d1659b058413228a8072fb9b764ca84754d3086fb",
+  "contract_source_sha256": "19dffa7be8981b59975c009054e5172153b5e202d1ad417700377ab420fe0ae4",
+  "contract_bytecode_sha256": "d03f448ff498713f8be2b516e9590ed3bdf2557939c07fe8092018f016f952cd",
+  "solc": "0.8.30",
+  "log_sha256": "ff29763732536b66d259d5e292ab86cd95178ea95e1a1c7d7c0143c9b0d97671",
+  "owned_node_stopped_after_run": true,
+  "limits": [
+    "deterministic software provider, not a live social provider",
+    "disposable local chain, not a public testnet or production",
+    "no physical-device UI or provider acceptance"
+  ]
+}
