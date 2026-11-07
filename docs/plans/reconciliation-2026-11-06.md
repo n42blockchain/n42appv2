@@ -11,7 +11,7 @@ This snapshot supersedes historical batch observations below. The overall maturi
 | Internal TestFlight | 2.5.4 (73423), t1 group Testing; installed version observed; [release](../releases/testflight-20261107-73423.md) | Functional device QA deferred; external beta review not claimed |
 | MPC EVM transfer path | Canonical signing, normal EVM routing and actual disposable Anvil native/ERC20 receipts/balance deltas pass | Real social-provider signing, public network and device flows |
 | Isolated Matrix encryption | Multi-client encryption/revocation, one key recovery and real repository account-switch smoke pass | Thirty-recovery batch is live; production/device recovery and push |
-| Encrypted group load | Three independent clients, 100 mixed events, 300 unique readable deliveries including offline catchup pass | Twenty-client/10,000-event run is live; no full-scale acceptance yet |
+| Encrypted group load | Twenty independent clients each verify 10,000 unique readable events, including offline catchup: 200,000 deliveries; process exit 0 | Protocol test only; attachment downloads, device UI, push and production remain open |
 | Image decode CI | Corpus setup added; 200 synthetic still images decode locally, P95 1.055 ms | New workflow execution pending; device/video/HDR and real startup performance |
 
 Host Chat runtime remains pinned to f42bf7ed; newer Chat changes are QA tools/tests/docs and do not change runtime lib/. See Chat OPEN_ISSUES.md for the authoritative unresolved feature ledger. IAP fulfillment, remaining dependency constraints, native provider acceptance and other earlier product requirements are not closed by these checks.
@@ -1500,3 +1500,10 @@ Older IAP delivery and payment-provider plans remain historical open work; they 
 Job 128408032719 reached actual native cases: 23 passed, two skipped and seven failed. Two chat cases require unconfigured N42_E2E_CHAT credentials; later cases could not load because package installation returned INSTALL_FAILED_INSUFFICIENT_STORAGE despite the configured 8G AVD. These are not accepted skipped passes. The CI emulator now requests 16G and logs the real /data capacity, APK size and install reserve. No user installation or runtime app code is changed.
 
 A manual android_only input runs the same complete Android suite in a separate concurrency group, preserving the active iOS run. Default push/PR/full manual execution retains every platform and rejects any non-success. Four executable summary tests confirm failure handling and explicit partial-run scope. All 73 script regressions pass. Actual 16G emulator acceptance remains pending.
+
+
+### Full isolated group-load acceptance — 2026-11-07
+
+Chat evidence commit 7de64171 records the completed 20-client/10,000-event run: every recipient has 10,000 unique readable events, including the offline recipient; 100 encrypted file events are included. Total 200,000 verified deliveries, process exit 0. Captured isolated server logs contain zero generated message-canary prefixes. This is not production/push log acceptance or attachment payload download coverage. The dedicated port-18949 server is stopped with its database volume/evidence retained; the independent recovery server continues unchanged. See Chat `docs/testing/local-tuwunel-group-load-2026-11-07.json` and MSG-001.
+
+Compatible dependency work is isolated on `chore/compatible-dependencies-20261107` at 42e74e240. Eight allowed lockfile updates resolve, local full analysis exits 0, and CI 42379157589 is running. It is not merged or present in the uploaded Beta. Major migration constraints remain open.
