@@ -1,39 +1,43 @@
 {
   "date": "2026-11-07",
-  "chatRef": "a993d22c9b98523eab9cb8971c08d3f18d6afb76",
+  "chatRef": "cd91a9e6d0ef453613866258bf1d052ddf51b5ce",
   "reproduced": [
     "Previous-account installed sticker cache returned after account switch.",
-    "Held index read requested pack details under replacement account."
+    "Held index read requested pack details under replacement account.",
+    "Install/uninstall continued work and returned success after account replacement."
   ],
   "changes": [
     "Cache partitioned by SDK client/user/device/homeserver.",
-    "Changed-account index/detail/fallback completions discarded."
+    "Changed-account index/detail/fallback completions discarded.",
+    "Install/uninstall retain original SDK client/user and recheck account scope after each asynchronous step."
   ],
   "verification": {
-    "focusedPassed": 48,
+    "focusedPassed": 52,
     "scopedAnalysis": "No issues found",
     "fullChatSuite": {
-      "passed": 8637,
+      "passed": 8641,
       "failed": 0,
       "skipped": 4,
       "exitCode": 0,
-      "report": "/tmp/n42-chat-sticker-full-20261107.jsonl"
+      "report": "/tmp/n42-chat-sticker-mutation-full-20261107.jsonl"
     },
     "hostIntegration": {
       "passed": 110,
       "failed": 0,
       "exitCode": 0,
-      "scope": [
-        "live module",
-        "bundled sticker assets",
-        "Chat initialization/SSO callback"
-      ],
-      "log": "/tmp/n42-sticker-host-integration.log"
+      "log": "/tmp/n42-sticker-mutation-host-integration.log"
+    },
+    "androidNativeRun": {
+      "id": 42421253719,
+      "source": "9e607d5b8a7bb3d48bbf1f3c6f7ae3e90b7cc6d9",
+      "status": "running at last observation; earlier read-only sticker fix source"
     }
   },
   "remaining": [
     "Native account-switch acceptance.",
     "Sticker sharing/import remains unimplemented (MEDIA-005).",
-    "No new TestFlight release."
-  ]
+    "No new TestFlight release.",
+    "Recent-usage/upload account-switch paths are outside this focused mutation verification."
+  ],
+  "previousReadOnlyFixRef": "a993d22c9b98523eab9cb8971c08d3f18d6afb76"
 }
