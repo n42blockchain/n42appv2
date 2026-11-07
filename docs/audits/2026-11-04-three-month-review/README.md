@@ -1897,3 +1897,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Real backup-page widget rendering exposed ListTile/ColoredBox material assertions. Card surfaces now use Material so the configured background does not hide ListTile ink/background rendering.
 - 16 page/BLoC tests pass (`/tmp/n42-chat-b265-related.log`). The page test verifies no file picker opens without an account lifecycle; its final run has no hit-test warning. Page/test analysis clean (`/tmp/n42-chat-b265-analysis.log`).
 - Chat f27226e6bce33a6c75a3749e60d183268c105589. Valid-account file picker, password cancel/wrong-password retry/confirm interaction, localization, full-history/ownership and live/device acceptance remain open.
+
+### Integrate restore interaction coverage and password debug privacy — batches 266–270 (2026-11-07)
+
+- Page tests cover valid-account picker cancellation/errors, stale picker errors, preview warnings, cancel/confirm, password input/cancel/confirmation, wrong-password rejection and account invalidation while entering a password. Services/file selection are simulated; tests do not prove real encrypted-file/device restoration.
+- BackupEvent disables Equatable field stringification even when globally enabled, preserving password-sensitive equality. Fifty-five event/BLoC/page tests pass (`/tmp/n42-chat-b270-final.log`); event/test analysis clean. This protects event toString only, not every log or in-memory secret.
+- Chat 9d53b9316aee634d1cd82956a725ffbbae3c24be. Remaining: real encrypted-file UI integration, in-place wrong-password retry UX, localization, backup ownership/full-history and device/backend acceptance.

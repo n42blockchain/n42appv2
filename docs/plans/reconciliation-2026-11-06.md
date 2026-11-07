@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate restore interaction coverage and password debug privacy — batches 266–270 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b270-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Page tests cover valid-account picker cancellation/errors, stale picker errors, preview warnings, cancel/confirm, password input/cancel/confirmation, wrong-password rejection and account invalidation while entering a password. Services/file selection are simulated; tests do not prove real encrypted-file/device restoration.
+- BackupEvent disables Equatable field stringification even when globally enabled, preserving password-sensitive equality. Fifty-five event/BLoC/page tests pass (`/tmp/n42-chat-b270-final.log`); event/test analysis clean. This protects event toString only, not every log or in-memory secret.
+- Chat 9d53b9316aee634d1cd82956a725ffbbae3c24be. Remaining: real encrypted-file UI integration, in-place wrong-password retry UX, localization, backup ownership/full-history and device/backend acceptance.
+
+
 ### Integrate backup page Material fix — batch 265 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b265-host.log`); manifest/lock resolve the immutable Chat commit.
