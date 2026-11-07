@@ -18,11 +18,17 @@ class MpcEvmTransactionSigner {
     Transaction transaction, {
     required int chainId,
   }) async {
+    // Legacy v = 2 * chainId + 35 + parity must remain exact on Dart Web.
+    const maxExactInteger = 9007199254740991;
+    const maxChainId = (maxExactInteger - 36) ~/ 2;
     if (chainId <= 0 ||
+        chainId > maxChainId ||
         transaction.nonce == null ||
         transaction.nonce! < 0 ||
+        transaction.nonce! > maxExactInteger ||
         transaction.maxGas == null ||
         transaction.maxGas! <= 0 ||
+        transaction.maxGas! > maxExactInteger ||
         transaction.value == null ||
         transaction.data == null ||
         (!transaction.isEIP1559 && transaction.gasPrice == null) ||

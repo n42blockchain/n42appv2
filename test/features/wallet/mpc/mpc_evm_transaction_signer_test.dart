@@ -186,6 +186,26 @@ void main() {
     );
     verifyNever(() => provider.signTransaction(any()));
   });
+  test(
+    'rejects chain IDs whose legacy v cannot be encoded exactly on Web',
+    () async {
+      await expectLater(
+        signer().sign(transaction(), chainId: 4503599627370479),
+        throwsArgumentError,
+      );
+      verifyNever(() => provider.signTransaction(any()));
+    },
+  );
+  for (final field in ['nonce', 'gas']) {
+    test('rejects $field outside the portable exact integer range', () async {
+      final tx = transaction().copyWith(
+        nonce: field == 'nonce' ? 9007199254740992 : 7,
+        maxGas: field == 'gas' ? 9007199254740992 : 65000,
+      );
+      await expectLater(signer().sign(tx, chainId: 1), throwsArgumentError);
+      verifyNever(() => provider.signTransaction(any()));
+    });
+  }
   test('rejects missing replay protection before invoking provider', () async {
     await expectLater(
       signer().sign(transaction(), chainId: 0),
