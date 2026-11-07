@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +26,10 @@ void main() {
     expect(find.text('Listen'), findsOneWidget);
     expect(find.text('Watch'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    if (Platform.isAndroid) {
+      await binding.convertFlutterSurfaceToImage();
+      await tester.pump();
+    }
     await binding.takeScreenshot('chat-discover-top');
 
     await tester.drag(find.byType(ListView), const Offset(0, -560));

@@ -3,6 +3,8 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -91,6 +93,10 @@ void main() {
       await tester.pump(const Duration(seconds: 8));
 
       expect(tester.takeException(), isNull);
+      if (Platform.isAndroid) {
+        await binding.convertFlutterSurfaceToImage();
+        await tester.pump();
+      }
       await binding.takeScreenshot('chat-extension-ios');
     },
     timeout: const Timeout(Duration(minutes: 5)),
