@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 233: archive/backup restore stop later work after captured session/service identity changes. 60 Chat tests and 51 host checks pass; pin 4b8ab5b2. Archive account partition/backup ownership and continuous redactions remain open, as do native login/full regression/release.
+
+
 > Batch 232: archive v2 persists event-ID deletion markers and atomically removes plaintext/FTS; stale inserts are rejected after reopen. 53 Chat tests and 51 host checks pass; pin 27c4d1a3. Remote delivery, whole-database restore, account lifecycle and release/full regression remain open.
 
 

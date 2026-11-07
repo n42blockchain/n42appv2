@@ -1699,3 +1699,8 @@ Two SQLite regressions reproduced redacted insertion and retained plaintext. Arc
 ### Batch 232 — Durable archive deletion markers
 
 Schema v2 records event IDs atomically with plaintext/FTS deletion; SQL trigger rejects stale reinsertion. Reproduced import resurrection, then passed 53 related tests including real file reopen, upgrade, rollback and existing SQLCipher migrations. Chat 27c4d1a3 integrated; 51 wallet host checks pass. Continuous remote delivery, whole-database replacement, account lifecycle and release acceptance remain open.
+
+
+### Batch 233 — Archive and restore session boundaries
+
+Capture session before async archive/restore work; reject later operations on client/user/token/device/server changes or replaced archive service. 60 related tests pass, analysis has eight existing infos and no errors/warnings. Chat 4b8ab5b2 integrated; 51 wallet host checks pass. Already-started writes, archive partitioning, backup ownership, remote delivery and release acceptance are not closed.

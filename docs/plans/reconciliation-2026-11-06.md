@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Stop archive and restore work after session changes — batch 233
+
+- Verified normal backup restore imports messages through MessageArchiveService instead of replacing archive.db, so v2 deletion markers protect that route. Found missing async session checks in archive scans and restore. Both now capture client/user/token/device/server identity before async work; restore also captures the archive-service instance. Changes stop subsequent lookups/writes and report failure; timeline subscriptions still release.
+- Chat `4b8ab5b2eb9d1258b831105d95c04bd465155874` committed/pushed. **60 related tests pass**, including four new pending-timeline/history/restore-lookup cases (`/tmp/n42-chat-b233-final.log`). Final analysis has no errors/warnings and eight pre-existing infos (`/tmp/n42-chat-b233-analysis-final.log`); initial test-fixture inference warning was fixed. Existing backup crypto and restore tests remain passing.
+- Wallet pub get exits zero, only Chat lock ref changes and exact package cache confirmed. **51 host checks pass** (`/tmp/n42-wallet-b233-host.log`, exit 0). Baseline unrelated artifacts remain untouched.
+- Already-started DB writes are not rolled back on an external session change; this does not partition the archive by account or authenticate backup ownership. Continuous remote redaction delivery, archive ownership/provenance, native login, current-source full regression and new release remain open. No upload, deployment or real account/device action.
+
+
 ### Persist archive deletion markers against stale imports — batch 232
 
 - Reproduced a stale import restoring deleted plaintext (`/tmp/n42-chat-b232-before.log`). Archive schema v2 adds an event-ID-only marker table and a BEFORE INSERT trigger. The marker and plaintext/FTS removal are one transaction; both explicit redaction/self-destruct cleanup and SDK-confirmed archive scans use this path. Ordinary archive APIs and raw SQL inserts cannot reintroduce marked events.
