@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 234: fixed-source full regressions accepted: wallet 07ab42be0, 7,505 pass / zero failures or skips, 73.768618% coverage; Chat 4b8ab5b2, 8,314 pass / zero failures / four external skips, 71.493947%. Source and coverage preservation verified. Old-worktree comparison found missing group-member-count refresh; restore next without discarding other work. Native login, archive ownership and release remain open.
+
+
 
 > Batch 233: archive/backup restore stop later work after captured session/service identity changes. 60 Chat tests and 51 host checks pass; pin 4b8ab5b2. Archive account partition/backup ownership and continuous redactions remain open, as do native login/full regression/release.
 

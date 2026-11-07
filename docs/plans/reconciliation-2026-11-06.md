@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Current-source full regression and interrupted-work check — batch 234
+
+- Wallet source `07ab42be08f7c02d81c56c000a365851b82fb0f9`: **7,505 pass, 0 failures, 0 skips**; coverage 103,909/140,858 = 73.768618%. Test and both quality gates exit 0; source unchanged and original coverage restored byte-for-byte. Log SHA-256 `1edfd1fd1a1c25cfb313c96334ccf95fa7573818767e5d7955ef628b1c17a8ca`; measured LCOV SHA-256 `5d892fe7b41c405d8fcd1bf83087fd46e45a640ceed116b325a98297695898b3`. Terminal evidence `/tmp/n42-wallet-b234-result.json`, with matching tests/coverage reports.
+- Chat source `4b8ab5b2eb9d1258b831105d95c04bd465155874`: **8,314 pass, 0 failures, 4 skips**; coverage 103,110/144,222 = 71.493947%. Test and both quality gates exit 0; source unchanged and original coverage restored byte-for-byte. Log SHA-256 `82f5dbd5409a5d26a337b02a5c5235568f018a132951324ddbdf63ec39f6f55d`; measured LCOV SHA-256 `74c1f3b0cf6dc19ae0e566191a5a306790a44637094bea00a9acb54a0f1274a9`. Terminal evidence `/tmp/n42-chat-b234-result.json`, with matching tests/coverage reports.
+- Chat's four skips require live UIA registration, a manifested image corpus, cross-device/offline accounts and homeserver media. These remain unverified, not passes. Wallet uses the captured native Falcon library hash in its result record.
+- Rechecked the 13 auxiliary wallet worktrees: seven dirty, four clean non-ancestors, two clean ancestors. Preserve them. The main-flow-audit branch still has three patch-unique commits. Inspection confirms its Chat member-count refresh (`5e23bcf5`, consumed by wallet `fbea594f1`) is absent from current source: GroupBloc only refreshes members; the chat title reads the original conversation count. Restore this behavior with lifecycle guards and focused tests next. The other signer patches are partly superseded by current per-sender/batch guards; full semantic comparison remains open.
+- These full runs validate the captured source only. They do not close the discovered member-count gap, archive account partition/backup ownership, continuous remote redactions, native login, deferred device acceptance or release delivery. The signed 73325 IPA remains superseded and unuploaded. No live message/payment, deployment or upload occurred.
+
+
 
 ### Stop archive and restore work after session changes — batch 233
 
