@@ -1856,3 +1856,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Sender coalesces concurrent calls per captured session/room/event, checks ownership after room preparation/event lookup and accepts only its own failed non-state events. Original transaction ID (or local event ID fallback) and event type are retained. Uploaded media/GIF content is resent directly; unfinished media uses SDK cached-upload recovery. Empty receipts/failures remain retryable.
 - 41 sender/media/encryption tests pass (`/tmp/n42-chat-b253-final.log`), including remote/encrypted attachment references, explicit retry after failure and missing encryption keys. Scoped analysis has one existing import info and no errors/warnings. Wallet resolves d569b4aa5c4c0d7029b4daa8bbae43149d733f68; 51 host tests pass (`/tmp/n42-wallet-b253-host.log`).
 - Already-dispatched SDK work cannot be recalled. Live encrypted media/cache recovery, server-side idempotency, receiver delivery, backend upgrade rehearsal and other maturity requirements remain unverified/open. No production messages or payments sent.
+
+### Preserve failed media with missing cache — batch 254 (2026-11-07)
+
+- SDK source shows sendAgain cancels the local failed event when its file cache is missing. Sender now checks original transaction, filename and cached file before SDK retry and rechecks session ownership after the database await. Missing cache returns failure without calling sendAgain.
+- Eleven sender tests pass (`/tmp/n42-chat-b254-final.log`), including cached and missing-file paths. Scoped analysis has two info diagnostics, no errors/warnings (`/tmp/n42-chat-b254-analysis.log`).
+- Chat commit 94bc47ec9a9d3bd5a03cc70a4527f191aedfbb2e. Cache eviction between precheck and SDK lookup, real media recovery, backend upgrade rehearsal and remaining maturity work stay open.

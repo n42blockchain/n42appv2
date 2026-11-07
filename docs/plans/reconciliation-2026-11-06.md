@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Preserve failed media with missing cache — batch 254 (2026-11-07)
+
+- SDK source shows sendAgain cancels the local failed event when its file cache is missing. Sender now checks original transaction, filename and cached file before SDK retry and rechecks session ownership after the database await. Missing cache returns failure without calling sendAgain.
+- Eleven sender tests pass (`/tmp/n42-chat-b254-final.log`), including cached and missing-file paths. Scoped analysis has two info diagnostics, no errors/warnings (`/tmp/n42-chat-b254-analysis.log`).
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b254-host.log`); lock resolves the new Chat commit.
+- Chat commit 94bc47ec9a9d3bd5a03cc70a4527f191aedfbb2e. Cache eviction between precheck and SDK lookup, real media recovery, backend upgrade rehearsal and remaining maturity work stay open.
+
+
 ### Preserve resend identity and media behavior — batch 253 (2026-11-07)
 
 - Seven pre-fix cases reproduced (`/tmp/n42-chat-b253-before.log`) lost transaction/type, foreign or already-sent event replay, stale-token dispatch, duplicate concurrent sends, false success on empty receipt and missing cached-media retry.
