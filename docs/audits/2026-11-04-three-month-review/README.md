@@ -1624,3 +1624,7 @@ Separate transfer balance now uses finalized account data and storage price at t
 ## Batch 215 — NEAR submission response checks
 
 Fourteen failures reproduced before repair. Signed-base64 validation now precedes submission; success requires one valid SuccessValue and a canonical 32-byte base58 transaction ID. Missing/pending/malformed/transport responses no longer claim success. 169 API/sender/WalletConnect lifecycle regressions pass. Logs `/tmp/n42-wallet-b215-{before,final,analysis}.log`. Optimistic execution is not finality; local-hash binding, journal/UI recovery and live acceptance remain open. No real transfer; release 73325 unchanged.
+
+## Batch 216 — NEAR signed transaction identity
+
+RPC success hash must now match the locally computed transaction hash. Envelope framing supports V0/V1 and Ed25519/secp256k1 without restricting action contents. Public Swift/WalletCore fixture includes independently verified signature and CryptoKit digest; Dart matches the digest. 185 API/sender/hash/WalletConnect regressions pass (`/tmp/n42-wallet-b216-final2.log`), native harness passes (`/tmp/n42-wallet-b216-native.log`). This closes submission hash binding, not Borsh/action validation, signature verification in Dart, durable recovery or trusted finality. Existing release unchanged.

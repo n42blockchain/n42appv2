@@ -55,6 +55,13 @@ struct NearComponentHarness {
         precondition(offset == bytes.count)
         let verifier = try Curve25519.Signing.PublicKey(rawRepresentation: publicKey)
         precondition(verifier.isValidSignature(signature, for: Data(SHA256.hash(data: preimage))))
+        if CommandLine.arguments.count == 2 {
+            let fixture: [String: Any] = ["signedTransaction": signed,
+                "transactionHashHex": SHA256.hash(data: preimage).map { String(format: "%02x", $0) }.joined(),
+                "source": "WalletCore 4.8.7 Swift bridge; independent CryptoKit SHA256 and Ed25519 verification"]
+            try JSONSerialization.data(withJSONObject: fixture, options: [.prettyPrinted, .sortedKeys])
+                .write(to: URL(fileURLWithPath: CommandLine.arguments[1]))
+        }
         print("NEAR native bridge: derivation, credentials, Borsh fields, exact amount and independent signature verification passed")
     }
 }

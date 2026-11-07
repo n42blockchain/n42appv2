@@ -1,6 +1,16 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Bind NEAR RPC success to the signed transaction identity — batch 216
+
+- Added local signed-envelope transaction hashing before dispatch and require the RPC success hash to equal it. A different syntactically valid 32-byte hash is no longer accepted as this transaction. The helper checks canonical base64, signer/key prefix, minimum framing and matching signature tag; it hashes the full transaction prefix without the signature suffix. V0/V1 and Ed25519/secp256k1 framing are covered. Action contents remain opaque: this is not a complete Borsh parser, action validator or signature verifier.
+- [nearcore transaction serialization](https://raw.githubusercontent.com/near/nearcore/master/core/primitives/src/transaction.rs) defines hash over serialized Transaction rather than SignedTransaction. Kept action and versioned nonce payloads opaque to avoid restricting valid signed action types while extracting identity. Malformed/truncated prefix or signature framing is rejected before RPC.
+- Extended the current Swift production-method harness to export a **public fixed test transaction** and an independently computed CryptoKit digest. Generated `test/native/near_reference.json`; no real wallet material is used. Actual native signing, decoded exact amount/fields and independent Ed25519 verification pass (`/tmp/n42-wallet-b216-native.log`). Dart matches the independently generated digest.
+- **185 related tests pass** at the final behavior (`/tmp/n42-wallet-b216-final2.log`): native fixture hash, signature exclusion, payload mutation, both envelope versions/key types, truncation, wrong RPC hash, sender/API and WalletConnect lifecycle. Synthetic V1 fixtures include the versioned nonce discriminant and nonce mode; no claim of full V1 native signing. Diff formatting passes.
+- RPC identity binding does not prove the RPC's execution/finality claims. Persisting the local identity before broadcast, unknown-outcome history/page recovery and independent finality verification remain open, along with Android JNI and real-flow acceptance. The local-hash gap from batch 215 is closed only for submission identity; this is not durable recovery. Release 73325 remains unchanged and does not contain this fix.
+
+
+
 ### Reject incomplete NEAR submission receipts — batch 215
 
 - Reproduced **14 failing cases**: old `sendTransaction` returned success with missing/unknown status, SuccessReceiptId, malformed SuccessValue or invalid transaction hashes, and passed malformed base64 to RPC. Failure baseline `/tmp/n42-wallet-b215-before.log`.

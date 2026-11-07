@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 216: NEAR submission success now requires the RPC hash to match the locally hashed signed transaction; 185 related tests and native independent digest fixture pass. Durable pre-submit identity/history recovery and finality remain open. 73325 predates this work.
+
 > Batch 215: NEAR submission rejects malformed/pending receipts instead of claiming success; 169 related cases pass. Local payload/hash binding, durable unknown-outcome recovery and finalized settlement remain open. No real transaction or new release upload.
 
 > Batch 214: NEAR transfer/Max now retains storage stake using same-final-block account/config data. Display balance contract is unchanged; 71 related tests and public read-only RPC schema verification pass. Precise fee/reserve preview, JNI/live/device and uncertain-outcome recovery remain open.

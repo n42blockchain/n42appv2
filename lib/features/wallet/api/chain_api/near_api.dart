@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'near_transaction_hash.dart';
+
 import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -171,7 +173,9 @@ class NearApi {
     MessageModel unknown() =>
         MessageModel.error()
           ..data = 'NEAR transaction outcome is unknown; check its status';
+    late final String expectedHash;
     try {
+      expectedHash = nearSignedTransactionHash(signedTxBase64);
       if (signedTxBase64.isEmpty ||
           base64Encode(base64Decode(signedTxBase64)) != signedTxBase64) {
         return MessageModel.error()..data = 'Invalid signed NEAR encoding';
@@ -202,7 +206,11 @@ class NearApi {
       }
       final hash = transaction['hash'] as String;
       final bytes = Base58Decode(hash);
-      if (bytes.length != 32 || Base58Encode(bytes) != hash) return unknown();
+      if (bytes.length != 32 ||
+          Base58Encode(bytes) != hash ||
+          hash != expectedHash) {
+        return unknown();
+      }
       return MessageModel()..data = hash;
     } catch (_) {
       return unknown();

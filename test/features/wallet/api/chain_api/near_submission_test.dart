@@ -1,12 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 
 void main() {
-  final hash = Base58Encode(List.filled(32, 7));
-  final signed = base64Encode(List.filled(200, 1));
+  final fixture = jsonDecode(
+    File('test/native/near_reference.json').readAsStringSync(),
+  ) as Map;
+  final hex = fixture['transactionHashHex'] as String;
+  final hash = Base58Encode(
+    List.generate(
+      32,
+      (i) => int.parse(hex.substring(i * 2, i * 2 + 2), radix: 16),
+    ),
+  );
+  final signed = fixture['signedTransaction'] as String;
   for (final status in [
     null,
     {},
@@ -95,4 +105,20 @@ void main() {
     expect((await api.sendTransaction(signed)).error, isTrue);
     expect(calls, 1);
   });
+  test(
+    'unrelated well-formed transaction hash is not this submission',
+    () async {
+      final api = NearApi(
+        request: (_, _) async => {
+          'result': {
+            'transaction': {'hash': Base58Encode(List.filled(32, 9))},
+            'status': {'SuccessValue': ''},
+          },
+        },
+      );
+      final result = await api.sendTransaction(signed);
+      expect(result.error, isTrue);
+      expect(result.data, contains('unknown'));
+    },
+  );
 }
