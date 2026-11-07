@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Current status — 2026-11-07: production Matrix upgrade to Tuwunel 1.9.4 is complete; public version was rechecked successfully. Backup, restore rehearsal and cutover evidence: [Matrix upgrade](../testing/matrix-upgrade-2026-11-06.md). Authenticated E2EE/media/push/calls/recovery acceptance remains open. Historical batch notices below describe their observation time and do not override this status.
+
 > Batch 281 integrated: duplicate private-event copies excluded; 103 backup and 51 host tests pass, pin 5c3c0219. Live Matrix recheck still reports Tuwunel 1.9.3; server upgrade has not been performed. Backup/rehearsal/deployment acceptance remains open.
 
 > Batches 279–280 integrated: full export deduplicates eligible event IDs; partial paging failure retains loaded data with warnings. 99 backup and 51 host tests pass; pin db84671c. Concurrency/privacy metadata, memory bounds, archive merge and live full-history acceptance remain open.
@@ -340,3 +342,8 @@
 
 - 5591d6342 fast-forwarded/pushed to master; main dependency/model/native-plugin setup succeeds and prior untracked work is retained.
 - Remote CI exposed an outdated IPA fixture (localization itself passed); fixed fixture and tested preparation-failure ordering. All 50 script tests pass. Moved Swift/model preparation to macOS jobs and added preparation to the separate iOS integration workflow; structural YAML assertions pass. New remote CI results remain to be verified.
+
+### 2026-11-07 current-source CI observation
+
+- Wallet commit 31997f613: CI 42361394470 analysis, security and all four backend jobs passed; coverage remained running at 10:04 UTC. Tests workflow 42361394493 widget tests passed; unit and iOS/Android integration jobs remained running. This is an observation, not completed CI acceptance.
+- Chat tool-only commit 3421871a removes fixed-password fallback: existing accounts require an explicit password; temporary accounts require an invite and use secure random passwords. Fourteen credential/guard tests passed without contacting Matrix. Host runtime pin remains ad7ce8c4; no live account acceptance is claimed.
