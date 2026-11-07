@@ -3,7 +3,7 @@
   "testJob": 128502906517,
   "source": "86cf96582966eeaf9b5d15bc4543029877c8152b",
   "testJobConclusion": "success",
-  "overallRun": "in_progress",
+  "overallRun": "success",
   "wallet": {
     "passed": 7795,
     "failed": 0,
@@ -23,16 +23,16 @@
     "passed": true
   },
   "logSha256": "063bb1a019917de4f84c606b38db44a2103bd51e25d0c6d4800a7d7410ea1b92",
-  "scope": "Runtime missing mnemonic/address and delayed wallet balance fixes. Later native fixtures, adapter injection parameters and profile cleanup API are not covered by this source. Native builds/performance still running at observation.",
+  "scope": "Complete source-86cf96582 CI succeeds. Later native fixtures, adapter injection parameters and profile cleanup API are not covered by this source; they have separate local/native evidence and require current-source confirmation.",
   "completedGates": [
     "analysis",
     "four backend modules",
     "tests and coverage",
     "security",
-    "performance"
-  ],
-  "pendingGates": [
+    "performance",
     "Android build",
-    "iOS build"
-  ]
+    "iOS build",
+    "summary"
+  ],
+  "pendingGates": []
 }
