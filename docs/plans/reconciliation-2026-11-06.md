@@ -1,6 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Return account persistence acknowledgement to callers — batch 198
+
+- CurrentUserNotifier.setUser previously discarded the secure-preferences write Future, so callers could not await persistence or catch its asynchronous failure. It now returns Future<void>; the existing immediate in-memory update remains, while completion waits for the write. Updated all three production call sites: AppGlobals.login awaits it, startup sync includes it in Future.wait, and email synchronization includes it alongside its existing writes without inserting an extra wait between dispatches.
+- Four new notifier tests verify pending acknowledgement, caller-visible failure, no account resurrection on late acknowledgement and disposed no-op behavior. Combined provider/restore/email-helper/basic-initialization suites: **35 pass**, exit 0 on final source (`/tmp/n42-wallet-b198-final.log`). Scoped analysis reports no issues (`/tmp/n42-wallet-b198-analysis.log`). The email and initialization suites are helper/provider checks, not a live remote email change or full native login test.
+- This adds completion/error propagation, not cross-store rollback: memory is still updated immediately, and separate SecureStorage writes or remote email changes may already have succeeded when another write fails. Transactional account switching, other login/logout races and real provider/device/release acceptance remain open. Chat final-source full verification continues independently.
+
+
 ### Preserve durable account operation order — batch 197
 
 - Five failures reproduced out-of-order account replacement, logout, sensitive/all-data clearing and reads while an earlier userInfo write remained pending (`/tmp/n42-wallet-b197-before.log`). SecurePreferences now queues userInfo reads/writes and both clearing operations through the production singleton, waits for migration before dispatch, and preserves caller-visible errors without poisoning the queue. User payload JSON is captured at invocation so later caller mutations cannot change queued identity data.

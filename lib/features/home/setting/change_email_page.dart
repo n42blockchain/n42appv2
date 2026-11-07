@@ -174,10 +174,11 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
     if (current == null) return;
     final updated = current.copyWith(email: email);
     AppGlobals.userInfo = updated;
-    ref
+    final profileWrite = ref
         .read(currentUserProvider.notifier)
         .setUser(SharedUserInfo.fromLegacyUserInfo(updated));
     await Future.wait([
+      profileWrite,
       SPUtil().saveUserInfo(updated),
       SecureStorage().saveEmail(email),
       SecureStorage().saveUserInfo(updated.toJson()),

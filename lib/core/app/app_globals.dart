@@ -105,7 +105,7 @@ class AppGlobals {
     }
     syncTasks.add(secureStorage.saveUserInfo(info.toJson()));
     await Future.wait(syncTasks);
-    globalProviderContainer
+    await globalProviderContainer
         .read(currentUserProvider.notifier)
         .setUser(SharedUserInfo.fromLegacyUserInfo(info));
     globalProviderContainer.invalidate(walletListProvider);

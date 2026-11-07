@@ -70,11 +70,11 @@ class CurrentUserNotifier extends StateNotifier<SharedUserInfo?> {
     }
   }
 
-  void setUser(SharedUserInfo user) {
+  Future<void> setUser(SharedUserInfo user) async {
     if (!mounted) return;
     _accountRevision++;
     state = user;
-    _spUtil.saveUserInfoJson(user.toJson());
+    await _spUtil.saveUserInfoJson(user.toJson());
   }
 
   void clearUser() {
@@ -197,9 +197,8 @@ Future<void> _syncActiveUser(
   SPUtil? spUtil,
 }) async {
   AppGlobals.userInfo = userInfo;
-  currentUserNotifier.setUser(_toSharedUserInfo(userInfo));
-
   final syncTasks = <Future<void>>[
+    currentUserNotifier.setUser(_toSharedUserInfo(userInfo)),
     secureStorage.saveUserInfo(userInfo.toJson()),
   ];
   if (userInfo.token != null && userInfo.token!.isNotEmpty) {
