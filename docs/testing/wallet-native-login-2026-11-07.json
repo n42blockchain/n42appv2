@@ -38,5 +38,15 @@
     "No physical-device, public network or other-chain acceptance",
     "Existing global transaction provider may be reused by full wallet suite; transaction background tracking is not part of this scenario"
   ],
-  "qualityTestsPassed": 8
+  "qualityTestsPassed": 8,
+  "remoteConfirmation": {
+    "run": 42409164978,
+    "source": "bbaaea463",
+    "conclusion": "success",
+    "suitePassed": 11,
+    "suiteFailed": 0,
+    "suiteSkipped": 1,
+    "scope": "Android emulator wallet suite; funded N42 transfer remains skipped",
+    "logSha256": "48eb800bccecb8b2271b4ff5c501dea988a36576b56fe218e23801a1fb5842a0"
+  }
 }
