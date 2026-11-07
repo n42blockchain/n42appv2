@@ -18,7 +18,7 @@ class NativeCiSuiteTest(unittest.TestCase):
     def test_default_retains_complete_suite(self):
         result = self.select('all')
         self.assertEqual(result.returncode, 0)
-        self.assertEqual(result.stdout.splitlines(), ['integration_test/'])
+        self.assertEqual(result.stdout.splitlines(), ['integration_test/', '--dart-define=N42_DISPOSABLE_WALLET_QA=true'])
 
     def test_mlkit_enables_real_download_cases(self):
         result = self.select('mlkit')
@@ -33,6 +33,7 @@ class NativeCiSuiteTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout.splitlines(), [
             'integration_test/flows/wallet_flow_test.dart',
+            '--dart-define=N42_DISPOSABLE_WALLET_QA=true',
         ])
 
     def test_unknown_targets_fail_closed(self):
@@ -40,7 +41,7 @@ class NativeCiSuiteTest(unittest.TestCase):
             with self.subTest(value=value):
                 result = self.select(value)
                 if not value:
-                    self.assertEqual(result.stdout.splitlines(), ['integration_test/'])
+                    self.assertEqual(result.stdout.splitlines(), ['integration_test/', '--dart-define=N42_DISPOSABLE_WALLET_QA=true'])
                 else:
                     self.assertEqual(result.returncode, 64)
                     self.assertEqual(result.stdout, '')

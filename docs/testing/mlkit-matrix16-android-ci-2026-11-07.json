@@ -1,0 +1,15 @@
+{
+  "run": "https://github.com/n42blockchain/n42appv2/actions/runs/42386885934",
+  "attempt": 2,
+  "job": 128456817204,
+  "platform": "Disposable Android API 30 x86_64 CI emulator",
+  "passed": 9,
+  "skipped": 0,
+  "failed": 0,
+  "exit_code": 0,
+  "model_download_passed": true,
+  "concurrent_downloads_passed": true,
+  "log_sha256": "56d5fab44df41fcf8487eb2273da1e22afecd3da92354f154816453b0d94af0e",
+  "scope": "Matrix 16 dependency graph. First-attempt 90-second timeouts are retained separately; retry passed without changing product code or extending the test timeout. Physical-device acceptance remains deferred.",
+  "source_commit": "359e93890a7857427fea8f1145c3be790f2e2e04"
+}

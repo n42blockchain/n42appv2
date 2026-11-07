@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'wallet_form_cases.dart';
+import 'wallet_import_fixture.dart';
 
 /// Device flows that require an isolated wallet fixture and a controllable RPC.
 ///
@@ -17,6 +18,7 @@ import 'wallet_form_cases.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   registerWalletFormCases();
+  registerWalletImportFixture();
 
   for (final testCase in _pendingWalletCases) {
     final displayName = '${testCase.name} [BLOCKED: ${testCase.blocker}]';
@@ -33,7 +35,7 @@ const _pendingWalletCases = <_PendingDeviceCase>[
   ),
   _PendingDeviceCase(
     'WLT-02 imports a disposable mnemonic wallet',
-    'Requires a secret-safe device fixture for a disposable mnemonic.',
+    'Requires complete address initialization and wallet-home acceptance.',
   ),
   _PendingDeviceCase(
     'WLT-03 imports a disposable private-key wallet',

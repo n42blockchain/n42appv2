@@ -1,0 +1,14 @@
+{
+  "passed": 4,
+  "skipped_in_verified_registration": 9,
+  "failed": 0,
+  "exit_code": 0,
+  "fixture_source_sha256": "bfec266b10a6eebab8cb0fd747ac39ac31fec5d9e64de4ff2801a3dee48d20d4",
+  "log_sha256": "63b151eee89bf396d94606cb258fe65553bb75260e074b61d62796499f06930d",
+  "platform": "Owned disposable Android API 36 arm64 emulator",
+  "native_import_form": true,
+  "native_secure_write_read_reload": true,
+  "owned_mnemonic_key_deleted_and_read_back_absent": true,
+  "owned_namespace_removed": true,
+  "scope": "Component fixture uses public BIP39 vector, synthetic owner and controlled keyboard. Background wallet/coin initialization is deliberately held; complete address derivation, balances, wallet-home UI and production end-to-end import remain unaccepted. The full import placeholder is retained; ten full-flow placeholders remain in the final registration."
+}
