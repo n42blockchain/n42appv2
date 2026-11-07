@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Reject malformed and cyclic thread pages — batch 189
+
+- Required chunk/event identity and continuation shape are validated; damaged pages are rejected rather than skipping entries or masquerading as exhaustion. Session/room/root-scoped continuation edges reject multi-step cycles while preserving valid explicit retries. Invalid limits/empty tokens fail before network access. Initial local fallback is limited to M_UNRECOGNIZED; permission, network and parsing failures remain visible.
+- Ten new cases cover cycles/retry, six malformed responses, network/permission failure, unsupported-endpoint fallback and invalid bounds. Related suites: **24 pass** (/tmp/n42-chat-b189-final.log); final handler rerun after cast cleanup: **16 pass** (/tmp/n42-chat-b189-handler-final.log). Final scoped analysis: zero errors/warnings, one info (/tmp/n42-chat-b189-analysis-final.log). Chat `7dfdfb57b231a8b947156b1127d0fa6010d4333a` is pushed and pinned. Only Chat changes in dependency resolution; three wallet host fixtures pass (/tmp/n42-wallet-b189-host.log).
+- Remaining: cursor/edge retention bounds, snapshot merging, proactive clear/account changes, fallback history completeness and real-service/device acceptance. Native login, wallet recovery/dependencies/payments, full regression and current-source release remain active. No fresh full-suite or release claim.
+
 ### Carry explicit thread page continuation to the UI — batch 188
 
 - Production handler, data source, repository and ThreadBloc now carry ThreadMessagePage with next_batch. Short/empty pages can continue until the token disappears; state retains/clears it explicitly. A localized Load older messages button allows continuation when the page cannot scroll. Existing list-only host implementations remain compatible; production selects the typed capability.
