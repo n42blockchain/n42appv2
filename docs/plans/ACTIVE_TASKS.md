@@ -1,8 +1,10 @@
 # 当前任务与验收台账
 
-> Batch 194 supersedes the pin below: current wallet dependency is Chat `930690d1`. Thread initialization visibility and first-load retry are repaired with focused regression evidence in the reconciliation. The batch 192 full run remains scoped to `90271407`, not these newer fixes.
+> Batch 195: Chat `930690d1` is now integrated into the usual branch and wallet. The stalled batch 192 run was explicitly terminated and is not accepted. A fresh full run of `930690d1` with concurrency 2 is active; require its terminal result and gates before claiming success.
 
-> Current source check (2026-11-06): wallet `66fc50b8a` pins Chat `90271407613989ccc27e159903382857c3848338`. Both match their fetched upstreams. Chat batch 192 full regression is still running; do not report it as passed. Batch 173 (Chat `ca0a2049`, 8,103 passed / four external skips, 71.1056% coverage) is a historical full-suite baseline, not the current dependency. See the current reconciliation for remaining work and evidence boundaries.
+> Batch 194 supersedes the pin below: current wallet dependency is Chat `930690d1`. Thread initialization visibility and first-load retry are repaired with focused regression evidence in the reconciliation. The terminated batch 192 run was scoped to `90271407`; it did not cover these newer fixes.
+
+> Current source check (2026-11-06): wallet `66fc50b8a` pins Chat `90271407613989ccc27e159903382857c3848338`. Both match their fetched upstreams. Chat batch 192 was later terminated; it did not produce accepted full-suite evidence. Batch 173 (Chat `ca0a2049`, 8,103 passed / four external skips, 71.1056% coverage) is a historical full-suite baseline, not the current dependency. See the current reconciliation for remaining work and evidence boundaries.
 
 > Latest verification (batch 172): wallet source `5cb2b8a7b` passes 7,271 tests with zero failures/skips; coverage 73.5942% passes the existing 70% gate. Older dated coverage/release statements below are historical, not the current baseline. Open feature and external acceptance items remain active. See [current reconciliation](reconciliation-2026-11-06.md).
 

@@ -1,6 +1,15 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Consolidate fixes and recover stalled full verification — batch 195
+
+- Batch 192 stopped advancing while loading `story_entity_test.dart`. Repeated live process checks and one-second runner/compiler samples showed both waiting, with no test child process. The unchanged Story source/tests independently passed 30 cases (`/tmp/n42-chat-b195-story.log`). Explicitly sent SIGTERM to the identified runner; both runner and compiler then exited. This was an intentional termination, not a successful run or an assumed exit after an observation timeout.
+- The interrupted runner returned exit 0 but left termination text and no valid complete reporter result. The strict gate rejects it; **batch 192 is not accepted**. Original coverage was unchanged and restored with SHA-256 `c7e9bebef9c2dbb69d6b298f9161b1043e99939e7f40b7bf46bff6e69153ffde`. Metadata: `/tmp/n42-chat-b192-interrupted.json`; raw log, stderr and process samples remain preserved. Do not use the earlier partial pass counts or existing LCOV as a fresh full result.
+- Fast-forwarded and pushed the usual Chat branch `fix/n42-social-login-20261105` to `930690d101890d90443882d43b5f1278e9aea186`; remote parity is 0/0. Wallet already pins that revision. Removed only this round's clean temporary `n42-chat-thread-init-20261106` worktree after verifying its commits are integrated; the pushed branch remains available. Original Chat coverage and all wallet baseline untracked files are preserved.
+- Started a fresh final-source full run with explicit `--concurrency=2`, source identity checks and automatic LCOV archive/restore. Runner `/tmp/n42-chat-b195-run.py`; live record `/tmp/n42-chat-b195-running.json`; log `/tmp/n42-chat-b195-full.jsonl`; terminal result `/tmp/n42-chat-b195-result.json` is written only on completion. Separate strict test/coverage gates and final source/hash checks must all pass. Full analysis of `930690d1` completed with zero errors/warnings and 361 infos (`/tmp/n42-chat-b195-analysis.log`). No full-test terminal result is claimed at this handoff. The script restores the preserved coverage even on a test failure.
+- Original full-acceptance, native/provider/device, wallet recovery, dependency/localization, payment and release gaps remain open. This consolidation supersedes the pending branch-merge and batch-192-running notes above/below, not their historical focused-test evidence.
+
+
 ### Recover from initial thread load failure — batch 194
 
 - First-load failure previously displayed only an error, leaving no way to recover in the page. Added the existing localized Retry control when no history is displayed. Reinitialize root/history/subscriptions without clearing the composer or sending it. Retry events reject in-flight duplicate loading, mismatched thread identity and expired captured account/session.
