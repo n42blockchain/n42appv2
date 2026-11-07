@@ -1,3 +1,4 @@
+import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
 
@@ -52,9 +53,11 @@ void main() {
         ..price = BigInt.one
         ..from1 = 'sender'
         ..userUuid = 'alice'
-        ..txHash = hash * 32;
+        ..txHash = chain == 'NEAR'
+            ? Base58Encode(List.filled(32, int.parse(hash, radix: 16)))
+            : hash * 32;
 
-  for (final chain in ['ADA', 'XLM', 'EGLD']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
     for (final sameHash in [false, true]) {
       test(
         '$chain simultaneous reservations sameHash=$sameHash allow one broadcast',
@@ -134,7 +137,7 @@ void main() {
         );
         final rows = await connection.query('TransationRecord');
         expect(rows, hasLength(2));
-        expect(rows.first['txHash'], 'ab' * 32);
+        expect(rows.first['txHash'], record(chain).txHash);
         expect(rows.first['state'], 1);
       },
     );
@@ -164,7 +167,7 @@ void main() {
       },
     );
   }
-  for (final chain in ['ADA', 'XLM', 'EGLD']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
     test('$chain release targets only original pending identity', () async {
       final original = record(chain);
       original.trId = await db.reserveMemoTransaction(original);
@@ -202,7 +205,7 @@ void main() {
       });
     }
   }
-  for (final chain in ['ADA', 'XLM', 'EGLD']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
     for (final terminal in [1, 2]) {
       test(
         '$chain late polling cannot overwrite terminal state $terminal',
@@ -250,7 +253,7 @@ void main() {
     );
   }
 
-  for (final chain in ['ADA', 'XLM', 'EGLD']) {
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
     test(
       '$chain prepared crash can retry after reopen without broadcasting old row',
       () async {
@@ -278,7 +281,7 @@ void main() {
         );
         final rows = await connection.query('TransationRecord');
         expect(rows, hasLength(1));
-        expect(rows.single['txHash'], 'cd' * 32);
+        expect(rows.single['txHash'], retry.txHash);
         expect(rows.single['memoDispatchPhase'], 'dispatching');
       },
     );
@@ -348,6 +351,11 @@ void main() {
   test('invalid reservation creates no history', () async {
     for (final tx in [
       record('BTC'),
+      record('NEAR')..txHash = 'ab' * 32,
+      record('NEAR')..txHash = '0' * 44,
+      record('NEAR')..txHash = Base58Encode(List.filled(31, 1)),
+      record('NEAR')..txHash = Base58Encode(List.filled(33, 1)),
+      record('NEAR')..txHash = " ${record('NEAR').txHash}",
       record('ADA')..txHash = 'bad',
       record('XLM')..state = 1,
       record('ADA')..isTest = 2,

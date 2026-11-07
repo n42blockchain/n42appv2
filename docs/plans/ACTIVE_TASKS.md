@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 218: NEAR memo-page preparation/dispatch and canonical Base58 database reservation are wired; 113 SQLite/widget cases pass. Final receipt/history resolution is the next required gap; pending reservations must not be released on timeout/not-found. No new release.
+
 > Batch 217: NEAR sender preserves local hash on unknown outcomes and awaits preparation/dispatch hooks with account rechecks; 65 related tests pass. Next integrate NEAR into memo-page/database reservation and receipt recovery; hooks alone are not durable app recovery. No release upload.
 
 > 本次中断核对：batch 216 已提交；35 项交易哈希/回执测试复跑通过。钱包及 Chat 先前全量运行均已有终态，不再列作运行中。73325 是未上传的旧候选包，不含 batches 212–216；仍需新包、原生登录验收和上传权限确认。13 个辅助工作树保留（7 个有本地改动，4 个干净但非祖先，2 个干净祖先）。详见[当前核对](reconciliation-2026-11-06.md)。

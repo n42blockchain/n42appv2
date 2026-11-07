@@ -524,7 +524,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
             trModel.price.toString(),
             decimals,
           ).toString(),
-          onBroadcastStarting: {'ADA', 'XLM', 'EGLD'}.contains(coinType)
+          onBroadcastStarting: {'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinType)
               ? (hash) async {
                   final original = _preparedRecord;
                   if (!mounted ||
@@ -543,7 +543,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                   }
                 }
               : null,
-          beforeBroadcast: {'ADA', 'XLM', 'EGLD'}.contains(coinType)
+          beforeBroadcast: {'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinType)
               ? (hash) async {
                   if (!mounted ||
                       RecentAddressService.currentUser != recentAddressOwner) {

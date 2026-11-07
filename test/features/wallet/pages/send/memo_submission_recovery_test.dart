@@ -1,3 +1,4 @@
+import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
 
 import 'dart:async';
@@ -33,8 +34,18 @@ class _Records extends TransactionRecordItemProvider {
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
-  for (final chain in ['XLM', 'EGLD']) {
-    final decimals = chain == 'XLM' ? 7 : 18;
+  for (final chain in ['XLM', 'EGLD', 'NEAR']) {
+    final decimals = chain == 'XLM'
+        ? 7
+        : chain == 'NEAR'
+        ? 24
+        : 18;
+    final hash = chain == 'NEAR'
+        ? Base58Encode(List.filled(32, 0xab))
+        : 'ab' * 32;
+    final otherHash = chain == 'NEAR'
+        ? Base58Encode(List.filled(32, 0xcd))
+        : 'cd' * 32;
     for (final scenario in [
       'not submitted',
       'dispatch rejected',
@@ -59,7 +70,11 @@ void main() {
         final coin = CoinModel()
           ..coin = {
             'coinType': chain,
-            'blockchainType': chain == 'XLM' ? 'Stellar' : 'MultiversX',
+            'blockchainType': chain == 'XLM'
+                ? 'Stellar'
+                : chain == 'NEAR'
+                ? 'Near'
+                : 'MultiversX',
             'unit': chain,
             'miniName': chain,
             'decimals': decimals,
@@ -108,7 +123,7 @@ void main() {
               stellarApi: FakeStellarQuoteApi(),
               persistTransaction: (tr) async {
                 saves++;
-                expect(tr.txHash, 'ab' * 32);
+                expect(tr.txHash, hash);
                 expect(broadcasts, 0);
                 if (scenario == 'pending reservation') {
                   throw const PendingMemoTransactionException();
@@ -128,7 +143,7 @@ void main() {
               releaseUnsubmittedTransaction: (tr) async {
                 releases++;
                 expect(tr.trId, 42);
-                expect(tr.txHash, 'ab' * 32);
+                expect(tr.txHash, hash);
                 if (scenario == 'release error') {
                   throw StateError('Disk unavailable');
                 }
@@ -137,9 +152,12 @@ void main() {
               transactionSender: (params) async {
                 submissions++;
                 expect(params.decimalAmountOverride, '1.25');
-                expect(params.expectedFeeBaseUnits, BigInt.from(100));
+                expect(
+                  params.expectedFeeBaseUnits,
+                  chain == 'NEAR' ? null : BigInt.from(100),
+                );
                 try {
-                  await params.beforeBroadcast!('ab' * 32);
+                  await params.beforeBroadcast!(hash);
                 } catch (_) {
                   return const SendResult.fail('Storage failed');
                 }
@@ -147,17 +165,14 @@ void main() {
                   if (!prepared.isCompleted) prepared.complete();
                   if (scenario == 'dispose before abort') await ack.future;
                   return SendResult.notSubmitted(
-                    scenario == 'abort foreign hash' ? 'cd' * 32 : 'ab' * 32,
+                    scenario == 'abort foreign hash' ? otherHash : hash,
                     'Cancelled before broadcast',
                   );
                 }
                 try {
-                  await params.onBroadcastStarting!('ab' * 32);
+                  await params.onBroadcastStarting!(hash);
                 } catch (_) {
-                  return SendResult.notSubmitted(
-                    'ab' * 32,
-                    'Dispatch not recorded',
-                  );
+                  return SendResult.notSubmitted(hash, 'Dispatch not recorded');
                 }
                 broadcasts++;
                 prepared.complete();
@@ -167,9 +182,9 @@ void main() {
                 ].contains(scenario)) {
                   await ack.future;
                 }
-                if (scenario == 'success') return SendResult.ok('ab' * 32);
-                if (scenario == 'foreign hash') return SendResult.ok('cd' * 32);
-                return SendResult.uncertain('ab' * 32, 'Response lost');
+                if (scenario == 'success') return SendResult.ok(hash);
+                if (scenario == 'foreign hash') return SendResult.ok(otherHash);
+                return SendResult.uncertain(hash, 'Response lost');
               },
             ),
             overrides: [
@@ -217,7 +232,7 @@ void main() {
           'pending reservation',
         ].contains(scenario);
         for (final check in dispatchChecks) {
-          expect(check, (42, 'ab' * 32, 0));
+          expect(check, (42, hash, 0));
         }
         expect(saves, 1);
         expect(broadcasts, failed || noBroadcast || dispatchAbort ? 0 : 1);
@@ -228,7 +243,7 @@ void main() {
               : 0,
         );
         expect(record.trId, failed || released ? 0 : 42);
-        expect(record.txHash, released ? '' : 'ab' * 32);
+        expect(record.txHash, released ? '' : hash);
         if (!failed && !released) {
           await state.signTx(record);
           expect(submissions, 1);

@@ -1,7 +1,22 @@
+import 'package:fast_base58/fast_base58.dart';
+
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:sqflite/sqflite.dart';
+
+bool _validMemoHash(Object? chain, String hash) {
+  if (chain == 'NEAR') {
+    if (hash.length < 32 || hash.length > 44) return false;
+    try {
+      final bytes = Base58Decode(hash);
+      return bytes.length == 32 && Base58Encode(bytes) == hash;
+    } catch (_) {
+      return false;
+    }
+  }
+  return hash.length == 64 && RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash);
+}
 
 /// An unresolved submission already reserves this account/sender/network.
 class PendingMemoTransactionException implements Exception {
@@ -83,7 +98,7 @@ extension TransactionRecordDao on AppDatabase {
     );
   }
 
-  /// Atomically reserve ADA/XLM/EGLD history before any broadcast. A new page or
+  /// Atomically reserve ADA/XLM/EGLD/NEAR history before any broadcast. A new page or
   /// process must not bypass an existing unresolved submission. Even an equal
   /// hash is rejected: it may already have been broadcast by the other caller.
   Future<int> reserveMemoTransaction(
@@ -92,9 +107,8 @@ extension TransactionRecordDao on AppDatabase {
   }) async {
     final values = Map<String, Object?>.from(record.toMapDb());
     final hash = values['txHash'] as String;
-    if (!{'ADA', 'XLM', 'EGLD'}.contains(values['coinMiniName']) ||
-        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash) ||
-        hash.length != 64 ||
+    if (!{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(values['coinMiniName']) ||
+        !_validMemoHash(values['coinMiniName'], hash) ||
         (values['from1'] as String).isEmpty ||
         ![0, 1].contains(values['isTest']) ||
         values['state'] != 0) {
@@ -145,7 +159,8 @@ extension TransactionRecordDao on AppDatabase {
   Future<bool> markMemoTransactionDispatch(TransationRecordModel record) async {
     final values = Map<String, Object?>.from(record.toMapDb());
     final id = record.trId;
-    if (id <= 0 || !{'ADA', 'XLM', 'EGLD'}.contains(values['coinMiniName'])) {
+    if (id <= 0 ||
+        !{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(values['coinMiniName'])) {
       return false;
     }
     final db = await database;
@@ -177,9 +192,8 @@ extension TransactionRecordDao on AppDatabase {
     final id = record.trId;
     final hash = values['txHash'] as String;
     if (id <= 0 ||
-        !{'ADA', 'XLM', 'EGLD'}.contains(values['coinMiniName']) ||
-        hash.length != 64 ||
-        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(hash)) {
+        !{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(values['coinMiniName']) ||
+        !_validMemoHash(values['coinMiniName'], hash)) {
       return false;
     }
     final db = await database;

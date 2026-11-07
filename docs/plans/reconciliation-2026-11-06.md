@@ -1,5 +1,12 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Wire NEAR pre-broadcast persistence into the memo page — batch 218
+
+- NEAR now uses the existing memo-page preparation and dispatch callbacks. The database reserves the account/sender/network before RPC and accepts canonical 32-byte Base58 NEAR identities rather than incorrectly imposing the hex format of ADA/XLM/EGLD. Existing chain hash rules remain unchanged. Malformed/oversized hashes are rejected before storage.
+- Extended real SQLite tests and widget scenarios to NEAR: concurrent reservation, database reopen, prepared-only crash recovery, ambiguous dispatch retention, owner/network isolation, original-row release, duplicate interaction, storage failures, disposal before acknowledgment and foreign hashes. **113 cases pass** (`/tmp/n42-wallet-b218-final.log`, exit 0). The first run found one old hex fixture assertion; corrected it to the actual NEAR identity before the final run. These are persistence/widget tests, not real-network transfers.
+- Remaining dependency: TransactionStateResolver has no NEAR branch yet, so unresolved NEAR history cannot automatically reach a terminal state. Add a hash/sender/receiver/amount-bound final receipt query next; never unlock a reservation merely because RPC times out or cannot find a transaction. The official [NEAR transaction RPC documentation](https://docs.near.org/api/rpc/transactions) supports tx_hash/sender_account_id with wait_until FINAL. This batch does not claim the complete recovery loop or production readiness. Release 73325 remains historical.
+
+
 ### Preserve NEAR submission uncertainty at the sender boundary — batch 217
 
 - The API could detect an unknown outcome, but NearSender converted it to an ordinary failure and discarded the local transaction identity. It now computes the hash before dispatch, awaits the existing preparation/dispatch callbacks, and rechecks wallet identity after each await. Storage failure or account change returns an explicit not-submitted result with the original hash; no RPC call occurs.

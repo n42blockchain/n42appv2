@@ -1632,3 +1632,7 @@ RPC success hash must now match the locally computed transaction hash. Envelope 
 ### Batch 217 — NEAR uncertain sender outcome
 
 Local hash survives API errors/missing/mismatched receipts as an uncertain result. Preparation and dispatch hooks are awaited and wallet identity rechecked; failures before RPC are explicitly not submitted. 65 related cases pass; scoped analysis clean. Memo page/database currently restrict reservation to ADA/XLM/EGLD: NEAR integration and durable receipt recovery remain open. See current reconciliation for evidence and limitations.
+
+### Batch 218 — NEAR memo-page persistence
+
+Added NEAR to preparation/dispatch and exact-row release paths, with canonical Base58 hash validation. 113 SQLite/widget cases pass across all four supported chains. NEAR final receipt resolution is still absent and required for complete recovery; unknown reservations stay protected. Details and evidence are in the reconciliation.
