@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "746931e09d7d19703eb2c2756f1dba282398c352",
+  "passed": 7772,
+  "failed": 0,
+  "skipped": 0,
+  "exit_code": 0,
+  "coverage": {
+    "hit": 104441,
+    "found": 141277,
+    "percent": 73.92639990939784,
+    "threshold": 70,
+    "passed": true
+  },
+  "log_sha256": "0ca4e25ef4b0d21b2af981c3b6e26bb2fb0d075441ebccc9231bf55fcdbc47bb",
+  "lcov_sha256": "e0b4e43876bb4c96a5a8d42445711fe31d62c53b1de5e255c493979add758e13",
+  "nativeFalconEnabled": true,
+  "sourceStability": "No lib/test/pubspec/lock/iOS/Android diff between runtime source 746931e09 and e5582e6a3. Later changes are backend tests and integration fixture only.",
+  "scope": "Full wallet unit/widget suite; not native send fixture, production role enforcement or physical-device acceptance. New live repairs are not in uploaded 73424."
+}

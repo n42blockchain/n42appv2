@@ -1,0 +1,15 @@
+{
+  "run": 42397806375,
+  "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42397806375",
+  "source": "e5582e6a3e028b3a0ddf2df6f396576d99a06997",
+  "status": "in_progress",
+  "acceptance": "pending",
+  "cases": [
+    "recipient validation",
+    "amount validation and overbalance",
+    "deterministic gas display"
+  ],
+  "fixture": "Opt-in virtual-device guard; loopback RPC; public unfunded address, no private key; assert no sign/broadcast requests; restore chain map after each case",
+  "remainingFlowPlaceholders": 10,
+  "scopedAnalysis": "No issues found"
+}
