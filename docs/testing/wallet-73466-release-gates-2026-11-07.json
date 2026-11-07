@@ -34,12 +34,19 @@
   "currentAndroidNative": {
     "run": 42425303197,
     "source": "5d3730e3c88281f339c5eeef21a4b8e0b4429f3f",
-    "status": "in progress; includes four real SQLCipher database checks"
+    "status": "completed",
+    "conclusion": "success",
+    "passed": 15,
+    "failed": 0,
+    "skipped": 1,
+    "databaseCasesPassed": 4,
+    "logSha256": "42a2f881ad8b9c0552c6ee4314b770024a3aa683516d5cd7cc8f809d1f57c1f7",
+    "scope": "Android emulator wallet forms/create/import/home/history/account switch and four SQLCipher cases; funded N42 transfer skipped"
   },
   "currentFullCi": {
     "run": 42425633295,
     "source": "5d3730e3c88281f339c5eeef21a4b8e0b4429f3f",
-    "status": "pending after obsolete-source cancellation request"
+    "status": "in progress; analysis/security/four backend modules passed; tests/coverage running"
   },
   "supersededFullCi": {
     "run": 42422731742,
@@ -55,5 +62,5 @@
     "73453",
     "73464"
   ],
-  "status": "Verified signed candidate; waiting for current-source native and CI gates; not uploaded"
+  "status": "Package, full local regression and current-source Android native gates passed; full CI pending; not uploaded"
 }

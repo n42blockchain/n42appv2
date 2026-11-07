@@ -35,10 +35,18 @@
       "failed": 0,
       "skipped": 3,
       "coveragePercent": 73.73355693775164
+    },
+    "androidNative": {
+      "run": 42425303197,
+      "source": "5d3730e3c88281f339c5eeef21a4b8e0b4429f3f",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 1,
+      "databaseCasesPassed": 4,
+      "logSha256": "42a2f881ad8b9c0552c6ee4314b770024a3aa683516d5cd7cc8f809d1f57c1f7"
     }
   },
   "remaining": [
-    "Run Android native suite with four real database checks",
     "Physical-device/installed-user continuity acceptance remains separate",
     "Current-source remote CI 42425633295"
   ],
