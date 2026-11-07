@@ -61,6 +61,18 @@ class SecurePreferences {
   static SecurePreferences? _instance;
   SharedPreferences? _prefs;
   final SecureStore _secureStorage;
+  Future<void> _userInfoTail = Future<void>.value();
+
+  // All SPUtil callers share this production singleton. Keep account reads,
+  // writes and clears in invocation order, including failed operations.
+  Future<T> _withUserInfo<T>(Future<T> Function() operation) {
+    final result = _userInfoTail.then((_) => operation());
+    _userInfoTail = result.then<void>(
+      (_) {},
+      onError: (Object error, StackTrace stack) {},
+    );
+    return result;
+  }
 
   SecurePreferences._({SecureStore? secureStorage})
     : _secureStorage = secureStorage ?? FlutterSecureStore();
@@ -170,15 +182,32 @@ class SecurePreferences {
 
   /// 保存用户信息
   Future<void> setUserInfo(Map<String, dynamic>? value) async {
-    if (value == null) {
-      await _secureStorage.delete(key: 'userInfo');
-    } else {
-      await _secureStorage.write(key: 'userInfo', value: jsonEncode(value));
+    final encoded = value == null ? null : jsonEncode(value);
+    return _withUserInfo(() async {
+      await init();
+      if (encoded == null) {
+        await _secureStorage.delete(key: 'userInfo');
+      } else {
+        await _secureStorage.write(key: 'userInfo', value: encoded);
+      }
+      await _removeLegacyUserInfo();
+    });
+  }
+
+  Future<void> _removeLegacyUserInfo() async {
+    final prefs = _prefs;
+    if (prefs != null && prefs.containsKey('userInfo')) {
+      if (!await prefs.remove('userInfo')) {
+        throw StateError('Failed to remove legacy account data');
+      }
     }
   }
 
   /// 获取用户信息
-  Future<Map<String, dynamic>?> getUserInfo() => _readSecureJson('userInfo');
+  Future<Map<String, dynamic>?> getUserInfo() => _withUserInfo(() async {
+    await init();
+    return _readSecureJson('userInfo');
+  });
 
   // ==================== 挖矿数据（敏感） ====================
 
@@ -288,15 +317,20 @@ class SecurePreferences {
   // ==================== 清理方法 ====================
 
   /// 清除所有敏感数据
-  Future<void> clearSensitiveData() async {
+  Future<void> clearSensitiveData() => _withUserInfo(() async {
+    await init();
     for (final key in _sensitiveKeys) {
       await _secureStorage.delete(key: key);
     }
-  }
+    await _removeLegacyUserInfo();
+  });
 
   /// 清除所有数据
-  Future<void> clearAll() async {
+  Future<void> clearAll() => _withUserInfo(() async {
+    await init();
     await _secureStorage.deleteAll();
-    await _prefs?.clear();
-  }
+    if (await _prefs?.clear() == false) {
+      throw StateError('Failed to clear legacy preferences');
+    }
+  });
 }

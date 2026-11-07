@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Preserve durable account operation order — batch 197
+
+- Five failures reproduced out-of-order account replacement, logout, sensitive/all-data clearing and reads while an earlier userInfo write remained pending (`/tmp/n42-wallet-b197-before.log`). SecurePreferences now queues userInfo reads/writes and both clearing operations through the production singleton, waits for migration before dispatch, and preserves caller-visible errors without poisoning the queue. User payload JSON is captured at invocation so later caller mutations cannot change queued identity data.
+- Explicit user writes/clears also remove the legacy plaintext account key after secure-store acknowledgement, including when migration failed. A reopened store cannot resurrect that leftover account in the new regression cases. Legacy-removal/all-preferences-clear failures propagate rather than report successful cleanup.
+- Twelve ordering/migration cases plus existing secure-storage/provider suites: **44 pass**, exit 0 (`/tmp/n42-wallet-b197-final.log`). Scoped analysis reports no issues (`/tmp/n42-wallet-b197-analysis.log`). Covers failure recovery, replacement, logout, read ordering, both cleanup paths, captured nested payloads, clear-before-init and migration-failure/reopen behavior.
+- Scope is the shared SecurePreferences instance and userInfo operations. Other secure keys, the separate SecureStorage namespace, cross-process/isolate writers, outstanding AppGlobals authentication flows and UI error propagation still need coordinated review. This is not a claim of atomic login/logout across both stores or production/device acceptance. Chat full batch 195 remains on unchanged source `930690d1` and has progressed past its previous stall point; require the terminal result.
+
+
 ### Reconcile old host audit and protect startup account state — batch 196
 
 - Compared the seven files from patch-unique old commit `4f64ed5cf`. Production PhishingDetector is byte-identical in current source; current tests retain cache/blocklist behavior, async deep-link disposal, profile persistence/legacy avatar handling, bridge readiness and WalletConnect null-context behavior. Integration-quality tests use the actual resolved Git dependency rather than the obsolete local mirror. Current six-suite regression: **101 pass**, exit 0 (`/tmp/n42-wallet-b196-old-audit.log`). Patch uniqueness did not mean missing production behavior.
