@@ -1775,3 +1775,11 @@ Capture session before async archive/restore work; reject later operations on cl
 ### Batch 242 — interrupted Sui message-key binding
 
 Recovered two uncommitted files. Sui message signing now verifies bounded hexadecimal address identity against native derivation using the captured signing credentials/path; preserves valid case/padding aliases. Seven pre-fix failures and 1,049 passing WalletConnect tests (17 added Sui cases). Logs: `/tmp/n42-wallet-b242-before.log`, `/tmp/n42-wallet-b242-final.log`, `/tmp/n42-wallet-b242-analysis-final.log`. Fixed one analyzer braces-style info. This does not establish actual native/device/protocol acceptance or Aptos rotated-account binding. Updated the interruption ledger; broader signer, archive, native-login, release and worktree requirements remain open.
+
+
+### Reject obsolete TRON/Solana transaction signatures — batch 243
+
+- Inspection found sign-only transaction paths returned native results without rechecking captured session/account/request identity. Corrected the TRON fixture to pass a transaction map rather than a message string; the first interrupted fixture run is not accepted evidence. The corrected pre-fix run reproduces **12 failures**, with two unchanged-context success cases (`/tmp/n42-wallet-b243-before-corrected.log`).
+- TRON and Solana now discard native transaction results when the captured guard is invalid. TRON also responds through its captured client and guards completion so it cannot reset a newer preview. Existing successful broadcast receipt handling remains intact; an already-started native operation cannot be rolled back.
+- **1,063 WalletConnect tests pass**, exit 0 (`/tmp/n42-wallet-b243-final.log`); scoped analysis clean (`/tmp/n42-wallet-b243-analysis.log`). Fourteen added cases cover revocation, wallet/owner/request/client changes, disconnect and normal success for both chains. These tests mock native signing and do not prove protocol/device acceptance.
+- Remaining: derived-key binding on transaction paths, Aptos sign-only completion review, native protocol parity and ordinary-sender worktree reconciliation. Archive/native-login/release requirements remain open. No physical-device action, real transaction, deployment or upload.

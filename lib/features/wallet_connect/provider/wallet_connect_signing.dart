@@ -341,6 +341,7 @@ mixin WalletConnectSigning
   Future<void> _handleTronTransaction(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
+    final responseClient = signClient!;
     final requestParams = eventData.params! as Map;
     final dataToSign = requestParams["message"];
     final cm = coinModelFor(CoinType.TRX);
@@ -365,14 +366,15 @@ mixin WalletConnectSigning
       mnemonic: credentials.mnemonic,
       pk: credentials.privateKey,
     );
-    await signClient!.respondSessionRequest(
+    if (!_signingContextIsCurrent(requireCurrent)) return;
+    await responseClient.respondSessionRequest(
       topic: eventData.topic,
       response: wallet_connect.JsonRpcResponse(
         id: eventData.id,
         result: returnStr,
       ),
     );
-    _completeSigningRequest(eventData);
+    _completeSigningRequest(eventData, requireCurrent: requireCurrent);
   }
 
   Future<void> _handleSolanaTransaction(
@@ -415,6 +417,7 @@ mixin WalletConnectSigning
       pk: credentials.privateKey,
     );
 
+    if (!_signingContextIsCurrent(requireCurrent)) return;
     if (signedTxBase64.isEmpty) {
       requireCurrent();
       viewStateDeal(

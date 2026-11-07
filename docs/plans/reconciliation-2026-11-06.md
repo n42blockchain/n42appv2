@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Reject obsolete TRON/Solana transaction signatures — batch 243
+
+- Inspection found sign-only transaction paths returned native results without rechecking captured session/account/request identity. Corrected the TRON fixture to pass a transaction map rather than a message string; the first interrupted fixture run is not accepted evidence. The corrected pre-fix run reproduces **12 failures**, with two unchanged-context success cases (`/tmp/n42-wallet-b243-before-corrected.log`).
+- TRON and Solana now discard native transaction results when the captured guard is invalid. TRON also responds through its captured client and guards completion so it cannot reset a newer preview. Existing successful broadcast receipt handling remains intact; an already-started native operation cannot be rolled back.
+- **1,063 WalletConnect tests pass**, exit 0 (`/tmp/n42-wallet-b243-final.log`); scoped analysis clean (`/tmp/n42-wallet-b243-analysis.log`). Fourteen added cases cover revocation, wallet/owner/request/client changes, disconnect and normal success for both chains. These tests mock native signing and do not prove protocol/device acceptance.
+- Remaining: derived-key binding on transaction paths, Aptos sign-only completion review, native protocol parity and ordinary-sender worktree reconciliation. Archive/native-login/release requirements remain open. No physical-device action, real transaction, deployment or upload.
+
+
 ### Interrupted-work check and Sui message binding — batch 242
 
 - Found two unfinished tracked files from interrupted Sui message-key binding. The completed directory log reports **1,049 passing WalletConnect tests** (`/tmp/n42-wallet-b242-final.log`), including 17 added Sui cases. Seven mismatched derivation cases failed before the repair (`/tmp/n42-wallet-b242-before.log`). Scoped analysis was rerun after fixing one braces-style info.
