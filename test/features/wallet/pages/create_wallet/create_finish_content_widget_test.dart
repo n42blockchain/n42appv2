@@ -108,6 +108,47 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('failed wallet save never displays creation success', (
+    tester,
+  ) async {
+    _setPhoneViewport(tester);
+    await _pumpFinish(
+      tester,
+      method: 'Create',
+      wallet: _wallet(),
+      saveWallet: (_) async => throw StateError('synthetic save failure'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text(S.current.g_key_3), findsOneWidget);
+    expect(find.text(S.current.g_key_79), findsOneWidget);
+    expect(find.text(S.current.g_key_wallet_c22), findsNothing);
+    expect(find.text(S.current.g_key_wallet_c24), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('rejected import never saves or shows import success', (
+    tester,
+  ) async {
+    _setPhoneViewport(tester);
+    var saves = 0;
+    await _pumpFinish(
+      tester,
+      method: 'Import',
+      wallet: _wallet(),
+      validateImport: (_) async => 1,
+      saveWallet: (_) async {
+        saves++;
+      },
+    );
+    await tester.pumpAndSettle();
+    expect(saves, 0);
+    expect(find.text(S.current.g_key_3), findsOneWidget);
+    expect(find.text(S.current.g_key_wallet_c15), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('creation stays in loading state until wallet save completes', (
     tester,
   ) async {

@@ -146,6 +146,22 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   }
 
   Widget _buildMainContent() {
+    if (load == Load.error) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 48),
+            _titleText(S.of(context).g_key_3),
+            AppButton(
+              label: S.of(context).g_key_79,
+              onPressed: () =>
+                  Navigator.popUntil(context, ModalRoute.withName(pageName)),
+            ),
+          ],
+        ),
+      );
+    }
     return Stack(
       children: [
         _visibleLayer(

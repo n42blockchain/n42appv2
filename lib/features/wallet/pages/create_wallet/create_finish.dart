@@ -2,12 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/core/enums/load.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:n42_wallet/features/wallet/widgets/wallet_gen_success.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +47,7 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
 
   Future<bool> _pageBack() {
     if (Navigator.canPop(context)) {
-      if (load == Load.finish) {
+      if (load == Load.finish || load == Load.error) {
         Navigator.popUntil(context, ModalRoute.withName(pageName));
       }
       return Future.value(false);
@@ -62,24 +60,26 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
     _wInfo = widget.wInfo;
     final walletActionProvider = ref.read(wapBridgeProvider);
 
-    if (_wInfo == null) {
-      _wInfo = WalletInfo(
-        walletName: "",
-        password: "",
-        walletUuid: walletActionProvider.userUUID,
-      );
-      _wInfo!.mnemonic = await Trustdart().generateMnemonic();
-    }
-
-    if (_wInfo!.walletName == "") {
-      _wInfo!.walletName =
-          "Account${walletActionProvider.walletInfoLsit.length + 1}";
-    }
-    _wInfo!.coinInfo ??= chainUrlMap;
-    _wInfo!.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
-
-    int code = -1;
+    var saved = false;
     try {
+      if (_wInfo == null) {
+        _wInfo = WalletInfo(
+          walletName: "",
+          password: "",
+          walletUuid: walletActionProvider.userUUID,
+        );
+        _wInfo!.mnemonic = await Trustdart().generateMnemonic();
+      }
+
+      if (_wInfo!.walletName == "") {
+        _wInfo!.walletName =
+            "Account${walletActionProvider.walletInfoLsit.length + 1}";
+      }
+      _wInfo!.coinInfo ??= chainUrlMap;
+      _wInfo!.timestamp = "${DateTime.now().millisecondsSinceEpoch}";
+
+      int code = -1;
+      if (!mounted) return;
       setState(() => load = Load.loading);
 
       code = widget.createMetod == "Import"
@@ -90,16 +90,15 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       if (code == 0) {
         await (widget.addWalletForTesting?.call(_wInfo!) ??
             walletActionProvider.addWalletInfo(_wInfo!));
+        saved = true;
       } else {
         AppLogger.w('CreateFinish', 'create wallet err');
-        ToastUtils.showFtToast(child: createWalletErrView('error'));
       }
-    } catch (err) {
-      ToastUtils.show(err.toString());
-      AppLogger.w('CreateFinish', 'create wallet err: $err');
+    } catch (_) {
+      AppLogger.w('CreateFinish', 'Wallet creation failed');
     } finally {
       if (mounted) {
-        setState(() => load = Load.finish);
+        setState(() => load = saved ? Load.finish : Load.error);
       }
     }
   }
