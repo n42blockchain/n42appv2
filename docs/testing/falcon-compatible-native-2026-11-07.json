@@ -1,0 +1,11 @@
+{
+  "source_commit": "fcd13e880dab37112229e0c1ae76136ce1d769d7",
+  "command": "FLUTTER_BIN=<Flutter 3.47.8> bash scripts/test_falcon_native.sh",
+  "exit_code": 0,
+  "rust_tests_passed": 1,
+  "flutter_native_tests_passed": 21,
+  "flutter_native_skipped": 0,
+  "log_sha256": "058bc075e87ec09d432c2e460921bf0e37b694033bd2c1d0110615a3e942e93a",
+  "library_sha256": "a2befdb8ed3e94333c87ded191fcad1279956c79c4e8dd139803c438587f3349",
+  "scope": "Locked Rust build and real macOS host Falcon FFI, network-fixture and page tests after compatible dependency integration. Not public-chain transaction, mobile packaged library, or physical-device acceptance."
+}
