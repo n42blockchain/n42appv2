@@ -55,5 +55,14 @@
     "threshold": 70
   },
   "raw_log_sha256": "543bfdf153d75dcf8c7e59f1009842de2532f439f0407a9f309aa23633464412",
-  "scope": "Eight compatible lockfile updates; SDK 15 Chat baseline. Matrix 16 is a separate candidate. Build success is not native business-flow acceptance. Synthetic startup benchmark does not establish actual startup performance."
+  "scope": "Eight compatible lockfile updates; SDK 15 Chat baseline. Matrix 16 is a separate candidate. Build success is not native business-flow acceptance. Synthetic startup benchmark does not establish actual startup performance.",
+  "checkoutCleanup": {
+    "date": "2026-11-07",
+    "removed": "../.tmp-worktrees/n42-wallet-compatible-deps-20261107",
+    "cleanTrackedAndUntracked": true,
+    "openFileHolders": 0,
+    "gitCherry": "42e74e240 patch-equivalent to integrated HEAD",
+    "branchRetained": "chore/compatible-dependencies-20261107",
+    "matrix16Comparison": "Retained separately because git cherry reports non-equivalent 57458054e; no removal inferred from ahead/behind counts."
+  }
 }
