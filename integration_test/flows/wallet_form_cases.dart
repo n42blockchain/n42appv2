@@ -30,13 +30,25 @@ void registerWalletFormCases() {
     await tester.enterText(target, value);
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.pumpAndSettle();
+    expect(
+      tester.widget<TextField>(target).controller!.text == value,
+      isTrue,
+      reason: 'Synthetic field $field did not retain the entered fixture.',
+    );
   }
 
   Future<void> reject(WidgetTester tester, String error) async {
     final before = find.text(error).evaluate().length;
     await tester.tap(find.text(S.current.g_key_115));
-    await tester.pumpAndSettle();
-    expect(find.text(error).evaluate().length, greaterThan(before));
+    for (var attempt = 0; attempt < 100; attempt++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      if (find.text(error).evaluate().length > before) break;
+    }
+    expect(
+      find.text(error).evaluate().length,
+      greaterThan(before),
+      reason: 'Expected inline validation did not appear after submit.',
+    );
     expect(find.byType(CreatePassword), findsOneWidget);
     expect(find.byType(CreateFinish), findsNothing);
     expect(tester.takeException(), isNull);

@@ -1,0 +1,17 @@
+{
+  "runtime_source_commit": "912db3dfed3128ef6bf1da2f52ae582e9a792bbf",
+  "passed": 7766,
+  "skipped": 0,
+  "failed": 0,
+  "exit_code": 0,
+  "coverage": {
+    "found": 141269,
+    "hit": 104422,
+    "passed": true,
+    "percent": 73.91713680991583,
+    "threshold": 70.0
+  },
+  "log_sha256": "7fd5d0678a57ff75533d19dc09c63d87add0df977ef155efc7f1439c1e91054f",
+  "lcov_sha256": "5da86d93864ca5ffe68ef7d023735aed6ed698a57c01cb385b6b93ea2030e3ae",
+  "scope": "Full wallet coverage regression with native PQ enabled. Product source unchanged; later form diagnostics are tested separately. Native forms remain unaccepted after Android mismatch case failure."
+}

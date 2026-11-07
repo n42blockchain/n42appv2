@@ -1,0 +1,11 @@
+{
+  "conclusion": "failure",
+  "headSha": "e3a67305738138442e9f6a895fa7333a239f80d2",
+  "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42387220505",
+  "passed": 1,
+  "skipped": 11,
+  "failed": 1,
+  "failure": "Password confirmation mismatch did not render expected inline error; root cause unproven.",
+  "log_sha256": "100f37edb92dddf896ac9e9e7272fefea251e730b7ae7dd6da2f4809eb4ca212",
+  "follow_up": "Synthetic input-retention assertions and bounded UI wait added; rerun required. No production validator change and no passing native claim."
+}
