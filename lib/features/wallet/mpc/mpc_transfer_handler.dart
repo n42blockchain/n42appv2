@@ -1,6 +1,8 @@
-import 'dart:typed_data';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 
-import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'mpc_evm_transaction_signer.dart';
+
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/sender/transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/api/sender/base_transfer_handler.dart';
@@ -12,12 +14,38 @@ class MpcTransferParams extends TransferParams {
   /// MPC Provider 实例
   final MpcProvider mpcProvider;
 
+  /// Exact reviewed EVM request, including durable broadcast persistence.
+  final SendParams? transaction;
+  final bool Function()? isCurrent;
+
+  factory MpcTransferParams.prepared({
+    required SendParams transaction,
+    required MpcProvider provider,
+    required bool Function() isCurrent,
+  }) => MpcTransferParams(
+    chainSymbol: transaction.coinType,
+    fromAddress: transaction.fromAddress,
+    toAddress: transaction.toAddress,
+    value: transaction.amount,
+    contractAddress: transaction.contractAddress,
+    isTest: transaction.isTest,
+    maxValue: transaction.sendMax,
+    message: transaction.memo,
+    privateKey: transaction.privateKey,
+    chainMap: transaction.chainConfig,
+    mpcProvider: provider,
+    transaction: transaction,
+    isCurrent: isCurrent,
+  );
+
   const MpcTransferParams({
     required super.chainSymbol,
     required super.fromAddress,
     required super.toAddress,
     required super.value,
     required this.mpcProvider,
+    this.transaction,
+    this.isCurrent,
     super.contractAddress = '',
     super.isTest = false,
     super.maxValue = true,
@@ -32,11 +60,16 @@ class MpcTransferParams extends TransferParams {
 /// MPC Transfer Handler
 ///
 /// 将 EVM 交易签名委托给 MpcProvider，而非本地私钥。
-/// 支持所有 EVM 链上的 ETH 和 ERC-20 转账。
+/// Prepared EVM transfers use the shared sender and return a broadcast hash.
 class MpcTransferHandler extends BaseTransferHandler {
   final String _chainSymbol;
 
-  MpcTransferHandler(this._chainSymbol);
+  final ChainSender Function(MpcEvmTransactionSigner)? _senderFactory;
+
+  MpcTransferHandler(
+    this._chainSymbol, {
+    ChainSender Function(MpcEvmTransactionSigner)? senderFactory,
+  }) : _senderFactory = senderFactory;
 
   @override
   String get chainSymbol => _chainSymbol;
@@ -69,37 +102,57 @@ class MpcTransferHandler extends BaseTransferHandler {
         return createError('Invalid parameters: MpcTransferParams required');
       }
 
-      final provider = params.mpcProvider;
-      if (!provider.isLoggedIn) {
-        return createError('MPC wallet is not logged in');
+      final transaction = params.transaction;
+      final isCurrent = params.isCurrent;
+      if (transaction == null ||
+          isCurrent == null ||
+          transaction.beforeBroadcast == null) {
+        return createError(
+          'A reviewed EVM transaction and durable persistence are required',
+        );
       }
-
-      // Build the unsigned transaction (same as EVM handler)
-      // The actual transaction building depends on the chain's RPC
-      // For MPC, we sign the transaction hash and broadcast
-
-      AppLogger.d('MpcTransferHandler', 'signing tx for ${params.chainSymbol}');
-
-      // Create a simple ETH/ERC-20 transfer transaction
-      final txBytes = _buildUnsignedTx(params);
-      final signResult = await provider.signTransaction(txBytes);
-
-      AppLogger.d('MpcTransferHandler', 'signed, broadcasting...');
-
-      // In a full implementation, broadcast the signed tx via RPC
-      // For now, return the signature as proof of concept
-      return createSuccess(
-        data: {
-          'signature': signResult.signatureHex,
-          'from': params.fromAddress,
-          'to': params.toAddress,
-          'value': params.value,
-          'chain': params.chainSymbol,
-        },
-      );
-    } catch (e) {
-      AppLogger.w('MpcTransferHandler', 'error: $e');
-      return createError(e.toString());
+      if (!supports(transaction.coinType) ||
+          normalizeSymbol(transaction.coinType) !=
+              normalizeSymbol(_chainSymbol) ||
+          normalizeSymbol(transaction.coinType) !=
+              normalizeSymbol(params.chainSymbol) ||
+          transaction.fromAddress != params.fromAddress ||
+          transaction.toAddress != params.toAddress ||
+          transaction.amount != params.value ||
+          transaction.contractAddress != params.contractAddress ||
+          transaction.isTest != params.isTest ||
+          transaction.sendMax != params.maxValue ||
+          transaction.memo != params.message ||
+          transaction.privateKey != null ||
+          params.privateKey != null) {
+        return createError(
+          'MPC transfer does not match the reviewed EVM request',
+        );
+      }
+      final provider = params.mpcProvider;
+      if (!provider.isLoggedIn || !isCurrent()) {
+        return createError(
+          'MPC wallet is not logged in or its session changed',
+        );
+      }
+      final signer = MpcEvmTransactionSigner(provider, isCurrent: isCurrent);
+      final sender =
+          _senderFactory?.call(signer) ?? EvmSender(mpcSigner: signer);
+      final result = await sender.send(transaction);
+      if (!result.success && result.txHash != null) {
+        return createError(
+          result.error ?? 'Broadcast outcome is uncertain',
+          data: {
+            'txHash': result.txHash,
+            'error': result.error,
+            'definitelyNotSubmitted': result.definitelyNotSubmitted,
+            'uncertain': !result.definitelyNotSubmitted,
+          },
+        );
+      }
+      return result.toMessageModel();
+    } catch (_) {
+      return createError('MPC transfer failed');
     }
   }
 
@@ -113,15 +166,5 @@ class MpcTransferHandler extends BaseTransferHandler {
       totalFee: BigInt.zero,
       errorMessage: 'MPC gas estimation requires RPC call',
     );
-  }
-
-  /// Build unsigned transaction bytes for MPC signing
-  Uint8List _buildUnsignedTx(MpcTransferParams params) {
-    // Simplified: encode the transfer intent as bytes for signing
-    // In production, this should build a proper RLP-encoded EVM transaction
-    // using nonce, gas price, gas limit from the chain's RPC
-    final data =
-        '${params.chainSymbol}:${params.fromAddress}:${params.toAddress}:${params.value}';
-    return Uint8List.fromList(data.codeUnits);
   }
 }
