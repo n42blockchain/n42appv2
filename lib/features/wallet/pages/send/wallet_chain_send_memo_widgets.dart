@@ -246,7 +246,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
     final feeText =
         (_isStellarNative && _currentStellarFunds == null) ||
             (_isCardanoNative && _currentCardanoPlan == null) ||
-            (_isEgldNative && _currentEgldQuote == null)
+            (_isEgldNative && _currentEgldQuote == null) ||
+            (_isNearNative && !_hasNearQuote)
         ? '—'
         : '${toEther(totalGasPrice.toString(), decimals)} $coinType';
 

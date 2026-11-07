@@ -152,10 +152,7 @@ void main() {
               transactionSender: (params) async {
                 submissions++;
                 expect(params.decimalAmountOverride, '1.25');
-                expect(
-                  params.expectedFeeBaseUnits,
-                  chain == 'NEAR' ? null : BigInt.from(100),
-                );
+                expect(params.expectedFeeBaseUnits, BigInt.from(100));
                 try {
                   await params.beforeBroadcast!(hash);
                 } catch (_) {

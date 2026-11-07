@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Bind NEAR confirmation to the sender's fee reserve — batch 220
+
+- Found the memo page displayed a fixed gas-unit count as if it were a base-unit fee, while NearSender multiplies a 300 TGas reserve by network gas price. Added confirmation-time NEAR balance/storage/gas-price preparation and a shared reserve constant. Max now subtracts storage plus that same fee reserve; ordinary sends preserve the requested amount. Stale form/network/account context and balance refresh invalidate quotes, query failure prevents confirmation and displays the existing localized quote error.
+- Pass the reviewed reserve through expectedFeeBaseUnits. NearSender re-queries and rejects a changed reserve before signing or persistence; no silent adjustment after confirmation. Unquoted fee rows display a dash, not a misleading fixed gas-unit value. Existing non-NEAR quote paths remain intact.
+- This is an intermediate consistency fix, **not precise fee estimation**. The unchanged conservative 300 TGas reserve is larger than ordinary transfer cost and Max remains conservative. [nearcore fee computation](https://github.com/near/nearcore/blob/master/core/primitives/src/fees.rs) separates send/execution charges, receipt gas purchase price and implicit-account costs; protocol-version-compatible quoting still requires that full model. Do not label the reserve as actual gas burned or claim optimal Max.
+- **85 related tests pass** (exit 0), and scoped analysis reports no issues. Validation covers quote/Max arithmetic, stale recipient context, insufficient funds, lookup failure, sender fee equality/rejection and memo persistence scenarios across XLM/EGLD/NEAR. No native transaction or release upload occurs. Final result logs: `/tmp/n42-wallet-b220-final.log` and `/tmp/n42-wallet-b220-analysis-final.log`.
+
+
 ### Resolve persisted NEAR history through final receipts — batch 219
 
 - Added the missing NEAR branch to TransactionStateResolver. Query the selected mainnet/testnet with the original transaction hash and sender using `tx` / `wait_until: FINAL`. Require a canonical local 32-byte hash, unchanged record identity across the await, matching receipt hash/sender/receiver and one Transfer action carrying the exact decimal base-unit amount. Contract-token records remain unsupported rather than being mistaken for native transfers.

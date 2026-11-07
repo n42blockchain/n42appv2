@@ -111,10 +111,12 @@ SendParams params({
   String? key = 'fixture-key',
   BigInt? exact,
   bool max = false,
+  BigInt? expectedFee,
   Future<void> Function(String)? beforeBroadcast,
   Future<void> Function(String)? onBroadcastStarting,
 }) => SendParams(
   sendMax: max,
+  expectedFeeBaseUnits: expectedFee,
   beforeBroadcast: beforeBroadcast,
   onBroadcastStarting: onBroadcastStarting,
   coinType: 'NEAR',
@@ -224,6 +226,33 @@ void main() {
     expect(result.txHash, isNull);
     expect(prepared, isFalse);
     expect(api.sends, 0);
+  });
+  test('changed reviewed fee stops before signing or persistence', () async {
+    final api = Api();
+    final signer = Signer();
+    var prepared = false;
+    final result = await NearSender(trustdart: signer, apiFactory: (_) => api)
+        .send(
+          params(
+            expectedFee: BigInt.one,
+            beforeBroadcast: (_) async {
+              prepared = true;
+            },
+          ),
+        );
+    expect(result.success, isFalse);
+    expect(signer.signs, 0);
+    expect(prepared, isFalse);
+    expect(api.sends, 0);
+  });
+  test('matching reviewed fee preserves transfer', () async {
+    final api = Api();
+    final result = await NearSender(
+      trustdart: Signer(),
+      apiFactory: (_) => api,
+    ).send(params(expectedFee: NearApi.transferGasReserve));
+    expect(result.success, isTrue);
+    expect(api.sends, 1);
   });
   test('native payload uses signer fields and binary encodings', () async {
     final api = Api();

@@ -1,3 +1,4 @@
+import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/services/egld_quote_service.dart';
 import 'package:n42_wallet/features/wallet/services/cardano_quote_service.dart';
 import 'package:n42_wallet/features/wallet/utils/cardano/transfer_plan.dart';
@@ -46,6 +47,7 @@ part 'wallet_chain_send_memo_widgets.dart';
 class WalletChainSendMemo extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final XlmApi? stellarApi;
+  final NearApi Function(bool)? nearApiFactory;
   final CardanoQuoteService? cardanoQuotes;
   final EgldQuoteService? egldQuotes;
   final Future<SendResult> Function(SendParams)? transactionSender;
@@ -58,6 +60,7 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
     super.key,
     this.transactionSender,
     this.stellarApi,
+    this.nearApiFactory,
     this.cardanoQuotes,
     this.egldQuotes,
     this.persistTransaction,

@@ -1640,3 +1640,7 @@ Added NEAR to preparation/dispatch and exact-row release paths, with canonical B
 ### Batch 219 — NEAR final history recovery
 
 Selected-network FINAL receipt queries now resolve the persisted NEAR row only when hash, sender, receiver and exact native Transfer amount match. Unknown responses remain pending. 147 API/resolver/session/SQLite cases pass, including reopen-to-final-resolution. No live transaction or production acceptance is implied; fee/native/device/release gaps remain. See current reconciliation.
+
+### Batch 220 — NEAR confirmation consistency
+
+Replaced the memo page's fixed gas-unit-as-fee display with network-priced reserve preparation. Max preserves storage reserve, and sender enforces the reviewed reserve before signing. Conservative 300 TGas remains; exact protocol fee estimation is explicitly unfinished. Evidence and limitations are recorded in the reconciliation.

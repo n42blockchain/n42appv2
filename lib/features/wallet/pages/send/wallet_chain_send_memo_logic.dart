@@ -61,6 +61,64 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     await loadBalance();
   }
 
+  bool get _isNearNative =>
+      widget.coinModel.config.coinType == 'NEAR' &&
+      !widget.coinModel.config.isContract;
+  Object? _nearContext;
+  int _nearVersion = 0;
+  bool get _hasNearQuote => _nearContext == _formContext;
+
+  Future<bool> prepareNearQuote({bool maximum = false}) async {
+    _nearContext = null;
+    final opening = _formContext;
+    final version = ++_nearVersion;
+    bool current() =>
+        mounted && opening == _formContext && version == _nearVersion;
+    try {
+      final api =
+          widget.nearApiFactory?.call(widget.coinModel.isTest) ??
+          NearApi(isTest: widget.coinModel.isTest);
+      final balance = await api.getTransferBalance(
+        widget.coinModel.address.toString(),
+      );
+      if (!current()) return false;
+      if (balance.error) throw const FormatException('Balance unavailable');
+      final funds = balance.data as Map;
+      final available =
+          (funds['balance'] as BigInt) - (funds['storageReserve'] as BigInt);
+      final price = await api.getGasPrice();
+      if (!current()) return false;
+      if (price.error) throw const FormatException('Gas price unavailable');
+      final unitPrice = price.data as BigInt;
+      if (unitPrice <= BigInt.zero) {
+        throw const FormatException('Invalid gas price');
+      }
+      final fee = unitPrice * NearApi.transferGasReserve;
+      final amount = maximum ? available - fee : transferValue;
+      if (amount <= BigInt.zero || amount + fee > available) {
+        setState(() => amountError = S.of(context).g_key_47);
+        return false;
+      }
+      if (maximum) {
+        transferValue = amount;
+        valueCtrl.text = toEther(amount.toString(), 24).toString();
+      }
+      totalGasPrice = fee;
+      gasPrice = unitPrice;
+      gas = NearApi.transferGasReserve;
+      _nearContext = _formContext;
+      amountError = '';
+      errorMessage = '';
+      setState(() {});
+      return true;
+    } catch (_) {
+      if (current()) {
+        setState(() => errorMessage = S.of(context).g_audit_quote_changed);
+      }
+      return false;
+    }
+  }
+
   bool get _isEgldNative =>
       widget.coinModel.config.coinType == 'EGLD' &&
       !widget.coinModel.config.isContract;
@@ -220,6 +278,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       load = Load.loading;
       _stellarFunds = null;
       _egldQuote = null;
+      _nearContext = null;
+      _nearVersion++;
     });
     var ok = false;
     try {
@@ -301,6 +361,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         (!_isStellarNative &&
             !_isCardanoNative &&
             !_isEgldNative &&
+            !_isNearNative &&
             widget.coinModel.coin['isContract'] != true &&
             valueBi + totalGasPrice > widget.coinModel.balance)) {
       amountError = S.of(context).g_key_47;
@@ -396,6 +457,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       return;
     }
 
+    if (_isNearNative && !await prepareNearQuote()) {
+      if (mounted) setState(() => load = Load.finish);
+      return;
+    }
     if (_isEgldNative && !await prepareEgldQuote()) {
       if (mounted) setState(() => load = Load.finish);
       return;
@@ -511,7 +576,10 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           path: path,
           sendMax: false,
           expectedFeeBaseUnits:
-              (_isStellarNative || _isCardanoNative || _isEgldNative)
+              (_isStellarNative ||
+                  _isCardanoNative ||
+                  _isEgldNative ||
+                  _isNearNative)
               ? trModel.gasPrice
               : null,
           isTest: widget.coinModel.isTest,
@@ -655,6 +723,17 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   Future<void> maxTag() async {
+    if (_isNearNative) {
+      if (load == Load.loading) return;
+      setState(() => load = Load.loading);
+      try {
+        await prepareNearQuote(maximum: true);
+      } finally {
+        if (mounted) setState(() => load = Load.finish);
+      }
+      return;
+    }
+
     if (_isEgldNative) {
       if (load == Load.loading) return;
       setState(() => load = Load.loading);

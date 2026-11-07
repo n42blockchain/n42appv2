@@ -131,8 +131,11 @@ class NearSender implements ChainSender {
     if (gasPrice <= BigInt.zero || chainBalance < BigInt.zero) {
       return const SendResult.fail('Invalid NEAR balance or gas price');
     }
-    final gasUnits = BigInt.from(300000000000000); // Existing conservative 300 TGas reserve; fee estimation remains separate.
-    final totalGas = gasPrice * gasUnits;
+    final totalGas = gasPrice * NearApi.transferGasReserve;
+    if (params.expectedFeeBaseUnits != null &&
+        params.expectedFeeBaseUnits != totalGas) {
+      return SendResult.fail(S.current.g_audit_quote_changed);
+    }
 
     BigInt valuePrice =
         params.valueWeiOverride ??

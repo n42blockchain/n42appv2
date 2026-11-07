@@ -8,6 +8,8 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// NEAR Protocol API
 class NearApi {
+  // Conservative reserve, not the exact gas burned by a native transfer.
+  static final transferGasReserve = BigInt.from(300000000000000);
   final bool isTest;
   final Future<dynamic> Function(String, Map<String, dynamic>)? request;
   late final String _baseUrl;
