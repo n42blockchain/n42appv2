@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 231: archive scans remove SDK-confirmed redactions from storage/FTS; live search excludes them. 48 Chat tests and 51 host checks pass. Pin f261cc62. Continuous remote redaction synchronization and durable tombstones remain open; no release/full-suite claim.
+
+
 > Batch 230: visible search results now clear on wired authentication and selected-owner durable history-clear events; pending work is invalidated and listeners released. 42 Chat tests and 51 host checks pass. Pin dbda9b3e. Server redactions/remaining history semantics, full regression, native login and release are still open.
 
 

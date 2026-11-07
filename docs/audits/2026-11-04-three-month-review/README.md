@@ -1689,3 +1689,8 @@ Session guards now cover directory/public-room responses and timeline/history se
 ### Batch 230 — Proactive visible search invalidation
 
 Production DI wires authentication and selected-owner history-clear events into a dedicated SearchBloc invalidation event. Old results clear without reading another session history; pending requests and debounce cannot restore them. Close releases streams. Chat dbda9b3e passes 42 related tests and scoped analysis; wallet host 51 pass. Server redaction/live account-switch timing and remaining release/full-suite work are not closed.
+
+
+### Batch 231 — Known redactions in archive/search
+
+Two SQLite regressions reproduced redacted insertion and retained plaintext. Archive scans now reconcile SDK-confirmed redactions with FTS cleanup; live searches exclude redacted events. Chat f261cc62 passes 48 related tests; analysis has two existing infos only. Wallet host 51 pass. Continuous redaction synchronization, tombstones, archive account lifecycle and production/release acceptance remain open.

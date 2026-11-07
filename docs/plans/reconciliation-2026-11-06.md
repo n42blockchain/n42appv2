@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Reconcile known redactions during archive scans — batch 231
+
+- Reproduced two real-SQLite failures: SDK-redacted events were inserted on first archive and existing plaintext survived subsequent insert-or-ignore scans (`/tmp/n42-chat-b231-before.log`). Archive scans now delete rows for SDK-confirmed redactions before filtering, allowing the existing FTS trigger to remove indexed text; redacted events cannot be archived again by that scan. Metadata updates use actual row counts. Live timeline search excludes redacted events even with a matching stale body.
+- Chat `f261cc62a10ecfcb7ac31429f44944b835ab22a3` committed/pushed. **48 related tests pass**, including three new cases proving removal, exclusion and preservation of unrelated data (`/tmp/n42-chat-b231-final.log`). Analysis has no errors/warnings and two existing constructor infos (`/tmp/n42-chat-b231-analysis.log`).
+- Wallet pub get exits zero; only Chat lock ref changes and exact Git cache is confirmed. **51 host checks pass** (`/tmp/n42-wallet-b231-host.log`, exit 0). Baseline unrelated/untracked artifacts remain preserved.
+- This is scan-time reconciliation, not continuous remote-redaction synchronization. Unloaded events, durable tombstones against stale imports/reinsertion, archive account lifecycle and real-server acceptance remain open. Native login/current-source full regression/new release are also unfinished. No live message, transaction, device action, deployment or upload.
+
+
 ### Proactively invalidate visible search results — batch 230
 
 - SearchBloc accepts lifecycle streams and uses a dedicated invalidation event to clear results without loading history. Receipt invalidates both search generation and history revision, so pending requests/errors/debounce cannot restore the prior context. Close cancels listeners. Production DI wires AuthBloc status/user transitions, repository login/current-account invalidation and selected-owner durable chat-history clear events.
