@@ -22,3 +22,12 @@ Wallet skips require `N42_PQ_LIBRARY`. Chat skips require a disposable-account s
 | `/tmp/n42-chat-full-20261107.log` | `6816d79de761ca37f09ca29e43497323064a740a29295549af95a67d6380ec72` |
 | `/tmp/n42-wallet-analyze-full-20261107.log` | `fae7ae550e0070a82149932d7712b7c58d3c5c0249f0725dc1c3cd62b7c3b92f` |
 | `/tmp/n42-chat-analyze-full-20261107.log` | `7f47ef3c587cbb75817427fda37a254a750f500a69136a34563324097ecbf847` |
+
+## Native Falcon follow-up
+
+Ran `FLUTTER_BIN=/Users/jieliu/.codex/toolchains/flutter-3.47.8/flutter/bin/flutter bash scripts/test_falcon_native.sh`, exit 0. The script builds the host Rust library with the lockfile and an explicit host target in a separate output directory; packaged iOS/Android artifacts are not replaced.
+
+Rust: one real-signature binding test passed. Flutter Falcon directory: 21 tests passed, no skips. This executes the native suites skipped in the full run, including real FFI signing, encrypted backup/password/account scope and page confirmation/account-change boundaries. Network tests use injected RPC fixtures; this does not establish real node transaction acceptance or mobile binary/device compatibility.
+
+Log: `/tmp/n42-falcon-native-20261107.log`.
+SHA-256: `dd1e283e600f27dd86afffa167347e8a4f042b4d220213c26478816dd41a3544`.
