@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-07",
+  "chatSource": "0b36bb32f07cf2b353639af8f51cd251f318dec1",
+  "problem": "A delayed display-name update returned success and wrote the shared profile cache after account replacement or logout.",
+  "regressionBefore": {
+    "failed": 2,
+    "passed": 2
+  },
+  "regressionAfter": {
+    "passed": 34,
+    "failed": 0,
+    "scope": "Auth repository implementation and contract tests"
+  },
+  "analysis": "No issues found",
+  "protection": "Capture client, user, device and token; recheck after the request before caching success. Reject completion after disposal or logout.",
+  "logSha256": {
+    "before": "523413b3faaee85bd74f690f351d93c6d62865c37db42c492b9fe967d9d72d16",
+    "after": "26e153e359cc853069deb869e0247befc40454a48d0538df274f3e1cdb78b8f1",
+    "analysis": "1459e299e9c4a6cec04c651e71d4cfac21bc6fb8dc0de9c7ff2ecd302ba8e2c8"
+  },
+  "boundaries": [
+    "Does not cancel a profile request already sent to the original server",
+    "Anonymous registration and whole-login generation isolation remain separate",
+    "No real-device or production profile acceptance",
+    "Current full CI 42411468479 predates this Chat runtime change"
+  ],
+  "hostLiveRegression": {
+    "passed": 74,
+    "failed": 0,
+    "logSha256": "79257ee87769f84d03d2f6ab1e9f2a23601ee847af53417c1d1f4c5b1bb81796"
+  }
+}
