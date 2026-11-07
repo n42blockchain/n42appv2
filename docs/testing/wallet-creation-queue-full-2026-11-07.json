@@ -1,0 +1,10 @@
+{
+  "source_commit": "b0d9f0e8d2b9b17d0bef0d63ecbe7bb49e15cadd",
+  "command": "N42_PQ_LIBRARY=<locked host library> flutter test test/ --no-pub --reporter expanded",
+  "passed": 7760,
+  "skipped": 0,
+  "failed": 0,
+  "exit_code": 0,
+  "log_sha256": "b72c9f071c64b4174b472d0729c7ab7cb7da145d788edddf21b00430b725e916",
+  "scope": "Full wallet test suite after Matrix 16, compatible dependencies, form cases and serialized creation. Product/test tree unchanged during this run. Not native device or production acceptance."
+}
