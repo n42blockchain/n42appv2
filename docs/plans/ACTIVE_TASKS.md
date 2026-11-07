@@ -328,3 +328,9 @@
 
 - Production Swift manager: 11/11 controlled notification/locking tests pass after fixing duplicate-callback reentry deadlock and honoring Wi-Fi-only/default download policy. Real iOS model smoke: 8 passed. CI/IPA resource preparation wired; local YAML/shell syntax checked.
 - Real plugin concurrency test separately reproduces first-download cancellation when the plugin replaces its manager. Plugin lifecycle fix and native concurrency rerun remain required before integration.
+
+
+### 2026-11-07 MLKit local integration gates passed
+
+- Plugin-level first-download cancellation reproduced and fixed by retaining a single model manager for plugin lifetime. Combined real native suite: 9 passed, including concurrent downloads plus status polling. Component Swift cases: 11 passed. Host regressions: 125 passed. Final unsigned arm64 device Release build and 15/15 restricted binary payload comparison pass.
+- Supersedes local model ownership/notification/concurrency and merge-regression blockers above. Preserve remaining physical-device, provider/account, media quality and release acceptance gaps; the whole wallet/Chat maturity goal is not complete. Evidence: docs/testing/mlkit-cocoapods-simulator-2026-11-07.md.

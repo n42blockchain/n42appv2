@@ -1502,12 +1502,11 @@ packages:
     source: hosted
     version: "0.17.1"
   google_mlkit_translation:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: google_mlkit_translation
-      sha256: "7404d9401ee3e5d60644da84244ba81a4a037d7857e6d849fb1bda4ae8ac5d98"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/google_mlkit_translation"
+      relative: true
+    source: path
     version: "0.15.1"
   google_sign_in:
     dependency: "direct main"

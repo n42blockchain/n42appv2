@@ -57,3 +57,28 @@ Added scripts/test_mlkit_notifications.py and test/native/mlkit_notifications. T
 Duplicate rejection now unlocks before FlutterResult. The native download condition honors the wifi parameter; absent/invalid values retain Wi-Fi-only behavior. CI runs this Swift suite and prepares checksum-pinned model resources; the IPA builder also prepares models before changing versions or invoking CocoaPods. Workflow YAML and shell syntax checks pass; no remote CI run is claimed. Real iOS model smoke rerun passes eight cases, exit 0 (/tmp/n42-mlkit-native-policy-final-20261107.log). Component logs: /tmp/n42-mlkit-notifications-before-20261107.log and /tmp/n42-mlkit-notifications-final-20261107.log.
 
 A separate real plugin concurrency test reproduces an additional existing issue: the translation plugin replaces GenericModelManager for each request, cancelling the first concurrent download with PlatformException(cancelled). This is not closed by manager-component tests. Keep plugin ownership and its integration fix open.
+
+## Translation plugin ownership and final integration gates
+
+The separate real concurrency probe reproduced PlatformException(cancelled, Model manager deallocated during download) when two fresh model downloads overlapped. The local MIT-licensed google_mlkit_translation 0.15.1 fork now owns one GenericModelManager for the plugin lifetime; checks/downloads/deletes no longer replace and dispose another request's owner. Dart/Android source trees in both local forks were compared byte-for-byte with their published versions and match.
+
+The concurrent case is consolidated into mlkit_native_smoke_test.dart through mlkit_model_concurrency_cases.dart. It requires uncached Spanish and French, starts both downloads, performs a German model-status query while they are pending, requires both download results and installed-model checks to succeed, and checks cleanup return values. Single-model inference, five OCR model loads, face detection and segmentation remain in the same suite. This is real native plugin execution with synthetic data; notification failure/reentry/Wi-Fi mapping uses the separate controlled-boundary Swift suite.
+
+Final local results on the pending ownership patch based on 346efd865, app version 2.5.3+73411:
+
+- Combined real iOS integration: nine passed, zero skipped, exit 0.
+- Host Chat initialization/configuration/SSO/push regressions: 125 passed, exit 0.
+- Controlled production Swift notification suite: eleven passed, exit 0.
+- Device Release compilation: exit 0, Xcode 207.5 seconds, arm64 iphoneos artifact (unsigned). All ten model bundle contents match prepared resources.
+- Device binary verifier: 15/15 match after restricted packaging/metadata normalization.
+- Scoped Dart analysis: no issues. CI YAML, IPA shell syntax and diff checks pass. Remote CI has not been inspected.
+
+CI and IPA resource preparation changes prevent a clean checkout from silently omitting models. These results resolve the local plugin ownership/concurrency and merge-regression gates above. Physical-device install/signing, real non-Latin accuracy, camera/video quality, cellular-network behavior, authenticated Chat/provider/business flows and TestFlight remain separate open acceptance work. No upload or real account operation occurred. The commit hook's following version-only bump does not describe a newly built artifact.
+
+Retained logs and hashes:
+- `/tmp/n42-mlkit-plugin-concurrency-before-20261107.log`: `2ebccedd0bf531a83c11ff42a00fd88fbb4c6c35d5ee3229f6623e0d3a03f64b`.
+- `/tmp/n42-mlkit-plugin-concurrency-after-20261107.log`: `00adaf8bad9c2ba1a19372b09d8486af299e08f539059083bcfadc120d26e58d`.
+- `/tmp/n42-mlkit-combined-final-20261107.log`: `163c65fdb2699fa038d47a148f449182cf308691702c9832e44f6ab9c2fb77c2`.
+- `/tmp/n42-mlkit-host-final-20261107.log`: `176854c36b34478b41822bc1f958c590b49e4cc90ef6ccaa00afb4ef81084f86`.
+- `/tmp/n42-mlkit-device-final-20261107.log`: `091f8d045df291efd5334d0dd2defad63c640af327a58d4c1f30a76cc508f449`.
+- `/tmp/n42-mlkit-notifications-final-20261107.log`: `9c267a81e71b4fb25a2d7cfb0504d5a5bf3605db5d142d8c6c1ec265827a195a`.

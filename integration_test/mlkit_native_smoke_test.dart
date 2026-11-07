@@ -12,6 +12,8 @@ import 'package:image/image.dart' as image;
 import 'package:integration_test/integration_test.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'mlkit_model_concurrency_cases.dart';
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   late Directory directory;
@@ -119,4 +121,5 @@ void main() {
     skip: !const bool.fromEnvironment('N42_MLKIT_DOWNLOAD_MODEL'),
     timeout: const Timeout(Duration(minutes: 5)),
   );
+  registerConcurrentModelTest();
 }

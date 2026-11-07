@@ -1,4 +1,6 @@
 dependency_overrides:
+  google_mlkit_translation:
+    path: packages/google_mlkit_translation
   google_mlkit_commons:
     path: packages/google_mlkit_commons
   dbus: ^0.8.0
