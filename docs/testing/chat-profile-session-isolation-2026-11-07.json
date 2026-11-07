@@ -28,5 +28,15 @@
     "passed": 74,
     "failed": 0,
     "logSha256": "79257ee87769f84d03d2f6ab1e9f2a23601ee847af53417c1d1f4c5b1bb81796"
+  },
+  "fullChatRegression": {
+    "source": "0b36bb32f07cf2b353639af8f51cd251f318dec1",
+    "passed": 8605,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "runnerSuccess": true,
+    "logSha256": "b5cca1ca4e0aa6bdf828147a1505bbfc844372a1d1a6f82d33c381463ea7cd26",
+    "scope": "macOS Flutter complete Chat suite, no coverage measurement; hidden runner setup entries excluded"
   }
 }
