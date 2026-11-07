@@ -146,7 +146,7 @@ jobs:
         id: root_tests
         run: |
           ulimit -n 4096
-          flutter test test/ --coverage --concurrency=4 --machine > test_results.jsonl
+          flutter test test/ --no-pub --coverage --concurrency=4 --machine > test_results.jsonl
           python3 scripts/quality_gate.py tests test_results.jsonl | tee test_output.txt
           cat test_output.txt >> "$GITHUB_STEP_SUMMARY"
 

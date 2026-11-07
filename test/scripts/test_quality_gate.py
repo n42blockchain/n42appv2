@@ -63,6 +63,14 @@ class QualityGateTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             quality_gate.test_result(self.path)
 
+    def test_dependency_resolution_preamble_cannot_be_silently_accepted(self):
+        self.path.write_text('Resolving dependencies...\n' + '\n'.join([
+            json.dumps({'type': 'testDone', 'testID': 1, 'result': 'success'}),
+            json.dumps({'type': 'done', 'success': True}),
+        ]))
+        with self.assertRaises(ValueError):
+            quality_gate.test_result(self.path)
+
     def test_failed_interrupted_empty_and_hidden_errors_cannot_pass(self):
         for events in [[], [{'type': 'done', 'success': True}],
                        [{'type': 'testDone', 'testID': 1, 'result': 'success'}],
