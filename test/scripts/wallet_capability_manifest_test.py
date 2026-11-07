@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 import plistlib
@@ -44,8 +45,10 @@ class ManifestTest(unittest.TestCase):
                     module.generate(path)
             with zipfile.ZipFile(path, 'w') as archive:
                 archive.writestr('assets/flutter_assets/assets/wallet_capabilities.json', (ROOT / module.ASSET).read_bytes())
+            with zipfile.ZipFile(path, 'a') as archive:
+                archive.writestr('assets/payload.bin', b'fixture-payload' * 200000)
             value = module.generate(path)
             self.assertTrue(value['artifactVerified'])
-            self.assertEqual(len(value['artifactSha256']),64)
+            self.assertEqual(value['artifactSha256'], hashlib.sha256(path.read_bytes()).hexdigest())
 
 if __name__ == '__main__': unittest.main()

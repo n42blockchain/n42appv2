@@ -54,7 +54,10 @@ def generate(artifact=None):
         result['artifactVerified'] = True
         result['artifactName'] = artifact.name
         with artifact.open('rb') as stream:
-            result['artifactSha256'] = hashlib.file_digest(stream, 'sha256').hexdigest()
+            digest = hashlib.sha256()
+            for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                digest.update(chunk)
+            result['artifactSha256'] = digest.hexdigest()
     return result
 
 
