@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate preview ownership preflight — batch 275 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b275-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Preview now shares declared-owner validation and restoration warning extraction. Explicit mismatch is refused before the confirmation dialog; ownerless legacy previews expose ownership warnings through the existing warning display.
+- Generated account/server mismatch fixtures and an independent encrypted legacy fixture verify preview behavior. Ninety-two backup tests pass (`/tmp/n42-chat-b275.log`); service analysis has six infos, no errors/warnings.
+- Chat 0f4205a7ea5209f86f4b95eade37b1ce129b9f7b. Localized ownership explanations, complete real-file UI/device restoration, legacy consent policy, metadata authenticity, full history and account isolation remain open.
+
+
 ### Integrate legacy archive warning parity — batch 274 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b274-host.log`); manifest/lock/cache resolve the immutable Chat commit.

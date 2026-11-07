@@ -1921,3 +1921,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Archive and settings restore now share warning extraction. Archive results retain manifest warnings/read-error fallback and warn that ownerless legacy data has no verified account owner.
 - An independent encrypted fixture through temporary SQLite verifies the legacy ownership warning; 92 backup tests pass (`/tmp/n42-chat-b274-final.log`). Scoped service analysis has six infos, no errors/warnings.
 - Chat 4b0c60bfc8e911db8fc84f3fda105db22b823b98. This preserves compatibility with unverified legacy ownership; explicit legacy-owner consent, preview localization, full-history/account isolation and live/device acceptance remain open.
+
+### Integrate preview ownership preflight — batch 275 (2026-11-07)
+
+- Preview now shares declared-owner validation and restoration warning extraction. Explicit mismatch is refused before the confirmation dialog; ownerless legacy previews expose ownership warnings through the existing warning display.
+- Generated account/server mismatch fixtures and an independent encrypted legacy fixture verify preview behavior. Ninety-two backup tests pass (`/tmp/n42-chat-b275.log`); service analysis has six infos, no errors/warnings.
+- Chat 0f4205a7ea5209f86f4b95eade37b1ce129b9f7b. Localized ownership explanations, complete real-file UI/device restoration, legacy consent policy, metadata authenticity, full history and account isolation remain open.
