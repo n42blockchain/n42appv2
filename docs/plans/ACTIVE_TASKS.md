@@ -1,6 +1,6 @@
 # 当前任务与验收台账
 
-> Standalone Chat verification (batch 173): source `ca0a2049` passes 8,103 tests with zero failures and four explicit external-fixture skips; coverage 71.1056%. Includes the real send-button draft-preservation repair. Current wallet dependency is pinned to this fix; the earlier wallet full-suite result remains scoped to its recorded source.
+> Current source check (2026-11-06): wallet `66fc50b8a` pins Chat `90271407613989ccc27e159903382857c3848338`. Both match their fetched upstreams. Chat batch 192 full regression is still running; do not report it as passed. Batch 173 (Chat `ca0a2049`, 8,103 passed / four external skips, 71.1056% coverage) is a historical full-suite baseline, not the current dependency. See the current reconciliation for remaining work and evidence boundaries.
 
 > Latest verification (batch 172): wallet source `5cb2b8a7b` passes 7,271 tests with zero failures/skips; coverage 73.5942% passes the existing 70% gate. Older dated coverage/release statements below are historical, not the current baseline. Open feature and external acceptance items remain active. See [current reconciliation](reconciliation-2026-11-06.md).
 

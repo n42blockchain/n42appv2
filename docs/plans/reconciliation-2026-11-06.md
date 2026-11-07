@@ -1,5 +1,24 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+
+## Interruption check — 2026-11-06, after batch 191
+
+- Fresh fetch: wallet `66fc50b8a` and Chat `90271407` are both 0 ahead / 0 behind their upstreams. Wallet tracked files are clean; the three existing untracked plans and `packages/n42_chat/` remain preserved. Chat has only its existing coverage-file modification. No uncommitted production patch was found in these two active worktrees.
+- Corrected ACTIVE_TASKS.md: its opening paragraph incorrectly described the batch 173 Chat revision as the current pin. Historical full-suite results must not be applied to batches 174–191. These later batches have their recorded focused tests and host integration checks.
+- Batch 192 full Chat regression is active, not interrupted or passed. At this inspection 1,762 visible tests had succeeded, with no final `done` event. Full analysis completed with zero errors/warnings and 361 infos. Logs: `/tmp/n42-chat-b192-full.jsonl`, `/tmp/n42-chat-b192-full.stderr`, `/tmp/n42-chat-b192-analysis.log`. Next: collect final exit/result, archive new LCOV, then restore `/tmp/n42-chat-b192-existing-lcov.info` and verify its SHA-256 `c7e9bebef9c2dbb69d6b298f9161b1043e99939e7f40b7bf46bff6e69153ffde`. Do not start a duplicate full run or restore coverage while it is running.
+
+### Remaining closeout groups
+
+1. **Native identity login:** a fresh read-only capabilities request still returns `google_native_code=false`, Apple/Facebook native providers, and all three Web providers. Native first/repeat/cancel/account-switch, Android handoff and same-DID Matrix acceptance remain open. Web success does not close these items. ID Hub `dev` is clean with no upstream configured; no provider settings were changed.
+2. **Chat behavior:** active-thread clear notification is integrated. Clear during initial loading, proactive search/preview invalidation, old-message redaction synchronization, refresh recovery and bounded cursor retention remain open in Chat MSG-001. Keep that file as the defect ledger; do not convert every historical caveat into a new duplicate issue.
+3. **Wallet audit/recovery:** ADA multi-asset change, XLM surge-fee handling, ambiguous dispatch recovery and remaining AA/hardware/native flow acceptance are not completed by the Chat fixes. Consult the source-specific audit records before implementation.
+4. **Release:** current code has no new verified N42 TestFlight upload, processing or tester availability. The older compiled artifacts do not contain the current revisions. Physical-device QA remains explicitly deferred, not silently passed. Meta public review/deletion acceptance is separate from developer-account login.
+5. **Dependencies/localization:** explicit Web3Auth/SPM, Flutter constraint and MLS dependency holds remain. Catalog checks and prior translation completion do not establish full editorial/RTL/native-screen acceptance.
+6. **Worktrees:** fresh inventory still finds 13 auxiliary wallet trees: seven dirty ancestor heads, five clean non-ancestor heads and one clean ancestor head. No deletion or merge performed. Compare unique patches and preserve dirty files before cleanup; ancestry alone is insufficient.
+7. **Older payment/IAP plans:** receipt verification, account binding, idempotent delivery, refund/restore and external provider acceptance remain historical open work. They are not new November interruptions and must not disappear from the plan.
+
+This check covers the active wallet/Chat repositories, wallet worktree inventory and the public N42 authentication capabilities. It does not claim a fresh audit/deployment of Mintus, every sibling repository, or every historical task.
+
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
 ### Refresh active threads after local clearing — batch 191
