@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-07",
+  "scope": "Offline operator acceptance helper and corrected deployment guidance; no issuer/runtime grant or production configuration change",
+  "checks": [
+    "SDK HS256 signature and required expiry plus strict current-time checks",
+    "Expected issuer, participant identity, SFU room, roomJoin, explicit publish and subscribe grants",
+    "Reject room/ingress administration and extra service grants",
+    "Token via bounded stdin, API secret via bounded controlled file, no credentials/participant/room printed"
+  ],
+  "tests": {
+    "goRaceAllPackages": true,
+    "goVetAllPackages": true,
+    "binaryBuild": true,
+    "policyVariants": 17,
+    "additionalCases": [
+      "Command input/output secrecy and bounds",
+      "Explicit expected publish required",
+      "Unsigned token rejection"
+    ]
+  },
+  "sourceSha256": {
+    "backend/livekit-jwt/cmd/token-check/main.go": "ebfeb79a67bccc0b7eb508954ea667c177664363bfd863420174d21d86a028a0",
+    "backend/livekit-jwt/cmd/token-check/main_test.go": "07f7c4c53ad9c9a27c0d92dd5df1a2dca2de9f204ada5169f0d0fe158ca4a7e7"
+  },
+  "logSha256": "c7f678f1bf748c4324cf2252f802f99694c94a701c40bf2a68371a3c53116b78",
+  "upstream": "https://github.com/element-hq/lk-jwt-service/releases/tag/v0.9.0",
+  "remaining": [
+    "Apply a consistent live-room publish policy to every reachable issuer for the same SFU",
+    "Tuwunel application-service wiring and member rejection remain unverified",
+    "Actual SFU viewer publish rejection and ordinary group-call compatibility",
+    "Native media/background and physical-device acceptance"
+  ]
+}

@@ -2,8 +2,7 @@
 
 面向运维。目标：**观众拿不到可推流的 LiveKit token**，只有该直播间的主播能推流。
 
-当前生产状态是「未限权」——任何进入直播间的人，token 里都带 `CanPublish=true`，
-理论上可以抢推流覆盖主播画面。本文给出改法、部署步骤和验证方法。
+当前生产使用官方 MatrixRTC 授权服务 0.9.0，本目录的 legacy 策略未接入该生产路径。**生产主播/观众发布权限尚未验收**。本目录的隔离测试通过，不代表其它签发端点也受同一策略约束。
 
 ---
 
@@ -12,14 +11,9 @@
 客户端在申请 token 时会带 `role=broadcaster|viewer`，但**这个字段不能作为授权依据**：
 它由客户端自己填，观众把它改成 `broadcaster` 是零成本的事。
 
-真正的问题在服务端：`handler.go` 里签发 token 时写死了
+旧版 legacy 服务曾把 `CanPublish` 写死为 `true`；本目录已改为服务端读取 Matrix 房间状态后决定权限。生产官方服务是另一条签发路径，不能用这里的修复推断其授权结果。
 
-```go
-CanPublish: boolPointer(true),   // 无论 role 是什么
-```
-
-`role` 只被塞进 metadata 做展示，没有参与任何决策。所以**两条签发路径都不限权**
-（详见 §5），限权必须在服务端重做。
+必须检查同一 SFU 接受的全部签发路径。只让正常客户端优先访问受控端点，不能阻止攻击者直接访问另一个端点。
 
 ## 2. 判据：按房间判，不按客户端说的 role 判
 
@@ -71,13 +65,12 @@ CanPublish: boolPointer(true),   // 无论 role 是什么
 其余情况（5xx、超时、200 但响应异常）一律按直播间从严处理。这样失败最多让一个
 群通话参与者暂时用不了麦克风，而不会让任何人劫持直播画面。
 
-**开播时序修正（2026-11-07）**：钱包创建公开直播房时，在同一个 `createRoom` 请求的 `initial_state` 中写入 `n42.live.status: {live:false}`。因此，首次申请 token 前标记已经存在；该房间从创建起即按直播间限权，且未写入开播心跳，不会提前显示正在直播。本修正在后续候选版本生效，已上传的 73424 不包含它。生产官方授权路径仍需要独立限权接入，不能由客户端标记代替服务端检查。
+**开播时序修正（2026-11-07）**：钱包创建公开直播房时，在同一个 `createRoom` 请求的 `initial_state` 中写入 `n42.live.status: {live:false}`。因此，首次申请 token 前标记已经存在；该房间从创建起即按直播间限权，且未写入开播心跳，不会提前显示正在直播。内部 TestFlight 73425 包含本修正，73424 不包含它。生产官方授权路径仍需要独立限权接入，不能由客户端标记代替服务端检查。
 
 ## 3. 代码改动（已完成，在本目录）
 
 - `matrix.go`：新增 `RoomCreator()`，调
-  `GET /_matrix/client/v3/rooms/{roomId}/state/m.room.create/` 取创建者。
-  兼容 room v11+（该版本不再有 `creator` 字段，改用事件的 `sender`）。
+  `GET /_matrix/client/v3/rooms/{roomId}/state`，从 `m.room.create`、空 state key 的可信事件外层读取 `sender`。单条 state 内容不是事件外层；room v11+ 的内容不再包含 `creator`。
 - `handler.go`：新增 `canPublishFor()` 实现上表；签发改为
   `CanPublish: boolPointer(request.canPublish)`，决策在服务端完成，
   `canPublish` 是私有字段、不从请求体解析，客户端塞不进来。
@@ -89,7 +82,7 @@ CanPublish: boolPointer(true),   // 无论 role 是什么
 
 `go test ./...` 全绿。
 
-## 4. 部署步骤
+## 4. 候选构建与上线前提
 
 ```bash
 cd backend/livekit-jwt
@@ -99,38 +92,28 @@ docker build -t n42-livekit-jwt:role-enforced .
 
 环境变量沿用现有配置（见 `README.md`），本次改动**没有新增配置项**。
 
-上线后确认服务在 `/livekit/jwt` 路径上应答 POST（GET 契约仍兼容）。
+候选服务兼容 `/livekit/jwt` 的 POST/GET；路径可达仅证明协议接通。上线前必须完成下一节的全部签发路径约束和回归，不能仅部署此端点就标记限权完成。
 
 > **注意**：本服务需要用请求者的 Matrix access token 去查房间 state。
 > 这与它已有的 `whoami` / 成员校验用的是同一个 token 和同一个 homeserver，
 > 不需要额外授予服务任何权限，也不需要 admin token。
 
-## 5. 关于生产当前用的是哪个服务（关键，请先确认）
+## 5. 生产签发路径必须统一受控
 
-`m.si46.world` 目前对外提供的是 **Element MatrixRTC Authorization Service**
-（`/livekit/jwt/sfu/get`），不是本目录这个 legacy 服务。这带来一个限制：
+生产发现地址指向 Element MatrixRTC Authorization Service 的 `/livekit/jwt/sfu/get`。客户端带 `role` 时优先尝试 legacy，旧端点明确不存在时才回退官方协议；这个顺序只是兼容策略，**不是访问控制**。
 
-**官方 MatrixRTC 契约不接收自定义 `role` 字段**，它只认 Matrix 房间成员身份，
-给所有成员签发同等 token。也就是说——**只要走官方端点，就没有任何办法区分主播和观众。**
+只新增 `/livekit/jwt`，同时保留可为同一 SFU 房间签发更宽权限的官方端点，仍可绕过 legacy 策略。上线方案需要先列清所有入口，包括 legacy、standalone、启用的 C-S/S-S 路由及其它持有该 SFU 签发密钥的服务，并让直播发布判据在所有入口一致。也可采用独立 SFU/签发密钥隔离，但必须先验证旧客户端、发现配置和群通话兼容性。不要直接关闭现有群通话入口来伪造策略完成。
 
-客户端的取舍是：带 role 的请求**优先走 legacy 端点**，只有 legacy 明确不存在
-（301/308/404/405/410）才回退官方端点。因此：
+官方 [0.9.0 发布说明](https://github.com/element-hq/lk-jwt-service/releases/tag/v0.9.0) 的 standalone 成员校验有前提：以 application service 运行，且唯一 full-access homeserver 与关联服务器一致。这个成员校验不等于 N42 的“仅房间创建者可发布”。Tuwunel 的 AS 接入、成员拒绝、主播/观众及普通群通话都需要独立验证。生产没有配置或实测证据时不能宣称成立。
 
-- **部署本服务到 `/livekit/jwt` → 客户端自动走它，限权立即生效，无需改客户端、无需发版。**
-- 不部署 → 客户端回退官方端点 → 直播能用但**不限权**（即今天的状态）。
-
-所以推荐路径就是把这个服务部署起来。若组织上决定长期只维护官方服务，
-那么限权需要另做：要么在官方服务前加一层代理按房间状态改写 grant，
-要么 fork 官方服务加入房间创建者判定——两者都比部署本服务成本高。
+本次记录与离线工具不修改生产路由、签发密钥或服务配置。
 
 ## 6. 上线验收（务必实测，别只看代码）
 
 需要两个账号、两台设备（或一台 + 一个浏览器）。
 
 1. **主播能推流**：A 开播，B 进房。B 应能看到 A 的画面。
-2. **观众推不了流**（核心项）：用 B 的身份申请一次 token，把返回的 JWT
-   贴到 <https://jwt.io> 解开，确认 `video.canPublish` 为 `false`、
-   `video.canSubscribe` 为 `true`。
+2. **观众推不了流**：分别向每个可达签发端点申请 B 的 token。在本机验证签名、有效期、预期 issuer/identity/room、`canPublish=false` 和 `canSubscribe=true`；不得把有效 JWT 或 API secret 上传第三方解码网站。随后以 B 尝试实际发布，确认 SFU 拒绝。仅查看 payload 不能证明签名有效或发布被拒绝。
 3. **伪造 role 挡得住**：手工发一个请求，`identity` 用 B、`role` 填
    `broadcaster`、`conversation_id` 填 A 的房间（**再把 `role` 整个删掉重发一次，
    两次的 `canPublish` 都必须是 `false`**——省略 role 曾经是一条绕过）：
@@ -143,15 +126,25 @@ docker build -t n42-livekit-jwt:role-enforced .
           "conversation_id":"!live:m.example","role":"broadcaster","video":true}'
    ```
 
-   解开返回的 JWT，`canPublish` 必须是 `false`。**这一项通过才算真正限权。**
+   离线验证返回的 JWT，`canPublish` 必须是 `false`。还须重复测试官方及其它可达签发路径；任一路径得到更宽授权，整项验收仍失败。
    （`room` 的算法：`mx_` 前缀 + `conversation_id` 里所有非字母数字字符替换成 `_`。
    例：`!live:m.example` → `mx__live_m_example`。不匹配会返回 `invalid_request`。）
 4. **群通话没被误伤**：正常打一通聊天群通话，双方都能出声出画。
 
+### 本机 JWT 验证工具
+
+从本目录构建，token 只从 stdin 输入；secret 从受控文件读取，不放入命令行、仓库或日志：
+
+```bash
+go build -o /tmp/n42-token-check ./cmd/token-check
+/tmp/n42-token-check --secret-file /controlled/livekit-secret --issuer EXPECTED_API_KEY --identity EXPECTED_PARTICIPANT --room EXPECTED_SFU_ROOM --publish=false < /controlled/viewer-token.jwt
+```
+
+预期身份和房间必须来自测试场景，不能从待检查 token 自行抄出作为唯一依据。文件在本机受控保存。工具使用现有 LiveKit SDK 验签，要求当前有效、明确的媒体 grant，拒绝 room/ingress 管理及额外服务权限。输出只含校验结果，不回显 token、secret、身份或房间。它不证明生产路由没有旁路、不代表服务端实际拒绝推流，也不替代两端音视频与群通话回归。
+
 ## 7. 回滚
 
-改动只在这一个服务内，回滚即部署上一个镜像。回滚后行为退回「不限权」，
-直播功能本身不受影响。
+回滚必须同时核对镜像、路由和签发密钥配置。恢复旧签发路径可能重新暴露发布权限；应在记录中恢复“权限未验收”状态，不能以直播仍可用作为策略通过的证据。保留群通话兼容性及各端点负向验证结果。
 
 ## 8. 遗留
 
