@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Refresh active threads after local clearing — batch 191
+
+- The clear store emits owner/room-hashed notifications only after durable acknowledgement. Other instances in the same isolate can observe them. The production repository binds notifications to the captured account/session. ThreadBloc subscribes after initialization, rereads retained visibility without waiting for a Matrix message, and detaches both subscriptions on reinitialize/dispose/close.
+- Real store/repository/BLoC tests cover immediate clearing, owner/room isolation and disposal; rejected platform writes produce no notification. Store/merge/lifecycle suites: **24 pass**, exit 0 (/tmp/n42-chat-b191-final.log). Scoped analysis: zero errors/warnings, fourteen infos (/tmp/n42-chat-b191-analysis.log). Chat `90271407613989ccc27e159903382857c3848338` is pushed and pinned. Dependency resolution changes only Chat; three wallet host fixtures pass (/tmp/n42-wallet-b191-host.log).
+- Remaining: clearing during initial load, proactive search/preview/account-switch invalidation, cross-isolate/process notification, older redaction synchronization, refresh recovery and cursor retention bounds. Broader native login, wallet recovery/dependencies/payments and current-source release remain open. Fresh full regression is due after the recent thread/search/store changes; prior coverage is not current-source coverage. No server deletion/cross-device/live/release claim.
+
 ### Preserve and revalidate retained thread history — batch 190
 
 - Partial live snapshots now merge by event ID, retain loaded older replies, update duplicates and preserve chronological order. The production repository revalidates all retained roots/replies against local account/room clearing. State can explicitly remove a cleared root. Newer stream revisions supersede delayed results; page/state changes during visibility reads cause revalidation instead of lost history.
