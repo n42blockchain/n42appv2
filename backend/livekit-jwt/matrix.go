@@ -107,50 +107,56 @@ func (m *matrixClient) RequireJoined(
 // "who is the broadcaster of this live room". The Flutter client anchors the
 // broadcaster's video track on the same field, so both sides agree without
 // trusting any client-supplied role.
-func (m *matrixClient) RoomCreator(
-	ctx context.Context,
-	accessToken string,
-	roomID string,
-) (string, error) {
-	endpoint := m.homeserver + "/_matrix/client/v3/rooms/" +
-		url.PathEscape(roomID) + "/state/m.room.create/"
+type createStateEvent struct {
+	Type     string          `json:"type"`
+	StateKey *string         `json:"state_key"`
+	Sender   string          `json:"sender"`
+	Content  json.RawMessage `json:"content"`
+}
+
+func (e createStateEvent) creator() string {
+	if e.Type != "m.room.create" || e.StateKey == nil || *e.StateKey != "" || len(e.Content) == 0 {
+		return ""
+	}
+	return strings.TrimSpace(e.Sender)
+}
+
+func (m *matrixClient) RoomCreator(ctx context.Context, accessToken, roomID string) (string, error) {
+	// The single-state endpoint returns content by default. Older servers may
+	// ignore format=event, and client content can imitate an event envelope.
+	// Use the state-list endpoint, whose array entries are server envelopes.
+	endpoint := m.homeserver + "/_matrix/client/v3/rooms/" + url.PathEscape(roomID) + "/state"
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return "", fmt.Errorf("%w: %v", errMatrixUpstream, err)
 	}
 	request.Header.Set("Authorization", "Bearer "+accessToken)
-
 	response, err := m.httpClient.Do(request)
 	if err != nil {
 		return "", fmt.Errorf("%w: %v", errMatrixUpstream, err)
 	}
 	defer response.Body.Close()
-	if response.StatusCode == http.StatusUnauthorized || response.StatusCode == http.StatusForbidden {
+	switch response.StatusCode {
+	case http.StatusUnauthorized, http.StatusForbidden:
 		return "", errMatrixUnauthorized
-	}
-	if response.StatusCode == http.StatusNotFound {
+	case http.StatusNotFound:
 		return "", errMatrixNoCreator
+	case http.StatusOK:
+	default:
+		return "", fmt.Errorf("%w: room state returned %d", errMatrixUpstream, response.StatusCode)
 	}
-	if response.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("%w: create state returned %d", errMatrixUpstream, response.StatusCode)
+	// Bound upstream data and keep failure closed for malformed/oversized state.
+	decoder := json.NewDecoder(io.LimitReader(response.Body, 16<<20))
+	var events []createStateEvent
+	if err = decoder.Decode(&events); err != nil {
+		return "", fmt.Errorf("%w: invalid room state response", errMatrixUpstream)
 	}
-
-	var body struct {
-		Creator string `json:"creator"`
-		Sender  string `json:"sender"`
+	for _, e := range events {
+		if creator := e.creator(); creator != "" {
+			return creator, nil
+		}
 	}
-	if err := decodeResponseJSON(response.Body, &body); err != nil {
-		return "", fmt.Errorf("%w: invalid create state response", errMatrixUpstream)
-	}
-	// room v11+ drops the creator field and the sender carries it instead.
-	creator := strings.TrimSpace(body.Creator)
-	if creator == "" {
-		creator = strings.TrimSpace(body.Sender)
-	}
-	if creator == "" {
-		return "", errMatrixNoCreator
-	}
-	return creator, nil
+	return "", errMatrixNoCreator
 }
 
 // RoomIsLive reports whether the room is an N42 live room.

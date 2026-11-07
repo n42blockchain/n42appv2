@@ -164,3 +164,9 @@ docker build -t n42-livekit-jwt:role-enforced .
   服务端读该 state 决定 `canPublish`。当前实现留了扩展点：
   判定集中在 `canPublishFor()` 一个函数里。
 - LiveKit 侧的 grant 由 LiveKit server 强制执行，不需要额外配置。
+
+## 2026-11-07：房间创建者读取修正
+
+`RoomCreator` 现从 `GET /rooms/{roomId}/state` 的 `m.room.create` 事件外层读取 `sender`，同时要求空 state key。不再把单条 state 接口返回的内容字段当成事件外层；旧服务端可能忽略 `format=event`，内容甚至可以伪装成完整事件。读取失败、错误事件或缺失发送者均拒绝推流授权。
+
+隔离 Tuwunel 1.9.4 的 v11 房间已实测：单条 state 内容没有 creator/sender，完整 state 的事件发送者与创建账号一致；临时账号已停用。本修正仅在仓库 legacy 服务完成，生产仍是官方 MatrixRTC 授权服务。官方路径的主播/观众权限不能据此认定已完成限权。
