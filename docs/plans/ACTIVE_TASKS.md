@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 249: Matrix locked/deactivated login and restore errors retained without destructive logout. Chat a3e2ea87; 97 Chat and 51 host tests pass. Server remains Tuwunel 1.9.3; 1.9.4 sync compatibility and backup/restore rehearsal remain open.
+
 > Batch 248: archive export no longer loses timestamp ties; 92 Chat and 51 host tests pass, pin 8136c112. Backend upgrade added to active scope: live Tuwunel 1.9.3, candidate 1.9.4, frontend SDK 15.0.0. Compatibility/rehearsal/deployment remain open; see testing/matrix-upgrade-2026-11-06.md.
 
 > Batch 247: incremental checkpoints are account-and-room-set scoped; partial read failures warn without advancing progress. Three pre-fix failures; 86 related and six final-source focused tests pass. Chat pin 0e6c720e. Full account partitioning, pagination/history completeness, native login and release remain open.

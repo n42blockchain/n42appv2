@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Matrix account restriction compatibility — batch 249
+
+- Live read-only federation probe still reports Tuwunel 1.9.3; official latest stable is 1.9.4. No server restart or upgrade performed.
+- Chat a3e2ea8700492a17d6f5c7097fcedc716e3118a8 preserves locked/deactivated errors across password/token login and stored-session restore. AuthBloc exposes the restore error without requesting logout or removing credentials.
+- Six pre-fix failures reproduced; 97 Chat repository/bloc tests pass (`/tmp/n42-chat-b249-after.log`). Scoped analysis has 11 existing infos, no errors/warnings. Wallet resolves the exact new cache; 51 host tests pass (`/tmp/n42-wallet-b249-host.log`).
+- Sync-time locking/unlocking, UIAA, E2EE and isolated backup/restore rehearsal remain open. These login tests do not prove production upgrade compatibility. See testing/matrix-upgrade-2026-11-06.md.
+
+
 ### Preserve archive pagination ties — batch 248
 
 - Real SQLite regression exported only 501 of 1,203 rows before the fix (`/tmp/n42-chat-b248-before.log`). Database/service now support a deterministic timestamp/event-ID cursor; incremental export uses both. Timestamp-only callers retain existing semantics.
