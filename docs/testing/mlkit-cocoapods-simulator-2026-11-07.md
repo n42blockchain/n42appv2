@@ -82,3 +82,11 @@ Retained logs and hashes:
 - `/tmp/n42-mlkit-host-final-20261107.log`: `176854c36b34478b41822bc1f958c590b49e4cc90ef6ccaa00afb4ef81084f86`.
 - `/tmp/n42-mlkit-device-final-20261107.log`: `091f8d045df291efd5334d0dd2defad63c640af327a58d4c1f30a76cc508f449`.
 - `/tmp/n42-mlkit-notifications-final-20261107.log`: `9c267a81e71b4fb25a2d7cfb0504d5a5bf3605db5d142d8c6c1ec265827a195a`.
+
+## Main integration and remote CI follow-up
+
+5591d6342 was fast-forwarded to master and pushed; the main worktree's locked pub resolution, model preparation and CocoaPods symlinks were refreshed successfully. Existing untracked plans and packages/n42_chat were preserved.
+
+CI Pipeline run 42360531743 failed in the combined localization/script step: localization passed, but the IPA helper fixture had not provided the newly required model-preparation helper. Updated the isolated fixture and added a failure-path check that preparation failure prevents version mutation and build dispatch. All 50 script tests and localization audit pass locally. No localization baseline was weakened.
+
+Also corrected native Swift/model preparation steps accidentally inserted in the Android build job: they now belong to the macOS iOS build job. The separate iOS integration workflow now prepares models too. YAML structure checks confirm Swift runs only on macOS and both iOS build/integration jobs prepare models; Android has no MLKit resource preparation step. Remote CI acceptance requires the new push results, not the earlier failed run or local syntax checks.

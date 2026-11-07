@@ -334,3 +334,9 @@
 
 - Plugin-level first-download cancellation reproduced and fixed by retaining a single model manager for plugin lifetime. Combined real native suite: 9 passed, including concurrent downloads plus status polling. Component Swift cases: 11 passed. Host regressions: 125 passed. Final unsigned arm64 device Release build and 15/15 restricted binary payload comparison pass.
 - Supersedes local model ownership/notification/concurrency and merge-regression blockers above. Preserve remaining physical-device, provider/account, media quality and release acceptance gaps; the whole wallet/Chat maturity goal is not complete. Evidence: docs/testing/mlkit-cocoapods-simulator-2026-11-07.md.
+
+
+### 2026-11-07 MLKit integrated; CI follow-up
+
+- 5591d6342 fast-forwarded/pushed to master; main dependency/model/native-plugin setup succeeds and prior untracked work is retained.
+- Remote CI exposed an outdated IPA fixture (localization itself passed); fixed fixture and tested preparation-failure ordering. All 50 script tests pass. Moved Swift/model preparation to macOS jobs and added preparation to the separate iOS integration workflow; structural YAML assertions pass. New remote CI results remain to be verified.

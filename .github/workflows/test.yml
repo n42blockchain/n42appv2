@@ -126,6 +126,9 @@ jobs:
       - name: Prepare synthetic Firebase resources
         run: python3 scripts/prepare_ci_firebase.py
 
+      - name: Prepare checksum-pinned MLKit models
+        run: python3 scripts/prepare_mlkit_resources.py
+
       - name: Run iOS Simulator
         run: |
           xcrun simctl list devices available --json > "$RUNNER_TEMP/ios-simulators.json"

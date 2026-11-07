@@ -30,6 +30,11 @@ class ReleaseBuilderTest(unittest.TestCase):
             shutil.copy2(ROOT / name, self.root / name)
         (self.root / 'scripts/build_ipa.sh').write_text(
             '#!/bin/bash\nexec flutter ipa-helper "$@"\n')
+        (self.root / 'scripts/prepare_mlkit_resources.py').write_text(
+            'import os, sys\nfrom pathlib import Path\n'
+            'code = int(os.environ.get("FIXTURE_MODEL_EXIT", "0"))\n'
+            'if code: sys.exit(code)\n'
+            'Path("models-prepared").write_text("ready")\n')
         self.calls = self.root / 'calls.jsonl'
         flutter = self.root / 'flutter'
         flutter.write_text(r'''#!/usr/bin/env python3
@@ -147,12 +152,25 @@ if sys.argv[1:3] in [["build", "apk"], ["build", "appbundle"]]:
         self.env['FIXTURE_EXIT'] = '23'
         result = self.run_build('--no-bump', script='scripts/build_ipa.sh')
         self.assertEqual(result.returncode, 23, result.stderr)
+        self.assertTrue((self.root / 'models-prepared').is_file())
         command = self.commands()[0]
         self.assertEqual(command[:2], ['build', 'ipa'])
         self.assertIn('--release', command)
         self.assertIn('--export-options-plist=ios/ExportOptions-AppStore.plist', command)
         self.assertIn('--build-number=123', command)
         self.assertIn('2.4.8+123', self.pubspec.read_text())
+
+    def test_model_prepare_failure_stops_before_version_bump_and_build(self):
+        shutil.copy2(ROOT / 'scripts/build_ipa.sh', self.root / 'scripts/build_ipa.sh')
+        xcrun = self.root / 'xcrun'
+        xcrun.write_text('#!/bin/bash\necho 27.1\n')
+        xcrun.chmod(0o700)
+        self.env['FIXTURE_MODEL_EXIT'] = '19'
+        before = self.pubspec.read_bytes()
+        result = self.run_build(script='scripts/build_ipa.sh')
+        self.assertEqual(result.returncode, 19, result.stderr)
+        self.assertEqual(self.pubspec.read_bytes(), before)
+        self.assertFalse(self.calls.exists())
 
     def test_outdated_ios_sdk_fails_before_version_bump(self):
         shutil.copy2(ROOT / 'scripts/build_ipa.sh', self.root / 'scripts/build_ipa.sh')

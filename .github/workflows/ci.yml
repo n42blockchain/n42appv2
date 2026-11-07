@@ -456,12 +456,6 @@ jobs:
       - name: Prepare synthetic Firebase resources
         run: python3 scripts/prepare_ci_firebase.py
 
-      - name: Test native model notification lifecycle
-        run: python3 scripts/test_mlkit_notifications.py
-
-      - name: Prepare checksum-pinned MLKit models
-        run: python3 scripts/prepare_mlkit_resources.py
-
       - name: Build APK (Debug)
         env:
           WALLET_CORE_USER: ${{ secrets.WALLET_CORE_USER || github.actor }}
@@ -502,6 +496,12 @@ jobs:
 
       - name: Prepare synthetic Firebase resources
         run: python3 scripts/prepare_ci_firebase.py
+
+      - name: Test native model notification lifecycle
+        run: python3 scripts/test_mlkit_notifications.py
+
+      - name: Prepare checksum-pinned MLKit models
+        run: python3 scripts/prepare_mlkit_resources.py
 
       - name: Build iOS (no codesign)
         run: |
