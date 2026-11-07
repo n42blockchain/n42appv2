@@ -194,10 +194,11 @@ class Web3AuthMpcProvider implements MpcProvider {
   @override
   Future<MpcSignResult> signTransaction(Uint8List serializedTx) async {
     _ensureLoggedIn();
-    // For raw transaction signing, the caller should provide the pre-hashed
-    // transaction. We sign the hash with secp256k1.
+    // The interface accepts the unsigned transaction preimage, not a digest.
+    // Hash it once without the EIP-191 personal-message prefix. The caller
+    // remains responsible for encoding the signature into its transaction.
     final creds = _getCredentials(_privateKey!);
-    final sig = creds.signPersonalMessageToUint8List(serializedTx);
+    final sig = creds.signToUint8List(serializedTx);
     return MpcSignResult(signature: sig, signatureHex: '0x${bytesToHex(sig)}');
   }
 

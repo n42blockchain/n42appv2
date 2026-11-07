@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:web3dart/web3dart.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/mpc/mpc_provider.dart';
@@ -108,6 +109,36 @@ void main() {
     );
     expect(provider.isLoggedIn, isFalse);
   });
+
+  test(
+    'transaction signs the raw EVM preimage without a message prefix',
+    () async {
+      await provider.login(MpcLoginType.google);
+      // EIP-155 unsigned transfer preimage; public deterministic fixture.
+      final preimage = hexToBytes(
+        'ec098504a817c800825208943535353535353535353535353535353535353535'
+        '880de0b6b3a764000080018080',
+      );
+      final result = await provider.signTransaction(preimage);
+      expect(result.signature.length, 65);
+      final signature = MsgSignature(
+        bytesToUnsignedInt(result.signature.sublist(0, 32)),
+        bytesToUnsignedInt(result.signature.sublist(32, 64)),
+        result.signature[64],
+      );
+      final publicKey = ecRecover(keccak256(preimage), signature);
+      final recovered = bytesToHex(keccak256(publicKey).sublist(12));
+      expect(recovered.toLowerCase(), address.toLowerCase());
+      final personal = await provider.signMessage(preimage);
+      expect(result.signature, isNot(orderedEquals(personal.signature)));
+      expect(result.signatureHex, '0x${bytesToHex(result.signature)}');
+      await provider.logout();
+      await expectLater(
+        provider.signTransaction(preimage),
+        throwsA(isA<MpcNotLoggedInException>()),
+      );
+    },
+  );
 
   test('logout clears signing access', () async {
     await provider.login(MpcLoginType.google);
