@@ -6,6 +6,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'wallet_form_cases.dart';
+
 /// Device flows that require an isolated wallet fixture and a controllable RPC.
 ///
 /// These cases used to contain unconditional placeholder assertions and were
@@ -14,6 +16,7 @@ import 'package:integration_test/integration_test.dart';
 /// without exposing mnemonic phrases or broadcasting unintended transactions.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  registerWalletFormCases();
 
   for (final testCase in _pendingWalletCases) {
     final displayName = '${testCase.name} [BLOCKED: ${testCase.blocker}]';
@@ -27,14 +30,6 @@ const _pendingWalletCases = <_PendingDeviceCase>[
   _PendingDeviceCase(
     'WLT-01 creates and backs up a disposable wallet',
     'Requires an isolated secure-storage fixture and disposable mnemonic.',
-  ),
-  _PendingDeviceCase(
-    'WLT-02 validates wallet name input',
-    'Requires stable keys and semantics on the real create-wallet form.',
-  ),
-  _PendingDeviceCase(
-    'WLT-01 validates wallet password requirements',
-    'Requires stable keys and semantics on the real create-wallet form.',
   ),
   _PendingDeviceCase(
     'WLT-02 imports a disposable mnemonic wallet',

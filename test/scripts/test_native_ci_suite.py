@@ -28,6 +28,13 @@ class NativeCiSuiteTest(unittest.TestCase):
             '--dart-define=N42_MLKIT_DOWNLOAD_MODEL=true',
         ])
 
+    def test_wallet_forms_selects_real_flow_with_explicit_remaining_skips(self):
+        result = self.select('wallet_forms')
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.splitlines(), [
+            'integration_test/flows/wallet_flow_test.dart',
+        ])
+
     def test_unknown_targets_fail_closed(self):
         for value in ['', '../test', 'mlkit; echo unsafe']:
             with self.subTest(value=value):
