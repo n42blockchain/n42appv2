@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 208: Chat pinned 8c5202ab full suite is accepted: 8,230 pass / four external skips, 71.3931% coverage. Wallet batch 205 remains active on 4b1f38aec. Isolated signed build failed for missing ignored Google plist; correct N42 config is now copied privately, and the license-only generated pod checksum is reconciled here. New IPA and TestFlight acceptance remain open.
+
 > Batch 204: Both sender fixes are integrated into master; their temporary worktree is removed. Wallet full batch 200 finished with 7,292 pass / one Falcon export-wait failure / zero skips, coverage 73.5978%, and is not accepted. The unchanged failure passes alone; its real-KDF ownership test now has a bounded contention-tolerant wait and both page cases pass. A new full run is required. Chat batch 199 still awaits its terminal result.
 
 > Batch 203: Algorand sender balance/API shape, selected-network routing, ASA native dispatch and signer isolation are repaired on the isolated branch (63 related tests). Native validity-window/full-width integer and live acceptance remain open. Main full regressions still apply only to their captured source commits.
