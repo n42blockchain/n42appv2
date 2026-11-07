@@ -83,7 +83,7 @@ mixin WalletConnectSigning
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         requireMessageCurrent = requireCurrent;
-        final credentials = await _addressBoundMessageCredentials(
+        final credentials = await _addressBoundSigningCredentials(
           cm,
           requireCurrent,
         );
@@ -151,7 +151,7 @@ mixin WalletConnectSigning
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         requireMessageCurrent = requireCurrent;
-        final credentials = await _addressBoundMessageCredentials(
+        final credentials = await _addressBoundSigningCredentials(
           cm,
           requireCurrent,
         );
@@ -193,7 +193,7 @@ mixin WalletConnectSigning
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         requireMessageCurrent = requireCurrent;
-        final credentials = await _addressBoundMessageCredentials(
+        final credentials = await _addressBoundSigningCredentials(
           cm,
           requireCurrent,
         );
@@ -353,7 +353,10 @@ mixin WalletConnectSigning
       return;
     }
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
-    final credentials = await getCurrentWalletCredentials();
+    final credentials = await _addressBoundSigningCredentials(
+      cm,
+      requireCurrent,
+    );
     requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
@@ -396,7 +399,10 @@ mixin WalletConnectSigning
     // Reject unsupported chains before credentials or native signing.
     SolApi.walletConnectRpcUrl(requestChainId);
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
-    final credentials = await getCurrentWalletCredentials();
+    final credentials = await _addressBoundSigningCredentials(
+      cm,
+      requireCurrent,
+    );
     requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
@@ -678,7 +684,10 @@ mixin WalletConnectSigning
     }
     final requestIsTest = _requestTestNetwork(CoinType.SUI, eventData.chainId);
     final requireCurrent = _nonEvmSigningGuard(eventData, cm);
-    final credentials = await getCurrentWalletCredentials();
+    final credentials = await _addressBoundSigningCredentials(
+      cm,
+      requireCurrent,
+    );
     requireCurrent();
     final path = getPathWithIndex(
       cm.config.pathForAddrType(cm.addrType)!,
@@ -936,10 +945,10 @@ mixin WalletConnectSigning
   }
 
   /// TRON/Solana/Sui addresses are verified with the same captured key material
-  /// and derivation path passed to message signing. Do not apply this equality
+  /// and derivation path passed to signing. Do not apply this equality
   /// rule to named/rotated accounts without their chain-specific key proof.
   Future<({String mnemonic, String privateKey})>
-  _addressBoundMessageCredentials(
+  _addressBoundSigningCredentials(
     CoinModel coin,
     void Function() requireCurrent,
   ) async {

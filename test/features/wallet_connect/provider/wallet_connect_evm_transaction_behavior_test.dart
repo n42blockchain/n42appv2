@@ -606,6 +606,9 @@ void main() {
     final calls = <MethodCall>[];
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_trustdartChannel, (call) async {
+          if (call.method == 'generateAddress') {
+            return {'legacy': provider.coinModels.single.address};
+          }
           calls.add(call);
           return 'c2lnbmVkLXRyYW5zYWN0aW9u';
         });
@@ -626,7 +629,8 @@ void main() {
 
     expect(calls.single.method, 'signTransaction');
     expect(calls.single.arguments['coin'], 'SOL');
-    expect(calls.single.arguments['mnemonic'], 'fixture mnemonic');
+    expect(calls.single.arguments['mnemonic'], '');
+    expect(calls.single.arguments['pk'], 'fixture private key');
     expect(client.responses.single.$2.result, {
       'transaction': 'c2lnbmVkLXRyYW5zYWN0aW9u',
     });
@@ -669,7 +673,9 @@ void main() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(
             _trustdartChannel,
-            (_) async => 'base64-sui-signature',
+            (call) async => call.method == 'generateAddress'
+                ? {'legacy': provider.coinModels.single.address}
+                : 'base64-sui-signature',
           );
       addTearDown(
         () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

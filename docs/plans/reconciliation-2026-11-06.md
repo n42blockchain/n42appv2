@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Bind TRON/Solana/Sui transaction keys — batch 245
+
+- Extended the existing key/address tests to sign-only transaction methods. **19 pre-fix failures** (`/tmp/n42-wallet-b245-before.log`): mismatched/missing/invalid derivation results still allowed native transaction signing.
+- Reuse the address-bound credential loader for TRON/Solana/Sui transactions. Derivation and signing receive identical selected credential material and path, with context checks after derivation and helper return. Sui preserves bounded hexadecimal case/padding aliases. Aptos rotated accounts and NEAR named accounts remain separate proof requirements.
+- **1,129 WalletConnect tests pass**, exit 0 (`/tmp/n42-wallet-b245-final.log`); four-file scoped analysis clean (`/tmp/n42-wallet-b245-analysis.log`). Added 45 transaction cases through shared message/transaction test matrices: invalid derivations, pending-context changes, empty credentials, valid private-key/mnemonic signing and Sui aliases. Positive native/broadcast fixtures now explicitly return matching derived addresses. Existing normal and already-broadcast response tests remain green.
+- This validates the Dart/native argument and lifecycle boundary with mocked native derivation, not independent native cryptographic acceptance or raw transaction sender semantics. Remaining work includes Aptos/NEAR account-key proofs, payload/protocol review, ordinary-sender worktree reconciliation, archive lifecycle, native login and fresh release. No real transaction, device action, deployment or upload.
+
+
 ### Complete inspected non-EVM post-native transaction guards — batch 244
 
 - Extended the delayed-native transaction matrix to Aptos/Sui/NEAR and asserted stale completions preserve both current UI state and error text. **16 pre-fix failures**, 19 passes (`/tmp/n42-wallet-b244-before.log`): Aptos/NEAR could return obsolete signatures; Sui suppressed responses but some stale guard exceptions overwrote UI state.

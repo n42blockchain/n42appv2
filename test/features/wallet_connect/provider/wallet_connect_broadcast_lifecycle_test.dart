@@ -154,7 +154,10 @@ void main() {
     client = WalletKitFake();
     provider = _Signer()..signClient = client;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (_) async {
+        .setMockMethodCallHandler(channel, (call) async {
+          if (call.method == 'generateAddress') {
+            return {'legacy': provider.coinModels.single.address};
+          }
           nativeCalls++;
           if (!nativeStarted.isCompleted) {
             nativeStarted.complete();
