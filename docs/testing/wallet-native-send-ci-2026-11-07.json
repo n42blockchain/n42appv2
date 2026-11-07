@@ -21,7 +21,14 @@
   "confirmation": {
     "run": 42399989972,
     "source": "0c821cea2",
+    "status": "cancelled",
+    "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42399989972",
+    "reason": "Superseded after local native run reproduced two remaining fixture assumptions and targeted corrected native tests passed. Not an observation-timeout retry."
+  },
+  "latestConfirmation": {
+    "run": 42401104188,
+    "source": "44c7da4bd",
     "status": "in_progress",
-    "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42399989972"
+    "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42401104188"
   }
 }

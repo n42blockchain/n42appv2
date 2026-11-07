@@ -1,0 +1,34 @@
+{
+  "run": 42398101409,
+  "testJob": 128480364304,
+  "source": "3f5ac8a271e12cd3d42d83b65d599eb4e70bc2be",
+  "testJobConclusion": "success",
+  "overallRun": "in_progress; builds/performance pending",
+  "wallet": {
+    "passed": 7775,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0
+  },
+  "chat": {
+    "passed": 8594,
+    "failed": 0,
+    "skipped": 5,
+    "skippedFiles": [
+      "live/account_switch_encryption_test.dart",
+      "live/live_media_smoke_test.dart",
+      "security/markdown_document_security_test.dart",
+      "integration/registration_live_test.dart",
+      "unit/encryption/vodozemac_native_abi_test.dart"
+    ]
+  },
+  "coverage": {
+    "found": 141278,
+    "hit": 104430,
+    "percent": 73.91809057319611,
+    "threshold": 70,
+    "passed": true
+  },
+  "log_sha256": "532b1279a7baeb592b669323a33a7cc435eb3e934c20653f3ad1b53e3858dfa5",
+  "scope": "Main unit/widget and resolved Chat checks. Not full native wallet flows, physical QA or production role enforcement."
+}
