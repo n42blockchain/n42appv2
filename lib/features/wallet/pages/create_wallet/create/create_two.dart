@@ -27,7 +27,13 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
 
   /// 助记词
   @override
-  late String mnemonicWords;
+  String mnemonicWords = '';
+  bool _generating = true;
+  int _generation = 0;
+
+  @override
+  bool get mnemonicReady =>
+      !_generating && mnemonicWordsList.length == mnemonicWordsCount;
 
   @override
   var mnemonicWordsList = [];
@@ -35,15 +41,30 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   int mnemonicWordsCount = 12;
 
   Future<void> resetMnemonicWordsCount({int value = 12}) async {
-    mnemonicWordsCount = value;
-    mnemonicWords = await _trustdart.generateMnemonic(
+    final generation = ++_generation;
+    setState(() {
+      mnemonicWordsCount = value;
+      mnemonicWords = '';
+      mnemonicWordsList = [];
+      showMnemonic = false;
+      _generating = true;
+    });
+    final generated = await _trustdart.generateMnemonic(
       length: (value * 10 + value / 3 * 2).toInt(),
     );
-    if (mounted) {
-      setState(() {
-        mnemonicWordsList = mnemonicWords.split(" ");
-      });
-    }
+    if (!mounted || generation != _generation) return;
+    final words = generated
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .toList();
+    setState(() {
+      _generating = false;
+      if (words.length == value) {
+        mnemonicWords = words.join(' ');
+        mnemonicWordsList = words;
+      }
+    });
   }
 
   @override
@@ -89,7 +110,22 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
                     _buildSubtitle(),
                     _buildWordCountSelector(),
                     SizedBox(height: ScreenUtil().setWidth(50.0)),
-                    buildGridView(),
+                    if (_generating)
+                      const Center(child: CircularProgressIndicator())
+                    else if (!mnemonicReady)
+                      Column(
+                        children: [
+                          Text(S.of(context).g_key_3),
+                          AppButton(
+                            label: S.of(context).g_swap_key_6,
+                            onPressed: () => resetMnemonicWordsCount(
+                              value: mnemonicWordsCount,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      buildGridView(),
                     _buildWarningRow(
                       S.of(context).g_key_wallet_c41,
                       topMargin: ScreenUtil().setWidth(40),
@@ -219,7 +255,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_wallet_c43,
-              onPressed: showMnemonic
+              onPressed: mnemonicReady && showMnemonic
                   ? () {
                       widget.wInfo.mnemonic = mnemonicWords;
                       Navigator.push(
@@ -237,9 +273,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
             width: double.infinity,
             color: AppColorTokens.of(context).bgBase,
             child: TextButton(
-              onPressed: () {
-                showSkipWidget();
-              },
+              onPressed: mnemonicReady ? showSkipWidget : null,
               child: Text(
                 S.of(context).g_key_wallet_c18,
                 style: AppTypography.body.copyWith(

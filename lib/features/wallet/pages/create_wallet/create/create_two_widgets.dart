@@ -10,6 +10,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   set showMnemonic(bool value);
   List get mnemonicWordsList;
   String get mnemonicWords;
+  bool get mnemonicReady;
 
   Color _itemBgColor() => AppColorTokens.of(context).bgSurface;
 
@@ -86,6 +87,8 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   }
 
   Future<void> showSkipWidget() async {
+    if (!mnemonicReady) return;
+    final selectedMnemonic = mnemonicWords;
     final mainTextColor = AppColorTokens.of(context).textPrimary;
     final child = Center(
       child: Container(
@@ -135,7 +138,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
       ),
     );
     final flag = await tipsDialog3(context, child);
-    if (!mounted) return;
+    if (!mounted || !mnemonicReady || mnemonicWords != selectedMnemonic) return;
     if (flag == true) {
       widget.wInfo.mnemonic = mnemonicWords;
       Navigator.push(
