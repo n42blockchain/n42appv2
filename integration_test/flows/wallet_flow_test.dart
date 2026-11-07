@@ -59,18 +59,6 @@ const _pendingWalletCases = <_PendingDeviceCase>[
     'TX-06 sends a disposable testnet transaction',
     'Requires an approved funded testnet wallet and controllable RPC.',
   ),
-  _PendingDeviceCase(
-    'TX-04 rejects invalid recipient addresses',
-    'Requires stable keys and semantics on the real send form.',
-  ),
-  _PendingDeviceCase(
-    'TX-05 rejects invalid and over-balance amounts',
-    'Requires stable keys and semantics plus deterministic balance data.',
-  ),
-  _PendingDeviceCase(
-    'TX-10 displays a deterministic gas estimate',
-    'Requires a deterministic fake RPC connected to the device build.',
-  ),
 ];
 
 class _PendingDeviceCase {

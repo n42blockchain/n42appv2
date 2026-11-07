@@ -3,7 +3,7 @@
   "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42397806375",
   "source": "e5582e6a3e028b3a0ddf2df6f396576d99a06997",
   "status": "failure",
-  "acceptance": "pending corrected fixture confirmation",
+  "acceptance": "Native form/storage components and send recipient/amount/gas cases pass; seven other full-flow requirements remain after removing the three satisfied placeholders.",
   "cases": [
     "recipient validation",
     "amount validation and overbalance",
@@ -28,7 +28,11 @@
   "latestConfirmation": {
     "run": 42401104188,
     "source": "44c7da4bd",
-    "status": "in_progress",
-    "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42401104188"
-  }
+    "status": "success",
+    "url": "https://github.com/n42blockchain/n42appv2/actions/runs/42401104188",
+    "passed": 7,
+    "failed": 0,
+    "skipped": 10
+  },
+  "latestLogSha256": "366ce5e1fd6d77a142726fd7ba20aaface2bb167bbfeaec05e894eb085762bc3"
 }
