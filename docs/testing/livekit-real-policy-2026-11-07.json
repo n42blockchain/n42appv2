@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-07",
+  "exit_code": 0,
+  "environment": "Owned loopback Tuwunel 1.9.4 disposable container; Matrix room v11",
+  "code": "N42 legacy token handler with actual matrixClient and real signed JWT; synthetic SFU key only",
+  "casesPassed": [
+    "owner can publish",
+    "owner viewer role cannot publish",
+    "viewer forged broadcaster cannot publish",
+    "viewer omitted role cannot publish",
+    "nonmember denied 403",
+    "ordinary group joined member can publish"
+  ],
+  "cleanup": "All three owned synthetic accounts deactivated through authenticated API; cleanup returned no error",
+  "log_sha256": "6015fd898a814ee0464d7cbdcd2a1288594e2fac333b510d0e341435f85c8128",
+  "production": "Not deployed. Official MatrixRTC route is not covered by this policy test."
+}

@@ -40,3 +40,7 @@ location = /livekit/jwt {
     proxy_set_header X-Forwarded-Proto $scheme;
 }
 ```
+
+## Isolated Matrix policy verification
+
+`matrix_local_policy_test.go` exercises the real handler against the owned loopback QA container at port 18949, with three disposable accounts and synthetic SFU signing keys. It requires explicit `N42_MATRIX_LOCAL_POLICY_QA=true` and a controlled `N42_MATRIX_LOCAL_REGISTRATION_TOKEN`; never use production credentials. The six cases cover broadcaster/viewer/forged or omitted role, nonmembership, and normal group publishing. Accounts are deactivated in cleanup. Without opt-in this live test explicitly skips; ordinary contract tests still run. Evidence: `docs/testing/livekit-real-policy-2026-11-07.json` in the wallet repository. Production official authorization remains a separate acceptance boundary.
