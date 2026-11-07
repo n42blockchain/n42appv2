@@ -1,0 +1,30 @@
+{
+  "authors": "Google, Inc.",
+  "description": "This is a cocoapod containing MLImage, a lightweight iOS image library for various on-device machine learning frameworks.",
+  "frameworks": [
+    "CoreGraphics",
+    "CoreMedia",
+    "CoreVideo",
+    "Foundation",
+    "UIKit"
+  ],
+  "homepage": "https://developers.google.com/ml-kit/guides",
+  "license": {
+    "text": "Copyright 2025 Google LLC",
+    "type": "Copyright"
+  },
+  "module_name": "MLImage",
+  "name": "MLImage",
+  "platforms": {
+    "ios": "15.5"
+  },
+  "source": {
+    "http": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLImage.xcframework.zip",
+    "sha256": "9e206e2b1a7bd5e5c788fa3221616e61f8e9c1c1d0c12b9e81f20a24f3732103"
+  },
+  "summary": "MLImage SDK for iOS",
+  "vendored_frameworks": [
+    "MLImage.xcframework"
+  ],
+  "version": "1.0.0-beta8"
+}

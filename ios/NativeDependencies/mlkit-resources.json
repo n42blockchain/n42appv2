@@ -1,0 +1,12 @@
+{
+  "ChineseOCRResources": "570404236a24d0064ff048e2dba28caac2c273df4c9098ae264776af2368c7a7",
+  "DevanagariOCRResources": "37b4a7a14d14b5d06fd9baa1dbd725a3d582e06d888ce4a4b75a8e8938e703f7",
+  "GoogleMVFaceDetectorResources": "a81acdd21b76228981f6332b0e7f2166e297528d756fb0099d98930d58eb51c3",
+  "JapaneseOCRResources": "a0c19995b3cb77b8d28ea526fb3fd3ccfe50e85d6885f214fb29d55abc7ced13",
+  "KoreanOCRResources": "f1bbb26a63cb6d2c2c1b3f9478dbaf413f75df5f5d2aa25d08d7b7765e1c7797",
+  "LatinOCRResources": "c790283599f67708c06fd93de61d96823ce2ad984ad00bfda5922afda0861758",
+  "MLKitSegmentationCommonResources": "c6085cd1542270150f3181476a4c72904fd579c294fa543f365c7970fbc8e085",
+  "MLKitSegmentationSelfieResources": "dcdc39b62b77979768e4b372c4966d67e5c2eeb7bd2324382e5f6ee79e520c57",
+  "MLKitTranslate_resource": "c64df63204a0cfa31c85efa8329ec1241b06849cfe47b03039e4868fecd25e47",
+  "MLKitXenoResources": "19497565bc3aa35be2aafd4571b64cf001b6d8624768c3a8770af9db9f49ac40"
+}

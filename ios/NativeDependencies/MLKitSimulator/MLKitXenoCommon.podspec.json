@@ -1,0 +1,39 @@
+{
+  "authors": "Google, Inc.",
+  "dependencies": {
+    "MLKitCommon": [
+      "~> 14.0"
+    ],
+    "MLKitVision": [
+      "~> 10.0"
+    ]
+  },
+  "description": "This is an INTERNAL ONLY pod containing common elements for all the MLKit Xenopods, including APIs for running detection graphs with Drishti.",
+  "frameworks": [
+    "CoreMedia",
+    "CoreVideo",
+    "Foundation"
+  ],
+  "homepage": "https://developers.google.com/ml-kit/guides",
+  "license": {
+    "text": "Copyright 2025 Google LLC",
+    "type": "Copyright"
+  },
+  "module_name": "MLKitXenoCommon",
+  "name": "MLKitXenoCommon",
+  "platforms": {
+    "ios": "15.5"
+  },
+  "preserve_paths": [
+    "NOTICES"
+  ],
+  "source": {
+    "http": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitXenoCommon.xcframework.zip",
+    "sha256": "46852be00814d9b6d66cccefaa7957e41c2bb29c3471adbf21e56ef44fe52e25"
+  },
+  "summary": "ML Kit XenoCommon SDK for iOS",
+  "vendored_frameworks": [
+    "MLKitXenoCommon.xcframework"
+  ],
+  "version": "1.0.0-beta16"
+}

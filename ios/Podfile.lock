@@ -535,6 +535,21 @@ DEPENDENCIES:
   - large_file_handler (from `.symlinks/plugins/large_file_handler/ios`)
   - livekit_client (from `.symlinks/plugins/livekit_client/ios`)
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
+  - MLImage (from `NativeDependencies/MLKitSimulator/MLImage.podspec.json`)
+  - MLKitCommon (from `NativeDependencies/MLKitSimulator/MLKitCommon.podspec.json`)
+  - MLKitFaceDetection (from `NativeDependencies/MLKitSimulator/MLKitFaceDetection.podspec.json`)
+  - MLKitNaturalLanguage (from `NativeDependencies/MLKitSimulator/MLKitNaturalLanguage.podspec.json`)
+  - MLKitSegmentationCommon (from `NativeDependencies/MLKitSimulator/MLKitSegmentationCommon.podspec.json`)
+  - MLKitSegmentationSelfie (from `NativeDependencies/MLKitSimulator/MLKitSegmentationSelfie.podspec.json`)
+  - MLKitTextRecognition (from `NativeDependencies/MLKitSimulator/MLKitTextRecognition.podspec.json`)
+  - MLKitTextRecognitionChinese (from `NativeDependencies/MLKitSimulator/MLKitTextRecognitionChinese.podspec.json`)
+  - MLKitTextRecognitionCommon (from `NativeDependencies/MLKitSimulator/MLKitTextRecognitionCommon.podspec.json`)
+  - MLKitTextRecognitionDevanagari (from `NativeDependencies/MLKitSimulator/MLKitTextRecognitionDevanagari.podspec.json`)
+  - MLKitTextRecognitionJapanese (from `NativeDependencies/MLKitSimulator/MLKitTextRecognitionJapanese.podspec.json`)
+  - MLKitTextRecognitionKorean (from `NativeDependencies/MLKitSimulator/MLKitTextRecognitionKorean.podspec.json`)
+  - MLKitTranslate (from `NativeDependencies/MLKitSimulator/MLKitTranslate.podspec.json`)
+  - MLKitVision (from `NativeDependencies/MLKitSimulator/MLKitVision.podspec.json`)
+  - MLKitXenoCommon (from `NativeDependencies/MLKitSimulator/MLKitXenoCommon.podspec.json`)
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/darwin`)
   - nfc_manager (from `.symlinks/plugins/nfc_manager/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
@@ -601,21 +616,6 @@ SPEC REPOS:
     - libwebp
     - MediaPipeTasksGenAI
     - MediaPipeTasksGenAIC
-    - MLImage
-    - MLKitCommon
-    - MLKitFaceDetection
-    - MLKitNaturalLanguage
-    - MLKitSegmentationCommon
-    - MLKitSegmentationSelfie
-    - MLKitTextRecognition
-    - MLKitTextRecognitionChinese
-    - MLKitTextRecognitionCommon
-    - MLKitTextRecognitionDevanagari
-    - MLKitTextRecognitionJapanese
-    - MLKitTextRecognitionKorean
-    - MLKitTranslate
-    - MLKitVision
-    - MLKitXenoCommon
     - nanopb
     - PromisesObjC
     - PromisesSwift
@@ -712,6 +712,36 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/livekit_client/ios"
   local_auth_darwin:
     :path: ".symlinks/plugins/local_auth_darwin/darwin"
+  MLImage:
+    :podspec: NativeDependencies/MLKitSimulator/MLImage.podspec.json
+  MLKitCommon:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitCommon.podspec.json
+  MLKitFaceDetection:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitFaceDetection.podspec.json
+  MLKitNaturalLanguage:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitNaturalLanguage.podspec.json
+  MLKitSegmentationCommon:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitSegmentationCommon.podspec.json
+  MLKitSegmentationSelfie:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitSegmentationSelfie.podspec.json
+  MLKitTextRecognition:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTextRecognition.podspec.json
+  MLKitTextRecognitionChinese:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTextRecognitionChinese.podspec.json
+  MLKitTextRecognitionCommon:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTextRecognitionCommon.podspec.json
+  MLKitTextRecognitionDevanagari:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTextRecognitionDevanagari.podspec.json
+  MLKitTextRecognitionJapanese:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTextRecognitionJapanese.podspec.json
+  MLKitTextRecognitionKorean:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTextRecognitionKorean.podspec.json
+  MLKitTranslate:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitTranslate.podspec.json
+  MLKitVision:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitVision.podspec.json
+  MLKitXenoCommon:
+    :podspec: NativeDependencies/MLKitSimulator/MLKitXenoCommon.podspec.json
   mobile_scanner:
     :path: ".symlinks/plugins/mobile_scanner/darwin"
   nfc_manager:
@@ -844,21 +874,21 @@ SPEC CHECKSUMS:
   local_auth_darwin: c3ee6cce0a8d56be34c8ccb66ba31f7f180aaebb
   MediaPipeTasksGenAI: e311d919ab79b2e615e381b65ad271b2c2617312
   MediaPipeTasksGenAIC: fee4ffd93e57fd2022287bcce0340b3c68b537be
-  MLImage: 0de5c6c2bf9e93b80ef752e2797f0836f03b58c0
-  MLKitCommon: 47d47b50a031d00db62f1b0efe5a1d8b09a3b2e6
-  MLKitFaceDetection: 32549f1e70e6e7731261bf9cea2b74095e2531cb
-  MLKitNaturalLanguage: 498154f2461f97abb00eb161eb773670ffc46250
-  MLKitSegmentationCommon: f634fb3c20c1d8bace22a2c026bdaa0ca17613d9
-  MLKitSegmentationSelfie: 62371f35c33d49c3e7474443677b6a0c7ac9c98b
-  MLKitTextRecognition: c0ad24510481dfc8893ad15dfcb8a5f05ed9e826
-  MLKitTextRecognitionChinese: b69210723ed8cc9bc7b2e7847001880b0dcbb7f8
-  MLKitTextRecognitionCommon: 234ceb1cfdfb5fceb4fd664943046609a2961cc2
-  MLKitTextRecognitionDevanagari: 326281ad520172466dd6dd6a784fa03fb8ab9e37
-  MLKitTextRecognitionJapanese: 965f89fd8ad3a02eb466106522ed08ea19f30f61
-  MLKitTextRecognitionKorean: 22c8d6a73f519fa9732873993a30b067f8deccb1
-  MLKitTranslate: fcb283a2cbaaa595e1cf1d3fedffcea2e97a1168
-  MLKitVision: 39a5a812db83c4a0794445088e567f3631c11961
-  MLKitXenoCommon: 1a4268c1222a6043047af5bb9435028206c63287
+  MLImage: 3dd71f4f106571105bbe2877e66f3ad6d7eaffd2
+  MLKitCommon: 5eae8aa349482e4c7adfa9ec0372030b9323c3bf
+  MLKitFaceDetection: fae93ff31ab4eecdc7bb668645d8302f8992d4c0
+  MLKitNaturalLanguage: b7d7b1244eba2ef164c0c42b9c13cbf0a16bff4f
+  MLKitSegmentationCommon: 1c92bc07952f8990ccf8ba1cc9d101c235ed72ad
+  MLKitSegmentationSelfie: d5fb8a0b3153390fbb6435abe2f23cbfc37c36b9
+  MLKitTextRecognition: 181891ae361159c7e2e05c0400886b255d78088e
+  MLKitTextRecognitionChinese: ff21200d06b1ff96b9ac4ffbe072fdf9b214a753
+  MLKitTextRecognitionCommon: ca23f39ca827bd205473a4bcfeba972615c2316b
+  MLKitTextRecognitionDevanagari: 504e0b560937e94a9c683fb1f2452a14ee7854b7
+  MLKitTextRecognitionJapanese: 39f9f855b286fe9c5dcf0a11345c6b225b75d7ee
+  MLKitTextRecognitionKorean: 12639962984eecda755422aa82b66408d0fcda68
+  MLKitTranslate: 4ddcbc348488bc61ac77991e7bfc6b8387b0edba
+  MLKitVision: 9a13e28d6cf095c2aafe7237735c413dac0eec22
+  MLKitXenoCommon: 2b4cf0baff153d772e604edcda7313d1493fdb7a
   mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   nfc_manager: 8439e997f8ed801c15d5a79045fb18c562bf6efc
@@ -893,7 +923,7 @@ SPEC CHECKSUMS:
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
   wakelock_plus: d4ca1e4e4bc9de42cb55d57b5bdc158af318e3c6
   walletconnect_pay: f32ca9b9f5c9e29583072b082a6ef7b5d4e12288
-  WalletCoreSwiftProtobuf: 63ff9e6b8c6b88468681254335a285d80f7d42fa
+  WalletCoreSwiftProtobuf: 54df2ff1c711c0c10eb7f1bbc04995ee003964d1
   Web3Auth: 5459b2d5bcdb150c5e84c7229639422cba684814
   web3auth_flutter: 3c8ec5760dccbc0a3e4fc0c09000ae9eaae1c9d2
   WebRTC-SDK: 71bce2be85c3082d24bbfd1a9930ea07d0c494c1
@@ -901,6 +931,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK-XCFramework: 996f8fe4f5ca9d75529546f7246da459ef31aa0d
   YttriumWrapper: 64983f0edbf609b800ac3074010224fc5341aaeb
 
-PODFILE CHECKSUM: abc4b71ee1cef831a98c9f678e7ea90255cddba4
+PODFILE CHECKSUM: acd23a047c119d73c3f16e30b7edb3e50061032e
 
 COCOAPODS: 1.17.0

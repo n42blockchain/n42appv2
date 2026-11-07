@@ -122,3 +122,6 @@ benchmark_results/
 # Chrome 扩展子项目（独立 npm 项目，构建产物/依赖不进主仓库）
 chrome-extension/node_modules/
 chrome-extension/dist/
+
+# Pinned MLKit model bundles fetched by scripts/prepare_mlkit_resources.py.
+/ios/MLKitResources/

@@ -1,0 +1,92 @@
+[
+  {
+    "name": "MLImage",
+    "version": "1.0.0-beta8",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLImage.xcframework.zip",
+    "sha256": "9e206e2b1a7bd5e5c788fa3221616e61f8e9c1c1d0c12b9e81f20a24f3732103"
+  },
+  {
+    "name": "MLKitCommon",
+    "version": "14.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitCommon.xcframework.zip",
+    "sha256": "87456955b5a61d2f8a68a12290d77a00ab1b679dfb0192785b94e53a0f8d0a3d"
+  },
+  {
+    "name": "MLKitFaceDetection",
+    "version": "8.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitFaceDetection.xcframework.zip",
+    "sha256": "4420f6712283c52941e7a0145356fe9a36bf9a572e30b5d615e2dc59ffcf94f8"
+  },
+  {
+    "name": "MLKitNaturalLanguage",
+    "version": "10.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitNaturalLanguage.xcframework.zip",
+    "sha256": "7c1e1b378281f814a053283b8d470b40eb0c95405fc1227dac3f279424fc3c0a"
+  },
+  {
+    "name": "MLKitSegmentationCommon",
+    "version": "1.0.0-beta14",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitSegmentationCommon.xcframework.zip",
+    "sha256": "61689e13986032d6120d7c296f6fdc58983db83f98867356f59f52c0b17c884c"
+  },
+  {
+    "name": "MLKitSegmentationSelfie",
+    "version": "1.0.0-beta14",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitSegmentationSelfie.xcframework.zip",
+    "sha256": "29c3a323cc1e53db56c2bbfb8c84dc53dce499cc248c9a38d60497fc87be7c52"
+  },
+  {
+    "name": "MLKitTextRecognition",
+    "version": "7.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTextRecognition.xcframework.zip",
+    "sha256": "6703514a50c2e67c70c3420c6d820bc3d826936f227bb3f9079d5070819bd6dc"
+  },
+  {
+    "name": "MLKitTextRecognitionChinese",
+    "version": "6.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTextRecognitionChinese.xcframework.zip",
+    "sha256": "9d273b9d26b79d0a53ccd69c4b19bbdcbeec71172b45ffe7aa6c14a02f375658"
+  },
+  {
+    "name": "MLKitTextRecognitionCommon",
+    "version": "6.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTextRecognitionCommon.xcframework.zip",
+    "sha256": "66e1d343be1d253faf282d9293c29d25c68ac70278b9d9670719c9a29602ecb3"
+  },
+  {
+    "name": "MLKitTextRecognitionDevanagari",
+    "version": "6.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTextRecognitionDevanagari.xcframework.zip",
+    "sha256": "b59c31e430ec3551a4ee5cd9f1e64f11193680d4cbb9ea2995240fea9410ae62"
+  },
+  {
+    "name": "MLKitTextRecognitionJapanese",
+    "version": "6.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTextRecognitionJapanese.xcframework.zip",
+    "sha256": "59e45c2dcc1c6d122f887d1d712ea805f7a9e3b9c1e958d68344cdc330f10458"
+  },
+  {
+    "name": "MLKitTextRecognitionKorean",
+    "version": "6.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTextRecognitionKorean.xcframework.zip",
+    "sha256": "e285a1ae238fbad2654323837d0a74c2774c8f930e424609b03b8769f69fcdf4"
+  },
+  {
+    "name": "MLKitTranslate",
+    "version": "8.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTranslate.xcframework.zip",
+    "sha256": "8cb621486b01b5a55295b0236e3aece107e7624a7d15c1dd67e62e99d35eecdb"
+  },
+  {
+    "name": "MLKitVision",
+    "version": "10.0.0",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitVision.xcframework.zip",
+    "sha256": "408a454ced451696ca2c98479c2db12d284b404a5d7daeeeffc6ac1dfb28942e"
+  },
+  {
+    "name": "MLKitXenoCommon",
+    "version": "1.0.0-beta16",
+    "url": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitXenoCommon.xcframework.zip",
+    "sha256": "46852be00814d9b6d66cccefaa7957e41c2bb29c3471adbf21e56ef44fe52e25"
+  }
+]

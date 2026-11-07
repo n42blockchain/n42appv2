@@ -1,0 +1,41 @@
+{
+  "authors": "Google, Inc.",
+  "dependencies": {
+    "MLKitNaturalLanguage": "~> 10.0",
+    "SSZipArchive": [
+      ">= 2.5.5",
+      " < 3.0"
+    ]
+  },
+  "description": "This is the Translate feature on iOS. ML Kit is a mobile SDK that brings Google's machine learning expertise to mobile devices in a powerful yet easy-to-use package.",
+  "frameworks": [
+    "Foundation"
+  ],
+  "homepage": "https://developers.google.com/ml-kit/guides",
+  "libraries": [
+    "c++",
+    "z"
+  ],
+  "license": {
+    "text": "Copyright 2025 Google LLC",
+    "type": "Copyright"
+  },
+  "module_name": "MLKitTranslate",
+  "name": "MLKitTranslate",
+  "platforms": {
+    "ios": "15.5"
+  },
+  "preserve_paths": [
+    "README.md",
+    "NOTICES"
+  ],
+  "source": {
+    "http": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitTranslate.xcframework.zip",
+    "sha256": "8cb621486b01b5a55295b0236e3aece107e7624a7d15c1dd67e62e99d35eecdb"
+  },
+  "summary": "ML Kit Translate SDK for iOS",
+  "vendored_frameworks": [
+    "MLKitTranslate.xcframework"
+  ],
+  "version": "8.0.0"
+}

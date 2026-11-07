@@ -1,0 +1,54 @@
+{
+  "authors": "Google, Inc.",
+  "dependencies": {
+    "GTMSessionFetcher/Core": [
+      ">= 3.3.2",
+      " < 4.0"
+    ],
+    "GoogleToolboxForMac/Logger": [
+      ">= 4.2.1",
+      " < 5.0"
+    ],
+    "GoogleToolboxForMac/NSData+zlib": [
+      ">= 4.2.1",
+      " < 5.0"
+    ],
+    "MLImage": [
+      " 1.0.0-beta8"
+    ],
+    "MLKitCommon": "~> 14.0"
+  },
+  "description": "This is the top level pod for ML Kit for vision based features on iOS. ML Kit is a mobile SDK that brings Google's machine learning expertise to mobile devices in a powerful yet easy-to-use package.",
+  "frameworks": [
+    "Accelerate",
+    "AVFoundation",
+    "CoreGraphics",
+    "CoreMedia",
+    "CoreVideo",
+    "Foundation",
+    "UIKit"
+  ],
+  "homepage": "https://developers.google.com/ml-kit/guides",
+  "license": {
+    "text": "Copyright 2025 Google LLC",
+    "type": "Copyright"
+  },
+  "module_name": "MLKitVision",
+  "name": "MLKitVision",
+  "platforms": {
+    "ios": "15.5"
+  },
+  "preserve_paths": [
+    "README.md",
+    "NOTICES"
+  ],
+  "source": {
+    "http": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitVision.xcframework.zip",
+    "sha256": "408a454ced451696ca2c98479c2db12d284b404a5d7daeeeffc6ac1dfb28942e"
+  },
+  "summary": "ML Kit Vision SDK for iOS",
+  "vendored_frameworks": [
+    "MLKitVision.xcframework"
+  ],
+  "version": "10.0.0"
+}

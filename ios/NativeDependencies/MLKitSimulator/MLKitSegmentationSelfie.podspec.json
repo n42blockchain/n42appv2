@@ -1,0 +1,33 @@
+{
+  "authors": "Google, Inc.",
+  "dependencies": {
+    "MLKitSegmentationCommon": "1.0.0-beta14"
+  },
+  "description": "This is the selfie segmentation feature on iOS. ML Kit is a mobile SDK that brings Google's machine learning expertise to mobile devices in a powerful yet easy-to-use package.",
+  "frameworks": [
+    "Foundation"
+  ],
+  "homepage": "https://developers.google.com/ml-kit/guides",
+  "license": {
+    "text": "Copyright 2025 Google LLC",
+    "type": "Copyright"
+  },
+  "module_name": "MLKitSegmentationSelfie",
+  "name": "MLKitSegmentationSelfie",
+  "platforms": {
+    "ios": "15.5"
+  },
+  "preserve_paths": [
+    "README.md",
+    "NOTICES"
+  ],
+  "source": {
+    "http": "https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/MLKitSegmentationSelfie.xcframework.zip",
+    "sha256": "29c3a323cc1e53db56c2bbfb8c84dc53dce499cc248c9a38d60497fc87be7c52"
+  },
+  "summary": "ML Kit SegmentationSelfie SDK for iOS",
+  "vendored_frameworks": [
+    "MLKitSegmentationSelfie.xcframework"
+  ],
+  "version": "1.0.0-beta14"
+}

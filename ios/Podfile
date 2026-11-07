@@ -34,6 +34,22 @@ target 'Runner' do
   # Upstream 4.8.7 is distributed as checksum-pinned XCFramework assets.
   pod 'WalletCoreSwiftProtobuf', :podspec => 'NativeDependencies/WalletCoreSwiftProtobuf.podspec'
   pod 'TrustWalletCore', :podspec => 'NativeDependencies/TrustWalletCore.podspec'
+  # Same upstream MLKit versions, repackaged with arm64 simulator slices.
+  pod 'MLImage', :podspec => 'NativeDependencies/MLKitSimulator/MLImage.podspec.json'
+  pod 'MLKitCommon', :podspec => 'NativeDependencies/MLKitSimulator/MLKitCommon.podspec.json'
+  pod 'MLKitFaceDetection', :podspec => 'NativeDependencies/MLKitSimulator/MLKitFaceDetection.podspec.json'
+  pod 'MLKitNaturalLanguage', :podspec => 'NativeDependencies/MLKitSimulator/MLKitNaturalLanguage.podspec.json'
+  pod 'MLKitSegmentationCommon', :podspec => 'NativeDependencies/MLKitSimulator/MLKitSegmentationCommon.podspec.json'
+  pod 'MLKitSegmentationSelfie', :podspec => 'NativeDependencies/MLKitSimulator/MLKitSegmentationSelfie.podspec.json'
+  pod 'MLKitTextRecognition', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTextRecognition.podspec.json'
+  pod 'MLKitTextRecognitionChinese', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTextRecognitionChinese.podspec.json'
+  pod 'MLKitTextRecognitionCommon', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTextRecognitionCommon.podspec.json'
+  pod 'MLKitTextRecognitionDevanagari', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTextRecognitionDevanagari.podspec.json'
+  pod 'MLKitTextRecognitionJapanese', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTextRecognitionJapanese.podspec.json'
+  pod 'MLKitTextRecognitionKorean', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTextRecognitionKorean.podspec.json'
+  pod 'MLKitTranslate', :podspec => 'NativeDependencies/MLKitSimulator/MLKitTranslate.podspec.json'
+  pod 'MLKitVision', :podspec => 'NativeDependencies/MLKitSimulator/MLKitVision.podspec.json'
+  pod 'MLKitXenoCommon', :podspec => 'NativeDependencies/MLKitSimulator/MLKitXenoCommon.podspec.json'
   # n42_chat image OCR scripts beyond the plugin's default Latin model.
   pod 'GoogleMLKit/TextRecognitionChinese', '~> 9.0.0'
   pod 'GoogleMLKit/TextRecognitionDevanagari', '~> 9.0.0'
@@ -100,8 +116,8 @@ post_install do |installer|
   runner_project.targets.each do |target|
     if target.name == 'Runner'
       target.build_configurations.each do |config|
-        # MLImage.framework (Google MLKit) has no arm64 simulator slice — use Rosetta (x86_64)
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        # Pinned MLKit XCFrameworks now include arm64 simulator code.
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
 
         # 强制链接 SQLCipher，使其 sqlite3_* 符号覆盖 firebase_messaging / sqflite
         # 通过 `-l sqlite3` 引入的系统 libsqlite3。否则 chat 归档库在 iOS 上会
@@ -181,6 +197,19 @@ post_install do |installer|
         end
       end
     end
+  end
+  # MLKit binary targets do not embed models; copy every required bundle intact.
+  resource_root = File.join(__dir__, 'MLKitResources')
+  manifest = JSON.parse(File.read(File.join(__dir__, 'NativeDependencies/mlkit-resources.json')))
+  group = runner_project.main_group.find_subpath('MLKitResources', false) ||
+    runner_project.main_group.new_group('MLKitResources', 'MLKitResources')
+  runner = runner_project.targets.find { |target| target.name == 'Runner' }
+  manifest.keys.sort.each do |name|
+    path = "#{name}.bundle"
+    raise "Missing MLKit model #{path}; run python3 scripts/prepare_mlkit_resources.py" unless
+      File.directory?(File.join(resource_root, path))
+    reference = group.files.find { |file| file.path == path } || group.new_file(path)
+    runner.resources_build_phase.add_file_reference(reference, true)
   end
   runner_project.save
 end
