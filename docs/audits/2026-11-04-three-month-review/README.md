@@ -1933,3 +1933,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Full/incremental exports now warn explicitly when account userId/homeserver is unavailable. The file is retained, but current declared-owner validation refuses restore until its ownership problem is resolved.
 - Three generated invalid-owner cases assert the export warning; 92 backup tests pass (`/tmp/n42-chat-b276-final.log`). Service analysis has six infos, no errors/warnings. Chat 44f589be29d93e21f449f1a5172749764aed5552.
 - Unknown-owner export policy/resolution, localized warnings, complete real-file UI/device restoration, legacy consent, full history and account isolation remain open. A warning is not a completed recovery mechanism.
+
+### Integrate full-export loaded message retention — batch 277 (2026-11-07)
+
+- Full export no longer truncates eligible loaded Timeline messages at 1,000. A 1,005-event file fixture verifies message count, file contents and Timeline cleanup. The manifest records historyScope=loadedTimeline.
+- 93 backup tests pass (`/tmp/n42-chat-b277-final.log`); service analysis has six infos, no errors/warnings. Chat 95044c7d0c7bd9c98d070591af52cc9ec1a24191.
+- Remote history pagination, archive merge/completeness, large-history resource bounds, localized scope display and live/device acceptance remain open. Removing this cap does not prove all server history was fetched.

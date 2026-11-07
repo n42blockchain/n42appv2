@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 277 integrated: full export retains all eligible loaded messages; 1,005-event fixture and 93 backup tests pass. 51 host tests pass; pin 95044c7d. Remote history pagination, archive merge, resource bounds and complete backup acceptance remain open.
+
 > Batch 276 integrated: unknown account owner now produces an export warning rather than clean success. 92 backup and 51 host tests pass; pin 44f589be. Safe recovery of unknown-owner files, localization, full history/isolation and live acceptance remain open.
 
 > Batch 275 integrated: restore preview refuses declared-owner mismatch and displays legacy ownership warnings. 92 backup and 51 host tests pass; pin 0f4205a7. Real-file UI/device restoration, localization, full history/isolation and live acceptance remain open.

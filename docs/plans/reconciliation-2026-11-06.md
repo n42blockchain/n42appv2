@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate full-export loaded message retention — batch 277 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b277-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Full export no longer truncates eligible loaded Timeline messages at 1,000. A 1,005-event file fixture verifies message count, file contents and Timeline cleanup. The manifest records historyScope=loadedTimeline.
+- 93 backup tests pass (`/tmp/n42-chat-b277-final.log`); service analysis has six infos, no errors/warnings. Chat 95044c7d0c7bd9c98d070591af52cc9ec1a24191.
+- Remote history pagination, archive merge/completeness, large-history resource bounds, localized scope display and live/device acceptance remain open. Removing this cap does not prove all server history was fetched.
+
+
 ### Integrate unknown export owner warnings — batch 276 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b276-host.log`); manifest/lock/cache resolve the immutable Chat commit.
