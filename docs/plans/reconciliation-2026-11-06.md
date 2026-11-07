@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Complete inspected non-EVM post-native transaction guards — batch 244
+
+- Extended the delayed-native transaction matrix to Aptos/Sui/NEAR and asserted stale completions preserve both current UI state and error text. **16 pre-fix failures**, 19 passes (`/tmp/n42-wallet-b244-before.log`): Aptos/NEAR could return obsolete signatures; Sui suppressed responses but some stale guard exceptions overwrote UI state.
+- Check the captured context immediately after Aptos signing and each NEAR native signature; return without delivering stale data. Sui now discards invalid context instead of throwing into the outer UI error handler. Normal signing and original-client responses for already-broadcast successful transactions remain unchanged.
+- **1,084 WalletConnect tests pass**, exit 0 (`/tmp/n42-wallet-b244-final.log`); scoped analysis clean (`/tmp/n42-wallet-b244-analysis.log`). Twenty-one added cases cover three chains and seven lifecycle/positive scenarios; the existing TRON/Solana cases now also assert no stale UI mutation. Native calls remain mocked.
+- This closes the inspected post-native-result gap, not transaction key/address proof, all asynchronous error paths, cryptographic/protocol validation or device/live acceptance. Ordinary-sender/worktree reconciliation, archive account lifecycle, native login and release remain open. No deployment/upload or real transaction.
+
+
 ### Reject obsolete TRON/Solana transaction signatures — batch 243
 
 - Inspection found sign-only transaction paths returned native results without rechecking captured session/account/request identity. Corrected the TRON fixture to pass a transaction map rather than a message string; the first interrupted fixture run is not accepted evidence. The corrected pre-fix run reproduces **12 failures**, with two unchanged-context success cases (`/tmp/n42-wallet-b243-before-corrected.log`).

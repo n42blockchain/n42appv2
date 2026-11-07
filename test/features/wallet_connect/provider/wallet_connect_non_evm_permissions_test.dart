@@ -591,7 +591,7 @@ void main() {
       );
     }
   }
-  for (final c in _chains.where((c) => c.type == 'TRX' || c.type == 'SOL')) {
+  for (final c in _chains) {
     final method = c.methods.firstWhere((m) => m.endsWith('_signTransaction'));
     for (final mutation in [
       'revoked',
@@ -641,6 +641,10 @@ void main() {
             c.field: c.address,
             'message': {'raw_data_hex': '00'},
             'transaction': 'Zml4dHVyZQ==',
+            'encodedTransaction': c.ns == 'aptos'
+                ? aptosRawFixture(c.address)
+                : 'cmF3',
+            'transactions': ['cmF3'],
           }, chain: c.chain);
           final operation = provider.transactionSignTap();
           await started.future;
@@ -660,6 +664,8 @@ void main() {
             await provider.viewStateDeal(WalletConnectState.disconnect);
           }
           if (mutation == 'client') provider.signClient = replacement;
+          final stateBefore = provider.walletConnectState;
+          final errorBefore = provider.errorMessage;
           pending.complete('fixture-signature');
           await operation;
           if (mutation == 'unchanged') {
@@ -667,6 +673,8 @@ void main() {
             expect(client.responses.single.$2.error, isNull);
           } else {
             expect(client.responses, isEmpty);
+            expect(provider.walletConnectState, stateBefore);
+            expect(provider.errorMessage, errorBefore);
           }
           expect(replacement.responses, isEmpty);
         },

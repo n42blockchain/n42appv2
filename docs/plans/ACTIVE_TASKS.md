@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 244: Aptos/NEAR stale transaction signatures and Sui stale UI errors are suppressed after native completion. 16 pre-fix failures; 1,084 WalletConnect tests pass; scoped analysis clean. Transaction signer proof, broader lifecycle/login/release acceptance remain open.
+
 > Batch 243: TRON/Solana transaction handlers discard obsolete native results; 12 pre-fix failures, 1,063 passing WalletConnect tests and clean scoped analysis. Transaction key binding, Aptos completion review and broader archive/login/release work remain open.
 
 > Batch 242 interruption check: Sui message-key binding recovered; 1,049 WalletConnect tests pass. Remaining signer/worktree reconciliation, archive ownership, native login, current-source regression and fresh release are explicitly open. See [current reconciliation](reconciliation-2026-11-06.md). Historical batch notices below are not a cumulative current TODO list.

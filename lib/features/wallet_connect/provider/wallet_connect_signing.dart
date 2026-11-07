@@ -614,6 +614,7 @@ mixin WalletConnectSigning
       mnemonic: credentials.mnemonic,
       pk: credentials.privateKey,
     );
+    if (!_signingContextIsCurrent(requireCurrent)) return;
     if (signedHex.isEmpty) {
       requireCurrent();
       viewStateDeal(
@@ -691,7 +692,7 @@ mixin WalletConnectSigning
       mnemonic: credentials.mnemonic,
       pk: credentials.privateKey,
     );
-    requireCurrent();
+    if (!_signingContextIsCurrent(requireCurrent)) return;
     if (signedResult.isEmpty) {
       viewStateDeal(
         WalletConnectState.error,
@@ -788,6 +789,7 @@ mixin WalletConnectSigning
         mnemonic: credentials.mnemonic,
         pk: credentials.privateKey,
       );
+      if (!_signingContextIsCurrent(requireCurrent)) return;
       if (signed.isEmpty) {
         requireCurrent();
         viewStateDeal(
