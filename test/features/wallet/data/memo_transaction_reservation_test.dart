@@ -215,6 +215,32 @@ void main() {
     );
   }
   for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain dispatch rejects changed transaction intent', () async {
+      final original = record(chain);
+      original.trId = await db.reserveMemoTransaction(
+        original,
+        trackDispatch: true,
+      );
+      for (final change in [
+        {'coinId': 99},
+        {'to1': 'other-recipient'},
+        {'price': '2'},
+        {'contract': 'other-token'},
+      ]) {
+        expect(
+          await db.markMemoTransactionDispatch(
+            TransationRecordModel.fromMap({...original.toMap(), ...change}),
+          ),
+          isFalse,
+        );
+        expect(
+          (await connection.query('TransationRecord'))
+              .single['memoDispatchPhase'],
+          'reserved',
+        );
+      }
+      expect(await db.markMemoTransactionDispatch(original), isTrue);
+    });
     test('$chain release targets only original pending identity', () async {
       final original = record(chain);
       original.trId = await db.reserveMemoTransaction(original);
@@ -224,6 +250,10 @@ void main() {
         {'txHash': 'cd' * 32},
         {'isTest': 1},
         {'from1': 'other'},
+        {'coinId': 99},
+        {'to1': 'other-recipient'},
+        {'price': '2'},
+        {'contract': 'other-token'},
         {'trId': 0},
       ]) {
         expect(

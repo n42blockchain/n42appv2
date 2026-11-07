@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 223: memo dispatch/release now match stored recipient, exact amount, contract and asset identity. Eight pre-fix SQLite failures reproduced; 124 related tests pass after repair. Broader maturity and release requirements remain open.
+
 > Batch 222: memo confirmation/quotes now track mutable signing configuration; persistence callbacks reject form/key changes before RPC. 65 widget cases pass. Native/live acceptance and broader remaining work are unchanged.
 
 > Batch 221: actual Android NEAR MethodChannel/WalletCore JNI passes two integration cases, including independent signature/reference matching and 12 malformed inputs. Temporary emulator stopped; physical devices untouched. Native component gap closed; full app/live/device, precise fees and new release remain open.

@@ -1652,3 +1652,7 @@ Current production MethodChannel/JNI signer passes actual emulator integration: 
 ### Batch 222 — memo confirmation configuration binding
 
 Snapshot derivation/key/precision/contract values instead of relying on mutable model identity. Recheck submission context around preparation and dispatch persistence. 65 quote/recovery/amount widget tests pass, including dispatch-time key changes on three chains. No live transaction or release claim.
+
+### Batch 223 — exact stored memo intent
+
+Fixed conditional dispatch/release SQL accepting altered recipient/amount/contract records; release also now binds coinId. Eight pre-fix failures across ADA/XLM/EGLD/NEAR become part of 124 passing SQLite/history/widget tests. No migration, live transfer or release upload.

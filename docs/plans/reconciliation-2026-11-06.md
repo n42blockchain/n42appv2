@@ -1,5 +1,12 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Match the complete stored transfer before dispatch or release — batch 223
+
+- Reproduced eight SQLite failures across ADA/XLM/EGLD/NEAR: dispatch accepted a copied record with a different receiver/amount/contract, while unsubmitted release also omitted coinId. Hash/row/owner checks alone did not reject these altered caller records. Failure evidence: `/tmp/n42-wallet-b223-before.log` (61 pass, eight failures).
+- Added recipient, exact persisted base-unit amount and contract to both conditional SQL mutations, plus coinId to release. The existing pending-state, dispatch-phase and owner/network constraints remain. No schema migration or broad deletion; a mismatch changes zero rows, and the original matching record can still dispatch/release normally.
+- **124 related SQLite/history/widget tests pass** at final source (`/tmp/n42-wallet-b223-final.log`, exit 0), including all eight previously failing behaviors and original-row success. Existing unknown-result, restart and terminal-state preservation remain covered. This is database behavior evidence, not real network/payment acceptance. Broader wallet/Chat work and updated release remain open.
+
+
 ### Bind memo confirmation and dispatch to signing configuration — batch 222
 
 - Review found that the shared memo form context captured the CoinModel reference, but not mutable private-key selection, derivation index/type/path, decimals or contract fields. A changed field on the same model could leave the asynchronous quote/confirmation looking current. Added value snapshots of those fields, including the resolved fallback derivation path; credentials are never logged or persisted by this check.

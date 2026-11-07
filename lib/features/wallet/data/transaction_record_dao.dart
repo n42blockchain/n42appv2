@@ -167,7 +167,7 @@ extension TransactionRecordDao on AppDatabase {
     return await db.update(
           'TransationRecord',
           {'memoDispatchPhase': 'dispatching'},
-          where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND isTest=? AND state=0 AND memoDispatchPhase=?',
+          where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND to1=? AND price=? AND contract=? AND isTest=? AND state=0 AND memoDispatchPhase=?',
           whereArgs: [
             id,
             values['txHash'],
@@ -176,6 +176,9 @@ extension TransactionRecordDao on AppDatabase {
             values['coinMiniName'],
             values['coinId'],
             values['from1'],
+            values['to1'],
+            values['price'],
+            values['contract'],
             values['isTest'],
             'reserved',
           ],
@@ -199,14 +202,18 @@ extension TransactionRecordDao on AppDatabase {
     final db = await database;
     final removed = await db.delete(
       'TransationRecord',
-      where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0',
+      where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND to1=? AND price=? AND contract=? AND isTest=? AND state=0',
       whereArgs: [
         id,
         hash,
         values['userUuid'],
         values['walletIndex'],
         values['coinMiniName'],
+        values['coinId'],
         values['from1'],
+        values['to1'],
+        values['price'],
+        values['contract'],
         values['isTest'],
       ],
     );
