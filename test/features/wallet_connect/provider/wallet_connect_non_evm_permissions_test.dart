@@ -278,6 +278,9 @@ void main() {
           const channel = MethodChannel('trustdart');
           TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
               .setMockMethodCallHandler(channel, (call) async {
+                if (call.method == 'generateAddress') {
+                  return {'legacy': c.address};
+                }
                 calls.add(call);
                 return 'fixture-signature';
               });
@@ -532,6 +535,9 @@ void main() {
           const channel = MethodChannel('trustdart');
           TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
               .setMockMethodCallHandler(channel, (call) {
+                if (call.method == 'generateAddress') {
+                  return Future.value({'legacy': c.address});
+                }
                 started.complete();
                 return pending.future;
               });
@@ -596,7 +602,10 @@ void main() {
           var attempts = 0;
           const channel = MethodChannel('trustdart');
           TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(channel, (_) async {
+              .setMockMethodCallHandler(channel, (call) async {
+                if (call.method == 'generateAddress') {
+                  return {'legacy': c.address};
+                }
                 if (attempts++ > 0) return 'fixture-signature';
                 if (failure == 'exception') {
                   throw PlatformException(code: 'signing_failed');
@@ -640,6 +649,173 @@ void main() {
           expect(provider.walletConnectState, WalletConnectState.connect);
         },
       );
+    }
+  }
+  for (final c in _chains.where((c) => c.type == 'TRX' || c.type == 'SOL')) {
+    final method = c.methods.firstWhere((m) => m.endsWith('Message'));
+    for (final mismatch in [
+      'different',
+      'empty',
+      'missing',
+      'wrong-type',
+      'exception',
+      'case',
+    ]) {
+      test(
+        '$method refuses $mismatch derived address before message signing',
+        () async {
+          var signed = 0;
+          const channel = MethodChannel('trustdart');
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (call) async {
+                if (call.method == 'generateAddress') {
+                  if (mismatch == 'exception') {
+                    throw PlatformException(code: 'derive-failed');
+                  }
+                  if (mismatch == 'missing') return <String, dynamic>{};
+                  return {
+                    'legacy': switch (mismatch) {
+                      'empty' => '',
+                      'wrong-type' => 12,
+                      'case' => c.address.toLowerCase(),
+                      _ => 'another-address',
+                    },
+                  };
+                }
+                signed++;
+                return 'fixture-signature';
+              });
+          addTearDown(
+            () => TestDefaultBinaryMessengerBinding
+                .instance
+                .defaultBinaryMessenger
+                .setMockMethodCallHandler(channel, null),
+          );
+          provider.coinModels = [
+            sessionCoin(
+              type: c.type,
+              blockchain: c.blockchain,
+              address: c.address,
+            )..coin['path'] = {'legacy': "m/44'/0'/0'"},
+          ];
+          provider.coinModelsIndex = 0;
+          client.activeSessions['request-topic'] = _session(
+            c.ns,
+            c.chain,
+            c.address,
+            c.methods,
+          );
+          provider.actionData = sessionRequest(method, {
+            c.field: c.address,
+            'message': 'Zml4dHVyZQ==',
+          }, chain: c.chain);
+          await provider.messageSignTap();
+          expect(signed, 0);
+          expect(client.responses, isEmpty);
+          expect(provider.walletConnectState, WalletConnectState.error);
+        },
+      );
+    }
+  }
+  for (final c in _chains.where((c) => c.type == 'TRX' || c.type == 'SOL')) {
+    final method = c.methods.firstWhere((m) => m.endsWith('Message'));
+    for (final scenario in [
+      'wallet',
+      'owner',
+      'revoked',
+      'path',
+      'request',
+      'valid-key',
+      'valid-mnemonic',
+      'empty',
+    ]) {
+      test('$method binds derivation and signing across $scenario', () async {
+        final signer = provider as _Signer;
+        if (scenario == 'empty' || scenario == 'valid-mnemonic') {
+          signer.credentials =
+              Completer<({String mnemonic, String privateKey})>()..complete((
+                mnemonic: scenario == 'empty' ? '' : 'fixture mnemonic',
+                privateKey: '',
+              ));
+        }
+        final calls = <MethodCall>[];
+        final started = Completer<void>();
+        final pending = Completer<Map<String, String>>();
+        const channel = MethodChannel('trustdart');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (call) async {
+              calls.add(call);
+              if (call.method == 'generateAddress') {
+                started.complete();
+                return pending.future;
+              }
+              return 'fixture-signature';
+            });
+        addTearDown(
+          () => TestDefaultBinaryMessengerBinding
+              .instance
+              .defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, null),
+        );
+        provider.coinModels = [
+          sessionCoin(
+            type: c.type,
+            blockchain: c.blockchain,
+            address: c.address,
+          )..coin['path'] = {'legacy': "m/44'/0'/0'"},
+        ];
+        provider.coinModelsIndex = 0;
+        client.activeSessions['request-topic'] = _session(
+          c.ns,
+          c.chain,
+          c.address,
+          c.methods,
+        );
+        provider.actionData = sessionRequest(method, {
+          c.field: c.address,
+          'message': 'Zml4dHVyZQ==',
+        }, chain: c.chain);
+        final operation = provider.messageSignTap();
+        if (scenario == 'empty') {
+          await operation;
+          expect(calls, isEmpty);
+          expect(client.responses, isEmpty);
+          expect(provider.walletConnectState, WalletConnectState.error);
+          return;
+        }
+        await started.future;
+        if (scenario == 'wallet') signer.walletIndex++;
+        if (scenario == 'owner') signer.owner = 'changed';
+        if (scenario == 'revoked') client.activeSessions.clear();
+        if (scenario == 'path') provider.coinModels.single.pathIndex++;
+        if (scenario == 'request') {
+          provider.actionData = sessionRequest(
+            method,
+            {},
+            chain: c.chain,
+            id: 999,
+          );
+        }
+        pending.complete({'legacy': c.address});
+        await operation;
+        if (scenario.startsWith('valid')) {
+          expect(calls.map((call) => call.method), [
+            'generateAddress',
+            'signMessage',
+          ]);
+          for (final field in ['coin', 'path', 'mnemonic', 'pk']) {
+            expect(calls.last.arguments[field], calls.first.arguments[field]);
+          }
+          expect(
+            calls.last.arguments['mnemonic'],
+            scenario == 'valid-key' ? '' : 'fixture mnemonic',
+          );
+          expect(client.responses.single.$2.error, isNull);
+        } else {
+          expect(calls.map((call) => call.method), ['generateAddress']);
+          expect(client.responses, isEmpty);
+        }
+      });
     }
   }
 }

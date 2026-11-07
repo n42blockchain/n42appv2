@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Bind TRON and Solana message keys to approved addresses — batch 241
+
+- **12 pre-fix failures reproduced** (`/tmp/n42-wallet-b241-before.log`): a different, empty, missing, wrong-type, failed or case-changed derived address did not prevent message signing. These cases cover TRON/Solana only, whose configured address can be compared directly to the native derivation result.
+- Capture credentials once; use the same selected private key (or mnemonic when no key is supplied), path and coin for address derivation and signing. Require exact nonempty address equality, with no case folding. Check captured request/session/wallet context after credential loading, derivation and helper completion before native signing. Empty credentials fail without native dispatch. Existing post-signature guards remain active.
+- **1,032 WalletConnect directory tests pass** (`/tmp/n42-wallet-b241-final.log`). After adding the final helper-return guard, **313 final-source non-EVM tests pass** (`/tmp/n42-wallet-b241-final-scoped.log`); scoped analysis clean (`/tmp/n42-wallet-b241-analysis-final.log`). Added 28 cases total, including pending derivation mutation, empty credentials and both valid credential forms; positive tests compare native derivation/signing arguments. Existing native mocks now explicitly return matching derivation results instead of treating every call as a signature.
+- This is message-handler binding verified through mocked native boundaries, not independent native cryptographic or live-device acceptance. Aptos/Sui message key binding, named/rotated account proofs, transaction signer paths and native message protocol parity remain open. Do not apply plain derived-address equality blindly to named/rotated accounts. Old-worktree reconciliation, archive lifecycle, native login and release also remain open; no live operation/upload.
+
+
 ### Reject empty native message signatures — batch 240
 
 - **16 failures reproduced** (`/tmp/n42-wallet-b240-before.log`): for TRON/Aptos/Sui/Solana, empty/whitespace native results and errors/null converted by Trustdart to empty strings were sent as successful WalletConnect responses.

@@ -83,7 +83,10 @@ mixin WalletConnectSigning
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         requireMessageCurrent = requireCurrent;
-        final credentials = await getCurrentWalletCredentials();
+        final credentials = await _addressBoundMessageCredentials(
+          cm,
+          requireCurrent,
+        );
         requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
@@ -187,7 +190,10 @@ mixin WalletConnectSigning
         }
         final requireCurrent = _nonEvmSigningGuard(eventData, cm);
         requireMessageCurrent = requireCurrent;
-        final credentials = await getCurrentWalletCredentials();
+        final credentials = await _addressBoundMessageCredentials(
+          cm,
+          requireCurrent,
+        );
         requireCurrent();
         final path = getPathWithIndex(
           cm.config.pathForAddrType(cm.addrType)!,
@@ -919,6 +925,43 @@ mixin WalletConnectSigning
         (requireCurrent == null || _signingContextIsCurrent(requireCurrent))) {
       viewStateDeal(WalletConnectState.connect);
     }
+  }
+
+  /// TRON/Solana addresses are verified with the same captured key material
+  /// and derivation path passed to message signing. Do not apply this equality
+  /// rule to named/rotated accounts without their chain-specific key proof.
+  Future<({String mnemonic, String privateKey})>
+  _addressBoundMessageCredentials(
+    CoinModel coin,
+    void Function() requireCurrent,
+  ) async {
+    final loaded = await getCurrentWalletCredentials();
+    requireCurrent();
+    final key = loaded.privateKey.trim().isEmpty ? '' : loaded.privateKey;
+    final mnemonic = key.isEmpty ? loaded.mnemonic : '';
+    if (key.isEmpty && mnemonic.trim().isEmpty) {
+      throw StateError('Signing key is unavailable');
+    }
+    final basePath = coin.config.pathForAddrType(coin.addrType);
+    if (basePath == null || basePath.isEmpty) {
+      throw StateError('Signing derivation path is unavailable');
+    }
+    final derived = await trustdart.generateAddress(
+      coin.config.coinType,
+      getPathWithIndex(basePath, coin.pathIndex),
+      coin.addrType,
+      mnemonic: mnemonic,
+      pk: key,
+      isTest: coin.isTest,
+    );
+    requireCurrent();
+    final address = derived[coin.addrType];
+    if (address is! String || address.isEmpty || address != coin.address) {
+      throw StateError(
+        'Signing key does not match the selected wallet address',
+      );
+    }
+    return (mnemonic: mnemonic, privateKey: key);
   }
 
   void _requireMessageSignature(String signature) {

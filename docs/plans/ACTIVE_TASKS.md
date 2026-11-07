@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 241: TRON/Solana message signing now verifies the derived address with identical captured key material and path. 12 pre-fix failures; 1,032 directory tests and 313 final-source scoped tests pass; analysis clean. Other non-EVM account models, native parity/device validation and broader release/lifecycle work remain open.
+
+
 > Batch 240: empty native WalletConnect message signatures fail without a success response; explicit retry remains available. 16 pre-fix failures and 1,004 passing directory tests. Non-EVM key/address binding, native protocol parity and broader lifecycle/release requirements remain open.
 
 
