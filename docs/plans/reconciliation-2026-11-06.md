@@ -2,6 +2,12 @@
 
 Scope: November 3–6 wallet work, its resolved Chat branch and ID Hub; adjacent Mintus release records checked separately. This is a source/record reconciliation, not fresh device, server or store acceptance. Repeat inspection found an interrupted, uncommitted Aptos native-signing integration on top of `336ef29ad` (matching remote master). Batch 31 below closes that implementation after verification. A subsequent inspection found interrupted scheduled-message account-isolation edits; batch 36 now closes and pushes that implementation (see below); the older untracked plans and unused Chat mirror are preserved.
 
+### Require thread receipts and preserve composer drafts — batch 186
+
+- Text/image/file thread sends now reject null/blank receipt IDs and overlapping pending dispatch. Text completion reports acceptance to the real page; the composer retains pending/failed text and preserves subsequent edits, clearing only unchanged text after acknowledgement. Reply targets survive failure. Errors remain visible without replacing the composer.
+- Ten new receipt/duplicate BLoC cases and three real-page cases pass with related suites: **78 pass**, exit 0 (/tmp/n42-chat-b186-final.log). Existing success fixtures now supply nonempty receipts. Initial missing Uint8List mock fallback was fixed and the run repeated. Scoped analysis: zero errors/warnings, eight infos (/tmp/n42-chat-b186-analysis.log). Chat `e7c94aa748f0f0b9dacc79295670687f8f4d9aff` is pushed and pinned. Only Chat changes in dependency resolution; three wallet host fixtures pass (/tmp/n42-wallet-b186-host.log).
+- Remaining: process/restart draft persistence, timeout/unknown-outcome reconciliation, queued completion after bloc closure, account changes without initialization, same-generation races and proactive clear-boundary updates. Media/provider/device/live acceptance, native login, wallet recovery/dependencies/payments and current-source release remain open. No automatic resend or exactly-once delivery claim.
+
 ### Isolate thread lifecycle and asynchronous completion — batch 185
 
 - Thread initialization now resets state, detaches subscriptions and increments a generation. Initialization/root fallback, refresh/pagination and text/image/file send completion check the originating generation; stream callbacks and queued update events retain their origin. Dispose clears state before cleanup, close invalidates pending work, and cancellation errors are caught.
