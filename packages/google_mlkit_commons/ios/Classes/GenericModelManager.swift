@@ -31,48 +31,48 @@ public class GenericModelManager: NSObject {
       }
       let modelObject = model as AnyObject
       let key = ObjectIdentifier(modelObject)
-      do {
-        pendingDownloadsLock.lock()
-        defer { pendingDownloadsLock.unlock() }
-        if pendingDownloads[key] != nil {
-          result(FlutterError(
-            code: "download_in_progress",
-            message: "A download for this model is already in progress",
-            details: nil
-          ))
-          return
-        }
-        let successToken = NotificationCenter.default.addObserver(
-          forName: Notification.Name.mlkitModelDownloadDidSucceed,
-          object: nil,
-          queue: .main
-        ) { [weak self] notification in
-          guard let remote = notification.userInfo?[ModelDownloadUserInfoKey.remoteModel.rawValue] as? RemoteModel,
-                remote.name == model.name,
-                remote.isKind(of: type(of: model)) else { return }
-          self?.completeDownload(key: key, success: true)
-        }
-        let failToken = NotificationCenter.default.addObserver(
-          forName: Notification.Name.mlkitModelDownloadDidFail,
-          object: nil,
-          queue: .main
-        ) { [weak self] notification in
-          guard let remote = notification.userInfo?[ModelDownloadUserInfoKey.remoteModel.rawValue] as? RemoteModel,
-                remote.name == model.name,
-                remote.isKind(of: type(of: model)) else { return }
-          self?.completeDownload(key: key, success: false)
-        }
-        pendingDownloads[key] = PendingDownload(
-          successToken: successToken,
-          failToken: failToken,
-          result: result
-        )
-        observerTokensByKey[key] = (success: successToken, fail: failToken)
+      pendingDownloadsLock.lock()
+      if pendingDownloads[key] != nil {
+        pendingDownloadsLock.unlock()
+        result(FlutterError(
+          code: "download_in_progress",
+          message: "A download for this model is already in progress",
+          details: nil
+        ))
+        return
       }
+      let successToken = NotificationCenter.default.addObserver(
+        forName: Notification.Name.mlkitModelDownloadDidSucceed,
+        object: nil,
+        queue: .main
+      ) { [weak self] notification in
+        guard let remote = notification.userInfo?[ModelDownloadUserInfoKey.remoteModel.rawValue] as? RemoteModel,
+              remote.name == model.name,
+              remote.isKind(of: type(of: model)) else { return }
+        self?.completeDownload(key: key, success: true)
+      }
+      let failToken = NotificationCenter.default.addObserver(
+        forName: Notification.Name.mlkitModelDownloadDidFail,
+        object: nil,
+        queue: .main
+      ) { [weak self] notification in
+        guard let remote = notification.userInfo?[ModelDownloadUserInfoKey.remoteModel.rawValue] as? RemoteModel,
+              remote.name == model.name,
+              remote.isKind(of: type(of: model)) else { return }
+        self?.completeDownload(key: key, success: false)
+      }
+      pendingDownloads[key] = PendingDownload(
+        successToken: successToken,
+        failToken: failToken,
+        result: result
+      )
+      observerTokensByKey[key] = (success: successToken, fail: failToken)
+      pendingDownloadsLock.unlock()
       // Call download after releasing the lock so a synchronous notification cannot deadlock
       // (completeDownload needs the lock). pendingDownloads is already populated above.
+      let wifiOnly = task["wifi"] as? Bool ?? true
       let conditions = ModelDownloadConditions(
-        allowsCellularAccess: true,
+        allowsCellularAccess: !wifiOnly,
         allowsBackgroundDownloading: true
       )
       modelManager.download(model, conditions: conditions)

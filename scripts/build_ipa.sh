@@ -57,6 +57,9 @@ if [ "$IOS_SDK_MAJOR" -lt 27 ] || { [ "$IOS_SDK_MAJOR" -eq 27 ] && [ "$IOS_SDK_M
   exit 1
 fi
 
+# Fetch verified model bundles before changing versions or invoking CocoaPods.
+python3 scripts/prepare_mlkit_resources.py
+
 # === Read the canonical version from pubspec.yaml ===
 CURRENT_PUBSPEC=$(grep '^version:' "$PUBSPEC" | sed 's/version: //')
 CURRENT_BUILD_NAME=$(echo "$CURRENT_PUBSPEC" | cut -d'+' -f1)

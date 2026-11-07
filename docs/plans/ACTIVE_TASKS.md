@@ -322,3 +322,9 @@
 
 - The three unexplained raw differences above are empty Mach-O load-command metadata replacements or trailing archive padding. Code/data sections, relocations and symbols match. A strict read-only verifier confirms all 15 device payloads after documented container/metadata normalization, with matching SHA-256 values.
 - This supersedes the unexplained binary difference blocker, without rewriting device binaries. Negative/concurrent native notifications, final host regression/review and full physical-device/business acceptance remain open. Evidence: scripts/verify_mlkit_device_payloads.py and docs/testing/mlkit-device-payload-verification-2026-11-07.json.
+
+
+### 2026-11-07 MLKit notification and Wi-Fi fixes
+
+- Production Swift manager: 11/11 controlled notification/locking tests pass after fixing duplicate-callback reentry deadlock and honoring Wi-Fi-only/default download policy. Real iOS model smoke: 8 passed. CI/IPA resource preparation wired; local YAML/shell syntax checked.
+- Real plugin concurrency test separately reproduces first-download cancellation when the plugin replaces its manager. Plugin lifecycle fix and native concurrency rerun remain required before integration.
