@@ -1,6 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Bind search aggregation to the initiating account — batch 228
+
+- Reproduced 25 failures spanning history save plus four category awaits, with client/user/token/device/server replacements (`/tmp/n42-chat-b228-before.log`). Capture one origin for global search and stop after a changed session rather than reading subsequent categories or returning mixed results. Added origin checks around privacy settings, username/ENS, room metadata and archive completion; visibility checks no longer disappear when the optional clear-store is absent.
+- Chat `3c02667b69960e408dc77d00fe457dc93c1141f0` committed/pushed. **128 related tests pass**, including 29 new session cases (`/tmp/n42-chat-b228-final.log`). Analysis has no errors/warnings and five existing constructor-style infos (`/tmp/n42-chat-b228-analysis-final.log`, no-fatal-infos exit 0). Archive missing-table log lines are deliberate fallback tests, not test failures.
+- Wallet pub get exits zero; lock changes only Chat ref and package_config resolves that exact Git cache. **51 host checks pass** (`/tmp/n42-wallet-b228-host.log`, exit 0). Baseline untracked wallet files and modified Chat coverage remain untouched.
+- Remaining search boundaries: proactive invalidation of already-rendered results, datasource-internal awaits/pagination and full session/UI acceptance. Broader wallet/native login, current-source full regression and new release remain open. No live message, transaction, device action, deployment or upload.
+
+
 ### Preserve current search when history changes — batch 227
 
 - Reproduced four failures: empty/global searches could restore deleted history or report an obsolete read error after ClearSearchHistory. Failure evidence `/tmp/n42-chat-b227-before.log`. Added revision-aware history refresh to PerformSearch without cancelling or discarding current search results; stop retries when the search generation expires. Current-revision errors still propagate.

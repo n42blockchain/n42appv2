@@ -1674,3 +1674,8 @@ Chat 7eef1654 removes cross-account shared history storage and serializes same-i
 ### Batch 227 — History revision during global search
 
 Four regressions reproduced old history/error restoration after clear. Revision-aware refresh now preserves current results and drops obsolete history reads/errors. Chat 2f136ef3: 59 related tests and scoped analysis pass; wallet host 51 pass. Global repository session-origin checks remain open; no new release or full-suite claim.
+
+
+### Batch 228 — Search session origin
+
+Global search and category async boundaries now check captured client/user/token/device/server identity. 25 reproduced aggregation failures; 128 related tests pass including 29 new session cases. Analysis has five pre-existing infos, no errors/warnings. Wallet pins Chat 3c02667b and 51 host checks pass. UI proactive invalidation/datasource lifecycle and release acceptance remain open.

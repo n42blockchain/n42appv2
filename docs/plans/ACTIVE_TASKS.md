@@ -1,6 +1,9 @@
 # 当前任务与验收台账
 
 
+> Batch 228: global/category search now rejects changed account origins across awaits; 128 related Chat tests and 51 host checks pass. Pin 3c02667b. Proactive UI invalidation and datasource lifecycle remain open, alongside native login/full regression/release.
+
+
 > Batch 227: clear-during-search history races reproduced and repaired; 59 Chat tests and 51 host checks pass. Chat pin 2f136ef3. Next: guard global search across account changes; full regression/native login/release remain open.
 
 
