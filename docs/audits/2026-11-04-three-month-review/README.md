@@ -1862,3 +1862,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - SDK source shows sendAgain cancels the local failed event when its file cache is missing. Sender now checks original transaction, filename and cached file before SDK retry and rechecks session ownership after the database await. Missing cache returns failure without calling sendAgain.
 - Eleven sender tests pass (`/tmp/n42-chat-b254-final.log`), including cached and missing-file paths. Scoped analysis has two info diagnostics, no errors/warnings (`/tmp/n42-chat-b254-analysis.log`).
 - Chat commit 94bc47ec9a9d3bd5a03cc70a4527f191aedfbb2e. Cache eviction between precheck and SDK lookup, real media recovery, backend upgrade rehearsal and remaining maturity work stay open.
+
+### Release export Timeline subscriptions — batch 256 (2026-11-07)
+
+- Full and incremental exports now release each acquired SDK Timeline in finally, including event-read failure and session-check exits. Four focused lifecycle cases pass; 82 backup-related tests pass (`/tmp/n42-chat-b256-final.log`). Scoped analysis has seven info diagnostics, no errors/warnings.
+- Test setup initially omitted full-export room metadata and placed its helper after use; those fixture errors were corrected before the accepted run. Unrelated test formatting was removed.
+- Chat 43d355ab47979d0e8224ad2a1dd4424a4ec0e579 includes the prior cache/session regression. SDK cancellation is initiated synchronously and does not await each underlying stream cancellation. Full-history loading, archive/restore ownership, live media recovery, backend rehearsal and remaining maturity requirements stay open.

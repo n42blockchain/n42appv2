@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 256: full/incremental backup Timeline cleanup implemented. Four lifecycle cases, 82 backup and 51 host tests pass; pin 43d355ab. Full history, ownership, device/live acceptance and remaining maturity work stay open.
+
 > Batch 254: missing media cache now fails without invoking SDK cancellation. Eleven sender and 51 host tests pass; pin 94bc47ec. Concurrent cache eviction, real recovery and remaining maturity requirements stay open.
 
 > Batch 253: sender resends preserve transaction/type, validate failed-message ownership and coalesce concurrent requests. Uploaded attachments/GIFs and cached-upload recovery retained. Seven pre-fix failures; 41 related and 51 host tests pass. Pin d569b4aa; live delivery/idempotency and remaining maturity work stay open.

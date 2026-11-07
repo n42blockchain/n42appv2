@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Release export Timeline subscriptions — batch 256 (2026-11-07)
+
+- Full and incremental exports now release each acquired SDK Timeline in finally, including event-read failure and session-check exits. Four focused lifecycle cases pass; 82 backup-related tests pass (`/tmp/n42-chat-b256-final.log`). Scoped analysis has seven info diagnostics, no errors/warnings.
+- Test setup initially omitted full-export room metadata and placed its helper after use; those fixture errors were corrected before the accepted run. Unrelated test formatting was removed.
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b256-host.log`); manifest and lock resolve the new commit.
+- Chat 43d355ab47979d0e8224ad2a1dd4424a4ec0e579 includes the prior cache/session regression. SDK cancellation is initiated synchronously and does not await each underlying stream cancellation. Full-history loading, archive/restore ownership, live media recovery, backend rehearsal and remaining maturity requirements stay open.
+
+
 ### Preserve failed media with missing cache — batch 254 (2026-11-07)
 
 - SDK source shows sendAgain cancels the local failed event when its file cache is missing. Sender now checks original transaction, filename and cached file before SDK retry and rechecks session ownership after the database await. Missing cache returns failure without calling sendAgain.
