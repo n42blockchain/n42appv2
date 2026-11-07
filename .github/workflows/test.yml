@@ -207,7 +207,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Nexus 6
-          script: bash -o pipefail -c "flutter test integration_test/ --no-pub --reporter expanded 2>&1 | tee android-integration.log"
+          script: bash -o pipefail -c "bash scripts/run_android_ci_integration.sh 2>&1 | tee android-integration.log"
 
       - name: Preserve test results
         if: always()
