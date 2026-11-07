@@ -1,6 +1,17 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Reject incomplete NEAR submission receipts — batch 215
+
+- Reproduced **14 failing cases**: old `sendTransaction` returned success with missing/unknown status, SuccessReceiptId, malformed SuccessValue or invalid transaction hashes, and passed malformed base64 to RPC. Failure baseline `/tmp/n42-wallet-b215-before.log`.
+- Validate canonical signed base64 before dispatch. Accept only a single SuccessValue status carrying valid base64 and a canonical 32-byte base58 transaction hash. Report incomplete/transport/RPC results as unknown; explicit execution failure is an error. Preserve the selected network and signed payload, and do not introduce resubmission. BaseHttp's existing retry default remains false.
+- **169 API, sender and WalletConnect lifecycle tests pass** (`/tmp/n42-wallet-b215-final.log`). Includes empty successful return value, nonempty success, missing status, pending receipt reference, mixed status, malformed hash/encoding and one-call transport failure. No real transaction was sent.
+- Final follow-up distinguishes invalid encoding before dispatch from unknown outcome after dispatch; the 19 submission cases are rerun at final source (`/tmp/n42-wallet-b215-final-style.log`). Scoped analysis: `/tmp/n42-wallet-b215-analysis-final.log`. These 19 overlap the 169-case run and are not an additional unique test count.
+- [NEAR RPC documentation](https://docs.near.org/api/rpc/transactions) distinguishes execution status from finality: broadcast_tx_commit is optimistic execution, not finalized settlement. This patch validates its execution result; it does not establish finality. A response hash is syntax-checked, not yet compared with a locally computed signed-transaction hash.
+- Remaining required work: bind receipt identity to the local signed payload, persist pre-submit transaction identity, recover unknown outcomes without duplicate sends, represent uncertainty through page/history state, precise fees and live/device/JNI acceptance. An error here is not evidence of safe retry. Release 73325 predates this fix; no new upload is claimed.
+
+
+
 ### Reserve NEAR storage stake before transfer — batch 214
 
 - Previous ordinary/Max sends compared amount plus fee only with raw account amount, ignoring storage staking. Added a separate transfer-balance query while retaining `getBalance`'s existing raw-amount display contract. Query finalized account data, then fetch the storage price from `EXPERIMENTAL_protocol_config` at that exact block hash; do not mix latest configuration with an unrelated account snapshot.

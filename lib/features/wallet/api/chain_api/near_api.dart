@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
@@ -162,31 +165,47 @@ class NearApi {
     );
   }
 
-  /// Send signed transaction
+  /// Submit once. An absent/nonterminal receipt is an unknown outcome, not
+  /// evidence that the signed transaction was rejected or is safe to resend.
   Future<MessageModel> sendTransaction(String signedTxBase64) async {
+    MessageModel unknown() =>
+        MessageModel.error()
+          ..data = 'NEAR transaction outcome is unknown; check its status';
+    try {
+      if (signedTxBase64.isEmpty ||
+          base64Encode(base64Decode(signedTxBase64)) != signedTxBase64) {
+        return MessageModel.error()..data = 'Invalid signed NEAR encoding';
+      }
+    } catch (_) {
+      return MessageModel.error()..data = 'Invalid signed NEAR encoding';
+    }
     try {
       final response = await _rpcPost(
         _rpcBody('broadcast_tx_commit', [signedTxBase64]),
       );
-      if (response != null && response['result'] != null) {
-        final result = response['result'];
-        if (result['status'] != null && result['status']['Failure'] != null) {
-          return MessageModel()
-            ..error = true
-            ..data = result['status']['Failure'].toString();
-        }
-        return MessageModel()..data = result['transaction']['hash'];
+      if (response is! Map || response['result'] is! Map) return unknown();
+      final result = response['result'] as Map;
+      final status = result['status'];
+      // SuccessReceiptId only points to subsequent execution; it is not the
+      // terminal SuccessValue returned after that receipt completes.
+      if (status is! Map || status.length != 1) return unknown();
+      if (status.containsKey('Failure')) {
+        return MessageModel.error()..data = 'NEAR transaction execution failed';
       }
-      if (response != null && response['error'] != null) {
-        return MessageModel()
-          ..error = true
-          ..data = (response['error']['message'] ?? 'Transaction failed');
+      final value = status['SuccessValue'];
+      if (value is! String || base64Encode(base64Decode(value)) != value) {
+        return unknown();
       }
-      return MessageModel()
-        ..error = true
-        ..data = 'Unknown error';
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
+      final transaction = result['transaction'];
+      if (transaction is! Map || transaction['hash'] is! String) {
+        return unknown();
+      }
+      final hash = transaction['hash'] as String;
+      final bytes = Base58Decode(hash);
+      if (bytes.length != 32 || Base58Encode(bytes) != hash) return unknown();
+      return MessageModel()..data = hash;
+    } catch (_) {
+      return unknown();
     }
   }
 

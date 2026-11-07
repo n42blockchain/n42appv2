@@ -1620,3 +1620,7 @@ Swift/Kotlin now reject missing or malformed account, nonce, hash and amount bef
 ## Batch 214 — NEAR storage reserve
 
 Separate transfer balance now uses finalized account data and storage price at the same block, preserves NEP-448 exemption and locked-stake coverage, and blocks ordinary/Max spending of reserved funds. Existing raw display balance remains unchanged. 71 API/sender/factory tests pass; public mainnet RPC read-only schema check succeeds. This does not optimize the existing gas reserve or establish payment/JNI/device acceptance. See reconciliation for logs and remaining boundaries. Release 73325 predates this change.
+
+## Batch 215 — NEAR submission response checks
+
+Fourteen failures reproduced before repair. Signed-base64 validation now precedes submission; success requires one valid SuccessValue and a canonical 32-byte base58 transaction ID. Missing/pending/malformed/transport responses no longer claim success. 169 API/sender/WalletConnect lifecycle regressions pass. Logs `/tmp/n42-wallet-b215-{before,final,analysis}.log`. Optimistic execution is not finality; local-hash binding, journal/UI recovery and live acceptance remain open. No real transfer; release 73325 unchanged.

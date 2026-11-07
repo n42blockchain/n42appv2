@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 215: NEAR submission rejects malformed/pending receipts instead of claiming success; 169 related cases pass. Local payload/hash binding, durable unknown-outcome recovery and finalized settlement remain open. No real transaction or new release upload.
+
 > Batch 214: NEAR transfer/Max now retains storage stake using same-final-block account/config data. Display balance contract is unchanged; 71 related tests and public read-only RPC schema verification pass. Precise fee/reserve preview, JNI/live/device and uncertain-outcome recovery remain open.
 
 > Batch 213: NEAR iOS/Android native parameter validation added before casts/key access; Swift/Kotlin each pass 96 boundary cases. Actual Swift signing and invalid-input rejection pass. Android JNI and full app/live acceptance remain open; 73325 predates these changes.
