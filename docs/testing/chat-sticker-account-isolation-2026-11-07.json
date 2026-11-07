@@ -1,43 +1,60 @@
 {
   "date": "2026-11-07",
-  "chatRef": "cd91a9e6d0ef453613866258bf1d052ddf51b5ce",
+  "chatRef": "bb628eab047c8532ba1a5eb3c9e1e347562aa6cf",
   "reproduced": [
     "Previous-account installed sticker cache returned after account switch.",
     "Held index read requested pack details under replacement account.",
-    "Install/uninstall continued work and returned success after account replacement."
+    "Install/uninstall continued work and returned success after account replacement.",
+    "Recent index requested replacement account packs.",
+    "Usage update wrote replacement account.",
+    "Upload result outlived its account.",
+    "Legacy asset load/upload completion sent stale emoji fallback."
   ],
   "changes": [
     "Cache partitioned by SDK client/user/device/homeserver.",
     "Changed-account index/detail/fallback completions discarded.",
-    "Install/uninstall retain original SDK client/user and recheck account scope after each asynchronous step."
+    "Install/uninstall retain original SDK client/user and recheck account scope after each asynchronous step.",
+    "Recent reads and usage writes check captured account; mutable recent lists are copied.",
+    "Old-account upload results are rejected.",
+    "Legacy media/fallback sending checks captured client/account after load/upload and before dispatch."
   ],
   "verification": {
-    "focusedPassed": 52,
+    "focusedPassed": 62,
     "scopedAnalysis": "No issues found",
     "fullChatSuite": {
-      "passed": 8641,
+      "passed": 8651,
       "failed": 0,
       "skipped": 4,
       "exitCode": 0,
-      "report": "/tmp/n42-chat-sticker-mutation-full-20261107.jsonl"
+      "report": "/tmp/n42-chat-sticker-send-full-20261107.jsonl"
     },
     "hostIntegration": {
       "passed": 110,
       "failed": 0,
       "exitCode": 0,
-      "log": "/tmp/n42-sticker-mutation-host-integration.log"
+      "log": "/tmp/n42-sticker-final-host-integration.log"
     },
     "androidNativeRun": {
       "id": 42421253719,
       "source": "9e607d5b8a7bb3d48bbf1f3c6f7ae3e90b7cc6d9",
       "status": "running at last observation; earlier read-only sticker fix source"
+    },
+    "earlierFullCi": {
+      "id": 42417927415,
+      "source": "164b0186be786bee0e8cf94bd63c51eb04030158",
+      "status": "all jobs completed successfully",
+      "walletTestsPassed": 7796,
+      "failed": 0,
+      "skipped": 0,
+      "artifactId": 13593601572,
+      "boundary": "Predates anonymous-auth and sticker isolation runtime fixes."
     }
   },
   "remaining": [
     "Native account-switch acceptance.",
     "Sticker sharing/import remains unimplemented (MEDIA-005).",
-    "No new TestFlight release.",
-    "Recent-usage/upload account-switch paths are outside this focused mutation verification."
+    "No new TestFlight release."
   ],
-  "previousReadOnlyFixRef": "a993d22c9b98523eab9cb8971c08d3f18d6afb76"
+  "previousReadOnlyFixRef": "a993d22c9b98523eab9cb8971c08d3f18d6afb76",
+  "previousMutationRef": "cd91a9e6d0ef453613866258bf1d052ddf51b5ce"
 }
