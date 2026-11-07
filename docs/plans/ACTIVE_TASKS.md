@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 238: WalletConnect coin lists now use completed wallet-build provenance; stale account/list contexts reject signing and refresh only from a ready source. 1,226 provider/WalletConnect tests pass, seven new origin/recovery cases. Non-EVM derived-key review, native/device acceptance, archive lifecycle and release remain open.
+
+
 > Batch 237: exact WalletConnect chain selection replaces namespace-only routing. Eight pre-fix failures reproduced; 960 directory tests pass, scoped analysis clean. Wallet-switch coin-list ownership requires upstream rebuild-origin tracking; old-worktree signer reconciliation and release remain open.
 
 

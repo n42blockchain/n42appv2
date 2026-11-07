@@ -43,6 +43,23 @@ mixin WalletConnectConnection on ChangeNotifier {
 
   int coinModelsIndex = -1;
   List<CoinModel> coinModels = [];
+  bool Function()? _coinModelsOriginIsCurrent;
+  bool get signingCoinModelsAreCurrent =>
+      _coinModelsOriginIsCurrent?.call() ?? true;
+
+  ({List<CoinModel> models, bool Function() isCurrent})
+  readSigningCoinModels() {
+    if (globalWapAdapter.walletIndex != signingWalletIndex) {
+      throw StateError('Selected wallet is still loading');
+    }
+    return globalWapAdapter.captureSigningCoinModels();
+  }
+
+  bool ensureSigningCoinModelsCurrent() {
+    if (signingCoinModelsAreCurrent) return true;
+    coinModelInit();
+    return signingCoinModelsAreCurrent;
+  }
 
   /// Look up the [CoinModel] for [type] from the loaded chain list.
   /// Returns null when the chain is not configured for the current session.
@@ -281,6 +298,7 @@ mixin WalletConnectConnection on ChangeNotifier {
       final endpoint = test ? cm.config.serviceTest : cm.config.service;
       current = () =>
           generation == _initializationGeneration &&
+          signingCoinModelsAreCurrent &&
           signingWalletIndex == index &&
           signingWalletOwner == owner &&
           coinModelsIndex >= 0 &&
@@ -335,6 +353,7 @@ mixin WalletConnectConnection on ChangeNotifier {
   }
 
   Future<bool> web3clientInitFromChainId(String chainStr) async {
+    if (!ensureSigningCoinModelsCurrent()) return false;
     final namespace = chainStr.split(':').first;
     // Use the same exact chain IDs as session/proposal resolution. A namespace
     // prefix alone must not turn an unknown network into a configured signer.
@@ -369,8 +388,16 @@ mixin WalletConnectConnection on ChangeNotifier {
   }
 
   void coinModelInit({int chainId = -1}) {
+    invalidateSigningInitialization();
+    _coinModelsOriginIsCurrent = () => false;
+    coinModels = [];
+    coinModelsIndex = -1;
     try {
-      coinModels = globalWapAdapter.coinModels
+      final index = signingWalletIndex;
+      final owner = signingWalletOwner;
+      final source = readSigningCoinModels();
+      if (!source.isCurrent()) throw StateError('Wallet coin models changed');
+      coinModels = source.models
           .where(
             (cm) =>
                 cm.config.blockchainType == BlockchainType.Ethereum.name ||
@@ -382,6 +409,10 @@ mixin WalletConnectConnection on ChangeNotifier {
           )
           .toList();
 
+      _coinModelsOriginIsCurrent = () =>
+          source.isCurrent() &&
+          signingWalletIndex == index &&
+          signingWalletOwner == owner;
       if (coinModels.isEmpty) return;
 
       if (chainId == -1) {

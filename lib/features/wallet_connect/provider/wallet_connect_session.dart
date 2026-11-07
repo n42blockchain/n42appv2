@@ -193,6 +193,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         viewStateDeal(WalletConnectState.error, params: "Error");
         return;
       }
+      if (!ensureSigningCoinModelsCurrent()) return;
       actionData = args;
       metadata = args.params.proposer.metadata;
 
@@ -359,6 +360,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
 
   /// Require approved method, chain and signer for every supported namespace.
   bool isSessionRequestAuthorized(wallet_connect.SessionRequestEvent request) {
+    if (!signingCoinModelsAreCurrent) return false;
     const signing = {
       'personal_sign',
       'eth_sign',
@@ -479,7 +481,8 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   Future<void> setActionDataMap(
     wallet_connect.SessionRequestEvent eventData,
   ) async {
-    if (!isSessionRequestAuthorized(eventData)) {
+    if (!ensureSigningCoinModelsCurrent() ||
+        !isSessionRequestAuthorized(eventData)) {
       await signClient?.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(

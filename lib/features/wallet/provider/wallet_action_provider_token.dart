@@ -21,7 +21,15 @@ extension WalletActionProviderToken on WalletActionProvider {
   //构建 币模型
   Future<void> buildCoinModel() async {
     if (_walletInfoLsit.isEmpty) return;
+    final owner = walletDataOwnerUuid;
+    if (owner != userUUID) {
+      _coinModelsOriginIsCurrent = null;
+      return;
+    }
+    final index = walletIndex;
+    final wallet = walletInfo;
     final keys = walletMap.keys.toList();
+    _coinModelsOriginIsCurrent = null;
 
     _coinModels = [];
     for (final key in keys) {
@@ -43,8 +51,16 @@ extension WalletActionProviderToken on WalletActionProvider {
       _coinModels.add(cm);
     }
     _applyChainOrder();
+    final models = _coinModels;
+    bool current() => userUUID == owner && walletIndex == index &&
+        hasAssetVisibilityWallet && identical(walletInfo, wallet) &&
+        models.length == _coinModels.length &&
+        models.every(_coinModels.contains);
     refresh();
+    if (!current()) return;
     await buildCoinModelInfo();
+    if (!current()) return;
+    _coinModelsOriginIsCurrent = current;
     globalTripInstance.selectUndoneTr();
   }
 

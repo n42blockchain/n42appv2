@@ -143,6 +143,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
     // 停在空白——失败时整体回滚到进入前的数据。
     final prevCoinList = coinList;
     final prevCoinModels = _coinModels;
+    final prevCoinModelsOrigin = _coinModelsOriginIsCurrent;
     final prevAggregatedCoins = _aggregatedCoins;
     coinList = [];
     _coinModels = [];
@@ -158,6 +159,7 @@ extension WalletActionProviderWallet on WalletActionProvider {
       if (!_walletReinitializationQueued) {
         coinList = prevCoinList;
         _coinModels = prevCoinModels;
+        _coinModelsOriginIsCurrent = prevCoinModelsOrigin;
         _aggregatedCoins = prevAggregatedCoins;
         rethrow;
       }

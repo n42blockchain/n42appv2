@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Bind WalletConnect coin lists to completed wallet builds — batch 238
+
+- Added an upstream signing-model capture that records the build's data owner, selected index, wallet object and model set. A new/failed/in-progress build cannot supply a signing snapshot; account or wallet changes invalidate it. Build completion and post-notification work check the captured owner. Existing init rollback restores the prior origin alongside its models, which remains unusable for a different wallet.
+- WalletConnect reads this source only when its selected index matches the adapter. Captured source validity participates in cached-key guards and session authorization. Chain selection/new request dispatch refresh stale lists; if rebuilding is not ready, old models/index/key are cleared and a later explicit retry can use the completed new source. Proposal resolution also checks the source.
+- **1,226 wallet-provider and WalletConnect tests pass** (`/tmp/n42-wallet-b238-final.log`, exit 0), including seven new source/binding cases: wallet/account/object changes, in-progress/build-time switching, stale request rejection and retry recovery. Corrected the synthetic storage fixture to prepopulate both wallets, removing an incidental out-of-range save log from the initial narrow run. Final scoped analysis has no errors/warnings and one existing constructor-style info (`/tmp/n42-wallet-b238-analysis-final.log`).
+- This verifies the application source-binding path, not native account/device acceptance or all mutable credential identities. Direct model injection used by standalone tests is not upstream provenance evidence. Old-worktree non-EVM derived-key binding and ordinary-sender semantic reconciliation remain open, along with archive account lifecycle, native login and release. No real signing, message, deployment or upload.
+
+
 ### Strict WalletConnect chain selection — batch 237
 
 - Follow-up on old-worktree reconciliation found web3clientInitFromChainId accepted any non-EVM reference sharing a namespace, treated unknown namespaces as EVM, ignored extra chain segments and threw for missing references. **Eight pre-fix failures** reproduced (`/tmp/n42-wallet-b237-before.log`).

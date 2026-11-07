@@ -345,6 +345,17 @@ class WalletActionProvider extends ChangeNotifier
     }).toList();
   }
 
+  bool Function()? _coinModelsOriginIsCurrent;
+
+  /// Capture only a completed model build belonging to the selected wallet.
+  ({List<CoinModel> models, bool Function() isCurrent}) captureSigningCoinModels() {
+    final origin = _coinModelsOriginIsCurrent;
+    bool current() => !isDisposed && !buildwallet &&
+        identical(_coinModelsOriginIsCurrent, origin) && origin?.call() == true;
+    if (!current()) throw StateError('Wallet coin models are not ready for signing');
+    return (models: List<CoinModel>.unmodifiable(_coinModels), isCurrent: current);
+  }
+
   List<CoinModel> _coinModels = [];
   List<CoinModel> get coinModels => _coinModels;
   //首页 显示的币列表（包含 CoinModel 和 AggregatedCoinModel）
