@@ -893,7 +893,7 @@ SPEC CHECKSUMS:
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
   wakelock_plus: d4ca1e4e4bc9de42cb55d57b5bdc158af318e3c6
   walletconnect_pay: f32ca9b9f5c9e29583072b082a6ef7b5d4e12288
-  WalletCoreSwiftProtobuf: 54df2ff1c711c0c10eb7f1bbc04995ee003964d1
+  WalletCoreSwiftProtobuf: 63ff9e6b8c6b88468681254335a285d80f7d42fa
   Web3Auth: 5459b2d5bcdb150c5e84c7229639422cba684814
   web3auth_flutter: 3c8ec5760dccbc0a3e4fc0c09000ae9eaae1c9d2
   WebRTC-SDK: 71bce2be85c3082d24bbfd1a9930ea07d0c494c1
