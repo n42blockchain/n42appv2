@@ -1,3 +1,4 @@
+import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
@@ -48,7 +49,13 @@ void main() {
   TransationRecordModel record(String chain, {String hash = 'ab'}) =>
       TransationRecordModel()
         ..coinMiniName = chain
-        ..coin = {'blockchainType': chain == 'EGLD' ? 'MultiversX' : chain}
+        ..coin = {
+          'blockchainType': chain == 'EGLD'
+              ? 'MultiversX'
+              : chain == 'NEAR'
+              ? 'Near'
+              : chain,
+        }
         ..to1 = 'recipient'
         ..price = BigInt.one
         ..from1 = 'sender'
@@ -125,6 +132,46 @@ void main() {
             'miniBlockHash': 'ef' * 32,
             'timestamp': 123,
           };
+          original.state = await resolver.resolveState(restored);
+          expect(original.state, 1);
+        } else if (chain == 'NEAR') {
+          final restored = TransationRecordModel.fromMap(
+            (await connection.query('TransationRecord')).single,
+          );
+          var finality = 'EXECUTED_OPTIMISTIC';
+          final resolver = TransactionStateResolver(
+            nearApiFactory: (_) => NearApi(
+              request: (_, body) async {
+                expect(body['params'], {
+                  'tx_hash': restored.txHash,
+                  'sender_account_id': restored.from1,
+                  'wait_until': 'FINAL',
+                });
+                return {
+                  'result': {
+                    'final_execution_status': finality,
+                    'status': {'SuccessValue': ''},
+                    'transaction': {
+                      'hash': restored.txHash,
+                      'signer_id': restored.from1,
+                      'receiver_id': restored.to1,
+                      'actions': [
+                        {
+                          'Transfer': {'deposit': restored.price.toString()},
+                        },
+                      ],
+                    },
+                  },
+                };
+              },
+            ),
+          );
+          expect(await resolver.resolveState(restored), -1);
+          await expectLater(
+            db.reserveMemoTransaction(record(chain, hash: 'cd')),
+            throwsA(isA<PendingMemoTransactionException>()),
+          );
+          finality = 'FINAL';
           original.state = await resolver.resolveState(restored);
           expect(original.state, 1);
         } else {

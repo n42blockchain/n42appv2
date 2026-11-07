@@ -1636,3 +1636,7 @@ Local hash survives API errors/missing/mismatched receipts as an uncertain resul
 ### Batch 218 — NEAR memo-page persistence
 
 Added NEAR to preparation/dispatch and exact-row release paths, with canonical Base58 hash validation. 113 SQLite/widget cases pass across all four supported chains. NEAR final receipt resolution is still absent and required for complete recovery; unknown reservations stay protected. Details and evidence are in the reconciliation.
+
+### Batch 219 — NEAR final history recovery
+
+Selected-network FINAL receipt queries now resolve the persisted NEAR row only when hash, sender, receiver and exact native Transfer amount match. Unknown responses remain pending. 147 API/resolver/session/SQLite cases pass, including reopen-to-final-resolution. No live transaction or production acceptance is implied; fee/native/device/release gaps remain. See current reconciliation.

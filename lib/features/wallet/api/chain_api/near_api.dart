@@ -224,7 +224,7 @@ class NearApi {
   ) async {
     return _rpcCall(
       'tx',
-      [txHash, senderId],
+      {'tx_hash': txHash, 'sender_account_id': senderId, 'wait_until': 'FINAL'},
       (r) => r,
       errorMsg: 'Transaction not found',
     );

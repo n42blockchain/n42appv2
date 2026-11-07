@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 219: NEAR history now queries FINAL receipts bound to hash/sender/receiver/exact amount. 147 related tests pass, including SQLite reopen and terminal resolution. Batches 217–219 close the local persistence/recovery wiring gap; fees, native/live/device acceptance and updated release remain open.
+
 > Batch 218: NEAR memo-page preparation/dispatch and canonical Base58 database reservation are wired; 113 SQLite/widget cases pass. Final receipt/history resolution is the next required gap; pending reservations must not be released on timeout/not-found. No new release.
 
 > Batch 217: NEAR sender preserves local hash on unknown outcomes and awaits preparation/dispatch hooks with account rechecks; 65 related tests pass. Next integrate NEAR into memo-page/database reservation and receipt recovery; hooks alone are not durable app recovery. No release upload.

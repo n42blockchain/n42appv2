@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Resolve persisted NEAR history through final receipts — batch 219
+
+- Added the missing NEAR branch to TransactionStateResolver. Query the selected mainnet/testnet with the original transaction hash and sender using `tx` / `wait_until: FINAL`. Require a canonical local 32-byte hash, unchanged record identity across the await, matching receipt hash/sender/receiver and one Transfer action carrying the exact decimal base-unit amount. Contract-token records remain unsupported rather than being mistaken for native transfers.
+- Only a FINAL receipt with a well-formed SuccessValue or nonempty Failure maps to terminal success/failure. Missing/optimistic/unknown/malformed responses, timeout and not-found remain unresolved; they never authorize automatic resubmission. This follows the [NEAR transaction RPC contract](https://docs.near.org/api/rpc/transactions), not proof of independent RPC trust or light-client verification.
+- **147 related tests pass**, covering both networks, success/failure, identity/amount/action mismatches, mutable history during await, transport errors, existing account-session isolation and real SQLite recovery (`/tmp/n42-wallet-b219-final.log`, exit 0). SQLite is closed/reopened with a pending NEAR row; optimistic execution keeps the reservation, then a matching FINAL receipt updates the original row and permits the next transfer. One malformed-response fixture initially inferred String values and rejected its intended integer mutation; corrected the fixture before final validation.
+- Together with batches 217–218, the normal NEAR send/history path now has pre-dispatch persistence and a local tested terminal-resolution loop. Still open: precise fee/confirmation binding, actual Android JNI/full native flows, real-node/device acceptance, independent receipt trust and a new release containing these changes. No funds moved and no release uploaded. Release 73325 predates this work.
+
+
 ### Wire NEAR pre-broadcast persistence into the memo page — batch 218
 
 - NEAR now uses the existing memo-page preparation and dispatch callbacks. The database reserves the account/sender/network before RPC and accepts canonical 32-byte Base58 NEAR identities rather than incorrectly imposing the hex format of ADA/XLM/EGLD. Existing chain hash rules remain unchanged. Malformed/oversized hashes are rejected before storage.

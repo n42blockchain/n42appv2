@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:fast_base58/fast_base58.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/ada_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -27,15 +31,18 @@ class TransactionStateResolver {
   final XlmApi _xlmApi;
   final AdaApi _adaApi;
   final EgldApi _egldApi;
+  final NearApi Function(bool) _nearApiFactory;
 
   TransactionStateResolver({
     TokenViewApi? tokenViewApi,
     XlmApi? xlmApi,
     AdaApi? adaApi,
     EgldApi? egldApi,
+    NearApi Function(bool)? nearApiFactory,
   }) : _tokenViewApi = tokenViewApi ?? TokenViewApi(),
        _xlmApi = xlmApi ?? XlmApi(),
        _egldApi = egldApi ?? EgldApi(),
+       _nearApiFactory = nearApiFactory ?? ((test) => NearApi(isTest: test)),
        _adaApi =
            adaApi ??
            AdaApi(
@@ -64,6 +71,8 @@ class TransactionStateResolver {
         return _resolveCardano(trm);
       case BlockchainType.MultiversX:
         return _resolveEgld(trm);
+      case BlockchainType.Near:
+        return _resolveNear(trm);
       case BlockchainType.Stellar:
         return _resolveStellar(trm);
       case BlockchainType.Filecoin:
@@ -94,6 +103,73 @@ class TransactionStateResolver {
       );
       if (mm.error) return -1;
       return mm.data as int? ?? 0;
+    }
+  }
+
+  Future<int> _resolveNear(TransationRecordModel record) async {
+    Object identity() => (
+      record.txHash,
+      record.isTest,
+      record.userUuid,
+      record.walletIndex,
+      record.coinId,
+      record.from1,
+      record.to1,
+      record.price,
+      record.contract,
+    );
+    final original = identity();
+    final hash = record.txHash;
+    final network = record.isTest;
+    try {
+      if (hash.length < 32 ||
+          hash.length > 44 ||
+          ![0, 1].contains(network) ||
+          record.from1.isEmpty ||
+          record.to1.isEmpty ||
+          record.price <= BigInt.zero ||
+          record.contract.isNotEmpty) {
+        return -1;
+      }
+      final bytes = Base58Decode(hash);
+      if (bytes.length != 32 || Base58Encode(bytes) != hash) return -1;
+      final response = await _nearApiFactory(network == 1)
+          .getTransactionStatus(hash, record.from1);
+      if (identity() != original || response.error) return -1;
+      final data = response.data;
+      if (data is! Map) return -1;
+      final tx = data['transaction'];
+      if (tx is! Map ||
+          tx['hash'] != hash ||
+          tx['signer_id'] != record.from1 ||
+          tx['receiver_id'] != record.to1) {
+        return -1;
+      }
+      final actions = tx['actions'];
+      if (actions is! List || actions.length != 1) return -1;
+      final action = actions.single;
+      if (action is! Map || action.length != 1) return -1;
+      final transfer = action['Transfer'];
+      if (transfer is! Map || transfer['deposit'] != record.price.toString()) {
+        return -1;
+      }
+      // Inclusion or optimistic execution is insufficient to close history.
+      if (data['final_execution_status'] != 'FINAL') return -1;
+      final status = data['status'];
+      if (status is! Map || status.length != 1) return -1;
+      if (status.containsKey('SuccessValue')) {
+        final value = status['SuccessValue'];
+        if (value is! String || base64Encode(base64Decode(value)) != value) {
+          return -1;
+        }
+        return 1;
+      }
+      final failure = status['Failure'];
+      if (failure is Map && failure.isNotEmpty) return 2;
+      return -1;
+    } catch (_) {
+      // Not-found and timeouts cannot prove a failed or safely retryable send.
+      return -1;
     }
   }
 
