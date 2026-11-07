@@ -1,5 +1,14 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate legacy archive warning parity — batch 274 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b274-host.log`); manifest/lock/cache resolve the immutable Chat commit.
+
+- Archive and settings restore now share warning extraction. Archive results retain manifest warnings/read-error fallback and warn that ownerless legacy data has no verified account owner.
+- An independent encrypted fixture through temporary SQLite verifies the legacy ownership warning; 92 backup tests pass (`/tmp/n42-chat-b274-final.log`). Scoped service analysis has six infos, no errors/warnings.
+- Chat 4b0c60bfc8e911db8fc84f3fda105db22b823b98. This preserves compatibility with unverified legacy ownership; explicit legacy-owner consent, preview localization, full-history/account isolation and live/device acceptance remain open.
+
+
 ### Integrate archive restore ownership — batch 273 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b273-host.log`); manifest/lock/cache resolve the immutable Chat commit.
