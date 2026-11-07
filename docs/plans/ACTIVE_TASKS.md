@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 225: Chat pin 07e7c2ae guards history completions/errors and clears visible results immediately. 46 Chat tests, clean analysis and 51 host checks pass. Repository write concurrency/proactive invalidation and remaining MSG-001 work stay open; no new release.
+
 > Batch 224: wallet now pins Chat a8a87226; stale search completions after clear/scope changes and duplicate pagination are guarded. 40 Chat search tests and 51 host tests pass. Proactive clear/account invalidation and remaining MSG-001 items stay open; old full-suite coverage is historical.
 
 > Batch 223: memo dispatch/release now match stored recipient, exact amount, contract and asset identity. Eight pre-fix SQLite failures reproduced; 124 related tests pass after repair. Broader maturity and release requirements remain open.

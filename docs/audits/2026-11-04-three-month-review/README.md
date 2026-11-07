@@ -1660,3 +1660,7 @@ Fixed conditional dispatch/release SQL accepting altered recipient/amount/contra
 ### Batch 224 — Chat search lifecycle
 
 Integrated Chat a8a87226: intent generations guard stale global/room/history display completions and single-flight pagination. 40 Chat search tests and 51 host checks pass; scoped Chat analysis clean. Remaining MSG-001 boundaries are recorded in the Chat issue ledger. No fresh full-suite or release claim.
+
+### Batch 225 — Chat search-history presentation
+
+Integrated 07e7c2ae: immediate visible search clearing and generation/revision-bound history reads, deletions and failures. 46 Chat search tests and 51 host checks pass; final analysis clean. Repository write concurrency and proactive account/clear invalidation remain separate unresolved work.

@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Guard Chat search-history presentation across async work — batch 225
+
+- ClearSearch now removes displayed results immediately instead of retaining them while reading history. History view/deletion/clear completions and errors are checked against both their search generation and history revision, stamped at event receipt. A delayed history read cannot restore entries after a clear; old mutation errors cannot replace a newer search. Storage operations are not claimed serialized by these display guards.
+- Chat `07e7c2aed969121d542e514f51b1797ece041dd3` committed/pushed; **46 search tests pass**, including six new delayed/failure cases. Final scoped analysis is clean (`/tmp/n42-chat-b225-final.log`, `/tmp/n42-chat-b225-analysis-final.log`). Pre-existing coverage modifications remain untouched.
+- Wallet dependency and lock resolve exactly to the new Git cache; pub get exits zero and only Chat ref changes in the lock. **51 host initialization/SSO/fixture checks pass** (`/tmp/n42-wallet-b225-host.log`, exit 0). These are not device or full-suite results.
+- Remaining MSG-001 boundaries include repository write concurrency, global-search/history-read overlap, proactive account/clear invalidation, redactions, history cursors and live/device acceptance. New release and the broader wallet backlog remain open. No deployment or upload.
+
+
 ### Prevent stale Chat searches from replacing current intent — batch 224
 
 - Reviewed the actual wallet-pinned Chat source, preserving its pre-existing modified coverage artifact. SearchBloc previously allowed cross-event completions after ClearSearch or global/room scope changes; repeated pagination could run concurrently. Added intent generations at event receipt (before debounce), guards on queued aliases and global/room/history result application, close invalidation and pagination single-flight.
