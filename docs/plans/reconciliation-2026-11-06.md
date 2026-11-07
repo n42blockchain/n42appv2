@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Account-scoped backup cutoffs and export guards — batch 246
+
+- Chat inspection confirmed one global incremental cutoff could skip a different account's history. Eight pre-fix file-behavior tests failed (`/tmp/n42-chat-b246-before.log`). Cursor keys now hash homeserver/user identity; unowned legacy cursors are ignored and unknown identities do not persist cutoffs. Returning to the original account resumes its own cursor.
+- Full/incremental export captures session/client/archive identity before its first await and checks later asynchronous reads, progress callbacks, file publication and completion. Detected account/server/token/device/client changes abort rather than continue mixing data. Already-started filesystem/storage work is not rolled back.
+- Chat **80 related tests pass**, plus **24 final-source focused cases** after removing unrelated formatter churn (`/tmp/n42-chat-b246-final.log`, `/tmp/n42-chat-b246-final-scoped.log`). Analysis has no errors/warnings and six existing infos (`/tmp/n42-chat-b246-analysis-final.log`). Chat commit `b1a97015a01f75d2151524b1b614d572e0dc0f96` pushed; wallet manifest, lock and resolved package cache now match. Pub get exits 0; **51 wallet host checks pass** (`/tmp/n42-wallet-b246-host.log`), covering initialization, SSO routing and fixture contracts. These are not device acceptance. Existing Facebook Windows plugin metadata warnings remain.
+- Remaining observed boundaries: global archive DB and backup directory, restore ownership, export Timeline subscription cleanup and room-subset/partial-failure cursor semantics. This is not complete archive account partitioning. Native login, signer reconciliation, current release and device acceptance remain open; no physical-device, live-message or upload action.
+
+
 ### Bind TRON/Solana/Sui transaction keys — batch 245
 
 - Extended the existing key/address tests to sign-only transaction methods. **19 pre-fix failures** (`/tmp/n42-wallet-b245-before.log`): mismatched/missing/invalid derivation results still allowed native transaction signing.
