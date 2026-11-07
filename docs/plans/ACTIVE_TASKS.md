@@ -347,3 +347,11 @@
 
 - Wallet commit 31997f613: CI 42361394470 analysis, security and all four backend jobs passed; coverage remained running at 10:04 UTC. Tests workflow 42361394493 widget tests passed; unit and iOS/Android integration jobs remained running. This is an observation, not completed CI acceptance.
 - Chat tool-only commit 3421871a removes fixed-password fallback: existing accounts require an explicit password; temporary accounts require an invite and use secure random passwords. Fourteen credential/guard tests passed without contacting Matrix. Host runtime pin remains ad7ce8c4; no live account acceptance is claimed.
+
+
+### 2026-11-07 wallet beta and full CI acceptance
+
+- Full CI 42372264075 at 3e05b801b completed successfully, including Android debug APK and unsigned iOS device builds. Strict wallet results: 7,744 passed, zero failures/errors/skips. Chat: 8,561 passed, eight skipped. Instrumented wallet line coverage is 73.868987% against 70%. The startup benchmark uses fixed delays and is not real startup-performance evidence.
+- Release 2.5.4+73423 was built from b09755b71 and delivered through Transporter at 08:19 local time. IPA checks: 50 signing/platform/version and 14 native login configuration checks passed. Main app/extension versions match; ten archive model bundles match prepared resources. Details: docs/releases/testflight-20261107-73423.md. Apple processing completion, tester access and physical-device/provider acceptance remain open; physical-device QA is deferred.
+- No lib/assets/ios/android/packages/plugins runtime source differs between the green CI source and the uploaded source. Newer follow-up exports both native crypto loader variables; 69 script tests and 24 explicit-library macOS crypto tests pass. CI 42376481517 at 556b89205 is running to verify this configuration on Linux. Do not transfer its pending result into the prior green run.
+- Native Tests 42374095584 unit/widget jobs pass; iOS/Android integration jobs remain running. The independent 30-device recovery process remains live under unmodified server rate limits; no 30/30 acceptance is claimed. Do not restart it merely because an observation expires.
