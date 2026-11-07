@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 257 integrated: full backup read errors now produce result/manifest warnings. 82 backup, four final-source focused and 51 host tests pass; pin f22caa0a. Restore/preview warning propagation and full-history limits remain open.
+
 > Batch 256: full/incremental backup Timeline cleanup implemented. Four lifecycle cases, 82 backup and 51 host tests pass; pin 43d355ab. Full history, ownership, device/live acceptance and remaining maturity work stay open.
 
 > Batch 254: missing media cache now fails without invoking SDK cancellation. Eleven sender and 51 host tests pass; pin 94bc47ec. Concurrent cache eviction, real recovery and remaining maturity requirements stay open.

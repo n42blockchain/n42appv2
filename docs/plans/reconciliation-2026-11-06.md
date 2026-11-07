@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate full-backup read warnings — batch 257 (2026-11-07)
+
+- Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b257-host.log`); manifest and lock resolve the immutable Chat commit.
+
+- Chat f22caa0a871089aae18fdcfc9437c49db93a627c marks full-export Timeline/room/settings read errors in result warnings and manifest hasReadErrors/warnings, retaining partial output. Eighty-two backup tests and four final-source manifest/lifecycle cases pass. Scoped analysis has seven infos, no errors/warnings.
+- RestoreFromBackup currently constructs warnings without importing manifest read errors; warning propagation into restore/preview remains open. Full-history loading, the 1,000-message cap, archive ownership, device acceptance and backend rehearsal also remain open.
+
+
 ### Release export Timeline subscriptions — batch 256 (2026-11-07)
 
 - Full and incremental exports now release each acquired SDK Timeline in finally, including event-read failure and session-check exits. Four focused lifecycle cases pass; 82 backup-related tests pass (`/tmp/n42-chat-b256-final.log`). Scoped analysis has seven info diagnostics, no errors/warnings.

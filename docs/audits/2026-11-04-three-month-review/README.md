@@ -1868,3 +1868,8 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Full and incremental exports now release each acquired SDK Timeline in finally, including event-read failure and session-check exits. Four focused lifecycle cases pass; 82 backup-related tests pass (`/tmp/n42-chat-b256-final.log`). Scoped analysis has seven info diagnostics, no errors/warnings.
 - Test setup initially omitted full-export room metadata and placed its helper after use; those fixture errors were corrected before the accepted run. Unrelated test formatting was removed.
 - Chat 43d355ab47979d0e8224ad2a1dd4424a4ec0e579 includes the prior cache/session regression. SDK cancellation is initiated synchronously and does not await each underlying stream cancellation. Full-history loading, archive/restore ownership, live media recovery, backend rehearsal and remaining maturity requirements stay open.
+
+### Integrate full-backup read warnings — batch 257 (2026-11-07)
+
+- Chat f22caa0a871089aae18fdcfc9437c49db93a627c marks full-export Timeline/room/settings read errors in result warnings and manifest hasReadErrors/warnings, retaining partial output. Eighty-two backup tests and four final-source manifest/lifecycle cases pass. Scoped analysis has seven infos, no errors/warnings.
+- RestoreFromBackup currently constructs warnings without importing manifest read errors; warning propagation into restore/preview remains open. Full-history loading, the 1,000-message cap, archive ownership, device acceptance and backend rehearsal also remain open.
