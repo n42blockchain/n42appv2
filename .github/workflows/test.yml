@@ -208,6 +208,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Nexus 6
+          disk-size: 8G
           script: bash -o pipefail -c "bash scripts/run_android_ci_integration.sh 2>&1 | tee android-integration.log"
 
       - name: Preserve test results
