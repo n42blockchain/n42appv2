@@ -32,3 +32,12 @@ This closes the inspected native model loading, model-download ZIP crash and suc
 - `/tmp/n42-mlkit-translation-stack-20261107.log`: SHA-256 `4817c6524c87e8cd8098762905e893ffc3818119c15bf9a4f6bad65bc86cb984`.
 - `/tmp/n42-mlkit-native-verified-20261107.log`: SHA-256 `bd0d1828c3adc17d48c317a69446c9603d131c8fdd8d7037176295019ed1a62f`.
 - `/tmp/n42-mlkit-native-final-source-20261107.log`: SHA-256 `9386086c655411763670f4b20ab08ef0da0ae22f0a3b8335cd7cbf1c61777863`.
+
+## Device Release compilation follow-up
+
+Source f208ce675, version 2.5.3+73408. `flutter build ios --release --no-codesign --no-pub` completed with exit 0; Xcode 230.5 seconds, reported app size 390.4 MB. Built Info.plist confirms ai.n42.www, iphoneos and the expected version. Runner is arm64. All ten required model bundle directories are present. nm confirms _n42_pq_sign and _n42_sszip_unzGetCurrentFileInfo. codesign reports the app is unsigned, as requested. No device install, provisioning, archive export or upload occurred.
+
+Device provenance comparison is retained in mlkit-device-slices-2026-11-07.json. The initial comparison included differing fat archive wrappers; after normalizing them, eleven arm64 archives match byte-for-byte. Of the four remaining libraries, the XenoCommon original Mach-O object matches the repackaged archive's sole object exactly. Three payloads remain different: FaceDetection, TextRecognitionCommon and Translate. Their same upstream version and successful compilation do not prove payload equivalence. Before merging, explain those differences or preserve the original Google device payloads; keep simulator compatibility separate from device algorithm changes. No binary equivalence claim is made for these three.
+
+Build log: /tmp/n42-mlkit-device-release-20261107.log.
+SHA-256: `e34780dd6dafc4a05b6920b0ea3cbcdc38c976c57a3cd808453d0ce6b46c85ba`.

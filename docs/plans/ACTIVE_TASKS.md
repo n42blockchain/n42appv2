@@ -310,3 +310,9 @@
 - Isolated fix/mlkit-pods-simulator-20261107 now retains CocoaPods/Firebase/old plugin APIs, builds and launches on arm64 simulator. Eight real native model tests pass on a clean install, including Spanish model download and inference.
 - Fixed SSZipArchive minizip ABI collision by namespacing its compatibility symbols; local commons fork receives model completion via userInfo and stable model identity. Both override files and native plugin symlink verified.
 - Remaining: device build, concurrent/failure notifications, non-Latin accuracy and real camera/video/chat acceptance. Do not merge or release until required integration gates pass. Evidence: docs/testing/mlkit-cocoapods-simulator-2026-11-07.md.
+
+
+### 2026-11-07 MLKit device build and provenance
+
+- f208ce675 builds unsigned iOS Release for arm64, exit 0; all ten model bundles plus Falcon and namespaced ZIP symbols are present. This is compilation only.
+- Twelve MLKit device payloads match the existing Google distributions after container normalization; FaceDetection, TextRecognitionCommon and Translate still differ. Explain differences or retain original Google device payloads before merge. Device install/signing, real media and full business acceptance remain open. Evidence: docs/testing/mlkit-cocoapods-simulator-2026-11-07.md and mlkit-device-slices-2026-11-07.json.

@@ -1,0 +1,131 @@
+[
+  {
+    "name": "MLImage",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "749f33059fe43acd81ab5107ba2f286d0f435a31da5af398dc8d9ab04d782652",
+    "candidateArm64ArchiveSha256": "749f33059fe43acd81ab5107ba2f286d0f435a31da5af398dc8d9ab04d782652",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitCommon",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "b434357fac70bb3208de8a854818c088c9683687f2e9e571ad8b454c7a43e33c",
+    "candidateArm64ArchiveSha256": "b434357fac70bb3208de8a854818c088c9683687f2e9e571ad8b454c7a43e33c",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitFaceDetection",
+    "status": "different",
+    "originalArm64ArchiveSha256": "355269973b67e4088551ae9a9dde25b15bcce5aa834201e4e13097ff18e73c5f",
+    "candidateArm64ArchiveSha256": "59901e2b3336210e63cbb1fb820f1ef2f324a5a95e1dd7fd26f849670c4cd8b5",
+    "candidateObjectMembers": [
+      [
+        "arm64.o",
+        "2dd6f19e3c338085d685f9b6eb894a6aca01fa1bf295ef4cb0be88ac1862e43c"
+      ]
+    ],
+    "devicePayloadIdentical": false
+  },
+  {
+    "name": "MLKitNaturalLanguage",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "f57de462faf979eafef2cfe6bc7d76b8607203d023ca423b172f02210affbb0a",
+    "candidateArm64ArchiveSha256": "f57de462faf979eafef2cfe6bc7d76b8607203d023ca423b172f02210affbb0a",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitSegmentationCommon",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "f45b2fe159c8db34e36923cebd3c205141b3b08438db378e1cb9830339feb899",
+    "candidateArm64ArchiveSha256": "f45b2fe159c8db34e36923cebd3c205141b3b08438db378e1cb9830339feb899",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitSegmentationSelfie",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "d7331f917e2f8456bc642ba6575e0e5fd1bcb0acb40445339960deded1ddae15",
+    "candidateArm64ArchiveSha256": "d7331f917e2f8456bc642ba6575e0e5fd1bcb0acb40445339960deded1ddae15",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitTextRecognition",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "f2c02845796b902ae44187367f842a84bd57cb75e1843dedf8edcda0042ea471",
+    "candidateArm64ArchiveSha256": "f2c02845796b902ae44187367f842a84bd57cb75e1843dedf8edcda0042ea471",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitTextRecognitionChinese",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "99232f96fcb60fa0e72a48c9e42074916e5abd6df68bea4921df0888d14f97e4",
+    "candidateArm64ArchiveSha256": "99232f96fcb60fa0e72a48c9e42074916e5abd6df68bea4921df0888d14f97e4",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitTextRecognitionCommon",
+    "status": "different",
+    "originalArm64ArchiveSha256": "f2b4fbc37e3df245d7b1f29717a466256d61655099404369bef0a3c5ed78de32",
+    "candidateArm64ArchiveSha256": "8e3528492d15d45c84178574fa16a87ecb7ad2a23404a3fb95cfa6f753bdecdd",
+    "candidateObjectMembers": [
+      [
+        "arm64.o",
+        "6a12f0733cc01a2690693d0b751b8a82b8693912cab326dca4192a81c3315bdb"
+      ]
+    ],
+    "devicePayloadIdentical": false
+  },
+  {
+    "name": "MLKitTextRecognitionDevanagari",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "dbcd78a689ec4fad79e644339c9ae80ebbbd7bc8941dde0dbce472800bd00b6c",
+    "candidateArm64ArchiveSha256": "dbcd78a689ec4fad79e644339c9ae80ebbbd7bc8941dde0dbce472800bd00b6c",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitTextRecognitionJapanese",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "73715e0c9ffbffe741a2fefa6119d946330b7c6811657fa630f65eb9a4fa57bd",
+    "candidateArm64ArchiveSha256": "73715e0c9ffbffe741a2fefa6119d946330b7c6811657fa630f65eb9a4fa57bd",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitTextRecognitionKorean",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "a3b44e7029aef5f89c6e53cb81de657b13c2cb9093b064d18df48e8a38bbf7b2",
+    "candidateArm64ArchiveSha256": "a3b44e7029aef5f89c6e53cb81de657b13c2cb9093b064d18df48e8a38bbf7b2",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitTranslate",
+    "status": "different",
+    "originalArm64ArchiveSha256": "1f74cd8c18adf133e195bcb460319d67c055651139b5c67704f2a6fd31c1bd54",
+    "candidateArm64ArchiveSha256": "e77cfef056fd96078222b16f044adf353312fc5b6c4a70e9a7534afd98d248bb",
+    "candidateObjectMembers": [
+      [
+        "arm64.o",
+        "967dbd2f83801eb2a778a37fe0b8ecb9cf77725edaa3c0c8ea897db7f63e2bab"
+      ]
+    ],
+    "devicePayloadIdentical": false
+  },
+  {
+    "name": "MLKitVision",
+    "status": "identical",
+    "originalArm64ArchiveSha256": "93bd68b1fed969659d256c0cf815c3cf95693c7e22703eef049f64f078a32bfd",
+    "candidateArm64ArchiveSha256": "93bd68b1fed969659d256c0cf815c3cf95693c7e22703eef049f64f078a32bfd",
+    "devicePayloadIdentical": true
+  },
+  {
+    "name": "MLKitXenoCommon",
+    "status": "different",
+    "originalArm64ArchiveSha256": "b543b985d92db4f7addcd53ac940342111082103e66fb4b7cc50a15196c20cdc",
+    "candidateArm64ArchiveSha256": "f3f50ec21915a883d9a1a3ea04f9c68338df09e10ee8a7be05c923d99cc6d511",
+    "candidateObjectMembers": [
+      [
+        "arm64.o",
+        "b543b985d92db4f7addcd53ac940342111082103e66fb4b7cc50a15196c20cdc"
+      ]
+    ],
+    "devicePayloadIdentical": true
+  }
+]
