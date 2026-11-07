@@ -30,10 +30,26 @@
   "packagedAuthChecks": 14,
   "modelBundles": 10,
   "modelFiles": 86,
-  "delivery": "Transporter Delivered, 2026-11-07 16:48 America/Toronto; App Store Connect lists 73454 as processing",
+  "delivery": "Delivered once at 2026-11-07 16:48 America/Toronto; Apple processing complete; existing t1 group shows Testing",
   "physicalDeviceQa": "deferred",
   "uploadAccepted": true,
-  "appleProcessingComplete": false,
-  "internalTesterAvailabilityVerified": false,
-  "testNotesSaved": false
+  "appleProcessingComplete": true,
+  "internalTesterAvailabilityVerified": true,
+  "testNotesSaved": true,
+  "notesExactReadbackAfterReload": true,
+  "appleBuildId": "650ee36a-261d-4420-b689-db124b8915e7",
+  "internalGroup": {
+    "name": "t1",
+    "testers": 16,
+    "builds": 46,
+    "state": "Testing",
+    "newTestersAdded": 0,
+    "association": "Existing group automatically associated; settings unchanged"
+  },
+  "notesTextSha256": "68b843f19c6636765cfe2e5b2a18b2ffcfda1818125055872ecf10c0023163e9",
+  "latestRemoteCi": {
+    "run": 42417927415,
+    "source": "164b0186be786bee0e8cf94bd63c51eb04030158",
+    "status": "in progress; not yet accepted"
+  }
 }
