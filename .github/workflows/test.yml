@@ -209,6 +209,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Prepare emulator packages with bounded retries
+        run: python3 scripts/prepare_android_emulator.py
+
       - name: Run Android Emulator
         env:
           WALLET_CORE_USER: ${{ secrets.WALLET_CORE_USER || github.actor }}
