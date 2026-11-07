@@ -35,10 +35,6 @@ target 'Runner' do
   pod 'WalletCoreSwiftProtobuf', :podspec => 'NativeDependencies/WalletCoreSwiftProtobuf.podspec'
   pod 'TrustWalletCore', :podspec => 'NativeDependencies/TrustWalletCore.podspec'
   # n42_chat image OCR scripts beyond the plugin's default Latin model.
-  pod 'GoogleMLKit/TextRecognitionChinese', '~> 9.0.0'
-  pod 'GoogleMLKit/TextRecognitionDevanagari', '~> 9.0.0'
-  pod 'GoogleMLKit/TextRecognitionJapanese', '~> 9.0.0'
-  pod 'GoogleMLKit/TextRecognitionKorean', '~> 9.0.0'
   target 'RunnerTests' do
     inherit! :search_paths
   end
@@ -100,8 +96,8 @@ post_install do |installer|
   runner_project.targets.each do |target|
     if target.name == 'Runner'
       target.build_configurations.each do |config|
-        # MLImage.framework (Google MLKit) has no arm64 simulator slice — use Rosetta (x86_64)
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+        # MLKit SwiftPM supplies an arm64 simulator slice.
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
 
         # 强制链接 SQLCipher，使其 sqlite3_* 符号覆盖 firebase_messaging / sqflite
         # 通过 `-l sqlite3` 引入的系统 libsqlite3。否则 chat 归档库在 iOS 上会

@@ -303,3 +303,9 @@
 
 - Full app compiles, but installation on isolated iOS 27.1 simulator fails: x86_64 app versus arm64-only installed runtimes. MLImage arm64 binary targets iOS device; existing exclusions preserve MLKit features.
 - Keep open: obtain compatible MLKit simulator binaries or runtime, then repeat install/cold-launch/login UI. Do not disable features or count compilation as runtime acceptance. Evidence: docs/testing/ios-integration-2026-11-07.md.
+
+
+### 2026-11-07 isolated MLKit migration follow-up
+
+- Experimental branch fix/mlkit-host-20261107 retains all OCR scripts and prepares ten checksum-pinned model bundles. 125 host tests pass.
+- Native SwiftPM resolution fails: Firebase 13.1.1 GTMSessionFetcher >=4 conflicts with MLKit 9.0.2 <4. Resource build-phase wiring and arm64 runtime validation are pending. Do not merge/release this branch. Details: docs/testing/mlkit-migration-2026-11-07.md.

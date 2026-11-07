@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.5.3+73406
+version: 2.5.3+73407
 
 environment:
   sdk: ">=3.13.0 <4.0.0"
@@ -149,7 +149,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: ad7ce8c41d2ad747db966ba1d8ff015f7d9230ef
+      ref: e10e6daf19e5cef1c67e96a970db75a84097ee2e
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
@@ -169,6 +169,9 @@ dependencies:
 # migration. Do not replace it with unpatched upstream v11.
   wallet: any
 dependency_overrides:
+  # Preserve all OCR scripts omitted by the upstream 1.0.1 SwiftPM manifest.
+  google_mlkit_text_recognition:
+    path: packages/google_mlkit_text_recognition
   # connectivity_plus 7.3.2 and Chat wakelock_plus 1.8.1 require dbus 0.8.
   dbus: ^0.8.0
   flutter_secure_storage:
@@ -204,11 +207,9 @@ dev_dependencies:
   video_player_platform_interface: ^6.9.0
 
 flutter:
-  # Keep native plugin resolution consistent with the validated iOS release.
-  # WebRTC and ML Kit are locked in ios/Podfile.lock; do not depend on a
-  # contributor's global Flutter Swift Package Manager setting.
+  # MLKit 1.x requires SwiftPM; retain CocoaPods for other native plugins.
   config:
-    enable-swift-package-manager: false
+    enable-swift-package-manager: true
   uses-material-design: true
   assets:
     - assets/
