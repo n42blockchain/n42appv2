@@ -86,7 +86,9 @@ class _GoLivePageState extends State<GoLivePage> {
               [Permission.camera, Permission.microphone].request());
       // 权限弹窗耗时期间用户可能已退出页面；此刻尚未创建任何资源，直接放弃。
       if (!mounted) return;
-      final granted = statuses.values.every((s) => s.isGranted);
+      final granted =
+          statuses[Permission.camera]?.isGranted == true &&
+          statuses[Permission.microphone]?.isGranted == true;
       if (!granted) {
         throw StateError('需要摄像头与麦克风权限才能开播');
       }

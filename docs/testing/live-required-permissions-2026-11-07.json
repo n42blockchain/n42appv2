@@ -1,0 +1,11 @@
+{
+  "before": "Empty or incomplete permission map passed values.every(isGranted); three page regressions failed",
+  "fix": "Require explicit granted results for both camera and microphone before room creation",
+  "verification": {
+    "liveModuleTestsPassed": 74,
+    "failed": 0,
+    "scopedAnalysis": "No issues found",
+    "log_sha256": "c047f4ab2d8884a99e81b3f0df8ac440e5e400db70164405f78101601b3a08be"
+  },
+  "scope": "Page permission-result handling. Actual native prompts/background/camera remain unverified. Not in uploaded 73424. Earlier 7772 full-suite result predates this change."
+}

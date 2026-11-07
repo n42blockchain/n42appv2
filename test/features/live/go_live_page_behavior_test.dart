@@ -119,6 +119,43 @@ void main() {
     expect(video.calls, isEmpty);
   });
 
+  final missingResults = <Map<Permission, PermissionStatus>>[
+    {},
+    {Permission.camera: PermissionStatus.granted},
+    {Permission.microphone: PermissionStatus.granted},
+  ];
+  for (var index = 0; index < missingResults.length; index++) {
+    testWidgets(
+      'does not create a room for incomplete permission result $index',
+      (tester) async {
+        tester.view.physicalSize = const Size(400, 900);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final chat = _RecordingLiveChatService();
+        final video = _FailingLiveVideoService();
+
+        await tester.pumpWidget(
+          wrapForTest(
+            GoLivePage(
+              chatServiceForTesting: chat,
+              videoServiceForTesting: video,
+              permissionRequestForTesting: () async => missingResults[index],
+            ),
+          ),
+        );
+
+        await tester.tap(find.text('开始直播'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Bad state: 需要摄像头与麦克风权限才能开播'), findsOneWidget);
+        expect(chat.calls, isEmpty);
+        expect(video.calls, isEmpty);
+      },
+    );
+  }
+
   testWidgets('rolls back a created room when Matrix join fails', (
     tester,
   ) async {
