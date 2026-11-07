@@ -90,6 +90,7 @@ class WalletActionProvider extends ChangeNotifier
   final DateTime Function() _now;
   final Future<void> Function(WalletInfo, int)? _assetVisibilityWriter;
   Future<void>? _priceRefreshInFlight;
+  Future<void> _walletCreationTail = Future<void>.value();
   bool _priceRefreshFailed = false;
   bool get priceRefreshFailed => _priceRefreshFailed;
   bool _hasPartialPrices = false;

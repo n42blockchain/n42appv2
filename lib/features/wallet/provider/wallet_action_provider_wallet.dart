@@ -369,9 +369,23 @@ extension WalletActionProviderWallet on WalletActionProvider {
   }
 
   ///添加钱包
-  Future<void> addWalletInfo(WalletInfo info) async {
+  Future<void> addWalletInfo(WalletInfo info) {
     final ownerUuid = walletDataOwnerUuid;
+    final operation = _walletCreationTail.then(
+      (_) => _addWalletInfoForOwner(info, ownerUuid),
+    );
+    // Keep the queue usable after a failure, while returning the original
+    // operation so its caller must still handle that failure.
+    _walletCreationTail = operation.then<void>(
+      (_) {},
+      onError: (Object error, StackTrace stack) {},
+    );
+    return operation;
+  }
+
+  Future<void> _addWalletInfoForOwner(WalletInfo info, String ownerUuid) async {
     if (ownerUuid != userUUID ||
+        ownerUuid != walletDataOwnerUuid ||
         (info.walletUuid?.isNotEmpty == true && info.walletUuid != ownerUuid)) {
       throw StateError('Wallet owner changed before creation');
     }

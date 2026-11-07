@@ -93,6 +93,87 @@ void main() {
     AppGlobals.userInfo = previousUser;
   });
 
+  test(
+    'overlapping wallet creation preserves both durable records and indexes',
+    () async {
+      final drafts = List.generate(
+        2,
+        (index) => WalletInfo(
+          walletName: 'Synthetic concurrent $index',
+          walletUuid: accountUuid,
+          timestamp: 'synthetic-concurrent-$index',
+          coinInfo: <String, dynamic>{},
+        ),
+      );
+      await Future.wait(drafts.map(store.addWalletInfo));
+      expect(store.walletInfoLsit, hasLength(2));
+      expect(store.walletIndex, 1);
+      final raw = await secureStorage.read(key: 'walletInfo', options: {});
+      final persisted = jsonDecode(raw!) as Map<String, dynamic>;
+      final wallets = persisted[accountUuid]['wallet'] as List;
+      expect(wallets.map((wallet) => wallet['timestamp']), [
+        'synthetic-concurrent-0',
+        'synthetic-concurrent-1',
+      ]);
+      expect(persisted[accountUuid]['index'], 1);
+    },
+  );
+
+  test('a failed creation does not poison the next queued save', () async {
+    FlutterSecureStoragePlatform.instance = _WalletStoragePlatform(
+      {},
+      failingReadKey: 'walletInfo',
+    );
+    await expectLater(
+      store.addWalletInfo(
+        WalletInfo(
+          walletName: 'Synthetic failed queued draft',
+          walletUuid: accountUuid,
+          coinInfo: <String, dynamic>{},
+        ),
+      ),
+      throwsStateError,
+    );
+    FlutterSecureStoragePlatform.instance = secureStorage;
+    await store.addWalletInfo(
+      WalletInfo(
+        walletName: 'Synthetic successful queued draft',
+        walletUuid: accountUuid,
+        coinInfo: <String, dynamic>{},
+      ),
+    );
+    expect(
+      store.walletInfoLsit.single.walletName,
+      'Synthetic successful queued draft',
+    );
+  });
+
+  test(
+    'queued ownerless drafts retain the owner captured at submission',
+    () async {
+      var writes = 0;
+      final storage = _WalletStoragePlatform(
+        {},
+        onWalletWrite: () {
+          writes++;
+          AppGlobals.userInfo = UserInfo(uuid: 'synthetic-other-account');
+        },
+      );
+      FlutterSecureStoragePlatform.instance = storage;
+      await expectLater(
+        Future.wait([
+          store.addWalletInfo(WalletInfo(walletName: 'Synthetic first draft')),
+          store.addWalletInfo(WalletInfo(walletName: 'Synthetic queued draft')),
+        ]),
+        throwsStateError,
+      );
+      expect(writes, 1);
+      expect(store.walletInfoLsit, isEmpty);
+      final raw = await storage.read(key: 'walletInfo', options: {});
+      expect((jsonDecode(raw!) as Map).keys, [accountUuid]);
+    },
+  );
+
   test('wallet creation propagates storage failure to its caller', () async {
     final initialCount = store.walletInfoLsit.length;
     FlutterSecureStoragePlatform.instance = _WalletStoragePlatform(
