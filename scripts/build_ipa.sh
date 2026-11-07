@@ -187,6 +187,11 @@ xcodebuild -exportArchive \
 
 echo ""
 python3 scripts/release/wallet_capability_manifest.py --artifact build/ios/ipa/N42Wallet.ipa --require-source build/release-evidence/wallet-ipa-source.json --output build/release-evidence/wallet-ipa.json
+python3 scripts/release/verify_ios_social_auth.py \
+  --ipa build/ios/ipa/N42Wallet.ipa \
+  --google-plist ios/Runner/GoogleService-Info.plist \
+  --native-config ios/Flutter/ChatSocialAuth.xcconfig \
+  --output build/release-evidence/wallet-ipa-social-auth.json
 echo "=== Done ==="
 echo "App Store Version: $CURRENT_BUILD_NAME  Build: $CURRENT_BUILD_NUMBER"
 ls -lh build/ios/ipa/*.ipa

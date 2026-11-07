@@ -1,6 +1,17 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Close full regression and prepare verified release — batch 211
+
+- Wallet batch 205 is accepted at `4b1f38aec8a16dc3a4bc9842933f88e616343b82`: **7,335 pass / zero failures / zero skips**, 103,546 / 140,578 covered lines (**73.6573%**). Test, strict reporter and coverage gates all exit 0. Source stayed fixed and original coverage was restored. Chat batch 199 is separately accepted: **8,230 pass / four external skips**, **71.3931%**.
+- Signed release **2.5.3+73325**, source `cbbe308d626891854d6fe0e0a18a8b44f92f9ccc`, passes archive/extension version, deep strict signing, packaged capability manifest, 50 exported-package checks and 12 native-provider checks. Private build configuration stayed unchanged. The release differs from the wallet full-test baseline only in release tooling/tests/docs, the reviewed pod license checksum and version; Dart/native application sources and pubspec.lock are identical.
+- Fast-forwarded master to the release branch and pushed. No force push or old-worktree deletion. The rejected 73324 IPA remains isolated and must not be uploaded. Current Transporter provider is SI46WORLD; N42 upload authority has not been established. Requested user account/team handoff without logging out the existing session.
+- Added permanent IPA native-login verification and wired it before the build helper's Done/upload instructions. It rejects missing/mismatched resource values, ambiguous apps, wrong bundle identity, invalid callbacks and placeholder schemes. Reports include hashes and named check outcomes, never configuration values. This verifies package configuration, not real provider authorization or backend availability.
+- Validation: all **61 Python script tests pass** on system Python 3.9; shell syntax and diff checks pass. The permanent verifier accepts the actual 73325 IPA (14 checks) and rejects the known-bad 73324 IPA at FacebookAppID. Reports: `/tmp/n42-wallet-b211-actual-provider.json`, `/tmp/n42-wallet-b211-rejected-provider.json`; test log `/tmp/n42-wallet-b211-scripts.log`.
+- No goal completion: native login and same-DID Matrix flows, Meta public availability, broader wallet/Chat audit, dependency/localization/payment and 12 old auxiliary worktrees remain open. Physical-device QA remains deferred. See the release record for exact source, artifact and evidence hashes.
+
+
+
 ### Reject incomplete native-login artifact and fix release Python compatibility — batch 210
 
 - Batch 208 produced a signed 2.5.3+73324 IPA with version/signature checks and 50 exported-package checks passing. It is **not accepted for delivery**: its native login Info.plist fields were empty and the Google callback remained n42-google-unconfigured because fresh worktree creation did not copy ignored ChatSocialAuth.xcconfig. The explicit provider inspection fails on FacebookAppID (`/tmp/n42-wallet-b208-provider-inspection.json`); the archive's four missing fields and callback are recorded in `-native-config-gap.json`. Preserved this rejected IPA under the release worktree's `build/release-rejected/`; SHA-256 `21ac22665053a56a993bc83b7ca77d039b289f6de8af44b8635308add8ca0d76`. Never upload that artifact.
