@@ -3,7 +3,7 @@
   "version": "2.5.4+73423",
   "buildSource": "b09755b71",
   "uploadAccepted": true,
-  "appleProcessingComplete": false,
+  "appleProcessingComplete": true,
   "physicalDeviceQa": "deferred by user",
   "ipaSha256": "53ae2134a913bd7a92a20c29dd048ebd8fb16b8250c2803344e9d7179725b133",
   "capabilityAssetVerified": true,
@@ -24,6 +24,14 @@
   "boundaries": [
     "real provider login not established by resource checks",
     "physical UI and native storage not accepted",
-    "processing/tester access still pending"
-  ]
+    "observed tester install is not functional QA",
+    "external beta review/distribution not claimed"
+  ],
+  "internalDistribution": {
+    "group": "t1",
+    "status": "Testing",
+    "testerCount": 16,
+    "installedBuildObserved": true,
+    "evidence": "App Store Connect internal group build row 2.5.4 (73423) and installed-version row; no tester identity retained"
+  }
 }
