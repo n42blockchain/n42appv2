@@ -33,11 +33,33 @@
       "skipped": 4,
       "exitCode": 0,
       "report": "/tmp/n42-chat-anonymous-full-20261107.jsonl"
+    },
+    "fullWalletSuite": {
+      "source": "d5c010c98c6473996a866e554239382389d06bdc",
+      "chatRef": "644fd852a9e56da3cdba76fe64e6181927b8fee4",
+      "passed": 7777,
+      "failed": 0,
+      "skipped": 3,
+      "exitCode": 0,
+      "coverage": {
+        "hit": 104201,
+        "found": 141321,
+        "percent": 73.73355693775164,
+        "threshold": 70,
+        "passed": true
+      },
+      "skips": [
+        "native Falcon page requires host library",
+        "native network suite",
+        "native Falcon suite requires compiled library"
+      ],
+      "report": "/tmp/n42-wallet-anonymous-full-20261107.jsonl",
+      "coverageReport": "/tmp/n42-wallet-anonymous-20261107.lcov"
     }
   },
   "remaining": [
     "Native and physical live login/media acceptance.",
-    "Full wallet CI for the new Chat pin."
+    "Native/CI acceptance of post-73454 source remains separate from local full wallet regression."
   ],
   "releaseBoundary": "Post-73454 source changes; not included in the already delivered TestFlight binary."
 }

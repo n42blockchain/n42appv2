@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-07",
+  "chatRef": "a993d22c9b98523eab9cb8971c08d3f18d6afb76",
+  "reproduced": [
+    "Previous-account installed sticker cache returned after account switch.",
+    "Held index read requested pack details under replacement account."
+  ],
+  "changes": [
+    "Cache partitioned by SDK client/user/device/homeserver.",
+    "Changed-account index/detail/fallback completions discarded."
+  ],
+  "verification": {
+    "focusedPassed": 48,
+    "scopedAnalysis": "No issues found",
+    "fullChatSuite": {
+      "passed": 8637,
+      "failed": 0,
+      "skipped": 4,
+      "exitCode": 0,
+      "report": "/tmp/n42-chat-sticker-full-20261107.jsonl"
+    },
+    "hostIntegration": {
+      "passed": 110,
+      "failed": 0,
+      "exitCode": 0,
+      "scope": [
+        "live module",
+        "bundled sticker assets",
+        "Chat initialization/SSO callback"
+      ],
+      "log": "/tmp/n42-sticker-host-integration.log"
+    }
+  },
+  "remaining": [
+    "Native account-switch acceptance.",
+    "Sticker sharing/import remains unimplemented (MEDIA-005).",
+    "No new TestFlight release."
+  ]
+}

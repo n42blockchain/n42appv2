@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Sticker account isolation — 2026-11-07: wallet pins Chat `a993d22c`; installed-pack cache and delayed index/detail reads are account-bound. Full Chat suite passes 8,637 tests/four skips, and 110 host live/sticker/initialization tests pass. Before this pin change, complete local wallet regression at `d5c010c98` passed 7,777 tests/three native-library skips with 73.733557% coverage. [Sticker evidence](../testing/chat-sticker-account-isolation-2026-11-07.json), [wallet regression](../testing/chat-anonymous-auth-isolation-2026-11-07.json). Native/device acceptance and a new TestFlight release remain separate.
+
 > Anonymous authentication isolation — 2026-11-07: wallet pins Chat `644fd852`. Registration/login exclusion, stale guest preflight, authenticated UI retention and session-bound guest nickname completion are integrated. Full Chat regression passes 8,635 tests with zero failures/four skips; 76 wallet live tests pass. This is post-73454 source work, not a new TestFlight release. [Evidence](../testing/chat-anonymous-auth-isolation-2026-11-07.json). Full wallet CI and native/physical acceptance remain open.
 
 > Current internal Beta — 2026-11-07: [73454](../releases/testflight-20261107-73454.md) is Testing in t1 (16 testers, 46 builds); notes are saved and exact text survives reload. Signed package checks, 8627 current Chat tests/four skips, eleven current Android wallet tests/one funded-transfer skip and earlier-source full CI 42411468479 pass. Latest full remote CI 42417927415 is running; physical/production acceptance remains separate.
