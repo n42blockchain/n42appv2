@@ -26,7 +26,7 @@ def prepare(chat_root: Path, target: Path) -> Path:
     library = target / 'release' / f'libvodozemac_bindings_dart.{suffix}'
     if not library.is_file():
         raise FileNotFoundError(f'Cargo did not produce {library}')
-    return library.parent
+    return library
 
 
 def main():
@@ -35,10 +35,11 @@ def main():
     parser.add_argument('--target-dir', type=Path, required=True)
     parser.add_argument('--github-env', type=Path, required=True)
     args = parser.parse_args()
-    directory = prepare(args.chat_root, args.target_dir)
+    library = prepare(args.chat_root, args.target_dir)
     # flutter_rust_bridge's supported loader override applies to all test isolates.
     with args.github_env.open('a') as output:
-        output.write(f'FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR={directory}\n')
+        output.write(f'FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR={library.parent}\n')
+        output.write(f'N42_VODOZEMAC_TEST_LIB={library}\n')
 
 
 if __name__ == '__main__':

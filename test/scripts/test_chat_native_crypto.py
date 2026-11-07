@@ -39,7 +39,8 @@ class NativeCryptoTest(unittest.TestCase):
             (self.target / 'release/libvodozemac_bindings_dart.so').touch()
         with patch.object(crypto.platform, 'system', return_value='Linux'), \
              patch.object(crypto.subprocess, 'run', side_effect=build):
-            self.assertEqual(crypto.prepare(self.chat, self.target), self.target / 'release')
+            self.assertEqual(crypto.prepare(self.chat, self.target),
+                             self.target / 'release/libvodozemac_bindings_dart.so')
         self.assertFalse((self.package / 'target').exists())
 
     def test_missing_library_is_failure(self):
@@ -47,6 +48,21 @@ class NativeCryptoTest(unittest.TestCase):
              patch.object(crypto.subprocess, 'run'):
             with self.assertRaises(FileNotFoundError):
                 crypto.prepare(self.chat, self.target)
+
+    def test_main_exports_directory_and_explicit_library_for_native_tests(self):
+        environment = self.root / 'github-env'
+        environment.write_text('EXISTING=value\n')
+        library = self.target / 'release/libvodozemac_bindings_dart.so'
+        with patch.object(crypto, 'prepare', return_value=library), \
+             patch('sys.argv', ['prepare', '--chat-root', str(self.chat),
+                                '--target-dir', str(self.target),
+                                '--github-env', str(environment)]):
+            crypto.main()
+        self.assertEqual(environment.read_text().splitlines(), [
+            'EXISTING=value',
+            f'FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR={library.parent}',
+            f'N42_VODOZEMAC_TEST_LIB={library}',
+        ])
 
     def test_failed_build_propagates(self):
         with patch.object(crypto.subprocess, 'run', side_effect=subprocess.CalledProcessError(1, 'cargo')):
