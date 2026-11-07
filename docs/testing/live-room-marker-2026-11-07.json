@@ -1,0 +1,12 @@
+{
+  "scope": "Wallet broadcast creation; not ordinary group creation",
+  "behavior": "Public unencrypted room and inactive n42.live.status are created in one Matrix createRoom request; token request occurs only after creation returns. Normal heartbeat/discovery and video-failure Matrix fallback remain unchanged.",
+  "verification": {
+    "liveModuleTestsPassed": 66,
+    "failed": 0,
+    "scopedAnalysis": "No issues found",
+    "testLogSha256": "30ac04103b8d77fd40759be838c8575337f6b1a6802237544958424b22b635d8"
+  },
+  "release": "Not included in uploaded 73424",
+  "remaining": "Production official authorization still needs server-enforced viewer/host policy; client marker is not a permission boundary by itself."
+}

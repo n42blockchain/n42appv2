@@ -15,6 +15,7 @@ import 'package:n42_chat/src/domain/repositories/message_repository.dart';
 import 'package:get_it/get_it.dart';
 
 import 'live_bootstrap.dart';
+import 'live_room_factory.dart';
 
 /// 直播结构化事件（礼物 / 预测同步等），经 Matrix 文本 timeline 承载。
 ///
@@ -134,11 +135,9 @@ class LiveChatService {
   Future<String> createLiveRoom({required String name}) async {
     await ensureLiveChatReady();
     await ensureAnonymousLogin();
-    return _group.createGroup(
-      name: name.trim().isEmpty ? '直播' : name.trim(),
-      isPublic: true,
-      enableEncryption: false,
-    );
+    final client = _client;
+    if (client == null) throw StateError('Matrix client not initialized');
+    return createLiveBroadcastRoom(client, name: name);
   }
 
   /// 订阅房间弹幕流（仅文本，按时间升序，取最近 [maxDanmu] 条）。
