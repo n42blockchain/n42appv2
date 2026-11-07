@@ -37,7 +37,7 @@ void main() {
 const _pendingWalletCases = <_PendingDeviceCase>[
   _PendingDeviceCase(
     'TX-06 sends a disposable testnet transaction',
-    'Requires an approved funded testnet wallet and controllable RPC.',
+    'Requires verified N42 test RPC/client provenance and an approved disposable funded account.',
   ),
 ];
 

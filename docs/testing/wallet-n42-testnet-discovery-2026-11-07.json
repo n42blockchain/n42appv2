@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-07",
+  "status": "No N42 transfer attempted; current client/testnet provenance remains unverified",
+  "sourceHead": "026896958e94570c98df0fab2ac9417faa38547f",
+  "genesis": {
+    "path": "N42-rs/crates/chainspec/res/genesis/n42_devnet.json",
+    "sha256": "9cd8bca2babce7476ac01eec071960c3ae2d4fc020f57ec9756e67ca79e6530d",
+    "chainId": 1143,
+    "allocEntries": 14,
+    "hasPublicDevelopmentAccount": true
+  },
+  "availableLocalBinaries": [
+    {
+      "profile": "debug",
+      "reportedVersion": "2.1.5-dev",
+      "reportedCommit": "2b75d4062aa2e3612653a310e453a7a488c0543a"
+    },
+    {
+      "profile": "release",
+      "reportedVersion": "2.1.6-dev",
+      "reportedCommit": "efcb7a58a4420c44cbc5a8d6363d05d576539f86"
+    }
+  ],
+  "readOnlyServerInventory": "Existing chat service host has no processes named n42/h2_validator and no matching N42 or standard RPC listeners in the inspected output; this does not describe other hosts",
+  "deploymentSource": "N42-gov5 scripts/qs/deploy-7node.sh defines an isolated loopback fleet and warns against advertising its shared validator keys across hosts; launcher was not run",
+  "nextStep": "Verify or prepare a current-client isolated N42 test network and disposable funded account, then run actual wallet confirmation/signing/broadcast with receipt and balance checks",
+  "boundaries": [
+    "Prior MPC Anvil receipt proof is not N42 native-wallet UI acceptance",
+    "No signatures, broadcasts, funds, node starts or deployments in this discovery",
+    "Other developer source/result changes preserved; no N42-rs or N42-gov5 files modified"
+  ]
+}
