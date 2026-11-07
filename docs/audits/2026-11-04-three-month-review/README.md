@@ -1873,3 +1873,9 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 
 - Chat f22caa0a871089aae18fdcfc9437c49db93a627c marks full-export Timeline/room/settings read errors in result warnings and manifest hasReadErrors/warnings, retaining partial output. Eighty-two backup tests and four final-source manifest/lifecycle cases pass. Scoped analysis has seven infos, no errors/warnings.
 - RestoreFromBackup currently constructs warnings without importing manifest read errors; warning propagation into restore/preview remains open. Full-history loading, the 1,000-message cap, archive ownership, device acceptance and backend rehearsal also remain open.
+
+### Integrate preview/restore backup warnings — batch 258 (2026-11-07)
+
+- Preview now carries filtered/deduplicated manifest warning strings. Restore imports them and supplies an incomplete-backup warning when hasReadErrors is true. Eighty-two backup tests and 15 BackupBloc tests pass; scoped service analysis has six infos, no errors/warnings.
+- Existing BackupBloc composes result warnings into successMessage; the restore page displays that message. This source path is verified, but device display, preview warning presentation and localization remain open.
+- Wallet pins 0c4028d9f2f87717d7951289dcd783074c34634c; 51 host tests pass (`/tmp/n42-wallet-b258-host.log`). Full-history loading, ownership, backend upgrade rehearsal and other maturity requirements remain open.

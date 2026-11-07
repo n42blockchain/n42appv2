@@ -1,5 +1,12 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Integrate preview/restore backup warnings — batch 258 (2026-11-07)
+
+- Preview now carries filtered/deduplicated manifest warning strings. Restore imports them and supplies an incomplete-backup warning when hasReadErrors is true. Eighty-two backup tests and 15 BackupBloc tests pass; scoped service analysis has six infos, no errors/warnings.
+- Existing BackupBloc composes result warnings into successMessage; the restore page displays that message. This source path is verified, but device display, preview warning presentation and localization remain open.
+- Wallet pins 0c4028d9f2f87717d7951289dcd783074c34634c; 51 host tests pass (`/tmp/n42-wallet-b258-host.log`). Full-history loading, ownership, backend upgrade rehearsal and other maturity requirements remain open.
+
+
 ### Integrate full-backup read warnings — batch 257 (2026-11-07)
 
 - Wallet integration: 51 host tests pass (`/tmp/n42-wallet-b257-host.log`); manifest and lock resolve the immutable Chat commit.

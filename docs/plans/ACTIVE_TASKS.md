@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 258 integrated: preview/restore retain incomplete-backup warnings. 82 backup, 15 BackupBloc and 51 host tests pass; pin 0c4028d9. Preview display/localization, full history, ownership and live acceptance remain open.
+
 > Batch 257 integrated: full backup read errors now produce result/manifest warnings. 82 backup, four final-source focused and 51 host tests pass; pin f22caa0a. Restore/preview warning propagation and full-history limits remain open.
 
 > Batch 256: full/incremental backup Timeline cleanup implemented. Four lifecycle cases, 82 backup and 51 host tests pass; pin 43d355ab. Full history, ownership, device/live acceptance and remaining maturity work stay open.
