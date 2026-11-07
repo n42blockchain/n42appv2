@@ -1628,3 +1628,7 @@ Fourteen failures reproduced before repair. Signed-base64 validation now precede
 ## Batch 216 — NEAR signed transaction identity
 
 RPC success hash must now match the locally computed transaction hash. Envelope framing supports V0/V1 and Ed25519/secp256k1 without restricting action contents. Public Swift/WalletCore fixture includes independently verified signature and CryptoKit digest; Dart matches the digest. 185 API/sender/hash/WalletConnect regressions pass (`/tmp/n42-wallet-b216-final2.log`), native harness passes (`/tmp/n42-wallet-b216-native.log`). This closes submission hash binding, not Borsh/action validation, signature verification in Dart, durable recovery or trusted finality. Existing release unchanged.
+
+### Batch 217 — NEAR uncertain sender outcome
+
+Local hash survives API errors/missing/mismatched receipts as an uncertain result. Preparation and dispatch hooks are awaited and wallet identity rechecked; failures before RPC are explicitly not submitted. 65 related cases pass; scoped analysis clean. Memo page/database currently restrict reservation to ADA/XLM/EGLD: NEAR integration and durable receipt recovery remain open. See current reconciliation for evidence and limitations.

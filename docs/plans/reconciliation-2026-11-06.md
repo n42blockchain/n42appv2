@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Preserve NEAR submission uncertainty at the sender boundary — batch 217
+
+- The API could detect an unknown outcome, but NearSender converted it to an ordinary failure and discarded the local transaction identity. It now computes the hash before dispatch, awaits the existing preparation/dispatch callbacks, and rechecks wallet identity after each await. Storage failure or account change returns an explicit not-submitted result with the original hash; no RPC call occurs.
+- A thrown API request, reported error, missing hash or different hash after dispatch returns `SendResult.uncertain` with the local hash and actual amount. Success requires equality with that local identity. No resubmission was introduced. Invalid native output is rejected before preparation.
+- **65 sender/hash/submission tests pass**, including callback ordering, persistence failures, switches at both persistence boundaries, malformed native output and four uncertain receipt modes (`/tmp/n42-wallet-b217-tests.log`, exit 0). Scoped analysis reports no issues (`/tmp/n42-wallet-b217-analysis.log`). Test signing stubs now use the public independently verified native fixture; these sender tests are orchestration evidence, not native signing execution.
+- **Integration still required:** NEAR routes to the memo send page, whose persistence callbacks and database reservation validator currently admit ADA/XLM/EGLD only. Wire NEAR's canonical base58 hash into those guards and history recovery with page/database tests next. This batch exposes the necessary sender contract; it does not claim durable application recovery yet. Release 73325 does not contain this change.
+
+
 ### Interrupted-work recheck — current closeout
 
 - Re-read the working tree, fetched `origin/master`, current task ledgers and terminal evidence. Before closeout, master matched origin; batch 216 was the only tracked implementation left uncommitted. Completed it as `c7b6b8672`; 35 hash/submission cases rerun successfully (`/tmp/n42-interruption-check-near.log`), in addition to the existing 185-case result. Final scoped analysis reports no issues. The four pre-existing untracked items are preserved.

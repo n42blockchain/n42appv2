@@ -3,8 +3,6 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'dart:convert';
-
 import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -14,6 +12,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
+import '../chain_api/near_transaction_hash.dart';
 import 'chain_sender.dart';
 
 /// NEAR Protocol sender.
@@ -223,17 +222,46 @@ class NearSender implements ChainSender {
     }
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
-    if (base64Decode(signStr).isEmpty) {
+    final String hash;
+    try {
+      hash = nearSignedTransactionHash(signStr);
+    } catch (_) {
       return const SendResult.fail('Invalid signed NEAR transaction');
     }
-    final sendMm = await nearApi.sendTransaction(signStr);
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-    final hash = sendMm.data;
-    if (hash is! String || hash.trim().isEmpty) {
-      return const SendResult.fail(
-        'NEAR submission returned no transaction ID',
+    try {
+      await params.beforeBroadcast?.call(hash);
+    } catch (_) {
+      return SendResult.notSubmitted(
+        hash,
+        'Unable to preserve transaction before submission',
       );
     }
-    return SendResult.ok(hash, actualAmount: adjustedAmount);
+    if (!current()) {
+      return SendResult.notSubmitted(hash, 'Wallet changed before submission');
+    }
+    try {
+      await params.onBroadcastStarting?.call(hash);
+    } catch (_) {
+      return SendResult.notSubmitted(
+        hash,
+        'Unable to record transaction dispatch',
+      );
+    }
+    if (!current()) {
+      return SendResult.notSubmitted(hash, 'Wallet changed before submission');
+    }
+    try {
+      final result = await nearApi.sendTransaction(signStr);
+      if (!result.error && result.data == hash) {
+        return SendResult.ok(hash, actualAmount: adjustedAmount);
+      }
+    } catch (_) {
+      // A response failure does not establish that the transaction was rejected.
+    }
+    return SendResult.uncertain(
+      hash,
+      'NEAR submission status is unknown; check the original transaction',
+      actualAmount: adjustedAmount,
+    );
   }
 }

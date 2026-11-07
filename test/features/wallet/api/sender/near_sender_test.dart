@@ -1,15 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/near_transaction_hash.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/near_sender.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
+
+final signedFixture =
+    (jsonDecode(File('test/native/near_reference.json').readAsStringSync())
+            as Map)['signedTransaction']
+        as String;
+final fixtureHash = nearSignedTransactionHash(signedFixture);
 
 MessageModel ok(dynamic value) => MessageModel()..data = value;
 
@@ -22,7 +30,10 @@ class Api extends NearApi {
   String block = Base58Encode(List.filled(32, 2));
   bool keyError = false;
   String? queriedKey;
-  String? hash = 'confirmed';
+  String? hash = fixtureHash;
+  bool sendError = false;
+  bool sendThrows = false;
+  VoidCallback? onSend;
   VoidCallback? onBalance;
   VoidCallback? onKey;
   Completer<void>? gate;
@@ -51,7 +62,9 @@ class Api extends NearApi {
   @override
   Future<MessageModel> sendTransaction(String signedTxBase64) async {
     sends++;
-    return ok(hash);
+    onSend?.call();
+    if (sendThrows) throw StateError('lost response');
+    return sendError ? MessageModel.error() : ok(hash);
   }
 }
 
@@ -60,6 +73,7 @@ class Signer extends Trustdart {
   Map? payload;
   String address = List.filled(32, '01').join();
   VoidCallback? onSign;
+  String signed = signedFixture;
   final credentials = <(String, String)>[];
   @override
   Future<Map> generateAddress(
@@ -89,7 +103,7 @@ class Signer extends Trustdart {
     credentials.add((mnemonic, pk));
     payload = Map.of(txData);
     onSign?.call();
-    return base64Encode([1, 2, 3]);
+    return signed;
   }
 }
 
@@ -97,8 +111,12 @@ SendParams params({
   String? key = 'fixture-key',
   BigInt? exact,
   bool max = false,
+  Future<void> Function(String)? beforeBroadcast,
+  Future<void> Function(String)? onBroadcastStarting,
 }) => SendParams(
   sendMax: max,
+  beforeBroadcast: beforeBroadcast,
+  onBroadcastStarting: onBroadcastStarting,
   coinType: 'NEAR',
   fromAddress: 'alice.near',
   toAddress: 'bob.near',
@@ -112,6 +130,101 @@ SendParams params({
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => S.load(const Locale('en')));
+  test('preparation and dispatch are awaited before the only send', () async {
+    final api = Api();
+    final events = <String>[];
+    final gate = Completer<void>();
+    api.onSend = () => events.add('send');
+    final result = NearSender(trustdart: Signer(), apiFactory: (_) => api).send(
+      params(
+        beforeBroadcast: (hash) async {
+          expect(hash, fixtureHash);
+          events.add('prepare');
+          await gate.future;
+        },
+        onBroadcastStarting: (hash) async {
+          expect(hash, fixtureHash);
+          events.add('dispatch');
+        },
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+    expect(events, ['prepare']);
+    expect(api.sends, 0);
+    gate.complete();
+    expect((await result).success, isTrue);
+    expect(events, ['prepare', 'dispatch', 'send']);
+  });
+  for (final stage in ['prepare', 'dispatch']) {
+    for (final changeOwner in [false, true]) {
+      test(
+        '$stage failure or account change $changeOwner never broadcasts',
+        () async {
+          final api = Api();
+          var owner = 'original';
+          Future<void> stop(String hash) async {
+            if (changeOwner) {
+              owner = 'other';
+            } else {
+              throw StateError('storage failed');
+            }
+          }
+
+          final result =
+              await NearSender(
+                trustdart: Signer(),
+                apiFactory: (_) => api,
+                ownerIdentity: () => owner,
+              ).send(
+                params(
+                  beforeBroadcast: stage == 'prepare' ? stop : null,
+                  onBroadcastStarting: stage == 'dispatch' ? stop : null,
+                ),
+              );
+          expect(result.definitelyNotSubmitted, isTrue);
+          expect(result.txHash, fixtureHash);
+          expect(api.sends, 0);
+        },
+      );
+    }
+  }
+  for (final mode in ['throw', 'error', 'missing', 'different']) {
+    test('$mode receipt preserves local hash and unknown outcome', () async {
+      final api = Api()
+        ..sendThrows = mode == 'throw'
+        ..sendError = mode == 'error';
+      if (mode == 'missing') api.hash = null;
+      if (mode == 'different') api.hash = Base58Encode(List.filled(32, 9));
+      final result = await NearSender(
+        trustdart: Signer(),
+        apiFactory: (_) => api,
+      ).send(params());
+      expect(result.success, isFalse);
+      expect(result.definitelyNotSubmitted, isFalse);
+      expect(result.txHash, fixtureHash);
+      expect(result.actualAmount, 1);
+      expect(api.sends, 1);
+    });
+  }
+  test('malformed native output never prepares or broadcasts', () async {
+    final api = Api();
+    var prepared = false;
+    final result =
+        await NearSender(
+          trustdart: Signer()..signed = 'AQID',
+          apiFactory: (_) => api,
+        ).send(
+          params(
+            beforeBroadcast: (_) async {
+              prepared = true;
+            },
+          ),
+        );
+    expect(result.success, isFalse);
+    expect(result.txHash, isNull);
+    expect(prepared, isFalse);
+    expect(api.sends, 0);
+  });
   test('native payload uses signer fields and binary encodings', () async {
     final api = Api();
     final signer = Signer();
