@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Recover initial sync UI — batch 251
+
+- Four pre-fix widget regressions reproduced (`/tmp/n42-chat-b251-before.log`). Initial sync errors now show localized generic load-failure/retry/close controls. Close also dismisses pending sync without logging out or stopping the background loop.
+- Retry is single-flight and bound to captured SDK client/user/device/token/homeserver. Replacement sessions cannot retry; disposed-widget completions cannot mutate UI. Existing localization keys are reused.
+- 110 related Chat tests pass (`/tmp/n42-chat-b251-final.log`); after adding the homeserver guard, 11 final-source widget tests pass (`/tmp/n42-chat-b251-final-widget.log`), scoped analysis clean. Wallet resolves ee811407fc1d60e3aa86938692d59852d62d94c0; 51 host tests pass (`/tmp/n42-wallet-b251-host.log`).
+- No live upgrade, physical-device UI, cryptographic recovery or release acceptance claimed. Account-lock-specific explanations, backend backup/restore rehearsal and remaining maturity requirements stay open.
+
+
 ### Verify restricted-session SDK sync — batch 250
 
 - Added real Matrix SDK 15.0.0 sync-loop coverage using temporary SQLite and a simulated HTTP peer. Locked/deactivated errors preserve session fields, stored client row and an account-data marker; no logout or session-clear events. Simulated unlocking resumes sync on the same token.
