@@ -1,0 +1,33 @@
+{
+  "run": "https://github.com/n42blockchain/n42appv2/actions/runs/42389134664",
+  "job": 128454664831,
+  "source_commit": "c574b5402f1281f14168332b93adfafd7c755fa9",
+  "wallet": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 0,
+    "tests_failed": 0,
+    "tests_passed": 7766
+  },
+  "wallet_coverage": {
+    "found": 141269,
+    "hit": 104412,
+    "passed": true,
+    "percent": 73.91005811607643,
+    "threshold": 70.0
+  },
+  "chat": {
+    "passed": 8594,
+    "skipped": 5,
+    "failed": 0,
+    "skipped_cases": [
+      "live/account_switch_encryption_test.dart: sequential accounts retain independent device identities and decrypt offline messages",
+      "live/live_media_smoke_test.dart: live homeserver media smoke",
+      "security/markdown_document_security_test.dart: encrypted document validates hash and decrypts before rendering",
+      "integration/registration_live_test.dart: live datasource UIA registration, password login and cleanup",
+      "unit/encryption/vodozemac_native_abi_test.dart: packaged native Vodozemac completes FRB handshake and Megolm pickle round trip"
+    ]
+  },
+  "log_sha256": "e367cfff5fe741df8f0644c68fb527f3b830d27aa720645f09796c5b769ae9a4",
+  "scope": "Completed test/coverage job, not whole-pipeline success. Product lib/native source/lockfile match the 73424 candidate; build number is the only product-manifest difference. Platform-gated/live skips retain their own acceptance boundaries. Both native build jobs remain running."
+}
