@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 248: archive export no longer loses timestamp ties; 92 Chat and 51 host tests pass, pin 8136c112. Backend upgrade added to active scope: live Tuwunel 1.9.3, candidate 1.9.4, frontend SDK 15.0.0. Compatibility/rehearsal/deployment remain open; see testing/matrix-upgrade-2026-11-06.md.
+
 > Batch 247: incremental checkpoints are account-and-room-set scoped; partial read failures warn without advancing progress. Three pre-fix failures; 86 related and six final-source focused tests pass. Chat pin 0e6c720e. Full account partitioning, pagination/history completeness, native login and release remain open.
 
 > Batch 246: Chat incremental cursors now belong to a homeserver/user; export detects session changes. Eight pre-fix failures; 80 related and 24 final-source focused tests pass. Pin b1a97015. Archive DB/directory and restore ownership remain open; this is not complete account partitioning.

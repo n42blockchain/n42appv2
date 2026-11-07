@@ -1,5 +1,12 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Preserve archive pagination ties — batch 248
+
+- Real SQLite regression exported only 501 of 1,203 rows before the fix (`/tmp/n42-chat-b248-before.log`). Database/service now support a deterministic timestamp/event-ID cursor; incremental export uses both. Timestamp-only callers retain existing semantics.
+- **92 related Chat tests pass** (`/tmp/n42-chat-b248-final.log`), including complete 1,203-row export, page sizes 1/2/5, room isolation and invalid cursor rejection. Scoped analysis: no errors/warnings, eight existing infos (`/tmp/n42-chat-b248-analysis.log`). Chat `8136c1124612a994249805293ce854092fe54329` pushed. Wallet pin/lock updated, pub get succeeds and **51 host tests pass** (`/tmp/n42-wallet-b248-host.log`).
+- Remaining: UI fallback pagination, concurrent/late arrivals, full Timeline loading/cleanup, account isolation, native login and release. User also requested backend upgrade assessment: live Tuwunel is 1.9.3, stable candidate 1.9.4; SDK resolves 15.0.0. See [assessment](../testing/matrix-upgrade-2026-11-06.md). No server upgrade, real-message/payment, upload or device acceptance claimed.
+
+
 ### Preserve incremental history across room scopes and failures — batch 247
 
 - Reproduced three failures (`/tmp/n42-chat-b247-before.log`): switching room subsets or adding rooms reused a previous cutoff, and failed room export silently advanced progress. Checkpoint v3 includes the captured sorted set of actual room IDs plus homeserver/user. Different scopes rescan safely; reordering the same scope retains progress. Older cursors are left untouched but not reused.
