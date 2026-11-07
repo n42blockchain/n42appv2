@@ -1,11 +1,12 @@
 {
   "date": "2026-11-07",
-  "chatRef": "fca10b9ec50899fcfb0cb211cdac8e5e882214dc",
+  "chatRef": "644fd852a9e56da3cdba76fe64e6181927b8fee4",
   "changes": [
     "Registration shares the authentication mutex with login and restore.",
     "Anonymous username preflight is invalidated by intervening authentication.",
     "AuthBloc retains an already authenticated current user after stale guest failure.",
-    "Live bootstrap accepts a current logged-in repository after superseded guest registration; replacement repositories do not inherit old failures."
+    "Live bootstrap accepts a current logged-in repository after superseded guest registration; replacement repositories do not inherit old failures.",
+    "Guest completion checks registered identity and captured SDK session before and after nickname update."
   ],
   "verification": {
     "reproducedBeforeFix": [
@@ -14,13 +15,21 @@
       "Late anonymous failure replaced authenticated AuthBloc with error.",
       "Live bootstrap rejected a current authenticated account after stale guest failure."
     ],
-    "chatAuthAndSessionTestsPassed": 100,
+    "chatAuthAndSessionTestsPassed": 105,
     "hostLiveTestsPassed": 76,
     "chatScopedAnalysis": "10 existing info diagnostics; no errors or warnings",
-    "hostScopedAnalysis": "No issues found"
+    "hostScopedAnalysis": "No issues found",
+    "guestCompletionScenarios": [
+      "Account replaced before nickname: no write",
+      "Account replaced during nickname: stale success rejected",
+      "Same-user token replaced: stale success rejected",
+      "Stable guest: success retained",
+      "Nickname failure with stable guest: registration success retained"
+    ],
+    "completionScopedAnalysis": "No issues found",
+    "fullChatSuite": "running; /tmp/n42-chat-anonymous-full-20261107.jsonl"
   },
   "remaining": [
-    "Post-registration guest nickname changes and stale success after session replacement.",
     "Full suite for this new dependency pin.",
     "Native and physical live login/media acceptance."
   ],
