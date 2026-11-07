@@ -1,0 +1,11 @@
+{
+  "command": "flutter test test/ --no-pub --reporter expanded",
+  "source_commit": "49273c46c1cbcd7f292abf1521c3a0f241f635ba",
+  "passed": 7733,
+  "skipped": 3,
+  "failed": 0,
+  "exit_code": 0,
+  "skip_reason": "Three native PQ library tests require N42_PQ_LIBRARY, absent from this local run.",
+  "log_sha256": "e79b8f8df78df6310fcfaef64ea6a8f9916101521ba08837fd06cc8232a5fbbd",
+  "scope": "Wallet tests after creation/import persistence fixes, before compatible dependency integration. Not physical-device or release acceptance."
+}
