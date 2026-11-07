@@ -1,6 +1,17 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
 
+### Repair NEAR sender identity and native wire contract — batch 212
+
+- Reproduced two failures before repair: the ordinary sender supplied `fromAddress`/`toAddress`, integer nonce and decimal/base58 values while both native handlers require `signerId`/`receiverId`, decimal-string nonce and hex bytes; a failed access-key lookup still signed with nonce zero. Original failure log `/tmp/n42-wallet-b212-before.log`.
+- Capture wallet identity and mnemonic/private key before awaits. Recheck before signing and submission, reject overlapping sends, and use the captured credentials for derivation/signing. Derive the Ed25519 key from Wallet Core's implicit hex account and encode it as base58 for `view_access_key`; authorize named accounts through their full-access key instead of incorrectly comparing the named account with the implicit address. Failed/malformed key lookup no longer falls through to signing.
+- Match the actual native wire contract: 32-byte decoded block hash, validated nonce within Android's present signed-Long capacity, exact base-unit amount as fixed 16-byte little-endian hex. Reject contract-token requests instead of silently making a native transfer. Preserve native sends, explicit private keys, stored private-key wallets and selected-network dispatch. Empty submission IDs cannot report success.
+- Wallet Core 4.8.7 [NEAR serialization](https://raw.githubusercontent.com/trustwallet/wallet-core/4.8.7/src/NEAR/Serialization.cpp) requires exactly 16 deposit bytes and writes them directly as Borsh u128; its proto big-endian comment is inconsistent with implementation. Native testing caught the initial variable-width encoding. An independently decoded signed fixture verifies amount `1000000000000000000000001`, sender/receiver, nonce, block, action, derived key and CryptoKit Ed25519 signature. The harness uses extracted current Swift production methods and installed WalletCore, not a replacement signer.
+- **44 sender/factory tests pass** (`/tmp/n42-wallet-b212-final3.log`). Final scoped analysis reports no issues (`/tmp/n42-wallet-b212-analysis-final.log`). Actual Swift/WalletCore component harness passes on N42's simulator (`/tmp/n42-wallet-b212-native-final.log`). This is CLI component execution; simulator UI boot recorded a migration warning and is not App/device acceptance. An incorrect fixture byte count and one nonexistent test path were corrected before the final rerun; their failed logs remain in `/tmp`.
+- Remaining: Android JNI execution and native boundary hardening, storage reserve and precise fee/MAX modeling (existing conservative 300 TGas reserve retained), full uint64/gas-key support, RPC trust/chain identity, durable unknown-submission recovery and real-node/device/session flows. No claim of completed NEAR production transfers. The verified 73325 IPA predates this fix and is unchanged; it must not be described as containing batch 212.
+
+
+
 ### Close full regression and prepare verified release — batch 211
 
 - Wallet batch 205 is accepted at `4b1f38aec8a16dc3a4bc9842933f88e616343b82`: **7,335 pass / zero failures / zero skips**, 103,546 / 140,578 covered lines (**73.6573%**). Test, strict reporter and coverage gates all exit 0. Source stayed fixed and original coverage was restored. Chat batch 199 is separately accepted: **8,230 pass / four external skips**, **71.3931%**.

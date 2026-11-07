@@ -3,6 +3,9 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
+
+import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
@@ -15,11 +18,98 @@ import 'chain_sender.dart';
 
 /// NEAR Protocol sender.
 class NearSender implements ChainSender {
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
+  final NearApi Function(bool) _apiFactory;
+  final Object? Function() _ownerIdentity;
+  final (String, String) Function() _readCredentials;
+  bool _sending = false;
+
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static (String, String) _currentCredentials() {
+    if (!globalWapAdapter.isWalletReady) return ('', '');
+    final wallet = globalWapAdapter.walletInfo;
+    return (wallet.mnemonic ?? '', wallet.privateKey ?? '');
+  }
+
+  NearSender({
+    Trustdart? trustdart,
+    NearApi Function(bool)? apiFactory,
+    Object? Function()? ownerIdentity,
+    (String, String) Function()? readCredentials,
+  }) : _trustdart = trustdart ?? Trustdart(),
+       _apiFactory = apiFactory ?? ((test) => NearApi(isTest: test)),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readCredentials = readCredentials ?? _currentCredentials;
 
   @override
   Future<SendResult> send(SendParams params) async {
-    final nearApi = NearApi(isTest: params.isTest);
+    if (_sending) return const SendResult.fail('A transfer is already pending');
+    _sending = true;
+    try {
+      final owner = _ownerIdentity();
+      final credentials = params.privateKey == null
+          ? _readCredentials()
+          : ('', params.privateKey!);
+      bool current() =>
+          _ownerIdentity() == owner &&
+          (params.privateKey != null ||
+              (owner != null && _readCredentials() == credentials));
+      if (!current() || (credentials.$1.isEmpty && credentials.$2.isEmpty)) {
+        return const SendResult.fail('Wallet is not ready');
+      }
+      return await _send(params, credentials, current);
+    } catch (_) {
+      return const SendResult.fail('Unable to prepare or send NEAR transfer');
+    } finally {
+      _sending = false;
+    }
+  }
+
+  Future<SendResult> _send(
+    SendParams params,
+    (String, String) credentials,
+    bool Function() current,
+  ) async {
+    if (params.contractAddress.isNotEmpty ||
+        params.fromAddress.isEmpty ||
+        params.toAddress.isEmpty) {
+      return const SendResult.fail('Invalid native NEAR transfer');
+    }
+    final nearApi = _apiFactory(params.isTest);
+    // Wallet Core derives NEAR's implicit account as the hex Ed25519 key.
+    // Named accounts are authorized by view_access_key, not address equality.
+    final derived = await _trustdart.generateAddress(
+      CoinType.NEAR.name,
+      params.path,
+      'legacy',
+      mnemonic: credentials.$2.isEmpty ? credentials.$1 : '',
+      pk: credentials.$2,
+      isTest: params.isTest,
+    );
+    final implicit = derived['legacy'];
+    if (!current() ||
+        implicit is! String ||
+        !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(implicit)) {
+      return const SendResult.fail('Invalid NEAR signing identity');
+    }
+    final keyBytes = List.generate(
+      32,
+      (i) => int.parse(implicit.substring(i * 2, i * 2 + 2), radix: 16),
+    );
+    final publicKey = 'ed25519:${Base58Encode(keyBytes)}';
 
     // Get balance
     final mmb = await nearApi.getBalance(params.fromAddress);
@@ -33,16 +123,22 @@ class NearSender implements ChainSender {
     final mmg = await nearApi.getGasPrice();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
-    final gasUnits = BigInt.from(
-      300000000000000,
-    ); // 30 TGas for simple transfer
+    if (gasPrice <= BigInt.zero || chainBalance < BigInt.zero) {
+      return const SendResult.fail('Invalid NEAR balance or gas price');
+    }
+    final gasUnits = BigInt.from(300000000000000); // Existing conservative 300 TGas reserve; fee estimation remains separate.
     final totalGas = gasPrice * gasUnits;
 
-    BigInt valuePrice = ethToWeiString(
-      params.amountDecimalString,
+    BigInt valuePrice =
+        params.valueWeiOverride ??
+        ethToWeiString(params.amountDecimalString, params.decimals);
+    double adjustedAmount = toEther(
+      valuePrice.toString(),
       params.decimals,
-    );
-    double adjustedAmount = params.amount;
+    ).toDouble();
+    if (valuePrice <= BigInt.zero || valuePrice >= (BigInt.one << 128)) {
+      return const SendResult.fail('Invalid NEAR amount');
+    }
 
     if (valuePrice == chainBalance && params.sendMax) {
       if (totalGas >= valuePrice) {
@@ -64,75 +160,73 @@ class NearSender implements ChainSender {
     final blockData = mmblock.data as Map<String, dynamic>;
     final blockHash = blockData['hash'] as String;
 
-    // Get nonce via access key — 公钥必须由「将用于签名的同一把密钥」派生。
-    // 否则传入 params.privateKey（指定账户）时，公钥/nonce 取自活跃钱包而签名用
-    // 另一账户 → 账户错配（与签名账户一致性 bug 同族）。仅在未传私钥时才读活跃钱包。
-    final String signingMnemonic;
-    final String signingPk;
-    if (params.privateKey != null) {
-      signingMnemonic = '';
-      signingPk = params.privateKey!;
-    } else {
-      final wi = globalWapAdapter.walletInfo;
-      signingMnemonic = wi.mnemonic ?? '';
-      signingPk = wi.privateKey ?? '';
+    final blockBytes = Base58Decode(blockHash);
+    if (blockBytes.length != 32 ||
+        Base58Encode(blockBytes) != blockHash ||
+        !current()) {
+      return const SendResult.fail('Invalid NEAR block or changed wallet');
     }
-    final pubKeyMm = await _trustdart.generateAddress(
+    final mmKey = await nearApi.getAccessKey(params.fromAddress, publicKey);
+    if (mmKey.error || !current()) {
+      return const SendResult.fail('Unable to authorize NEAR access key');
+    }
+    final keyData = mmKey.data;
+    if (keyData is! Map || keyData['permission'] != 'FullAccess') {
+      return const SendResult.fail('NEAR transfer requires a full-access key');
+    }
+    final nonceText = keyData['nonce'].toString();
+    final previousNonce = RegExp(r'^[0-9]+$').hasMatch(nonceText)
+        ? BigInt.tryParse(nonceText)
+        : null;
+    // Android currently parses a signed Long. Reject instead of overflowing.
+    if (previousNonce == null ||
+        previousNonce >= BigInt.from(0x7fffffffffffffff)) {
+      return const SendResult.fail('Invalid or unsupported NEAR nonce');
+    }
+    // Wallet Core 4.8.7's NEAR serializer writes these bytes directly as
+    // Borsh u128: fixed-width little endian (despite its proto comment).
+    final amountHex = List.generate(
+      16,
+      (i) => ((valuePrice >> (8 * i)) & BigInt.from(255))
+          .toInt()
+          .toRadixString(16)
+          .padLeft(2, '0'),
+    ).join();
+    final signMap = <String, dynamic>{
+      'amount': amountHex,
+      'receiverId': params.toAddress,
+      'signerId': params.fromAddress,
+      'nonce': (previousNonce + BigInt.one).toString(),
+      'blockHash': blockBytes
+          .map((b) => b.toRadixString(16).padLeft(2, '0'))
+          .join(),
+    };
+    if (!current()) {
+      return const SendResult.fail('Wallet changed before signing');
+    }
+    final signStr = await _trustdart.signTransaction(
       CoinType.NEAR.name,
       params.path,
-      'legacy',
-      mnemonic: signingMnemonic,
-      pk: signingPk,
+      signMap,
+      mnemonic: credentials.$2.isEmpty ? credentials.$1 : '',
+      pk: credentials.$2,
     );
-    final publicKey =
-        pubKeyMm['publicKey']?.toString() ??
-        pubKeyMm['legacy']?.toString() ??
-        '';
-
-    int nonce = 0;
-    if (publicKey.isNotEmpty) {
-      final mmKey = await nearApi.getAccessKey(
-        params.fromAddress,
-        'ed25519:$publicKey',
-      );
-      if (!mmKey.error) {
-        nonce =
-            ((mmKey.data as Map<String, dynamic>)['nonce'] as int? ?? 0) + 1;
-      }
+    if (!current()) {
+      return const SendResult.fail('Wallet changed before submission');
     }
-
-    final signMap = <String, dynamic>{
-      'amount': valuePrice.toString(),
-      'toAddress': params.toAddress,
-      'nonce': nonce,
-      'blockHash': blockHash,
-      'fromAddress': params.fromAddress,
-    };
-
-    String signStr;
-    if (params.privateKey == null) {
-      if (!AppGlobals.appContext.mounted) {
-        return const SendResult.fail('Context is no longer valid');
-      }
-      signStr = await _trustdart.signTransaction(
-        CoinType.NEAR.name,
-        params.path,
-        signMap,
-        mnemonic: signingMnemonic,
-      );
-    } else {
-      signStr = await _trustdart.signTransaction(
-        CoinType.NEAR.name,
-        params.path,
-        signMap,
-        pk: params.privateKey!,
-      );
-    }
-
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
+    if (base64Decode(signStr).isEmpty) {
+      return const SendResult.fail('Invalid signed NEAR transaction');
+    }
     final sendMm = await nearApi.sendTransaction(signStr);
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
-    return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);
+    final hash = sendMm.data;
+    if (hash is! String || hash.trim().isEmpty) {
+      return const SendResult.fail(
+        'NEAR submission returned no transaction ID',
+      );
+    }
+    return SendResult.ok(hash, actualAmount: adjustedAmount);
   }
 }

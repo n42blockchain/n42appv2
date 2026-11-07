@@ -1608,3 +1608,7 @@ Chat batch 195 (`930690d1`) ended exit 1: 8,222 passed, eight failures, four ext
 - Signed 2.5.3+73325 at `cbbe308d6` passed version/signature/artifact/provider checks. Master fast-forwarded and pushed. No TestFlight upload; N42-authorized Transporter account handoff requested.
 - Persistent `verify_ios_social_auth.py` checks packaged resources and callback binding before the IPA helper reports success. 61 script tests pass on system Python, shell syntax clean; actual 73325 accepted, known-bad 73324 rejected. No provider values emitted. Package verification is separate from native login E2E.
 - Exact provenance and remaining delivery boundary: [release record](../../releases/testflight-20261106-73325.md). Broader feature maturity goal remains active.
+
+## Batch 212 — NEAR sender and native contract
+
+Two pre-fix regressions reproduced missing native signer fields and signing after failed access-key lookup. Captured credentials/owner checks, native field/encoding compatibility, exact u128 amount and full-access authorization are repaired. 44 related Dart tests and actual Swift/WalletCore component signing with independent CryptoKit verification pass. See reconciliation batch 212 for source references, failed fixture correction, logs and the remaining fee/reserve, Android, uint64, RPC and uncertain-outcome boundaries. Release 73325 does not contain this fix.
