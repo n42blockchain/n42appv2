@@ -1842,3 +1842,10 @@ Recovered two uncommitted files. Sui message signing now verifies bounded hexade
 - Retry is single-flight and bound to captured SDK client/user/device/token/homeserver. Replacement sessions cannot retry; disposed-widget completions cannot mutate UI. Existing localization keys are reused.
 - 110 related Chat tests pass (`/tmp/n42-chat-b251-final.log`); after adding the homeserver guard, 11 final-source widget tests pass (`/tmp/n42-chat-b251-final-widget.log`), scoped analysis clean. Wallet resolves ee811407fc1d60e3aa86938692d59852d62d94c0; 51 host tests pass (`/tmp/n42-wallet-b251-host.log`).
 - No live upgrade, physical-device UI, cryptographic recovery or release acceptance claimed. Account-lock-specific explanations, backend backup/restore rehearsal and remaining maturity requirements stay open.
+
+### Bind automatic retries to their originating session — batch 252 (2026-11-07)
+
+- Four regressions reproduced (`/tmp/n42-chat-b252-before.log`): delayed retry used a new room, leave/return reused stale work, concurrent retry events sent twice, and an old failed request polluted a new room queue.
+- Batches capture room/account generation and check before dispatch and after completion. Queue and sync-listener ownership survive async delays; one batch per generation runs. Initialization clears only in-memory retry bookkeeping, preserving SDK events. Token changes before dispatch/during delay are rejected.
+- 207 ChatBloc/extended tests pass (`/tmp/n42-chat-b252-final.log`); final-source six focused cases pass (`/tmp/n42-chat-b252-focused.log`). Analysis has eight existing infos, no errors/warnings. Wallet resolves exact Chat 3f1faf85719d19ec5dae7441b32a7c59026a0dc5; 51 host tests pass (`/tmp/n42-wallet-b252-host.log`).
+- These checks do not establish live offline/reconnect delivery or exactly-once server receipt. Backend upgrade rehearsal, E2EE/device acceptance, release and other maturity requirements remain open.

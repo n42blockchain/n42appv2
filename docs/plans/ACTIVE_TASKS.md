@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Batch 252: automatic retry ownership and duplicate-batch races repaired. Four pre-fix failures; 207 ChatBloc, six final-source focused and 51 host tests pass. Pin 3f1faf85; live delivery, backend rehearsal and remaining maturity work stay open.
+
 > Batch 251: initial sync failure now offers retry/close; retries retain session ownership and suppress duplicates. 110 related Chat, 11 final-source widget and 51 host tests pass; pin ee811407. Backend rehearsal, live E2EE and remaining maturity work stay open.
 
 > Batch 250: real SDK/SQLite tests confirm restricted sync retains the session and simulated unlock resumes it; 99 related tests pass. Runtime pin unchanged. Initial-sync recovery UX, live E2EE and upgrade rehearsal remain open.
