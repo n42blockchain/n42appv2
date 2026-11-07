@@ -1,0 +1,9 @@
+{
+  "source_commit": "8d37804cb",
+  "passed": 7733,
+  "skipped": 3,
+  "failed": 0,
+  "exit_code": 0,
+  "log_sha256": "1add5ed8a52dc48eb31916a61b3c50a1ed935efab85917214f23d6ba72fe5a49",
+  "scope": "Full wallet regression after eight compatible dependency updates and persistence fixes, before Matrix 16 integration. Three PQ-library placeholders skipped; actual native PQ suite separately passes 21 tests."
+}
