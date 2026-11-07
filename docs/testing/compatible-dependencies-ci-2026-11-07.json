@@ -63,6 +63,6 @@
     "openFileHolders": 0,
     "gitCherry": "42e74e240 patch-equivalent to integrated HEAD",
     "branchRetained": "chore/compatible-dependencies-20261107",
-    "matrix16Comparison": "Retained separately because git cherry reports non-equivalent 57458054e; no removal inferred from ahead/behind counts."
+    "matrix16Comparison": "Initially retained due non-equivalent documentation patch; subsequently removed after exact lockfile/normalized manifest match and document integration review. Branch and evidence retained."
   }
 }

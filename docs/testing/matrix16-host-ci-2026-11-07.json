@@ -49,5 +49,14 @@
     }
   ],
   "raw_log_sha256": "e56b1bb6d9fc3680038c85b38088b74f4875ccdd71787fd61b1b10cdbad6d675",
-  "scope": "Combined Matrix 16.0.1 host and eight compatible dependency updates; build/unit CI. Not native authenticated business-flow or production acceptance."
+  "scope": "Combined Matrix 16.0.1 host and eight compatible dependency updates; build/unit CI. Not native authenticated business-flow or production acceptance.",
+  "checkoutCleanup": {
+    "date": "2026-11-07",
+    "removed": "/Users/jieliu/Documents/n42/.tmp-worktrees/n42-wallet-matrix16-20261107",
+    "branchRetained": "chore/wallet-matrix16-20261107",
+    "sourceCommit": "57458054e278fd660e222bdf1ce5b0f956fac007",
+    "proof": "Exact lockfile match; pubspec identical after build version normalization; document conflict integration 3a9030913 retains pin and validation facts. Current documentation supersedes stale candidate statuses.",
+    "clean": true,
+    "openFileHolders": 0
+  }
 }
