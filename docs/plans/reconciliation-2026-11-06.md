@@ -1,5 +1,13 @@
 # Recent interrupted-work reconciliation — 2026-11-06
 
+### Reject empty native message signatures — batch 240
+
+- **16 failures reproduced** (`/tmp/n42-wallet-b240-before.log`): for TRON/Aptos/Sui/Solana, empty/whitespace native results and errors/null converted by Trustdart to empty strings were sent as successful WalletConnect responses.
+- Validate nonempty signature content before any successful response. Empty or prefix-only results fail without responding with a signature or returning to connected success. Keep the original request available for an explicit retry; captured session guards still suppress stale completions. This does not add automatic retry or change valid signature bytes.
+- **1,004 WalletConnect directory tests pass** (`/tmp/n42-wallet-b240-final.log`, exit 0), including all 16 failure-then-successful-retry cases and prior stale lifecycle/permission tests. Removed one new test-style info; final analysis is stored in `/tmp/n42-wallet-b240-analysis-final.log`. No real native signing or relay acceptance inferred from mocked MethodChannel tests.
+- The observed empty-result path is closed. Full signature encoding/cryptographic validation, non-EVM derived-key/address binding and native protocol parity remain open. Old-worktree semantic review, archive lifecycle, native login and new release still require completion. No real message/payment, deployment or upload.
+
+
 ### Suppress obsolete native message signatures — batch 239
 
 - Inspection of non-EVM signer paths found the pre-native session guard was not reused after awaiting the native signature. **24 delayed-native tests fail before repair** (`/tmp/n42-wallet-b239-before.log`): TRON/Aptos/Sui/Solana messages could deliver signatures after revocation, wallet/account/request changes, disconnect or replacement of the WalletKit client.

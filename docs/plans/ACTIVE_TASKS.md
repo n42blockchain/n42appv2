@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Batch 240: empty native WalletConnect message signatures fail without a success response; explicit retry remains available. 16 pre-fix failures and 1,004 passing directory tests. Non-EVM key/address binding, native protocol parity and broader lifecycle/release requirements remain open.
+
+
 > Batch 239: obsolete native message signatures no longer reach WalletConnect after captured session/request/account changes. 24 pre-fix failures, 988 directory tests and 269 final-source scoped tests pass. Empty native signature handling and non-EVM derived-key binding remain next, alongside broader release/lifecycle acceptance.
 
 

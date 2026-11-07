@@ -125,6 +125,7 @@ mixin WalletConnectSigning
           pk: credentials.privateKey,
         );
         requireCurrent();
+        _requireMessageSignature(sig);
         await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
@@ -161,6 +162,7 @@ mixin WalletConnectSigning
           pk: credentials.privateKey,
         );
         requireCurrent();
+        _requireMessageSignature(sig);
         await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
@@ -200,6 +202,7 @@ mixin WalletConnectSigning
           pk: credentials.privateKey,
         );
         requireCurrent();
+        _requireMessageSignature(sig);
         await signClient!.respondSessionRequest(
           topic: eventData.topic,
           response: wallet_connect.JsonRpcResponse(
@@ -245,6 +248,7 @@ mixin WalletConnectSigning
       }
 
       requireMessageCurrent?.call();
+      _requireMessageSignature(signedDataHex);
       await signClient!.respondSessionRequest(
         topic: eventData.topic,
         response: wallet_connect.JsonRpcResponse(
@@ -914,6 +918,13 @@ mixin WalletConnectSigning
         walletConnectState != WalletConnectState.disconnect &&
         (requireCurrent == null || _signingContextIsCurrent(requireCurrent))) {
       viewStateDeal(WalletConnectState.connect);
+    }
+  }
+
+  void _requireMessageSignature(String signature) {
+    final value = signature.trim();
+    if (value.isEmpty || value.toLowerCase() == '0x') {
+      throw StateError('Native message signing returned no signature');
     }
   }
 

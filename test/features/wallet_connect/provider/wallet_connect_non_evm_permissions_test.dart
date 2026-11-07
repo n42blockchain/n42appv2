@@ -585,4 +585,61 @@ void main() {
       );
     }
   }
+  for (final c in _chains.where(
+    (c) => c.methods.any((m) => m.endsWith('Message')),
+  )) {
+    final method = c.methods.firstWhere((m) => m.endsWith('Message'));
+    for (final failure in ['empty', 'whitespace', 'exception', 'null']) {
+      test(
+        '$method rejects native $failure and permits an explicit retry',
+        () async {
+          var attempts = 0;
+          const channel = MethodChannel('trustdart');
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (_) async {
+                if (attempts++ > 0) return 'fixture-signature';
+                if (failure == 'exception') {
+                  throw PlatformException(code: 'signing_failed');
+                }
+                if (failure == 'null') return null;
+                return failure == 'empty' ? '' : '  ';
+              });
+          addTearDown(
+            () => TestDefaultBinaryMessengerBinding
+                .instance
+                .defaultBinaryMessenger
+                .setMockMethodCallHandler(channel, null),
+          );
+          provider.coinModels = [
+            sessionCoin(
+              type: c.type,
+              blockchain: c.blockchain,
+              address: c.address,
+            )..coin['path'] = {'legacy': "m/44'/0'/0'"},
+          ];
+          provider.coinModelsIndex = 0;
+          client.activeSessions['request-topic'] = _session(
+            c.ns,
+            c.chain,
+            c.address,
+            c.methods,
+          );
+          final request = sessionRequest(method, {
+            c.field: c.address,
+            'message': 'Zml4dHVyZQ==',
+          }, chain: c.chain);
+          provider.actionData = request;
+          await provider.messageSignTap();
+          expect(client.responses, isEmpty);
+          expect(provider.walletConnectState, WalletConnectState.error);
+          expect(provider.errorMessage, isNotEmpty);
+          expect(provider.actionData, same(request));
+          await provider.messageSignTap();
+          expect(attempts, 2);
+          expect(client.responses.single.$2.error, isNull);
+          expect(provider.walletConnectState, WalletConnectState.connect);
+        },
+      );
+    }
+  }
 }
