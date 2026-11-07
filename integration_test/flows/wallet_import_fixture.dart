@@ -14,6 +14,10 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_one.dart';
+import 'package:n42_wallet/features/wallet/pages/create_wallet/create/create_three.dart';
+import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart';
+import 'package:roundcheckbox/roundcheckbox.dart';
 
 import '../../test/helpers/widget_test_helpers.dart';
 
@@ -32,9 +36,16 @@ class _ImportFixtureStore extends WalletActionProvider {
 }
 
 void registerWalletImportFixture() {
-  for (final privateKey in [false, true]) {
-    final caseId = privateKey ? 'WLT-03' : 'WLT-02';
-    final label = privateKey ? 'private-key' : 'mnemonic';
+  for (final mode in ['mnemonic', 'private-key', 'create']) {
+    final privateKey = mode == 'private-key';
+    final creating = mode == 'create';
+    var expectedPhrase = _publicPhrase;
+    final caseId = creating
+        ? 'WLT-01'
+        : privateKey
+        ? 'WLT-03'
+        : 'WLT-02';
+    final label = creating ? 'created and backed-up' : mode;
     testWidgets(
       _enabled
           ? '$caseId imports a disposable $label wallet into native storage'
@@ -112,21 +123,60 @@ void registerWalletImportFixture() {
         );
         await tester.pumpWidget(
           wrapForTest(
-            privateKey ? const ImportPrivatekey() : const ImportOne(),
+            creating
+                ? const CreateOne()
+                : privateKey
+                ? const ImportPrivatekey()
+                : const ImportOne(),
             overrides: [wapBridgeProvider.overrideWith((ref) => store)],
           ),
         );
         await tester.pumpAndSettle();
-        await tester.enterText(
-          find.byType(TextField),
-          privateKey ? publicKey : _publicPhrase,
-        );
-        FocusManager.instance.primaryFocus?.unfocus();
-        await tester.pumpAndSettle();
-        await tester.tap(
-          find.text(privateKey ? S.current.g_key_78 : S.current.g_key_11),
-        );
-        await _wait(tester, find.byType(CreatePassword));
+        if (creating) {
+          for (var index = 0; index < 3; index++) {
+            final check = find.byType(RoundCheckBox).at(index);
+            await tester.ensureVisible(check);
+            await tester.tap(check);
+            await tester.pumpAndSettle();
+          }
+          await tester.tap(find.text(S.current.g_key_wallet_c10));
+          await _wait(tester, find.text(S.current.g_key_wallet_c44));
+          await tester.ensureVisible(find.text(S.current.g_key_wallet_c44));
+          await tester.tap(find.text(S.current.g_key_wallet_c44));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text(S.current.g_key_wallet_c43));
+          await _wait(tester, find.byType(CreateThree));
+          expectedPhrase = tester
+              .widget<CreateThree>(find.byType(CreateThree))
+              .wInfo
+              .mnemonic!;
+          expect(expectedPhrase.split(' ').length == 12, isTrue);
+          for (final word in expectedPhrase.split(' ')) {
+            final candidate = find.byWidgetPredicate((widget) {
+              final key = widget.key;
+              return widget is GestureDetector &&
+                  key is ValueKey<MessMnemonicWordsItem> &&
+                  key.value.word == word &&
+                  !key.value.isSelected;
+            }).first;
+            await tester.ensureVisible(candidate);
+            await tester.tap(candidate);
+            await tester.pumpAndSettle();
+          }
+          await tester.tap(find.text(S.current.g_key_wallet_c43));
+          await _wait(tester, find.byType(CreatePassword));
+        } else {
+          await tester.enterText(
+            find.byType(TextField),
+            privateKey ? publicKey : _publicPhrase,
+          );
+          FocusManager.instance.primaryFocus?.unfocus();
+          await tester.pumpAndSettle();
+          await tester.tap(
+            find.text(privateKey ? S.current.g_key_78 : S.current.g_key_11),
+          );
+          await _wait(tester, find.byType(CreatePassword));
+        }
         for (final entry in [
           (0, 'Native QA Import'),
           (1, 'QaImport123!'),
@@ -139,7 +189,12 @@ void registerWalletImportFixture() {
           await tester.pumpAndSettle();
         }
         await tester.tap(find.text(S.current.g_key_115));
-        await _wait(tester, find.text(S.current.g_key_wallet_c15));
+        await _wait(
+          tester,
+          find.text(
+            creating ? S.current.g_key_wallet_c22 : S.current.g_key_wallet_c15,
+          ),
+        );
         expect(find.byType(CreateFinish), findsOneWidget);
         expect(store.walletInfoLsit, hasLength(1));
         final wallet = store.walletInfoLsit.single;
@@ -147,13 +202,13 @@ void registerWalletImportFixture() {
         expect(
           privateKey
               ? wallet.privateKey == encodedKey
-              : wallet.mnemonic == _publicPhrase,
+              : wallet.mnemonic == expectedPhrase,
           isTrue,
         );
         final key = '${owner}_${wallet.timestamp}';
         if (!privateKey) {
           expect(
-            await SecureStorage().getMnemonic(key) == _publicPhrase,
+            await SecureStorage().getMnemonic(key) == expectedPhrase,
             isTrue,
           );
         }
@@ -163,7 +218,7 @@ void registerWalletImportFixture() {
         expect(
           privateKey
               ? restarted.walletInfoLsit.single.privateKey == encodedKey
-              : restarted.walletInfoLsit.single.mnemonic == _publicPhrase,
+              : restarted.walletInfoLsit.single.mnemonic == expectedPhrase,
           isTrue,
         );
         expect(tester.takeException(), isNull);
