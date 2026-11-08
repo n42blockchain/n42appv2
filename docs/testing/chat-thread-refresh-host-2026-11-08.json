@@ -1,0 +1,37 @@
+{
+  "chat_commit": "6e880138b81c9df27010dcf8d5bbbef2c0833860",
+  "chat_runtime_commit": "af68f8db9fc83c0a470befaa37db98711b812388",
+  "resolved_lib_asset_files": 859,
+  "source_mismatches": 0,
+  "host_focused_tests": {
+    "passed": 137,
+    "failed": 0,
+    "skipped": 0
+  },
+  "actual_resolved_package_thread_tests": {
+    "success": 12
+  },
+  "chat_full_regression": {
+    "passed": 9072,
+    "failed": 0,
+    "environment_skips": 7,
+    "coverage_hit": 107621,
+    "coverage_total": 148080,
+    "coverage_percent": 72.67760669908158
+  },
+  "analysis": {
+    "exit_code": 0,
+    "errors": 0,
+    "warnings": 0,
+    "existing_infos": 78
+  },
+  "localization_audit": "passed",
+  "excluded_release": "73525",
+  "remaining": [
+    "Whole-wallet current-source regression",
+    "Current-source CI and native gates",
+    "New signed artifact and delivery",
+    "Physical device and real-homeserver acceptance"
+  ],
+  "scope": "Separate follow-up branch; frozen 73525 and its exact-source native rerun are unchanged"
+}
