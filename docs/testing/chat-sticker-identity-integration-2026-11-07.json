@@ -1,0 +1,40 @@
+{
+  "chatRef": "3fc080f15b94b9212223dc2d43af5eb175179d6d",
+  "problem": "Same emoji overwrote images and changed sticker identifiers during account-data persistence",
+  "beforeFix": {
+    "passed": 1,
+    "failed": 3,
+    "reportSha256": "b5b66205b18ba2d2ef1784aad4ee8cb7bbc4ceb136a2269f3e3aaad46808ee11"
+  },
+  "repair": "Key images by stable sticker identifier; preserve nullable emoji in optional n42.emoji metadata; read legacy aliases; reject empty/duplicate identifiers before writing",
+  "focused": {
+    "passed": 67,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "chatFull": {
+    "passed": 8695,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "strictReportGatePassed": true
+  },
+  "hostFocused": {
+    "passed": 141,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "reportSha256": "60af32d1bedbb2d752b395ead196fdbda64c663d8ce676d17a76b90acfd65729"
+  },
+  "analysis": "No issues",
+  "candidate73481ContainsFix": false,
+  "candidate73481Held": true,
+  "restoresPreviouslyOverwrittenImages": false,
+  "sharingAndImportImplemented": false,
+  "remaining": [
+    "exact-source CI",
+    "fresh signed and verified package before delivery",
+    "runtime encrypted-room/profile acceptance",
+    "persistent sticker distribution and receiver preview/install"
+  ]
+}
