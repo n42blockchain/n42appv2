@@ -1,0 +1,33 @@
+{
+  "run": 42445681678,
+  "job": 128624765603,
+  "source": "557e20e70203fd944253179c53b2120a102e4891",
+  "wallet": {
+    "passed": 7802,
+    "failed": 0,
+    "skipped": 0,
+    "strictGatePassed": true
+  },
+  "chat": {
+    "passed": 8699,
+    "failed": 0,
+    "skipped": 5,
+    "skipCases": [
+      "live/account_switch_encryption_test.dart: sequential accounts retain independent device identities and decrypt offline messages",
+      "live/live_media_smoke_test.dart: live homeserver media smoke",
+      "security/markdown_document_security_test.dart: encrypted document validates hash and decrypts before rendering",
+      "integration/registration_live_test.dart: live datasource UIA registration, password login and cleanup",
+      "unit/encryption/vodozemac_native_abi_test.dart: packaged native Vodozemac completes FRB handshake and Megolm pickle round trip"
+    ]
+  },
+  "coverage": {
+    "hit": 104546,
+    "found": 141321,
+    "percent": 73.97768201470411,
+    "threshold": 70,
+    "passed": true
+  },
+  "jobSucceeded": true,
+  "wholeWorkflowComplete": false,
+  "jobLogSha256": "80c77c0da66600d61fbbc84049282f9c3e2ebbe397f43ad4be07e351c3ec9dea"
+}

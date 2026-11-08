@@ -1,6 +1,6 @@
 # 当前任务与验收台账
 
-> Current candidate — 2026-11-07: **73486**, source `557e20e70`, Chat `b3c1dec1`, is signed, verified, preserved and staged in Transporter, **not uploaded**. Full Chat regression: 8,700 pass / zero failures / four external-fixture skips; host integration: 73 pass. IPA checks: 50 package, nine SQLCipher, 14 login; ten MLKit bundles/86 exact files. CI 42445681678 is running. Candidates 73484 and 73481 must not be delivered. Later docs-only build-number changes do not require a rebuild.
+> Current candidate — 2026-11-07: **73486**, source `557e20e70`, Chat `b3c1dec1`, was **uploaded successfully** on 2026-11-08 at 00:13 Toronto; Apple processing and tester availability remain pending. Full Chat regression: 8,700 pass / zero failures / four external-fixture skips; host integration: 73 pass. IPA checks: 50 package, nine SQLCipher, 14 login; ten MLKit bundles/86 exact files. CI 42445681678 passed all 11 jobs; wallet 7,802 passes and 73.98% coverage. Candidates 73484 and 73481 must not be delivered. Later docs-only build-number changes do not require a rebuild.
 
 
 > RELEASE HOLD — 2026-11-07: **73484 must not be delivered**. A new regression reproduces account switching during sticker upload copying the old pack into the replacement account. Canonical Chat repair `b3c1dec1` passes 52 repository/persistence tests and is now pinned in the wallet. Host integration passes 73 tests; whole-host analysis exits 0 with 78 infos and no warnings/errors. Full Chat regression is running; a new signed candidate remains required.

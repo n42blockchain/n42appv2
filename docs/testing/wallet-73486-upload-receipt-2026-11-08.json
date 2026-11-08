@@ -1,0 +1,16 @@
+{
+  "version": "2.5.4+73486",
+  "appId": "6738644072",
+  "source": "557e20e70203fd944253179c53b2120a102e4891",
+  "ipaSha256": "b88b74efd026a458ee0be7a91f0067c3ab8bcd69a56d837221d81f7cec0a98d8",
+  "uploadAccepted": true,
+  "message": "UPLOAD SUCCEEDED with no errors",
+  "deliveryUuid": "5c2febf4-1506-418c-abc6-0f27166e9333",
+  "transferredBytes": 193101046,
+  "transferSeconds": 9.302,
+  "receiptTimeLocal": "2026-11-08 00:13:26.628",
+  "evidence": "Transporter delivery log visible in native UI",
+  "appleProcessing": "processing",
+  "testerAvailabilityVerified": false,
+  "physicalDeviceAcceptance": false
+}
