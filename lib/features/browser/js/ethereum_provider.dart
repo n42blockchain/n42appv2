@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Builds the JavaScript IIFE that defines `window.ethereum` (EIP-1193).
 ///
 /// **Status: live (wired 2026-07+).** `BrowserProvider` registers the
@@ -23,6 +25,7 @@ class EthereumProviderJs {
   /// [accounts]    e.g. ["0xabc..."]  — current wallet address(es)
   static String buildProviderScript(String chainIdHex, List<String> accounts) {
     final accountsJson = accounts.map((a) => '"$a"').join(',');
+    final discoveryId = _newDiscoveryId();
 
     return '''
 (function() {
@@ -331,7 +334,7 @@ class EthereumProviderJs {
   // EIP-6963: Announce provider for multi-wallet discovery
   try {
     var info = {
-      uuid: "n42-wallet-eip6963",
+      uuid: "$discoveryId",
       name: "N42 Wallet",
       icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>",
       rdns: "ai.n42.wallet"
@@ -353,5 +356,20 @@ class EthereumProviderJs {
   }, 0);
 })();
 ''';
+  }
+
+  // EIP-6963 requires UUIDv4 per provider session. Generate it in the host so
+  // discovery also works in WebViews without crypto.randomUUID(). Reinjection
+  // keeps the existing provider and its identifier through the early guard.
+  static String _newDiscoveryId() {
+    final random = Random.secure();
+    final bytes = List<int>.generate(16, (_) => random.nextInt(256));
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    final hex = bytes
+        .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+        .join();
+    return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-'
+        '${hex.substring(12, 16)}-${hex.substring(16, 20)}-${hex.substring(20)}';
   }
 }

@@ -1,0 +1,22 @@
+{
+  "change": "EIP-6963 compliant unique provider-session discovery identifiers",
+  "beforeRepairFailedRegressions": 2,
+  "browserTests": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 0,
+    "tests_failed": 0,
+    "tests_passed": 210,
+    "exitCode": 0,
+    "reportSha256": "887496d37d4e3df066161ed60acc461097fe55b96d335e53f4649aedec5b6ecc"
+  },
+  "hostAnalysis": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 78
+  },
+  "nativeWebViewAcceptance": false,
+  "newSignedArtifactBuilt": false,
+  "originalHomepageSyntaxDiagnosticResolved": false
+}
