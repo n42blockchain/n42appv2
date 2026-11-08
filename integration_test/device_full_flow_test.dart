@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_chat/src/core/theme/app_icons.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
@@ -448,7 +449,12 @@ Future<void> _exerciseChat(WidgetTester tester) async {
   );
   await tester.pump(const Duration(seconds: 2));
   _expectNoException(tester, 'chat global search');
-  await tester.pageBack();
+  final searchBack = find.descendant(
+    of: find.byKey(const ValueKey<String>('chat_global_search_page')),
+    matching: find.widgetWithIcon(IconButton, AppIcons.back),
+  );
+  await _waitFor(tester, searchBack.hitTestable());
+  await tester.tap(searchBack);
   await _waitForKey(tester, 'chat_main_page');
 
   for (final tab in <MapEntry<int, String>>[
@@ -476,7 +482,7 @@ Future<void> _exerciseChat(WidgetTester tester) async {
     find.byKey(const ValueKey<String>('chat_add_menu_payment')),
     findsOneWidget,
   );
-  await tester.pageBack();
+  await tester.binding.handlePopRoute();
   await tester.pump(const Duration(milliseconds: 500));
 
   await _tapKey(tester, 'chat_back_to_wallet');

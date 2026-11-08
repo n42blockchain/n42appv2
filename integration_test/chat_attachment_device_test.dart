@@ -80,9 +80,9 @@ void main() {
         const Duration(seconds: 30),
       );
 
-      final conversation = find.byType(ConversationTile).first;
-      await _waitFor(tester, conversation, const Duration(seconds: 60));
-      await tester.tap(conversation);
+      final conversations = find.byType(ConversationTile);
+      await _waitFor(tester, conversations, const Duration(seconds: 60));
+      await tester.tap(conversations.first);
       await tester.pump(const Duration(seconds: 2));
       await _waitFor(
         tester,

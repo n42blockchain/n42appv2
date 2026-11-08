@@ -1,0 +1,35 @@
+{
+  "run": 42450433761,
+  "source": "482e5f38ce12fe80f8ba0a55117985a06ad79c9b",
+  "artifactId": 13607077153,
+  "conclusion": "failure",
+  "passed": 45,
+  "skipped": 3,
+  "failed": 2,
+  "rawLogSha256": "8997002632c9c3e2868aba1e5749d196fb6849ee4215c0cf7624c567916c40b5",
+  "failures": [
+    {
+      "case": "DEVICE-01",
+      "cause": "tester.pageBack cannot find the custom search IconButton",
+      "repair": "Tap the visible scoped AppIcons.back IconButton; dismiss the popup via the platform back route"
+    },
+    {
+      "case": "CHAT-DEVICE",
+      "cause": "Finder.first throws while the conversation list is still empty, before the intended wait can poll",
+      "repair": "Wait on the unfiltered conversation finder, then select the first loaded conversation"
+    }
+  ],
+  "configurationGapResolved": true,
+  "productionBugConclusion": false,
+  "rerunRequired": true,
+  "otherDiagnosticsUntriaged": [
+    "DApp JavaScript syntax diagnostic",
+    "globalProviderContainer initialization diagnostics"
+  ],
+  "newArtifactBuilt": false,
+  "repairValidation": {
+    "helperTestsPassed": 19,
+    "scopedDartAnalysis": "No issues found",
+    "nativeRerunAccepted": false
+  }
+}
