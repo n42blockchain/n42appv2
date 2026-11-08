@@ -1,0 +1,37 @@
+{
+  "chatPin": "b7d2432e76fe9d133f583638be2de2d607087b53",
+  "resolvedRuntimeAssets": {
+    "checked": 859,
+    "mismatches": 0
+  },
+  "friendshipHostAndResolvedTests": {
+    "passed": 125,
+    "failed": 0,
+    "skipped": 0
+  },
+  "priorAuthPushAdmissionCompatibility": {
+    "passed": 149,
+    "failed": 0,
+    "skipped": 0,
+    "countsOverlapWithFriendshipCluster": true
+  },
+  "hostAnalysis": {
+    "errors": 0,
+    "warnings": 0,
+    "existingInfos": 78
+  },
+  "chatFullRegression": "running; not yet accepted",
+  "walletFullCI": "pending",
+  "nativeAcceptance": "pending for this new pin; run 42515321315 covers the preceding pin",
+  "delivery": "73531 is held and superseded for upload; new artifact required after verified integration",
+  "preserved": [
+    "native provider configuration copied privately and verified",
+    "no local Chat mirror used",
+    "existing chat and wallet functions retained"
+  ],
+  "logs": {
+    "/tmp/n42-friendship-host-tests.jsonl": "95afb09f1fead21ef6a107865ca91b31c98bf18b9d96b49016af1f485f955c97",
+    "/tmp/n42-friendship-host-compat-tests.jsonl": "740ab7f2060d6ad3ac6f796752e37b66b691370a6503e81a1036854f5bbd240d",
+    "/tmp/n42-friendship-host-analysis.log": "e6a43c9899d9842b2e14858b98d57e0ebcaa1b64ab4825490e82c966b6768121"
+  }
+}
