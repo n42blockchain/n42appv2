@@ -216,6 +216,9 @@ jobs:
         if: ${{ env.N42_NATIVE_SUITE == 'all' }}
         run: python3 scripts/prepare_native_chat_fixture.py start --output "$RUNNER_TEMP/native-chat-defines.json"
 
+      - name: Prefetch checksum-verified Gradle distribution
+        run: python3 scripts/prepare_gradle_test_distribution.py
+
       - name: Run Android Emulator
         env:
           WALLET_CORE_USER: ${{ secrets.WALLET_CORE_USER || github.actor }}

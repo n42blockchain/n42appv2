@@ -396,6 +396,9 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Prefetch checksum-verified Linux SQLite test assets
+        run: python3 scripts/prepare_sqlite_test_assets.py
+
       - name: Create benchmark results directory
         run: mkdir -p benchmark_results
 
@@ -487,6 +490,9 @@ jobs:
 
       - name: Prepare synthetic Firebase resources
         run: python3 scripts/prepare_ci_firebase.py
+
+      - name: Prefetch checksum-verified Gradle distribution
+        run: python3 scripts/prepare_gradle_test_distribution.py
 
       - name: Build APK (Debug)
         env:
