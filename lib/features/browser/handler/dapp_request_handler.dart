@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart'
@@ -500,6 +501,8 @@ class DAppRequestHandler {
       );
     } catch (error) {
       if (error is Map) rethrow;
+      // Error text may contain authenticated RPC URLs. Log only its type.
+      AppLogger.w('Browser', 'Asset metadata failed (${error.runtimeType})');
       // Never expose configured RPC URLs or authentication details to a DApp.
       throw {'code': -32603, 'message': 'Unable to verify token metadata'};
     }

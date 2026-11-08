@@ -42,8 +42,10 @@
     "run": 42481926728,
     "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
     "conclusion": "failure",
-    "observed_failure": "Actual BrowserPage loads and provider bridge exists, but asset approval sheet did not appear within bounded wait. RPC/JS failure diagnostics were missing.",
-    "next_step": "Rerun with bounded JS result, RPC method list and wallet readiness diagnostics; do not merge as native accepted."
+    "observed_failure": "Bridge and wallet readiness passed; only eth_chainId reached the loopback server before generic metadata verification failure. No approval sheet appeared.",
+    "next_step": "Rerun with sanitized transport error type and fixture response/error records; keep native acceptance and merge held.",
+    "diagnostic_run": 42483823913,
+    "diagnostic_conclusion": "failure"
   },
   "remote_full_tests": {
     "run": 42480307220,

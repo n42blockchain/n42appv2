@@ -76,6 +76,8 @@ void main() {
       final identity = UserInfo(uuid: owner, name: 'Owned asset fixture');
       final otherIdentity = UserInfo(uuid: '$owner-other');
       final methods = <String>[];
+      final fixtureErrors = <String>[];
+      final replies = <String>[];
       final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
       final rpc = 'http://localhost:${server.port}/rpc';
       final pageUrl = 'http://localhost:${server.port}/dapp';
@@ -139,7 +141,7 @@ void main() {
               jsonEncode({
                 'jsonrpc': '2.0',
                 'id': body['id'],
-                'result': ?result,
+                if (result != null) 'result': result,
                 if (result == null)
                   'error': {
                     'code': -32601,
@@ -151,7 +153,9 @@ void main() {
             request.response.statusCode = 204;
           }
           await request.response.close();
-        } catch (_) {
+          replies.add('${request.method} ${request.uri.path}');
+        } catch (error) {
+          fixtureErrors.add(error.runtimeType.toString());
           try {
             await request.response.close();
           } catch (_) {}
@@ -283,7 +287,7 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
         () => find.byType(DAppAssetSuggestionSheet).evaluate().isNotEmpty,
         'Asset approval did not appear.',
         diagnostics: () async =>
-            'result=${await controller.runJavaScriptReturningResult("JSON.stringify(window.__qaAssetResult)")} rpcMethods=$methods walletReady=${adapter!.isWalletReady}',
+            'result=${await controller.runJavaScriptReturningResult("JSON.stringify(window.__qaAssetResult)")} rpcMethods=$methods replies=$replies fixtureErrors=$fixtureErrors walletReady=${adapter!.isWalletReady}',
       );
       expect(await flag('window.__qaAssetResult === true'), isTrue);
       expect(await persistedTokens(), isEmpty);
@@ -352,6 +356,7 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
       await tester.tap(find.text(S.current.g_key_79));
       await tester.pumpAndSettle();
       AppGlobals.userInfo = identity;
+      expect(fixtureErrors, isEmpty);
       expect(methods, isNotEmpty);
       expect(
         methods.every({'eth_chainId', 'eth_getCode', 'eth_call'}.contains),
