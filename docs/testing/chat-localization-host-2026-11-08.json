@@ -1,0 +1,24 @@
+{
+  "chat_commit": "149f567ce6e2de12687ace6266f1dc1b718a04e5",
+  "resolved_source_files": 859,
+  "source_mismatches": 0,
+  "host_tests": {
+    "passed": 137,
+    "failed": 0,
+    "skipped": 0
+  },
+  "chat_tests": {
+    "passed": 9014,
+    "failed": 0,
+    "skipped": 7,
+    "coverage_percent": 72.64947443133809
+  },
+  "analysis": {
+    "exit_code": 0,
+    "errors": 0,
+    "warnings": 0,
+    "existing_infos": 78
+  },
+  "scope": "Chat localization dependency update; no native or business-flow acceptance claim",
+  "excluded_release": "73510"
+}
