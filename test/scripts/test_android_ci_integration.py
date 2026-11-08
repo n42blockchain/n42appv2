@@ -107,6 +107,26 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
         self.assertIn('--dart-define-from-file', calls[5])
         self.assertIn('--no-uninstall', calls[5])
 
+    def test_prebuild_uses_the_same_defines_as_the_native_test(self):
+        def defines(call):
+            result = []
+            for index, value in enumerate(call):
+                if value.startswith('--dart-define='):
+                    result.append((value,))
+                elif value == '--dart-define-from-file':
+                    result.append((value, call[index + 1]))
+            return result
+
+        for suite in ['all', 'chat_layout', 'chat_audit', 'watch_asset',
+                      'browser', 'mlkit', 'wallet_forms']:
+            with self.subTest(suite=suite):
+                result, calls = self.run_helper(suite=suite)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(defines(calls[1]), defines(calls[5]))
+                if suite != 'all':
+                    target = calls[1][calls[1].index('--target') + 1]
+                    self.assertEqual(target, calls[5][2])
+
     def test_install_failure_stops_before_grant_and_tests(self):
         result, calls = self.run_helper(fail_install=True)
         self.assertNotEqual(result.returncode, 0)

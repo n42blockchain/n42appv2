@@ -30,8 +30,26 @@ fi
 if [[ "${N42_NATIVE_SUITE:-all}" == browser ]]; then
   native_prebuild_target=integration_test/browser_provider_native_test.dart
 fi
-flutter build apk --debug --no-pub \
-  --target "$native_prebuild_target"
+if [[ "${N42_NATIVE_SUITE:-all}" == mlkit ]]; then
+  native_prebuild_target=integration_test/mlkit_native_smoke_test.dart
+fi
+if [[ "${N42_NATIVE_SUITE:-all}" == wallet_forms ]]; then
+  native_prebuild_target=integration_test/flows/wallet_flow_test.dart
+fi
+# The allowlisted suite places all targets before build defines. Preserve the
+# same defines (including a separate define-file path) for the preinstalled APK.
+# Otherwise flutter test must compile a different program after pregranting it.
+native_build_args=(--target "$native_prebuild_target")
+native_copy_flags=false
+for native_arg in "${native_test_args[@]}"; do
+  if [[ "$native_arg" == --* ]]; then
+    native_copy_flags=true
+  fi
+  if [[ "$native_copy_flags" == true ]]; then
+    native_build_args+=("$native_arg")
+  fi
+done
+flutter build apk --debug --no-pub "${native_build_args[@]}"
 apk_bytes=$(wc -c < build/app/outputs/flutter-apk/app-debug.apk)
 disk_report=$(adb shell df -k /data | tr -d '\r')
 printf '%s\n' "$disk_report"
