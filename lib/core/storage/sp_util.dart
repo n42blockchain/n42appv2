@@ -133,6 +133,9 @@ class SPUtil {
     await _securePrefs.setWalletInfo(map);
   }
 
+  Future<T> updateWalletInfo<T>(T Function(Map<String, dynamic>) mutate) =>
+      _securePrefs.updateWalletInfo(mutate);
+
   /// 获取钱包列表（安全存储）
   Future<Map<String, dynamic>?> getWalletInfo() {
     return _securePrefs.getWalletInfo();

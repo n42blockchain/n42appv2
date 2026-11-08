@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +8,7 @@ class FakeSecureStore implements SecureStore {
   final Map<String, String> values = {};
   final Set<String> failingWrites = {};
   final List<String> writtenKeys = [];
+  Future<void> Function(String)? beforeRead;
 
   @override
   Future<void> delete({required String key}) async {
@@ -18,7 +21,10 @@ class FakeSecureStore implements SecureStore {
   }
 
   @override
-  Future<String?> read({required String key}) async => values[key];
+  Future<String?> read({required String key}) async {
+    await beforeRead?.call(key);
+    return values[key];
+  }
 
   @override
   Future<void> write({required String key, required String value}) async {
@@ -40,6 +46,163 @@ void main() {
       prefs = await SharedPreferences.getInstance();
       secureStore = FakeSecureStore();
       return SecurePreferences.test(prefs: prefs, secureStorage: secureStore);
+    }
+
+    test(
+      'wallet mutations preserve concurrent updates to different owners',
+      () async {
+        final subject = await createSubject();
+        await subject.setWalletInfo({
+          'a': {'tokens': []},
+          'b': {'tokens': []},
+        });
+        await Future.wait([
+          subject.updateWalletInfo<void>((data) {
+            data['a']['tokens'].add('A');
+          }),
+          subject.updateWalletInfo<void>((data) {
+            data['b']['tokens'].add('B');
+          }),
+        ]);
+        expect(await subject.getWalletInfo(), {
+          'a': {
+            'tokens': ['A'],
+          },
+          'b': {
+            'tokens': ['B'],
+          },
+        });
+      },
+    );
+
+    test(
+      'wallet mutation acknowledges the write and propagates its failure',
+      () async {
+        final subject = await createSubject();
+        await subject.setWalletInfo({'before': true});
+        secureStore.failingWrites.add('walletInfo');
+        await expectLater(
+          subject.updateWalletInfo<void>((data) {
+            data['after'] = true;
+          }),
+          throwsStateError,
+        );
+        expect(await subject.getWalletInfo(), {'before': true});
+        secureStore.failingWrites.clear();
+        final receipt = await subject.updateWalletInfo<String>((data) {
+          data['after'] = true;
+          return 'saved';
+        });
+        expect(receipt, 'saved');
+        expect(await subject.getWalletInfo(), {'before': true, 'after': true});
+      },
+    );
+
+    test(
+      'corrupt wallet records are retained and do not reach mutation',
+      () async {
+        final subject = await createSubject();
+        for (final raw in ['invalid', '[]', 'null']) {
+          secureStore.values['walletInfo'] = raw;
+          var called = false;
+          await expectLater(
+            subject.updateWalletInfo<void>((data) {
+              called = true;
+            }),
+            throwsA(anything),
+          );
+          expect(called, isFalse);
+          expect(secureStore.values['walletInfo'], raw);
+        }
+      },
+    );
+
+    test(
+      'failed mutation does not commit partial changes or block later writes',
+      () async {
+        final subject = await createSubject();
+        await subject.setWalletInfo({'before': true});
+        await expectLater(
+          subject.updateWalletInfo<void>((data) {
+            data['partial'] = true;
+            throw StateError('cancelled');
+          }),
+          throwsStateError,
+        );
+        expect(await subject.getWalletInfo(), {'before': true});
+        await subject.updateWalletInfo<void>((data) {
+          data['next'] = true;
+        });
+        expect(await subject.getWalletInfo(), {'before': true, 'next': true});
+      },
+    );
+
+    test(
+      'queued wallet setter captures its input before caller changes it',
+      () async {
+        final subject = await createSubject();
+        final input = {
+          'owner': {'token': 'A'},
+        };
+        final pending = subject.setWalletInfo(input);
+        input['owner']!['token'] = 'B';
+        await pending;
+        expect(await subject.getWalletInfo(), {
+          'owner': {'token': 'A'},
+        });
+      },
+    );
+
+    test('wallet removal is ordered after pending mutation', () async {
+      final subject = await createSubject();
+      await subject.setWalletInfo({'owner': true});
+      final pending = subject.updateWalletInfo<void>((data) {
+        data['token'] = 'A';
+      });
+      final removal = subject.removeWalletInfo();
+      await Future.wait([pending, removal]);
+      expect(await subject.getWalletInfo(), isNull);
+      expect(secureStore.values['walletInfo'], isNull);
+    });
+
+    test('async wallet mutation is rejected before writing', () async {
+      final subject = await createSubject();
+      await subject.setWalletInfo({'before': true});
+      await expectLater(
+        subject.updateWalletInfo((data) async {
+          data['unsafe'] = true;
+        }),
+        throwsArgumentError,
+      );
+      expect(await subject.getWalletInfo(), {'before': true});
+    });
+
+    for (final clearAll in [false, true]) {
+      test(
+        'clear wallet data orders after an in-flight read (all=$clearAll)',
+        () async {
+          final subject = await createSubject();
+          await subject.setWalletInfo({'owner': true});
+          final entered = Completer<void>();
+          final release = Completer<void>();
+          secureStore.beforeRead = (key) async {
+            if (key == 'walletInfo') {
+              if (!entered.isCompleted) entered.complete();
+              await release.future;
+            }
+          };
+          final pending = subject.updateWalletInfo<void>((data) {
+            data['token'] = 'A';
+          });
+          await entered.future;
+          final clearing = clearAll
+              ? subject.clearAll()
+              : subject.clearSensitiveData();
+          release.complete();
+          await Future.wait([pending, clearing]);
+          expect(await subject.getWalletInfo(), isNull);
+        },
+      );
     }
 
     test(

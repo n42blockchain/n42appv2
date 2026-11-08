@@ -652,35 +652,27 @@ extension WalletActionProviderWallet on WalletActionProvider {
   }) async {
     final sPUtils = SPUtil();
     final storageUuid = walletDataOwnerUuid;
-    Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
-    if (walletAll == null) {
-      await sPUtils.setWalletInfo({
-        storageUuid: {
-          "index": 0,
-          "miningIndex": 0,
-          "wallet": [newWalletInfo.toJson()],
-        },
-      });
-    } else {
+    final record =
+        jsonDecode(jsonEncode(newWalletInfo.toJson())) as Map<String, dynamic>;
+    final miningIndex = walletMiningIndex;
+    await sPUtils.updateWalletInfo<void>((walletAll) {
       final userWallets = walletAll[storageUuid];
       if (userWallets == null) {
         walletAll[storageUuid] = {
-          "index": 0,
-          "miningIndex": 0,
-          "wallet": [newWalletInfo.toJson()],
+          'index': 0,
+          'miningIndex': 0,
+          'wallet': [record],
         };
       } else {
         if (isNewWallet) {
-          (userWallets['wallet'] as List).add(newWalletInfo.toJson());
+          (userWallets['wallet'] as List).add(record);
         } else {
-          userWallets['wallet'][wIndex] = newWalletInfo.toJson();
+          userWallets['wallet'][wIndex] = record;
         }
         userWallets['index'] = wIndex;
-        userWallets['miningIndex'] = walletMiningIndex;
-        walletAll[storageUuid] = userWallets;
+        userWallets['miningIndex'] = miningIndex;
       }
-      await sPUtils.setWalletInfo(walletAll);
-    }
+    });
     await refreshWalletListNotifier();
   }
 
