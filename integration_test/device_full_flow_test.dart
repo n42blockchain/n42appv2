@@ -12,6 +12,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:n42_wallet/main.dart' as app;
 import 'package:n42_chat/src/core/theme/app_icons.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/identity/pages/id_hub_sign_page.dart';
@@ -363,9 +364,10 @@ Future<void> _exerciseDrawer(WidgetTester tester) async {
   ]) {
     debugPrint('DEVICE_STEP drawer: $destination');
     final finder = find.byKey(ValueKey<String>(destination));
-    await tester.ensureVisible(finder);
-    await tester.pump(const Duration(milliseconds: 250));
-    await tester.tap(finder);
+    await _tapKey(tester, destination);
+    if (destination == 'drawer_security') {
+      await _waitFor(tester, find.byType(SecuritySetting).hitTestable());
+    }
     await tester.pump(const Duration(seconds: 1));
     expect(finder, findsNothing, reason: '$destination did not open a page');
     _expectNoException(tester, destination);
@@ -378,7 +380,7 @@ Future<void> _exerciseDrawer(WidgetTester tester) async {
     } else {
       await tester.pageBack();
     }
-    await _waitForKey(tester, destination);
+    await _waitFor(tester, finder.hitTestable());
   }
 
   final closeDrawer = find.descendant(

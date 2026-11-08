@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-08",
+  "artifactSource": "d3f6634e19b026416a6cd394506c5c0485a0b2c0",
+  "artifactVersion": "2.5.4+73542",
+  "observedBaseline": {
+    "source": "70a4ea097239a8bab6c36a060a19ffbd3da67fe6",
+    "run": 42519429115,
+    "job": 128849465934,
+    "conclusion": "cancelled",
+    "completedPassesObserved": 9,
+    "failuresObserved": 1,
+    "failure": "DEVICE-01 drawer_security did not open a page",
+    "lastTargetLoading": "integration_test/t26_b_device_regression_test.dart",
+    "completeAcceptance": false
+  },
+  "testChange": [
+    "Use existing hit-testable tap helper for every drawer destination",
+    "Wait for the real SecuritySetting destination to receive pointer events",
+    "Wait for returned drawer targets to receive pointer events",
+    "Keep all seven shard targets; allow 180 minutes for cold native builds"
+  ],
+  "preflight": {
+    "focusedPassed": 15,
+    "focusedFailed": 0,
+    "scopedAnalysis": "clean",
+    "scriptTestsPassed": 155
+  },
+  "unchangedProductPaths": [
+    "lib",
+    "assets",
+    "android",
+    "ios",
+    "packages",
+    "plugins",
+    "pubspec.lock",
+    "pubspec_overrides.yaml"
+  ],
+  "nativeConfirmation": "pending; route timing hypothesis is not yet accepted",
+  "boundaries": [
+    "No production route or biometric gate changed",
+    "73542 artifact remains unchanged; the test commit hook may change only the source build counter"
+  ]
+}

@@ -139,7 +139,8 @@ jobs:
       N42_IOS_NATIVE_SHARD_INDEX: ${{ matrix.shard }}
       N42_IOS_NATIVE_SHARD_COUNT: ${{ (inputs.native_suite == '' || inputs.native_suite == 'all') && '3' || '1' }}
     runs-on: xcode-27
-    timeout-minutes: 120
+    # Seven native targets may rebuild; retain the complete shard on cold runners.
+    timeout-minutes: 180
     
     steps:
       - name: Checkout code
