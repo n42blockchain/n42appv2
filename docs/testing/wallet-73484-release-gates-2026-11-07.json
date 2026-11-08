@@ -1,0 +1,142 @@
+{
+  "updatedAt": "2026-11-07T22:31:56-05:00",
+  "candidate": "2.5.4+73484",
+  "source": "7a4d950ae412c15c388961a98ab520d8f0f68baf",
+  "chatRef": "3fc080f15b94b9212223dc2d43af5eb175179d6d",
+  "features": [
+    "account-bound favorites",
+    "lossless same-emoji sticker persistence and stable identity"
+  ],
+  "chatFull": {
+    "passed": 8695,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "strictReportGatePassed": true
+  },
+  "hostFocused": {
+    "passed": 141,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "stickerCluster": {
+    "passed": 67,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "currentSourceCi": {
+    "runId": 42442481625,
+    "source": "7a4d950ae412c15c388961a98ab520d8f0f68baf",
+    "status": "in_progress",
+    "conclusion": "",
+    "jobs": [
+      {
+        "name": "Backend contracts (backend/loyalty)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83d\udcca Code Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Backend contracts (backend/social-auth)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Backend contracts (backend/livekit-jwt)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Backend contracts (backend/swap)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83e\uddea Tests & Coverage",
+        "status": "in_progress",
+        "conclusion": ""
+      },
+      {
+        "name": "\ud83d\udd12 Security Scan",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "buildStatus": "completed",
+  "buildLog": "/tmp/n42-wallet73484-ipa-build.log",
+  "uploadAccepted": false,
+  "priorCandidate73481": {
+    "held": true,
+    "reason": "Lacks confirmed sticker identity repair",
+    "source": "afec57de7531c173121eb7c3c02b9d80317b7023",
+    "ciRun": 42440417096,
+    "ciSupersededBy": 42442481625,
+    "ciConclusion": "cancelled"
+  },
+  "physicalDeviceQa": "deferred by user",
+  "remaining": [
+    "exact-source full CI and native build results",
+    "upload and Apple processing/tester availability",
+    "runtime acceptance and remaining sticker sharing/import implementation"
+  ],
+  "ipaSha256": "312f8de6bfd3283d0c5698a87cc0e6d367ea04f425b4334d54343ec681264a26",
+  "buildExit": 0,
+  "buildSourceStable": true,
+  "artifactVerified": true,
+  "packageChecks": 50,
+  "chatCryptoChecks": 9,
+  "packagedAuthChecks": 14,
+  "modelBundles": 10,
+  "modelFiles": 86,
+  "modelArchiveAndIpaBytesMatch": true,
+  "stickerPersistenceRepairIncluded": true,
+  "previouslyOverwrittenEntriesRestored": false,
+  "preservedPath": "/Users/jieliu/Documents/n42/n42appv2/build/release-preserved/73484-20261107",
+  "status": "Signed, verified and staged; current-source full CI pending; not uploaded",
+  "compactViewportWidgetTests": {
+    "passed": 2,
+    "failed": 0,
+    "viewport": [
+      360,
+      640
+    ],
+    "textScale": 1.5,
+    "keyboardInset": 300,
+    "runtimeSourceUnchanged": true
+  },
+  "capabilities": {
+    "google_native_code": false,
+    "native_oidc_providers": [
+      "apple",
+      "facebook"
+    ],
+    "web_oauth": true,
+    "web_providers": [
+      "google",
+      "apple",
+      "facebook"
+    ],
+    "legacy_account_migration": false,
+    "httpStatus": 200,
+    "verifiedAt": "2026-11-07T22:31:56-05:00"
+  },
+  "transporterStage": {
+    "version": "2.5.4",
+    "build": "73484",
+    "appId": "6738644072",
+    "source": "7a4d950ae412c15c388961a98ab520d8f0f68baf",
+    "ipaSha256": "312f8de6bfd3283d0c5698a87cc0e6d367ea04f425b4334d54343ec681264a26",
+    "ipaPath": "/Users/jieliu/Documents/n42/n42appv2/build/release-preserved/73484-20261107/N42Wallet.ipa",
+    "readyToDeliver": true,
+    "deliveryStarted": false,
+    "uploadAccepted": false,
+    "verifiedAt": "2026-11-07T22:39:19-05:00",
+    "verification": "Transporter native screenshot shows N42 Wallet 2.5.4 (73484), in Active with Deliver button; existing other-app queue entries left unchanged"
+  }
+}
