@@ -1,0 +1,22 @@
+{
+  "chatRuntime": "e3460397c371d9b2f3bb680a294ded0fcdac7eff",
+  "change": "Bind device rename and logout to the active authentication client as well as the opening encryption session.",
+  "resolvedGitFiles": 859,
+  "resolvedFileMismatches": 0,
+  "hostWalletBridgeTests": {
+    "passed": 40,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "chatFocusedTests": {
+    "passed": 35,
+    "failed": 0,
+    "analysis": "clean"
+  },
+  "pending": [
+    "Chat full regression",
+    "Current-source wallet CI",
+    "New signed artifact and release validation"
+  ],
+  "priorArtifact73542": "Held; does not include this runtime."
+}
