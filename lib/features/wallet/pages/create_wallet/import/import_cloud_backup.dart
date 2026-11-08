@@ -115,7 +115,14 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   }
 
   Future<void> _import() async {
+    if (_load == Load.loading) return;
     var completedWithExit = false;
+    final wap = ref.read(wapBridgeProvider);
+    final owner = wap.userUUID;
+    bool ownsRestore() =>
+        mounted &&
+        identical(ref.read(wapBridgeProvider), wap) &&
+        wap.userUUID == owner;
     if (_backupContent == null) {
       ToastUtils.show(S.of(context).g_ui_backup_select_file_first);
       return;
@@ -137,6 +144,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         password,
       );
       if (!mounted) return;
+      if (!ownsRestore()) throw StateError('Restore account changed');
 
       if (wallets.isEmpty) {
         setState(() => _error = S.of(context).g_ui_backup_empty);
@@ -145,12 +153,12 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
 
       int imported = 0;
       int skipped = 0;
-      final wap = ref.read(wapBridgeProvider);
       for (final w in wallets) {
+        if (!ownsRestore()) throw StateError('Restore account changed');
         try {
           final info = walletInfoFromBackupPayload(
             Map<String, dynamic>.from(w),
-            userUUID: wap.userUUID,
+            userUUID: owner,
           );
           if (_walletAlreadyExists(wap, info)) {
             skipped++;
@@ -158,8 +166,10 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           }
           await wap.addWalletInfo(info);
           if (!mounted) return;
+          if (!ownsRestore()) throw StateError('Restore account changed');
           imported++;
         } catch (e) {
+          if (!ownsRestore()) rethrow;
           skipped++;
           AppLogger.w('ImportCloudBackup', 'skipping wallet payload: $e');
         }

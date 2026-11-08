@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-08",
+  "base_source": "51540083f",
+  "change": "Bind cloud backup batch restoration to its initial account and provider; stop after account change; reject duplicate import dispatch. Preserve existing completed writes.",
+  "regression": {
+    "passed": 16,
+    "failed": 0,
+    "scope": "Cloud import account isolation, backup payload, backup flow utilities, backup one and three widgets"
+  },
+  "analysis": "No issues found",
+  "pre_fix": "Same account-switch widget test fails: synthetic restored wallet attempted write under restore-B",
+  "boundaries": [
+    "No physical device or production restoration acceptance",
+    "Previously completed writes remain under original owner; no destructive rollback",
+    "Signed uploaded 73526 does not contain this follow-up"
+  ],
+  "logs": {
+    "/tmp/n42-cloud-restore-exact-before.log": "1b6c36784c642618cf44ac29d711b0452bfeb90e167ed4160620e0cc2ce1ec23",
+    "/tmp/n42-cloud-restore-regression.log": "4d53c7bef59ca9cff9d3b393d0d567e359e338ca51c5bd4a293659e6dd5469c6",
+    "/tmp/n42-cloud-restore-analysis.log": "0839cdb03751bc9861e74b72e59f74d61301f8a5949957ed6c04503a769e6302"
+  }
+}
