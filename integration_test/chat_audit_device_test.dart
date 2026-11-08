@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'chat_coverage_device_cases.dart';
+import 'fixtures/audit_sticker_fixture.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,30 +9,11 @@ import 'package:get_it/get_it.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/domain/entities/message_entity.dart';
-import 'package:n42_chat/src/domain/entities/sticker_pack_entity.dart';
 import 'package:n42_chat/src/domain/repositories/sticker_repository.dart';
 import 'package:n42_chat/src/presentation/pages/ai/ai_assistant_page.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/expression_panel.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/wechat_message_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class _StickerFixture implements IStickerRepository {
-  @override
-  Future<List<StickerPack>> getInstalledPacks() async => [
-    const StickerPack(
-      id: 'audit',
-      name: 'Audit',
-      isInstalled: true,
-      stickers: [Sticker(id: 'puzzle', url: 'emoji:🧩', emoji: '🧩')],
-    ),
-  ];
-  @override
-  Future<List<RecentSticker>> getRecentStickers({int limit = 20}) async => [];
-  @override
-  Future<void> recordStickerUsage(String packId, String stickerId) async {}
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +44,9 @@ void main() {
     (tester) async {
       SharedPreferences.setMockInitialValues({});
       await GetIt.instance.reset();
-      GetIt.instance.registerSingleton<IStickerRepository>(_StickerFixture());
+      GetIt.instance.registerSingleton<IStickerRepository>(
+        AuditStickerFixture(),
+      );
       var selected = '';
       await tester.pumpWidget(
         _app(
