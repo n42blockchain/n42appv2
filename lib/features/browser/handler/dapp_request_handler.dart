@@ -1,3 +1,5 @@
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/browser/models/watch_asset_metadata.dart';
 import 'package:n42_wallet/features/browser/models/watch_asset_request.dart';
 
 import 'dart:convert';
@@ -95,6 +97,7 @@ class DAppRequestHandler {
     List<dynamic> params, {
     String? origin,
     bool Function()? isRequestActive,
+    DAppAssetSuggestion? assetSuggestion,
   }) async {
     final requestOrigin = origin ?? dappOrigin;
     final requestRevision = _chainRevision;
@@ -129,7 +132,7 @@ class DAppRequestHandler {
         return address;
 
       case 'wallet_watchAsset':
-        final suggest = onAssetSuggestion;
+        final suggest = assetSuggestion ?? onAssetSuggestion;
         if (suggest == null) {
           throw {
             'code': -32601,
@@ -419,6 +422,87 @@ class DAppRequestHandler {
     );
     validateRequest();
     return bytesToHex(signed, include0x: true);
+  }
+
+  CoinModel parentForAsset(WatchAssetRequest asset) => ethCoinModels.firstWhere(
+    (model) =>
+        (model.isTest ? model.config.chainIdTest : model.config.chainId) ==
+        asset.chainId,
+    orElse: () => throw {'code': 4902, 'message': 'Unsupported asset network'},
+  );
+
+  Future<WatchAssetMetadata> loadAssetMetadata(
+    WatchAssetRequest asset, {
+    required void Function() validateRequest,
+  }) async {
+    final parent = parentForAsset(asset);
+    final testnet = parent.isTest;
+    final rpcUrl = testnet ? parent.config.serviceTest : parent.config.service;
+    void validate() {
+      validateRequest();
+      if (_isDisposed ||
+          !ethCoinModels.contains(parent) ||
+          parent.isTest != testnet ||
+          (testnet ? parent.config.chainIdTest : parent.config.chainId) !=
+              asset.chainId ||
+          (testnet ? parent.config.serviceTest : parent.config.service) !=
+              rpcUrl) {
+        throw {'code': 4001, 'message': 'Asset network changed'};
+      }
+    }
+
+    try {
+      return await WatchAssetMetadata.load(
+        request: asset,
+        validateRequest: validate,
+        rpc: (method, params) async {
+          final client = Client();
+          try {
+            final request = Request('POST', Uri.parse(rpcUrl))
+              ..followRedirects = false
+              ..headers.addAll(
+                ProxyConfig.mergeAuthHeaders(rpcUrl, {
+                  'Content-Type': 'application/json',
+                }),
+              )
+              ..body = jsonEncode({
+                'jsonrpc': '2.0',
+                'id': 1,
+                'method': method,
+                'params': params,
+              });
+            final response = await client
+                .send(request)
+                .timeout(const Duration(seconds: 15));
+            if (response.statusCode != 200) {
+              throw StateError('Asset RPC unavailable');
+            }
+            final bytes = BytesBuilder();
+            await for (final chunk in response.stream.timeout(
+              const Duration(seconds: 15),
+            )) {
+              if (bytes.length + chunk.length > 2 * 1024 * 1024) {
+                throw StateError('Asset RPC response exceeds limit');
+              }
+              bytes.add(chunk);
+            }
+            final decoded = jsonDecode(utf8.decode(bytes.takeBytes()));
+            if (decoded is! Map ||
+                decoded.containsKey('error') ||
+                !decoded.containsKey('result')) {
+              throw StateError('Invalid asset RPC result');
+            }
+            return decoded['result'];
+          } finally {
+            client.close();
+          }
+        },
+      );
+    } catch (error) {
+      if (error is Map) rethrow;
+      // Never expose configured RPC URLs or authentication details to a DApp.
+      throw {'code': -32603, 'message': 'Unable to verify token metadata'};
+    }
   }
 
   // ── RPC forwarding ─────────────────────────────────────────────────────────

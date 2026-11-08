@@ -34,6 +34,7 @@ class WatchAssetMetadata {
 
     final chain = await read('eth_chainId', []);
     if (chain is! String ||
+        chain.length > 16 ||
         !RegExp(r'^0x[0-9a-fA-F]+$').hasMatch(chain) ||
         BigInt.parse(chain.substring(2), radix: 16) !=
             BigInt.from(request.chainId)) {
