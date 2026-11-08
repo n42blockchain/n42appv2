@@ -79,20 +79,28 @@ void main() {
       },
     );
 
-    test('pending device cases are explicit skips with blockers', () {
-      final source = File('integration_test/flows/wallet_flow_test.dart')
-          .readAsStringSync();
-
-      expect(source, contains(r'[BLOCKED: ${testCase.blocker}]'));
-      expect(source, contains('skip: true'));
-      expect(
-        RegExp(
-          r'^  _PendingDeviceCase\(',
-          multiLine: true,
-        ).allMatches(source).length,
-        1,
-      );
-    });
+    test(
+      'funded device transfer is explicit opt-in with real receipt checks',
+      () {
+        final entry = File('integration_test/flows/wallet_flow_test.dart')
+            .readAsStringSync();
+        final fixture = File(
+          'integration_test/flows/wallet_funded_transfer_fixture.dart',
+        ).readAsStringSync();
+        expect(entry, contains('registerWalletFundedTransferFixture();'));
+        expect(fixture, contains('skip: !_enabled'));
+        expect(fixture, contains('TX-06 [BLOCKED:'));
+        expect(fixture, contains("bool.fromEnvironment('N42_FUNDED_TX_QA')"));
+        expect(
+          fixture,
+          contains("bool.fromEnvironment('N42_DISPOSABLE_WALLET_QA')"),
+        );
+        expect(fixture, contains('EvmSender('));
+        expect(fixture, contains('eth_getTransactionReceipt'));
+        expect(fixture, contains('afterRecipient - beforeRecipient'));
+        expect(fixture, contains('beforeSender - afterSender'));
+      },
+    );
 
     test('the QA master plan has unique case IDs and required coverage', () {
       final source = File('docs/QA_TEST_PLAN.md').readAsStringSync();

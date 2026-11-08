@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-08",
+  "base_source": "d5afb1c69a315513d4ab97c5b5c6468d14ffe1ad",
+  "implementation": "Opt-in simulator fixture uses production EvmSender and native Trustdart signing, validates chain/genesis/client/zero peers, transaction fields, receipt and exact sender/receiver balance effects",
+  "default": "Explicit skipped blocker unless both disposable-wallet and funded-test flags are enabled",
+  "configuration_and_quality_tests": {
+    "passed": 22,
+    "failed": 0
+  },
+  "scoped_analysis": "No issues found",
+  "native_execution": "pending source-bound node build and simulator run",
+  "acceptance_boundaries": [
+    "No actual transfer accepted yet",
+    "Not full send-page or public-network acceptance",
+    "No production credentials, funds or RPC used",
+    "73531 candidate unchanged"
+  ],
+  "logs": {
+    "/tmp/n42-disposable-transfer-quality.log": "48ab82310a759287d5d74f78fb908ad304c292b0442d692f34fe15be980d64a1",
+    "/tmp/n42-disposable-transfer-analysis.log": "b739a61018e2e80aea747e2f25f8aa69ba2a1cc2a89c92b8e6f07bac31a80e53"
+  }
+}
