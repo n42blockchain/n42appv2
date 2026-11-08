@@ -11,6 +11,10 @@ on:
         description: Run only the complete Android integration suite
         type: boolean
         default: false
+      ios_only:
+        description: Run only iOS integration (all retains every test across three shards)
+        type: boolean
+        default: false
       native_suite:
         description: Native suite (chat_layout is Android-only; MLKit includes real model downloads)
         type: choice
@@ -25,7 +29,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}${{ (inputs.android_only || inputs.native_suite == 'chat_layout') && '-android-only' || '' }}-${{ inputs.native_suite || 'all' }}
+  group: ${{ github.workflow }}-${{ github.ref }}${{ (inputs.android_only || inputs.native_suite == 'chat_layout') && '-android-only' || '' }}${{ inputs.ios_only && '-ios-only' || '' }}-${{ inputs.native_suite || 'all' }}
   cancel-in-progress: true
 
 defaults:
@@ -38,7 +42,7 @@ env:
 
 jobs:
   unit-tests:
-    if: ${{ !inputs.android_only && inputs.native_suite != 'chat_layout' }}
+    if: ${{ !inputs.android_only && !inputs.ios_only && inputs.native_suite != 'chat_layout' }}
     name: Unit Tests
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -85,7 +89,7 @@ jobs:
           retention-days: 14
 
   widget-tests:
-    if: ${{ !inputs.android_only && inputs.native_suite != 'chat_layout' }}
+    if: ${{ !inputs.android_only && !inputs.ios_only && inputs.native_suite != 'chat_layout' }}
     name: Widget Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -121,7 +125,14 @@ jobs:
 
   integration-tests:
     if: ${{ !inputs.android_only && inputs.native_suite != 'chat_layout' }}
-    name: Integration Tests
+    name: Integration Tests (iOS shard ${{ matrix.shard }})
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON((inputs.native_suite == '' || inputs.native_suite == 'all') && '[0,1,2]' || '[0]') }}
+    env:
+      N42_IOS_NATIVE_SHARD_INDEX: ${{ matrix.shard }}
+      N42_IOS_NATIVE_SHARD_COUNT: ${{ (inputs.native_suite == '' || inputs.native_suite == 'all') && '3' || '1' }}
     runs-on: xcode-27
     timeout-minutes: 120
     
@@ -188,13 +199,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ios-integration-results
+          name: ios-integration-results-${{ matrix.shard }}
           path: |
             ios-integration.log
+            ${{ runner.temp }}/ios-shard-manifest.json
           if-no-files-found: warn
           retention-days: 14
 
   integration-tests-android:
+    if: ${{ !inputs.ios_only }}
     name: Integration Tests (Android)
     permissions:
       contents: read
@@ -285,6 +298,7 @@ jobs:
           IOS_RESULT: ${{ needs.integration-tests.result }}
           ANDROID_RESULT: ${{ needs.integration-tests-android.result }}
           ANDROID_ONLY: ${{ inputs.android_only || inputs.native_suite == 'chat_layout' }}
+          IOS_ONLY: ${{ inputs.ios_only }}
         run: |
           {
             echo "## Test Results"
@@ -300,7 +314,14 @@ jobs:
             echo "See job logs and uploaded artifacts for test counts and measured coverage."
           } >> "$GITHUB_STEP_SUMMARY"
           results=("$UNIT_RESULT" "$WIDGET_RESULT" "$IOS_RESULT" "$ANDROID_RESULT")
-          if [[ "$ANDROID_ONLY" == 'true' ]]; then
+          if [[ "${IOS_ONLY:-false}" == 'true' ]]; then
+            if [[ "$ANDROID_ONLY" == 'true' || "$UNIT_RESULT" != skipped || "$WIDGET_RESULT" != skipped || "$ANDROID_RESULT" != skipped ]]; then
+              echo 'Conflicting platform scope or unexpected non-iOS jobs.' >&2
+              exit 1
+            fi
+            echo 'Scope: iOS-only manual run. Android and unit gates were not executed.' >> "$GITHUB_STEP_SUMMARY"
+            results=("$IOS_RESULT")
+          elif [[ "$ANDROID_ONLY" == 'true' ]]; then
             echo 'Scope: Android-only manual run. Other platform gates were not executed.' >> "$GITHUB_STEP_SUMMARY"
             results=("$ANDROID_RESULT")
           fi

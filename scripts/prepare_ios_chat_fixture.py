@@ -14,8 +14,18 @@ import time
 import prepare_native_chat_fixture as matrix
 
 
+def shard_index(env):
+    value = env.get('N42_IOS_NATIVE_SHARD_INDEX', '0')
+    count = env.get('N42_IOS_NATIVE_SHARD_COUNT', '1')
+    if not value.isdigit() or not count.isdigit() or not (0 <= int(value) < int(count) <= 8):
+        raise ValueError('Invalid owned Matrix shard')
+    return int(value)
+
+
 def fixture_root(env):
     name = matrix.container_name(env)
+    if 'N42_IOS_NATIVE_SHARD_INDEX' in env:
+        name += f'-shard-{shard_index(env)}'
     return Path(env['RUNNER_TEMP']).resolve() / name
 
 
@@ -49,7 +59,7 @@ def start(output, env):
     root = fixture_root(env)
     # Refuse an occupied endpoint before creating any account or process state.
     with socket.socket() as probe:
-        probe.bind(('127.0.0.1', 18949))
+        probe.bind(('127.0.0.1', 18949 + shard_index(env)))
     root.mkdir(mode=0o700, parents=False, exist_ok=False)
     try:
         _start(root, output, env)
@@ -59,12 +69,14 @@ def start(output, env):
 
 
 def _start(root, output, env):
+    port = 18949 + shard_index(env)
+    matrix.BASE = f'http://127.0.0.1:{port}'
     config = root / 'homeserver.json'
     # JSON is valid YAML. All listeners and the SQLite database are disposable.
     config.write_text(json.dumps({
         'server_name': 'native-ci.test', 'public_baseurl': matrix.BASE,
         'pid_file': str(root / 'synapse.pid'), 'report_stats': False,
-        'listeners': [{'port': 18949, 'type': 'http', 'tls': False,
+        'listeners': [{'port': port, 'type': 'http', 'tls': False,
                        'bind_addresses': ['127.0.0.1'],
                        'resources': [{'names': ['client'], 'compress': False}]}],
         'database': {'name': 'sqlite3', 'args': {'database': str(root / 'homeserver.db')}},
@@ -87,7 +99,7 @@ def _start(root, output, env):
         if process.poll() is not None:
             raise RuntimeError('Disposable Synapse exited; inspect private fixture log')
         try:
-            owner = subprocess.run(['lsof', '-nP', '-t', '-iTCP:18949', '-sTCP:LISTEN'],
+            owner = subprocess.run(['lsof', '-nP', '-t', f'-iTCP:{port}', '-sTCP:LISTEN'],
                                    capture_output=True, text=True)
             if owner.stdout.strip() != str(process.pid):
                 time.sleep(1)

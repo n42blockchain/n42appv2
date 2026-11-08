@@ -1,0 +1,53 @@
+{
+  "replacesIncompleteIosRun": 42508240859,
+  "originalResult": {
+    "conclusion": "cancelled",
+    "completeSuite": false,
+    "lastObserved": {
+      "passed": 30,
+      "failed": 4,
+      "skipped": 2
+    },
+    "jobBudgetMinutes": 120,
+    "unreachedFinalFile": "integration_test/flows/wallet_flow_test.dart"
+  },
+  "repairs": [
+    "Retain real camera capture/resume test on supported hardware; add explicit unsupported-camera UI/lifecycle coverage for wallet scanner on iOS Simulator",
+    "Partition all 21 integration test files into three disjoint shards; retain fail-fast=false and unique manifests/artifacts",
+    "Give each shard a separate owned loopback Matrix port and process directory",
+    "Allow iOS-only complete replacement while existing Android and unit jobs finish unchanged"
+  ],
+  "verification": {
+    "pythonScriptTests": 152,
+    "qualityTests": 8,
+    "walletScannerAnalysis": "no issues",
+    "allTargets": 21,
+    "targetsPerShard": [
+      7,
+      7,
+      7
+    ],
+    "missingTargets": 0,
+    "duplicateTargets": 0,
+    "actualShardFixture": "Shard 1 password login/private room/0600 defines/owned process and port cleanup passed",
+    "workflowYaml": "parsed"
+  },
+  "productArtifact": {
+    "source": "71db01144207672227aa080d388b2a3ea69702ed",
+    "version": "2.5.4+73537",
+    "productSources": "unchanged by this test-only repair",
+    "testBuildCounter": "will differ; not an exact-source native pass for 71db01144",
+    "sha256": "deea99b3397e6d19fb6094d64101faacbd174601cc6837fb0d5c88c3be099929"
+  },
+  "remaining": [
+    "Complete all three actual iOS shards and verify their manifest union",
+    "Finish Android acceptance at artifact source 71db01144",
+    "Finish full CI at artifact source 71db01144",
+    "Physical camera capture remains deferred"
+  ],
+  "logs": {
+    "/tmp/n42-ios-sharded-script-tests.log": "0b539f4fa3d33c5e705e126c064533d1451f2f35366dc8ade3dafe5f2d71ab2b",
+    "/tmp/n42-ios-sharded-quality-tests.log": "ed814dbcae9a351953dc050300f03fd0cc5d56c699e28dc45525a0e14cd9fd03",
+    "/tmp/n42-wallet-scanner-capability-analysis.log": "adaa628f79ec6f42e0e1d12b1777184140aa212d486b21dd6d76439d1469b05d"
+  }
+}

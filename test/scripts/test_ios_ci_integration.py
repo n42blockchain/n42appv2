@@ -10,7 +10,7 @@ UUID = '11111111-2222-3333-4444-555555555555'
 
 
 class IosCiIntegrationTest(unittest.TestCase):
-    def run_helper(self, *, ci='true', uuid=UUID, actual=UUID, grant_error=False, fixture=True):
+    def run_helper(self, *, ci='true', uuid=UUID, actual=UUID, grant_error=False, fixture=True, suite='all', shard_index=None, shard_count='1'):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             log = root / 'calls'
@@ -27,7 +27,13 @@ if sys.argv[1:3] == ['simctl','privacy'] and os.environ['GRANT_ERROR']=='1':
 ''')
                 tool.chmod(0o700)
             env = dict(os.environ, CI=ci, IOS_SIMULATOR_ID=uuid, ACTUAL_UUID=actual,
-                       CALL_LOG=str(log), GRANT_ERROR=str(int(grant_error)))
+                       CALL_LOG=str(log), GRANT_ERROR=str(int(grant_error)),
+                       RUNNER_TEMP=str(root), N42_NATIVE_SUITE=suite,
+                       N42_IOS_NATIVE_SHARD_COUNT=shard_count)
+            if shard_index is not None:
+                env['N42_IOS_NATIVE_SHARD_INDEX'] = shard_index
+            else:
+                env.pop('N42_IOS_NATIVE_SHARD_INDEX', None)
             if fixture:
                 defines = root / 'chat-defines.json'
                 defines.write_text('{}')
@@ -67,6 +73,26 @@ if sys.argv[1:3] == ['simctl','privacy'] and os.environ['GRANT_ERROR']=='1':
 
     def test_missing_chat_fixture_stops_before_flutter(self):
         result, calls = self.run_helper(fixture=False)
+        self.assertEqual(result.returncode, 64)
+        self.assertEqual(len(calls), 1)
+
+    def test_shard_passes_every_selected_file_and_existing_defines(self):
+        result, calls = self.run_helper(shard_index='1', shard_count='3')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        files = [arg for arg in calls[-1] if arg.startswith('integration_test/')]
+        expected = sorted(p.relative_to(ROOT).as_posix() for p in (ROOT / 'integration_test').rglob('*_test.dart'))[1::3]
+        self.assertEqual(files, expected)
+        self.assertIn('--dart-define=N42_DISPOSABLE_WALLET_QA=true', calls[-1])
+        self.assertIn('--dart-define-from-file', calls[-1])
+        self.assertIn('--no-uninstall', calls[-1])
+
+    def test_invalid_shard_never_runs_flutter(self):
+        result, calls = self.run_helper(shard_index='3', shard_count='3')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(len(calls), 1)
+
+    def test_sharding_never_silently_changes_a_focused_suite(self):
+        result, calls = self.run_helper(suite='browser', shard_index='0', shard_count='3')
         self.assertEqual(result.returncode, 64)
         self.assertEqual(len(calls), 1)
 

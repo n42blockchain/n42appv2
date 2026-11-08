@@ -9,13 +9,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class NativeCiSummaryTest(unittest.TestCase):
-    def run_summary(self, android_only, results):
+    def run_summary(self, android_only, results, ios_only=False):
         workflow = (ROOT / '.github/workflows/test.yml').read_text()
         script = textwrap.dedent(workflow.rsplit('        run: |\n', 1)[1])
         with tempfile.TemporaryDirectory() as directory:
             summary = Path(directory) / 'summary'
             env = dict(os.environ, GITHUB_STEP_SUMMARY=str(summary),
-                       ANDROID_ONLY=str(android_only).lower(), N42_NATIVE_SUITE='all', **results)
+                       ANDROID_ONLY=str(android_only).lower(), IOS_ONLY=str(ios_only).lower(), N42_NATIVE_SUITE='all', **results)
             result = subprocess.run(['bash', '-e', '-c', script], env=env,
                                     capture_output=True, text=True)
             return result.returncode, summary.read_text()
@@ -39,6 +39,20 @@ class NativeCiSummaryTest(unittest.TestCase):
     def test_android_only_still_rejects_failed_android(self):
         code, _ = self.run_summary(True, dict(UNIT_RESULT='skipped',
             WIDGET_RESULT='skipped', IOS_RESULT='skipped', ANDROID_RESULT='failure'))
+        self.assertNotEqual(code, 0)
+
+    def test_ios_only_reports_scope_and_requires_all_ios_shards_result(self):
+        results = dict(UNIT_RESULT='skipped', WIDGET_RESULT='skipped', IOS_RESULT='success', ANDROID_RESULT='skipped')
+        code, summary = self.run_summary(False, results, ios_only=True)
+        self.assertEqual(code, 0)
+        self.assertIn('iOS-only manual run', summary)
+        for value in ['failure', 'cancelled', 'skipped']:
+            with self.subTest(value=value):
+                code, _ = self.run_summary(False, dict(results, IOS_RESULT=value), ios_only=True)
+                self.assertNotEqual(code, 0)
+
+    def test_conflicting_platform_flags_fail_closed(self):
+        code, _ = self.run_summary(True, dict(UNIT_RESULT='skipped', WIDGET_RESULT='skipped', IOS_RESULT='success', ANDROID_RESULT='skipped'), ios_only=True)
         self.assertNotEqual(code, 0)
 
 

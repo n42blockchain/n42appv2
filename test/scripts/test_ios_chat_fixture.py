@@ -36,6 +36,18 @@ class IosChatFixtureTest(unittest.TestCase):
                     fixture.start(Path(directory) / 'defines', env)
                 stop.assert_not_called()
 
+    def test_shards_use_separate_owned_directories_and_ports(self):
+        with tempfile.TemporaryDirectory() as directory:
+            env = dict(CI='true', GITHUB_RUN_ID='12', GITHUB_RUN_ATTEMPT='1', RUNNER_TEMP=directory,
+                       N42_IOS_NATIVE_SHARD_INDEX='2', N42_IOS_NATIVE_SHARD_COUNT='3')
+            with patch.object(fixture.socket, 'socket') as socket, patch.object(fixture, '_start'):
+                fixture.start(Path(directory) / 'defines', env)
+                socket.return_value.__enter__.return_value.bind.assert_called_once_with(('127.0.0.1', 18951))
+            self.assertTrue(fixture.fixture_root(env).name.endswith('-shard-2'))
+            for value in ['-1', '3', 'unsafe']:
+                with self.subTest(value=value), self.assertRaises(ValueError):
+                    fixture.shard_index(dict(env, N42_IOS_NATIVE_SHARD_INDEX=value))
+
     def test_cleanup_refuses_reused_pid(self):
         with tempfile.TemporaryDirectory() as directory:
             env = dict(CI='true', GITHUB_RUN_ID='12', GITHUB_RUN_ATTEMPT='1', RUNNER_TEMP=directory)
