@@ -80,7 +80,7 @@
     "problem": "Five native suites prebuilt without their test Dart defines; MLKit and wallet forms also used another target.",
     "fix": "Prebuild each focused native target with exactly the same allowlisted Dart defines as flutter test. Complete all-suite scope is unchanged.",
     "before": "New parameter parity regression fails in five suites.",
-    "after": "136 script tests pass; final Android-helper suite passes all 12 tests across all seven selectors.",
+    "after": "138 script tests pass; final Android-helper suite passes all 12 tests across all seven selectors.",
     "limits": "No measured CI speedup yet. Active diagnostic run 42485869555 is unchanged and remains running."
   }
 }
