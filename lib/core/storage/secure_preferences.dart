@@ -74,6 +74,26 @@ class SecurePreferences {
     return result;
   }
 
+  Future<void>? _walletInfoTail;
+
+  Future<T> _withWalletInfo<T>(Future<T> Function() operation) {
+    final previous = _walletInfoTail;
+    final result = previous == null
+        ? Future<T>.sync(operation)
+        : previous.then((_) => operation());
+    late final Future<void> completion;
+    void release() {
+      if (identical(_walletInfoTail, completion)) _walletInfoTail = null;
+    }
+
+    completion = result.then<void>(
+      (_) => release(),
+      onError: (Object error, StackTrace stack) => release(),
+    );
+    _walletInfoTail = completion;
+    return result;
+  }
+
   SecurePreferences._({SecureStore? secureStorage})
     : _secureStorage = secureStorage ?? FlutterSecureStore();
 
@@ -155,18 +175,47 @@ class SecurePreferences {
   // ==================== 钱包信息（敏感） ====================
 
   /// 保存钱包信息
-  Future<void> setWalletInfo(Map<String, dynamic> map) async {
-    await _secureStorage.write(key: 'walletInfo', value: jsonEncode(map));
+  Future<void> setWalletInfo(Map<String, dynamic> map) {
+    final encoded = jsonEncode(map);
+    return _withWalletInfo(
+      () => _secureStorage.write(key: 'walletInfo', value: encoded),
+    );
   }
+
+  /// Serialize one read/modify/write in the shared production storage instance.
+  /// The synchronous mutation must not call another wallet-storage operation.
+  /// Corrupt records fail before mutation; they are never replaced with {}.
+  Future<T> updateWalletInfo<T>(T Function(Map<String, dynamic>) mutate) =>
+      _withWalletInfo(() async {
+        final encoded = await _secureStorage.read(key: 'walletInfo');
+        Map<String, dynamic> data;
+        try {
+          final decoded = encoded == null || encoded.isEmpty
+              ? <String, dynamic>{}
+              : jsonDecode(encoded);
+          if (decoded is! Map<String, dynamic>) {
+            throw const FormatException();
+          }
+          data = decoded;
+        } on FormatException {
+          // Decoder exceptions can contain secret record excerpts.
+          throw StateError('Stored wallet data is invalid');
+        }
+        final result = mutate(data);
+        if (result is Future) {
+          throw ArgumentError('Wallet mutations must be synchronous');
+        }
+        await _secureStorage.write(key: 'walletInfo', value: jsonEncode(data));
+        return result;
+      });
 
   /// 获取钱包信息
   Future<Map<String, dynamic>?> getWalletInfo() =>
-      _readSecureJson('walletInfo');
+      _withWalletInfo(() => _readSecureJson('walletInfo'));
 
   /// 删除钱包信息
-  Future<void> removeWalletInfo() async {
-    await _secureStorage.delete(key: 'walletInfo');
-  }
+  Future<void> removeWalletInfo() =>
+      _withWalletInfo(() => _secureStorage.delete(key: 'walletInfo'));
 
   // ==================== 安全设置（敏感） ====================
 
@@ -317,20 +366,24 @@ class SecurePreferences {
   // ==================== 清理方法 ====================
 
   /// 清除所有敏感数据
-  Future<void> clearSensitiveData() => _withUserInfo(() async {
-    await init();
-    for (final key in _sensitiveKeys) {
-      await _secureStorage.delete(key: key);
-    }
-    await _removeLegacyUserInfo();
-  });
+  Future<void> clearSensitiveData() => _withUserInfo(
+    () => _withWalletInfo(() async {
+      await init();
+      for (final key in _sensitiveKeys) {
+        await _secureStorage.delete(key: key);
+      }
+      await _removeLegacyUserInfo();
+    }),
+  );
 
   /// 清除所有数据
-  Future<void> clearAll() => _withUserInfo(() async {
-    await init();
-    await _secureStorage.deleteAll();
-    if (await _prefs?.clear() == false) {
-      throw StateError('Failed to clear legacy preferences');
-    }
-  });
+  Future<void> clearAll() => _withUserInfo(
+    () => _withWalletInfo(() async {
+      await init();
+      await _secureStorage.deleteAll();
+      if (await _prefs?.clear() == false) {
+        throw StateError('Failed to clear legacy preferences');
+      }
+    }),
+  );
 }

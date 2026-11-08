@@ -139,8 +139,10 @@ class EthereumProviderJs {
             caveats: [{type: "restrictReturnedAccounts", value: _accounts.slice()}]
           }]);
         case "wallet_watchAsset":
-          // Accept but do nothing — return true as success per EIP-747
-          return Promise.resolve(true);
+          // Both the EIP object form and the legacy array form reach native
+          // validation. Native recognition is separate from user approval.
+          if (!Array.isArray(params)) params = [params];
+          break;
         case "web3_clientVersion":
           return Promise.resolve("N42Wallet/1.0.0");
         case "web3_sha3":

@@ -1,3 +1,7 @@
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/browser/models/watch_asset_metadata.dart';
+import 'package:n42_wallet/features/browser/models/watch_asset_request.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -61,6 +65,13 @@ typedef DAppSigningApproval = Future<bool> Function({
 /// "Proceed Anyway"; it whitelists the URL for this session and retries.
 typedef PhishingWarning = void Function(String url, VoidCallback proceed);
 
+typedef DAppAssetPrompt = Future<void> Function({
+  required String origin,
+  required String chainName,
+  required WatchAssetMetadata asset,
+  required Future<void> Function() onApprove,
+});
+
 class BrowserProvider extends ChangeNotifier {
   BrowserProvider() {
     getBrowserSetting();
@@ -102,6 +113,27 @@ class BrowserProvider extends ChangeNotifier {
   /// Set by [BrowserPage] to show the DApp signing confirmation sheet for
   /// injected-provider (EIP-1193) requests.
   DAppSigningApproval? onSigningRequest;
+
+  DAppAssetPrompt? onAssetSuggestion;
+  final Map<String, Future<WatchAssetMetadata>> _pendingAssetSuggestions = {};
+
+  Future<WatchAssetMetadata> verifyAssetSuggestion(
+    DAppRequestHandler handler,
+    WatchAssetRequest asset,
+    void Function() validateRequest,
+  ) => handler.loadAssetMetadata(asset, validateRequest: validateRequest);
+
+  Future<void> saveAssetSuggestion(
+    CoinModel parent,
+    WatchAssetMetadata asset,
+    void Function() validateRequest,
+  ) => globalWapAdapter.addConfirmedWalletToken(
+    parent: parent,
+    contract: asset.request.address.eip55With0x,
+    symbol: asset.symbol,
+    decimals: asset.decimals,
+    validateRequest: validateRequest,
+  );
 
   /// Lazily-built EIP-1193 request handler for the injected `window.ethereum`.
   /// Rebuilt whenever the wallet's EVM coin models change (address/chain).
@@ -681,6 +713,8 @@ class BrowserProvider extends ChangeNotifier {
     String raw,
   ) async {
     int? id;
+    void Function()? releaseAssetSuggestion;
+    Future<void> Function()? presentAssetSuggestion;
     final revision = tab.documentRevision;
     bool isCurrentDocument() =>
         !_isDisposed &&
@@ -691,7 +725,13 @@ class BrowserProvider extends ChangeNotifier {
       final msg = json.decode(raw) as Map<String, dynamic>;
       id = msg['id'] as int?;
       final method = msg['method'] as String? ?? '';
-      final params = (msg['params'] as List<dynamic>?) ?? const [];
+      final rawParams = msg['params'];
+      final params =
+          method == 'wallet_watchAsset' &&
+              rawParams != null &&
+              rawParams is! List
+          ? <dynamic>[rawParams]
+          : (rawParams as List<dynamic>?) ?? const [];
       if (id == null) return;
 
       final handler = _ensureDappHandler();
@@ -809,10 +849,151 @@ class BrowserProvider extends ChangeNotifier {
         params,
         origin: origin,
         isRequestActive: () => isCurrentDocument() && isCurrentWallet(),
+        assetSuggestion:
+            ({
+              required asset,
+              required origin,
+              required validateRequest,
+            }) async {
+              final prompt = onAssetSuggestion;
+              if (prompt == null) {
+                throw {
+                  'code': 4200,
+                  'message': 'Asset approval is unavailable',
+                };
+              }
+              final wallet = globalWapAdapter.walletInfo;
+              final owner = globalWapAdapter.walletDataOwnerUuid;
+              final parent = handler.parentForAsset(asset);
+              final testnet = parent.isTest;
+              final rpc = testnet
+                  ? parent.config.serviceTest
+                  : parent.config.service;
+              void validate() {
+                validateRequest();
+                if (!isCurrentDocument() ||
+                    !isCurrentWallet() ||
+                    globalWapAdapter.userUUID != owner ||
+                    globalWapAdapter.walletDataOwnerUuid != owner ||
+                    !globalWapAdapter.isWalletReady ||
+                    !identical(globalWapAdapter.walletInfo, wallet) ||
+                    parent.isTest != testnet ||
+                    (testnet
+                            ? parent.config.chainIdTest
+                            : parent.config.chainId) !=
+                        asset.chainId ||
+                    (testnet
+                            ? parent.config.serviceTest
+                            : parent.config.service) !=
+                        rpc) {
+                  throw {
+                    'code': 4001,
+                    'message': 'Asset request context changed',
+                  };
+                }
+              }
+
+              validate();
+              final key = jsonEncode([
+                owner,
+                identityHashCode(wallet),
+                origin,
+                asset.chainId,
+                asset.address.with0x.toLowerCase(),
+              ]);
+              final pending = _pendingAssetSuggestions[key];
+              if (pending != null) {
+                final existing = await pending;
+                validate();
+                if ((asset.suggestedSymbol != null &&
+                        asset.suggestedSymbol != existing.symbol) ||
+                    (asset.suggestedDecimals != null &&
+                        asset.suggestedDecimals != existing.decimals)) {
+                  throw {
+                    'code': -32602,
+                    'message':
+                        'Suggested metadata does not match the token contract',
+                  };
+                }
+                return;
+              }
+              if (_pendingAssetSuggestions.isNotEmpty) {
+                throw {
+                  'code': -32002,
+                  'message': 'An asset suggestion is already pending',
+                };
+              }
+              final ready = Completer<WatchAssetMetadata>();
+              // Observe failures even when there is no duplicate waiter.
+              unawaited(
+                ready.future.then<void>(
+                  (_) {},
+                  onError: (Object _, StackTrace _) {},
+                ),
+              );
+              _pendingAssetSuggestions[key] = ready.future;
+              void release() {
+                if (identical(_pendingAssetSuggestions[key], ready.future)) {
+                  _pendingAssetSuggestions.remove(key);
+                }
+              }
+
+              releaseAssetSuggestion = release;
+              try {
+                final verified = await verifyAssetSuggestion(
+                  handler,
+                  asset,
+                  validate,
+                );
+                validate();
+                ready.complete(verified);
+                if (parent.tokens.values.any(
+                  (token) =>
+                      token is Map &&
+                      token['contract']?.toString().toLowerCase() ==
+                          asset.address.with0x.toLowerCase(),
+                )) {
+                  release();
+                  return;
+                }
+                presentAssetSuggestion = () async {
+                  try {
+                    validate();
+                    if (!identical(onAssetSuggestion, prompt)) return;
+                    await prompt(
+                      origin: origin,
+                      chainName: parent.config.name,
+                      asset: verified,
+                      onApprove: () async {
+                        validate();
+                        await saveAssetSuggestion(parent, verified, validate);
+                      },
+                    );
+                  } finally {
+                    release();
+                  }
+                };
+              } catch (error, stack) {
+                if (!ready.isCompleted) ready.completeError(error, stack);
+                release();
+                rethrow;
+              }
+            },
       );
-      if (!isCurrentDocument()) return;
-      await _resolveProvider(wvc, id, result);
+      if (!isCurrentDocument()) {
+        releaseAssetSuggestion?.call();
+        return;
+      }
+      final delivered = await _resolveProvider(wvc, id, result);
+      // EIP-747 recognition precedes user interaction. Approval is not exposed
+      // through the RPC response, and duplicates share the pending suggestion.
+      if (delivered && presentAssetSuggestion != null && isCurrentDocument()) {
+        unawaited(presentAssetSuggestion!().catchError((Object _) {}));
+      } else {
+        releaseAssetSuggestion?.call();
+      }
     } catch (e) {
+      releaseAssetSuggestion?.call();
       if (id == null || !isCurrentDocument()) return;
       // Normalize thrown JSON-RPC error maps and generic errors.
       int code = -32603;
@@ -826,6 +1007,7 @@ class BrowserProvider extends ChangeNotifier {
   }
 
   static const Set<String> _sensitiveMethods = {
+    'wallet_watchAsset',
     'eth_sendTransaction',
     'eth_signTransaction',
     'personal_sign',
@@ -844,7 +1026,7 @@ class BrowserProvider extends ChangeNotifier {
     return '${uri.scheme}://${uri.host}';
   }
 
-  Future<void> _resolveProvider(
+  Future<bool> _resolveProvider(
     WebViewController wvc,
     int id,
     dynamic result,
@@ -855,8 +1037,10 @@ class BrowserProvider extends ChangeNotifier {
         'window.ethereum && window.ethereum._n42Cb('
         '$id, ${json.encode(resultJson)}, null)',
       );
+      return true;
     } catch (e) {
       AppLogger.w('Browser', 'provider resolve error: $e');
+      return false;
     }
   }
 
@@ -955,6 +1139,11 @@ class BrowserProvider extends ChangeNotifier {
   @override
   void dispose() {
     _isDisposed = true;
+    onAssetSuggestion = null;
+    onSigningRequest = null;
+    _pendingAssetSuggestions.clear();
+    _dappHandler?.dispose();
+    _dappHandler = null;
     browserDispose();
     for (final wvc in wvcList) {
       wvc.setNavigationDelegate(NavigationDelegate());

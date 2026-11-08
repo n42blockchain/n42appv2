@@ -8,7 +8,8 @@ import 'package:n42_wallet/features/browser/js/ethereum_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Real platform WebView and JS channels. The native responder only rejects a
-// synthetic connection request; no wallet, account, key or external site is used.
+// synthetic connection request and recognizes an asset suggestion. Recognition
+// does not add an asset; no wallet, account, key or external site is used.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('NATIVE-BROWSER parses, discovers and rejects through the bridge', (
@@ -42,6 +43,20 @@ void main() {
         try {
           final request = jsonDecode(message.message) as Map<String, dynamic>;
           calls.add(request['method'] as String);
+          if (request['method'] == 'wallet_watchAsset') {
+            final params = request['params'] as List;
+            expect(params, hasLength(1));
+            expect(params.single['type'], 'ERC20');
+            expect(
+              params.single['options']['address'],
+              '0x52908400098527886E0F7030069857D2E4169EE7',
+            );
+            await controller.runJavaScript(
+              'window.ethereum._n42Cb(${jsonEncode(request['id'])}, "true", null);',
+            );
+            return;
+          }
+
           expect(request['method'], 'eth_requestAccounts');
           expect(request['params'], isEmpty);
           final rejection = jsonEncode({
@@ -90,7 +105,11 @@ Promise.all([
   return window.ethereum.request({method: 'eth_requestAccounts'}).then(function() {
     N42Qa.postMessage('{"unexpectedAuthorization":true}');
   }, function(error) {
+    return window.ethereum.request({method: 'wallet_watchAsset', params: {
+      type: 'ERC20', options: {address: '0x52908400098527886E0F7030069857D2E4169EE7'}
+    }}).then(function(recognized) {
     N42Qa.postMessage(JSON.stringify({
+      assetRecognized: recognized,
       chainId: values[0], accounts: values[1], rejectedCode: error.code,
       bridge: window.ethereum._n42BridgeStatus(),
       ids: window.__n42QaAnnouncements.map(function(info) { return info.uuid; }),
@@ -98,6 +117,7 @@ Promise.all([
       legacyProvider: window.web3.currentProvider === window.ethereum,
       userAgent: navigator.userAgent
     }));
+    });
   });
 }).catch(function(error) { N42Qa.postMessage(JSON.stringify({scriptFailure: String(error)})); });
 ''');
@@ -107,6 +127,7 @@ Promise.all([
       expect(report!['chainId'], '0x1');
       expect(report['accounts'], isEmpty);
       expect(report['rejectedCode'], 4001);
+      expect(report['assetRecognized'], isTrue);
       expect(report['bridge'], anyOf('direct', 'webkit'));
       expect(report['legacyProvider'], isTrue);
       expect(report['rdns'], 'ai.n42.wallet');
@@ -121,7 +142,7 @@ Promise.all([
         ),
       );
       expect(ids.last, ids.first);
-      expect(calls, ['eth_requestAccounts']);
+      expect(calls, ['eth_requestAccounts', 'wallet_watchAsset']);
       expect(errors, isEmpty);
       debugPrint('NATIVE_BROWSER_USER_AGENT ${report['userAgent']}');
     } finally {

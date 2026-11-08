@@ -59,6 +59,103 @@ Matcher throwsRpcError(int code) =>
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('asset suggestion recognition', () {
+    const contract = '0x52908400098527886E0F7030069857D2E4169EE7';
+    final params = [
+      {
+        'type': 'ERC20',
+        'options': {'address': contract},
+      },
+    ];
+
+    test(
+      'recognizes only after native validation enqueues the prompt',
+      () async {
+        final handler = DAppRequestHandler(ethCoinModels: [makeEthModel()]);
+        final validated = Completer<void>();
+        var called = false;
+        handler.onAssetSuggestion =
+            ({
+              required asset,
+              required origin,
+              required validateRequest,
+            }) async {
+              expect(asset.address.eip55With0x, contract);
+              expect(origin, 'https://example.test');
+              validateRequest();
+              called = true;
+              await validated.future;
+            };
+        var completed = false;
+        final pending = handler
+            .handleRequest(
+              'wallet_watchAsset',
+              params,
+              origin: 'https://example.test',
+            )
+            .then((value) {
+              completed = true;
+              return value;
+            });
+        await Future<void>.delayed(Duration.zero);
+        expect(called, isTrue);
+        expect(completed, isFalse);
+        validated.complete();
+        expect(await pending, isTrue);
+      },
+    );
+
+    test('invalid suggestions never reach native metadata or UI', () async {
+      final handler = DAppRequestHandler(ethCoinModels: [makeEthModel()]);
+      var called = false;
+      handler.onAssetSuggestion =
+          ({required asset, required origin, required validateRequest}) async {
+            called = true;
+          };
+      await expectLater(
+        handler.handleRequest('wallet_watchAsset', []),
+        throwsRpcError(-32602),
+      );
+      expect(called, isFalse);
+    });
+
+    test(
+      'document changes during native validation reject recognition',
+      () async {
+        final handler = DAppRequestHandler(ethCoinModels: [makeEthModel()]);
+        var active = true;
+        handler.onAssetSuggestion =
+            ({
+              required asset,
+              required origin,
+              required validateRequest,
+            }) async {
+              active = false;
+            };
+        await expectLater(
+          handler.handleRequest(
+            'wallet_watchAsset',
+            params,
+            isRequestActive: () => active,
+          ),
+          throwsRpcError(4001),
+        );
+      },
+    );
+
+    test('native validation failures propagate without recognition', () async {
+      final handler = DAppRequestHandler(ethCoinModels: [makeEthModel()]);
+      handler.onAssetSuggestion =
+          ({required asset, required origin, required validateRequest}) async {
+            throw {'code': -32602, 'message': 'Contract metadata mismatch'};
+          };
+      await expectLater(
+        handler.handleRequest('wallet_watchAsset', params),
+        throwsRpcError(-32602),
+      );
+    });
+  });
+
   group('approved signing', () {
     late DAppRequestHandler handler;
     late _Secrets secrets;

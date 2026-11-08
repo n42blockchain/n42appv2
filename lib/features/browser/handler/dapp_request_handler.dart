@@ -1,8 +1,13 @@
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/browser/models/watch_asset_metadata.dart';
+import 'package:n42_wallet/features/browser/models/watch_asset_request.dart';
+
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart'
@@ -21,6 +26,14 @@ typedef DAppSigningCallback = Future<bool> Function({
   required String origin,
   required String method,
   required Map<String, dynamic> details,
+});
+
+/// Validate native metadata and enqueue the asset prompt, then return without
+/// waiting for user approval. Revalidate the request at each async boundary.
+typedef DAppAssetSuggestion = Future<void> Function({
+  required WatchAssetRequest asset,
+  required String origin,
+  required void Function() validateRequest,
 });
 
 class DAppRequestHandler {
@@ -73,6 +86,8 @@ class DAppRequestHandler {
   /// Callback for signing requests — set by BrowserPage
   DAppSigningCallback? onSigningRequest;
 
+  DAppAssetSuggestion? onAssetSuggestion;
+
   /// Handle a DApp JSON-RPC request and return the result.
   /// Throws on error (caller converts to JSON-RPC error).
   ///
@@ -83,6 +98,7 @@ class DAppRequestHandler {
     List<dynamic> params, {
     String? origin,
     bool Function()? isRequestActive,
+    DAppAssetSuggestion? assetSuggestion,
   }) async {
     final requestOrigin = origin ?? dappOrigin;
     final requestRevision = _chainRevision;
@@ -115,6 +131,34 @@ class DAppRequestHandler {
 
       case 'eth_coinbase':
         return address;
+
+      case 'wallet_watchAsset':
+        final suggest = assetSuggestion ?? onAssetSuggestion;
+        if (suggest == null) {
+          throw {
+            'code': -32601,
+            'message': 'Asset suggestions are unavailable',
+          };
+        }
+        final asset = WatchAssetRequest.parse(
+          params,
+          requestChain,
+          supportedChainIds: {
+            for (final model in ethCoinModels)
+              (model.isTest
+                      ? model.coin['chainId_test']
+                      : model.coin['chainId'])
+                  as int,
+          },
+        );
+        await suggest(
+          asset: asset,
+          origin: requestOrigin,
+          validateRequest: validateRequest,
+        );
+        validateRequest();
+        // Recognition is not the user's approval or a persistence receipt.
+        return true;
 
       case 'wallet_switchEthereumChain':
         return _handleSwitchChain(params);
@@ -379,6 +423,89 @@ class DAppRequestHandler {
     );
     validateRequest();
     return bytesToHex(signed, include0x: true);
+  }
+
+  CoinModel parentForAsset(WatchAssetRequest asset) => ethCoinModels.firstWhere(
+    (model) =>
+        (model.isTest ? model.config.chainIdTest : model.config.chainId) ==
+        asset.chainId,
+    orElse: () => throw {'code': 4902, 'message': 'Unsupported asset network'},
+  );
+
+  Future<WatchAssetMetadata> loadAssetMetadata(
+    WatchAssetRequest asset, {
+    required void Function() validateRequest,
+  }) async {
+    final parent = parentForAsset(asset);
+    final testnet = parent.isTest;
+    final rpcUrl = testnet ? parent.config.serviceTest : parent.config.service;
+    void validate() {
+      validateRequest();
+      if (_isDisposed ||
+          !ethCoinModels.contains(parent) ||
+          parent.isTest != testnet ||
+          (testnet ? parent.config.chainIdTest : parent.config.chainId) !=
+              asset.chainId ||
+          (testnet ? parent.config.serviceTest : parent.config.service) !=
+              rpcUrl) {
+        throw {'code': 4001, 'message': 'Asset network changed'};
+      }
+    }
+
+    try {
+      return await WatchAssetMetadata.load(
+        request: asset,
+        validateRequest: validate,
+        rpc: (method, params) async {
+          final client = Client();
+          try {
+            final request = Request('POST', Uri.parse(rpcUrl))
+              ..followRedirects = false
+              ..headers.addAll(
+                ProxyConfig.mergeAuthHeaders(rpcUrl, {
+                  'Content-Type': 'application/json',
+                }),
+              )
+              ..body = jsonEncode({
+                'jsonrpc': '2.0',
+                'id': 1,
+                'method': method,
+                'params': params,
+              });
+            final response = await client
+                .send(request)
+                .timeout(const Duration(seconds: 15));
+            if (response.statusCode != 200) {
+              throw StateError('Asset RPC unavailable');
+            }
+            final bytes = BytesBuilder();
+            await for (final chunk in response.stream.timeout(
+              const Duration(seconds: 15),
+            )) {
+              if (bytes.length + chunk.length > 2 * 1024 * 1024) {
+                throw StateError('Asset RPC response exceeds limit');
+              }
+              bytes.add(chunk);
+            }
+            final decoded = jsonDecode(utf8.decode(bytes.takeBytes()));
+            if (decoded is! Map ||
+                decoded.containsKey('error') ||
+                !decoded.containsKey('result')) {
+              throw StateError('Invalid asset RPC result');
+            }
+            return decoded['result'];
+          } finally {
+            client.close();
+          }
+        },
+      );
+    } catch (error) {
+      if (error is Map) rethrow;
+      // Error text may contain authenticated RPC URLs. Log only its type.
+      AppLogger.w('Browser', 'Asset metadata failed (${error.runtimeType})');
+      // Never expose configured RPC URLs or authentication details to a DApp.
+      throw {'code': -32603, 'message': 'Unable to verify token metadata'};
+    }
   }
 
   // ── RPC forwarding ─────────────────────────────────────────────────────────

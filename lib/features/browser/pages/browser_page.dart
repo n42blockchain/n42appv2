@@ -1,3 +1,4 @@
+import 'package:n42_wallet/features/browser/widgets/dapp_asset_suggestion_sheet.dart';
 import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/core/security/phishing_warning_dialog.dart';
 import 'package:n42_wallet/features/widgets/dapp_security_badge.dart';
@@ -78,6 +79,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     _browserProvider?.connectDAPPCallBack = null;
     _browserProvider?.phishingCallBack = null;
     _browserProvider?.onSigningRequest = null;
+    _browserProvider?.onAssetSuggestion = null;
     _browserProvider?.browserDispose();
     super.dispose();
   }
@@ -143,6 +145,27 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     };
     // Injected-provider (window.ethereum) signing/tx confirmations.
     bp.onSigningRequest = _showDAppSigningSheet;
+    bp.onAssetSuggestion =
+        ({
+          required origin,
+          required chainName,
+          required asset,
+          required onApprove,
+        }) async {
+          if (!mounted) return;
+          await showModalBottomSheet<bool>(
+            context: context,
+            isScrollControlled: true,
+            isDismissible: false,
+            enableDrag: false,
+            builder: (_) => DAppAssetSuggestionSheet(
+              origin: origin,
+              chainName: chainName,
+              asset: asset,
+              onApprove: onApprove,
+            ),
+          );
+        };
 
     bp.browserInit();
     bp.addUrl(widget.openUrl);

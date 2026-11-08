@@ -1,0 +1,96 @@
+{
+  "scope": "DApp legacy ERC20 asset suggestion implementation and storage follow-up",
+  "passed": true,
+  "tests": {
+    "command": "flutter test --no-pub test/core/storage/secure_preferences_test.dart test/features/wallet test/features/browser --reporter json",
+    "passed": 3181,
+    "failed": 0,
+    "skipped": 3,
+    "raw_log": "/tmp/n42-watch-asset-final-reconciled.jsonl"
+  },
+  "analysis": {
+    "command": "flutter analyze --no-pub --no-fatal-infos",
+    "exit_code": 0,
+    "errors": 0,
+    "warnings": 0,
+    "existing_infos": 78
+  },
+  "reproduced_before_fix": [
+    "concurrent preference save erases an approved token",
+    "new token inherits the native-chain cached balance"
+  ],
+  "verified_boundaries": [
+    "atomic storage acknowledgement and failure propagation",
+    "owner/wallet/chain/document changes",
+    "concurrent duplicate requests and contract records",
+    "object and array JavaScript request forms",
+    "recognition before user interaction",
+    "exact-network RPC, bounded responses, redirects rejected and transport errors sanitized",
+    "failed addition does not leak into a concurrent snapshot",
+    "later intentional removal remains effective",
+    "fresh wallet-provider reload retains stored asset",
+    "zero isolated balance/price caches and exact testnet contract"
+  ],
+  "limitations": [
+    "Secure-storage backend is a controlled Flutter platform fixture. Fresh provider reload is not a device keychain or process restart.",
+    "RPC execution uses an owned loopback server, not funded on-chain transfers.",
+    "Exact-source full CI and native installed-wallet end-to-end acceptance remain open.",
+    "Physical-device QA remains deferred by user."
+  ],
+  "historical_source_hold": "c2411ee59f616840cf1eddfe960d9bf33fd7fe74",
+  "native_acceptance": {
+    "run": 42481926728,
+    "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
+    "conclusion": "failure",
+    "observed_failure": "RPC callback recorded FlutterError before sending eth_chainId response; the client then reported FormatException. GET responses completed, wallet readiness and bridge passed.",
+    "next_step": "Move RPC assertions out of socket callbacks into the test body, retain auth/contract checks, and rerun the actual native workflow.",
+    "diagnostic_run": 42485869555,
+    "diagnostic_conclusion": "failure"
+  },
+  "remote_full_tests": {
+    "run": 42480307220,
+    "source": "609a23f5795c70aa26199d2ae169a0f0a0cbff06",
+    "tests_passed": 7865,
+    "tests_failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "raw_sha256": "46829239736b7f361d1edf7e12209a7595fa11045ed44b38799033c844639070",
+    "coverage": {
+      "found": 141801,
+      "hit": 104996,
+      "percent": 74.0446118151494,
+      "threshold": 70
+    },
+    "scope": "Complete CI passed, including Android/iOS builds, analysis, backend contracts, security, performance and tests/coverage. This is not native asset workflow acceptance.",
+    "workflow_conclusion": "success",
+    "jobs_passed": 11
+  },
+  "complete_android_run": {
+    "run": 42480309165,
+    "source": "609a23f5795c70aa26199d2ae169a0f0a0cbff06",
+    "conclusion": "failure",
+    "passed": 47,
+    "skipped": 3,
+    "failed": 1,
+    "cause": "Historical _StickerFixture omitted watchInstalledPacks; source ec10b4e12 and later includes the shared corrected fixture.",
+    "supplementary_focused_rerun": 42480743818,
+    "supplementary_result": "Four chat audit cases passed; not a replacement terminal result for the entire original run."
+  },
+  "ci_prebuild_alignment": {
+    "problem": "Five native suites prebuilt without their test Dart defines; MLKit and wallet forms also used another target.",
+    "fix": "Prebuild each focused native target with exactly the same allowlisted Dart defines as flutter test. Complete all-suite scope is unchanged.",
+    "before": "New parameter parity regression fails in five suites.",
+    "after": "138 script tests pass; final Android-helper suite passes all 12 tests across all seven selectors.",
+    "limits": "No measured CI speedup yet. Active diagnostic run 42485869555 is unchanged and remains running."
+  },
+  "rpc_callback_assertion_fix": {
+    "change": "Capture authenticated request method names and requested contracts in the HTTP callback; assert after the browser flow in the test body.",
+    "preserved_checks": [
+      "No RPC authorization headers",
+      "Only owned fixture contracts",
+      "No fixture callback errors",
+      "No signing or transaction RPC methods"
+    ],
+    "verification": "Scoped analysis passes with no issues; native acceptance still pending."
+  }
+}

@@ -1,3 +1,8 @@
+import 'package:n42_wallet/features/browser/models/watch_asset_metadata.dart';
+import 'package:n42_wallet/features/browser/models/watch_asset_request.dart';
+import 'package:n42_wallet/features/browser/handler/dapp_request_handler.dart';
+import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -21,6 +26,14 @@ class _Wallet extends Fake implements LegacyWalletActionProviderAdapter {
   List<CoinModel> coinModels = [];
   @override
   int walletIndex = 0;
+  @override
+  String userUUID = 'fixture-owner';
+  @override
+  String walletDataOwnerUuid = 'fixture-owner';
+  @override
+  bool isWalletReady = true;
+  @override
+  WalletInfo walletInfo = WalletInfo(timestamp: 'fixture-wallet');
 }
 
 class _Secrets extends Fake implements IWalletService {
@@ -57,6 +70,41 @@ class _Provider extends BrowserProvider {
   final _bookmarks = _Bookmarks();
   @override
   _Bookmarks get browserApi => _bookmarks;
+
+  Future<void> Function()? metadataGate;
+  int metadataReads = 0;
+  int assetSaves = 0;
+  @override
+  Future<WatchAssetMetadata> verifyAssetSuggestion(
+    DAppRequestHandler handler,
+    WatchAssetRequest asset,
+    void Function() validateRequest,
+  ) async {
+    metadataReads++;
+    await metadataGate?.call();
+    return WatchAssetMetadata.load(
+      request: asset,
+      validateRequest: validateRequest,
+      rpc: (method, params) async => switch (method) {
+        'eth_chainId' => '0x1',
+        'eth_getCode' => '0x6000',
+        _ =>
+          (params.first as Map)['data'] == '0x95d89b41'
+              ? '0x414243${''.padRight(58, '0')}'
+              : '0x${'12'.padLeft(64, '0')}',
+      },
+    );
+  }
+
+  @override
+  Future<void> saveAssetSuggestion(
+    CoinModel parent,
+    WatchAssetMetadata asset,
+    void Function() validateRequest,
+  ) async {
+    validateRequest();
+    assetSaves++;
+  }
 }
 
 void main() {
@@ -70,6 +118,10 @@ void main() {
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     wallet.walletIndex = 0;
+    wallet.walletInfo = WalletInfo(timestamp: 'fixture-wallet');
+    wallet.userUUID = 'fixture-owner';
+    wallet.walletDataOwnerUuid = 'fixture-owner';
+    wallet.isWalletReady = true;
     wallet.coinModels = [
       CoinModel()
         ..address = address
@@ -101,7 +153,7 @@ void main() {
     BrowserControllerFake controller,
     String method, {
     int id = 7,
-    List<dynamic> params = const [],
+    dynamic params = const [],
   }) async {
     controller.channels['N42Wallet']!.onMessageReceived(
       JavaScriptMessage(
@@ -122,6 +174,171 @@ void main() {
       args[2] == null ? null : jsonDecode(args[2] as String),
     );
   }
+
+  group('asset suggestions', () {
+    const contract = '0x52908400098527886E0F7030069857D2E4169EE7';
+    Map<String, dynamic> request([Map<String, dynamic> extra = const {}]) => {
+      'type': 'ERC20',
+      'options': {'address': contract, ...extra},
+    };
+
+    test('object form responds before prompting and saves only on explicit approval', () async {
+      final controller = await tab('https://example.test');
+      final closed = Completer<void>();
+      Future<void> Function()? approve;
+      provider.onAssetSuggestion =
+          ({
+            required origin,
+            required chainName,
+            required asset,
+            required onApprove,
+          }) async {
+            expect(response(controller).$2, isTrue);
+            expect(origin, 'https://example.test');
+            approve = onApprove;
+            await closed.future;
+          };
+      await message(controller, 'wallet_watchAsset', params: request());
+      expect(approve, isNotNull);
+      expect(provider.assetSaves, 0);
+      await approve!();
+      expect(provider.assetSaves, 1);
+      closed.complete();
+      await flush();
+    });
+
+    test(
+      'duplicates share metadata and prompt but conflicting hints reject',
+      () async {
+        final controller = await tab('https://example.test');
+        final closed = Completer<void>();
+        var prompts = 0;
+        provider.onAssetSuggestion =
+            ({
+              required origin,
+              required chainName,
+              required asset,
+              required onApprove,
+            }) async {
+              prompts++;
+              await closed.future;
+            };
+        await message(controller, 'wallet_watchAsset', params: [request()]);
+        await message(
+          controller,
+          'wallet_watchAsset',
+          id: 8,
+          params: request(),
+        );
+        expect(response(controller).$2, isTrue);
+        expect(prompts, 1);
+        expect(provider.metadataReads, 1);
+        await message(
+          controller,
+          'wallet_watchAsset',
+          id: 9,
+          params: request({'symbol': 'FAKE'}),
+        );
+        expect((response(controller).$3 as Map)['code'], -32602);
+        expect(prompts, 1);
+        closed.complete();
+        await flush();
+      },
+    );
+
+    test(
+      'wallet changes during metadata prevent recognition and prompting',
+      () async {
+        final controller = await tab('https://example.test');
+        final entered = Completer<void>();
+        final release = Completer<void>();
+        var prompts = 0;
+        provider.metadataGate = () async {
+          entered.complete();
+          await release.future;
+        };
+        provider.onAssetSuggestion =
+            ({
+              required origin,
+              required chainName,
+              required asset,
+              required onApprove,
+            }) async {
+              prompts++;
+            };
+        await message(controller, 'wallet_watchAsset', params: request());
+        await entered.future;
+        wallet.walletInfo = WalletInfo(timestamp: 'replacement');
+        release.complete();
+        await flush();
+        expect((response(controller).$3 as Map)['code'], 4001);
+        expect(prompts, 0);
+        expect(provider.assetSaves, 0);
+      },
+    );
+
+    test(
+      'account changes after recognition cannot use an old approval',
+      () async {
+        final controller = await tab('https://example.test');
+        final closed = Completer<void>();
+        Future<void> Function()? approve;
+        provider.onAssetSuggestion =
+            ({
+              required origin,
+              required chainName,
+              required asset,
+              required onApprove,
+            }) async {
+              approve = onApprove;
+              await closed.future;
+            };
+        await message(controller, 'wallet_watchAsset', params: request());
+        wallet.userUUID = 'other-owner';
+        await expectLater(
+          approve!(),
+          throwsA(isA<Map>().having((e) => e['code'], 'code', 4001)),
+        );
+        expect(provider.assetSaves, 0);
+        closed.complete();
+        await flush();
+      },
+    );
+
+    test(
+      'already installed asset is recognized without another prompt',
+      () async {
+        final controller = await tab('https://example.test');
+        var prompts = 0;
+        wallet.coinModels.first.tokens = {
+          'token': {'contract': contract.toLowerCase()},
+        };
+        provider.onAssetSuggestion =
+            ({
+              required origin,
+              required chainName,
+              required asset,
+              required onApprove,
+            }) async {
+              prompts++;
+            };
+        await message(controller, 'wallet_watchAsset', params: request());
+        expect(response(controller).$2, isTrue);
+        expect(prompts, 0);
+        expect(provider.assetSaves, 0);
+      },
+    );
+
+    test(
+      'missing approval UI rejects rather than reporting recognition',
+      () async {
+        final controller = await tab('https://example.test');
+        await message(controller, 'wallet_watchAsset', params: request());
+        expect((response(controller).$3 as Map)['code'], 4200);
+        expect(provider.metadataReads, 0);
+      },
+    );
+  });
 
   test(
     'first load waits for native channels and local storage setup',

@@ -88,6 +88,19 @@ class WalletActionProvider extends ChangeNotifier
   final MarketApi _marketApi;
   final Future<dynamic> Function(String) _stablecoinPriceRequest;
   final DateTime Function() _now;
+  final List<
+    ({
+      WalletInfo wallet,
+      String owner,
+      int index,
+      String chainKey,
+      int chainId,
+      bool testnet,
+      String contract,
+    })
+  >
+  _pendingConfirmedTokenWrites = [];
+
   final Future<void> Function(WalletInfo, int)? _assetVisibilityWriter;
   Future<void>? _priceRefreshInFlight;
   Future<void> _walletCreationTail = Future<void>.value();

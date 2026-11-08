@@ -14,7 +14,7 @@ on:
       native_suite:
         description: Native suite (chat_layout is Android-only; MLKit includes real model downloads)
         type: choice
-        options: [all, mlkit, wallet_forms, browser, chat_layout, chat_audit]
+        options: [all, mlkit, wallet_forms, browser, chat_layout, chat_audit, watch_asset]
         default: all
   push:
     branches: [master, main, develop]

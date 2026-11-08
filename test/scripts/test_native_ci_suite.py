@@ -55,6 +55,14 @@ class NativeCiSuiteTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout.splitlines(), ['integration_test/chat_audit_device_test.dart'])
 
+    def test_asset_suite_requires_disposable_wallet_define(self):
+        result = self.select('watch_asset')
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.splitlines(), [
+            'integration_test/dapp_watch_asset_device_test.dart',
+            '--dart-define=N42_DISPOSABLE_WALLET_QA=true',
+        ])
+
     def test_unknown_targets_fail_closed(self):
         for value in ['', '../test', 'mlkit; echo unsafe']:
             with self.subTest(value=value):

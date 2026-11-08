@@ -84,6 +84,14 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
         self.assertIn(target, calls[1])
         self.assertEqual(calls[5][:3], ['flutter', 'test', target])
 
+    def test_asset_suite_prebuilds_actual_target_with_disposable_opt_in(self):
+        result, calls = self.run_helper(chat_fixture=False, suite='watch_asset')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        target = 'integration_test/dapp_watch_asset_device_test.dart'
+        self.assertIn(target, calls[1])
+        self.assertEqual(calls[5][:3], ['flutter', 'test', target])
+        self.assertIn('--dart-define=N42_DISPOSABLE_WALLET_QA=true', calls[5])
+
     def test_chat_layout_requires_owned_fixture_before_build(self):
         result, calls = self.run_helper(chat_fixture=False, suite='chat_layout')
         self.assertEqual(result.returncode, 64)
@@ -98,6 +106,26 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
             'integration_test/chat_attachment_device_test.dart'])
         self.assertIn('--dart-define-from-file', calls[5])
         self.assertIn('--no-uninstall', calls[5])
+
+    def test_prebuild_uses_the_same_defines_as_the_native_test(self):
+        def defines(call):
+            result = []
+            for index, value in enumerate(call):
+                if value.startswith('--dart-define='):
+                    result.append((value,))
+                elif value == '--dart-define-from-file':
+                    result.append((value, call[index + 1]))
+            return result
+
+        for suite in ['all', 'chat_layout', 'chat_audit', 'watch_asset',
+                      'browser', 'mlkit', 'wallet_forms']:
+            with self.subTest(suite=suite):
+                result, calls = self.run_helper(suite=suite)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(defines(calls[1]), defines(calls[5]))
+                if suite != 'all':
+                    target = calls[1][calls[1].index('--target') + 1]
+                    self.assertEqual(target, calls[5][2])
 
     def test_install_failure_stops_before_grant_and_tests(self):
         result, calls = self.run_helper(fail_install=True)

@@ -346,6 +346,153 @@ extension WalletActionProviderToken on WalletActionProvider {
     refresh();
   }
 
+  /// Persist an approved token to the captured wallet and exact parent network.
+  /// Existing manual import APIs retain their behavior. No signing is involved.
+  Future<void> addConfirmedWalletToken({
+    required CoinModel parent,
+    required String contract,
+    required String symbol,
+    required int decimals,
+    required void Function() validateRequest,
+  }) async {
+    final owner = walletDataOwnerUuid;
+    final index = walletIndex;
+    final wallet = walletInfo;
+    final chainKey = parent.config.mKey;
+    final testnet = parent.isTest;
+    final chainId = testnet ? parent.config.chainIdTest : parent.config.chainId;
+    if (!RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(contract) ||
+        symbol.trim().isEmpty ||
+        decimals < 0 ||
+        decimals > 255 ||
+        chainId <= 0) {
+      throw ArgumentError('Invalid approved token');
+    }
+    void validate() {
+      validateRequest();
+      if (owner != userUUID ||
+          owner != walletDataOwnerUuid ||
+          !isWalletReady ||
+          walletIndex != index ||
+          !identical(walletInfo, wallet) ||
+          !_coinModels.contains(parent) ||
+          parent.isTest != testnet ||
+          (testnet ? parent.config.chainIdTest : parent.config.chainId) !=
+              chainId) {
+        throw StateError('Asset owner or network changed');
+      }
+    }
+
+    validate();
+    final timestamp = wallet.timestamp;
+    final walletUuid = wallet.walletUuid;
+    final pendingWrite = (
+      wallet: wallet,
+      owner: owner,
+      index: index,
+      chainKey: chainKey,
+      chainId: chainId,
+      testnet: testnet,
+      contract: contract,
+    );
+    _pendingConfirmedTokenWrites.add(pendingWrite);
+    late final Map<String, dynamic> token;
+    try {
+      token = await SPUtil().updateWalletInfo<Map<String, dynamic>>((all) {
+        validate();
+        final wallets = (all[owner] as Map?)?['wallet'];
+        if (wallets is! List || index < 0 || index >= wallets.length) {
+          throw StateError('Asset owner is no longer stored');
+        }
+        final record = wallets[index] as Map;
+        if (record['timestamp'] != timestamp || record['UUID'] != walletUuid) {
+          throw StateError('Stored wallet identity changed');
+        }
+        final chain = (record['coinInfo'] as Map?)?[chainKey];
+        if (chain is! Map ||
+            chain['isTest'] != testnet ||
+            resolveChainConfigIdOrNull(
+                  Map<String, dynamic>.from(chain),
+                  isTest: testnet,
+                ) !=
+                chainId) {
+          throw StateError('Stored asset network changed');
+        }
+        final Map tokens;
+        if (testnet) {
+          final networks = chain['testnets'];
+          if (networks is! List || networks.isEmpty || networks.first is! Map) {
+            throw StateError('Missing stored test network');
+          }
+          tokens = networks.first['testnetContract'] as Map;
+        } else {
+          tokens = chain['mainnets'] as Map;
+        }
+        for (final existing in tokens.values) {
+          if (existing is Map &&
+              existing['contract']?.toString().toLowerCase() ==
+                  contract.toLowerCase()) {
+            return Map<String, dynamic>.from(existing);
+          }
+        }
+        final added = Map<String, dynamic>.from(chain['baseInfo'] as Map)
+          ..addAll({
+            'contract': contract,
+            'contract_test': testnet ? contract : '',
+            'balance': '0',
+            'balance_test': '0',
+            'coinPrice': 0.0,
+            'percentage': 0.0,
+            'canEdit': true,
+            'decimals_verified': true,
+            'mKey': contract.toUpperCase(),
+            'name': symbol,
+            'miniName': symbol,
+            'symbol': symbol,
+            'unit': symbol,
+            'decimals': decimals,
+            'customer': true,
+            'isContract': true,
+            'icon': '',
+          });
+        tokens[contract.toUpperCase()] = added;
+        return added;
+      });
+    } finally {
+      _pendingConfirmedTokenWrites.remove(pendingWrite);
+    }
+    validate();
+    final chain = walletMap[chainKey] as Map;
+    final Map tokens = testnet
+        ? chain['testnets'][0]['testnetContract'] as Map
+        : chain['mainnets'] as Map;
+    final present = tokens.values.any(
+      (existing) =>
+          existing is Map &&
+          existing['contract']?.toString().toLowerCase() ==
+              contract.toLowerCase(),
+    );
+    if (!present) tokens[token['mKey']] = token;
+    parent.tokens = Map<String, dynamic>.from(tokens);
+    final visible =
+        wallet.networkIndex == -1 ||
+        (wallet.networkIndex >= 0 &&
+            wallet.networkIndex < _coinModels.length &&
+            identical(_coinModels[wallet.networkIndex], parent));
+    if (visible &&
+        !coinList.any(
+          (coin) =>
+              coin.config.contract.toLowerCase() == contract.toLowerCase() &&
+              (coin.isTest ? coin.config.chainIdTest : coin.config.chainId) ==
+                  chainId,
+        )) {
+      final model = buildTokenCoinModel(parent, token);
+      coinList.add(model);
+      coinRefreshMap[index]?.add(model);
+    }
+    refresh();
+  }
+
   //添加代币
   void addWalletChainToken(Map<String, dynamic> token) {
     String symbolStr = token['coinType'].toString().toUpperCase();
