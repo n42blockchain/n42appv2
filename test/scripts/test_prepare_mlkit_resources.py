@@ -4,10 +4,13 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import sys
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError
 import zipfile
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 
 spec = importlib.util.spec_from_file_location('mlkit', 'scripts/prepare_mlkit_resources.py')
 mlkit = importlib.util.module_from_spec(spec)
@@ -98,6 +101,14 @@ class MlkitResourcesTest(unittest.TestCase):
         with patch.object(mlkit.urllib.request, 'urlopen', return_value=io.BytesIO(data)):
             with self.assertRaisesRegex(ValueError, 'Archive symlink'):
                 mlkit.prepare()
+
+    def test_api_metadata_and_asset_recover_after_transient_errors(self):
+        metadata = json.dumps({'assets': [{'name': 'Models.bundle.zip', 'id': 99}]}).encode()
+        errors = lambda: HTTPError('https://test', 504, 'timeout', {}, None)
+        with patch.object(mlkit.urllib.request, 'urlopen', side_effect=[errors(), errors(), io.BytesIO(metadata), errors(), io.BytesIO(self.data)]), patch('download_retry.time.sleep') as sleep:
+            mlkit.prepare()
+        self.assertEqual(sleep.call_count, 2)
+        self.assertEqual((self.root / 'ios/MLKitResources/Models.bundle/model.bin').read_bytes(), b'model fixture')
 
     def test_response_size_limit(self):
         with self.assertRaisesRegex(ValueError, 'size limit'):

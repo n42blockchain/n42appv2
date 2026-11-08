@@ -1,10 +1,15 @@
 import hashlib
+import io
+from urllib.error import HTTPError
 import importlib.util
 import json
 from pathlib import Path
 import tempfile
+import sys
 import unittest
 from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 
 spec = importlib.util.spec_from_file_location('assets', 'scripts/prepare_sqlite_test_assets.py')
 assets = importlib.util.module_from_spec(spec)
@@ -68,6 +73,11 @@ class SqliteAssetsTest(unittest.TestCase):
         with patch.object(assets, 'fetch', side_effect=AssertionError('no SQLite dependency')):
             self.assertIsNone(assets.prepare(self.root))
         self.assertFalse((self.root / '.dart_tool/hooks_runner').exists())
+
+    def test_fetch_retries_transient_api_error(self):
+        with patch.object(assets, 'urlopen', side_effect=[HTTPError('https://test', 504, 'timeout', {}, None), io.BytesIO(b'payload')]) as opener, patch('download_retry.time.sleep'):
+            self.assertEqual(assets.fetch('https://api.github.com/test'), b'payload')
+        self.assertEqual(opener.call_count, 2)
 
     def test_missing_release_asset_fails_closed(self):
         with patch.object(assets, 'fetch', return_value=b'{"assets": []}'):

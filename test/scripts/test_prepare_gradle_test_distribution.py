@@ -4,8 +4,12 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import sys
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
+from urllib.error import HTTPError, URLError
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
 
 spec = importlib.util.spec_from_file_location('gradle', 'scripts/prepare_gradle_test_distribution.py')
 gradle = importlib.util.module_from_spec(spec)
@@ -47,6 +51,25 @@ class GradleDistributionTest(unittest.TestCase):
         with self.assertRaises(OSError):
             gradle.prepare(self.props, self.root, Mock(side_effect=OSError('offline')))
         self.assertEqual(target.read_bytes(), b'old corrupt cache')
+
+    def test_release_metadata_recovers_after_gateway_error(self):
+        opener = Mock(side_effect=[HTTPError('https://test', 504, 'timeout', {}, None), io.BytesIO(self.metadata), io.BytesIO(self.data)])
+        with patch('download_retry.time.sleep'):
+            target = gradle.prepare(self.props, self.root, opener)
+        self.assertEqual(target.read_bytes(), self.data)
+        self.assertEqual(opener.call_count, 3)
+
+    def test_partial_transfer_is_discarded_before_retry(self):
+        class BrokenStream(io.BytesIO):
+            def read(self, size=-1):
+                if self.tell():
+                    raise URLError('connection lost')
+                return super().read(size)
+        opener = Mock(side_effect=[io.BytesIO(self.metadata), BrokenStream(b'partial archive'), io.BytesIO(self.data)])
+        with patch('download_retry.time.sleep'):
+            target = gradle.prepare(self.props, self.root, opener)
+        self.assertEqual(target.read_bytes(), self.data)
+        self.assertEqual(list(target.parent.iterdir()), [target])
 
     def test_missing_hash_fails_before_network(self):
         self.props.write_text(f'distributionUrl={self.url}\n')

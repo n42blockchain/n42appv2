@@ -14,17 +14,21 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse, unquote
 from urllib.request import Request, urlopen
 
+from download_retry import retry_download
+
 API = 'https://api.github.com/repos/simolus3/sqlite3.dart'
 LIMIT = 64 * 1024 * 1024
 
 
 def fetch(url, accept='application/vnd.github+json'):
     request = Request(url, headers={'Accept': accept, 'User-Agent': 'N42-test-assets'})
-    with urlopen(request, timeout=30) as response:
-        data = response.read(LIMIT + 1)
-    if len(data) > LIMIT:
-        raise ValueError('Asset response exceeds size limit')
-    return data
+    def read():
+        with urlopen(request, timeout=30) as response:
+            data = response.read(LIMIT + 1)
+        if len(data) > LIMIT:
+            raise ValueError('Asset response exceeds size limit')
+        return data
+    return retry_download(read)
 
 
 def prepare(root):

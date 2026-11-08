@@ -10,6 +10,8 @@ import urllib.request
 import urllib.error
 import zipfile
 
+from download_retry import retry_download
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -36,14 +38,14 @@ def download_bundle(name, release, opener):
         pass
     if release is None:
         request = urllib.request.Request(f'{RELEASE_API}/tags/9.0.2', headers={'User-Agent': 'N42-MLKit-resources'})
-        release = json.loads(read_response(opener, request, 2 * 1024 * 1024))
+        release = json.loads(retry_download(lambda: read_response(opener, request, 2 * 1024 * 1024)))
     filename = f'{name}.bundle.zip'
     assets = [asset for asset in release['assets'] if asset['name'] == filename]
     if len(assets) != 1 or type(assets[0]['id']) is not int:
         raise ValueError(f'Missing unique MLKit release asset: {name}')
     request = urllib.request.Request(f"{RELEASE_API}/assets/{assets[0]['id']}", headers={
         'User-Agent': 'N42-MLKit-resources', 'Accept': 'application/octet-stream'})
-    return read_response(opener, request, MAX_BUNDLE_BYTES), release
+    return retry_download(lambda: read_response(opener, request, MAX_BUNDLE_BYTES)), release
 
 
 def prepare():
