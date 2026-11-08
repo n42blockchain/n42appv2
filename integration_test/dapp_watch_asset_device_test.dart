@@ -77,6 +77,8 @@ void main() {
       final otherIdentity = UserInfo(uuid: '$owner-other');
       final methods = <String>[];
       final fixtureErrors = <String>[];
+      final authenticatedRequests = <String>[];
+      final requestedContracts = <String>[];
       final replies = <String>[];
       final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
       final rpc = 'http://localhost:${server.port}/rpc';
@@ -119,13 +121,14 @@ void main() {
                 jsonDecode(await utf8.decoder.bind(request).join()) as Map;
             final method = body['method'] as String;
             methods.add(method);
-            expect(request.headers.value('authorization'), isNull);
+            // Flutter assertions cannot run inside asynchronous socket callbacks
+            // while the widget tester has another guarded action in flight.
+            if (request.headers.value('authorization') != null) {
+              authenticatedRequests.add(method);
+            }
             final params = body['params'] as List;
             if (method == 'eth_call') {
-              expect([
-                _contract,
-                _cancelledContract,
-              ], contains(params.first['to']));
+              requestedContracts.add(params.first['to'].toString());
             }
             final result = switch (method) {
               'eth_chainId' => '0x7a69',
@@ -141,7 +144,7 @@ void main() {
               jsonEncode({
                 'jsonrpc': '2.0',
                 'id': body['id'],
-                if (result != null) 'result': result,
+                'result': ?result,
                 if (result == null)
                   'error': {
                     'code': -32601,
@@ -357,6 +360,12 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
       await tester.pumpAndSettle();
       AppGlobals.userInfo = identity;
       expect(fixtureErrors, isEmpty);
+      expect(authenticatedRequests, isEmpty);
+      expect(requestedContracts, isNotEmpty);
+      expect(
+        requestedContracts.every([_contract, _cancelledContract].contains),
+        isTrue,
+      );
       expect(methods, isNotEmpty);
       expect(
         methods.every({'eth_chainId', 'eth_getCode', 'eth_call'}.contains),

@@ -42,9 +42,9 @@
     "run": 42481926728,
     "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
     "conclusion": "failure",
-    "observed_failure": "Bridge and wallet readiness passed; only eth_chainId reached the loopback server before generic metadata verification failure. No approval sheet appeared.",
-    "next_step": "Rerun with sanitized transport error type and fixture response/error records; keep native acceptance and merge held.",
-    "diagnostic_run": 42483823913,
+    "observed_failure": "RPC callback recorded FlutterError before sending eth_chainId response; the client then reported FormatException. GET responses completed, wallet readiness and bridge passed.",
+    "next_step": "Move RPC assertions out of socket callbacks into the test body, retain auth/contract checks, and rerun the actual native workflow.",
+    "diagnostic_run": 42485869555,
     "diagnostic_conclusion": "failure"
   },
   "remote_full_tests": {
@@ -82,5 +82,15 @@
     "before": "New parameter parity regression fails in five suites.",
     "after": "138 script tests pass; final Android-helper suite passes all 12 tests across all seven selectors.",
     "limits": "No measured CI speedup yet. Active diagnostic run 42485869555 is unchanged and remains running."
+  },
+  "rpc_callback_assertion_fix": {
+    "change": "Capture authenticated request method names and requested contracts in the HTTP callback; assert after the browser flow in the test body.",
+    "preserved_checks": [
+      "No RPC authorization headers",
+      "Only owned fixture contracts",
+      "No fixture callback errors",
+      "No signing or transaction RPC methods"
+    ],
+    "verification": "Scoped analysis passes with no issues; native acceptance still pending."
   }
 }
