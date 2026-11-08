@@ -31,7 +31,11 @@
   },
   "currentChatFullRegression": {
     "source": "5ec23e95f3e809d7e4cebd6ece357593dd8dc3c1",
-    "status": "in_progress"
+    "status": "passed",
+    "testsPassed": 8842,
+    "testsFailed": 0,
+    "skipped": 7,
+    "exitCode": 0
   },
   "liveFixture": {
     "publicationAndReceiptRecovery": true,
@@ -47,5 +51,14 @@
     "New signed artifact and TestFlight release"
   ],
   "published73486ContainsChanges": false,
-  "newSignedArtifactBuilt": false
+  "newSignedArtifactBuilt": false,
+  "localizationReview": {
+    "locale": "fr",
+    "key": "stickerPackImages",
+    "value": "Images",
+    "reason": "The French label is correctly spelled identically to English; accept only this reviewed entry.",
+    "ciFailure": 42462287297,
+    "localAuditExitCode": 0,
+    "scriptTestsPassed": 92
+  }
 }
