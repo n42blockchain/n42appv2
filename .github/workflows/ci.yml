@@ -146,9 +146,15 @@ jobs:
         id: root_tests
         run: |
           ulimit -n 4096
-          flutter test test/ --no-pub --coverage --concurrency=4 --machine > test_results.jsonl
-          python3 scripts/quality_gate.py tests test_results.jsonl | tee test_output.txt
+          test_status=0
+          flutter test test/ --no-pub --coverage --concurrency=4 --machine > test_results.jsonl || test_status=$?
+          report_status=0
+          python3 scripts/quality_gate.py tests test_results.jsonl | tee test_output.txt || report_status=$?
           cat test_output.txt >> "$GITHUB_STEP_SUMMARY"
+          if [ "$test_status" -ne 0 ]; then
+            exit "$test_status"
+          fi
+          exit "$report_status"
 
       - name: Export the resolved Chat Git revision
         id: chat_export
