@@ -1,0 +1,24 @@
+{
+  "chatRef": "b3c1dec190427eff1d56f398a8837391f125fb98",
+  "repair": "Capture account scope across sticker upload, avatar creation, lookup and pack mutation awaits",
+  "reproducedFailures": 3,
+  "chatFocused": {
+    "passed": 52,
+    "failed": 0
+  },
+  "hostFocused": {
+    "passed": 73,
+    "failed": 0,
+    "skipped": 0,
+    "strictGatePassed": true
+  },
+  "hostAnalysis": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 78
+  },
+  "chatFull": "running; not accepted yet",
+  "candidate73484Held": true,
+  "replacementSignedArtifactVerified": false
+}

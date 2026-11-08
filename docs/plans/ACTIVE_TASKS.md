@@ -1,6 +1,6 @@
 # 当前任务与验收台账
 
-> RELEASE HOLD — 2026-11-07: **73484 must not be delivered**. A new regression reproduces account switching during sticker upload copying the old pack into the replacement account. Canonical Chat repair passes 39 repository tests; full regression, host integration and a new signed candidate remain required.
+> RELEASE HOLD — 2026-11-07: **73484 must not be delivered**. A new regression reproduces account switching during sticker upload copying the old pack into the replacement account. Canonical Chat repair `b3c1dec1` passes 52 repository/persistence tests and is now pinned in the wallet. Host integration passes 73 tests; whole-host analysis exits 0 with 78 infos and no warnings/errors. Full Chat regression is running; a new signed candidate remains required.
 
 > Historical candidate snapshot — 2026-11-07: **73484**, source `7a4d950ae`, Chat `3fc080f1`, is signed/preserved and staged in Transporter, **not uploaded**. Chat full **8,695 pass / four live skips**, strict gate passed; host/package **141 pass**, sticker cluster **67 pass**, two compact-viewport probes pass. IPA gates: **50 package / nine SQLCipher / 14 login checks**, ten model bundles/86 matching files. Exact-source CI **42442481625 is running**. **73481 remains held** and must not be delivered. No rebuild for docs-only version bumps. [Candidate](../releases/testflight-20261107-73484.md).
 
