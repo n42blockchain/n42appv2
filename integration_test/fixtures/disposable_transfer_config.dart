@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Test-only configuration. Never use a production account with this harness.
 class DisposableTransferConfig {
   static const chainId = 313371143;
@@ -7,6 +9,12 @@ class DisposableTransferConfig {
   final String privateKey;
   final String sender;
   final String recipient;
+
+  /// Match the existing wallet import/native signing contract.
+  String get walletPrivateKey => base64Encode([
+    for (var i = 0; i < privateKey.length; i += 2)
+      int.parse(privateKey.substring(i, i + 2), radix: 16),
+  ]);
 
   DisposableTransferConfig.fromJson(Map<String, dynamic> json)
     : rpc = Uri.parse(json['rpc'] is String ? json['rpc'] as String : ''),

@@ -4,11 +4,11 @@
   "implementation": "Opt-in simulator fixture uses production EvmSender and native Trustdart signing, validates chain/genesis/client/zero peers, transaction fields, receipt and exact sender/receiver balance effects",
   "default": "Explicit skipped blocker unless both disposable-wallet and funded-test flags are enabled",
   "configuration_and_quality_tests": {
-    "passed": 22,
+    "passed": 23,
     "failed": 0
   },
   "scoped_analysis": "No issues found",
-  "native_execution": "pending source-bound node build and simulator run",
+  "native_execution": "Attempt 1 failed before signing: fixture raw hex key did not match the existing Base64 wallet key contract; fixture corrected and native rerun pending",
   "acceptance_boundaries": [
     "No actual transfer accepted yet",
     "Not full send-page or public-network acceptance",
@@ -16,7 +16,14 @@
     "73531 candidate unchanged"
   ],
   "logs": {
-    "/tmp/n42-disposable-transfer-quality.log": "48ab82310a759287d5d74f78fb908ad304c292b0442d692f34fe15be980d64a1",
-    "/tmp/n42-disposable-transfer-analysis.log": "b739a61018e2e80aea747e2f25f8aa69ba2a1cc2a89c92b8e6f07bac31a80e53"
+    "/tmp/n42-disposable-transfer-quality.log": "0d1231f95c7bd7df97996e46bcd2e66fcdc23295688fd9aced77d8a0770e648e",
+    "/tmp/n42-disposable-transfer-analysis.log": "f0db56935f78a5a78ff97bff6f7e4917c80f9ab6619c0b6b6515650ba463cc45"
+  },
+  "native_attempt1": {
+    "source": "fb34ebb46",
+    "exit_code": 1,
+    "broadcast_performed": false,
+    "failure": "Fixture private-key encoding",
+    "log_sha256": "3964e8e765fc7761c6ec895bc09638ee4b58f20aa49ae9d07918ae33ef12cb3e"
   }
 }

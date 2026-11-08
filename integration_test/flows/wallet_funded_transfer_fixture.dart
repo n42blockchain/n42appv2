@@ -132,7 +132,7 @@ void registerWalletFundedTransferFixture() {
               decimals: 18,
               path: "m/44'/60'/0'/0/0",
               isTest: true,
-              privateKey: config.privateKey,
+              privateKey: config.walletPrivateKey,
               valueWeiOverride: BigInt.from(1000000),
               chainConfig: {
                 'chainId_test': DisposableTransferConfig.chainId,

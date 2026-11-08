@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../integration_test/fixtures/disposable_transfer_config.dart';
@@ -15,6 +17,10 @@ void main() {
   };
   test('accepts an explicit owned loopback chain', () {
     expect(DisposableTransferConfig.fromJson(valid()).rpc.host, '127.0.0.1');
+  });
+  test('uses the wallet Base64 private-key format for native signing', () {
+    final config = DisposableTransferConfig.fromJson(valid());
+    expect(base64Decode(config.walletPrivateKey), List.filled(32, 0x11));
   });
   for (final rpc in [
     'https://rpc.example.com',
