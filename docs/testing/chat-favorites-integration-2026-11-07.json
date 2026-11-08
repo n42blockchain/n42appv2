@@ -1,0 +1,68 @@
+{
+  "walletSource": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+  "chatRef": "fd953157e1f918ddbcb7101d53902b17efe526a4",
+  "features": [
+    "saved message annotations and search",
+    "account-bound forwarding with acknowledgement/retry",
+    "account-bound deletion"
+  ],
+  "chatFull": {
+    "passed": 8681,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0
+  },
+  "hostFocused": {
+    "passed": 127,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "scope": "host Chat initialization/auth/config/SQLCipher/sticker/dependency contracts and three pinned-package favorite/datasource/persistence suites"
+  },
+  "walletFull": {
+    "passed": 7781,
+    "failed": 0,
+    "skipped": 3,
+    "exitCode": 0,
+    "strictReportGatePassed": true,
+    "coverageHit": 104200,
+    "coverageFound": 141321,
+    "coveragePercent": 73.73284932883294,
+    "coverageThreshold": 70,
+    "coverageGatePassed": true,
+    "reportSha256": "b938ea4b69867388e9ff0b9bda006db24fa0eb328874f3ede5abb1254b1dc192"
+  },
+  "currentSourceCi": {
+    "runId": 42438225917,
+    "source": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+    "status": "in_progress",
+    "confirmedPassed": [
+      "backend/loyalty",
+      "backend/social-auth",
+      "backend/livekit-jwt",
+      "backend/swap",
+      "code analysis",
+      "security scan"
+    ]
+  },
+  "androidNative": {
+    "runId": 42438227855,
+    "source": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+    "suite": "wallet_forms",
+    "status": "in_progress"
+  },
+  "laterDraftRepair": {
+    "chatSource": "af265ed4f762e79ee78652acc5cfd3d55ea4f856",
+    "integratedInWallet": false,
+    "focusedPassed": 70,
+    "scopedAnalysis": "no issues",
+    "fullRegression": "in_progress"
+  },
+  "uploaded73473ContainsThisBatch": false,
+  "remaining": [
+    "CI and Android native terminal results",
+    "later note/link draft repair full regression and wallet integration",
+    "real encrypted-room/profile-entry acceptance",
+    "physical-device acceptance deferred by user"
+  ]
+}
