@@ -32,20 +32,40 @@
     "zero isolated balance/price caches and exact testnet contract"
   ],
   "limitations": [
-    "Secure-storage backend is a controlled Flutter platform fixture. Fresh provider reload is not a device keychain or process restart.",
+    "Host storage tests use a controlled backend. The Android experiment separately uses native storage and a fresh provider in the same process; no process-restart/crash durability claim.",
     "RPC execution uses an owned loopback server, not funded on-chain transfers.",
-    "Exact-source full CI and native installed-wallet end-to-end acceptance remain open.",
+    "The original DApp source CI passed; final combined source 6fea9e38b CI 42490177248 and full Android suite 42491155844 remain running.",
     "Physical-device QA remains deferred by user."
   ],
   "historical_source_hold": "c2411ee59f616840cf1eddfe960d9bf33fd7fe74",
   "native_acceptance": {
-    "run": 42481926728,
-    "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
-    "conclusion": "failure",
-    "observed_failure": "Metadata verification and recognition succeeded, approval sheet appeared, but the test tapped FilledButton during entry animation at y=1080.4 outside a 683.4-high viewport. Flutter logged a missed hit; acknowledgement close timed out.",
-    "next_step": "Wait for the actual approval action to be hit-testable before each dialog interaction, then rerun all native approval/cancel/stale-owner assertions.",
-    "diagnostic_run": 42487753927,
-    "diagnostic_conclusion": "failure"
+    "run": 42489529218,
+    "source": "89c2c331e2771763dff36113d60c8fb93a7bd0ab",
+    "conclusion": "success",
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "missedHitWarnings": 0,
+    "rawLogSha256": "ece57febcbf365801b871fbec3b45be52c42e7d0a4a6d1963bcd783d720e5d7e",
+    "scope": "Owned Android emulator, real BrowserPage/WebView/readonly RPC, explicit approval UI, native wallet storage write and same-process fresh-provider reload. No funded transaction or physical-device acceptance.",
+    "asserted": [
+      "Recognition before approval; no preapproval token write",
+      "Explicit approval persists the selected asset with isolated zero balance/price",
+      "Fresh provider reload retains token metadata",
+      "Cancellation writes nothing",
+      "Account change rejects stale approval without foreign-owner storage",
+      "No RPC auth headers, signing methods or transaction methods",
+      "Owned fixture namespace cleanup and no socket callback errors"
+    ],
+    "previousFailureRecord": {
+      "run": 42481926728,
+      "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
+      "conclusion": "failure",
+      "observed_failure": "Metadata verification and recognition succeeded, approval sheet appeared, but the test tapped FilledButton during entry animation at y=1080.4 outside a 683.4-high viewport. Flutter logged a missed hit; acknowledgement close timed out.",
+      "next_step": "Wait for the actual approval action to be hit-testable before each dialog interaction, then rerun all native approval/cancel/stale-owner assertions.",
+      "diagnostic_run": 42487753927,
+      "diagnostic_conclusion": "failure"
+    }
   },
   "remote_full_tests": {
     "run": 42480307220,
