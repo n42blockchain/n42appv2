@@ -18,6 +18,9 @@ class _BundledStickerRepository implements IStickerRepository {
   Future<List<StickerPack>> getInstalledPacks() async => [pack];
 
   @override
+  Stream<List<StickerPack>> watchInstalledPacks() => Stream.value([pack]);
+
+  @override
   Future<List<RecentSticker>> getRecentStickers({int limit = 20}) async => [];
 
   @override

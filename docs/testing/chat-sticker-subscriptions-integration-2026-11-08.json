@@ -1,0 +1,49 @@
+{
+  "chatRef": "b5f6b5bf8401ae0c07bde88779220faf4caad6bb",
+  "hostParent": "c79ec6cfb2c368da4cc3bd9ebc60bbce29074419",
+  "changes": [
+    "Standard m.image_pack.rooms subscriptions with bounded live room-state resolution",
+    "Separate explicit subscription consent and private-copy installation",
+    "Reference management and unsubscribe without source-room access",
+    "Account-bound picker refresh, recents and preview/dialog clearing",
+    "26-language subscription UI"
+  ],
+  "hostAndResolvedPackageTests": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 0,
+    "tests_failed": 0,
+    "tests_passed": 259,
+    "exitCode": 0,
+    "reportSha256": "711957666157875358b3f7f24ccdea0d97a0799f8ffa9200f3a56213d8f2e5ef"
+  },
+  "currentChatFullRegression": {
+    "source": "b5f6b5bf8401ae0c07bde88779220faf4caad6bb",
+    "errors": 0,
+    "passed": true,
+    "skipped": 7,
+    "tests_failed": 0,
+    "tests_passed": 8933,
+    "exitCode": 0,
+    "reportSha256": "4dc843ae8d178e84847c215a9935acd5d98d0087d28b2d9f63b1fa09992825c3"
+  },
+  "hostAnalysis": {
+    "exitCode": 0,
+    "infos": 78,
+    "warnings": 0,
+    "errors": 0
+  },
+  "localizationAudit": {
+    "exitCode": 0
+  },
+  "canonicalCoveragePreservedSha256": "370033f871ea5c2940be2258d56579de23a90bc2297f08885312a198f9a2c5ec",
+  "publishedBuild": 73486,
+  "publishedBuildContainsChanges": false,
+  "newSignedArtifactBuilt": false,
+  "remaining": [
+    "Exact integrated-source remote CI and native acceptance",
+    "Final-source owned-service fixture revalidation",
+    "New signed artifact and TestFlight release",
+    "Physical-device acceptance deferred by user; production acceptance remains separate"
+  ]
+}
