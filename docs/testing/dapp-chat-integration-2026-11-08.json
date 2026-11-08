@@ -20,7 +20,28 @@
   },
   "scope": "Isolated merge preparation; release branch and preserved signed 73523 remain unchanged.",
   "open": [
-    "Native DApp acceptance run 42487753927 remains in progress.",
-    "Exact merged-source full regression and native acceptance remain open."
-  ]
+    "Native DApp run 42489529218 is still running.",
+    "Exact final integrated-source remote/native acceptance remains open."
+  ],
+  "wholeWallet": {
+    "source": "5e29507e2ec38ce5bacc1f82838d02ac3934f764",
+    "passed": 7846,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 3,
+    "coverage": {
+      "found": 141802,
+      "hit": 104646,
+      "percent": 73.79726661119025,
+      "threshold": 70
+    },
+    "testLogSha256": "a1e2177bcf1cc3c9d1441ea9c7f2ef10e676f3eea0ddd386e6f0a8565d1d65c6",
+    "lcovSha256": "e0f91e23cecc5b36c3a3d3bd0a73379bcc7961736f6d8407372d02d2419f25d0"
+  },
+  "postValidationMerge": {
+    "dappSource": "89c2c331e2771763dff36113d60c8fb93a7bd0ab",
+    "runtimeDiffFiles": [],
+    "scope": "Native fixture hit-target waits and protocol limitation receipt only; product runtime unchanged.",
+    "nativeFixtureAnalysis": "No issues found."
+  }
 }
