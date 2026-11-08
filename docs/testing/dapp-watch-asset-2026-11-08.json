@@ -92,5 +92,12 @@
       "No signing or transaction RPC methods"
     ],
     "verification": "Scoped analysis passes with no issues; native acceptance still pending."
+  },
+  "protocolReview": {
+    "source": "https://eips.ethereum.org/EIPS/eip-747",
+    "verifiedOn": "2026-11-08",
+    "scope": "Legacy ERC20 type only; unsupported asset types fail explicitly.",
+    "returnSemantics": "Valid recognition returns true before user interaction; this does not prove approval or asset persistence.",
+    "remainingRecommendation": "A well-known-token name/symbol collision warning is not implemented. The confirmation shows chain, contract and on-chain symbol/decimals; these do not prove token legitimacy."
   }
 }
