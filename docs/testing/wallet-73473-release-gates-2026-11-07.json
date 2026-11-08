@@ -1,0 +1,65 @@
+{
+  "candidate": "2.5.4+73473",
+  "source": "24ba91cb1712d35fda41fd103851773865574fae",
+  "chatRef": "3e1a57d35f661cab68c74ae3227a60b39af5df11",
+  "ipaSha256": "6850ee6acb38ed75fe888d62c2045d170ef7eacbcae07263dc01b569e6281410",
+  "buildExit": 0,
+  "buildSourceStable": true,
+  "artifactVerified": true,
+  "packageChecks": 50,
+  "chatCryptoChecks": 9,
+  "packagedAuthChecks": 14,
+  "modelBundles": 10,
+  "modelFiles": 86,
+  "modelArchiveAndIpaBytesMatch": true,
+  "chatFull": {
+    "passed": 8660,
+    "failed": 0,
+    "skipped": 4
+  },
+  "hostFocused": {
+    "passed": 34,
+    "failed": 0,
+    "skipped": 0
+  },
+  "walletFull": {
+    "status": "passed",
+    "passed": 7781,
+    "failed": 0,
+    "skipped": 3,
+    "exitCode": 0,
+    "report": "/tmp/n42-wallet73473-full-20261107.jsonl",
+    "coverageHit": 104200,
+    "coverageFound": 141321,
+    "coveragePercent": 73.73284932883294,
+    "coverageThreshold": 70,
+    "coveragePassed": true
+  },
+  "androidNative": {
+    "run": 42430560225,
+    "source": "24ba91cb1712d35fda41fd103851773865574fae",
+    "status": "in progress",
+    "scope": "wallet_forms, not physical-device or live business acceptance"
+  },
+  "priorCi": {
+    "run": 42428371187,
+    "source": "15519c614f130b52987a7bee9d28821a793e934c",
+    "rootTestsStep": "success",
+    "status": "Tests & Coverage success; remaining obsolete-source build/performance jobs superseded by current-source run; cancellation requested",
+    "visiblePassed": 7802,
+    "failed": 0,
+    "skipped": 0,
+    "testResultsArtifact": 13597373763
+  },
+  "currentSourceCi": {
+    "run": 42431321440,
+    "source": "24ba91cb1712d35fda41fd103851773865574fae",
+    "status": "queued/in progress"
+  },
+  "transporterReadyVisible": true,
+  "uploadAccepted": false,
+  "appleProcessingComplete": false,
+  "testerAvailabilityVerified": false,
+  "physicalDeviceQa": "deferred",
+  "status": "Signed package, full local regression and Chat regression passed; current-source remote CI and Android native pending; not uploaded"
+}
