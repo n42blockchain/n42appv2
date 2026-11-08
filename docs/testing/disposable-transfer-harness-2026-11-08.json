@@ -8,12 +8,12 @@
     "failed": 0
   },
   "scoped_analysis": "No issues found",
-  "native_execution": "Attempt 1 failed before signing: fixture raw hex key did not match the existing Base64 wallet key contract; fixture corrected and native rerun pending",
+  "native_execution": "Attempt 2 passed on Android API 36 with production EvmSender/native signing and independent chain receipt/balance verification",
   "acceptance_boundaries": [
-    "No actual transfer accepted yet",
     "Not full send-page or public-network acceptance",
     "No production credentials, funds or RPC used",
-    "73531 candidate unchanged"
+    "73531 candidate unchanged",
+    "Owned standard EVM transaction accepted; Falcon 0x05 and public networks remain separate"
   ],
   "logs": {
     "/tmp/n42-disposable-transfer-quality.log": "0d1231f95c7bd7df97996e46bcd2e66fcdc23295688fd9aced77d8a0770e648e",
@@ -25,5 +25,6 @@
     "broadcast_performed": false,
     "failure": "Fixture private-key encoding",
     "log_sha256": "3964e8e765fc7761c6ec895bc09638ee4b58f20aa49ae9d07918ae33ef12cb3e"
-  }
+  },
+  "native_acceptance_receipt": "disposable-transfer-native-2026-11-08.json"
 }

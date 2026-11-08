@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-08",
+  "wallet_test_source": "200ed36fcab7c57ac6d1998651d66e5adb1e12fc",
+  "node_source": "026896958e94570c98df0fab2ac9417faa38547f",
+  "chain_id": 313371143,
+  "native": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "exit_code": 0
+  },
+  "independent_rpc": {
+    "transaction_hash": "0x71ea74fe529d6547ef60b14bb256c6c6c9d9ae40dd9dfec8bdc6a015d0408130",
+    "block_hash": "0x52da1f5920e3a665ff0828ed4880a777c7fbcc45728ac021c14f587490517159",
+    "block_number": 250,
+    "status": 1,
+    "value_wei": "1000000",
+    "sender_nonce": 1,
+    "recipient_balance_wei": "1000000",
+    "sender_balance_wei": "999999999998706000",
+    "fee_wei": "294000",
+    "balance_equation_verified": true,
+    "canonical_block_verified": true,
+    "sender_address": "0x281d31416f0e839492E09F7DfE61445Ae3893f7b",
+    "recipient_address": "0x22797dCed8F01fFF64DD525272De55060b1Fc53F"
+  },
+  "signing": "Actual production EvmSender and native Trustdart, standard EVM ECDSA transaction",
+  "log_sha256": "3405fa36e07cd70a39dd4901643c3c854d73d469360864d8fe1b42d23b3591f3",
+  "boundaries": [
+    "Owned local four-validator chain and Android API 36 emulator only",
+    "Does not establish Falcon 0x05, public network, full send-page or physical-device acceptance",
+    "Private test credentials and compiled test APK stay outside Git"
+  ],
+  "node_binary_sha256": "ce7a4cf09fe2e811e33325b735644e11ee0dc78c3302ee98b8c585fa07c1d356",
+  "production_sender_sha256": "f9a72d1103525d757755851d7e8e6afe3b44fc5e243a6629fd1b643975cb2cf8"
+}
