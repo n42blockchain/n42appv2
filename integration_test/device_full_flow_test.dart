@@ -432,6 +432,8 @@ Future<void> _exerciseChat(WidgetTester tester) async {
       find.byKey(const ValueKey<String>('chat_login_password')),
       _chatPassword,
     );
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pump(const Duration(milliseconds: 350));
     await _tapKey(tester, 'chat_login_submit');
     await _waitForKey(
       tester,

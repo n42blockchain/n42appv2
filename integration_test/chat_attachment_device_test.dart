@@ -64,9 +64,17 @@ void main() {
           find.byKey(const ValueKey<String>('chat_login_password')),
           _chatPassword,
         );
-        await tester.tap(
-          find.byKey(const ValueKey<String>('chat_login_submit')),
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pump(const Duration(milliseconds: 350));
+        final submit = find.byKey(const ValueKey<String>('chat_login_submit'));
+        await tester.ensureVisible(submit);
+        await tester.pump(const Duration(milliseconds: 150));
+        await _waitFor(
+          tester,
+          submit.hitTestable(),
+          const Duration(seconds: 20),
         );
+        await tester.tap(submit);
         await tester.pump(const Duration(seconds: 1));
         await _waitForKey(
           tester,
@@ -80,6 +88,11 @@ void main() {
         const Duration(seconds: 30),
       );
 
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'Chat login and message list',
+      );
       final conversations = find.byType(ConversationTile);
       await _waitFor(tester, conversations, const Duration(seconds: 60));
       await tester.tap(conversations.first);
@@ -90,6 +103,11 @@ void main() {
         const Duration(seconds: 30),
       );
 
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'Conversation before attachments',
+      );
       final attachmentToggle = find.byKey(
         const ValueKey<String>('chat_input_attachment_toggle'),
       );
@@ -99,7 +117,11 @@ void main() {
       await _waitForKey(tester, 'chat_more_panel', const Duration(seconds: 20));
       await tester.pump(const Duration(seconds: 8));
 
-      expect(tester.takeException(), isNull);
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'Attachment panel after media load',
+      );
       if (Platform.isAndroid) {
         await binding.convertFlutterSurfaceToImage();
         await tester.pump();
