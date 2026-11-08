@@ -44,5 +44,21 @@
     "conclusion": "failure",
     "observed_failure": "Actual BrowserPage loads and provider bridge exists, but asset approval sheet did not appear within bounded wait. RPC/JS failure diagnostics were missing.",
     "next_step": "Rerun with bounded JS result, RPC method list and wallet readiness diagnostics; do not merge as native accepted."
+  },
+  "remote_full_tests": {
+    "run": 42480307220,
+    "source": "609a23f5795c70aa26199d2ae169a0f0a0cbff06",
+    "tests_passed": 7865,
+    "tests_failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "raw_sha256": "46829239736b7f361d1edf7e12209a7595fa11045ed44b38799033c844639070",
+    "coverage": {
+      "found": 141801,
+      "hit": 104996,
+      "percent": 74.0446118151494,
+      "threshold": 70
+    },
+    "scope": "Tests and coverage job passed; complete workflow builds remain running. Native asset acceptance remains failed/pending diagnostics."
   }
 }
