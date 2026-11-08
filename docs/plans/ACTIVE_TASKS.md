@@ -1,3 +1,5 @@
+> Source follow-up — 2026-11-08: wallet now pins Chat `46c92379`, rejecting stale sticker-uninstall receipts after account switches. Host configuration/assets tests: 69 passes; actual resolved Chat repository/native-auth API tests: 86 passes; no failures/skips. Host analysis exits 0. Chat full regression remains running. Real encrypted text/file forwarding passes on the owned loopback service, without production/native UI acceptance. Published 73486 is unchanged.
+
 # 当前任务与验收台账
 
 > Source follow-up — 2026-11-08: wallet now pins Chat `557b800f` for optional image-pack metadata/standard attribution compatibility, preserving legacy author precedence. Chat full regression: 8,704 passes, zero failures/five explicit environment skips; host/package integration: 124 passes; whole-host analysis exits 0 with 78 infos, no warnings/errors. This is source integration for the next release batch, not another TestFlight upload. Published 73486 remains unchanged at Chat b3c1dec1. Android fixture rerun 42450433761 tests its earlier runtime pin and remains pending.
