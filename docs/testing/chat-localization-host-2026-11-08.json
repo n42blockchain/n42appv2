@@ -1,0 +1,63 @@
+{
+  "chat_commit": "856850ef04695135c696ba4347df2b622b821ba5",
+  "resolved_source_files": 859,
+  "source_mismatches": 0,
+  "host_tests": {
+    "passed": 137,
+    "failed": 0,
+    "skipped": 0
+  },
+  "chat_tests": {
+    "passed": 9066,
+    "failed": 0,
+    "skipped": 7,
+    "coverage_percent": 72.66506805363234
+  },
+  "analysis": {
+    "exit_code": 0,
+    "errors": 0,
+    "warnings": 0,
+    "existing_infos": 78
+  },
+  "scope": "Chat attachment localization and system time preference dependency update; no native or business-flow acceptance claim",
+  "excluded_release": "73510",
+  "homograph_review": {
+    "de": {
+      "chatAttachmentCode": "Code is the German computing noun.",
+      "chatAttachmentWhiteboard": "Whiteboard is the German board noun."
+    },
+    "fr": {
+      "chatAttachmentCode": "Code is the French computing noun."
+    },
+    "id": {
+      "chatAttachmentTip": "Tip is an Indonesian gratuity noun."
+    }
+  },
+  "ci_follow_up": {
+    "failed_run": 42483662604,
+    "cause": "Four newly introduced valid homographs lacked reviewed baseline entries.",
+    "fix": "Accept only those four exact locale/key/value entries; leave all other baseline entries and audit rules unchanged."
+  },
+  "previous_chat_commit": "149f567ce6e2de12687ace6266f1dc1b718a04e5",
+  "current_pin_full_ci": "Local whole-wallet regression passes; exact-source remote CI and native acceptance remain open. Running CI 42483939833 belongs to prior source b98b66a1f.",
+  "whole_wallet_local": {
+    "source": "4df679716eaf06aac98d85c310ad694190bf30c0",
+    "passed": 7785,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 3,
+    "skip_names": [
+      "native Falcon page requires host library",
+      "native network suite",
+      "native Falcon suite requires compiled library"
+    ],
+    "coverage": {
+      "found": 141331,
+      "hit": 104210,
+      "percent": 73.73470788432827,
+      "threshold": 70
+    },
+    "test_log_sha256": "683f50166a6fba902cd124156cf907c9fe0087a1651683349a0e43072671ba21",
+    "lcov_sha256": "377dbc0741ec877280282713350215ffd3256fee0a98435156ddad9eba852a5f"
+  }
+}
