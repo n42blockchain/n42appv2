@@ -286,3 +286,10 @@ Server identity/session implementation and deployment remain outstanding.
 - Source fd5fe815c, Chat production pin b6ff2c46: Flutter 3.47.8, JDK 21, `flutter build apk --debug --no-pub --target-platform android-arm64 --dart-define=N42_NATIVE_AUTH_URL=https://n42.world` completed with exit 0 in 107.4 seconds. Artifact build/app/outputs/flutter-apk/app-debug.apk is ai.n42.www 2.5.3 (73274), target SDK 36, 714898505 bytes. SHA-256 29de39c62cd728b71445ac865496189924ad04e2c2951a096e7929a8010eac10. apksigner verify passes. Flutter arm64 and Falcon native libraries are packaged. Debug packaging still contains additional dependency ABIs; this is not a size-optimized release.
 - Chat native API/BLoC suite: 16 pass (/tmp/n42-chat-b155-native.log). Build log: /tmp/n42-wallet-b155-android.log. Existing future built-in-Kotlin migration and Windows Facebook plugin warnings remain; they did not fail this Android build.
 - No installation, real provider login, same-DID Matrix acceptance, release signing, TestFlight upload or production deployment was performed. Native Google activation still needs acceptance before enabling. Earlier release/native acceptance gaps remain open.
+
+### Read-only Matrix registration compatibility check — 2026-11-07
+
+- Public `m.si46.world/_matrix/federation/v1/version` reports Tuwunel 1.9.4.
+- GET `/_synapse/admin/v1/register` returns HTTP 200 with a nonce. The nonce value was not recorded. The shared-secret registration route must not be classified as absent based only on the server implementation name.
+- GET `/_matrix/client/versions` returns HTTP 200 with 27 advertised versions.
+- These public GET checks do not prove authenticated registration, same-DID account reuse, E2EE initialization or native provider acceptance. No account was created and no production setting was changed. Native Google activation remains gated.
