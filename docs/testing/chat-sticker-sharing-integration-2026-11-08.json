@@ -1,0 +1,51 @@
+{
+  "chatRef": "5ec23e95f3e809d7e4cebd6ece357593dd8dc3c1",
+  "hostParent": "8e37803cfbce9c3cc0588d22e5cb6a468aebd88b",
+  "changes": [
+    "Read-only shared Matrix sticker preview and explicit installation",
+    "Reviewed owned-pack publication with joined membership and state permissions",
+    "Content-bound publication receipt recovery and explicit save-failure warning",
+    "26 locale coverage and account/session isolation"
+  ],
+  "hostAndResolvedPackageTests": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 0,
+    "tests_failed": 0,
+    "tests_passed": 169,
+    "exitCode": 0,
+    "reportSha256": "d35b706994547e52eca082a6b42d06f768f9bde0fa28d858b00b1f4ddf49ced2"
+  },
+  "hostAnalysis": {
+    "exitCode": 0,
+    "infos": 78,
+    "warnings": 0,
+    "errors": 0
+  },
+  "parentChatFullRegression": {
+    "source": "e9d10f65a0f72f285a429ce12a4ea1855b5b7400",
+    "testsPassed": 8820,
+    "testsFailed": 0,
+    "skipped": 7,
+    "exitCode": 0
+  },
+  "currentChatFullRegression": {
+    "source": "5ec23e95f3e809d7e4cebd6ece357593dd8dc3c1",
+    "status": "in_progress"
+  },
+  "liveFixture": {
+    "publicationAndReceiptRecovery": true,
+    "receiverAccessPreviewMediaInstallReopenUninstall": true,
+    "disposableAccountsDeactivated": true,
+    "fixtureStopped": true,
+    "sdkCacheAndLifecycleAdapters": true,
+    "physicalOrProductionAcceptance": false
+  },
+  "remaining": [
+    "Standard m.image_pack.rooms live subscriptions",
+    "Exact-source full regression and native acceptance",
+    "New signed artifact and TestFlight release"
+  ],
+  "published73486ContainsChanges": false,
+  "newSignedArtifactBuilt": false
+}
