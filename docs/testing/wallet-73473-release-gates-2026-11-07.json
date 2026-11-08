@@ -38,8 +38,16 @@
   "androidNative": {
     "run": 42430560225,
     "source": "24ba91cb1712d35fda41fd103851773865574fae",
-    "status": "in progress",
-    "scope": "wallet_forms, not physical-device or live business acceptance"
+    "status": "completed",
+    "scope": "wallet_forms, not physical-device or live business acceptance",
+    "conclusion": "success",
+    "passed": 15,
+    "failed": 0,
+    "skipped": 1,
+    "databaseCasesPassed": 4,
+    "artifact": 13597508421,
+    "logSha256": "85a066f326d865badd966740807fd0f493fc172b05a0e9aa42763c064d20352e",
+    "skipReason": "TX-06 requires verified N42 RPC/client provenance and an approved disposable funded account"
   },
   "priorCi": {
     "run": 42428371187,
@@ -61,5 +69,5 @@
   "appleProcessingComplete": false,
   "testerAvailabilityVerified": false,
   "physicalDeviceQa": "deferred",
-  "status": "Signed package, full local regression and Chat regression passed; current-source remote CI and Android native pending; not uploaded"
+  "status": "Signed package, complete local regression, Chat regression and current-source Android native checks passed; full current-source CI pending; not uploaded"
 }
