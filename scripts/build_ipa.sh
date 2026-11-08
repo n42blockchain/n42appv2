@@ -105,6 +105,8 @@ flutter build ipa \
   --build-number="$CURRENT_BUILD_NUMBER" \
   ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
 
+python3 scripts/release/login_build_evidence.py --settings ios/Flutter/Generated.xcconfig --output build/release-evidence/wallet-ipa-login-build.json
+
 echo "=== Fixing objective_c.framework in archive ==="
 ARCHIVE_PATH="build/ios/archive/Runner.xcarchive"
 ARCHIVE_APP="$ARCHIVE_PATH/Products/Applications/Runner.app"
