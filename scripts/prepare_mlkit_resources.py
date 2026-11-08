@@ -7,19 +7,52 @@ from pathlib import Path
 import shutil
 import tempfile
 import urllib.request
+import urllib.error
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+RELEASE_API = 'https://api.github.com/repos/d-date/google-mlkit-swiftpm/releases'
+MAX_BUNDLE_BYTES = 256 * 1024 * 1024
+
+
+def read_response(opener, request, limit):
+    with opener(request, timeout=120) as response:
+        data = response.read(limit + 1)
+    if len(data) > limit:
+        raise ValueError('MLKit download exceeds size limit')
+    return data
+
+
+def download_bundle(name, release, opener):
+    url = f'https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/{name}.bundle.zip'
+    try:
+        return read_response(opener, url, MAX_BUNDLE_BYTES), release
+    except urllib.error.HTTPError as error:
+        if error.code not in (429, 500, 502, 503, 504):
+            raise
+    except urllib.error.URLError:
+        pass
+    if release is None:
+        request = urllib.request.Request(f'{RELEASE_API}/tags/9.0.2', headers={'User-Agent': 'N42-MLKit-resources'})
+        release = json.loads(read_response(opener, request, 2 * 1024 * 1024))
+    filename = f'{name}.bundle.zip'
+    assets = [asset for asset in release['assets'] if asset['name'] == filename]
+    if len(assets) != 1 or type(assets[0]['id']) is not int:
+        raise ValueError(f'Missing unique MLKit release asset: {name}')
+    request = urllib.request.Request(f"{RELEASE_API}/assets/{assets[0]['id']}", headers={
+        'User-Agent': 'N42-MLKit-resources', 'Accept': 'application/octet-stream'})
+    return read_response(opener, request, MAX_BUNDLE_BYTES), release
 
 
 def prepare():
     manifest = json.loads((ROOT / 'ios/NativeDependencies/mlkit-resources.json').read_text())
     output = ROOT / 'ios/MLKitResources'
     output.mkdir(exist_ok=True)
+    release = None
     for name, expected in manifest.items():
-        url = f'https://github.com/d-date/google-mlkit-swiftpm/releases/download/9.0.2/{name}.bundle.zip'
-        with urllib.request.urlopen(url, timeout=120) as response:
-            data = response.read()
+        data, release = download_bundle(name, release, urllib.request.urlopen)
         if hashlib.sha256(data).hexdigest() != expected:
             raise ValueError(f'Checksum mismatch: {name}')
         with tempfile.TemporaryDirectory(dir=output) as temporary:
