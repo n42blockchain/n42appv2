@@ -84,6 +84,14 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
         self.assertIn(target, calls[1])
         self.assertEqual(calls[5][:3], ['flutter', 'test', target])
 
+    def test_asset_suite_prebuilds_actual_target_with_disposable_opt_in(self):
+        result, calls = self.run_helper(chat_fixture=False, suite='watch_asset')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        target = 'integration_test/dapp_watch_asset_device_test.dart'
+        self.assertIn(target, calls[1])
+        self.assertEqual(calls[5][:3], ['flutter', 'test', target])
+        self.assertIn('--dart-define=N42_DISPOSABLE_WALLET_QA=true', calls[5])
+
     def test_chat_layout_requires_owned_fixture_before_build(self):
         result, calls = self.run_helper(chat_fixture=False, suite='chat_layout')
         self.assertEqual(result.returncode, 64)

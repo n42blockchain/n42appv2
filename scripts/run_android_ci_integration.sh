@@ -24,6 +24,9 @@ fi
 if [[ "${N42_NATIVE_SUITE:-all}" == chat_audit ]]; then
   native_prebuild_target=integration_test/chat_audit_device_test.dart
 fi
+if [[ "${N42_NATIVE_SUITE:-all}" == watch_asset ]]; then
+  native_prebuild_target=integration_test/dapp_watch_asset_device_test.dart
+fi
 if [[ "${N42_NATIVE_SUITE:-all}" == browser ]]; then
   native_prebuild_target=integration_test/browser_provider_native_test.dart
 fi
