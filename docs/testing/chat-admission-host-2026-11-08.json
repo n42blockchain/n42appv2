@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-08",
+  "chat_pin": "76b840032da4598483bcd0b727b3c7ba08f2dd7e",
+  "chat_runtime": "26c84ac0",
+  "chat_full": {
+    "passed": 9074,
+    "failed": 0,
+    "environment_skips": 7,
+    "coverage_percent": 72.67852922308134
+  },
+  "resolved_lib_assets": {
+    "checked": 859,
+    "mismatches": 0
+  },
+  "host_and_resolved_admission_tests": {
+    "passed": 149,
+    "failed": 0,
+    "skipped": 0
+  },
+  "host_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "existing_infos": 78
+  },
+  "wallet_import_followup": {
+    "source": "1d787d753",
+    "passed": 29,
+    "failed": 0
+  },
+  "remaining": [
+    "Exact-source full CI and Android native run",
+    "Real provider login, funded testnet transfer and deferred physical QA",
+    "New signed release excludes existing uploaded 73526"
+  ],
+  "logs": {
+    "/tmp/n42-admission-host-tests.jsonl": "0c45afcdb7e01e9d71ccbaecf47a2973076ca73f376cd5be4605d9649116ec8e",
+    "/tmp/n42-admission-host-analysis.log": "7ce87e182ea03430b31b0826cd4087715cd8eb70d0707226544fa1ab180dd6c6",
+    "/tmp/n42-core-wallet-import-regression.log": "252d70e21d7ecef0c0571d2297fc1f575cc195d312b6bafc51b73b5ee2223005"
+  }
+}

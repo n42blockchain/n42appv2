@@ -1,3 +1,5 @@
+> Core flow integration — 2026-11-08: candidate pins Chat `76b84003` (runtime `26c84ac0`) after 9,074 Chat passes, seven environment skips and 72.678529% coverage. All 859 resolved runtime/assets match; host plus resolved admission cluster passes 149 tests without failures/skips. Analysis retains 78 existing infos with no errors/warnings. Includes wallet cloud restore account binding and backup input validation. Exact-source CI/native gates and a new release remain pending. Uploaded 73526 is Apple-processed and ready for internal testing; specific tester access remains unverified. See ../testing/chat-admission-host-2026-11-08.json.
+
 ## Current direction — core user flows (2026-11-08)
 
 This section supersedes pending/running statements in the historical snapshots below.
