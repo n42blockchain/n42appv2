@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-08",
+  "chatRuntimeSource": "99abefb1eeed0ecacbb2143b6fef51d7c88d4ce7",
+  "chatFull": {
+    "counts": {
+      "passed": 9088,
+      "failed": 0,
+      "skipped": 7
+    },
+    "exitCode": 0,
+    "terminalSuccess": true,
+    "coveredLines": 107726,
+    "totalLines": 148170,
+    "coveragePercent": 72.7043261118985
+  },
+  "actualSdkProtocol": {
+    "image": "jevolk/tuwunel@sha256:0e86c6164d6c9f5b60291938eb61ad8395021c37fe58d47a963ea7edddbedaec",
+    "serverVersion": {
+      "name": "Tuwunel",
+      "version": "1.9.4",
+      "compiler": "rustc 1.95.0 (59807616e 2026-04-14)"
+    },
+    "checks": [
+      {
+        "check": "actual Matrix 16 SDK raw challenge and session continuation",
+        "actual": 0,
+        "expected": 0,
+        "passed": true
+      },
+      {
+        "check": "deleted SDK device token invalidated",
+        "actual": 401,
+        "expected": 401,
+        "passed": true
+      }
+    ],
+    "scope": "Actual Matrix SDK deleteDevice wire exchange against disposable Tuwunel 1.9.4; not native UI or production acceptance",
+    "containerRemoved": true,
+    "sdk": "matrix 16.0.1",
+    "clientFix": "99abefb1",
+    "runnerHashes": {
+      "sdk-check.py": "16c7f05b8f6ca3b524803e4af728660eddaac94d31802c841d68eaaddb94aaca",
+      "sdk_uia.dart": "80e502a28362392a93616bdb7327cbf99b00b27e5c8fe1b06ed00124e7082a89"
+    },
+    "credentialFileRemoved": true
+  },
+  "walletHost": {
+    "passed": 95,
+    "failed": 0,
+    "skipped": 0,
+    "resolvedRuntimeAssetsMatched": 859,
+    "lockChanges": "Chat ref and resolved-ref only"
+  },
+  "boundaries": [
+    "Full current-wallet CI pending",
+    "73541 lacks SDK raw-error handling; preserve it but do not upload",
+    "Native UI and real provider acceptance remain separate"
+  ],
+  "logs": {
+    "/tmp/n42-chat-sdk16-device-uia-full.jsonl": "b71aa82595502e83eace1b8662f06a08a4c6bacb931b616e7c22fecaa5a9f39a",
+    "/tmp/n42-chat-sdk16-device-uia-full-lcov.info": "1005bf63606e6f1ef29b77b7e1233a569c046349e2e3dfee6dfb4dd8b217a250",
+    "/tmp/n42-sdk16-device-wallet-regression.log": "07e4540110733c13202cdfe0e55dab759f1a407e09a345f74cbdc10bffe9a1c7"
+  }
+}
