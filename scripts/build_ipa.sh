@@ -107,6 +107,7 @@ flutter build ipa \
 
 echo "=== Fixing objective_c.framework in archive ==="
 ARCHIVE_PATH="build/ios/archive/Runner.xcarchive"
+ARCHIVE_APP="$ARCHIVE_PATH/Products/Applications/Runner.app"
 bash scripts/check_ios_version.sh "$ARCHIVE_PATH/Products/Applications/Runner.app"
 ARCHIVE_OBJ_C="$ARCHIVE_PATH/Products/Applications/Runner.app/Frameworks/objective_c.framework/objective_c"
 ARCHIVE_OBJ_C_PLIST="$ARCHIVE_PATH/Products/Applications/Runner.app/Frameworks/objective_c.framework/Info.plist"
@@ -144,9 +145,18 @@ if [ -f "$ARCHIVE_OBJ_C" ]; then
 
   if [ "$NEEDS_FIX" = true ]; then
     echo "  Re-signing framework..."
-    IDENTITY=$(security find-identity -v -p codesigning | head -1 | sed 's/.*"\(.*\)"/\1/')
+    # Use the archive's signer, not the first unrelated identity in the keychain.
+    IDENTITY=$(codesign --display --verbose=4 "$ARCHIVE_APP" 2>&1 | \
+      sed -n 's/^Authority=//p' | head -1)
+    if [ -z "$IDENTITY" ]; then
+      echo "Cannot identify the archive signing authority." >&2
+      exit 1
+    fi
     codesign --force --sign "$IDENTITY" --preserve-metadata=identifier,entitlements \
       "$ARCHIVE_PATH/Products/Applications/Runner.app/Frameworks/objective_c.framework"
+    # Nested code changes invalidate the containing app's resource seal.
+    codesign --force --sign "$IDENTITY" \
+      --preserve-metadata=identifier,entitlements,requirements,flags "$ARCHIVE_APP"
     echo "  Done!"
   else
     echo "  No fixes needed."
@@ -154,6 +164,9 @@ if [ -f "$ARCHIVE_OBJ_C" ]; then
 else
   echo "  objective_c.framework not found in archive, skipping."
 fi
+
+# Fail before export if the repaired archive or any nested signature is invalid.
+codesign --verify --deep --strict "$ARCHIVE_APP"
 
 echo "=== Exporting IPA ==="
 mkdir -p build/ios/ipa

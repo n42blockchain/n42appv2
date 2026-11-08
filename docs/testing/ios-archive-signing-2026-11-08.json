@@ -1,0 +1,22 @@
+{
+  "problem": "Repaired nested objective_c.framework invalidates the containing archived app resource seal.",
+  "fix": [
+    "Select original archive signing authority instead of first keychain identity.",
+    "Re-sign the containing app after the repaired framework.",
+    "Strictly verify all nested signatures before export."
+  ],
+  "verification": {
+    "bash_syntax_exit": 0,
+    "real_archive_clone_before_verify_exit": 1,
+    "real_archive_clone_after_repair_verify_exit": 0,
+    "app_entitlements_preserved": true,
+    "release_builder_tests_passed": 12,
+    "uploaded_73510_ipa_unchanged": true,
+    "uploaded_73510_ipa_sha256": "6c0f19010f8bb2b33c2d7df67bd36b858c09070fb76f2082fead869284c6e1ec",
+    "repair_log_sha256": "371d71a158b2f7070ab86436c5faea430a057c240fd0e619b11186da1c1f877f"
+  },
+  "limits": [
+    "Verified on a clone of the archived signed app, not a fresh complete build/export.",
+    "Original archive and uploaded IPA were not modified."
+  ]
+}
