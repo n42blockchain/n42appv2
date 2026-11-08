@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-11-08T04:19:53.608776+00:00",
+  "testCommit": "352bf127",
+  "runtimeChatRef": "b3c1dec190427eff1d56f398a8837391f125fb98",
+  "endpointScope": "owned loopback only",
+  "fixtureImage": "jevolk/tuwunel@sha256:0e86c6164d6c9f5b60291938eb61ad8395021c37fe58d47a963ea7edddbedaec",
+  "passed": 1,
+  "failed": 0,
+  "exitCode": 0,
+  "actualAccountDataHttp": true,
+  "managerBoundaryMocked": true,
+  "reopenedStableIds": true,
+  "repeatedEmojiPreserved": true,
+  "renameAndSelectedDeletion": true,
+  "uninstallConfirmed": true,
+  "disposableAccountCleanupPassed": true,
+  "fixtureStopped": true,
+  "logSha256": "48fdc70f68b20959c3b4fed23ba2c1f38fc00e5aebc7c0ae944bc3f8bc47f4aa",
+  "physicalDeviceAcceptance": false,
+  "encryptedRoomAcceptance": false
+}

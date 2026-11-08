@@ -30,5 +30,15 @@
   "candidateVersion": "2.5.4+73486",
   "candidateSource": "557e20e70203fd944253179c53b2120a102e4891",
   "ciRun": 42445681678,
-  "uploaded": false
+  "uploaded": false,
+  "supplementalLoopbackPersistence": {
+    "testCommit": "352bf127",
+    "passed": 1,
+    "failed": 0,
+    "actualAccountDataHttp": true,
+    "managerBoundaryMocked": true,
+    "disposableAccountCleanupPassed": true,
+    "fixtureStopped": true,
+    "nativeAcceptance": false
+  }
 }
