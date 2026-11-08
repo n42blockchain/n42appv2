@@ -227,7 +227,11 @@ void main() {
           child: BrowserPage(pageUrl),
         ),
       );
-      Future<void> waitUntil(bool Function() ready, String reason) async {
+      Future<void> waitUntil(
+        bool Function() ready,
+        String reason, {
+        Future<String> Function()? diagnostics,
+      }) async {
         for (var attempt = 0; attempt < 200; attempt++) {
           await tester.pump(const Duration(milliseconds: 100));
           if (ready()) return;
@@ -235,7 +239,13 @@ void main() {
             () => Future<void>.delayed(const Duration(milliseconds: 50)),
           );
         }
-        expect(ready(), isTrue, reason: reason);
+        expect(
+          ready(),
+          isTrue,
+          reason: diagnostics == null
+              ? reason
+              : '$reason ${await diagnostics()}',
+        );
       }
 
       await waitUntil(
@@ -260,7 +270,7 @@ void main() {
 window.__qaAssetResult = 'pending';
 window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options:{
  address:${jsonEncode(address)},chainId:31337,symbol:'ABC',decimals:18
-}}}).then(function(value){window.__qaAssetResult=value;},function(error){window.__qaAssetResult={code:error.code};});
+}}}).then(function(value){window.__qaAssetResult=value;},function(error){window.__qaAssetResult={code:error.code,message:String(error.message).slice(0,180)};});
 ''');
       Future<Map> persistedTokens() async {
         final all = await storage.getWalletInfo();
@@ -272,6 +282,8 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
       await waitUntil(
         () => find.byType(DAppAssetSuggestionSheet).evaluate().isNotEmpty,
         'Asset approval did not appear.',
+        diagnostics: () async =>
+            'result=${await controller.runJavaScriptReturningResult("JSON.stringify(window.__qaAssetResult)")} rpcMethods=$methods walletReady=${adapter!.isWalletReady}',
       );
       expect(await flag('window.__qaAssetResult === true'), isTrue);
       expect(await persistedTokens(), isEmpty);

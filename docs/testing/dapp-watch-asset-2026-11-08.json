@@ -37,5 +37,12 @@
     "Exact-source full CI and native installed-wallet end-to-end acceptance remain open.",
     "Physical-device QA remains deferred by user."
   ],
-  "historical_source_hold": "c2411ee59f616840cf1eddfe960d9bf33fd7fe74"
+  "historical_source_hold": "c2411ee59f616840cf1eddfe960d9bf33fd7fe74",
+  "native_acceptance": {
+    "run": 42481926728,
+    "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
+    "conclusion": "failure",
+    "observed_failure": "Actual BrowserPage loads and provider bridge exists, but asset approval sheet did not appear within bounded wait. RPC/JS failure diagnostics were missing.",
+    "next_step": "Rerun with bounded JS result, RPC method list and wallet readiness diagnostics; do not merge as native accepted."
+  }
 }
