@@ -41,6 +41,15 @@ class NativeCiSuiteTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout.splitlines(), ['integration_test/browser_provider_native_test.dart'])
 
+    def test_chat_layout_selects_both_real_chat_paths(self):
+        result = self.select('chat_layout')
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.splitlines(), [
+            'integration_test/device_full_flow_test.dart',
+            'integration_test/chat_attachment_device_test.dart',
+            '--dart-define=N42_DISPOSABLE_WALLET_QA=true',
+        ])
+
     def test_unknown_targets_fail_closed(self):
         for value in ['', '../test', 'mlkit; echo unsafe']:
             with self.subTest(value=value):

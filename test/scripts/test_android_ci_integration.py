@@ -77,6 +77,21 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
         self.assertIn(target, calls[1])
         self.assertEqual(calls[5][:3], ['flutter', 'test', target])
 
+    def test_chat_layout_requires_owned_fixture_before_build(self):
+        result, calls = self.run_helper(chat_fixture=False, suite='chat_layout')
+        self.assertEqual(result.returncode, 64)
+        self.assertEqual(len(calls), 1)
+
+    def test_chat_layout_prebuilds_actual_target_and_injects_fixture(self):
+        result, calls = self.run_helper(suite='chat_layout')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('integration_test/device_full_flow_test.dart', calls[1])
+        self.assertEqual(calls[5][:4], ['flutter', 'test',
+            'integration_test/device_full_flow_test.dart',
+            'integration_test/chat_attachment_device_test.dart'])
+        self.assertIn('--dart-define-from-file', calls[5])
+        self.assertIn('--no-uninstall', calls[5])
+
     def test_install_failure_stops_before_grant_and_tests(self):
         result, calls = self.run_helper(fail_install=True)
         self.assertNotEqual(result.returncode, 0)

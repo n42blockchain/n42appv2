@@ -12,9 +12,9 @@ on:
         type: boolean
         default: false
       native_suite:
-        description: Native suite (MLKit includes model download and concurrency)
+        description: Native suite (chat_layout is Android-only; MLKit includes real model downloads)
         type: choice
-        options: [all, mlkit, wallet_forms, browser]
+        options: [all, mlkit, wallet_forms, browser, chat_layout]
         default: all
   push:
     branches: [master, main, develop]
@@ -25,7 +25,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.android_only && '-android-only' || '' }}-${{ inputs.native_suite || 'all' }}
+  group: ${{ github.workflow }}-${{ github.ref }}${{ (inputs.android_only || inputs.native_suite == 'chat_layout') && '-android-only' || '' }}-${{ inputs.native_suite || 'all' }}
   cancel-in-progress: true
 
 defaults:
@@ -38,7 +38,7 @@ env:
 
 jobs:
   unit-tests:
-    if: ${{ !inputs.android_only }}
+    if: ${{ !inputs.android_only && inputs.native_suite != 'chat_layout' }}
     name: Unit Tests
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -85,7 +85,7 @@ jobs:
           retention-days: 14
 
   widget-tests:
-    if: ${{ !inputs.android_only }}
+    if: ${{ !inputs.android_only && inputs.native_suite != 'chat_layout' }}
     name: Widget Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -120,7 +120,7 @@ jobs:
           retention-days: 14
 
   integration-tests:
-    if: ${{ !inputs.android_only }}
+    if: ${{ !inputs.android_only && inputs.native_suite != 'chat_layout' }}
     name: Integration Tests
     runs-on: xcode-27
     timeout-minutes: 120
@@ -213,7 +213,7 @@ jobs:
         run: python3 scripts/prepare_android_emulator.py
 
       - name: Prepare isolated chat fixture
-        if: ${{ env.N42_NATIVE_SUITE == 'all' }}
+        if: ${{ env.N42_NATIVE_SUITE == 'all' || env.N42_NATIVE_SUITE == 'chat_layout' }}
         run: python3 scripts/prepare_native_chat_fixture.py start --output "$RUNNER_TEMP/native-chat-defines.json"
 
       - name: Prefetch checksum-verified Gradle distribution
@@ -233,7 +233,7 @@ jobs:
           script: bash -o pipefail -c "bash scripts/run_android_ci_integration.sh 2>&1 | tee android-integration.log"
 
       - name: Remove isolated chat fixture
-        if: ${{ always() && env.N42_NATIVE_SUITE == 'all' }}
+        if: ${{ always() && (env.N42_NATIVE_SUITE == 'all' || env.N42_NATIVE_SUITE == 'chat_layout') }}
         run: |
           python3 scripts/prepare_native_chat_fixture.py stop
           rm -f "$RUNNER_TEMP/native-chat-defines.json"
@@ -261,7 +261,7 @@ jobs:
           WIDGET_RESULT: ${{ needs.widget-tests.result }}
           IOS_RESULT: ${{ needs.integration-tests.result }}
           ANDROID_RESULT: ${{ needs.integration-tests-android.result }}
-          ANDROID_ONLY: ${{ inputs.android_only || false }}
+          ANDROID_ONLY: ${{ inputs.android_only || inputs.native_suite == 'chat_layout' }}
         run: |
           {
             echo "## Test Results"

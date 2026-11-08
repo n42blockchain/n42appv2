@@ -1,0 +1,51 @@
+{
+  "chatRef": "d4f3201927a3a396822a30df3448d98cfbbab4d4",
+  "hostParent": "fa67238ae099e10ed7ab1a5b288514bc6c5cef08",
+  "changes": [
+    "Defer attachment rendering until the native keyboard exits while retaining panel intent",
+    "Allow empty-chat notice and content to scroll in constrained height",
+    "Add Android-only chat_layout native suite while preserving complete all suite",
+    "Keep complete Android execution budget at 90 minutes after observed 60-minute timeout"
+  ],
+  "hostTests": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 0,
+    "tests_failed": 0,
+    "tests_passed": 323,
+    "sha256": "6554cd329b2ae7389320e56168b2d1d512ea063dea2be9dc5ff5798c4fbe9bc0"
+  },
+  "chatFullTests": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 7,
+    "tests_failed": 0,
+    "tests_passed": 8935,
+    "sha256": "178a575db661ca100403a50854dc39cb7a692e888902e6a5f34830ce97a5247b"
+  },
+  "chatCoverage": {
+    "found": 147505,
+    "hit": 107032,
+    "passed": true,
+    "percent": 72.561608081082,
+    "threshold": 70.0,
+    "sha256": "e31067e38c98bf09283743b5225eb60b6087ee26cb62f7114d5fd34840831679"
+  },
+  "hostAnalysis": {
+    "exitCode": 0,
+    "infos": 78,
+    "warnings": 0,
+    "errors": 0
+  },
+  "scriptTestsPassed": 124,
+  "localizationAuditPassed": true,
+  "heldBuild": 73507,
+  "nativeAcceptance": "pending",
+  "newSignedArtifactBuilt": false,
+  "remaining": [
+    "Exact-source remote CI",
+    "Focused and complete Android native acceptance",
+    "Fresh signed candidate and TestFlight processing/tester access",
+    "Apple web session renewal for version-train verification; physical acceptance remains deferred"
+  ]
+}
