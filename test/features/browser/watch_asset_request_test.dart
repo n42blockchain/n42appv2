@@ -67,6 +67,18 @@ void main() {
       rpc(4902),
     );
   });
+  test(
+    'accepts an explicitly supported network without changing the active one',
+    () {
+      final result = WatchAssetRequest.parse(
+        request({'chainId': 137}),
+        1,
+        supportedChainIds: {1, 137},
+      );
+      expect(result.chainId, 137);
+    },
+  );
+
   test('rejects ambiguous or unsafe chain IDs', () {
     for (final value in ['1', '0x1', 1.0, 0, -1, 9007199254740992]) {
       expect(

@@ -14,7 +14,11 @@ class WatchAssetRequest {
     this.suggestedDecimals,
   });
 
-  factory WatchAssetRequest.parse(List<dynamic> params, int activeChainId) {
+  factory WatchAssetRequest.parse(
+    List<dynamic> params,
+    int activeChainId, {
+    Set<int>? supportedChainIds,
+  }) {
     Never invalid(String message) => throw {'code': -32602, 'message': message};
     if (params.length != 1 || params.single is! Map) {
       invalid('Expected one asset suggestion');
@@ -45,8 +49,11 @@ class WatchAssetRequest {
         requestedChain > 9007199254740991) {
       invalid('Invalid asset chain ID');
     }
-    if (requestedChain != activeChainId) {
-      throw {'code': 4902, 'message': 'Asset chain is not the active network'};
+    if (!(supportedChainIds ?? {activeChainId}).contains(requestedChain)) {
+      throw {
+        'code': 4902,
+        'message': 'Asset chain is not supported by this wallet',
+      };
     }
     final symbol = options['symbol'];
     if (symbol != null &&

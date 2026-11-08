@@ -136,7 +136,17 @@ class DAppRequestHandler {
             'message': 'Asset suggestions are unavailable',
           };
         }
-        final asset = WatchAssetRequest.parse(params, requestChain);
+        final asset = WatchAssetRequest.parse(
+          params,
+          requestChain,
+          supportedChainIds: {
+            for (final model in ethCoinModels)
+              (model.isTest
+                      ? model.coin['chainId_test']
+                      : model.coin['chainId'])
+                  as int,
+          },
+        );
         await suggest(
           asset: asset,
           origin: requestOrigin,
