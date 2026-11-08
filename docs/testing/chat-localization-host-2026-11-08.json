@@ -20,5 +20,22 @@
     "existing_infos": 78
   },
   "scope": "Chat localization dependency update; no native or business-flow acceptance claim",
-  "excluded_release": "73510"
+  "excluded_release": "73510",
+  "homograph_review": {
+    "de": {
+      "chatAttachmentCode": "Code is the German computing noun.",
+      "chatAttachmentWhiteboard": "Whiteboard is the German board noun."
+    },
+    "fr": {
+      "chatAttachmentCode": "Code is the French computing noun."
+    },
+    "id": {
+      "chatAttachmentTip": "Tip is an Indonesian gratuity noun."
+    }
+  },
+  "ci_follow_up": {
+    "failed_run": 42483662604,
+    "cause": "Four newly introduced valid homographs lacked reviewed baseline entries.",
+    "fix": "Accept only those four exact locale/key/value entries; leave all other baseline entries and audit rules unchanged."
+  }
 }
