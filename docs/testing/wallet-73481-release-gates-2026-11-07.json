@@ -76,7 +76,7 @@
   "modelFiles": 86,
   "modelArchiveAndIpaBytesMatch": true,
   "preservedPath": "/Users/jieliu/Documents/n42/n42appv2/build/release-preserved/73481-20261107",
-  "status": "Signed and preserved candidate; current-source full CI pending; not uploaded",
+  "status": "Held for verified sticker identity repair; signed artifact preserved; not uploaded",
   "capabilities": {
     "google_native_code": false,
     "native_oidc_providers": [
@@ -92,5 +92,10 @@
     "legacy_account_migration": false,
     "httpStatus": 200,
     "verifiedAt": "2026-11-07T22:05:31-05:00"
+  },
+  "releaseHold": {
+    "reason": "Confirmed pre-existing sticker persistence data loss: same-emoji entries overwrite and identifiers change",
+    "evidence": "Three failing roundtrip regressions before repair; canonical Chat repair requires full regression and wallet integration",
+    "next": "Include sticker identity repair in the next verified candidate before delivery"
   }
 }
