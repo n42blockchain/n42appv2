@@ -16,6 +16,7 @@ class _Storage extends TestFlutterSecureStoragePlatform {
   _Storage() : super({});
   bool fail = false;
   Future<void> Function()? beforeRead;
+  Future<void> Function()? beforeWrite;
   @override
   Future<String?> read({
     required String key,
@@ -32,6 +33,7 @@ class _Storage extends TestFlutterSecureStoragePlatform {
     required Map<String, String> options,
   }) async {
     if (key == 'walletInfo' && fail) throw StateError('storage unavailable');
+    if (key == 'walletInfo') await beforeWrite?.call();
     await super.write(key: key, value: value, options: options);
   }
 }
@@ -191,6 +193,8 @@ void main() {
       (storedChain('ETH')['testnets'][0]['testnetContract'] as Map).length,
       1,
     );
+    expect(store.coinList.single.coin['contract_test'], contract);
+    expect(store.coinList.single.coin['balance_test'], '0');
   });
   test('EVM chains sharing coinType use their exact chain key', () async {
     parent = CoinModel.fromMap(base(key: 'POLYGON', chain: 137))
@@ -207,6 +211,105 @@ void main() {
     expect(storedChain('ETH')['mainnets'], isEmpty);
     expect((storedChain('POLYGON')['mainnets'] as Map).length, 1);
   });
+  test(
+    'concurrent wallet preference save cannot erase the approved token',
+    () async {
+      final entered = Completer<void>();
+      final release = Completer<void>();
+      var writes = 0;
+      storage.beforeWrite = () async {
+        if (++writes == 1) {
+          entered.complete();
+          await release.future;
+        }
+      };
+      final adding = add();
+      await entered.future;
+      wallet.walletName = 'Renamed while saving';
+      final saving = store.saveWalletInfoOrThrow(wallet, 0);
+      release.complete();
+      await Future.wait([adding, saving]);
+      expect((storedChain('ETH')['mainnets'] as Map).length, 1);
+      final all = jsonDecode(storage.data['walletInfo']!) as Map;
+      expect(
+        all[store.walletDataOwnerUuid]['wallet'][0]['walletName'],
+        'Renamed while saving',
+      );
+    },
+  );
+
+  test(
+    'failed addition is not copied by a concurrent preference save',
+    () async {
+      final entered = Completer<void>();
+      final release = Completer<void>();
+      var writes = 0;
+      storage.beforeWrite = () async {
+        if (++writes == 1) {
+          entered.complete();
+          await release.future;
+          throw StateError('write failed');
+        }
+      };
+      final adding = add();
+      await entered.future;
+      wallet.walletName = 'Renamed';
+      final saving = store.saveWalletInfoOrThrow(wallet, 0);
+      final failed = expectLater(adding, throwsStateError);
+      release.complete();
+      await failed;
+      await saving;
+      expect(storedChain('ETH')['mainnets'], isEmpty);
+      expect(store.coinList, isEmpty);
+    },
+  );
+
+  test(
+    'intentional removal after acknowledgement is not resurrected',
+    () async {
+      await add();
+      (wallet.coinInfo!['ETH']['mainnets'] as Map).clear();
+      await store.saveWalletInfoOrThrow(wallet, 0);
+      expect(storedChain('ETH')['mainnets'], isEmpty);
+    },
+  );
+
+  test('approved asset survives loading a fresh wallet provider', () async {
+    await add();
+    final reopened = WalletActionProvider();
+    try {
+      await reopened.getWalletInfo();
+      final tokens = reopened.walletInfo.coinInfo!['ETH']['mainnets'] as Map;
+      expect(tokens.length, 1);
+      expect(tokens.values.single['contract'], contract);
+      expect(tokens.values.single['decimals'], 18);
+    } finally {
+      reopened.dispose();
+    }
+  });
+
+  test(
+    'a new token never inherits the parent native balance or market price',
+    () async {
+      wallet.coinInfo!['ETH']['baseInfo'].addAll({
+        'balance': '9000000000000000000',
+        'balance_test': '8000000000000000000',
+        'coinPrice': 2000.0,
+        'percentage': 12.0,
+      });
+      storage.data['walletInfo'] = jsonEncode({
+        store.walletDataOwnerUuid: {
+          'index': 0,
+          'wallet': [wallet.toJson()],
+        },
+      });
+      await add();
+      expect(store.coinList.single.balance, BigInt.zero);
+      expect(store.coinList.single.coinPrice, 0);
+      expect(store.coinList.single.value, 0);
+    },
+  );
+
   test(
     'legacy wallet without a timestamp remains supported at its bound index',
     () async {

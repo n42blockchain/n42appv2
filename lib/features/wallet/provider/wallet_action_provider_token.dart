@@ -386,59 +386,81 @@ extension WalletActionProviderToken on WalletActionProvider {
     validate();
     final timestamp = wallet.timestamp;
     final walletUuid = wallet.walletUuid;
-    final token = await SPUtil().updateWalletInfo<Map<String, dynamic>>((all) {
-      validate();
-      final wallets = (all[owner] as Map?)?['wallet'];
-      if (wallets is! List || index < 0 || index >= wallets.length) {
-        throw StateError('Asset owner is no longer stored');
-      }
-      final record = wallets[index] as Map;
-      if (record['timestamp'] != timestamp || record['UUID'] != walletUuid) {
-        throw StateError('Stored wallet identity changed');
-      }
-      final chain = (record['coinInfo'] as Map?)?[chainKey];
-      if (chain is! Map ||
-          chain['isTest'] != testnet ||
-          resolveChainConfigIdOrNull(
-                Map<String, dynamic>.from(chain),
-                isTest: testnet,
-              ) !=
-              chainId) {
-        throw StateError('Stored asset network changed');
-      }
-      final Map tokens;
-      if (testnet) {
-        final networks = chain['testnets'];
-        if (networks is! List || networks.isEmpty || networks.first is! Map) {
-          throw StateError('Missing stored test network');
+    final pendingWrite = (
+      wallet: wallet,
+      owner: owner,
+      index: index,
+      chainKey: chainKey,
+      chainId: chainId,
+      testnet: testnet,
+      contract: contract,
+    );
+    _pendingConfirmedTokenWrites.add(pendingWrite);
+    late final Map<String, dynamic> token;
+    try {
+      token = await SPUtil().updateWalletInfo<Map<String, dynamic>>((all) {
+        validate();
+        final wallets = (all[owner] as Map?)?['wallet'];
+        if (wallets is! List || index < 0 || index >= wallets.length) {
+          throw StateError('Asset owner is no longer stored');
         }
-        tokens = networks.first['testnetContract'] as Map;
-      } else {
-        tokens = chain['mainnets'] as Map;
-      }
-      for (final existing in tokens.values) {
-        if (existing is Map &&
-            existing['contract']?.toString().toLowerCase() ==
-                contract.toLowerCase()) {
-          return Map<String, dynamic>.from(existing);
+        final record = wallets[index] as Map;
+        if (record['timestamp'] != timestamp || record['UUID'] != walletUuid) {
+          throw StateError('Stored wallet identity changed');
         }
-      }
-      final added = Map<String, dynamic>.from(chain['baseInfo'] as Map)
-        ..addAll({
-          'contract': contract,
-          'mKey': contract.toUpperCase(),
-          'name': symbol,
-          'miniName': symbol,
-          'symbol': symbol,
-          'unit': symbol,
-          'decimals': decimals,
-          'customer': true,
-          'isContract': true,
-          'icon': '',
-        });
-      tokens[contract.toUpperCase()] = added;
-      return added;
-    });
+        final chain = (record['coinInfo'] as Map?)?[chainKey];
+        if (chain is! Map ||
+            chain['isTest'] != testnet ||
+            resolveChainConfigIdOrNull(
+                  Map<String, dynamic>.from(chain),
+                  isTest: testnet,
+                ) !=
+                chainId) {
+          throw StateError('Stored asset network changed');
+        }
+        final Map tokens;
+        if (testnet) {
+          final networks = chain['testnets'];
+          if (networks is! List || networks.isEmpty || networks.first is! Map) {
+            throw StateError('Missing stored test network');
+          }
+          tokens = networks.first['testnetContract'] as Map;
+        } else {
+          tokens = chain['mainnets'] as Map;
+        }
+        for (final existing in tokens.values) {
+          if (existing is Map &&
+              existing['contract']?.toString().toLowerCase() ==
+                  contract.toLowerCase()) {
+            return Map<String, dynamic>.from(existing);
+          }
+        }
+        final added = Map<String, dynamic>.from(chain['baseInfo'] as Map)
+          ..addAll({
+            'contract': contract,
+            'contract_test': testnet ? contract : '',
+            'balance': '0',
+            'balance_test': '0',
+            'coinPrice': 0.0,
+            'percentage': 0.0,
+            'canEdit': true,
+            'decimals_verified': true,
+            'mKey': contract.toUpperCase(),
+            'name': symbol,
+            'miniName': symbol,
+            'symbol': symbol,
+            'unit': symbol,
+            'decimals': decimals,
+            'customer': true,
+            'isContract': true,
+            'icon': '',
+          });
+        tokens[contract.toUpperCase()] = added;
+        return added;
+      });
+    } finally {
+      _pendingConfirmedTokenWrites.remove(pendingWrite);
+    }
     validate();
     final chain = walletMap[chainKey] as Map;
     final Map tokens = testnet

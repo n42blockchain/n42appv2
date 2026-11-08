@@ -1,0 +1,41 @@
+{
+  "scope": "DApp legacy ERC20 asset suggestion implementation and storage follow-up",
+  "passed": true,
+  "tests": {
+    "command": "flutter test --no-pub test/core/storage/secure_preferences_test.dart test/features/wallet test/features/browser --reporter json",
+    "passed": 3181,
+    "failed": 0,
+    "skipped": 3,
+    "raw_log": "/tmp/n42-watch-asset-final-reconciled.jsonl"
+  },
+  "analysis": {
+    "command": "flutter analyze --no-pub --no-fatal-infos",
+    "exit_code": 0,
+    "errors": 0,
+    "warnings": 0,
+    "existing_infos": 78
+  },
+  "reproduced_before_fix": [
+    "concurrent preference save erases an approved token",
+    "new token inherits the native-chain cached balance"
+  ],
+  "verified_boundaries": [
+    "atomic storage acknowledgement and failure propagation",
+    "owner/wallet/chain/document changes",
+    "concurrent duplicate requests and contract records",
+    "object and array JavaScript request forms",
+    "recognition before user interaction",
+    "exact-network RPC, bounded responses, redirects rejected and transport errors sanitized",
+    "failed addition does not leak into a concurrent snapshot",
+    "later intentional removal remains effective",
+    "fresh wallet-provider reload retains stored asset",
+    "zero isolated balance/price caches and exact testnet contract"
+  ],
+  "limitations": [
+    "Secure-storage backend is a controlled Flutter platform fixture. Fresh provider reload is not a device keychain or process restart.",
+    "RPC execution uses an owned loopback server, not funded on-chain transfers.",
+    "Exact-source full CI and native installed-wallet end-to-end acceptance remain open.",
+    "Physical-device QA remains deferred by user."
+  ],
+  "historical_source_hold": "c2411ee59f616840cf1eddfe960d9bf33fd7fe74"
+}

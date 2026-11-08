@@ -655,6 +655,17 @@ extension WalletActionProviderWallet on WalletActionProvider {
     final record =
         jsonDecode(jsonEncode(newWalletInfo.toJson())) as Map<String, dynamic>;
     final miningIndex = walletMiningIndex;
+    // A full snapshot captured during an approved token write must not erase
+    // that token when its turn in the storage queue arrives. Capture only
+    // in-flight additions; later intentional removals remain authoritative.
+    final pendingTokens = _pendingConfirmedTokenWrites
+        .where(
+          (pending) =>
+              identical(pending.wallet, newWalletInfo) &&
+              pending.owner == storageUuid &&
+              pending.index == wIndex,
+        )
+        .toList(growable: false);
     await sPUtils.updateWalletInfo<void>((walletAll) {
       final userWallets = walletAll[storageUuid];
       if (userWallets == null) {
@@ -667,6 +678,58 @@ extension WalletActionProviderWallet on WalletActionProvider {
         if (isNewWallet) {
           (userWallets['wallet'] as List).add(record);
         } else {
+          final latest = userWallets['wallet'][wIndex] as Map;
+          if (latest['timestamp'] == record['timestamp'] &&
+              latest['UUID'] == record['UUID']) {
+            for (final pending in pendingTokens) {
+              final latestChain =
+                  (latest['coinInfo'] as Map?)?[pending.chainKey];
+              final snapshotChain =
+                  (record['coinInfo'] as Map?)?[pending.chainKey];
+              if (latestChain is! Map ||
+                  snapshotChain is! Map ||
+                  resolveChainConfigIdOrNull(
+                        Map<String, dynamic>.from(latestChain),
+                        isTest: pending.testnet,
+                      ) !=
+                      pending.chainId ||
+                  resolveChainConfigIdOrNull(
+                        Map<String, dynamic>.from(snapshotChain),
+                        isTest: pending.testnet,
+                      ) !=
+                      pending.chainId) {
+                continue;
+              }
+              Map? bucket(Map chain) {
+                if (!pending.testnet) return chain['mainnets'] as Map?;
+                final networks = chain['testnets'];
+                if (networks is! List ||
+                    networks.isEmpty ||
+                    networks.first is! Map) {
+                  return null;
+                }
+                return networks.first['testnetContract'] as Map?;
+              }
+
+              final storedTokens = bucket(latestChain);
+              final snapshotTokens = bucket(snapshotChain);
+              if (storedTokens == null || snapshotTokens == null) continue;
+              for (final entry in storedTokens.entries) {
+                final token = entry.value;
+                if (token is Map &&
+                    token['contract']?.toString().toLowerCase() ==
+                        pending.contract.toLowerCase() &&
+                    !snapshotTokens.values.any(
+                      (value) =>
+                          value is Map &&
+                          value['contract']?.toString().toLowerCase() ==
+                              pending.contract.toLowerCase(),
+                    )) {
+                  snapshotTokens[entry.key] = Map<String, dynamic>.from(token);
+                }
+              }
+            }
+          }
           userWallets['wallet'][wIndex] = record;
         }
         userWallets['index'] = wIndex;
