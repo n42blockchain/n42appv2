@@ -50,6 +50,11 @@ class NativeCiSuiteTest(unittest.TestCase):
             '--dart-define=N42_DISPOSABLE_WALLET_QA=true',
         ])
 
+    def test_chat_audit_selects_actual_device_fixture_without_credentials(self):
+        result = self.select('chat_audit')
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.splitlines(), ['integration_test/chat_audit_device_test.dart'])
+
     def test_unknown_targets_fail_closed(self):
         for value in ['', '../test', 'mlkit; echo unsafe']:
             with self.subTest(value=value):

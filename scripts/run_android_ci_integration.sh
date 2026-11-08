@@ -21,6 +21,9 @@ native_prebuild_target=integration_test/chat_scanner_camera_device_test.dart
 if [[ "${N42_NATIVE_SUITE:-all}" == chat_layout ]]; then
   native_prebuild_target=integration_test/device_full_flow_test.dart
 fi
+if [[ "${N42_NATIVE_SUITE:-all}" == chat_audit ]]; then
+  native_prebuild_target=integration_test/chat_audit_device_test.dart
+fi
 if [[ "${N42_NATIVE_SUITE:-all}" == browser ]]; then
   native_prebuild_target=integration_test/browser_provider_native_test.dart
 fi

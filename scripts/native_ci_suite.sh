@@ -5,6 +5,7 @@ case "${N42_NATIVE_SUITE:-all}" in
   chat_layout) native_test_args=(integration_test/device_full_flow_test.dart
     integration_test/chat_attachment_device_test.dart
     --dart-define=N42_DISPOSABLE_WALLET_QA=true) ;;
+  chat_audit) native_test_args=(integration_test/chat_audit_device_test.dart) ;;
   browser) native_test_args=(integration_test/browser_provider_native_test.dart) ;;
   mlkit) native_test_args=(integration_test/mlkit_native_smoke_test.dart
     --dart-define=N42_MLKIT_DOWNLOAD_MODEL=true) ;;
