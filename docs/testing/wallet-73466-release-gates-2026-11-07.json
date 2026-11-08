@@ -46,7 +46,9 @@
   "currentFullCi": {
     "run": 42425633295,
     "source": "5d3730e3c88281f339c5eeef21a4b8e0b4429f3f",
-    "status": "in progress; analysis/security/four backend modules passed; tests/coverage running"
+    "status": "in progress; root Run tests with coverage failed; Chat suite still running; failure artifact pending",
+    "rootTestsStep": "failure",
+    "failureCause": "not yet established; local machine report passes the same quality gate"
   },
   "supersededFullCi": {
     "run": 42422731742,
@@ -62,5 +64,12 @@
     "73453",
     "73464"
   ],
-  "status": "Package, full local regression and current-source Android native gates passed; full CI pending; not uploaded"
+  "status": "HELD: remote root test step failed; cause unresolved. Local regression, packaged crypto and Android native checks passed; not uploaded",
+  "hostChatDatabases": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Five existing Chat archive/migration/media database suites under the wallet package configuration and SQLCipher hook; synthetic temporary data, not installed-user continuity",
+    "report": "build/release-evidence/wallet-73466-host-chat-databases.json"
+  }
 }
