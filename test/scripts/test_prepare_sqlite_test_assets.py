@@ -63,6 +63,12 @@ class SqliteAssetsTest(unittest.TestCase):
             assets.prepare(self.root)
         self.assertEqual(target.read_bytes(), self.data['sqlite3'])
 
+    def test_project_without_sqlite_needs_no_native_asset(self):
+        (self.root / '.dart_tool/package_config.json').write_text(json.dumps({'packages': []}))
+        with patch.object(assets, 'fetch', side_effect=AssertionError('no SQLite dependency')):
+            self.assertIsNone(assets.prepare(self.root))
+        self.assertFalse((self.root / '.dart_tool/hooks_runner').exists())
+
     def test_missing_release_asset_fails_closed(self):
         with patch.object(assets, 'fetch', return_value=b'{"assets": []}'):
             with self.assertRaisesRegex(ValueError, 'unique release asset'):

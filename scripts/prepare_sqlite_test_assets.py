@@ -31,7 +31,10 @@ def prepare(root):
     root = root.resolve()
     config = (root / '.dart_tool/package_config.json').resolve()
     packages = json.loads(config.read_text())['packages']
-    package = next(p for p in packages if p['name'] == 'sqlite3')
+    package = next((p for p in packages if p['name'] == 'sqlite3'), None)
+    if package is None:
+        print('No sqlite3 dependency; no test assets required')
+        return
     uri = urlparse(urljoin(config.as_uri(), package['rootUri']))
     if uri.scheme != 'file':
         raise ValueError('sqlite3 must resolve locally')
