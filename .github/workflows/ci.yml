@@ -103,6 +103,8 @@ jobs:
   # 单元测试与覆盖率
   # ============================================
   test:
+    permissions:
+      contents: read
     name: 🧪 Tests & Coverage
     runs-on: ubuntu-latest
     needs: analyze
@@ -133,13 +135,20 @@ jobs:
               print(f'{name}: {actual}')
           PY_OVERRIDES
 
+      - name: Resolve mining example dependencies
+        run: cd plugins/flutter_mining/example && flutter pub get
+
       - name: Prefetch checksum-verified Linux SQLite test assets
-        run: python3 scripts/prepare_sqlite_test_assets.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/prepare_sqlite_test_assets.py
+          python3 scripts/prepare_sqlite_test_assets.py --root plugins/flutter_mining/example
 
       - name: Test active local plugins
         run: |
           flutter test plugins/flutter_mining/test/
-          (cd plugins/flutter_mining/example && flutter pub get && python3 ../../../scripts/prepare_sqlite_test_assets.py && flutter test test/)
+          (cd plugins/flutter_mining/example && flutter test test/)
           flutter test packages/webview_flutter_wkwebview/test/
 
       - name: Build and test native Falcon signing
@@ -194,11 +203,17 @@ jobs:
         run: |
           cd "$CHAT_TEST_ROOT"
           flutter pub get
-          python3 "$GITHUB_WORKSPACE/scripts/prepare_sqlite_test_assets.py" --root "$CHAT_TEST_ROOT"
+
+      - name: Prefetch resolved Chat native assets
+        id: chat_assets
+        if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/prepare_sqlite_test_assets.py --root "$CHAT_TEST_ROOT"
 
       - name: Build resolved Chat native crypto for Linux tests
         id: chat_crypto
-        if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
+        if: ${{ always() && steps.chat_assets.outcome == 'success' }}
         run: |
           python3 scripts/prepare_chat_native_crypto.py \
             --chat-root "$CHAT_TEST_ROOT" \
@@ -379,6 +394,8 @@ jobs:
   # 性能回归检测
   # ============================================
   performance:
+    permissions:
+      contents: read
     name: ⚡ Performance Regression
     runs-on: ubuntu-latest
     needs: test
@@ -397,6 +414,8 @@ jobs:
         run: flutter pub get
 
       - name: Prefetch checksum-verified Linux SQLite test assets
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_sqlite_test_assets.py
 
       - name: Create benchmark results directory
@@ -492,6 +511,8 @@ jobs:
         run: python3 scripts/prepare_ci_firebase.py
 
       - name: Prefetch checksum-verified Gradle distribution
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_gradle_test_distribution.py
 
       - name: Build APK (Debug)
@@ -515,6 +536,8 @@ jobs:
   # iOS 构建验证
   # ============================================
   build-ios:
+    permissions:
+      contents: read
     name: 🍎 Build iOS
     runs-on: xcode-27
     needs: [test, security]
@@ -547,6 +570,8 @@ jobs:
         run: python3 scripts/test_mlkit_notifications.py
 
       - name: Prepare checksum-pinned MLKit models
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_mlkit_resources.py
 
       - name: Build iOS (no codesign)

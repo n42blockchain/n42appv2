@@ -10,7 +10,8 @@ import os
 from pathlib import Path
 import re
 import tempfile
-from urllib.request import Request, urlopen
+from urllib.request import Request
+from release_http import urlopen
 
 from download_retry import retry_download
 

@@ -40,14 +40,14 @@ class MlkitResourcesTest(unittest.TestCase):
             'Models': hashlib.sha256(data).hexdigest()}))
 
     def test_canonical_download_retains_checksum_and_extracts_bundle(self):
-        with patch.object(mlkit.urllib.request, 'urlopen', return_value=io.BytesIO(self.data)):
+        with patch.object(mlkit.release_http, 'urlopen', return_value=io.BytesIO(self.data)):
             mlkit.prepare()
         self.assertEqual((self.root / 'ios/MLKitResources/Models.bundle/model.bin').read_bytes(), b'model fixture')
 
     def test_504_uses_official_api_and_checks_same_manifest(self):
         metadata = json.dumps({'assets': [{'name': 'Models.bundle.zip', 'id': 99}]}).encode()
         failure = HTTPError('https://github.com/test', 504, 'timeout', {}, None)
-        with patch.object(mlkit.urllib.request, 'urlopen', side_effect=[failure, io.BytesIO(metadata), io.BytesIO(self.data)]) as opener:
+        with patch.object(mlkit.release_http, 'urlopen', side_effect=[failure, io.BytesIO(metadata), io.BytesIO(self.data)]) as opener:
             mlkit.prepare()
         self.assertEqual(opener.call_args_list[-1].args[0].full_url, mlkit.RELEASE_API + '/assets/99')
         self.assertTrue((self.root / 'ios/MLKitResources/Models.bundle/model.bin').is_file())
@@ -56,27 +56,27 @@ class MlkitResourcesTest(unittest.TestCase):
         old = self.root / 'ios/MLKitResources/Models.bundle/model.bin'
         old.parent.mkdir(parents=True)
         old.write_bytes(b'previous model')
-        with patch.object(mlkit.urllib.request, 'urlopen', return_value=io.BytesIO(b'504 error page')):
+        with patch.object(mlkit.release_http, 'urlopen', return_value=io.BytesIO(b'504 error page')):
             with self.assertRaisesRegex(ValueError, 'Checksum mismatch'):
                 mlkit.prepare()
         self.assertEqual(old.read_bytes(), b'previous model')
 
     def test_missing_api_asset_fails_closed(self):
         failure = HTTPError('https://github.com/test', 504, 'timeout', {}, None)
-        with patch.object(mlkit.urllib.request, 'urlopen', side_effect=[failure, io.BytesIO(b'{"assets": []}')]):
+        with patch.object(mlkit.release_http, 'urlopen', side_effect=[failure, io.BytesIO(b'{"assets": []}')]):
             with self.assertRaisesRegex(ValueError, 'unique MLKit'):
                 mlkit.prepare()
 
     def test_verified_archive_still_rejects_path_traversal(self):
         data = self.archive('../escape', b'bad')
         self.write_manifest(data)
-        with patch.object(mlkit.urllib.request, 'urlopen', return_value=io.BytesIO(data)):
+        with patch.object(mlkit.release_http, 'urlopen', return_value=io.BytesIO(data)):
             with self.assertRaisesRegex(ValueError, 'Unsafe archive path'):
                 mlkit.prepare()
         self.assertFalse((self.root / 'ios/escape').exists())
 
     def test_404_is_not_silently_replaced(self):
-        with patch.object(mlkit.urllib.request, 'urlopen', side_effect=HTTPError('https://github.com/test', 404, 'missing', {}, None)) as opener:
+        with patch.object(mlkit.release_http, 'urlopen', side_effect=HTTPError('https://github.com/test', 404, 'missing', {}, None)) as opener:
             with self.assertRaises(HTTPError):
                 mlkit.prepare()
         self.assertEqual(opener.call_count, 1)
@@ -84,7 +84,7 @@ class MlkitResourcesTest(unittest.TestCase):
     def test_api_payload_cannot_bypass_manifest_hash(self):
         failure = HTTPError('https://github.com/test', 504, 'timeout', {}, None)
         metadata = json.dumps({'assets': [{'name': 'Models.bundle.zip', 'id': 99}]}).encode()
-        with patch.object(mlkit.urllib.request, 'urlopen', side_effect=[failure, io.BytesIO(metadata), io.BytesIO(b'bad archive')]):
+        with patch.object(mlkit.release_http, 'urlopen', side_effect=[failure, io.BytesIO(metadata), io.BytesIO(b'bad archive')]):
             with self.assertRaisesRegex(ValueError, 'Checksum mismatch'):
                 mlkit.prepare()
         self.assertFalse((self.root / 'ios/MLKitResources/Models.bundle').exists())
@@ -98,14 +98,14 @@ class MlkitResourcesTest(unittest.TestCase):
             archive.writestr(info, '../outside')
         data = output.getvalue()
         self.write_manifest(data)
-        with patch.object(mlkit.urllib.request, 'urlopen', return_value=io.BytesIO(data)):
+        with patch.object(mlkit.release_http, 'urlopen', return_value=io.BytesIO(data)):
             with self.assertRaisesRegex(ValueError, 'Archive symlink'):
                 mlkit.prepare()
 
     def test_api_metadata_and_asset_recover_after_transient_errors(self):
         metadata = json.dumps({'assets': [{'name': 'Models.bundle.zip', 'id': 99}]}).encode()
         errors = lambda: HTTPError('https://test', 504, 'timeout', {}, None)
-        with patch.object(mlkit.urllib.request, 'urlopen', side_effect=[errors(), errors(), io.BytesIO(metadata), errors(), io.BytesIO(self.data)]), patch('download_retry.time.sleep') as sleep:
+        with patch.object(mlkit.release_http, 'urlopen', side_effect=[errors(), errors(), io.BytesIO(metadata), errors(), io.BytesIO(self.data)]), patch('download_retry.time.sleep') as sleep:
             mlkit.prepare()
         self.assertEqual(sleep.call_count, 2)
         self.assertEqual((self.root / 'ios/MLKitResources/Models.bundle/model.bin').read_bytes(), b'model fixture')

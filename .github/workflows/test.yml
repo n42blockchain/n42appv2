@@ -150,6 +150,8 @@ jobs:
         run: python3 scripts/prepare_ci_firebase.py
 
       - name: Prepare checksum-pinned MLKit models
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_mlkit_resources.py
 
       - name: Run iOS Simulator
@@ -217,6 +219,8 @@ jobs:
         run: python3 scripts/prepare_native_chat_fixture.py start --output "$RUNNER_TEMP/native-chat-defines.json"
 
       - name: Prefetch checksum-verified Gradle distribution
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_gradle_test_distribution.py
 
       - name: Run Android Emulator

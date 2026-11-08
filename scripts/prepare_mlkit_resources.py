@@ -8,6 +8,7 @@ import shutil
 import tempfile
 import urllib.request
 import urllib.error
+import release_http
 import zipfile
 
 from download_retry import retry_download
@@ -54,7 +55,7 @@ def prepare():
     output.mkdir(exist_ok=True)
     release = None
     for name, expected in manifest.items():
-        data, release = download_bundle(name, release, urllib.request.urlopen)
+        data, release = download_bundle(name, release, release_http.urlopen)
         if hashlib.sha256(data).hexdigest() != expected:
             raise ValueError(f'Checksum mismatch: {name}')
         with tempfile.TemporaryDirectory(dir=output) as temporary:
