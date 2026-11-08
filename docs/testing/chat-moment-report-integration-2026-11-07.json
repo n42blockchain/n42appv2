@@ -1,0 +1,36 @@
+{
+  "chatRef": "3e1a57d35f661cab68c74ae3227a60b39af5df11",
+  "entryPoints": [
+    "moment detail",
+    "feed action menu",
+    "video sidebar",
+    "detail comment long press"
+  ],
+  "chatFull": {
+    "passed": 8660,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0
+  },
+  "reportClusterPassed": 73,
+  "hostFocused": {
+    "passed": 34,
+    "failed": 0,
+    "skipped": 0
+  },
+  "previousHostFull": {
+    "source": "f1a17f8a6651bf5305f0e230cbf87bcd6862622a",
+    "passed": 7781,
+    "failed": 0,
+    "skipped": 3,
+    "coverageHit": 104200,
+    "coverageFound": 141321,
+    "coveragePercent": 73.73284932883294
+  },
+  "remaining": [
+    "Current integrated source remote CI",
+    "Moderator receipt and action",
+    "Physical device acceptance"
+  ],
+  "candidate73466ContainsThisChange": false
+}
