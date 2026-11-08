@@ -285,20 +285,24 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
             as Map;
       }
 
+      final sheet = find.byType(DAppAssetSuggestionSheet);
+      final approvalButton = find.descendant(
+        of: sheet,
+        matching: find.byType(FilledButton),
+      );
+      // A mounted bottom sheet may still be below the viewport during entry.
+      // Wait for the actual action to receive pointer input before tapping it.
       await suggest(_contract);
       await waitUntil(
-        () => find.byType(DAppAssetSuggestionSheet).evaluate().isNotEmpty,
+        () => approvalButton.hitTestable().evaluate().isNotEmpty,
         'Asset approval did not appear.',
         diagnostics: () async =>
             'result=${await controller.runJavaScriptReturningResult("JSON.stringify(window.__qaAssetResult)")} rpcMethods=$methods replies=$replies fixtureErrors=$fixtureErrors walletReady=${adapter!.isWalletReady}',
       );
       expect(await flag('window.__qaAssetResult === true'), isTrue);
       expect(await persistedTokens(), isEmpty);
-      final sheet = find.byType(DAppAssetSuggestionSheet);
       expect(find.text('Owned EVM (31337)'), findsOneWidget);
-      await tester.tap(
-        find.descendant(of: sheet, matching: find.byType(FilledButton)),
-      );
+      await tester.tap(approvalButton);
       await waitUntil(
         () => find.byType(DAppAssetSuggestionSheet).evaluate().isEmpty,
         'Acknowledged asset approval did not close.',
@@ -322,7 +326,7 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
       }
       await suggest(_cancelledContract);
       await waitUntil(
-        () => find.byType(DAppAssetSuggestionSheet).evaluate().isNotEmpty,
+        () => approvalButton.hitTestable().evaluate().isNotEmpty,
         'Cancellation preview did not appear.',
       );
       await tester.tap(find.text(S.current.g_key_79));
@@ -334,16 +338,11 @@ window.ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options
       expect((await persistedTokens()).length, 1);
       await suggest(_cancelledContract);
       await waitUntil(
-        () => find.byType(DAppAssetSuggestionSheet).evaluate().isNotEmpty,
+        () => approvalButton.hitTestable().evaluate().isNotEmpty,
         'Account-bound preview did not appear.',
       );
       AppGlobals.userInfo = otherIdentity;
-      await tester.tap(
-        find.descendant(
-          of: find.byType(DAppAssetSuggestionSheet),
-          matching: find.byType(FilledButton),
-        ),
-      );
+      await tester.tap(approvalButton);
       await waitUntil(
         () => find
             .byKey(const ValueKey('asset-save-error'))

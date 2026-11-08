@@ -42,9 +42,9 @@
     "run": 42481926728,
     "source": "df83c413b5eff72ed4de272e6ae3ae39f0203ff7",
     "conclusion": "failure",
-    "observed_failure": "RPC callback recorded FlutterError before sending eth_chainId response; the client then reported FormatException. GET responses completed, wallet readiness and bridge passed.",
-    "next_step": "Move RPC assertions out of socket callbacks into the test body, retain auth/contract checks, and rerun the actual native workflow.",
-    "diagnostic_run": 42485869555,
+    "observed_failure": "Metadata verification and recognition succeeded, approval sheet appeared, but the test tapped FilledButton during entry animation at y=1080.4 outside a 683.4-high viewport. Flutter logged a missed hit; acknowledgement close timed out.",
+    "next_step": "Wait for the actual approval action to be hit-testable before each dialog interaction, then rerun all native approval/cancel/stale-owner assertions.",
+    "diagnostic_run": 42487753927,
     "diagnostic_conclusion": "failure"
   },
   "remote_full_tests": {
@@ -99,5 +99,10 @@
     "scope": "Legacy ERC20 type only; unsupported asset types fail explicitly.",
     "returnSemantics": "Valid recognition returns true before user interaction; this does not prove approval or asset persistence.",
     "remainingRecommendation": "A well-known-token name/symbol collision warning is not implemented. The confirmation shows chain, contract and on-chain symbol/decimals; these do not prove token legitimacy."
+  },
+  "native_animation_wait_fix": {
+    "change": "All three approval-preview waits require a hit-testable FilledButton, preserving complete scenario assertions.",
+    "analysis": "No issues found.",
+    "scope": "Test synchronization only; no product persistence change."
   }
 }
