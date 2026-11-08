@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class AndroidCiIntegrationTest(unittest.TestCase):
-    def run_helper(self, *, ci='true', emulator='1', fail_install=False, free_kb='9000000'):
+    def run_helper(self, *, ci='true', emulator='1', fail_install=False, free_kb='9000000', chat_fixture=True):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             log = root / 'calls'
@@ -31,8 +31,14 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
  sys.exit(1)
 ''')
                 tool.chmod(0o700)
+            fixture = root / 'chat-defines.json'
+            fixture.write_text('{}')
             env = dict(os.environ, CI=ci, EMULATOR=emulator,
                        FAIL_INSTALL=str(int(fail_install)), CALL_LOG=str(log), FREE_KB=free_kb)
+            if chat_fixture:
+                env['N42_NATIVE_CHAT_DEFINES'] = str(fixture)
+            else:
+                env.pop('N42_NATIVE_CHAT_DEFINES', None)
             env['PATH'] = str(root) + os.pathsep + env['PATH']
             result = subprocess.run(['bash', str(ROOT / 'scripts/run_android_ci_integration.sh')],
                                     env=env, cwd=root, capture_output=True, text=True)
@@ -49,6 +55,12 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
         result, calls = self.run_helper(emulator='0')
         self.assertEqual(result.returncode, 64)
         self.assertEqual(len(calls), 1)
+
+    def test_complete_suite_without_chat_fixture_fails_before_build(self):
+        result, calls = self.run_helper(chat_fixture=False)
+        self.assertEqual(result.returncode, 64)
+        self.assertIn('owned chat fixture', result.stderr)
+        self.assertFalse(any(call[0] == 'flutter' for call in calls))
 
     def test_prepares_grant_before_preserving_full_test_suite(self):
         result, calls = self.run_helper()

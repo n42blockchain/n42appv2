@@ -212,6 +212,10 @@ jobs:
       - name: Prepare emulator packages with bounded retries
         run: python3 scripts/prepare_android_emulator.py
 
+      - name: Prepare isolated chat fixture
+        if: ${{ env.N42_NATIVE_SUITE == 'all' }}
+        run: python3 scripts/prepare_native_chat_fixture.py start --output "$RUNNER_TEMP/native-chat-defines.json"
+
       - name: Run Android Emulator
         env:
           WALLET_CORE_USER: ${{ secrets.WALLET_CORE_USER || github.actor }}
@@ -224,6 +228,12 @@ jobs:
           profile: Nexus 6
           disk-size: 16G
           script: bash -o pipefail -c "bash scripts/run_android_ci_integration.sh 2>&1 | tee android-integration.log"
+
+      - name: Remove isolated chat fixture
+        if: ${{ always() && env.N42_NATIVE_SUITE == 'all' }}
+        run: |
+          python3 scripts/prepare_native_chat_fixture.py stop
+          rm -f "$RUNNER_TEMP/native-chat-defines.json"
 
       - name: Preserve test results
         if: always()

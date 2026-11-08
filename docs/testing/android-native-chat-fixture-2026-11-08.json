@@ -1,0 +1,21 @@
+{
+  "run": 42446502945,
+  "source": "d2ca479130a9f5a850310cf2daa15d198fdf3a04",
+  "passed": 45,
+  "failed": 2,
+  "skipped": 3,
+  "accepted": false,
+  "failures": [
+    "DEVICE-01: missing N42_E2E_CHAT_USERNAME before login",
+    "CHAT-DEVICE: missing N42_E2E_CHAT_USERNAME before login"
+  ],
+  "logSha256": "62435e0beeb8037c3f419b3e2472bee705e78ae181b894b0eee9f4f81a5245b0",
+  "repair": "Seed owned loopback Matrix fixture; pass private define file; fill normal server field; cleanup container and define file",
+  "localFixtureVerification": {
+    "passwordLoginHttpStatus": 200,
+    "joinedRoomCount": 1,
+    "privateDefinesMode": "0600",
+    "cleanupPassed": true
+  },
+  "rerunRequired": true
+}

@@ -14,6 +14,7 @@ import 'package:n42_wallet/main.dart' as app;
 
 const _chatUsername = String.fromEnvironment('N42_E2E_CHAT_USERNAME');
 const _chatPassword = String.fromEnvironment('N42_E2E_CHAT_PASSWORD');
+const _chatHomeserver = String.fromEnvironment('N42_E2E_CHAT_HOMESERVER');
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,12 @@ void main() {
         chatState = 'chat_login_page';
       }
       if (chatState == 'chat_login_page') {
+        if (_chatHomeserver.isNotEmpty) {
+          await tester.enterText(
+            find.byKey(const ValueKey<String>('chat_login_server')),
+            _chatHomeserver,
+          );
+        }
         expect(
           _chatUsername,
           isNotEmpty,

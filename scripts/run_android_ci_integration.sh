@@ -10,6 +10,13 @@ if [[ "$(adb shell getprop ro.kernel.qemu | tr -d '\r')" != "1" ]]; then
   echo 'Refusing to prepare a non-emulator Android device.' >&2
   exit 64
 fi
+if [[ "${N42_NATIVE_SUITE:-all}" == all ]]; then
+  if [[ -z "${N42_NATIVE_CHAT_DEFINES:-}" || ! -f "$N42_NATIVE_CHAT_DEFINES" ]]; then
+    echo 'The complete suite requires the owned chat fixture define file.' >&2
+    exit 64
+  fi
+  native_test_args+=(--dart-define-from-file "$N42_NATIVE_CHAT_DEFINES")
+fi
 flutter build apk --debug --no-pub \
   --target integration_test/chat_scanner_camera_device_test.dart
 apk_bytes=$(wc -c < build/app/outputs/flutter-apk/app-debug.apk)
