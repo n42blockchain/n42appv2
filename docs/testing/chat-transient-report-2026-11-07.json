@@ -1,0 +1,19 @@
+{
+  "chatRef": "d2f7809d4545e60d847ebed41d54820b88487a9c",
+  "reproducedBeforeFix": true,
+  "focusedPassed": 75,
+  "full": {
+    "passed": 8651,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0
+  },
+  "host": {
+    "passed": 34,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Chat initialization and SQLCipher runtime"
+  },
+  "remaining": "Fresh full host regression, remote CI and release integration; installed-user/device acceptance separate",
+  "candidate73466Changed": false
+}
