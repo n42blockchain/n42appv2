@@ -133,10 +133,13 @@ jobs:
               print(f'{name}: {actual}')
           PY_OVERRIDES
 
+      - name: Prefetch checksum-verified Linux SQLite test assets
+        run: python3 scripts/prepare_sqlite_test_assets.py
+
       - name: Test active local plugins
         run: |
           flutter test plugins/flutter_mining/test/
-          (cd plugins/flutter_mining/example && flutter pub get && flutter test test/)
+          (cd plugins/flutter_mining/example && flutter pub get && python3 ../../../scripts/prepare_sqlite_test_assets.py && flutter test test/)
           flutter test packages/webview_flutter_wkwebview/test/
 
       - name: Build and test native Falcon signing
@@ -191,6 +194,7 @@ jobs:
         run: |
           cd "$CHAT_TEST_ROOT"
           flutter pub get
+          python3 "$GITHUB_WORKSPACE/scripts/prepare_sqlite_test_assets.py" --root "$CHAT_TEST_ROOT"
 
       - name: Build resolved Chat native crypto for Linux tests
         id: chat_crypto
