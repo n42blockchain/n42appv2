@@ -14,7 +14,7 @@ on:
       native_suite:
         description: Native suite (MLKit includes model download and concurrency)
         type: choice
-        options: [all, mlkit, wallet_forms]
+        options: [all, mlkit, wallet_forms, browser]
         default: all
   push:
     branches: [master, main, develop]

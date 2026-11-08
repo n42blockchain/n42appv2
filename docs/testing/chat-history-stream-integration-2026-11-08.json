@@ -30,7 +30,16 @@
     "exitCode": 0,
     "reportSha256": "cbc91a7b02a0ae5ddbb9ffee0a6499d95da24ad0064b6a3155b7b8663e7a22e3"
   },
-  "newStreamRepairFullRegression": false,
+  "newStreamRepairFullRegression": {
+    "errors": 0,
+    "passed": true,
+    "skipped": 6,
+    "tests_failed": 0,
+    "tests_passed": 8711,
+    "source": "96de55c247d53b91f7aa9672807cf59334383f92",
+    "exitCode": 0,
+    "reportSha256": "40d87732cae69f9362fecaf964c637993e7061a892ae8ddba673f5794272ee97"
+  },
   "liveHistorySharing": {
     "ownedLoopbackService": true,
     "realSdkAndCrypto": true,

@@ -36,6 +36,11 @@ class NativeCiSuiteTest(unittest.TestCase):
             '--dart-define=N42_DISPOSABLE_WALLET_QA=true',
         ])
 
+    def test_browser_selects_real_webview_without_wallet_credentials(self):
+        result = self.select('browser')
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.splitlines(), ['integration_test/browser_provider_native_test.dart'])
+
     def test_unknown_targets_fail_closed(self):
         for value in ['', '../test', 'mlkit; echo unsafe']:
             with self.subTest(value=value):

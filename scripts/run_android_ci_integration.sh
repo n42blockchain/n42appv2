@@ -17,8 +17,12 @@ if [[ "${N42_NATIVE_SUITE:-all}" == all ]]; then
   fi
   native_test_args+=(--dart-define-from-file "$N42_NATIVE_CHAT_DEFINES")
 fi
+native_prebuild_target=integration_test/chat_scanner_camera_device_test.dart
+if [[ "${N42_NATIVE_SUITE:-all}" == browser ]]; then
+  native_prebuild_target=integration_test/browser_provider_native_test.dart
+fi
 flutter build apk --debug --no-pub \
-  --target integration_test/chat_scanner_camera_device_test.dart
+  --target "$native_prebuild_target"
 apk_bytes=$(wc -c < build/app/outputs/flutter-apk/app-debug.apk)
 disk_report=$(adb shell df -k /data | tr -d '\r')
 printf '%s\n' "$disk_report"

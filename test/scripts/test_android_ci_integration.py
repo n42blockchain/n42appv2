@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class AndroidCiIntegrationTest(unittest.TestCase):
-    def run_helper(self, *, ci='true', emulator='1', fail_install=False, free_kb='9000000', chat_fixture=True):
+    def run_helper(self, *, ci='true', emulator='1', fail_install=False, free_kb='9000000', chat_fixture=True, suite='all'):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             log = root / 'calls'
@@ -34,7 +34,7 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
             fixture = root / 'chat-defines.json'
             fixture.write_text('{}')
             env = dict(os.environ, CI=ci, EMULATOR=emulator,
-                       FAIL_INSTALL=str(int(fail_install)), CALL_LOG=str(log), FREE_KB=free_kb)
+                       FAIL_INSTALL=str(int(fail_install)), CALL_LOG=str(log), FREE_KB=free_kb, N42_NATIVE_SUITE=suite)
             if chat_fixture:
                 env['N42_NATIVE_CHAT_DEFINES'] = str(fixture)
             else:
@@ -69,6 +69,13 @@ if sys.argv[1:2] == ['install'] and os.environ['FAIL_INSTALL']=='1':
         self.assertEqual(calls[4], ['adb', 'shell', 'pm', 'grant', 'ai.n42.www', 'android.permission.CAMERA'])
         self.assertEqual(calls[5][:3], ['flutter', 'test', 'integration_test/'])
         self.assertIn('--no-uninstall', calls[5])
+
+    def test_browser_prebuilds_the_actual_webview_target_without_chat_secrets(self):
+        result, calls = self.run_helper(chat_fixture=False, suite='browser')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        target = 'integration_test/browser_provider_native_test.dart'
+        self.assertIn(target, calls[1])
+        self.assertEqual(calls[5][:3], ['flutter', 'test', target])
 
     def test_install_failure_stops_before_grant_and_tests(self):
         result, calls = self.run_helper(fail_install=True)
