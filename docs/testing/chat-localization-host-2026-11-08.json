@@ -1,5 +1,5 @@
 {
-  "chat_commit": "149f567ce6e2de12687ace6266f1dc1b718a04e5",
+  "chat_commit": "856850ef04695135c696ba4347df2b622b821ba5",
   "resolved_source_files": 859,
   "source_mismatches": 0,
   "host_tests": {
@@ -8,10 +8,10 @@
     "skipped": 0
   },
   "chat_tests": {
-    "passed": 9014,
+    "passed": 9066,
     "failed": 0,
     "skipped": 7,
-    "coverage_percent": 72.64947443133809
+    "coverage_percent": 72.66506805363234
   },
   "analysis": {
     "exit_code": 0,
@@ -19,7 +19,7 @@
     "warnings": 0,
     "existing_infos": 78
   },
-  "scope": "Chat localization dependency update; no native or business-flow acceptance claim",
+  "scope": "Chat attachment localization and system time preference dependency update; no native or business-flow acceptance claim",
   "excluded_release": "73510",
   "homograph_review": {
     "de": {
@@ -37,5 +37,7 @@
     "failed_run": 42483662604,
     "cause": "Four newly introduced valid homographs lacked reviewed baseline entries.",
     "fix": "Accept only those four exact locale/key/value entries; leave all other baseline entries and audit rules unchanged."
-  }
+  },
+  "previous_chat_commit": "149f567ce6e2de12687ace6266f1dc1b718a04e5",
+  "current_pin_full_ci": "Pending; running CI 42483939833 belongs to previous host source b98b66a1f and Chat 149f567c."
 }
