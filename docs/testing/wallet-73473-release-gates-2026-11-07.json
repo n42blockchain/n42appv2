@@ -62,12 +62,97 @@
   "currentSourceCi": {
     "run": 42431321440,
     "source": "24ba91cb1712d35fda41fd103851773865574fae",
-    "status": "queued/in progress"
+    "status": "completed",
+    "testsJob": 128581500474,
+    "testsJobConclusion": "success",
+    "wallet": {
+      "passed": 7802,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    },
+    "coverage": {
+      "hit": 104546,
+      "found": 141321,
+      "percent": 73.97768201470411,
+      "threshold": 70,
+      "passed": true
+    },
+    "chat": {
+      "passed": 8659,
+      "skipped": 5,
+      "extraLinuxSkip": "vodozemac_native_abi_test is explicitly macOS-only"
+    },
+    "testResultsArtifact": 13598283529,
+    "coverageArtifact": 13598562864,
+    "jobLogSha256": "bd1ba47f177858275c90594c13e65e2543c904751c4e6c8a434634efc5f3a810",
+    "conclusion": "success",
+    "allJobsPassed": true,
+    "jobs": [
+      {
+        "name": "Backend contracts (backend/social-auth)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Backend contracts (backend/loyalty)",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83d\udcca Code Analysis",
+        "conclusion": "success"
+      },
+      {
+        "name": "Backend contracts (backend/livekit-jwt)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Backend contracts (backend/swap)",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83e\uddea Tests & Coverage",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83d\udd12 Security Scan",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83c\udf4e Build iOS",
+        "conclusion": "success"
+      },
+      {
+        "name": "\u26a1 Performance Regression",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83e\udd16 Build Android",
+        "conclusion": "success"
+      },
+      {
+        "name": "\ud83d\udccb CI Summary",
+        "conclusion": "success"
+      }
+    ]
   },
   "transporterReadyVisible": true,
-  "uploadAccepted": false,
+  "uploadAccepted": true,
   "appleProcessingComplete": false,
   "testerAvailabilityVerified": false,
   "physicalDeviceQa": "deferred",
-  "status": "Signed package, complete local regression, Chat regression and current-source Android native checks passed; full current-source CI pending; not uploaded"
+  "status": "Current-source CI and all package/native/local gates passed; upload accepted with no errors; Apple processing and internal tester availability pending",
+  "uploadReceipt": {
+    "version": "2.5.4+73473",
+    "appId": "6738644072",
+    "source": "24ba91cb1712d35fda41fd103851773865574fae",
+    "ipaSha256": "6850ee6acb38ed75fe888d62c2045d170ef7eacbcae07263dc01b569e6281410",
+    "accepted": true,
+    "acceptedAt": "2026-11-07T20:44:01-05:00",
+    "message": "UPLOAD SUCCEEDED with no errors",
+    "deliveryUuid": "9755b51e-a3bc-4d6a-ae3d-7a57ed96db24",
+    "transferredBytes": 193116676,
+    "receiptSource": "Transporter delivery log UI",
+    "appleProcessingComplete": false,
+    "internalTesterAvailabilityVerified": false
+  }
 }

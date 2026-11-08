@@ -5,4 +5,4 @@ N42 Wallet 2.5.4 (73473)
 - Prevent repeated message-report success notices.
 - Add account-bound reporting for moment posts, videos and comments.
 
-Please test Chat history and recovery, account switching, sticker sending and content reporting. Device continuity, production login, funded transfers and live calls still require separate acceptance.
+Please test Chat history and recovery, account switching, sticker sending and content reporting. Device continuity, production login, funded transfers and live calls still require separate acceptance. Google native authorization-code exchange remains disabled on the deployed server; this build does not establish live provider-login acceptance.
