@@ -137,10 +137,10 @@
   },
   "transporterReadyVisible": true,
   "uploadAccepted": true,
-  "appleProcessingComplete": false,
-  "testerAvailabilityVerified": false,
+  "appleProcessingComplete": true,
+  "testerAvailabilityVerified": true,
   "physicalDeviceQa": "deferred",
-  "status": "Current-source CI and all package/native/local gates passed; upload accepted with no errors; Apple processing and internal tester availability pending",
+  "status": "Upload accepted; Apple processing complete; t1 testing and saved notes verified; physical-device and live business acceptance remain open",
   "uploadReceipt": {
     "version": "2.5.4+73473",
     "appId": "6738644072",
@@ -152,7 +152,25 @@
     "deliveryUuid": "9755b51e-a3bc-4d6a-ae3d-7a57ed96db24",
     "transferredBytes": 193116676,
     "receiptSource": "Transporter delivery log UI",
-    "appleProcessingComplete": false,
-    "internalTesterAvailabilityVerified": false
+    "appleProcessingComplete": true,
+    "internalTesterAvailabilityVerified": true
+  },
+  "appleAvailability": {
+    "observedAt": "2026-11-07T21:15:21-05:00",
+    "appId": "6738644072",
+    "version": "2.5.4",
+    "build": "73473",
+    "buildId": "9755b51e-a3bc-4d6a-ae3d-7a57ed96db24",
+    "appleProcessingComplete": true,
+    "group": "t1",
+    "groupId": "cb8145d0-d3dc-46d3-97ea-57e7b2193351",
+    "groupType": "internal",
+    "testerCount": 16,
+    "groupBuildCount": 47,
+    "groupBuildStatus": "Testing",
+    "notesSavedAndVerifiedAfterReload": true,
+    "notesSha256": "7ccc455df7e8919ee3ac24c40a4d78f613ffaaf098ef0d6f00a1f44c2b7c5eab",
+    "verification": "App Store Connect native browser UI; build details reloaded after Save; t1 build table shows Testing",
+    "physicalDeviceQa": false
   }
 }
