@@ -1,4 +1,4 @@
-> Source follow-up — 2026-11-08: wallet now pins Chat `46c92379`, rejecting stale sticker-uninstall receipts after account switches. Host configuration/assets tests: 69 passes; actual resolved Chat repository/native-auth API tests: 86 passes; no failures/skips. Host analysis exits 0. Chat full regression remains running. Real encrypted text/file forwarding passes on the owned loopback service, without production/native UI acceptance. Published 73486 is unchanged.
+> Source follow-up — 2026-11-08: wallet now pins Chat `46c92379`, rejecting stale sticker-uninstall receipts after account switches. Host configuration/assets tests: 64 visible passes; actual resolved Chat repository/native-auth API tests: 78 visible passes; no failures/skips. Host analysis exits 0. Chat full regression remains running. Real encrypted text/file forwarding passes on the owned loopback service, without production/native UI acceptance. Published 73486 is unchanged.
 
 # 当前任务与验收台账
 

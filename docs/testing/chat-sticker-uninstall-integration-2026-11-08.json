@@ -2,18 +2,20 @@
   "chatRef": "46c92379cf234fa106be799138c46765a7b86565",
   "change": "Reject sticker uninstall receipts after account scope changes",
   "hostTests": {
-    "passed": 69,
+    "passed": 64,
     "failed": 0,
     "skipped": 0,
     "exitCode": 0,
-    "reportSha256": "025b3c124bd11b8002070945738b7c57a1726a03ad6698c49d5b508b19b071c5"
+    "reportSha256": "025b3c124bd11b8002070945738b7c57a1726a03ad6698c49d5b508b19b071c5",
+    "strictGatePassed": true
   },
   "resolvedPackageTests": {
-    "passed": 86,
+    "passed": 78,
     "failed": 0,
     "skipped": 0,
     "exitCode": 0,
-    "reportSha256": "d99d8a81af47de5b9482f8ce1aa238e66f9944657d495bde410eee5c97879c94"
+    "reportSha256": "d99d8a81af47de5b9482f8ce1aa238e66f9944657d495bde410eee5c97879c94",
+    "strictGatePassed": true
   },
   "chatFullRegression": {
     "status": "running",
@@ -27,5 +29,6 @@
     "errors": 0,
     "warnings": 0,
     "infos": 78
-  }
+  },
+  "counting": "Visible tests only; hidden loading/setup/teardown events excluded by scripts/quality_gate.py."
 }
