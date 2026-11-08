@@ -1,0 +1,35 @@
+{
+  "failedRun": 42519429115,
+  "failedJob": 128849466201,
+  "failedShard": 1,
+  "originalNativeResult": {
+    "passed": 21,
+    "failed": 2,
+    "skipped": 2,
+    "cases": [
+      "WLT-02 disposable mnemonic import",
+      "WLT-03 disposable private-key import"
+    ],
+    "expectedWalletName": "Native QA",
+    "actualWalletName": "Account1"
+  },
+  "diagnosis": "Wallet display names are set and stored in Dart, not passed to native key APIs. The import fixture dismisses native input before settling editing messages; the already-passing form-validation fixture explicitly settles keyboard focus first. Input synchronization is a hypothesis until the native rerun.",
+  "testRepair": [
+    "Use the same showKeyboard/settle/enter/settle/unfocus/settle sequence as the passing native form cases",
+    "Assert every input retains its fixture value before submission without logging secrets",
+    "Retain final stored-name assertion and add the same name assertion after provider restart",
+    "Rerun the complete seven-file shard 1; keep shards 0 and 2 running"
+  ],
+  "preflight": {
+    "scriptTests": 152,
+    "hostImportAndQualityTests": 26,
+    "analysis": "no issues"
+  },
+  "productSource": "Unchanged from signed 73537 / 71db01144; no product fix or new artifact claimed",
+  "nativeVerification": "pending",
+  "logs": {
+    "/tmp/n42-ios-import-input-script-tests.log": "7f52db10331dc480cd3c981b94ab205a5b828c98342a69442826f459b82d3fa3",
+    "/tmp/n42-ios-import-input-regression.log": "0ec2289ca0cc76eb3118e7b94cb18d0df2a05796d538de98624355f3dd1819d4",
+    "/tmp/n42-ios-import-input-analysis.log": "86bca7b3761f46d521ea638d0c2410b51ce0af1f32f3dcab31a6ee1b978ffd1d"
+  }
+}

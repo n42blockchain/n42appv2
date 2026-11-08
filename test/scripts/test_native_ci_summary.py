@@ -9,13 +9,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class NativeCiSummaryTest(unittest.TestCase):
-    def run_summary(self, android_only, results, ios_only=False):
+    def run_summary(self, android_only, results, ios_only=False, ios_shard='all'):
         workflow = (ROOT / '.github/workflows/test.yml').read_text()
         script = textwrap.dedent(workflow.rsplit('        run: |\n', 1)[1])
         with tempfile.TemporaryDirectory() as directory:
             summary = Path(directory) / 'summary'
             env = dict(os.environ, GITHUB_STEP_SUMMARY=str(summary),
-                       ANDROID_ONLY=str(android_only).lower(), IOS_ONLY=str(ios_only).lower(), N42_NATIVE_SUITE='all', **results)
+                       ANDROID_ONLY=str(android_only).lower(), IOS_ONLY=str(ios_only).lower(), IOS_SHARD_SELECTION=ios_shard, N42_NATIVE_SUITE='all', **results)
             result = subprocess.run(['bash', '-e', '-c', script], env=env,
                                     capture_output=True, text=True)
             return result.returncode, summary.read_text()
@@ -46,6 +46,9 @@ class NativeCiSummaryTest(unittest.TestCase):
         code, summary = self.run_summary(False, results, ios_only=True)
         self.assertEqual(code, 0)
         self.assertIn('iOS-only manual run', summary)
+        code, selected = self.run_summary(False, results, ios_only=True, ios_shard='1')
+        self.assertEqual(code, 0)
+        self.assertIn('iOS shard selection: 1', selected)
         for value in ['failure', 'cancelled', 'skipped']:
             with self.subTest(value=value):
                 code, _ = self.run_summary(False, dict(results, IOS_RESULT=value), ios_only=True)

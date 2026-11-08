@@ -15,6 +15,11 @@ on:
         description: Run only iOS integration (all retains every test across three shards)
         type: boolean
         default: false
+      ios_shard:
+        description: Complete iOS shard to rerun (all retains the full three-shard suite)
+        type: choice
+        options: [all, '0', '1', '2']
+        default: all
       native_suite:
         description: Native suite (chat_layout is Android-only; MLKit includes real model downloads)
         type: choice
@@ -29,7 +34,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}${{ (inputs.android_only || inputs.native_suite == 'chat_layout') && '-android-only' || '' }}${{ inputs.ios_only && '-ios-only' || '' }}-${{ inputs.native_suite || 'all' }}
+  group: ${{ github.workflow }}-${{ github.ref }}${{ (inputs.android_only || inputs.native_suite == 'chat_layout') && '-android-only' || '' }}${{ inputs.ios_only && '-ios-only' || '' }}-${{ inputs.native_suite || 'all' }}-${{ inputs.ios_shard || 'all' }}
   cancel-in-progress: true
 
 defaults:
@@ -129,7 +134,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: ${{ fromJSON((inputs.native_suite == '' || inputs.native_suite == 'all') && '[0,1,2]' || '[0]') }}
+        shard: ${{ fromJSON((inputs.ios_only && (inputs.native_suite == '' || inputs.native_suite == 'all') && inputs.ios_shard != '' && inputs.ios_shard != 'all') && format('[{0}]', inputs.ios_shard) || ((inputs.native_suite == '' || inputs.native_suite == 'all') && '[0,1,2]' || '[0]')) }}
     env:
       N42_IOS_NATIVE_SHARD_INDEX: ${{ matrix.shard }}
       N42_IOS_NATIVE_SHARD_COUNT: ${{ (inputs.native_suite == '' || inputs.native_suite == 'all') && '3' || '1' }}
@@ -299,10 +304,12 @@ jobs:
           ANDROID_RESULT: ${{ needs.integration-tests-android.result }}
           ANDROID_ONLY: ${{ inputs.android_only || inputs.native_suite == 'chat_layout' }}
           IOS_ONLY: ${{ inputs.ios_only }}
+          IOS_SHARD_SELECTION: ${{ inputs.ios_shard || 'all' }}
         run: |
           {
             echo "## Test Results"
             printf 'Native suite: %s\n' "$N42_NATIVE_SUITE"
+            printf 'iOS shard selection: %s\n' "${IOS_SHARD_SELECTION:-all}"
             echo ""
             echo "| Job | Result |"
             echo "|-----|--------|"

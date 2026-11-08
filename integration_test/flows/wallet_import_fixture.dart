@@ -273,12 +273,11 @@ void registerWalletImportFixture() {
           await tester.tap(find.text(S.current.g_key_wallet_c43));
           await _wait(tester, find.byType(CreatePassword));
         } else {
-          await tester.enterText(
+          await _enterFixtureText(
+            tester,
             find.byType(TextField),
             privateKey ? publicKey : _publicPhrase,
           );
-          FocusManager.instance.primaryFocus?.unfocus();
-          await tester.pumpAndSettle();
           await tester.tap(
             find.text(privateKey ? S.current.g_key_78 : S.current.g_key_11),
           );
@@ -290,10 +289,7 @@ void registerWalletImportFixture() {
           (2, 'QaImport123!'),
         ]) {
           final field = find.byType(TextField).at(entry.$1);
-          await tester.ensureVisible(field);
-          await tester.enterText(field, entry.$2);
-          FocusManager.instance.primaryFocus?.unfocus();
-          await tester.pumpAndSettle();
+          await _enterFixtureText(tester, field, entry.$2);
         }
         await tester.tap(find.text(S.current.g_key_115));
         await _wait(
@@ -323,6 +319,7 @@ void registerWalletImportFixture() {
         final restarted = _ImportFixtureStore(owner);
         await restarted.getWalletInfo();
         expect(restarted.walletInfoLsit, hasLength(1));
+        expect(restarted.walletInfoLsit.single.walletName, 'Native QA');
         expect(
           privateKey
               ? restarted.walletInfoLsit.single.privateKey == encodedKey
@@ -483,5 +480,26 @@ Future<void> _wait(WidgetTester tester, Finder target) async {
     target,
     findsOneWidget,
     reason: 'Native import did not finish within 30 seconds.',
+  );
+}
+
+// Keep the real platform focus handshake ahead of injected editing messages.
+// Native iOS can otherwise restore the field's old value as focus is dismissed.
+Future<void> _enterFixtureText(
+  WidgetTester tester,
+  Finder field,
+  String value,
+) async {
+  await tester.ensureVisible(field);
+  await tester.showKeyboard(field);
+  await tester.pumpAndSettle();
+  await tester.enterText(field, value);
+  await tester.pumpAndSettle();
+  FocusManager.instance.primaryFocus?.unfocus();
+  await tester.pumpAndSettle();
+  expect(
+    tester.widget<TextField>(field).controller!.text == value,
+    isTrue,
+    reason: 'The native input did not retain the fixture before submission.',
   );
 }
