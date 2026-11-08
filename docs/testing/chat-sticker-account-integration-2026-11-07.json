@@ -18,7 +18,17 @@
     "warnings": 0,
     "infos": 78
   },
-  "chatFull": "running; not accepted yet",
+  "chatFull": {
+    "passed": 8700,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "strictGatePassed": true
+  },
   "candidate73484Held": true,
-  "replacementSignedArtifactVerified": false
+  "replacementSignedArtifactVerified": true,
+  "candidateVersion": "2.5.4+73486",
+  "candidateSource": "557e20e70203fd944253179c53b2120a102e4891",
+  "ciRun": 42445681678,
+  "uploaded": false
 }

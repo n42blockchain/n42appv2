@@ -1,5 +1,8 @@
 # 当前任务与验收台账
 
+> Current candidate — 2026-11-07: **73486**, source `557e20e70`, Chat `b3c1dec1`, is signed, verified, preserved and staged in Transporter, **not uploaded**. Full Chat regression: 8,700 pass / zero failures / four external-fixture skips; host integration: 73 pass. IPA checks: 50 package, nine SQLCipher, 14 login; ten MLKit bundles/86 exact files. CI 42445681678 is running. Candidates 73484 and 73481 must not be delivered. Later docs-only build-number changes do not require a rebuild.
+
+
 > RELEASE HOLD — 2026-11-07: **73484 must not be delivered**. A new regression reproduces account switching during sticker upload copying the old pack into the replacement account. Canonical Chat repair `b3c1dec1` passes 52 repository/persistence tests and is now pinned in the wallet. Host integration passes 73 tests; whole-host analysis exits 0 with 78 infos and no warnings/errors. Full Chat regression is running; a new signed candidate remains required.
 
 > Historical candidate snapshot — 2026-11-07: **73484**, source `7a4d950ae`, Chat `3fc080f1`, is signed/preserved and staged in Transporter, **not uploaded**. Chat full **8,695 pass / four live skips**, strict gate passed; host/package **141 pass**, sticker cluster **67 pass**, two compact-viewport probes pass. IPA gates: **50 package / nine SQLCipher / 14 login checks**, ten model bundles/86 matching files. Exact-source CI **42442481625 is running**. **73481 remains held** and must not be delivered. No rebuild for docs-only version bumps. [Candidate](../releases/testflight-20261107-73484.md).

@@ -1,0 +1,9 @@
+N42 Wallet 2.5.4 (73486)
+
+- View, edit and search saved-message tags and remarks.
+- Forward saved messages, notes and links to a selected chat.
+- Keep failed note/link drafts for retry and reject stale account actions.
+- Reject sticker upload, pack creation and pack changes after account switching.
+- Preserve distinct stickers that use the same emoji, with stable IDs after save, reopen, rename and selected deletion.
+
+Please test Favorites, account switching during open menus/drafts, new sticker packs with repeated emoji, and switching accounts during sticker/avatar uploads. Previously overwritten sticker entries are not automatically restored. Google native authorization-code exchange remains disabled on the deployed server. Production provider login, funded transfers and physical-device continuity still require separate acceptance.

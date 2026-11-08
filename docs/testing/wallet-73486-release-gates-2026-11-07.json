@@ -1,0 +1,16 @@
+{
+  "preservedAt": "2026-11-08T04:16:15.965805+00:00",
+  "source": "557e20e70203fd944253179c53b2120a102e4891",
+  "chatRef": "b3c1dec190427eff1d56f398a8837391f125fb98",
+  "version": "2.5.4+73486",
+  "ipaSha256": "b88b74efd026a458ee0be7a91f0067c3ab8bcd69a56d837221d81f7cec0a98d8",
+  "signedPackageChecksPassed": 50,
+  "sqlcipherChecksPassed": 9,
+  "loginResourceChecksPassed": 14,
+  "mlkitBundles": 10,
+  "mlkitFiles": 86,
+  "buildExitCode": 0,
+  "sourceTrackedClean": true,
+  "ciRun": 42445681678,
+  "uploaded": false
+}
