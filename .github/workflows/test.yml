@@ -154,6 +154,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_mlkit_resources.py
 
+      - name: Setup Python for the macOS Matrix fixture
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Rust for the macOS Matrix fixture
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Prepare isolated iOS chat fixture
+        run: |
+          python3 -m venv "$RUNNER_TEMP/native-chat-venv"
+          # Avoid the Rust stripping LINKEDIT defect on macOS 27 (rust-lang/rust#157750).
+          RUSTFLAGS="-C strip=none" CARGO_PROFILE_RELEASE_STRIP=false "$RUNNER_TEMP/native-chat-venv/bin/pip" install --no-cache-dir --no-binary matrix-synapse 'matrix-synapse==1.164.2'
+          "$RUNNER_TEMP/native-chat-venv/bin/python" scripts/prepare_ios_chat_fixture.py start --output "$RUNNER_TEMP/ios-chat-defines.json"
+
       - name: Run iOS Simulator
         run: |
           xcrun simctl list devices available --json > "$RUNNER_TEMP/ios-simulators.json"
@@ -164,6 +179,10 @@ jobs:
       - name: Run integration tests (iOS)
         run: |
           bash scripts/run_ios_ci_integration.sh 2>&1 | tee ios-integration.log
+
+      - name: Remove isolated iOS chat fixture
+        if: always()
+        run: python3 scripts/prepare_ios_chat_fixture.py stop
 
       - name: Preserve test results
         if: always()

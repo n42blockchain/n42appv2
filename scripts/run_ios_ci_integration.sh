@@ -14,6 +14,13 @@ if [[ "$(xcrun simctl getenv "$IOS_SIMULATOR_ID" SIMULATOR_UDID)" != "$IOS_SIMUL
   echo 'The selected simulator is not booted or does not match.' >&2
   exit 64
 fi
+if [[ "${N42_NATIVE_SUITE:-all}" == all || "${N42_NATIVE_SUITE:-all}" == chat_layout ]]; then
+  if [[ -z "${N42_NATIVE_CHAT_DEFINES:-}" || ! -f "$N42_NATIVE_CHAT_DEFINES" ]]; then
+    echo 'The selected suite requires the owned chat fixture define file.' >&2
+    exit 64
+  fi
+  native_test_args+=(--dart-define-from-file "$N42_NATIVE_CHAT_DEFINES")
+fi
 xcrun simctl privacy "$IOS_SIMULATOR_ID" grant camera ai.n42.www
 flutter test "${native_test_args[@]}" --device-id "$IOS_SIMULATOR_ID" \
   --no-uninstall --no-pub --reporter expanded

@@ -1,0 +1,34 @@
+{
+  "scope": "CI environment and native acceptance tests only; no product source changes",
+  "cameraCommit": "0ed227265",
+  "originalNativeRun": 42508240859,
+  "originalIosStatus": "in_progress; two failures observed, final result not yet available",
+  "repairs": [
+    "Provide a loopback-only Synapse 1.164.2 fixture with real password login and a seeded private conversation to iOS",
+    "Keep camera capture/resume acceptance on supported devices; separately assert unsupported-camera UI and lifecycle on iOS Simulator"
+  ],
+  "verified": {
+    "scriptTests": 143,
+    "qualityTests": 8,
+    "cameraAnalysis": "no issues",
+    "actualMatrix": [
+      "password login",
+      "one joined private room",
+      "seeded peer message",
+      "0600 define file",
+      "owned process shutdown; port 18949 closed"
+    ]
+  },
+  "matrixBuild": "Python 3.12; source build with Rust stripping disabled for macOS 27 LINKEDIT compatibility; rust-lang/rust#157750",
+  "pending": [
+    "Complete corrected native suite",
+    "Physical camera capture deferred by user",
+    "Public network and end-to-end business acceptance remain separate"
+  ],
+  "release73531": "Held; not uploaded",
+  "scriptHashes": {
+    "scripts/prepare_ios_chat_fixture.py": "563c4287658e3def8770ac3a778086bbbe531bdd92a5de053c5ad3379f0685d6",
+    "scripts/prepare_native_chat_fixture.py": "50c4d4f7572a9ebeb32a6f34d6da695b66630f34b557f28ca8bc2dd318ae08ad",
+    "scripts/run_ios_ci_integration.sh": "8e2c5cd193821f2d659ffd10dd6112268c18a97adf114623c4fc41824c0639ad"
+  }
+}

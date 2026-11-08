@@ -42,7 +42,8 @@ def request(path, body=None, token=None, method=None):
 
 def register(username, password, registration_token):
     body = {'username': username, 'password': password,
-            'auth': {'type': 'm.login.registration_token', 'token': registration_token}}
+            'auth': ({'type': 'm.login.registration_token', 'token': registration_token}
+                     if registration_token else {'type': 'm.login.dummy'})}
     status, result = request('/_matrix/client/v3/register', body)
     if status == 401 and result.get('session'):
         body['auth']['session'] = result['session']
@@ -77,6 +78,10 @@ def start(output, env):
         raise RuntimeError('Disposable Matrix startup timed out')
     # The first Tuwunel account bootstraps administration; tests use ordinary users.
     register('fixture_bootstrap', secrets.token_urlsafe(32), registration_token)
+    seed(output, env, registration_token, 'http://10.0.2.2:18949')
+
+
+def seed(output, env, registration_token, client_base):
     password = secrets.token_urlsafe(32)
     primary = register('wallet_fixture', password, registration_token)
     peer = register('wallet_peer', secrets.token_urlsafe(32), registration_token)
@@ -102,7 +107,7 @@ def start(output, env):
     # File paths only enter the workflow environment; credentials never do.
     fd = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, 'w') as file:
-        json.dump({'N42_E2E_CHAT_HOMESERVER': 'http://10.0.2.2:18949',
+        json.dump({'N42_E2E_CHAT_HOMESERVER': client_base,
                    'N42_E2E_CHAT_USERNAME': primary['user_id'],
                    'N42_E2E_CHAT_PASSWORD': password}, file)
     with open(env['GITHUB_ENV'], 'a') as file:

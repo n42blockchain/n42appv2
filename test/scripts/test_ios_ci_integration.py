@@ -10,7 +10,7 @@ UUID = '11111111-2222-3333-4444-555555555555'
 
 
 class IosCiIntegrationTest(unittest.TestCase):
-    def run_helper(self, *, ci='true', uuid=UUID, actual=UUID, grant_error=False):
+    def run_helper(self, *, ci='true', uuid=UUID, actual=UUID, grant_error=False, fixture=True):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             log = root / 'calls'
@@ -28,6 +28,12 @@ if sys.argv[1:3] == ['simctl','privacy'] and os.environ['GRANT_ERROR']=='1':
                 tool.chmod(0o700)
             env = dict(os.environ, CI=ci, IOS_SIMULATOR_ID=uuid, ACTUAL_UUID=actual,
                        CALL_LOG=str(log), GRANT_ERROR=str(int(grant_error)))
+            if fixture:
+                defines = root / 'chat-defines.json'
+                defines.write_text('{}')
+                env['N42_NATIVE_CHAT_DEFINES'] = str(defines)
+            else:
+                env.pop('N42_NATIVE_CHAT_DEFINES', None)
             env['PATH'] = str(root) + os.pathsep + env['PATH']
             result = subprocess.run(['bash', str(ROOT / 'scripts/run_ios_ci_integration.sh')],
                                     env=env, capture_output=True, text=True)
@@ -54,9 +60,15 @@ if sys.argv[1:3] == ['simctl','privacy'] and os.environ['GRANT_ERROR']=='1':
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(calls[1], ['xcrun','simctl','privacy',UUID,'grant','camera','ai.n42.www'])
         self.assertEqual(calls[2][:3], ['flutter','test','integration_test/'])
+        self.assertIn('--dart-define-from-file', calls[2])
         self.assertIn('--no-uninstall', calls[2])
         self.assertIn(UUID, calls[2])
         self.assertEqual(len(calls), 3)
+
+    def test_missing_chat_fixture_stops_before_flutter(self):
+        result, calls = self.run_helper(fixture=False)
+        self.assertEqual(result.returncode, 64)
+        self.assertEqual(len(calls), 1)
 
     def test_failed_grant_stops_before_test_launch(self):
         result, calls = self.run_helper(grant_error=True)
