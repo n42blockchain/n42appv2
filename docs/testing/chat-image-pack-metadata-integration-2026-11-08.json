@@ -1,0 +1,30 @@
+{
+  "source": "557b800fc5b4cc9cadbe096f7c87f3ec5dd2883d",
+  "passed": 8704,
+  "failed": 0,
+  "skipped": 5,
+  "exitCode": 0,
+  "strictGatePassed": true,
+  "reportSha256": "1cdfa41901ab1332b2043e9c4416c57daedfc0cc6246ee76ee1ac5db6bbca71e",
+  "walletHostIntegrated": true,
+  "published73486ContainsFollowup": false,
+  "hostFocused": {
+    "passed": 124,
+    "failed": 0,
+    "skipped": 0,
+    "strictGatePassed": true,
+    "reportSha256": "4ffd0c2e65162a290cce6ed5577ba4a08eceda7d6769ca8932e4d08b7c504a6b"
+  },
+  "hostAnalysis": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 78
+  },
+  "newSignedArtifactBuilt": false,
+  "androidNativeRerun": {
+    "run": 42450433761,
+    "chatRef": "b3c1dec190427eff1d56f398a8837391f125fb98",
+    "status": "running; not acceptance of this new pin"
+  }
+}
