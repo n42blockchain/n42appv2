@@ -1,5 +1,7 @@
 # 当前任务与验收台账
 
+> Favorite draft follow-up — 2026-11-07: wallet now pins Chat `af265ed4`. New note/link drafts capture their originating account at add-menu opening, wait for save acknowledgement and retain failed drafts for retry. Chat full regression: **8,689 pass / zero failures / four live-fixture skips**; actual host/package cluster: **135 pass**; scoped analysis has no issues. The complete 7,781-test wallet coverage result below belongs to prior source `fe2128a91`; it is a baseline, not proof for this later pin. Exact-source CI/native build gates remain pending. Uploaded 73473 does not contain this follow-up. [Evidence](../testing/chat-favorites-integration-2026-11-07.json).
+
 > Unreleased favorites integration — 2026-11-07: wallet `fe2128a91` pins Chat `fd953157`. Full local wallet regression passes **7,781 tests / zero failures / three skips**, with **73.732849%** coverage passing the 70% gate. Chat full: **8,681 pass / zero failures / four live-fixture skips**; host/package cluster: **127 pass**. Exact-source CI `42438225917` and Android `42438227855` remain running. Later note/link draft repair `af265ed4` has 70 focused passes and clean analysis but is not yet integrated; its full run remains pending. Uploaded 73473 excludes this batch. [Integration evidence](../testing/chat-favorites-integration-2026-11-07.json).
 
 

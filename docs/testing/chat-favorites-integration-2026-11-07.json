@@ -64,5 +64,36 @@
     "later note/link draft repair full regression and wallet integration",
     "real encrypted-room/profile-entry acceptance",
     "physical-device acceptance deferred by user"
-  ]
+  ],
+  "followUpIntegration": {
+    "chatRef": "af265ed4f762e79ee78652acc5cfd3d55ea4f856",
+    "features": [
+      "account-bound note/link drafts",
+      "acknowledged save and retained draft retry",
+      "localized URL validation"
+    ],
+    "chatFull": {
+      "passed": 8689,
+      "failed": 0,
+      "skipped": 4,
+      "exitCode": 0
+    },
+    "hostFocused": {
+      "passed": 135,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "reportSha256": "8e0341e3d3215abbf2b4f0e5a11d6c85fd53cd0033153618f3ac7d45ac4a2e3a"
+    },
+    "scopedAnalysis": "no issues",
+    "fullWalletBaselineSource": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+    "fullWalletBaselineDoesNotContainDraftRepair": true,
+    "currentSourceCi": "not yet dispatched",
+    "uploaded73473ContainsThisFollowUp": false,
+    "remaining": [
+      "exact-source CI/native build gates",
+      "real encrypted-room/profile-entry acceptance",
+      "physical-device acceptance deferred by user"
+    ]
+  }
 }
