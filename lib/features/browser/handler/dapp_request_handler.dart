@@ -1,3 +1,5 @@
+import 'package:n42_wallet/features/browser/models/watch_asset_request.dart';
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -21,6 +23,14 @@ typedef DAppSigningCallback = Future<bool> Function({
   required String origin,
   required String method,
   required Map<String, dynamic> details,
+});
+
+/// Validate native metadata and enqueue the asset prompt, then return without
+/// waiting for user approval. Revalidate the request at each async boundary.
+typedef DAppAssetSuggestion = Future<void> Function({
+  required WatchAssetRequest asset,
+  required String origin,
+  required void Function() validateRequest,
 });
 
 class DAppRequestHandler {
@@ -73,6 +83,8 @@ class DAppRequestHandler {
   /// Callback for signing requests — set by BrowserPage
   DAppSigningCallback? onSigningRequest;
 
+  DAppAssetSuggestion? onAssetSuggestion;
+
   /// Handle a DApp JSON-RPC request and return the result.
   /// Throws on error (caller converts to JSON-RPC error).
   ///
@@ -115,6 +127,24 @@ class DAppRequestHandler {
 
       case 'eth_coinbase':
         return address;
+
+      case 'wallet_watchAsset':
+        final suggest = onAssetSuggestion;
+        if (suggest == null) {
+          throw {
+            'code': -32601,
+            'message': 'Asset suggestions are unavailable',
+          };
+        }
+        final asset = WatchAssetRequest.parse(params, requestChain);
+        await suggest(
+          asset: asset,
+          origin: requestOrigin,
+          validateRequest: validateRequest,
+        );
+        validateRequest();
+        // Recognition is not the user's approval or a persistence receipt.
+        return true;
 
       case 'wallet_switchEthereumChain':
         return _handleSwitchChain(params);
