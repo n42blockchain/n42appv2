@@ -46,9 +46,18 @@
   "currentFullCi": {
     "run": 42425633295,
     "source": "5d3730e3c88281f339c5eeef21a4b8e0b4429f3f",
-    "status": "in progress; root Run tests with coverage failed; Chat suite still running; failure artifact pending",
+    "status": "completed",
     "rootTestsStep": "failure",
-    "failureCause": "not yet established; local machine report passes the same quality gate"
+    "failureCause": "quality_gate JSON decoding rejected three native SQLCipher wrong-key diagnostics on stdout; Flutter done success=true, no reporter errors or failed assertions",
+    "conclusion": "failure",
+    "diagnosticOnly": {
+      "visiblePassed": 7802,
+      "failed": 0,
+      "errors": 0,
+      "omittedNativeLogLines": 3,
+      "rawArtifact": 13595914088,
+      "notAnOfficialGreenRun": true
+    }
   },
   "supersededFullCi": {
     "run": 42422731742,
@@ -64,7 +73,7 @@
     "73453",
     "73464"
   ],
-  "status": "HELD: remote root test step failed; cause unresolved. Local regression, packaged crypto and Android native checks passed; not uploaded",
+  "status": "HELD pending fresh CI with test-only native log isolation; no application runtime change required by this diagnosis; not uploaded",
   "hostChatDatabases": {
     "passed": 21,
     "failed": 0,

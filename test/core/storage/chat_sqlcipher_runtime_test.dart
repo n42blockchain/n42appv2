@@ -81,6 +81,9 @@ void main() {
       isNot(orderedEquals('SQLite format 3\u0000'.codeUnits)),
     );
     final wrong = sqlite3.open(path);
+    // This expected authentication failure must not corrupt --machine output
+    // with native SQLCipher diagnostics on Linux runners.
+    wrong.execute('PRAGMA cipher_log_level = NONE;');
     try {
       wrong.execute("PRAGMA key = 'wrong-fixture-key';");
       expect(
@@ -88,6 +91,7 @@ void main() {
         throwsA(isA<SqliteException>()),
       );
     } finally {
+      wrong.execute('PRAGMA cipher_log_level = ERROR;');
       wrong.close();
     }
     final restored = sqlite3.open(path);
