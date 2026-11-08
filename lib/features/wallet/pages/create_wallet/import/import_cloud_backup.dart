@@ -76,7 +76,14 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
     }
 
     try {
-      final content = await File(path).readAsString();
+      final selected = File(path);
+      if (await selected.length() > WalletBackupCrypto.maxBackupCharacters) {
+        if (mounted) {
+          setState(() => _error = S.of(context).g_ui_backup_invalid_file);
+        }
+        return;
+      }
+      final content = await selected.readAsString();
       if (!mounted) return;
       // 快速格式验证（不解密）
       final decoded = jsonDecode(content);

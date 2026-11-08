@@ -14,6 +14,10 @@ class WalletBackupCrypto {
   static const _kApp = 'N42Wallet';
   static const _kIterations = 600000;
 
+  /// Bounds apply before parsing/derivation; current exports use 600,000 rounds.
+  static const maxBackupCharacters = 16 * 1024 * 1024;
+  static const maxImportIterations = 1000000;
+
   // AES-256-CBC with HMAC-SHA256 for integrity
   static final _cipher = AesCbc.with256bits(macAlgorithm: Hmac.sha256());
 
@@ -61,6 +65,9 @@ class WalletBackupCrypto {
     String backupJson,
     String password,
   ) async {
+    if (backupJson.length > maxBackupCharacters) {
+      throw const WalletBackupException('Backup file is too large');
+    }
     final Map<String, dynamic> envelope;
     try {
       envelope = jsonDecode(backupJson) as Map<String, dynamic>;
@@ -72,11 +79,38 @@ class WalletBackupCrypto {
       throw const WalletBackupException('Not an N42Wallet backup file');
     }
 
-    final salt = base64.decode(envelope['salt'] as String);
-    final iv = base64.decode(envelope['iv'] as String);
-    final mac = base64.decode(envelope['mac'] as String);
-    final cipherText = base64.decode(envelope['data'] as String);
-    final iterations = (envelope['iterations'] as int?) ?? _kIterations;
+    // Older envelopes may omit the version/KDF labels. Explicit unknown
+    // values must never be interpreted as the current algorithm.
+    if ((envelope['version'] != null && envelope['version'] != _kVersion) ||
+        (envelope['kdf'] != null && envelope['kdf'] != 'pbkdf2-sha256')) {
+      throw const WalletBackupException('Unsupported backup format');
+    }
+    final rounds = envelope['iterations'] ?? _kIterations;
+    if (rounds is! int || rounds < 1 || rounds > maxImportIterations) {
+      throw const WalletBackupException('Invalid backup iteration count');
+    }
+    List<int> decodeField(String name) {
+      try {
+        final value = envelope[name];
+        if (value is! String) throw const FormatException();
+        return base64.decode(value);
+      } catch (_) {
+        throw const WalletBackupException('Invalid backup encryption fields');
+      }
+    }
+
+    final salt = decodeField('salt');
+    final iv = decodeField('iv');
+    final mac = decodeField('mac');
+    final cipherText = decodeField('data');
+    if (salt.length != 16 ||
+        iv.length != 16 ||
+        mac.length != 32 ||
+        cipherText.isEmpty ||
+        cipherText.length % 16 != 0) {
+      throw const WalletBackupException('Invalid backup encryption fields');
+    }
+    final iterations = rounds;
 
     final key = await _deriveKey(password, salt, iterations);
 
@@ -96,8 +130,13 @@ class WalletBackupCrypto {
       throw const WalletBackupException('Backup data is corrupted');
     }
 
-    return (payload['wallets'] as List<dynamic>? ?? [])
-        .cast<Map<String, dynamic>>();
+    final wallets = payload['wallets'];
+    if (wallets == null) return [];
+    if (wallets is! List ||
+        wallets.any((wallet) => wallet is! Map<String, dynamic>)) {
+      throw const WalletBackupException('Backup wallet list is corrupted');
+    }
+    return wallets.cast<Map<String, dynamic>>().toList();
   }
 
   // ──────────────────────────────────────────────

@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-08",
+  "base_source": "12994ca53",
+  "change": [
+    "Validate backup version/KDF labels and encryption field types/lengths before derivation",
+    "Bound input to 16 Mi characters and imported PBKDF2 rounds to 1..1000000; current exports remain 600000",
+    "Materialize and validate decrypted wallet lists; preserve absent legacy labels",
+    "Reject oversized selected files before reading"
+  ],
+  "tests": {
+    "passed": 16,
+    "failed": 0,
+    "pre_fix_malformed_field_failures": 4,
+    "accepted": [
+      "Current 600000-round export restores",
+      "Unlabeled legacy envelope restores",
+      "Wrong password rejected",
+      "Malformed fields, invalid rounds, unsupported labels and oversized input rejected",
+      "Account-switch restore regression retained"
+    ]
+  },
+  "boundaries": [
+    "Physical cloud-drive picker and production restore not accepted",
+    "Inputs above documented import resource limits are rejected"
+  ],
+  "logs": {
+    "/tmp/n42-backup-envelope-before.log": "28a23efcd0c9191ddd858000816948de42d08e7397cf8ea14aa9e2ec13b965a4",
+    "/tmp/n42-backup-envelope-final.log": "1465d1f1be4fba32f240241fb5a27c7fb6709e3c2588241d6bd2d2f3e46fac52"
+  }
+}
