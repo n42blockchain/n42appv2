@@ -1,0 +1,96 @@
+{
+  "updatedAt": "2026-11-07T22:04:15-05:00",
+  "candidate": "2.5.4+73481",
+  "source": "afec57de7531c173121eb7c3c02b9d80317b7023",
+  "chatRef": "af265ed4f762e79ee78652acc5cfd3d55ea4f856",
+  "chatFull": {
+    "passed": 8689,
+    "failed": 0,
+    "skipped": 4,
+    "exitCode": 0
+  },
+  "hostFocused": {
+    "passed": 135,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "priorWalletFull": {
+    "source": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+    "chatRef": "fd953157e1f918ddbcb7101d53902b17efe526a4",
+    "passed": 7781,
+    "failed": 0,
+    "skipped": 3,
+    "coverageHit": 104200,
+    "coverageFound": 141321,
+    "coveragePercent": 73.73284932883294,
+    "appliesToCandidateSource": false
+  },
+  "priorAndroidNative": {
+    "runId": 42438227855,
+    "source": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+    "status": "completed",
+    "conclusion": "success",
+    "passed": 15,
+    "failed": 0,
+    "skipped": 1,
+    "skipReason": "Requires verified N42 test RPC/client provenance and approved disposable funded account",
+    "logSha256": "89b216d1c5de9ef5794795b15a594f1abcf75bde1954e2043673d4d342271c3a",
+    "appliesToCandidateSource": false
+  },
+  "currentSourceCi": {
+    "runId": 42440417096,
+    "source": "afec57de7531c173121eb7c3c02b9d80317b7023",
+    "status": "in_progress"
+  },
+  "supersededCi": {
+    "runId": 42438225917,
+    "source": "fe2128a91fd979b0f8bc312c2c417a6a772acec0",
+    "cancellationReason": "Superseded by accepted note/link draft repair, not observation timeout",
+    "passedJobs": [
+      "four backend contracts",
+      "analysis",
+      "security"
+    ],
+    "allGreen": false,
+    "status": "completed",
+    "conclusion": "cancelled"
+  },
+  "buildStatus": "completed",
+  "buildLog": "/tmp/n42-wallet73481-ipa-build.log",
+  "uploadAccepted": false,
+  "physicalDeviceQa": "deferred by user",
+  "remaining": [
+    "exact-source full CI and native build results",
+    "new build upload and Apple processing/tester availability",
+    "live provider/funded transfer/encrypted-room acceptance"
+  ],
+  "ipaSha256": "bc66a3ca4249593890297b9129fe1135776eb052fc63de842cd4ee4f8942f6bb",
+  "buildExit": 0,
+  "buildSourceStable": true,
+  "artifactVerified": true,
+  "packageChecks": 50,
+  "chatCryptoChecks": 9,
+  "packagedAuthChecks": 14,
+  "modelBundles": 10,
+  "modelFiles": 86,
+  "modelArchiveAndIpaBytesMatch": true,
+  "preservedPath": "/Users/jieliu/Documents/n42/n42appv2/build/release-preserved/73481-20261107",
+  "status": "Signed and preserved candidate; current-source full CI pending; not uploaded",
+  "capabilities": {
+    "google_native_code": false,
+    "native_oidc_providers": [
+      "apple",
+      "facebook"
+    ],
+    "web_oauth": true,
+    "web_providers": [
+      "google",
+      "apple",
+      "facebook"
+    ],
+    "legacy_account_migration": false,
+    "httpStatus": 200,
+    "verifiedAt": "2026-11-07T22:05:31-05:00"
+  }
+}

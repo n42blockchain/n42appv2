@@ -1,0 +1,8 @@
+N42 Wallet 2.5.4 (73481)
+
+- View, edit and search tags and remarks on saved messages.
+- Forward saved messages, notes and links to a selected chat.
+- Keep note and link drafts on save failure and allow retry.
+- Prevent stale account actions and duplicate submissions.
+
+Please test Favorites search and filters, tag/remark editing, forwarding text and encrypted attachments, and account switching while a menu or draft is open. Google native authorization-code exchange remains disabled on the deployed server. Production provider login, funded transfers and physical-device data continuity still require separate acceptance.
