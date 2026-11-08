@@ -59,6 +59,19 @@
       "percent": 74.0446118151494,
       "threshold": 70
     },
-    "scope": "Tests and coverage job passed; complete workflow builds remain running. Native asset acceptance remains failed/pending diagnostics."
+    "scope": "Complete CI passed, including Android/iOS builds, analysis, backend contracts, security, performance and tests/coverage. This is not native asset workflow acceptance.",
+    "workflow_conclusion": "success",
+    "jobs_passed": 11
+  },
+  "complete_android_run": {
+    "run": 42480309165,
+    "source": "609a23f5795c70aa26199d2ae169a0f0a0cbff06",
+    "conclusion": "failure",
+    "passed": 47,
+    "skipped": 3,
+    "failed": 1,
+    "cause": "Historical _StickerFixture omitted watchInstalledPacks; source ec10b4e12 and later includes the shared corrected fixture.",
+    "supplementary_focused_rerun": 42480743818,
+    "supplementary_result": "Four chat audit cases passed; not a replacement terminal result for the entire original run."
   }
 }
