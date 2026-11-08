@@ -1,0 +1,17 @@
+{
+  "version": "2.5.4+73486",
+  "buildId": "5c2febf4-1506-418c-abc6-0f27166e9333",
+  "appleProcessingComplete": true,
+  "notesSavedAndReloaded": true,
+  "group": "t1",
+  "groupId": "cb8145d0-d3dc-46d3-97ea-57e7b2193351",
+  "internalTesters": 16,
+  "groupAssigned": true,
+  "deviceInstallVerified": false,
+  "physicalDeviceAcceptance": false,
+  "androidNativeRerun": 42450433761,
+  "androidNativeRerunAccepted": false,
+  "groupTestingStatus": "Testing",
+  "groupBuildCount": 48,
+  "notesReloadVerified": true
+}
