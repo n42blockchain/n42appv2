@@ -81,3 +81,13 @@ activates compatible chain configuration. See each client's
 - The network suite uses synthetic RPC responses and secure-storage mocks with
   actual native signatures. It does not submit to a node or validate device
   keychain/keystore behavior. Linux CI execution remains to be observed remotely.
+
+## RPC compatibility refresh, 2026-11-09
+
+The public RPC still returns method-not-found for the Falcon capability handshake.
+The wallet now reports that this network has not enabled Falcon transactions and
+keeps offline signing available. A mismatched response ID, other RPC method or
+other error does not receive that compatibility classification. Real loopback
+HTTP regression and native crypto/vault/page suites pass all 25 tests. Three Rust
+wallet/Go codec tests pass. This is not public-network send or seven-node activation
+acceptance. The separate private-chain mining test is still running.

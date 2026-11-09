@@ -7,5 +7,34 @@
   "flutter_native_skipped": 0,
   "log_sha256": "058bc075e87ec09d432c2e460921bf0e37b694033bd2c1d0110615a3e942e93a",
   "library_sha256": "a2befdb8ed3e94333c87ded191fcad1279956c79c4e8dd139803c438587f3349",
-  "scope": "Locked Rust build and real macOS host Falcon FFI, network-fixture and page tests after compatible dependency integration. Not public-chain transaction, mobile packaged library, or physical-device acceptance."
+  "scope": "Locked Rust build and real macOS host Falcon FFI, network-fixture and page tests after compatible dependency integration. Not public-chain transaction, mobile packaged library, or physical-device acceptance.",
+  "rpc_transport_followup_2026_11_09": {
+    "wallet_base_source": "d165b95a8acfcd5cdbb6ac7fc0b39f5943073dd7",
+    "native_and_transport_tests_passed": 25,
+    "skipped": 0,
+    "analysis": "No issues found",
+    "public_probe": {
+      "commonHeight": null,
+      "consistent": false,
+      "nodes": [
+        {
+          "rpc": "https://rpc.n42.world",
+          "ok": false,
+          "error": "RpcRejected",
+          "failedMethod": "n42_getPQCapabilities",
+          "rpcCode": -32601
+        }
+      ]
+    },
+    "behavior": "Only a matching JSON-RPC method-not-found response to n42_getPQCapabilities produces the existing network-not-enabled guidance. Other methods, IDs and errors remain failures. Offline signing remains available.",
+    "rust_codec_tests_passed": 3,
+    "rust_source": "2d7e88b63",
+    "rust_mined_test": "Still running separately; not accepted by this receipt",
+    "logs": {
+      "n42-falcon-rpc-red.log": "91896d786ad9648173233855c50cbf7a15315e3ff6c4ad5eae3ae7877b458679",
+      "n42-falcon-rpc-green.log": "562b191df4e916a6966c015c67b2a4fae12d13d1e3ddd2604dfef4b108193fea",
+      "n42-falcon-native-rpc-regression.log": "a253c2a0b8640d751091c39270f5e347d2b8bb7d15725cdd2a698dca37dd721f",
+      "n42-falcon-codec-20261109.log": "68349ef6b3f56330edd5454a5fd743acf71680595ef4db9c9fe0b65f5a2dc78c"
+    }
+  }
 }

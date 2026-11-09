@@ -52,6 +52,16 @@ final class FalconNetwork {
         data: {'jsonrpc': '2.0', 'id': id, 'method': method, 'params': params},
       );
       final data = response.data;
+      final rpcError = data is Map ? data['error'] : null;
+      if (method == 'n42_getPQCapabilities' &&
+          data is Map &&
+          data['jsonrpc'] == '2.0' &&
+          data['id'] == id &&
+          !data.containsKey('result') &&
+          rpcError is Map &&
+          rpcError['code'] == -32601) {
+        throw FalconNetworkNotEnabled();
+      }
       if (data is! Map ||
           data['jsonrpc'] != '2.0' ||
           data['id'] != id ||
