@@ -28,13 +28,18 @@
     },
     "behavior": "Only a matching JSON-RPC method-not-found response to n42_getPQCapabilities produces the existing network-not-enabled guidance. Other methods, IDs and errors remain failures. Offline signing remains available.",
     "rust_codec_tests_passed": 3,
-    "rust_source": "2d7e88b63",
-    "rust_mined_test": "Still running separately; not accepted by this receipt",
+    "rust_source": "2d7e88b63f9c13fe886bbd22090ed414bc606732",
+    "rust_mined_test": {
+      "passed": 1,
+      "failed": 0,
+      "scope": "Isolated single-process node; actual RPC handler, pool, block import, stored typed receipt and balance/nonce/gas assertions. Not deployed HTTP transport or seven-node acceptance."
+    },
     "logs": {
       "n42-falcon-rpc-red.log": "91896d786ad9648173233855c50cbf7a15315e3ff6c4ad5eae3ae7877b458679",
       "n42-falcon-rpc-green.log": "562b191df4e916a6966c015c67b2a4fae12d13d1e3ddd2604dfef4b108193fea",
       "n42-falcon-native-rpc-regression.log": "a253c2a0b8640d751091c39270f5e347d2b8bb7d15725cdd2a698dca37dd721f",
-      "n42-falcon-codec-20261109.log": "68349ef6b3f56330edd5454a5fd743acf71680595ef4db9c9fe0b65f5a2dc78c"
+      "n42-falcon-codec-20261109.log": "68349ef6b3f56330edd5454a5fd743acf71680595ef4db9c9fe0b65f5a2dc78c",
+      "n42-falcon-mined-20261109.log": "1a112a8868a7bfd45126e274c7e2aca81e8dc0cc38c88ccae7fed6d8ede10608"
     }
   }
 }

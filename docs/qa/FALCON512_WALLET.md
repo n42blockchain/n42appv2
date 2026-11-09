@@ -90,4 +90,7 @@ keeps offline signing available. A mismatched response ID, other RPC method or
 other error does not receive that compatibility classification. Real loopback
 HTTP regression and native crypto/vault/page suites pass all 25 tests. Three Rust
 wallet/Go codec tests pass. This is not public-network send or seven-node activation
-acceptance. The separate private-chain mining test is still running.
+acceptance. The private-chain mining test also passes: invalid signatures are
+rejected, a valid transfer is mined with a successful 0x05 receipt, and recipient
+balance, sender nonce and exact value plus gas charge match. This test calls the
+actual node RPC handler in one process; it is not a deployed HTTP/wallet send.
