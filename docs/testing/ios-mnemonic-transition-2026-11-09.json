@@ -1,0 +1,24 @@
+{
+  "baseSource": "90331c0b02d0916a49d5c69f3662dc28240801f5",
+  "failedRun": 42535139405,
+  "failedJob": 128897666926,
+  "failure": "WLT-01 first mnemonic candidate tap outside root during route transition; password page not reached.",
+  "observedTap": {
+    "x": 522.9,
+    "rootWidth": 420.0
+  },
+  "change": "Settle the CreateThree route and require each mnemonic candidate to be hit-testable before tapping.",
+  "preservedAssertions": [
+    "Exact generated mnemonic order",
+    "Password page reached",
+    "Native wallet storage",
+    "Wallet name and restart state"
+  ],
+  "hostTests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "scopedAnalysis": "clean",
+  "nativeConfirmation": "pending complete shard 1 rerun",
+  "productCodeChanged": false
+}

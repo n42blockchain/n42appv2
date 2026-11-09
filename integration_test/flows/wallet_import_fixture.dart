@@ -253,6 +253,8 @@ void registerWalletImportFixture() {
           await tester.pumpAndSettle();
           await tester.tap(find.text(S.current.g_key_wallet_c43));
           await _wait(tester, find.byType(CreateThree));
+          // The route exists before its native slide transition finishes.
+          await tester.pumpAndSettle();
           expectedPhrase = tester
               .widget<CreateThree>(find.byType(CreateThree))
               .wInfo
@@ -267,7 +269,8 @@ void registerWalletImportFixture() {
                   !key.value.isSelected;
             }).first;
             await tester.ensureVisible(candidate);
-            await tester.tap(candidate);
+            await _wait(tester, candidate.hitTestable());
+            await tester.tap(candidate.hitTestable());
             await tester.pumpAndSettle();
           }
           await tester.tap(find.text(S.current.g_key_wallet_c43));
