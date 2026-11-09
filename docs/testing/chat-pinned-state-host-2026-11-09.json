@@ -1,0 +1,10 @@
+{
+  "chatSource": "50a17364a2ef334724b021e8aa838719838ce8f3",
+  "walletHostTestsPassed": 65,
+  "resolvedRuntimeFiles": 859,
+  "resolvedMismatches": 0,
+  "hostLogSha256": "9545e6eb1b28988a1acf3530041696d8940722763a9c0c6ee8ab8240df1f055b",
+  "ownedServiceEvidence": "n42_chat docs/testing/catchup-matrix16-live-2026-11-09.json at Chat source",
+  "scope": "Wallet initialization and provider configuration; actual pin/attention/history protocol acceptance belongs to the isolated Chat service fixture. Not physical-device or production acceptance.",
+  "delivered73544ContainsFix": false
+}
