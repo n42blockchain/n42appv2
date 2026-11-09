@@ -60,5 +60,22 @@
       "n42-native-auth-regression.log": "b623304fa64bc339174c80debead9d9f1f690a7609d6d96e50763a66e42d1d79",
       "n42-native-host-regression.log": "5acad2d20e24c1d6df9623262f9eba552d992941b7c74bfd9fb2e3a997af5886"
     }
+  },
+  "native_matrix_completion_followup": {
+    "chat_source": "0637fc1f0a2796246cbccd599894af27dcf146cf",
+    "pre_fix_failures": 2,
+    "combined_auth_tests_passed": 107,
+    "wallet_host_tests_passed": 65,
+    "resolved_runtime_files": 859,
+    "resolved_mismatches": 0,
+    "analysis_errors": 0,
+    "analysis_warnings": 0,
+    "existing_analysis_infos": 9,
+    "scope": "Late Matrix login success/failure preserves another current account. Stable same-account login and provider failure remain covered. Not real provider acceptance and not in delivered 73544.",
+    "logs": {
+      "n42-native-matrix-before.log": "3555ecea7cb7c42d28b27f98dcc3764087a535486000767a1e702d1e44f26d15",
+      "n42-native-matrix-after.log": "60f8e1f98267a97d55d990717927d171331240ee55f6e4f6cac4e2535352ae69",
+      "n42-native-matrix-host.log": "42bd71ada8be7553c4c1e0aff51798affff32db04fc3e8b97988e59eb4473ea8"
+    }
   }
 }
