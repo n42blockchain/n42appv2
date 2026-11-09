@@ -39,5 +39,26 @@
     "/tmp/n42-core-login-20261108.log": "f8580da0e03dfd39162dd8355cac0e6a96af457774b05a4b8778b13f6803537d",
     "/tmp/n42-native-auth-backend-20261108.log": "b78fc75988d4ecc3a185d6577698cfdcd86bd0cee33219a57f08426dc8269194",
     "/tmp/n42-browser-handoff-real-redis-20261108.log": "ef708ed1c2bab3452c60443b66fa555379beae49c63faee7419d150cae22fc3c"
+  },
+  "native_stale_failure_followup": {
+    "chat_source": "b03bb58a2f95e0bb767e12fc42c025ef9e0bd738",
+    "reproduced_before_fix": true,
+    "native_hub_tests_passed": 23,
+    "general_auth_tests_passed": 82,
+    "wallet_host_tests_passed": 65,
+    "resolved_runtime_files": 859,
+    "resolved_mismatches": 0,
+    "analysis": {
+      "errors": 0,
+      "warnings": 0,
+      "existing_infos": 9
+    },
+    "scope": "Old native provider errors cannot replace another logged-in account. Mocked regression and host integration; not real provider acceptance. Not included in delivered 73544.",
+    "logs": {
+      "n42-native-stale-before.log": "4b136dfc4d5f631b6d6f38fdc0f6a55fa5e0a6a1b21e5ee44e55dbec6f6847ab",
+      "n42-native-stale-after.log": "bc1b5cc0b30a71fdbaaf17b0ea03ad41435eaa09a875f9c8bf167845eb2d6050",
+      "n42-native-auth-regression.log": "b623304fa64bc339174c80debead9d9f1f690a7609d6d96e50763a66e42d1d79",
+      "n42-native-host-regression.log": "5acad2d20e24c1d6df9623262f9eba552d992941b7c74bfd9fb2e3a997af5886"
+    }
   }
 }
