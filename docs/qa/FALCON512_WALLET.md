@@ -94,3 +94,7 @@ acceptance. The private-chain mining test also passes: invalid signatures are
 rejected, a valid transfer is mined with a successful 0x05 receipt, and recipient
 balance, sender nonce and exact value plus gas charge match. This test calls the
 actual node RPC handler in one process; it is not a deployed HTTP/wallet send.
+
+The entry-path regression also passes all 16 enablement/attestation/sharding/
+corrupt-signature combinations. Disabled or invalid Falcon transactions are
+rejected, and external sender claims never replace the verified signer.

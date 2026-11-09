@@ -39,7 +39,14 @@
       "n42-falcon-rpc-green.log": "562b191df4e916a6966c015c67b2a4fae12d13d1e3ddd2604dfef4b108193fea",
       "n42-falcon-native-rpc-regression.log": "a253c2a0b8640d751091c39270f5e347d2b8bb7d15725cdd2a698dca37dd721f",
       "n42-falcon-codec-20261109.log": "68349ef6b3f56330edd5454a5fd743acf71680595ef4db9c9fe0b65f5a2dc78c",
-      "n42-falcon-mined-20261109.log": "1a112a8868a7bfd45126e274c7e2aca81e8dc0cc38c88ccae7fed6d8ede10608"
+      "n42-falcon-mined-20261109.log": "1a112a8868a7bfd45126e274c7e2aca81e8dc0cc38c88ccae7fed6d8ede10608",
+      "n42-falcon-ingest-20261109.log": "612e877e24906db142ca736e09f14203dc5b3f8be74da8811161bf3a747e29e6"
+    },
+    "rust_ingest_test": {
+      "passed": 1,
+      "failed": 0,
+      "combinations": 16,
+      "scope": "Enablement, attestation, sharding and corrupt-signature combinations; sender claims never replace the verified signer."
     }
   }
 }
