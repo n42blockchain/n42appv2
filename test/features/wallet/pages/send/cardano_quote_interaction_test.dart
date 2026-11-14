@@ -22,6 +22,8 @@ class _Wallet extends WalletActionProvider {
 
 class _Quotes extends CardanoQuoteService {
   int calls = 0;
+  final modes = <bool>[];
+  BigInt balance = BigInt.from(10000000);
   Completer<void>? gate;
   bool fail = false;
   @override
@@ -34,17 +36,24 @@ class _Quotes extends CardanoQuoteService {
     required bool Function() isCurrent,
   }) async {
     calls++;
+    modes.add(maximum);
     await gate?.future;
     if (fail) throw StateError('offline');
+    final fee = BigInt.from(200000);
+    if (!maximum && balance - fee - amount < BigInt.from(1000000)) {
+      // Like the native planner, an exact plan needs a change output above
+      // the minimum UTxO: the Max amount cannot be planned in exact mode.
+      throw const FormatException('Cardano quote unavailable');
+    }
     return CardanoTransferPlan.parse(
       {
-        'amount': maximum ? '9800000' : amount.toString(),
-        'fee': '200000',
-        'change': maximum ? '0' : (BigInt.from(9800000) - amount).toString(),
-        'available': '10000000',
+        'amount': (maximum ? balance - fee : amount).toString(),
+        'fee': '$fee',
+        'change': maximum ? '0' : (balance - fee - amount).toString(),
+        'available': '$balance',
       },
-      requested: maximum ? BigInt.from(10000000) : amount,
-      available: BigInt.from(10000000),
+      requested: maximum ? balance : amount,
+      available: balance,
       sendMax: maximum,
     );
   }
@@ -186,6 +195,65 @@ void main() {
     expect(captured!.decimalAmountOverride, '1.25');
     expect(captured!.sendMax, false);
   });
+  for (final scenario in ['unchanged', 'balance moved', 'amount edited']) {
+    testWidgets('Max confirmation keeps the maximum mode: $scenario', (
+      tester,
+    ) async {
+      SendParams? captured;
+      final quotes = _Quotes();
+      final state = await mount(
+        tester,
+        quotes,
+        sender: (params) async {
+          captured = params;
+          return const SendResult.fail('fixture: no broadcast');
+        },
+      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('trustdart'),
+            (_) async => true,
+          );
+      state.toCtrl.text = 'addr_synthetic_recipient_for_quote_tests';
+      await state.maxTag();
+      await tester.pump();
+      expect(state.transferValue, BigInt.from(9800000));
+      if (scenario == 'balance moved') {
+        quotes.balance = BigInt.from(12000000);
+      } else if (scenario == 'amount edited') {
+        state.valueCtrl.text = '1.25';
+      }
+      final Future<void> pending = state.sendTransaction();
+      await tester.pumpAndSettle();
+      if (scenario == 'balance moved') {
+        // Never present or sign a different amount than the reviewed Max.
+        expect(find.byType(WalletBaseSend), findsNothing);
+        await pending;
+        expect(quotes.modes, [true, true]);
+        expect(state.errorMessage, isNotEmpty);
+        expect(captured, isNull);
+        return;
+      }
+      final page = tester.widget<WalletBaseSend>(find.byType(WalletBaseSend));
+      Navigator.of(tester.element(find.byType(WalletBaseSend))).pop(true);
+      await tester.pumpAndSettle();
+      await pending;
+      expect(captured, isNotNull);
+      expect(captured!.expectedFeeBaseUnits, BigInt.from(200000));
+      if (scenario == 'unchanged') {
+        expect(quotes.modes, [true, true]);
+        expect(page.transationRecordModel!.price, BigInt.from(9800000));
+        expect(captured!.sendMax, isTrue);
+        // The full ADA-only balance; the sender deducts the reviewed fee.
+        expect(captured!.decimalAmountOverride, '10');
+      } else {
+        expect(quotes.modes, [true, false]);
+        expect(captured!.sendMax, isFalse);
+        expect(captured!.decimalAmountOverride, '1.25');
+      }
+      expect(tester.takeException(), isNull);
+    });
+  }
   for (final action in ['Max', 'Send']) {
     testWidgets('$action rejects form changed during address validation', (
       tester,

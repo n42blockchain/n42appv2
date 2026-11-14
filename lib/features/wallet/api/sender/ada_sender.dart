@@ -16,6 +16,7 @@ import 'package:n42_wallet/features/wallet/utils/cardano/transfer_plan.dart';
 import 'chain_sender.dart';
 import '../../utils/cardano/signing_inputs.dart';
 import '../../utils/cardano/signed_transfer.dart';
+
 import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 
 /// Cardano (ADA) sender — uses Blockfrost API.
@@ -152,6 +153,14 @@ class AdaSender implements ChainSender {
       params.decimals,
     );
     final useMaxAmount = params.sendMax && valuePrice == chainBalance;
+    // A quoted maximum was reviewed for an exact spendable balance. If that
+    // balance moved, never fall back to an exact transfer of the old balance:
+    // the amount would differ from the one the user confirmed.
+    if (params.sendMax &&
+        !useMaxAmount &&
+        params.expectedFeeBaseUnits != null) {
+      return SendResult.fail(S.current.g_audit_quote_changed);
+    }
     if (valuePrice <= BigInt.zero || valuePrice > chainBalance) {
       return SendResult.fail(
         inputs.excludesNativeAssets

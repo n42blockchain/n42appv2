@@ -189,14 +189,25 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   CardanoTransferPlan? _cardanoPlan;
   Object? _cardanoContext;
   int _cardanoVersion = 0;
+
+  /// Amount shown by the last Max quote. While the amount field still holds
+  /// it, confirmation re-quotes and signs in the planner's maximum mode, the
+  /// mode that produced the reviewed amount and fee. An exact-amount plan of
+  /// the same value would need a change output the balance cannot fund.
+  BigInt? _cardanoMaxAmount;
+  bool _cardanoPlanIsMax = false;
+  bool get _cardanoMaxSelected =>
+      _cardanoMaxAmount != null && _cardanoMaxAmount == transferValue;
   CardanoTransferPlan? get _currentCardanoPlan =>
       _cardanoContext == _formContext ? _cardanoPlan : null;
 
   Future<bool> prepareCardanoQuote(
     String recipient, {
     bool maximum = false,
+    bool confirming = false,
   }) async {
     final version = ++_cardanoVersion;
+    if (maximum && !confirming) _cardanoMaxAmount = null;
     final openingForm = _formContext;
     final contextKey = (
       RecentAddressService.currentUser,
@@ -218,6 +229,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
               valueCtrl.text,
             );
     _cardanoPlan = null;
+    _cardanoPlanIsMax = false;
     try {
       final plan = await (widget.cardanoQuotes ?? CardanoQuoteService()).quote(
         sender: contextKey.$2,
@@ -228,11 +240,18 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         isCurrent: current,
       );
       if (!current()) return false;
-      if (maximum) {
+      if (maximum && confirming) {
+        // The spendable balance moved since the reviewed Max quote.
+        if (plan.amount != transferValue) {
+          throw StateError('Cardano maximum changed');
+        }
+      } else if (maximum) {
         transferValue = plan.amount;
         valueCtrl.text = toEther(plan.amount.toString(), 6).toString();
+        _cardanoMaxAmount = plan.amount;
       }
       _cardanoPlan = plan;
+      _cardanoPlanIsMax = maximum;
       _cardanoContext = _formContext;
       totalGasPrice = plan.fee;
       errorMessage = '';
@@ -474,7 +493,12 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       if (mounted) setState(() => load = Load.finish);
       return;
     }
-    if (_isCardanoNative && !await prepareCardanoQuote(toAddr)) {
+    if (_isCardanoNative &&
+        !await prepareCardanoQuote(
+          toAddr,
+          maximum: _cardanoMaxSelected,
+          confirming: true,
+        )) {
       if (mounted) setState(() => load = Load.finish);
       return;
     }
@@ -577,6 +601,16 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       final submit =
           widget.transactionSender ??
           SenderFactory.instance.getSender(coinType).send;
+      // A reviewed Cardano Max plan is signed in the same maximum mode: the
+      // full ADA-only balance with the fee deducted. The sender re-plans it and
+      // refuses a different fee or balance.
+      final cardanoPlan = _currentCardanoPlan;
+      final cardanoMax =
+          _isCardanoNative &&
+          _cardanoPlanIsMax &&
+          cardanoPlan != null &&
+          cardanoPlan.amount == trModel.price &&
+          cardanoPlan.fee == trModel.gasPrice;
       // A proof belongs to one signed transaction only.
       trModel.memoExpiry = null;
       final result = await submit(
@@ -587,7 +621,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           amount: toEther(trModel.price.toString(), decimals).toDouble(),
           decimals: decimals,
           path: path,
-          sendMax: false,
+          sendMax: cardanoMax,
           expectedFeeBaseUnits:
               (_isStellarNative ||
                   _isCardanoNative ||
@@ -602,7 +636,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
           privateKey: widget.coinModel.privateKey,
           chainConfig: widget.coinModel.coin,
           decimalAmountOverride: toEther(
-            trModel.price.toString(),
+            (cardanoMax ? cardanoPlan.available : trModel.price).toString(),
             decimals,
           ).toString(),
           onBroadcastStarting: {'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinType)

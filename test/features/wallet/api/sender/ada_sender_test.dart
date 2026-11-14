@@ -94,12 +94,15 @@ class _Signer extends Trustdart {
   ) async {
     onPlan?.call();
     if (brokenQuote) return {};
-    final amount = BigInt.parse(txData['amount'] as String);
+    final maximum = txData['useMaxAmount'] == true;
+    final fee = BigInt.parse(quoteFee);
+    final amount = maximum
+        ? BigInt.from(10000000) - fee
+        : BigInt.parse(txData['amount'] as String);
     return {
       'amount': amount.toString(),
       'fee': quoteFee,
-      'change': (BigInt.from(10000000) - amount - BigInt.parse(quoteFee))
-          .toString(),
+      'change': (BigInt.from(10000000) - amount - fee).toString(),
       'available': '10000000',
     };
   }
@@ -164,6 +167,44 @@ void main() {
   setUpAll(() async {
     await S.load(const Locale('en'));
   });
+  for (final (amount, quoted, expectMax, ok) in [
+    (10.0, true, true, true),
+    (9.0, true, false, false),
+    (9.0, false, false, true),
+  ]) {
+    test('sendMax amount=$amount quoted=$quoted', () async {
+      final signer = _Signer();
+      final result =
+          await AdaSender(
+            api: _Api(),
+            trustdart: signer,
+            ownerIdentity: () => 'owner',
+            readMnemonic: () => 'fixture mnemonic',
+          ).send(
+            SendParams(
+              coinType: 'ADA',
+              fromAddress: 'addr_confirmed',
+              toAddress: 'addr_recipient',
+              amount: amount,
+              decimals: 6,
+              path: "m/1852'/1815'/0'/0/2",
+              sendMax: true,
+              expectedFeeBaseUnits: quoted ? BigInt.from(200000) : null,
+            ),
+          );
+      if (!ok) {
+        // A reviewed maximum whose balance moved is never sent as an exact
+        // transfer of the old balance.
+        expect(result.success, isFalse);
+        expect(result.txHash, isNull);
+        expect(signer.signatures, 0);
+        return;
+      }
+      expect(signer.signatures, 1);
+      expect(signer.payload!['useMaxAmount'], expectMax);
+      if (expectMax) expect(result.actualAmount, 9.8);
+    });
+  }
   for (final scenario in [
     'same fee',
     'new fee',
