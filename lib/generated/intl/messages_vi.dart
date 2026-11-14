@@ -2667,6 +2667,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Danh sách theo dõi",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("Ngừng chờ"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Bạn có thể gửi lại. Giao dịch trước đó vẫn đang được kiểm tra.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Tiếp tục chờ",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Một lần chuyển trước đó từ địa chỉ này chưa được xác nhận và hiện chưa thể xác định kết quả, nên các lần chuyển mới đang bị chặn. Nếu bạn ngừng chờ, giao dịch đó vẫn nằm trong lịch sử ở trạng thái đang chờ và vẫn tiếp tục được kiểm tra. Cảnh báo: giao dịch đó vẫn có thể hoàn tất trên chuỗi, nên gửi lại có thể khiến bạn thanh toán hai lần. Hãy kiểm tra giao dịch trước đó trên trình khám phá khối trước.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Không rõ trạng thái giao dịch trước",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Điểm không hoạt động của trình xác thực cao. Kiểm tra trạng thái nút của bạn để tránh bị phạt.",
     ),

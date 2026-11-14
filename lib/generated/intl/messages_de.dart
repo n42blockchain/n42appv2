@@ -2798,6 +2798,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Beobachtungsliste",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Nicht mehr warten",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Sie können wieder senden. Die frühere Transaktion wird weiterhin geprüft.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Weiter warten",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Eine frühere Überweisung von dieser Adresse wurde noch nicht bestätigt und ihr Ergebnis lässt sich noch nicht feststellen, daher sind neue Überweisungen gesperrt. Wenn Sie nicht länger darauf warten, bleibt sie im Verlauf als ausstehend und wird weiterhin geprüft. Warnung: Sie kann trotzdem noch auf der Blockchain ausgeführt werden – wenn Sie erneut senden, zahlen Sie möglicherweise doppelt. Prüfen Sie die frühere Transaktion zuerst in einem Block-Explorer.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Status der vorherigen Transaktion unbekannt",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Inaktivitätswert des Validators ist hoch. Überprüfen Sie Ihren Knotenstatus, um Strafen zu vermeiden.",
     ),

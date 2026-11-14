@@ -2620,6 +2620,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "قائمة المراقبة",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "التوقف عن الانتظار",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "يمكنك الإرسال مرة أخرى. لا يزال التحقق من المعاملة السابقة جاريًا.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "مواصلة الانتظار",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "لم يتم تأكيد تحويل سابق من هذا العنوان ولا يمكن تحديد نتيجته بعد، لذلك تم حظر التحويلات الجديدة. إذا توقفت عن انتظاره، فسيبقى في السجل كمعلّق وسيستمر التحقق منه. تحذير: قد يكتمل على الشبكة رغم ذلك، لذا فإن الإرسال مرة أخرى قد يجعلك تدفع مرتين. تحقق أولاً من المعاملة السابقة في مستكشف الكتل.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "حالة المعاملة السابقة غير معروفة",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "درجة عدم نشاط أداة التحقق عالية. تحقق من حالة العقدة الخاصة بك لتجنب العقوبات.",
     ),

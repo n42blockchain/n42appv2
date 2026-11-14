@@ -2833,6 +2833,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Liste de surveillance",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Ne plus attendre",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Vous pouvez envoyer à nouveau. La transaction précédente est toujours en cours de vérification.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Continuer d\'attendre",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Un transfert précédent depuis cette adresse n\'a pas été confirmé et son résultat ne peut pas encore être déterminé ; les nouveaux transferts sont donc bloqués. Si vous cessez de l\'attendre, il restera en attente dans votre historique et continuera d\'être vérifié. Attention : il peut encore être exécuté sur la blockchain, donc renvoyer pourrait vous faire payer deux fois. Vérifiez d\'abord la transaction précédente dans un explorateur de blocs.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Statut de la transaction précédente inconnu",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Le score d\'inactivité du validateur est élevé. Vérifiez l\'état de votre nœud pour éviter les pénalités.",
     ),

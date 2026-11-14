@@ -1796,5 +1796,10 @@
   "miningV3BackgroundPaused": "En pause en arrière-plan",
   "miningV3LocalTestnet": "Réseau de test local",
   "miningV3UseLocalTestnet": "Utiliser le réseau de test local",
-  "miningV3LocalTestnetHint": "Le nœud par défaut se trouve sur le réseau de test local. Vous pouvez aussi saisir une adresse personnalisée."
+  "miningV3LocalTestnetHint": "Le nœud par défaut se trouve sur le réseau de test local. Vous pouvez aussi saisir une adresse personnalisée.",
+  "g_memo_pending_unknown_title": "Statut de la transaction précédente inconnu",
+  "g_memo_pending_unknown_body": "Un transfert précédent depuis cette adresse n'a pas été confirmé et son résultat ne peut pas encore être déterminé ; les nouveaux transferts sont donc bloqués. Si vous cessez de l'attendre, il restera en attente dans votre historique et continuera d'être vérifié. Attention : il peut encore être exécuté sur la blockchain, donc renvoyer pourrait vous faire payer deux fois. Vérifiez d'abord la transaction précédente dans un explorateur de blocs.",
+  "g_memo_pending_keep_waiting": "Continuer d'attendre",
+  "g_memo_pending_dismiss": "Ne plus attendre",
+  "g_memo_pending_dismissed": "Vous pouvez envoyer à nouveau. La transaction précédente est toujours en cours de vérification."
 }

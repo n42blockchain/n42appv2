@@ -2724,6 +2724,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Daftar pantauan",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Berhenti menunggu",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Anda dapat mengirim lagi. Transaksi sebelumnya masih terus diperiksa.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Tetap menunggu",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Transfer sebelumnya dari alamat ini belum dikonfirmasi dan hasilnya belum dapat ditentukan, sehingga transfer baru diblokir. Jika Anda berhenti menunggu, transfer tersebut tetap ada di riwayat sebagai tertunda dan akan terus diperiksa. Peringatan: transfer tersebut masih bisa selesai di blockchain, sehingga mengirim lagi dapat membuat Anda membayar dua kali. Periksa dulu transaksi sebelumnya di block explorer.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Status transaksi sebelumnya tidak diketahui",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Skor tidak aktif validator tinggi. Periksa status node Anda untuk menghindari penalti.",
     ),

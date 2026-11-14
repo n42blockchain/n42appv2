@@ -2812,6 +2812,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Lista di controllo",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Smetti di attendere",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Puoi inviare di nuovo. La transazione precedente è ancora in verifica.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Continua ad attendere",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Un trasferimento precedente da questo indirizzo non è stato confermato e il suo esito non può ancora essere determinato, quindi i nuovi trasferimenti sono bloccati. Se smetti di attenderlo, resterà nella cronologia come in sospeso e continuerà a essere verificato. Attenzione: potrebbe ancora essere completato sulla blockchain, quindi inviando di nuovo potresti pagare due volte. Controlla prima la transazione precedente in un block explorer.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Stato della transazione precedente sconosciuto",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Il punteggio di inattività del validatore è alto. Controlla lo stato del nodo per evitare sanzioni.",
     ),

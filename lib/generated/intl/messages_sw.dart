@@ -2788,6 +2788,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Orodha ya maangalizi",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Acha kusubiri",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Unaweza kutuma tena. Muamala uliopita bado unaendelea kukaguliwa.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Endelea kusubiri",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Uhamisho uliopita kutoka anwani hii haujathibitishwa na matokeo yake bado hayawezi kubainishwa, kwa hivyo uhamisho mpya umezuiwa. Ukiacha kuusubiri, utabaki kwenye historia kama unaosubiri na utaendelea kukaguliwa. Onyo: bado unaweza kukamilika kwenye mnyororo, kwa hivyo ukituma tena unaweza kulipa mara mbili. Kwanza kagua muamala uliopita kwenye kichunguzi cha bloku.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Hali ya muamala uliopita haijulikani",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Alama ya kutotumika ya kihalalishi ni ya juu. Angalia hali ya nodi yako ili kuepuka adhabu.",
     ),
@@ -3324,7 +3339,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Haijathibitishwa",
     ),
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
-      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+      "Bado hakuna uthibitisho kutoka kwenye mnyororo na matokeo hayajulikani. Bado inakaguliwa na huenda bado ikakamilika. Ikague kwenye kichunguzi cha bloku kabla ya kutuma tena.",
     ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Ukopeshaji wa Aave V3",

@@ -2177,6 +2177,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage("コインを検索..."),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("トレンド"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("ウォッチリスト"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("待機をやめる"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "再度送信できます。以前の取引は引き続き確認されます。",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "待機を続ける",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "このアドレスからの以前の送金がまだ確認されておらず、結果をまだ判断できないため、新しい送金はブロックされています。待機をやめても、その取引は保留中として履歴に残り、引き続き確認されます。警告：その取引はまだチェーン上で完了する可能性があるため、再送信すると二重に支払うおそれがあります。まずブロックエクスプローラーで以前の取引を確認してください。",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "以前の取引の状態が不明です",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "バリデーターの非活動スコアが高いです。ペナルティを避けるため、ノードのステータスを確認してください。",
     ),

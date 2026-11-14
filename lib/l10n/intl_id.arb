@@ -1796,5 +1796,10 @@
   "miningV3BackgroundPaused": "Dijeda di latar belakang",
   "miningV3LocalTestnet": "Jaringan uji lokal",
   "miningV3UseLocalTestnet": "Gunakan jaringan uji lokal",
-  "miningV3LocalTestnetHint": "Node bawaan berada di jaringan uji lokal. Anda juga dapat memasukkan alamat khusus."
+  "miningV3LocalTestnetHint": "Node bawaan berada di jaringan uji lokal. Anda juga dapat memasukkan alamat khusus.",
+  "g_memo_pending_unknown_title": "Status transaksi sebelumnya tidak diketahui",
+  "g_memo_pending_unknown_body": "Transfer sebelumnya dari alamat ini belum dikonfirmasi dan hasilnya belum dapat ditentukan, sehingga transfer baru diblokir. Jika Anda berhenti menunggu, transfer tersebut tetap ada di riwayat sebagai tertunda dan akan terus diperiksa. Peringatan: transfer tersebut masih bisa selesai di blockchain, sehingga mengirim lagi dapat membuat Anda membayar dua kali. Periksa dulu transaksi sebelumnya di block explorer.",
+  "g_memo_pending_keep_waiting": "Tetap menunggu",
+  "g_memo_pending_dismiss": "Berhenti menunggu",
+  "g_memo_pending_dismissed": "Anda dapat mengirim lagi. Transaksi sebelumnya masih terus diperiksa."
 }

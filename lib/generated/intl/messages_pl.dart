@@ -2745,6 +2745,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Lista obserwowanych",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Przestań czekać",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Możesz wysłać ponownie. Wcześniejsza transakcja jest nadal sprawdzana.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Czekaj dalej",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Wcześniejszy przelew z tego adresu nie został potwierdzony, a jego wyniku nie można jeszcze ustalić, dlatego nowe przelewy są zablokowane. Jeśli przestaniesz na niego czekać, pozostanie w historii jako oczekujący i nadal będzie sprawdzany. Uwaga: nadal może zostać zrealizowany w blockchainie, więc ponowne wysłanie może oznaczać podwójną płatność. Najpierw sprawdź wcześniejszą transakcję w eksploratorze bloków.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Nieznany status wcześniejszej transakcji",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Wynik nieaktywności walidatora jest wysoki. Sprawdź status węzła, aby uniknąć kar.",
     ),

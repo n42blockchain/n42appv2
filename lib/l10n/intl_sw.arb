@@ -218,7 +218,7 @@
   "g_key_t_2": "Inasubiri",
   "g_key_t_3": "Kushindwa",
   "g_tx_status_unconfirmed": "Haijathibitishwa",
-  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+  "g_tx_status_unconfirmed_hint": "Bado hakuna uthibitisho kutoka kwenye mnyororo na matokeo hayajulikani. Bado inakaguliwa na huenda bado ikakamilika. Ikague kwenye kichunguzi cha bloku kabla ya kutuma tena.",
   "g_key_t_4": "Uhamisho nje",
   "g_key_t_5": "Hamisha ndani",
   "g_key_t_6": "Gesi Inayotumika",
@@ -1817,5 +1817,10 @@
   "miningV3BackgroundPaused": "Imesitishwa chinichini",
   "miningV3LocalTestnet": "Mtandao wa majaribio wa ndani",
   "miningV3UseLocalTestnet": "Tumia mtandao wa majaribio wa ndani",
-  "miningV3LocalTestnetHint": "Nodi chaguomsingi iko kwenye mtandao wa majaribio wa ndani. Unaweza pia kuingiza anwani yako mwenyewe."
+  "miningV3LocalTestnetHint": "Nodi chaguomsingi iko kwenye mtandao wa majaribio wa ndani. Unaweza pia kuingiza anwani yako mwenyewe.",
+  "g_memo_pending_unknown_title": "Hali ya muamala uliopita haijulikani",
+  "g_memo_pending_unknown_body": "Uhamisho uliopita kutoka anwani hii haujathibitishwa na matokeo yake bado hayawezi kubainishwa, kwa hivyo uhamisho mpya umezuiwa. Ukiacha kuusubiri, utabaki kwenye historia kama unaosubiri na utaendelea kukaguliwa. Onyo: bado unaweza kukamilika kwenye mnyororo, kwa hivyo ukituma tena unaweza kulipa mara mbili. Kwanza kagua muamala uliopita kwenye kichunguzi cha bloku.",
+  "g_memo_pending_keep_waiting": "Endelea kusubiri",
+  "g_memo_pending_dismiss": "Acha kusubiri",
+  "g_memo_pending_dismissed": "Unaweza kutuma tena. Muamala uliopita bado unaendelea kukaguliwa."
 }

@@ -2723,6 +2723,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("ٹرینڈنگ"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("واچ لسٹ"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "انتظار چھوڑ دیں",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "آپ دوبارہ بھیج سکتے ہیں۔ پچھلی ٹرانزیکشن کی جانچ اب بھی جاری ہے۔",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "انتظار جاری رکھیں",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "اس پتے سے کی گئی پچھلی منتقلی کی ابھی تک تصدیق نہیں ہوئی اور اس کا نتیجہ ابھی طے نہیں کیا جا سکتا، اس لیے نئی منتقلیاں روک دی گئی ہیں۔ اگر آپ اس کا انتظار چھوڑ دیں تو یہ ہسٹری میں زیرِ التوا کے طور پر رہے گی اور اس کی جانچ جاری رہے گی۔ انتباہ: یہ اب بھی چین پر مکمل ہو سکتی ہے، اس لیے دوبارہ بھیجنے سے آپ کو دو بار ادائیگی کرنی پڑ سکتی ہے۔ پہلے بلاک ایکسپلورر میں پچھلی ٹرانزیکشن چیک کریں۔",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "پچھلی ٹرانزیکشن کی حیثیت نامعلوم",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "تصدیق کنندہ کی غیرفعالیت کا اسکور زیادہ ہے۔ جرمانے سے بچنے کے لیے اپنے نوڈ کی حیثیت چیک کریں۔",
     ),
@@ -3209,7 +3224,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "تصدیق نہیں ہوئی",
     ),
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
-      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+      "چین کی طرف سے ابھی تک تصدیق نہیں ہوئی اور نتیجہ نامعلوم ہے۔ اس کی جانچ اب بھی جاری ہے اور یہ اب بھی مکمل ہو سکتی ہے۔ دوبارہ بھیجنے سے پہلے اسے بلاک ایکسپلورر میں چیک کریں۔",
     ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Aave V3 قرض دہی",

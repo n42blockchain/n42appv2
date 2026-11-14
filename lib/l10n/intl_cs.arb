@@ -1817,5 +1817,10 @@
   "miningV3BackgroundPaused": "Pozastaveno na pozadí",
   "miningV3LocalTestnet": "Místní testovací síť",
   "miningV3UseLocalTestnet": "Použít místní testovací síť",
-  "miningV3LocalTestnetHint": "Výchozí uzel je v místní testovací síti. Můžete také zadat vlastní adresu."
+  "miningV3LocalTestnetHint": "Výchozí uzel je v místní testovací síti. Můžete také zadat vlastní adresu.",
+  "g_memo_pending_unknown_title": "Stav předchozí transakce není znám",
+  "g_memo_pending_unknown_body": "Předchozí převod z této adresy nebyl potvrzen a jeho výsledek zatím nelze určit, proto jsou nové převody zablokovány. Pokud na něj přestanete čekat, zůstane v historii jako čekající a bude se dál kontrolovat. Upozornění: stále může být na blockchainu dokončen, takže opětovným odesláním můžete zaplatit dvakrát. Nejprve předchozí transakci zkontrolujte v průzkumníku bloků.",
+  "g_memo_pending_keep_waiting": "Čekat dál",
+  "g_memo_pending_dismiss": "Přestat čekat",
+  "g_memo_pending_dismissed": "Můžete znovu odesílat. Předchozí transakce se stále kontroluje."
 }

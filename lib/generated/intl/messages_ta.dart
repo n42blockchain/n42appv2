@@ -2878,6 +2878,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "கண்காணிப்பு பட்டியல்",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "காத்திருப்பதை நிறுத்து",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "நீங்கள் மீண்டும் அனுப்பலாம். முந்தைய பரிவர்த்தனை இன்னும் சரிபார்க்கப்படுகிறது.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "தொடர்ந்து காத்திரு",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "இந்த முகவரியிலிருந்து செய்யப்பட்ட முந்தைய பரிமாற்றம் இன்னும் உறுதிப்படுத்தப்படவில்லை, அதன் முடிவை இன்னும் தீர்மானிக்க முடியவில்லை, எனவே புதிய பரிமாற்றங்கள் தடுக்கப்பட்டுள்ளன. நீங்கள் காத்திருப்பதை நிறுத்தினால், அது வரலாற்றில் நிலுவையில் உள்ளதாகவே இருக்கும், தொடர்ந்து சரிபார்க்கப்படும். எச்சரிக்கை: அது இன்னும் செயினில் நிறைவடையக்கூடும், எனவே மீண்டும் அனுப்பினால் நீங்கள் இருமுறை பணம் செலுத்த நேரிடலாம். முதலில் பிளாக் எக்ஸ்ப்ளோரரில் முந்தைய பரிவர்த்தனையைச் சரிபார்க்கவும்.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "முந்தைய பரிவர்த்தனையின் நிலை தெரியவில்லை",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "வேலிடேட்டர் செயலற்ற மதிப்பெண் அதிகமாக உள்ளது. அபராதங்களைத் தவிர்க்க உங்கள் முனை நிலையைச் சரிபார்க்கவும்.",
     ),
@@ -3426,7 +3441,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "உறுதிப்படுத்தப்படவில்லை",
     ),
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
-      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+      "செயின் தரப்பிலிருந்து இன்னும் உறுதிப்படுத்தல் வரவில்லை, முடிவு தெரியவில்லை. இது இன்னும் சரிபார்க்கப்படுகிறது, இன்னும் நிறைவடையக்கூடும். மீண்டும் அனுப்பும் முன் பிளாக் எக்ஸ்ப்ளோரரில் இதைச் சரிபார்க்கவும்.",
     ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 கடன்"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage(

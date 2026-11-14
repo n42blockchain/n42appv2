@@ -2673,6 +2673,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "İzleme listesi",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Beklemeyi bırak",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Yeniden gönderebilirsiniz. Önceki işlem kontrol edilmeye devam ediyor.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Beklemeye devam et",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Bu adresten yapılan önceki bir transfer henüz onaylanmadı ve sonucu henüz belirlenemiyor, bu nedenle yeni transferler engellendi. Beklemeyi bırakırsanız işlem geçmişinizde beklemede olarak kalır ve kontrol edilmeye devam eder. Uyarı: İşlem hâlâ zincirde tamamlanabilir; yeniden gönderirseniz iki kez ödeme yapabilirsiniz. Önce önceki işlemi bir blok gezgininde kontrol edin.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Önceki işlemin durumu bilinmiyor",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Doğrulayıcı hareketsizlik puanı yüksek. Ceza almamak için node durumunuzu kontrol edin.",
     ),

@@ -218,7 +218,7 @@
   "g_key_t_2": "زیر التواء",
   "g_key_t_3": "ناکامی",
   "g_tx_status_unconfirmed": "تصدیق نہیں ہوئی",
-  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+  "g_tx_status_unconfirmed_hint": "چین کی طرف سے ابھی تک تصدیق نہیں ہوئی اور نتیجہ نامعلوم ہے۔ اس کی جانچ اب بھی جاری ہے اور یہ اب بھی مکمل ہو سکتی ہے۔ دوبارہ بھیجنے سے پہلے اسے بلاک ایکسپلورر میں چیک کریں۔",
   "g_key_t_4": "باہر منتقل",
   "g_key_t_5": "میں منتقل کریں۔",
   "g_key_t_6": "استعمال شدہ گیس",
@@ -1817,5 +1817,10 @@
   "miningV3BackgroundPaused": "پس منظر میں موقوف",
   "miningV3LocalTestnet": "مقامی ٹیسٹ نیٹ",
   "miningV3UseLocalTestnet": "مقامی ٹیسٹ نیٹ استعمال کریں",
-  "miningV3LocalTestnetHint": "ڈیفالٹ نوڈ مقامی ٹیسٹ نیٹ پر ہے۔ آپ اپنی مرضی کا پتہ بھی درج کر سکتے ہیں۔"
+  "miningV3LocalTestnetHint": "ڈیفالٹ نوڈ مقامی ٹیسٹ نیٹ پر ہے۔ آپ اپنی مرضی کا پتہ بھی درج کر سکتے ہیں۔",
+  "g_memo_pending_unknown_title": "پچھلی ٹرانزیکشن کی حیثیت نامعلوم",
+  "g_memo_pending_unknown_body": "اس پتے سے کی گئی پچھلی منتقلی کی ابھی تک تصدیق نہیں ہوئی اور اس کا نتیجہ ابھی طے نہیں کیا جا سکتا، اس لیے نئی منتقلیاں روک دی گئی ہیں۔ اگر آپ اس کا انتظار چھوڑ دیں تو یہ ہسٹری میں زیرِ التوا کے طور پر رہے گی اور اس کی جانچ جاری رہے گی۔ انتباہ: یہ اب بھی چین پر مکمل ہو سکتی ہے، اس لیے دوبارہ بھیجنے سے آپ کو دو بار ادائیگی کرنی پڑ سکتی ہے۔ پہلے بلاک ایکسپلورر میں پچھلی ٹرانزیکشن چیک کریں۔",
+  "g_memo_pending_keep_waiting": "انتظار جاری رکھیں",
+  "g_memo_pending_dismiss": "انتظار چھوڑ دیں",
+  "g_memo_pending_dismissed": "آپ دوبارہ بھیج سکتے ہیں۔ پچھلی ٹرانزیکشن کی جانچ اب بھی جاری ہے۔"
 }

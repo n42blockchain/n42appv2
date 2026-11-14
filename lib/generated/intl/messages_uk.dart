@@ -2771,6 +2771,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Список спостереження",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("Не чекати"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Можна надсилати знову. Попередня транзакція й надалі перевіряється.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Чекати далі",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Попередній переказ із цієї адреси не підтверджено, і його результат поки неможливо визначити, тому нові перекази заблоковано. Якщо ви перестанете його чекати, він залишиться в історії як очікуваний і надалі перевірятиметься. Увага: його ще може бути виконано в блокчейні, тож повторне надсилання може призвести до подвійної оплати. Спочатку перевірте попередню транзакцію в оглядачі блоків.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Статус попередньої транзакції невідомий",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Показник бездіяльності валідатора високий. Перевірте статус свого вузла, щоб уникнути штрафів.",
     ),

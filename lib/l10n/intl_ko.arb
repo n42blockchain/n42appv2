@@ -1789,5 +1789,10 @@
   "miningV3BackgroundPaused": "백그라운드에서 일시 중지됨",
   "miningV3LocalTestnet": "로컬 테스트넷",
   "miningV3UseLocalTestnet": "로컬 테스트넷 사용",
-  "miningV3LocalTestnetHint": "기본 노드는 로컬 테스트넷에 있습니다. 사용자 지정 주소도 입력할 수 있습니다."
+  "miningV3LocalTestnetHint": "기본 노드는 로컬 테스트넷에 있습니다. 사용자 지정 주소도 입력할 수 있습니다.",
+  "g_memo_pending_unknown_title": "이전 거래 상태 알 수 없음",
+  "g_memo_pending_unknown_body": "이 주소에서 보낸 이전 전송이 아직 확인되지 않았고 결과를 아직 판단할 수 없어 새 전송이 차단되었습니다. 기다리기를 중단해도 해당 거래는 기록에 대기 중으로 남아 계속 확인됩니다. 경고: 해당 거래가 여전히 체인에서 완료될 수 있으므로 다시 보내면 이중으로 지불할 수 있습니다. 먼저 블록 탐색기에서 이전 거래를 확인하세요.",
+  "g_memo_pending_keep_waiting": "계속 기다리기",
+  "g_memo_pending_dismiss": "기다리기 중단",
+  "g_memo_pending_dismissed": "다시 보낼 수 있습니다. 이전 거래는 계속 확인 중입니다."
 }

@@ -1796,5 +1796,10 @@
   "miningV3BackgroundPaused": "Đã tạm dừng khi chạy nền",
   "miningV3LocalTestnet": "Mạng thử nghiệm cục bộ",
   "miningV3UseLocalTestnet": "Dùng mạng thử nghiệm cục bộ",
-  "miningV3LocalTestnetHint": "Nút mặc định nằm trên mạng thử nghiệm cục bộ. Bạn cũng có thể nhập địa chỉ tùy chỉnh."
+  "miningV3LocalTestnetHint": "Nút mặc định nằm trên mạng thử nghiệm cục bộ. Bạn cũng có thể nhập địa chỉ tùy chỉnh.",
+  "g_memo_pending_unknown_title": "Không rõ trạng thái giao dịch trước",
+  "g_memo_pending_unknown_body": "Một lần chuyển trước đó từ địa chỉ này chưa được xác nhận và hiện chưa thể xác định kết quả, nên các lần chuyển mới đang bị chặn. Nếu bạn ngừng chờ, giao dịch đó vẫn nằm trong lịch sử ở trạng thái đang chờ và vẫn tiếp tục được kiểm tra. Cảnh báo: giao dịch đó vẫn có thể hoàn tất trên chuỗi, nên gửi lại có thể khiến bạn thanh toán hai lần. Hãy kiểm tra giao dịch trước đó trên trình khám phá khối trước.",
+  "g_memo_pending_keep_waiting": "Tiếp tục chờ",
+  "g_memo_pending_dismiss": "Ngừng chờ",
+  "g_memo_pending_dismissed": "Bạn có thể gửi lại. Giao dịch trước đó vẫn đang được kiểm tra."
 }

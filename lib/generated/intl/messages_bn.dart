@@ -2736,6 +2736,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("প্রবণতা"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("ওয়াচলিস্ট"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "অপেক্ষা বন্ধ করুন",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "আপনি আবার পাঠাতে পারেন। আগের লেনদেনটির যাচাই এখনও চলছে।",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "অপেক্ষা চালিয়ে যান",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "এই ঠিকানা থেকে আগের একটি ট্রান্সফার এখনও নিশ্চিত হয়নি এবং এর ফলাফল এখনও নির্ধারণ করা যাচ্ছে না, তাই নতুন ট্রান্সফার বন্ধ রাখা হয়েছে। আপনি অপেক্ষা বন্ধ করলে এটি ইতিহাসে মুলতুবি হিসেবে থেকে যাবে এবং এর যাচাই চলতে থাকবে। সতর্কতা: এটি এখনও চেইনে সম্পন্ন হতে পারে, তাই আবার পাঠালে আপনাকে দুবার অর্থ পরিশোধ করতে হতে পারে। প্রথমে একটি ব্লক এক্সপ্লোরারে আগের লেনদেনটি দেখে নিন।",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "আগের লেনদেনের অবস্থা অজানা",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "যাচাইকারী নিষ্ক্রিয়তার স্কোর বেশি। জরিমানা এড়াতে আপনার নোড স্থিতি পরীক্ষা করুন।",
     ),
@@ -3228,7 +3243,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "নিশ্চিত হয়নি",
     ),
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
-      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+      "চেইন থেকে এখনও কোনো নিশ্চিতকরণ আসেনি এবং ফলাফল অজানা। এটি এখনও যাচাই করা হচ্ছে এবং এখনও সম্পন্ন হতে পারে। আবার পাঠানোর আগে এটি একটি ব্লক এক্সপ্লোরারে দেখে নিন।",
     ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 লেনদেন"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage(

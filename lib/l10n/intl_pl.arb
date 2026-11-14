@@ -1824,5 +1824,10 @@
   "miningV3BackgroundPaused": "Wstrzymano w tle",
   "miningV3LocalTestnet": "Lokalna sieć testowa",
   "miningV3UseLocalTestnet": "Użyj lokalnej sieci testowej",
-  "miningV3LocalTestnetHint": "Domyślny węzeł działa w lokalnej sieci testowej. Możesz też podać własny adres."
+  "miningV3LocalTestnetHint": "Domyślny węzeł działa w lokalnej sieci testowej. Możesz też podać własny adres.",
+  "g_memo_pending_unknown_title": "Nieznany status wcześniejszej transakcji",
+  "g_memo_pending_unknown_body": "Wcześniejszy przelew z tego adresu nie został potwierdzony, a jego wyniku nie można jeszcze ustalić, dlatego nowe przelewy są zablokowane. Jeśli przestaniesz na niego czekać, pozostanie w historii jako oczekujący i nadal będzie sprawdzany. Uwaga: nadal może zostać zrealizowany w blockchainie, więc ponowne wysłanie może oznaczać podwójną płatność. Najpierw sprawdź wcześniejszą transakcję w eksploratorze bloków.",
+  "g_memo_pending_keep_waiting": "Czekaj dalej",
+  "g_memo_pending_dismiss": "Przestań czekać",
+  "g_memo_pending_dismissed": "Możesz wysłać ponownie. Wcześniejsza transakcja jest nadal sprawdzana."
 }

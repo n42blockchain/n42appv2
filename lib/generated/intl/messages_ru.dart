@@ -2771,6 +2771,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Список наблюдения",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("Не ждать"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Можно отправлять снова. Предыдущая транзакция по-прежнему проверяется.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Продолжить ожидание",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Предыдущий перевод с этого адреса не подтверждён, и его результат пока невозможно определить, поэтому новые переводы заблокированы. Если вы перестанете его ждать, он останется в истории как ожидающий и будет проверяться дальше. Внимание: он всё ещё может быть выполнен в блокчейне, поэтому при повторной отправке вы можете заплатить дважды. Сначала проверьте предыдущую транзакцию в обозревателе блоков.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Статус предыдущей транзакции неизвестен",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Показатель неактивности валидатора высокий. Проверьте статус узла, чтобы избежать штрафов.",
     ),

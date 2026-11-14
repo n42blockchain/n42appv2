@@ -2810,6 +2810,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("ట్రెండింగ్"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("వీక్షణ జాబితా"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "వేచి ఉండటం ఆపు",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "మీరు మళ్లీ పంపవచ్చు. మునుపటి లావాదేవీ ఇంకా తనిఖీ చేయబడుతోంది.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "వేచి ఉండటం కొనసాగించు",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "ఈ చిరునామా నుండి చేసిన మునుపటి బదిలీ ఇంకా నిర్ధారించబడలేదు, దాని ఫలితాన్ని ఇంకా నిర్ణయించలేము, కాబట్టి కొత్త బదిలీలు నిలిపివేయబడ్డాయి. మీరు దాని కోసం వేచి ఉండటం ఆపివేస్తే, అది చరిత్రలో పెండింగ్‌గా ఉంటుంది, తనిఖీ కొనసాగుతుంది. హెచ్చరిక: అది ఇంకా చెయిన్‌లో పూర్తి కావచ్చు, కాబట్టి మళ్లీ పంపితే మీరు రెండుసార్లు చెల్లించాల్సి రావచ్చు. ముందుగా బ్లాక్ ఎక్స్‌ప్లోరర్‌లో మునుపటి లావాదేవీని తనిఖీ చేయండి.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "మునుపటి లావాదేవీ స్థితి తెలియదు",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "వాలిడేటర్ ఇనాక్టివిటీ స్కోర్ ఎక్కువగా ఉంది. పెనాల్టీలను నివారించడానికి మీ నోడ్ స్థితిని తనిఖీ చేయండి.",
     ),
@@ -3336,7 +3351,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "నిర్ధారించబడలేదు",
     ),
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
-      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+      "చెయిన్ నుండి ఇంకా నిర్ధారణ రాలేదు, ఫలితం తెలియదు. ఇది ఇంకా తనిఖీ చేయబడుతోంది, ఇంకా పూర్తి కావచ్చు. మళ్లీ పంపే ముందు బ్లాక్ ఎక్స్‌ప్లోరర్‌లో దీన్ని తనిఖీ చేయండి.",
     ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Aave V3 లోనింగ్",

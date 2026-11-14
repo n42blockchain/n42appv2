@@ -2642,6 +2642,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("ट्रेंडिंग"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("वॉचलिस्ट"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "वाट पाहणे थांबवा",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "तुम्ही पुन्हा पाठवू शकता. मागील व्यवहाराची तपासणी अजूनही सुरू आहे.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "वाट पाहत राहा",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "या पत्त्यावरून केलेले मागील हस्तांतरण अद्याप पुष्टी झालेले नाही आणि त्याचा निकाल अद्याप ठरवता येत नाही, म्हणून नवीन हस्तांतरणे थांबवली आहेत. तुम्ही त्याची वाट पाहणे थांबवल्यास ते इतिहासात प्रलंबित म्हणून राहील आणि त्याची तपासणी सुरू राहील. चेतावणी: ते अजूनही चेनवर पूर्ण होऊ शकते, त्यामुळे पुन्हा पाठवल्यास तुम्हाला दोनदा पैसे द्यावे लागू शकतात. आधी ब्लॉक एक्सप्लोररमध्ये मागील व्यवहार तपासा.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "मागील व्यवहाराची स्थिती अज्ञात",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "व्हॅलिडेटर निष्क्रियता स्कोअर उच्च आहे. दंड टाळण्यासाठी तुमची नोड स्थिती तपासा.",
     ),
@@ -3122,7 +3137,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "पुष्टी झालेली नाही",
     ),
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
-      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+      "चेनकडून अद्याप पुष्टी मिळालेली नाही आणि निकाल अज्ञात आहे. त्याची तपासणी अजूनही सुरू आहे आणि तो अजूनही पूर्ण होऊ शकतो. पुन्हा पाठवण्यापूर्वी ब्लॉक एक्सप्लोररमध्ये तो तपासा.",
     ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "एव्ह व्ही३ लेंडिंग",

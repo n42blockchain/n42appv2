@@ -2675,6 +2675,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("ट्रेंडिंग"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("निगरानी सूची"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "प्रतीक्षा बंद करें",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "आप फिर से भेज सकते हैं। पिछले लेनदेन की जाँच अभी भी जारी है।",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "प्रतीक्षा जारी रखें",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "इस पते से किया गया पिछला ट्रांसफ़र अभी तक पुष्ट नहीं हुआ है और उसका परिणाम अभी तय नहीं किया जा सकता, इसलिए नए ट्रांसफ़र रोक दिए गए हैं। यदि आप उसकी प्रतीक्षा बंद करते हैं, तो वह इतिहास में लंबित के रूप में बना रहेगा और उसकी जाँच जारी रहेगी। चेतावनी: वह अभी भी चेन पर पूरा हो सकता है, इसलिए दोबारा भेजने पर आपको दो बार भुगतान करना पड़ सकता है। पहले ब्लॉक एक्सप्लोरर में पिछला लेनदेन जाँचें।",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "पिछले लेनदेन की स्थिति अज्ञात",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "सत्यापनकर्ता निष्क्रियता स्कोर उच्च है. दंड से बचने के लिए अपने नोड की स्थिति जांचें।",
     ),

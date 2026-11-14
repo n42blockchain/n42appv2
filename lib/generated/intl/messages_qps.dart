@@ -3175,6 +3175,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "[# Ŵàťçĥĺìšť ~~~~#]",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "[# Šťöƥ ŵàìťìñĝ ~~~~~~#]",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "[# Ýöü çàñ šéñð àĝàìñ. Ťĥé éàŗĺìéŗ ťŗàñšàçťìöñ ìš šťìĺĺ ƀéìñĝ çĥéçķéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "[# Ķééƥ ŵàìťìñĝ ~~~~~~#]",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "[# Àñ éàŗĺìéŗ ťŗàñšƒéŗ ƒŗöṁ ťĥìš àððŗéšš ĥàš ñöť ƀééñ çöñƒìŗṁéð àñð ìťš ŗéšüĺť çàññöť ƀé ðéťéŗṁìñéð ýéť, šö ñéŵ ťŗàñšƒéŗš àŗé ƀĺöçķéð. Ìƒ ýöü šťöƥ ŵàìťìñĝ ƒöŗ ìť, ìť ŵìĺĺ šťàý ìñ ýöüŗ ĥìšťöŗý àš ƥéñðìñĝ àñð ŵìĺĺ šťìĺĺ ƀé çĥéçķéð. Ŵàŗñìñĝ: ìť ṁàý šťìĺĺ ƀé çöṁƥĺéťéð öñ çĥàìñ, šö šéñðìñĝ àĝàìñ ṁàý ƥàý ťŵìçé. Çĥéçķ ťĥé éàŗĺìéŗ ťŗàñšàçťìöñ ìñ à ƀĺöçķ éẋƥĺöŗéŗ ƒìŗšť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "[# Éàŗĺìéŗ ťŗàñšàçťìöñ šťàťüš üñķñöŵñ ~~~~~~~~~~~~~~~~~#]",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "[# Ṽàĺìðàťöŗ ìñàçťìṽìťý šçöŗé ìš ĥìĝĥ. Çĥéçķ ýöüŗ ñöðé šťàťüš ťö àṽöìð ƥéñàĺťìéš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),

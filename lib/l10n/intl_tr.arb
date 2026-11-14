@@ -1824,5 +1824,10 @@
   "miningV3BackgroundPaused": "Arka planda duraklatıldı",
   "miningV3LocalTestnet": "Yerel test ağı",
   "miningV3UseLocalTestnet": "Yerel test ağını kullan",
-  "miningV3LocalTestnetHint": "Varsayılan düğüm yerel test ağındadır. Özel bir adres de girebilirsiniz."
+  "miningV3LocalTestnetHint": "Varsayılan düğüm yerel test ağındadır. Özel bir adres de girebilirsiniz.",
+  "g_memo_pending_unknown_title": "Önceki işlemin durumu bilinmiyor",
+  "g_memo_pending_unknown_body": "Bu adresten yapılan önceki bir transfer henüz onaylanmadı ve sonucu henüz belirlenemiyor, bu nedenle yeni transferler engellendi. Beklemeyi bırakırsanız işlem geçmişinizde beklemede olarak kalır ve kontrol edilmeye devam eder. Uyarı: İşlem hâlâ zincirde tamamlanabilir; yeniden gönderirseniz iki kez ödeme yapabilirsiniz. Önce önceki işlemi bir blok gezgininde kontrol edin.",
+  "g_memo_pending_keep_waiting": "Beklemeye devam et",
+  "g_memo_pending_dismiss": "Beklemeyi bırak",
+  "g_memo_pending_dismissed": "Yeniden gönderebilirsiniz. Önceki işlem kontrol edilmeye devam ediyor."
 }

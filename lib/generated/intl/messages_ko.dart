@@ -2100,6 +2100,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage("동전 검색..."),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("인기 급상승"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("관심 목록"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("기다리기 중단"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "다시 보낼 수 있습니다. 이전 거래는 계속 확인 중입니다.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "계속 기다리기",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "이 주소에서 보낸 이전 전송이 아직 확인되지 않았고 결과를 아직 판단할 수 없어 새 전송이 차단되었습니다. 기다리기를 중단해도 해당 거래는 기록에 대기 중으로 남아 계속 확인됩니다. 경고: 해당 거래가 여전히 체인에서 완료될 수 있으므로 다시 보내면 이중으로 지불할 수 있습니다. 먼저 블록 탐색기에서 이전 거래를 확인하세요.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "이전 거래 상태 알 수 없음",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "유효성 검사기 비활동 점수가 높습니다. 페널티를 피하려면 노드 상태를 확인하세요.",
     ),

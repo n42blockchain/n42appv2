@@ -2706,6 +2706,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "Seznam sledovaných",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Přestat čekat",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "Můžete znovu odesílat. Předchozí transakce se stále kontroluje.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Čekat dál",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "Předchozí převod z této adresy nebyl potvrzen a jeho výsledek zatím nelze určit, proto jsou nové převody zablokovány. Pokud na něj přestanete čekat, zůstane v historii jako čekající a bude se dál kontrolovat. Upozornění: stále může být na blockchainu dokončen, takže opětovným odesláním můžete zaplatit dvakrát. Nejprve předchozí transakci zkontrolujte v průzkumníku bloků.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Stav předchozí transakce není znám",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Skóre nečinnosti validátoru je vysoké. Zkontrolujte stav svého uzlu, abyste se vyhnuli penalizacím.",
     ),
