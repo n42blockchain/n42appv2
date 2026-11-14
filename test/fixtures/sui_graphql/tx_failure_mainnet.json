@@ -1,0 +1,20 @@
+{
+  "data": {
+    "transaction": {
+      "digest": "CE7zrjcLxHUAatmDtc7hKduQ4CdHSvyoRWdo97Nukp9h",
+      "sender": {
+        "address": "0xe0d6f7629f6bbbfd73c36b706b2b78d3e7f5d734207e7e05684b352f0a3017eb"
+      },
+      "effects": {
+        "digest": "CE7zrjcLxHUAatmDtc7hKduQ4CdHSvyoRWdo97Nukp9h",
+        "status": "FAILURE",
+        "executionError": {
+          "message": "Error in 1st command, Move Bytecode Verification Error. Please run the Bytecode Verifier for more information."
+        },
+        "checkpoint": {
+          "sequenceNumber": 345134562
+        }
+      }
+    }
+  }
+}

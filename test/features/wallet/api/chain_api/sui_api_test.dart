@@ -4,73 +4,130 @@ import 'dart:io';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 
-class _Api extends SuiApi {
-  dynamic response;
-  int calls = 0;
-  @override
-  Future<Result<dynamic, AppError>> baseRPCSui(
-    String method,
-    dynamic value, {
-    bool enableRetry = true,
-  }) async {
-    calls++;
-    expect(method, 'sui_executeTransactionBlock');
-    expect(value, [
-      'bytes',
-      ['signature'],
-      {'showEffects': true, 'showEvents': true},
-    ]);
-    expect(enableRetry, isFalse);
-    return Result.success(response);
-  }
-}
-
+/// executeTransaction is only exercised against mocks: reply shapes follow the
+/// live schema (Mutation.executeTransaction -> ExecutionResult ->
+/// TransactionEffects) and the error envelope the service returns for
+/// rejected input (test/fixtures/sui_graphql/*.json).
 void main() {
   final digest = Base58Encode(List.filled(32, 7));
-  Map<String, dynamic> receipt(String status) => {
-    'digest': digest,
-    'effects': {
-      'status': {'status': status},
+  Map<String, dynamic> executed(String status, {String? error}) => {
+    'data': {
+      'executeTransaction': {
+        'effects': {
+          'digest': digest,
+          'status': status,
+          'executionError': error == null ? null : {'message': error},
+          'checkpoint': null,
+        },
+      },
     },
-    'events': [],
   };
-  test('successful submission retains the full confirmed response', () async {
-    final api = _Api()..response = receipt('success');
-    final response = await api.submit('bytes', 'signature');
-    expect(response.error, isFalse);
-    expect(response.data, api.response);
-    expect(api.calls, 1);
-  });
-  final invalid = <dynamic>[
-    null,
-    {},
-    digest,
-    {'digest': digest},
-    receipt('failure'),
-    receipt('pending'),
-    {
-      ...receipt('success'),
-      'effects': {'status': 'success'},
+
+  SuiApi api(Object reply, List<Map<String, dynamic>> bodies) => SuiApi(
+    post: (url, body) async {
+      bodies.add(body);
+      if (reply is Exception) throw reply;
+      return reply;
     },
-    {...receipt('success'), 'digest': ''},
-    {...receipt('success'), 'digest': 42},
-    {...receipt('success'), 'digest': 'invalid'},
-    {...receipt('success'), 'digest': '$digest\n'},
-    {...receipt('success'), 'digest': Base58Encode(List.filled(31, 7))},
-  ];
-  for (var i = 0; i < invalid.length; i++) {
-    test('unconfirmed receipt $i cannot report success', () async {
-      final api = _Api()..response = invalid[i];
-      expect((await api.submit('bytes', 'signature')).error, isTrue);
-      expect(api.calls, 1);
+  );
+
+  test('endpoints are the official GraphQL services', () {
+    expect(SuiApi().url, 'https://graphql.mainnet.sui.io/graphql');
+    expect(SuiApi(isTest: true).url, 'https://graphql.testnet.sui.io/graphql');
+  });
+
+  test('successful execution returns the confirmed digest', () async {
+    final bodies = <Map<String, dynamic>>[];
+    final response = await api(
+      executed('SUCCESS'),
+      bodies,
+    ).submit('bytes', 'signature');
+    expect(response.error, isFalse);
+    expect(response.data['digest'], digest);
+    expect(response.data['effects']['status'], 'SUCCESS');
+    expect(bodies.single['query'], SuiApi.executeMutation);
+    expect(bodies.single['variables'], {
+      'transactionDataBcs': 'bytes',
+      'signatures': ['signature'],
     });
-  }
+  });
+
+  final invalid = <String, Object>{
+    'failure effects': executed('FAILURE', error: 'InsufficientGas'),
+    'graphql error': {
+      'data': null,
+      'errors': [
+        {
+          'message': 'Invalid argument: invalid transaction',
+          'path': ['executeTransaction'],
+          'extensions': {'code': 'BAD_USER_INPUT'},
+        },
+      ],
+    },
+    'partial data with errors': {
+      ...executed('SUCCESS'),
+      'errors': [
+        {'message': 'Request timed out'},
+      ],
+    },
+    'no effects': {
+      'data': {
+        'executeTransaction': {'effects': null},
+      },
+    },
+    'no data': <String, dynamic>{},
+    'not a map': 'oops',
+    'short digest': {
+      'data': {
+        'executeTransaction': {
+          'effects': {
+            'digest': Base58Encode(List.filled(31, 7)),
+            'status': 'SUCCESS',
+          },
+        },
+      },
+    },
+    'lower-case status': {
+      'data': {
+        'executeTransaction': {
+          'effects': {'digest': digest, 'status': 'success'},
+        },
+      },
+    },
+    'transport error': const SocketException('reset'),
+  };
+  invalid.forEach((name, reply) {
+    test('execution that is not confirmed is an error: $name', () async {
+      final bodies = <Map<String, dynamic>>[];
+      final response = await api(reply, bodies).submit('bytes', 'signature');
+      expect(response.error, isTrue);
+      expect(bodies, hasLength(1));
+    });
+  });
+
+  test('execution failure keeps the chain reason', () async {
+    final response = await api(
+      executed('FAILURE', error: 'InsufficientGas'),
+      [],
+    ).submit('bytes', 'signature');
+    expect(response.data, contains('InsufficientGas'));
+  });
+
+  test('GraphQL error message is surfaced', () async {
+    final response = await api({
+      'data': null,
+      'errors': [
+        {'message': 'Transaction is locked by another transaction'},
+      ],
+    }, []).submit('bytes', 'signature');
+    expect(response.data, 'Transaction is locked by another transaction');
+  });
+
   for (final fail in [false, true]) {
     test(
-      'real HTTP submission preserves positional params; RPC error=$fail',
+      'real HTTP execution posts one GraphQL mutation; error=$fail',
       () async {
         final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
         addTearDown(() => server.close(force: true));
@@ -84,26 +141,24 @@ void main() {
           if (!received.isCompleted) received.complete(body);
           request.response.headers.contentType = ContentType.json;
           request.response.write(
-            jsonEncode({
-              'jsonrpc': '2.0',
-              'id': body['id'],
-              if (fail)
-                'error': {'code': -32000, 'message': 'Rejected'}
-              else
-                'result': receipt('success'),
-            }),
+            jsonEncode(
+              fail
+                  ? {
+                      'data': null,
+                      'errors': [
+                        {'message': 'Rejected'},
+                      ],
+                    }
+                  : executed('SUCCESS'),
+            ),
           );
           await request.response.close();
         });
-        final api = SuiApi()..url = 'http://127.0.0.1:${server.port}';
-        final response = await api.submit('bytes', 'signature');
+        final client = SuiApi()..url = 'http://127.0.0.1:${server.port}';
+        final response = await client.submit('bytes', 'signature');
         final body = await received.future.timeout(const Duration(seconds: 5));
-        expect(body['method'], 'sui_executeTransactionBlock');
-        expect(body['params'], [
-          'bytes',
-          ['signature'],
-          {'showEffects': true, 'showEvents': true},
-        ]);
+        expect(body['query'], SuiApi.executeMutation);
+        expect(body['variables']['signatures'], ['signature']);
         expect(response.error, fail);
         expect(calls, 1);
       },

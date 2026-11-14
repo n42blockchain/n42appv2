@@ -132,11 +132,12 @@ class TransactionStateResolver {
     return '0x${value.substring(2).toLowerCase().padLeft(64, '0')}';
   }
 
-  /// Sui: only the stored digest's own effects decide. Success or failure
-  /// counts once the transaction is in a checkpoint (final); an executed but
-  /// not yet checkpointed transaction stays pending. Not found, RPC errors
-  /// and unfamiliar replies are unknown (-1): absence alone never proves a
-  /// Sui transaction can no longer execute.
+  /// Sui (GraphQL `transaction(digest:)`): only the stored digest's own
+  /// effects decide. Success or failure counts once the effects name the
+  /// checkpoint that finalized them; effects without one stay pending. Not
+  /// found (null: never executed, not yet indexed or pruned), GraphQL or
+  /// transport errors and unfamiliar replies are unknown (-1): absence alone
+  /// never proves a Sui transaction can no longer execute.
   Future<(int, String?)> _resolveSuiDetailed(
     TransationRecordModel record,
   ) async {
@@ -162,28 +163,28 @@ class TransactionStateResolver {
       }
       final data = response.data;
       if (data is! Map || data['digest'] != digest) return (-1, null);
-      final transaction = data['transaction'];
-      final txData = transaction is Map ? transaction['data'] : null;
-      if (txData is! Map || _suiAddress(txData['sender']) != sender) {
+      final senderInfo = data['sender'];
+      if (senderInfo is! Map || _suiAddress(senderInfo['address']) != sender) {
         return (-1, null);
       }
       final effects = data['effects'];
       if (effects is! Map ||
-          (effects.containsKey('transactionDigest') &&
-              effects['transactionDigest'] != digest)) {
+          (effects['digest'] != null && effects['digest'] != digest)) {
         return (-1, null);
       }
-      final status = effects['status'];
-      if (status is! Map) return (-1, null);
-      final checkpoint = data['checkpoint'];
+      final checkpoint = effects['checkpoint'];
       final finalized =
-          checkpoint is String && RegExp(r'^[0-9]+$').hasMatch(checkpoint);
-      switch (status['status']) {
-        case 'success':
+          SuiApi.amount(
+            checkpoint is Map ? checkpoint['sequenceNumber'] : null,
+          ) !=
+          null;
+      switch (effects['status']) {
+        case 'SUCCESS':
           return (finalized ? 1 : 0, null);
-        case 'failure':
+        case 'FAILURE':
           if (!finalized) return (0, null);
-          final error = status['error'];
+          final failure = effects['executionError'];
+          final error = failure is Map ? failure['message'] : null;
           return (
             2,
             error is String && error.isNotEmpty

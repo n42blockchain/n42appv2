@@ -1,5 +1,4 @@
 import 'package:fast_base58/fast_base58.dart';
-import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/utils/message_model_bridge.dart';
 import 'package:n42_wallet/core/utils/result.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -7,87 +6,242 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
+/// Sui chain access through the official GraphQL API.
+///
+/// Public fullnodes answer every JSON-RPC method with -32601 ("JSON-RPC on
+/// public fullnodes has been deprecated"), so reads, simulation and execution
+/// go through the Sui GraphQL service. Transaction bytes and signatures are
+/// produced exactly as before; only the transport changed.
 class SuiApi {
+  /// GraphQL endpoint, configured like the other chain URLs ('graphql').
   String url = "";
 
-  /// Optional JSON-RPC transport (tests); defaults to the shared HTTP client.
+  /// Optional transport (tests); defaults to the shared HTTP client.
   final Future<dynamic> Function(String url, Map<String, dynamic> body)? post;
   SuiApi({bool isTest = false, this.post}) {
-    url = RequestUrl().getUrl2(CoinType.SUI.name, "rpc", isTest: isTest);
+    url = RequestUrl().getUrl2(CoinType.SUI.name, "graphql", isTest: isTest);
   }
-  Future<MessageModel> getBalanceSui(String address) async {
-    final result = await baseRPCSui("suix_getBalance", [
-      address,
-      "0x2::sui::SUI",
-    ]);
-    final rmm = resultToMessageModel(result);
-    if (rmm.error == false) {
-      rmm.data = BigInt.parse(rmm.data['totalBalance']);
+
+  static const balanceQuery = r'''
+query SuiBalance($owner: SuiAddress!) {
+  address(address: $owner) {
+    balance(coinType: "0x2::sui::SUI") {
+      totalBalance
     }
-    return rmm;
+  }
+}''';
+
+  static const gasPriceQuery = r'''
+query SuiReferenceGasPrice {
+  epoch {
+    referenceGasPrice
+  }
+}''';
+
+  /// 50 is the service's maximum page size for Address.objects.
+  static const coinsQuery = r'''
+query SuiCoins($owner: SuiAddress!, $after: String) {
+  address(address: $owner) {
+    objects(
+      first: 50
+      after: $after
+      filter: {type: "0x2::coin::Coin<0x2::sui::SUI>"}
+    ) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        address
+        version
+        digest
+        contents {
+          json
+        }
+      }
+    }
+  }
+}''';
+
+  static const simulateQuery = r'''
+query SuiSimulate($transaction: JSON!) {
+  simulateTransaction(transaction: $transaction) {
+    effects {
+      status
+      executionError {
+        message
+      }
+      gasEffects {
+        gasSummary {
+          computationCost
+          storageCost
+          storageRebate
+        }
+      }
+    }
+  }
+}''';
+
+  static const executeMutation = r'''
+mutation SuiExecute($transactionDataBcs: Base64!, $signatures: [Base64!]!) {
+  executeTransaction(
+    transactionDataBcs: $transactionDataBcs
+    signatures: $signatures
+  ) {
+    effects {
+      digest
+      status
+      executionError {
+        message
+      }
+      checkpoint {
+        sequenceNumber
+      }
+    }
+  }
+}''';
+
+  static const transactionQuery = r'''
+query SuiTransaction($digest: String!) {
+  transaction(digest: $digest) {
+    digest
+    sender {
+      address
+    }
+    effects {
+      digest
+      status
+      executionError {
+        message
+      }
+      checkpoint {
+        sequenceNumber
+      }
+    }
+  }
+}''';
+
+  static final _decimal = RegExp(r'^[0-9]+$');
+
+  /// A non-negative integer from a GraphQL BigInt (decimal string) or UInt53
+  /// (JSON number); anything else is rejected.
+  static BigInt? amount(Object? value) {
+    if (value is String && _decimal.hasMatch(value)) return BigInt.parse(value);
+    if (value is int && value >= 0) return BigInt.from(value);
+    return null;
+  }
+
+  static Object? field(Object? value, List<String> path) {
+    for (final key in path) {
+      if (value is! Map) return null;
+      value = value[key];
+    }
+    return value;
+  }
+
+  static bool isDigest(Object? value) {
+    if (value is! String) return false;
+    try {
+      final bytes = Base58Decode(value);
+      return bytes.length == 32 && Base58Encode(bytes) == value;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<MessageModel> getBalanceSui(String address) async {
+    final rmm = resultToMessageModel(
+      await graphQL(balanceQuery, {'owner': address}),
+    );
+    if (rmm.error) return rmm;
+    // An unused address reports "0"; a missing balance is not proof of an
+    // empty account.
+    final total = amount(
+      field(rmm.data, ['address', 'balance', 'totalBalance']),
+    );
+    if (total == null) {
+      return MessageModel.error()..data = 'Invalid Sui balance response';
+    }
+    return MessageModel()..data = total;
   }
 
   Future<MessageModel> getGasPriceSui() async {
-    final result = await baseRPCSui("suix_getReferenceGasPrice", []);
-    final rmm = resultToMessageModel(result);
-    if (rmm.error == false) {
-      rmm.data = BigInt.parse(rmm.data);
+    final rmm = resultToMessageModel(await graphQL(gasPriceQuery, const {}));
+    if (rmm.error) return rmm;
+    final price = amount(field(rmm.data, ['epoch', 'referenceGasPrice']));
+    if (price == null) {
+      return MessageModel.error()..data = 'Invalid Sui gas price response';
     }
-    return rmm;
+    return MessageModel()..data = price;
   }
 
-  //用户所有的对象，NFT，合约等
+  /// Every SUI coin object owned by [address], in the shape the send code and
+  /// the native signers consume: `{'data': {'objectId', 'version' (decimal
+  /// string), 'digest', 'content': {'fields': {'balance'}}}}`. A malformed or
+  /// incomplete page yields an empty list, never a partial selection.
   Future<List<dynamic>> getOwnedObjects(String address) async {
     final objects = <dynamic>[];
     final cursors = <String>{};
     String? cursor;
     while (true) {
-      final result = await baseRPCSui("suix_getOwnedObjects", [
-        address,
-        {
-          "filter": {"StructType": "0x2::coin::Coin<0x2::sui::SUI>"},
-          "options": {"showContent": true},
-        },
-        cursor,
-        50,
-      ]);
-      final response = resultToMessageModel(result);
-      final page = response.data;
-      if (response.error ||
-          page is! Map ||
-          page['data'] is! List ||
-          page['hasNextPage'] is! bool) {
-        return [];
+      final response = resultToMessageModel(
+        await graphQL(coinsQuery, {'owner': address, 'after': cursor}),
+      );
+      final page = field(response.data, ['address', 'objects']);
+      final nodes = field(page, ['nodes']);
+      final hasNext = field(page, ['pageInfo', 'hasNextPage']);
+      if (response.error || nodes is! List || hasNext is! bool) return [];
+      for (final node in nodes) {
+        final id = field(node, ['address']);
+        final version = amount(field(node, ['version']));
+        final digest = field(node, ['digest']);
+        final balance = amount(field(node, ['contents', 'json', 'balance']));
+        if (id is! String ||
+            id.isEmpty ||
+            version == null ||
+            digest is! String ||
+            digest.isEmpty ||
+            balance == null) {
+          return [];
+        }
+        objects.add({
+          'data': {
+            'objectId': id,
+            'version': version.toString(),
+            'digest': digest,
+            'content': {
+              'fields': {'balance': balance.toString()},
+            },
+          },
+        });
       }
-      objects.addAll(page['data'] as List);
-      if (page['hasNextPage'] == false) return objects;
-      final next = page['nextCursor'];
+      if (!hasNext) return objects;
+      final next = field(page, ['pageInfo', 'endCursor']);
       if (next is! String || next.isEmpty || !cursors.add(next)) return [];
       cursor = next;
     }
   }
 
-  //模拟交易
-  Future<MessageModel> dryRunTransactionBlock(String signStr) async {
-    final result = await baseRPCSui("sui_dryRunTransactionBlock", [signStr]);
-    final rmm = resultToMessageModel(result);
+  /// Simulate base64 BCS TransactionData (no signature needed) and return
+  /// its net gas cost. Only a SUCCESS simulation yields an estimate.
+  Future<MessageModel> dryRunTransactionBlock(String transactionBcs) async {
+    final rmm = resultToMessageModel(
+      await graphQL(simulateQuery, {
+        'transaction': {
+          'bcs': {'value': transactionBcs},
+        },
+      }),
+    );
     if (rmm.error) return rmm;
-    final data = rmm.data;
-    final effects = data is Map ? data['effects'] : null;
-    final status = effects is Map ? effects['status'] : null;
-    final gas = effects is Map ? effects['gasUsed'] : null;
-    if (status is! Map || status['status'] != 'success' || gas is! Map) {
-      return MessageModel.error()..data = 'Sui simulation was not successful';
+    final effects = field(rmm.data, ['simulateTransaction', 'effects']);
+    final gas = field(effects, ['gasEffects', 'gasSummary']);
+    if (field(effects, ['status']) != 'SUCCESS' || gas is! Map) {
+      return MessageModel.error()
+        ..data = _withReason('Sui simulation was not successful', effects);
     }
-    BigInt? cost(String key) {
-      final value = gas[key];
-      if (value is! String || !RegExp(r'^[0-9]+$').hasMatch(value)) return null;
-      return BigInt.tryParse(value);
-    }
-
-    final computation = cost('computationCost');
-    final storage = cost('storageCost');
-    final rebate = cost('storageRebate');
+    final computation = amount(gas['computationCost']);
+    final storage = amount(gas['storageCost']);
+    final rebate = amount(gas['storageRebate']);
     if (computation == null || storage == null || rebate == null) {
       return MessageModel.error()..data = 'Invalid Sui simulation gas usage';
     }
@@ -95,84 +249,94 @@ class SuiApi {
     return MessageModel()..data = net.isNegative ? BigInt.zero : net;
   }
 
-  //交易上链（明确禁用重试，防止双发）
+  /// Execute signed transaction bytes; retries are explicitly disabled to
+  /// avoid a double submission. Success requires effects that name a
+  /// well-formed digest and report SUCCESS. Anything else (GraphQL errors,
+  /// FAILURE, missing or malformed effects) is an error the caller treats as
+  /// an unknown outcome. On success `data` is `{'digest', 'effects'}`.
   Future<MessageModel> submit(String transactionBlock, String signStr) async {
     final response = resultToMessageModel(
-      await baseRPCSui("sui_executeTransactionBlock", [
-        transactionBlock,
-        [signStr],
-        {"showEffects": true, "showEvents": true},
-      ], enableRetry: false),
+      await graphQL(executeMutation, {
+        'transactionDataBcs': transactionBlock,
+        'signatures': [signStr],
+      }, enableRetry: false),
     );
     if (response.error) return response;
-    final data = response.data;
-    final digest = data is Map ? data['digest'] : null;
-    final effects = data is Map ? data['effects'] : null;
-    final status = effects is Map ? effects['status'] : null;
-    var validDigest = false;
-    if (digest is String) {
-      try {
-        final bytes = Base58Decode(digest);
-        validDigest = bytes.length == 32 && Base58Encode(bytes) == digest;
-      } catch (_) {
-        // A malformed RPC response is not evidence of successful execution.
-      }
-    }
-    if (!validDigest || status is! Map || status['status'] != 'success') {
+    final effects = field(response.data, ['executeTransaction', 'effects']);
+    final digest = field(effects, ['digest']);
+    if (!isDigest(digest) || field(effects, ['status']) != 'SUCCESS') {
       return MessageModel.error()
-        ..data = 'Sui transaction execution was not confirmed';
+        ..data = _withReason(
+          'Sui transaction execution was not confirmed',
+          effects,
+        );
     }
-    return response;
+    return MessageModel()..data = {'digest': digest, 'effects': effects};
   }
 
-  /// Read one transaction with its effects and input (for the sender).
+  /// Read one transaction with its sender and effects. `data` is the
+  /// `transaction` object, or null when the service does not know the
+  /// digest (never executed, not yet indexed, or pruned).
   Future<MessageModel> getTransactionBlock(String txHash) async {
-    return resultToMessageModel(
-      await baseRPCSui("sui_getTransactionBlock", [
-        txHash,
-        {
-          "showInput": true,
-          "showRawInput": false,
-          "showEffects": true,
-          "showEvents": false,
-          "showObjectChanges": false,
-          "showBalanceChanges": false,
-          "showRawEffects": false,
-        },
-      ]),
+    final rmm = resultToMessageModel(
+      await graphQL(transactionQuery, {'digest': txHash}),
     );
+    if (rmm.error) return rmm;
+    final data = rmm.data;
+    if (data is! Map || !data.containsKey('transaction')) {
+      return MessageModel.error()..data = 'Invalid Sui transaction response';
+    }
+    return MessageModel()..data = data['transaction'];
   }
 
-  Future<Result<dynamic, AppError>> baseRPCSui(
-    String method,
-    dynamic value, {
+  static String _withReason(String message, Object? effects) {
+    final reason = field(effects, ['executionError', 'message']);
+    return reason is String && reason.isNotEmpty
+        ? '$message: $reason'
+        : message;
+  }
+
+  /// One GraphQL request. A reply carrying `errors` is a failure even when
+  /// partial data came back; a reply without a `data` object is a failure.
+  Future<Result<dynamic, AppError>> graphQL(
+    String document,
+    Map<String, dynamic> variables, {
     bool enableRetry = true,
   }) async {
     try {
-      Map<String, dynamic> postData = {
-        "jsonrpc": "2.0",
-        "method": method,
-        "params": value,
-        "id": AppGlobals.nextId,
-      };
-      final data = post != null
-          ? await post!(url, postData)
+      final body = <String, dynamic>{'query': document, 'variables': variables};
+      final reply = post != null
+          ? await post!(url, body)
           : await BaseApi.requestEmptyH.post(
               url,
               params: {},
-              data: postData,
+              data: body,
               enableRetry: enableRetry,
             );
-      if (data.containsKey('error')) {
+      final errors = reply is Map ? reply['errors'] : null;
+      if (errors is List && errors.isNotEmpty) {
+        final message = field(errors.first, ['message']);
         return Result.failure(
           AppError.blockchain(
-            data['error']?.toString() ?? 'RPC error',
-            code: 'SUI_RPC_ERROR',
-            originalError: data['error'],
+            message is String && message.isNotEmpty
+                ? message
+                : 'Sui GraphQL error',
+            code: 'SUI_GRAPHQL_ERROR',
+            originalError: errors,
           ),
         );
       }
-      return Result.success(data['result']);
+      final data = reply is Map ? reply['data'] : null;
+      if (data is! Map) {
+        return Result.failure(
+          AppError.blockchain(
+            'Invalid Sui GraphQL response',
+            code: 'SUI_GRAPHQL_ERROR',
+            originalError: reply,
+          ),
+        );
+      }
+      return Result.success(data);
     } catch (e, st) {
       // BaseHttp converts DioException to a localized String upstream.
       return Result.failure(
