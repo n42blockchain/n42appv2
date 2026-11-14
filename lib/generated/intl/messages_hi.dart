@@ -3165,6 +3165,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("सावधानी"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("उच्च जोखिम"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("सुरक्षित"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "पुष्टि नहीं हुई",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "चेन से अभी तक पुष्टि नहीं मिली है और परिणाम अज्ञात है। इसकी जाँच जारी है और यह अभी भी पूरा हो सकता है। दोबारा भेजने से पहले इसे ब्लॉक एक्सप्लोरर में जाँचें।",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Aave V3 लेंडिंग",
     ),

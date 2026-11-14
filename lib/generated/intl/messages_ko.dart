@@ -2480,6 +2480,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("주의"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("고위험"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("안전"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage("미확인"),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "아직 체인에서 확인되지 않아 결과를 알 수 없습니다. 계속 확인 중이며 아직 완료될 수 있습니다. 다시 보내기 전에 블록 탐색기에서 확인하세요.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 대출"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage("계정 이메일"),
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(

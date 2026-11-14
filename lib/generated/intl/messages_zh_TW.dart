@@ -2241,6 +2241,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("警告"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高風險"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全的"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage("未確認"),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "鏈上尚未確認，結果未知。系統仍在持續查詢，交易仍可能完成。再次發送前請先在區塊瀏覽器中查看。",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 借貸"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage("帳戶電子郵件"),
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(

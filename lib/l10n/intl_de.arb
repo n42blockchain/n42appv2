@@ -217,6 +217,8 @@
   "g_key_t_1": "Abgeschlossen",
   "g_key_t_2": "Ausstehend",
   "g_key_t_3": "Fehlgeschlagen",
+  "g_tx_status_unconfirmed": "Nicht bestätigt",
+  "g_tx_status_unconfirmed_hint": "Noch keine Bestätigung von der Blockchain, das Ergebnis ist unbekannt. Die Transaktion wird weiterhin geprüft und kann noch abgeschlossen werden. Prüfen Sie sie in einem Block-Explorer, bevor Sie erneut senden.",
   "g_key_t_4": "Ausgehend",
   "g_key_t_5": "Eingehend",
   "g_key_t_6": "Verbrauchtes Gas",

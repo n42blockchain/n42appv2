@@ -223,6 +223,8 @@
   "g_key_t_1": "Completed",
   "g_key_t_2": "Pending",
   "g_key_t_3": "Failure",
+  "g_tx_status_unconfirmed": "Not confirmed",
+  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
   "g_key_t_4": "Transfer out",
   "g_key_t_5": "Transfer in",
   "g_key_t_6": "Gas Used",

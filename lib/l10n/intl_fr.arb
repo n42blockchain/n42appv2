@@ -217,6 +217,8 @@
   "g_key_t_1": "Terminé",
   "g_key_t_2": "En attente",
   "g_key_t_3": "Échec",
+  "g_tx_status_unconfirmed": "Non confirmée",
+  "g_tx_status_unconfirmed_hint": "Aucune confirmation de la blockchain pour l'instant et le résultat est inconnu. Elle est toujours vérifiée et peut encore aboutir. Vérifiez-la dans un explorateur de blocs avant de renvoyer.",
   "g_key_t_4": "Transfert sortant",
   "g_key_t_5": "Transfert entrant",
   "g_key_t_6": "Gas utilisé",

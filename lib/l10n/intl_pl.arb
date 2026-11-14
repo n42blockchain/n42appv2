@@ -217,6 +217,8 @@
   "g_key_t_1": "Zakończone",
   "g_key_t_2": "Oczekujące",
   "g_key_t_3": "Niepowodzenie",
+  "g_tx_status_unconfirmed": "Niepotwierdzona",
+  "g_tx_status_unconfirmed_hint": "Brak jeszcze potwierdzenia z blockchainu, wynik jest nieznany. Transakcja jest nadal sprawdzana i może się jeszcze zakończyć. Przed ponownym wysłaniem sprawdź ją w eksploratorze bloków.",
   "g_key_t_4": "Transfer wychodzący",
   "g_key_t_5": "Transfer przychodzący",
   "g_key_t_6": "Zużyty gaz",

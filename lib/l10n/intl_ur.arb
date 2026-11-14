@@ -217,6 +217,8 @@
   "g_key_t_1": "مکمل",
   "g_key_t_2": "زیر التواء",
   "g_key_t_3": "ناکامی",
+  "g_tx_status_unconfirmed": "تصدیق نہیں ہوئی",
+  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
   "g_key_t_4": "باہر منتقل",
   "g_key_t_5": "میں منتقل کریں۔",
   "g_key_t_6": "استعمال شدہ گیس",

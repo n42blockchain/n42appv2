@@ -3289,6 +3289,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Обережно"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Високий ризик"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Безпечний"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Не підтверджено",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "Підтвердження від блокчейну поки немає, результат невідомий. Перевірка триває, транзакція ще може завершитися. Перед повторним надсиланням перевірте її в оглядачі блоків.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Забезпечення Aave V3",
     ),

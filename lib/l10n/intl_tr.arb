@@ -217,6 +217,8 @@
   "g_key_t_1": "Tamamlandı",
   "g_key_t_2": "Beklemede",
   "g_key_t_3": "Başarısız",
+  "g_tx_status_unconfirmed": "Onaylanmadı",
+  "g_tx_status_unconfirmed_hint": "Zincirden henüz onay yok ve sonuç bilinmiyor. Kontrol edilmeye devam ediyor ve hâlâ tamamlanabilir. Yeniden göndermeden önce bir blok gezgininde kontrol edin.",
   "g_key_t_4": "Giden transfer",
   "g_key_t_5": "Gelen transfer",
   "g_key_t_6": "Kullanılan Gas",

@@ -3092,6 +3092,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("الحذر"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("مخاطر عالية"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("آمنة"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "غير مؤكدة",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد تأكيد من الشبكة حتى الآن والنتيجة غير معروفة. لا يزال التحقق جاريًا وقد تكتمل المعاملة. تحقق منها في مستكشف الكتل قبل الإرسال مرة أخرى.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("إقراض Aave V3"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
       "البريد الإلكتروني للحساب",

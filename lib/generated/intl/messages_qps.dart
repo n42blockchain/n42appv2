@@ -3841,6 +3841,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ĥìĝĥ Ŗìšķ ~~~~#]",
     ),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("[# Šàƒé ~~#]"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "[# Ñöť çöñƒìŗṁéð ~~~~~~#]",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö çöñƒìŗṁàťìöñ ƒŗöṁ ťĥé çĥàìñ ýéť àñð ťĥé ŗéšüĺť ìš üñķñöŵñ. Ìť ìš šťìĺĺ ƀéìñĝ çĥéçķéð àñð ṁàý šťìĺĺ çöṁƥĺéťé. Çĥéçķ ìť ìñ à ƀĺöçķ éẋƥĺöŗéŗ ƀéƒöŗé šéñðìñĝ àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "[# Ààṽé Ṽ3 Ĺéñðìñĝ ~~~~~~~#]",
     ),

@@ -3332,6 +3332,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("జాగ్రత్త"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("అధిక ప్రమాదం"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("సురక్షితమైనది"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "నిర్ధారించబడలేదు",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Aave V3 లోనింగ్",
     ),

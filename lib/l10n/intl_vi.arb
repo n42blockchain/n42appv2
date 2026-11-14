@@ -217,6 +217,8 @@
   "g_key_t_1": "Hoàn tất",
   "g_key_t_2": "Đang chờ",
   "g_key_t_3": "Thất bại",
+  "g_tx_status_unconfirmed": "Chưa xác nhận",
+  "g_tx_status_unconfirmed_hint": "Chưa có xác nhận từ chuỗi và kết quả chưa rõ. Giao dịch vẫn đang được kiểm tra và vẫn có thể hoàn tất. Hãy kiểm tra trên trình khám phá khối trước khi gửi lại.",
   "g_key_t_4": "Chuyển đi",
   "g_key_t_5": "Chuyển đến",
   "g_key_t_6": "Gas đã dùng",

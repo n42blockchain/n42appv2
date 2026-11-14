@@ -217,6 +217,8 @@
   "g_key_t_1": "Dokončeno",
   "g_key_t_2": "Čeká na vyřízení",
   "g_key_t_3": "Selhání",
+  "g_tx_status_unconfirmed": "Nepotvrzeno",
+  "g_tx_status_unconfirmed_hint": "Blockchain transakci zatím nepotvrdil a výsledek není znám. Stále se kontroluje a ještě může být dokončena. Před opětovným odesláním ji zkontrolujte v průzkumníku bloků.",
   "g_key_t_4": "Přenést ven",
   "g_key_t_5": "Přenést dovnitř",
   "g_key_t_6": "Použitý plyn",

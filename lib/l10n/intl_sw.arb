@@ -217,6 +217,8 @@
   "g_key_t_1": "Kamilisha",
   "g_key_t_2": "Inasubiri",
   "g_key_t_3": "Kushindwa",
+  "g_tx_status_unconfirmed": "Haijathibitishwa",
+  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
   "g_key_t_4": "Uhamisho nje",
   "g_key_t_5": "Hamisha ndani",
   "g_key_t_6": "Gesi Inayotumika",

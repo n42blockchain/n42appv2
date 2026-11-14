@@ -223,6 +223,8 @@
   "g_key_t_1": "完成",
   "g_key_t_2": "待辦的",
   "g_key_t_3": "失敗",
+  "g_tx_status_unconfirmed": "未確認",
+  "g_tx_status_unconfirmed_hint": "鏈上尚未確認，結果未知。系統仍在持續查詢，交易仍可能完成。再次發送前請先在區塊瀏覽器中查看。",
   "g_key_t_4": "轉出",
   "g_key_t_5": "轉入",
   "g_key_t_6": "使用氣體",

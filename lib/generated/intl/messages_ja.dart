@@ -2559,6 +2559,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("注意"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高リスク"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage("未確認"),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "まだチェーン上で確認されておらず、結果は不明です。引き続き確認中で、まだ完了する可能性があります。再送信する前にブロックエクスプローラーで確認してください。",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 レンディング"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage("アカウントメール"),
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(

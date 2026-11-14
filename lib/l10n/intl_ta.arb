@@ -217,6 +217,8 @@
   "g_key_t_1": "நிறைவு",
   "g_key_t_2": "நிலுவையில் உள்ளது",
   "g_key_t_3": "தோல்வி",
+  "g_tx_status_unconfirmed": "உறுதிப்படுத்தப்படவில்லை",
+  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
   "g_key_t_4": "வெளியே மாற்றவும்",
   "g_key_t_5": "உள்ளே மாற்றவும்",
   "g_key_t_6": "பயன்படுத்தப்படும் எரிவாயு",

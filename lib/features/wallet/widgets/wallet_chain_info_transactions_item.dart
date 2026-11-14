@@ -6,6 +6,8 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show toEther;
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
@@ -66,6 +68,17 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
   }
 
   bool get _isMempoolTx => transactionModel is MempoolTxItem;
+
+  /// Pending for longer than the resolver's unknown threshold: the chain has
+  /// not given a result, so "pending" would overstate what is known.
+  bool get _isUnconfirmed =>
+      !_isBtcType &&
+      transactionModel is TransationRecordModel &&
+      TransactionStateResolver.isUnconfirmed(transactionModel);
+
+  String get _statusText => _isUnconfirmed
+      ? S.current.g_tx_status_unconfirmed
+      : getBuyStateText(transactionModel.state);
 
   String get _coinTypeForEns {
     final coinType = coinModel?.config.coinType;
@@ -203,9 +216,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
           ),
         ),
         Text(
-          getBuyStateText(transactionModel.state),
+          _statusText,
           style: AppTypography.body.copyWith(
-            color: AppColorTokens.of(context).textPrimary,
+            color: _isUnconfirmed
+                ? AppColorTokens.of(context).warning
+                : AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -275,6 +290,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
             isTest: coinModel?.isTest,
+            status: _isBtcType ? null : _statusText,
+            statusHint: _isUnconfirmed
+                ? S.current.g_tx_status_unconfirmed_hint
+                : null,
           ),
         ),
       );
@@ -300,6 +319,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
             isTest: coinModel?.isTest,
+            status: _statusText,
+            statusHint: _isUnconfirmed
+                ? S.current.g_tx_status_unconfirmed_hint
+                : null,
           ),
         ),
       );

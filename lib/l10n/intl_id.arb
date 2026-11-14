@@ -217,6 +217,8 @@
   "g_key_t_1": "Selesai",
   "g_key_t_2": "Tertunda",
   "g_key_t_3": "Gagal",
+  "g_tx_status_unconfirmed": "Belum dikonfirmasi",
+  "g_tx_status_unconfirmed_hint": "Belum ada konfirmasi dari blockchain dan hasilnya belum diketahui. Transaksi masih diperiksa dan masih bisa selesai. Periksa di block explorer sebelum mengirim lagi.",
   "g_key_t_4": "Transfer keluar",
   "g_key_t_5": "Transfer masuk",
   "g_key_t_6": "Gas Terpakai",

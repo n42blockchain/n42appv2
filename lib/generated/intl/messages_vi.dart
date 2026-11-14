@@ -3167,6 +3167,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Thận trọng"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Rủi ro cao"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("An toàn"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Chưa xác nhận",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "Chưa có xác nhận từ chuỗi và kết quả chưa rõ. Giao dịch vẫn đang được kiểm tra và vẫn có thể hoàn tất. Hãy kiểm tra trên trình khám phá khối trước khi gửi lại.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Cho vay Aave V3",
     ),

@@ -3261,6 +3261,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Uwaga"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Wysokie Ryzyko"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Bezpieczne"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Niepotwierdzona",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "Brak jeszcze potwierdzenia z blockchainu, wynik jest nieznany. Transakcja jest nadal sprawdzana i może się jeszcze zakończyć. Przed ponownym wysłaniem sprawdź ją w eksploratorze bloków.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Wypożyczenie Aave V3",
     ),

@@ -217,6 +217,8 @@
   "g_key_t_1": "పూర్తి",
   "g_key_t_2": "పెండింగ్‌లో ఉంది",
   "g_key_t_3": "వైఫల్యం",
+  "g_tx_status_unconfirmed": "నిర్ధారించబడలేదు",
+  "g_tx_status_unconfirmed_hint": "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
   "g_key_t_4": "బయటకు బదిలీ చేయండి",
   "g_key_t_5": "బదిలీ చేయండి",
   "g_key_t_6": "వాడిన గ్యాస్",

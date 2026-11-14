@@ -3224,6 +3224,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("সতর্কতা"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("উচ্চ ঝুঁকি"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("নিরাপদ"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "নিশ্চিত হয়নি",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 লেনদেন"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট ইমেইল",

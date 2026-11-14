@@ -28,6 +28,23 @@ import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 ///  -1 = 无法确定（RPC 错误、数据尚未就绪）
 ///   0 = 尚未确认（仍在 pending 中）
 class TransactionStateResolver {
+  /// A record still pending this long after it was sent has gone through
+  /// many polling rounds (every 10 s) without a chain result. It is shown as
+  /// "not confirmed" instead of "pending"; its stored state is unchanged and
+  /// it keeps being checked.
+  static const unknownAfter = Duration(minutes: 30);
+
+  /// Whether [record] is pending past [unknownAfter]. Display only.
+  static bool isUnconfirmed(TransationRecordModel record, {DateTime? now}) {
+    if (record.state != 0) return false;
+    final raw = int.tryParse(record.txTime);
+    if (raw == null || raw <= 0) return false;
+    final sentAt = DateTime.fromMillisecondsSinceEpoch(
+      record.txTime.length == 13 ? raw : raw * 1000,
+    );
+    return (now ?? DateTime.now()).difference(sentAt) > unknownAfter;
+  }
+
   final TokenViewApi _tokenViewApi;
 
   final XlmApi _xlmApi;

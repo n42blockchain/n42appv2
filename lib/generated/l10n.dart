@@ -1785,6 +1785,26 @@ class S {
     return Intl.message('Failure', name: 'g_key_t_3', desc: '', args: []);
   }
 
+  /// `Not confirmed`
+  String get g_tx_status_unconfirmed {
+    return Intl.message(
+      'Not confirmed',
+      name: 'g_tx_status_unconfirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.`
+  String get g_tx_status_unconfirmed_hint {
+    return Intl.message(
+      'No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.',
+      name: 'g_tx_status_unconfirmed_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Transfer out`
   String get g_key_t_4 {
     return Intl.message('Transfer out', name: 'g_key_t_4', desc: '', args: []);

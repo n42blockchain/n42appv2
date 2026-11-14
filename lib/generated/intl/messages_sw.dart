@@ -3320,6 +3320,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Tahadhari"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Hatari kubwa"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Salama"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Haijathibitishwa",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Ukopeshaji wa Aave V3",
     ),

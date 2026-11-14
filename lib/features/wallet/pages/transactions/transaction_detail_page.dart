@@ -22,6 +22,12 @@ class TransactionDetailPage extends StatefulWidget {
   final String? value;
   final bool? isTest;
 
+  /// Local record status label, e.g. pending / success / not confirmed.
+  final String? status;
+
+  /// Explanation shown under [status] when its outcome is not known.
+  final String? statusHint;
+
   const TransactionDetailPage({
     this.time,
     this.from,
@@ -34,6 +40,8 @@ class TransactionDetailPage extends StatefulWidget {
     this.gasUsed,
     this.value,
     this.isTest,
+    this.status,
+    this.statusHint,
     super.key,
   });
 
@@ -83,6 +91,17 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildItem(s.g_key_wallet_k25, widget.time),
+            _buildItem(s.g_key_wallet_k33, widget.status),
+            if (widget.statusHint?.isNotEmpty == true)
+              Padding(
+                padding: _itemPadding,
+                child: Text(
+                  widget.statusHint!,
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).warning,
+                  ),
+                ),
+              ),
             _buildItem(s.g_key_wallet_k54, widget.blockNumber),
             _buildAddressItem(s.g_key_75, widget.from),
             _buildAddressItem(s.g_key_38, widget.to),

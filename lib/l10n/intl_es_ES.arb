@@ -217,6 +217,8 @@
   "g_key_t_1": "Completado",
   "g_key_t_2": "Pendiente",
   "g_key_t_3": "Error",
+  "g_tx_status_unconfirmed": "No confirmada",
+  "g_tx_status_unconfirmed_hint": "Aún no hay confirmación de la cadena y el resultado es desconocido. Se sigue comprobando y todavía puede completarse. Compruébala en un explorador de bloques antes de volver a enviar.",
   "g_key_t_4": "Trasferencia",
   "g_key_t_5": "Transferencia",
   "g_key_t_6": "Gas usado",

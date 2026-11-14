@@ -3163,6 +3163,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Dikkat"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Yüksek Risk"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Güvenli"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "Onaylanmadı",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "Zincirden henüz onay yok ve sonuç bilinmiyor. Kontrol edilmeye devam ediyor ve hâlâ tamamlanabilir. Yeniden göndermeden önce bir blok gezgininde kontrol edin.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Aave V3 Kredi Verme",
     ),

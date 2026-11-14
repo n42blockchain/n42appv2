@@ -3118,6 +3118,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("खबरदारी"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("उच्च धोका"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("सुरक्षित"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "पुष्टी झालेली नाही",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "No confirmation from the chain yet and the result is unknown. It is still being checked and may still complete. Check it in a block explorer before sending again.",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "एव्ह व्ही३ लेंडिंग",
     ),
