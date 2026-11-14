@@ -20,18 +20,68 @@ import '../../pages/send/sui_amount_utils.dart';
 class SuiSender implements ChainSender {
   final Trustdart _trustdart;
   final SuiApi Function(bool) _apiFactory;
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
   bool _sending = false;
 
-  SuiSender({Trustdart? trustdart, SuiApi Function(bool)? apiFactory})
-    : _trustdart = trustdart ?? Trustdart(),
-      _apiFactory = apiFactory ?? ((isTest) => SuiApi(isTest: isTest));
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  SuiSender({
+    Trustdart? trustdart,
+    SuiApi Function(bool)? apiFactory,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+  }) : _trustdart = trustdart ?? Trustdart(),
+       _apiFactory = apiFactory ?? ((isTest) => SuiApi(isTest: isTest)),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic;
 
   @override
   Future<SendResult> send(SendParams params) async {
     if (_sending) return const SendResult.fail('A transfer is already pending');
     _sending = true;
     try {
-      return await _send(params);
+      // Capture the signing account before any asynchronous preparation so a
+      // wallet switch can never sign with the replacement account's mnemonic.
+      final owner = _ownerIdentity();
+      final mnemonic = params.privateKey == null ? _readMnemonic() : null;
+      bool signerIsCurrent() {
+        try {
+          return _ownerIdentity() == owner &&
+              (params.privateKey != null ||
+                  (owner != null && mnemonic == _readMnemonic()));
+        } catch (_) {
+          return false;
+        }
+      }
+
+      if (!signerIsCurrent() ||
+          (params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+        return const SendResult.fail('Wallet is not ready');
+      }
+      return await _send(params, mnemonic, signerIsCurrent);
     } catch (_) {
       return const SendResult.fail('Unable to prepare or send Sui transfer');
     } finally {
@@ -39,7 +89,11 @@ class SuiSender implements ChainSender {
     }
   }
 
-  Future<SendResult> _send(SendParams params) async {
+  Future<SendResult> _send(
+    SendParams params,
+    String? mnemonic,
+    bool Function() signerIsCurrent,
+  ) async {
     if (params.contractAddress.isNotEmpty) {
       return const SendResult.fail(
         'Sui token transfers require a token-specific transaction',
@@ -115,6 +169,9 @@ class SuiSender implements ChainSender {
       }).toList(),
     };
 
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Sui signing');
+    }
     String signStr;
     if (params.privateKey == null) {
       if (!AppGlobals.appContext.mounted) {
@@ -124,7 +181,7 @@ class SuiSender implements ChainSender {
         CoinType.SUI.name,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: mnemonic!,
       );
     } else {
       signStr = await _trustdart.signTransaction(
@@ -136,6 +193,9 @@ class SuiSender implements ChainSender {
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Sui submission');
+    }
 
     final signed = SuiSignedTransaction.parse(signStr);
     if (signed == null) {

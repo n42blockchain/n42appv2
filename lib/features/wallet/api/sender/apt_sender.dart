@@ -28,6 +28,7 @@ class AptSender implements ChainSender {
   final Trustdart _trustdart;
   final AptApi Function(bool isTest) _apiFactory;
   final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
   final AptSubmissionJournal _journal;
   final Future<void> Function(AptPendingSubmission, AptTransactionReceipt)?
   _reconcileWriter;
@@ -46,11 +47,22 @@ class AptSender implements ChainSender {
     }
   }
 
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   AptSender({
     Map<String, dynamic>? chainConfig,
     Trustdart? trustdart,
     AptApi Function(bool isTest)? apiFactory,
     Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
     AptSubmissionJournal? journal,
     Future<void> Function(AptPendingSubmission, AptTransactionReceipt)?
     reconcileWriter,
@@ -59,13 +71,28 @@ class AptSender implements ChainSender {
        _trustdart = trustdart ?? Trustdart(),
        _apiFactory = apiFactory ?? ((isTest) => AptApi(isTest: isTest)),
        _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic,
        _journal = journal ?? AptSubmissionJournal();
 
   @override
   Future<SendResult> send(SendParams params) async {
+    // Capture the signing account and its mnemonic before any asynchronous
+    // work: a wallet switch must never sign with the replacement mnemonic.
     final owner = _ownerIdentity();
     if (owner == null) return const SendResult.fail('Wallet is not ready');
-    bool ownerIsCurrent() => _ownerIdentity() == owner;
+    final mnemonic = params.privateKey == null ? _readMnemonic() : null;
+    if ((params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+      return const SendResult.fail('Wallet is not ready');
+    }
+    bool ownerIsCurrent() {
+      try {
+        return _ownerIdentity() == owner &&
+            (params.privateKey != null || mnemonic == _readMnemonic());
+      } catch (_) {
+        return false;
+      }
+    }
+
     final coinType = params.coinType.toUpperCase();
     // Resolve mutable configuration before the first asynchronous operation.
     final int? resolvedChainId = resolveChainConfigIdOrNull(
@@ -286,7 +313,7 @@ class AptSender implements ChainSender {
         coinType,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: mnemonic!,
       );
     } else {
       signStr = await _trustdart.signTransaction(

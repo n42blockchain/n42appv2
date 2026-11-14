@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
@@ -11,6 +13,7 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class FakeApi extends SuiApi {
   int submits = 0;
+  void Function()? onBalance;
   Object? submitError;
   MessageModel? reply;
   int reads = 0;
@@ -18,6 +21,7 @@ class FakeApi extends SuiApi {
   @override
   Future<MessageModel> getBalanceSui(String address) async {
     reads++;
+    onBalance?.call();
     return MessageModel()..data = balance;
   }
 
@@ -43,6 +47,8 @@ class FakeApi extends SuiApi {
 
 class Signer extends Trustdart {
   Map? received;
+  String? mnemonic;
+  void Function()? onSign;
   String output = 'AQID|${base64Encode(List.filled(97, 0))}';
   Completer<String>? pending;
   @override
@@ -55,6 +61,8 @@ class Signer extends Trustdart {
     String passphrase = '',
   }) async {
     received = txData;
+    this.mnemonic = mnemonic;
+    onSign?.call();
     return pending == null ? output : pending!.future;
   }
 }
@@ -77,6 +85,13 @@ SendParams params({
   contractAddress: contract,
   sendMax: max,
 );
+
+/// Mnemonic signing requires a mounted app context.
+Future<void> mountContext(WidgetTester tester) async {
+  await tester.pumpWidget(const SizedBox());
+  AppGlobals.appContext = tester.element(find.byType(SizedBox));
+}
+
 void main() {
   test('exact amount and full coin references reach signer without fee multiplication', () async {
     final api = FakeApi();
@@ -150,6 +165,92 @@ void main() {
       },
     );
   }
+  for (final change in ['owner', 'mnemonic', 'owner after signing']) {
+    testWidgets('wallet $change change never signs or submits', (tester) async {
+      await mountContext(tester);
+      Object owner = Object();
+      var mnemonic = 'first account words';
+      final api = FakeApi();
+      final signer = Signer();
+      if (change == 'owner after signing') {
+        signer.onSign = () => owner = Object();
+      } else {
+        api.onBalance = () => change == 'owner'
+            ? owner = Object()
+            : mnemonic = 'replacement account words';
+      }
+      final request = SendParams(
+        coinType: 'SUI',
+        fromAddress: 'owner',
+        toAddress: 'recipient',
+        amount: 1,
+        decimals: 9,
+        path: 'path',
+        isTest: true,
+      );
+      final result = await SuiSender(
+        trustdart: signer,
+        apiFactory: (_) => api,
+        ownerIdentity: () => owner,
+        readMnemonic: () => mnemonic,
+      ).send(request);
+      expect(result.success, isFalse);
+      expect(result.txHash, isNull);
+      expect(api.submits, 0);
+      if (change == 'owner after signing') {
+        expect(signer.mnemonic, 'first account words');
+      } else {
+        expect(signer.received, isNull);
+      }
+    });
+  }
+  testWidgets('mnemonic signing uses the account captured at entry', (
+    tester,
+  ) async {
+    await mountContext(tester);
+    final api = FakeApi();
+    final signer = Signer();
+    final result =
+        await SuiSender(
+          trustdart: signer,
+          apiFactory: (_) => api,
+          ownerIdentity: () => 'owner',
+          readMnemonic: () => 'first account words',
+        ).send(
+          SendParams(
+            coinType: 'SUI',
+            fromAddress: 'owner',
+            toAddress: 'recipient',
+            amount: 1,
+            decimals: 9,
+            path: 'path',
+            isTest: true,
+          ),
+        );
+    expect(result.success, isTrue);
+    expect(signer.mnemonic, 'first account words');
+  });
+  test('missing wallet fails before any RPC', () async {
+    final api = FakeApi();
+    final result =
+        await SuiSender(
+          trustdart: Signer(),
+          apiFactory: (_) => api,
+          ownerIdentity: () => null,
+          readMnemonic: () => null,
+        ).send(
+          SendParams(
+            coinType: 'SUI',
+            fromAddress: 'owner',
+            toAddress: 'recipient',
+            amount: 1,
+            decimals: 9,
+            path: 'path',
+          ),
+        );
+    expect(result.success, isFalse);
+    expect(api.reads, 0);
+  });
   test('failures before submission stay plain failures', () async {
     final api = FakeApi()..balance = BigInt.zero;
     final result = await SuiSender(
