@@ -13,12 +13,26 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_sui.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
 
 class _OfflineWalletProvider extends WalletActionProvider {
   @override
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel) async => false;
+}
+
+class _StubResolver extends TransactionStateResolver {
+  (int, String?) reply = (-1, null);
+  final asked = <String>[];
+  @override
+  Future<(int, String?)> resolveStateWithReason(
+    TransationRecordModel trm,
+  ) async {
+    asked.add(trm.txHash);
+    return reply;
+  }
 }
 
 class _RejectingHttpClient implements HttpClient {
@@ -79,6 +93,11 @@ void main() {
     Future<int> Function(TransationRecordModel)? transactionWriter,
     Future<MessageModel?> Function(CoinModel)? gasPriceLoader,
     Future<List<dynamic>> Function(CoinModel)? ownedObjectsLoader,
+    Future<List<TransationRecordModel>> Function(TransationRecordModel)?
+    pendingTransactions,
+    TransactionStateResolver? stateResolver,
+    Future<int> Function(TransationRecordModel)? saveResolvedTransaction,
+    Future<int> Function(TransationRecordModel)? dismissPendingTransactions,
   }) async {
     await tester.pumpWidget(
       wrapForTest(
@@ -89,6 +108,10 @@ void main() {
           gasPriceLoader:
               gasPriceLoader ?? (_) async => MessageModel()..data = BigInt.one,
           ownedObjectsLoader: ownedObjectsLoader ?? (_) async => const [],
+          pendingTransactions: pendingTransactions ?? (_) async => [],
+          stateResolver: stateResolver,
+          saveResolvedTransaction: saveResolvedTransaction,
+          dismissPendingTransactions: dismissPendingTransactions,
         ),
         overrides: [
           wapBridgeProvider.overrideWith((ref) => _OfflineWalletProvider()),
@@ -444,5 +467,143 @@ void main() {
     expect(state.load, Load.loading);
     await tester.pump(const Duration(seconds: 8));
     expect(tester.takeException(), isNull);
+  });
+
+  group('earlier unresolved send', () {
+    TransationRecordModel earlier() => TransationRecordModel()
+      ..trId = 3
+      ..coin = {'blockchainType': 'Sui', 'coinType': 'SUI'}
+      ..coinMiniName = 'SUI'
+      ..from1 = '0x${'11' * 32}'
+      ..txHash = 'earlier-digest';
+
+    for (final (state, reason) in [(1, null), (2, 'Sui transaction failed')]) {
+      testWidgets('settled on chain ($state) is saved and does not block', (
+        tester,
+      ) async {
+        var sends = 0;
+        final saved = <TransationRecordModel>[];
+        final resolver = _StubResolver()..reply = (state, reason);
+        final page = await mount(
+          tester,
+          transactionSender: (_) async {
+            sends++;
+            return const SendResult.ok('new-digest');
+          },
+          transactionWriter: (_) async => 8,
+          pendingTransactions: (_) async => [earlier()],
+          stateResolver: resolver,
+          saveResolvedTransaction: (record) async {
+            saved.add(record);
+            return 1;
+          },
+        );
+        await page.signTx(recordFor(page));
+        await tester.pumpAndSettle();
+        expect(resolver.asked, ['earlier-digest']);
+        expect(saved.single.txHash, 'earlier-digest');
+        expect(saved.single.state, state);
+        expect(saved.single.errorMessage, reason ?? '');
+        expect(sends, 1);
+        expect(find.text(S.current.g_memo_pending_unknown_title), findsNothing);
+        await tester.pump(const Duration(seconds: 8));
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('a result that was not saved still blocks', (tester) async {
+      var sends = 0;
+      final page = await mount(
+        tester,
+        transactionSender: (_) async {
+          sends++;
+          return const SendResult.ok('new-digest');
+        },
+        pendingTransactions: (_) async => [earlier()],
+        stateResolver: _StubResolver()..reply = (1, null),
+        saveResolvedTransaction: (_) async => 0,
+        dismissPendingTransactions: (_) async => 0,
+      );
+      await page.signTx(recordFor(page));
+      await tester.pumpAndSettle();
+      expect(sends, 0);
+      expect(find.text(S.current.g_memo_pending_unknown_title), findsOneWidget);
+      await tester.tap(find.text(S.current.g_memo_pending_keep_waiting));
+      await tester.pumpAndSettle();
+    });
+
+    for (final dismiss in [false, true]) {
+      testWidgets('unknown outcome blocks and offers to stop waiting: '
+          'dismiss=$dismiss', (tester) async {
+        var sends = 0;
+        var dismissals = 0;
+        var blocking = true;
+        String? dismissedFrom;
+        final page = await mount(
+          tester,
+          transactionSender: (_) async {
+            sends++;
+            return const SendResult.ok('new-digest');
+          },
+          transactionWriter: (_) async => 8,
+          pendingTransactions: (_) async => blocking ? [earlier()] : [],
+          stateResolver: _StubResolver(),
+          saveResolvedTransaction: (_) async => fail('nothing settled'),
+          dismissPendingTransactions: (record) async {
+            dismissals++;
+            dismissedFrom = record.from1;
+            blocking = false;
+            return 1;
+          },
+        );
+        final record = recordFor(page);
+        await page.signTx(record);
+        await tester.pumpAndSettle();
+        expect(sends, 0);
+        expect(record.txHash, isEmpty);
+        expect(
+          find.text(S.current.g_memo_pending_unknown_title),
+          findsOneWidget,
+        );
+        await tester.tap(
+          find.text(
+            dismiss
+                ? S.current.g_memo_pending_dismiss
+                : S.current.g_memo_pending_keep_waiting,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(dismissals, dismiss ? 1 : 0);
+        expect(dismissedFrom, dismiss ? '0x${'11' * 32}' : isNull);
+        await page.signTx(record);
+        await tester.pumpAndSettle();
+        expect(sends, dismiss ? 1 : 0);
+        if (!dismiss) {
+          await tester.tap(find.text(S.current.g_memo_pending_keep_waiting));
+          await tester.pumpAndSettle();
+        }
+        await tester.pump(const Duration(seconds: 8));
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('a failed history lookup stops the send', (tester) async {
+      var sends = 0;
+      final page = await mount(
+        tester,
+        transactionSender: (_) async {
+          sends++;
+          return const SendResult.ok('new-digest');
+        },
+        pendingTransactions: (_) async => throw StateError('db closed'),
+      );
+      await page.signTx(recordFor(page));
+      await tester.pumpAndSettle();
+      expect(sends, 0);
+      expect(page.errorMessage, contains('db closed'));
+      expect(find.text(S.current.g_memo_pending_unknown_title), findsNothing);
+      await tester.pump(const Duration(seconds: 8));
+      expect(tester.takeException(), isNull);
+    });
   });
 }

@@ -545,6 +545,44 @@ void main() {
     });
   }
 
+  test('SUI history rows can stop blocking without being failed', () async {
+    // Sui rows are written by the plain history insert, not a reservation.
+    TransationRecordModel sui(String hash) => TransationRecordModel()
+      ..coinMiniName = 'SUI'
+      ..coin = {'blockchainType': 'Sui', 'coinType': 'SUI'}
+      ..to1 = 'recipient'
+      ..price = BigInt.one
+      ..from1 = 'sender'
+      ..userUuid = 'alice'
+      ..txHash = hash;
+    await db.insertTransationRecord(sui('digest-a'));
+    await db.insertTransationRecord(sui('digest-b')..state = 1);
+    Future<List<TransationRecordModel>> blocking() =>
+        db.selectBlockingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: 'SUI',
+          from: 'sender',
+          isTest: 0,
+        );
+    expect((await blocking()).map((r) => r.txHash), ['digest-a']);
+    expect(
+      await db.dismissPendingMemoTransactions(
+        userUuid: 'alice',
+        coinMiniName: 'SUI',
+        from: 'sender',
+        isTest: 0,
+      ),
+      1,
+    );
+    expect(await blocking(), isEmpty);
+    final rows = await connection.query('TransationRecord', orderBy: 'trId');
+    expect(rows.map((r) => r['state']), [0, 1]);
+    expect(rows.first['memoDispatchPhase'], memoPhaseDismissed);
+    // Still pending history: a later chain result updates it.
+    final settled = TransationRecordModel.fromMap(rows.first)..state = 1;
+    expect(await db.updateTransationRecordTxhash(settled), 1);
+  });
+
   test('dismissal rejects other chains and incomplete identities', () async {
     for (final args in [
       ('BTC', 'alice', 'sender', 0),

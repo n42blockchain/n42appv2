@@ -196,7 +196,7 @@ extension TransactionRecordDao on AppDatabase {
     required String from,
     required int isTest,
   }) async {
-    if (!{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinMiniName) ||
+    if (!{'ADA', 'XLM', 'EGLD', 'NEAR', 'SUI'}.contains(coinMiniName) ||
         userUuid.isEmpty ||
         from.isEmpty ||
         ![0, 1].contains(isTest)) {
