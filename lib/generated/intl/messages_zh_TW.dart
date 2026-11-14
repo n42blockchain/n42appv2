@@ -1902,6 +1902,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage("搜尋硬幣..."),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("流行趨勢"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("注意列表"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("不再等待"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "現在可以再次發送，先前的交易仍會持續查詢。",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage("繼續等待"),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "此地址先前的一筆轉帳尚未確認，目前無法判斷結果，因此新的轉帳被暫停。若您選擇不再等待，該筆交易仍會以「待處理」保留在紀錄中並持續查詢。警告：它仍可能在鏈上完成，再次發送可能導致重複付款。請先在區塊瀏覽器確認先前的交易。",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "先前交易狀態未知",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "驗證者閒置分數偏高。請檢查您的節點狀態以避免受罰。",
     ),

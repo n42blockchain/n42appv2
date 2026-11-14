@@ -15197,6 +15197,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Earlier transaction status unknown`
+  String get g_memo_pending_unknown_title {
+    return Intl.message(
+      'Earlier transaction status unknown',
+      name: 'g_memo_pending_unknown_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An earlier transfer from this address has not been confirmed and its result cannot be determined yet, so new transfers are blocked. If you stop waiting for it, it will stay in your history as pending and will still be checked. Warning: it may still be completed on chain, so sending again may pay twice. Check the earlier transaction in a block explorer first.`
+  String get g_memo_pending_unknown_body {
+    return Intl.message(
+      'An earlier transfer from this address has not been confirmed and its result cannot be determined yet, so new transfers are blocked. If you stop waiting for it, it will stay in your history as pending and will still be checked. Warning: it may still be completed on chain, so sending again may pay twice. Check the earlier transaction in a block explorer first.',
+      name: 'g_memo_pending_unknown_body',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Keep waiting`
+  String get g_memo_pending_keep_waiting {
+    return Intl.message(
+      'Keep waiting',
+      name: 'g_memo_pending_keep_waiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop waiting`
+  String get g_memo_pending_dismiss {
+    return Intl.message(
+      'Stop waiting',
+      name: 'g_memo_pending_dismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can send again. The earlier transaction is still being checked.`
+  String get g_memo_pending_dismissed {
+    return Intl.message(
+      'You can send again. The earlier transaction is still being checked.',
+      name: 'g_memo_pending_dismissed',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -114,6 +115,7 @@ void main() {
         ].contains(scenario);
         final dispatchChecks = <(int, String, int)>[];
         var releases = 0;
+        var dismissals = 0;
         var saves = 0;
         var broadcasts = 0;
         var submissions = 0;
@@ -145,6 +147,11 @@ void main() {
                   coin.privateKey = 'public-test-placeholder';
                 }
                 return scenario != 'dispatch rejected';
+              },
+              dismissPendingTransactions: (tr) async {
+                dismissals++;
+                expect(tr.txHash, hash);
+                return 1;
               },
               releaseUnsubmittedTransaction: (tr) async {
                 releases++;
@@ -234,6 +241,22 @@ void main() {
           'storage failure',
           'pending reservation',
         ].contains(scenario);
+        if (scenario == 'pending reservation') {
+          // The blocked send offers to stop waiting for the unknown original.
+          expect(
+            find.text(S.current.g_memo_pending_unknown_title),
+            findsOneWidget,
+          );
+          expect(dismissals, 0);
+          await tester.tap(find.text(S.current.g_memo_pending_dismiss));
+          await tester.pumpAndSettle();
+          expect(dismissals, 1);
+        } else {
+          expect(
+            find.text(S.current.g_memo_pending_unknown_title),
+            findsNothing,
+          );
+        }
         for (final check in dispatchChecks) {
           expect(check, (42, hash, 0));
         }

@@ -23,6 +23,15 @@ class PendingMemoTransactionException implements Exception {
   const PendingMemoTransactionException();
 }
 
+/// Dispatch phase of a pending ADA/XLM/EGLD/NEAR row whose outcome could not
+/// be determined and which the user chose to stop waiting for. The row keeps
+/// state=0 (its outcome is still unknown and it is still polled), but it no
+/// longer reserves the sender.
+const memoPhaseDismissed = 'dismissed';
+
+const _blockingMemoWhere =
+    "userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0 AND (memoDispatchPhase IS NULL OR memoDispatchPhase<>'$memoPhaseDismissed')";
+
 /// 本地交易记录（含 BTC UTXO 记录）的类型化 DAO。
 ///
 /// 以 extension 挂在 [AppDatabase] 上：表 schema 归 sqlite 模块集中管理，
@@ -133,10 +142,12 @@ extension TransactionRecordDao on AppDatabase {
         );
         values['memoDispatchPhase'] = 'reserved';
       }
+      // A row the user explicitly dismissed stays pending history (it is
+      // still polled and may still resolve) but no longer blocks a send.
       final pending = await txn.query(
         'TransationRecord',
         columns: ['trId'],
-        where: 'userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0',
+        where: _blockingMemoWhere,
         whereArgs: [
           values['userUuid'],
           values['coinMiniName'],
@@ -152,6 +163,51 @@ extension TransactionRecordDao on AppDatabase {
         conflictAlgorithm: ConflictAlgorithm.rollback,
       );
     });
+  }
+
+  /// Pending rows that currently reserve this sender (oldest first). Used to
+  /// show the user what is blocking a new send.
+  Future<List<TransationRecordModel>> selectBlockingMemoTransactions({
+    required String userUuid,
+    required String coinMiniName,
+    required String from,
+    required int isTest,
+  }) {
+    return queryList(
+      'TransationRecord',
+      TransationRecordModel.fromMap,
+      where: _blockingMemoWhere,
+      whereArgs: [userUuid, coinMiniName, from, isTest],
+      orderBy: 'trId asc',
+    );
+  }
+
+  /// The user confirmed, after a warning that the original may still land,
+  /// that the unresolved rows reserving this sender should stop blocking new
+  /// sends. Their state stays 0, so a later chain result still updates them;
+  /// nothing is reported as failed.
+  Future<int> dismissPendingMemoTransactions({
+    required String userUuid,
+    required String coinMiniName,
+    required String from,
+    required int isTest,
+  }) async {
+    if (!{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinMiniName) ||
+        userUuid.isEmpty ||
+        from.isEmpty ||
+        ![0, 1].contains(isTest)) {
+      throw ArgumentError('Invalid memo transaction dismissal');
+    }
+    final db = await database;
+    return db.update(
+      'TransationRecord',
+      {'memoDispatchPhase': memoPhaseDismissed},
+      // A 'reserved' row never reached the broadcast API and is replaced by
+      // the next tracked reservation; it is left to that path.
+      where:
+          "userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0 AND (memoDispatchPhase IS NULL OR memoDispatchPhase='dispatching')",
+      whereArgs: [userUuid, coinMiniName, from, isTest],
+    );
   }
 
   /// Persist possible dispatch before invoking the network. Failure or a lost

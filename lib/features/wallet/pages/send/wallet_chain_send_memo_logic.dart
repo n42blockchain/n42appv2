@@ -558,6 +558,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         : RecentAddressService.currentUser;
     bool completedWithExit = false;
     bool blockedByPending = false;
+    bool offerDismiss = false;
     try {
       final coinType = widget.coinModel.config.coinType;
       // 派生参数必须跟随发起账户：token 模型的 addrType/pathIndex 复制自其所
@@ -660,7 +661,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       );
 
       if (blockedByPending) {
-        if (mounted) ToastUtils.show(S.current.g_key_bridge_tx_pending);
+        offerDismiss = true;
         return;
       }
       if (result.definitelyNotSubmitted) {
@@ -718,14 +719,62 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         ToastUtils.show(friendly);
       }
     } catch (e) {
-      errorMessage = blockedByPending
-          ? S.current.g_key_bridge_tx_pending
-          : e.toString();
-      if (mounted) ToastUtils.show(errorMessage);
+      if (blockedByPending) {
+        offerDismiss = true;
+      } else {
+        errorMessage = e.toString();
+        if (mounted) ToastUtils.show(errorMessage);
+      }
     } finally {
       _signing = false;
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});
+      // Not awaited: the send attempt is over; the dialog only offers a
+      // choice. Placed here so the early returns above also reach it.
+      if (offerDismiss && mounted) _offerDismissPending(trModel).ignore();
+    }
+  }
+
+  /// An earlier send from this address has no provable outcome and still
+  /// reserves it. Tell the user its status is unknown and let them stop
+  /// waiting for it, with a warning that it may still be included. The old
+  /// record stays pending (never marked failed) and keeps being checked.
+  Future<void> _offerDismissPending(TransationRecordModel trModel) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(S.current.g_memo_pending_unknown_title),
+        content: Text(S.current.g_memo_pending_unknown_body),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(S.current.g_memo_pending_keep_waiting),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(S.current.g_memo_pending_dismiss),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      final dismissed =
+          await (widget.dismissPendingTransactions?.call(trModel) ??
+              AppDatabase().dismissPendingMemoTransactions(
+                userUuid: trModel.userUuid,
+                coinMiniName: trModel.coinMiniName,
+                from: trModel.from1,
+                isTest: trModel.isTest,
+              ));
+      if (!mounted) return;
+      ToastUtils.show(
+        dismissed > 0
+            ? S.current.g_memo_pending_dismissed
+            : S.current.g_key_bridge_tx_pending,
+      );
+    } catch (_) {
+      if (mounted) ToastUtils.show(S.current.g_key_bridge_tx_pending);
     }
   }
 

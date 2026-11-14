@@ -442,4 +442,90 @@ void main() {
     }
     expect(await connection.query('TransationRecord'), isEmpty);
   });
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain dismissing an unresolved send unblocks without failing it', () async {
+      // A legacy row (no dispatch phase) and a dispatched row both block.
+      final legacy = record(chain);
+      legacy.trId = await db.reserveMemoTransaction(legacy);
+      await expectLater(
+        db.reserveMemoTransaction(record(chain, hash: 'cd')),
+        throwsA(isA<PendingMemoTransactionException>()),
+      );
+      expect(
+        await db.selectBlockingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        hasLength(1),
+      );
+      // Another user or sender is never touched.
+      expect(
+        await db.dismissPendingMemoTransactions(
+          userUuid: 'bob',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        0,
+      );
+      expect(
+        await db.dismissPendingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        1,
+      );
+      final row = (await connection.query('TransationRecord')).single;
+      expect(row['state'], 0, reason: 'outcome is still unknown');
+      expect(row['memoDispatchPhase'], memoPhaseDismissed);
+      expect(
+        await db.selectBlockingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        isEmpty,
+      );
+      final next = record(chain, hash: 'cd');
+      next.trId = await db.reserveMemoTransaction(next, trackDispatch: true);
+      expect(next.trId, greaterThan(0));
+      // The dismissed row is still pending history and still resolvable.
+      final legacyRow = TransationRecordModel.fromMap(row)..state = 2;
+      expect(await db.updateTransationRecordTxhash(legacyRow), 1);
+      // A tracked reservation that never reached the network is not dismissed.
+      expect(
+        await db.dismissPendingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        0,
+      );
+    });
+  }
+
+  test('dismissal rejects other chains and incomplete identities', () async {
+    for (final args in [
+      ('BTC', 'alice', 'sender', 0),
+      ('XLM', '', 'sender', 0),
+      ('XLM', 'alice', '', 0),
+      ('XLM', 'alice', 'sender', 2),
+    ]) {
+      await expectLater(
+        db.dismissPendingMemoTransactions(
+          coinMiniName: args.$1,
+          userUuid: args.$2,
+          from: args.$3,
+          isTest: args.$4,
+        ),
+        throwsArgumentError,
+      );
+    }
+  });
 }

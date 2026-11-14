@@ -2620,6 +2620,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("Trending"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("Watchlist"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "Stop waiting",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "You can send again. The earlier transaction is still being checked.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "Keep waiting",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "An earlier transfer from this address has not been confirmed and its result cannot be determined yet, so new transfers are blocked. If you stop waiting for it, it will stay in your history as pending and will still be checked. Warning: it may still be completed on chain, so sending again may pay twice. Check the earlier transaction in a block explorer first.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "Earlier transaction status unknown",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "Validator inactivity score is high. Check your node status to avoid penalties.",
     ),

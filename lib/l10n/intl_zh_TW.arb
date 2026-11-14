@@ -1892,5 +1892,10 @@
   "miningV3BackgroundPaused": "已在背景暫停",
   "miningV3LocalTestnet": "本地測試網",
   "miningV3UseLocalTestnet": "使用本地測試網",
-  "miningV3LocalTestnetHint": "預設使用本地測試網節點，也可輸入自訂節點位址。"
+  "miningV3LocalTestnetHint": "預設使用本地測試網節點，也可輸入自訂節點位址。",
+  "g_memo_pending_unknown_title": "先前交易狀態未知",
+  "g_memo_pending_unknown_body": "此地址先前的一筆轉帳尚未確認，目前無法判斷結果，因此新的轉帳被暫停。若您選擇不再等待，該筆交易仍會以「待處理」保留在紀錄中並持續查詢。警告：它仍可能在鏈上完成，再次發送可能導致重複付款。請先在區塊瀏覽器確認先前的交易。",
+  "g_memo_pending_keep_waiting": "繼續等待",
+  "g_memo_pending_dismiss": "不再等待",
+  "g_memo_pending_dismissed": "現在可以再次發送，先前的交易仍會持續查詢。"
 }
