@@ -142,6 +142,8 @@ extension TransactionRecordDao on AppDatabase {
         );
         values['memoDispatchPhase'] = 'reserved';
       }
+      final expiry = record.memoExpiry;
+      if (expiry != null && expiry.isNotEmpty) values['memoExpiry'] = expiry;
       // A row the user explicitly dismissed stays pending history (it is
       // still polled and may still resolve) but no longer blocks a send.
       final pending = await txn.query(

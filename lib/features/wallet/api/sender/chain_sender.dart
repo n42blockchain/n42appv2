@@ -64,6 +64,11 @@ class SendParams {
   /// network call. Throwing aborts this attempt without invoking the API.
   final Future<void> Function(String txHash)? onBroadcastStarting;
 
+  /// ADA/XLM/EGLD/NEAR: chain facts read from the exact signed bytes (see
+  /// MemoExpiryProof), reported just before [beforeBroadcast] so the record
+  /// can later be closed only when the chain proves it can never land.
+  final void Function(String proof)? onExpiryProof;
+
   String get amountDecimalString => decimalAmountOverride ?? amount.toString();
 
   const SendParams({
@@ -96,6 +101,7 @@ class SendParams {
     this.expectedFeeBaseUnits,
     this.beforeBroadcast,
     this.onBroadcastStarting,
+    this.onExpiryProof,
   });
 }
 

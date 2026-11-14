@@ -16,6 +16,7 @@ import 'package:n42_wallet/features/wallet/utils/cardano/transfer_plan.dart';
 import 'chain_sender.dart';
 import '../../utils/cardano/signing_inputs.dart';
 import '../../utils/cardano/signed_transfer.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 
 /// Cardano (ADA) sender — uses Blockfrost API.
 class AdaSender implements ChainSender {
@@ -245,6 +246,10 @@ class AdaSender implements ChainSender {
       signed.amount.toString(),
       params.decimals,
     ).toDouble();
+    final signedTtl = cardanoSignedTtl(signed.encoded);
+    if (signedTtl != null && signedTtl.toString() == ttl) {
+      params.onExpiryProof?.call(MemoExpiryProof.cardano(ttl: signedTtl));
+    }
     try {
       await params.beforeBroadcast?.call(signed.txHash);
     } catch (_) {

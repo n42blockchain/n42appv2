@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
@@ -98,7 +99,7 @@ void main() {
         )
         .join(', ');
     await connection.execute(
-      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT)',
+      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT, memoExpiry TEXT)',
     );
     database = _Database(connection);
   });
@@ -160,6 +161,11 @@ void main() {
                 EgldTransactionHash.compute(signed),
               );
               expect(rows.single['memoDispatchPhase'], 'dispatching');
+              // The signed nonce is durable before the network call.
+              expect(
+                rows.single['memoExpiry'],
+                MemoExpiryProof.multiversx(nonce: BigInt.zero),
+              );
               throw TimeoutException('node may already have accepted');
             },
           );

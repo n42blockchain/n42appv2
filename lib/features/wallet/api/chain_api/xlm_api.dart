@@ -17,7 +17,15 @@ class XlmApi {
   })?
   _submit;
 
+  final Future<HttpStatusResult> Function(
+    String url,
+    Map<String, String> header,
+  )?
+  _lookup;
+
   XlmApi({
+    Future<HttpStatusResult> Function(String url, Map<String, String> header)?
+    lookup,
     Future<dynamic> Function(
       String url,
       Map<String, String> body, {
@@ -25,7 +33,8 @@ class XlmApi {
       required bool enableRetry,
     })?
     submit,
-  }) : _submit = submit;
+  }) : _submit = submit,
+       _lookup = lookup;
 
   static const _coinType = CoinType.XLM;
   static const _header = {'Content-Type': 'application/json'};
@@ -120,6 +129,19 @@ class XlmApi {
       if (parts.isNotEmpty) return 'Stellar rejected the transaction: ${parts.join(', ')}';
     }
     return 'Stellar rejected the transaction';
+  }
+
+  /// Single GET that exposes the HTTP status (no retry, no error mapping) so
+  /// a definite 404 can be told apart from a transport failure.
+  Future<HttpStatusResult> lookup(String path, {required bool isTest}) {
+    final url = '${_base(isTest)}$path';
+    if (_lookup != null) return _lookup(url, _header);
+    return BaseApi.requestEmptyH.requestWithStatus(
+      url,
+      method: 'GET',
+      header: _header,
+      timeout: const Duration(seconds: 15),
+    );
   }
 
   /// 查询交易状态

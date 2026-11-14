@@ -132,6 +132,8 @@ void main() {
               persistTransaction: (tr) async {
                 saves++;
                 expect(tr.txHash, hash);
+                // The signed transaction's expiry proof is saved with it.
+                expect(tr.memoExpiry, 'proof-$chain-$submissions');
                 expect(broadcasts, 0);
                 if (scenario == 'pending reservation') {
                   throw const PendingMemoTransactionException();
@@ -176,6 +178,7 @@ void main() {
                 submissions++;
                 expect(params.decimalAmountOverride, '1.25');
                 expect(params.expectedFeeBaseUnits, BigInt.from(100));
+                params.onExpiryProof!('proof-$chain-$submissions');
                 try {
                   await params.beforeBroadcast!(hash);
                 } catch (_) {

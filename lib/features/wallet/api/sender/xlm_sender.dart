@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 import '../../utils/stellar/spendable_balance.dart';
 import '../../utils/stellar/signed_transaction.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 
 import 'chain_sender.dart';
 
@@ -186,6 +187,20 @@ class XlmSender implements ChainSender {
       signed = StellarSignedTransaction.parse(signStr);
     } on FormatException catch (error) {
       return SendResult.fail(error.message);
+    }
+    // Read the sequence from the signed envelope itself, never from the
+    // signing input: only facts about the exact bytes can prove expiry.
+    final envelopeSequence = stellarEnvelopeSequence(signed.encoded);
+    final latestLedger = funds.latestLedger;
+    if (envelopeSequence != null &&
+        envelopeSequence == funds.nextSequence &&
+        latestLedger != null) {
+      params.onExpiryProof?.call(
+        MemoExpiryProof.stellar(
+          sequence: envelopeSequence,
+          ledger: latestLedger,
+        ),
+      );
     }
     try {
       await params.beforeBroadcast?.call(signed.txHash);

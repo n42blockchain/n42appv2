@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
 import '../chain_api/near_transaction_hash.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 import 'chain_sender.dart';
 
 /// NEAR Protocol sender.
@@ -230,6 +231,21 @@ class NearSender implements ChainSender {
       hash = nearSignedTransactionHash(signStr);
     } catch (_) {
       return const SendResult.fail('Invalid signed NEAR transaction');
+    }
+    final signedFields = nearSignedNonceAndBlock(signStr);
+    final height = blockData['height'];
+    if (signedFields != null &&
+        signedFields.$1 == previousNonce + BigInt.one &&
+        signedFields.$2 == blockHash &&
+        height is int &&
+        height > 0) {
+      params.onExpiryProof?.call(
+        MemoExpiryProof.near(
+          nonce: signedFields.$1,
+          publicKey: publicKey,
+          height: BigInt.from(height),
+        ),
+      );
     }
     try {
       await params.beforeBroadcast?.call(hash);

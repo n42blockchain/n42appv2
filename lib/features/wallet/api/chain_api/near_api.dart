@@ -239,6 +239,23 @@ class NearApi {
     }
   }
 
+  /// Raw JSON-RPC response (both result and error objects preserved), or
+  /// null when the transport failed or the body is not a JSON object.
+  Future<Map<String, dynamic>?> rpcRaw(String method, dynamic params) async {
+    try {
+      final response = await _rpcPost(_rpcBody(method, params));
+      if (response is Map<String, dynamic>) return response;
+      if (response is Map) return Map<String, dynamic>.from(response);
+      if (response is String) {
+        final decoded = jsonDecode(response);
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Get transaction status
   Future<MessageModel> getTransactionStatus(
     String txHash,

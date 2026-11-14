@@ -17,6 +17,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 import 'chain_sender.dart';
 
 /// MultiversX (EGLD) sender.
@@ -248,6 +249,10 @@ class EgldSender implements ChainSender {
       return const SendResult.fail('Invalid signed transaction');
     }
 
+    // The signed nonce was checked against the account nonce above.
+    params.onExpiryProof?.call(
+      MemoExpiryProof.multiversx(nonce: BigInt.from(nonce)),
+    );
     try {
       await params.beforeBroadcast?.call(localHash);
     } catch (_) {

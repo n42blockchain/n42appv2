@@ -577,6 +577,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       final submit =
           widget.transactionSender ??
           SenderFactory.instance.getSender(coinType).send;
+      // A proof belongs to one signed transaction only.
+      trModel.memoExpiry = null;
       final result = await submit(
         SendParams(
           coinType: coinType,
@@ -623,6 +625,9 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
                     throw StateError('Transaction dispatch was not recorded');
                   }
                 }
+              : null,
+          onExpiryProof: {'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinType)
+              ? (proof) => trModel.memoExpiry = proof
               : null,
           beforeBroadcast: {'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(coinType)
               ? (hash) async {

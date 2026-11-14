@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 import 'package:n42_wallet/features/wallet/services/egld_transaction_hash.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
@@ -238,6 +239,7 @@ void main() {
       var mnemonic = 'fixture mnemonic';
       final stages = <String>[];
       String? original;
+      final proofs = <String>[];
       final sender = EgldSender(
         trustdart: _Signer(),
         ownerIdentity: () => owner,
@@ -278,6 +280,10 @@ void main() {
           amount: 1,
           decimals: 18,
           path: "m/44'/508'/0'/0'/0'",
+          onExpiryProof: (proof) {
+            expect(original, isNull, reason: 'proof precedes the save');
+            proofs.add(proof);
+          },
           beforeBroadcast: (hash) async {
             original = hash;
             stages.add('save');
@@ -308,6 +314,8 @@ void main() {
         scenario == 'accepted' || scenario == 'owner during broadcast',
       );
       if (!notSubmitted) expect(stages, ['save', 'dispatch', 'broadcast']);
+      // The signed nonce lets the poller prove a later nonce consumption.
+      expect(proofs, [MemoExpiryProof.multiversx(nonce: BigInt.from(7))]);
     });
   }
   for (final field in [

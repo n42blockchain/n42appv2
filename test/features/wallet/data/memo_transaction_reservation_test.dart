@@ -38,7 +38,7 @@ void main() {
         )
         .join(', ');
     await connection.execute(
-      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT)',
+      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT, memoExpiry TEXT)',
     );
     db = _Database(connection);
   });
@@ -525,6 +525,23 @@ void main() {
       expect(await db.markMemoTransactionRejected(sent, 'again'), isFalse);
       final next = record(chain, hash: 'cd');
       expect(await db.reserveMemoTransaction(next), greaterThan(0));
+    });
+  }
+
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain reservation keeps the signed expiry proof for polling', () async {
+      final sent = record(chain)..memoExpiry = '{"v":1,"chain":"$chain"}';
+      sent.trId = await db.reserveMemoTransaction(sent, trackDispatch: true);
+      final pending = await db.selectTransationRecordUnDone('alice');
+      expect(pending.single.memoExpiry, sent.memoExpiry);
+      // Generic updates never drop or rewrite the proof.
+      expect(sent.toMapDb().containsKey('memoExpiry'), isFalse);
+      final legacy = record(chain, hash: 'cd')..userUuid = 'bob';
+      await db.reserveMemoTransaction(legacy);
+      expect(
+        (await db.selectTransationRecordUnDone('bob')).single.memoExpiry,
+        isNull,
+      );
     });
   }
 

@@ -31,8 +31,16 @@ class AdaApi {
   final Future<dynamic> Function(String url, Map<String, String> header)?
   _readChainTip;
 
+  final Future<HttpStatusResult> Function(
+    String url,
+    Map<String, String> header,
+  )?
+  _lookup;
+
   AdaApi({
     required this.projectId,
+    Future<HttpStatusResult> Function(String url, Map<String, String> header)?
+    lookup,
     Future<dynamic> Function(String url, Map<String, String> header)?
     readChainTip,
     Future<dynamic> Function(
@@ -50,7 +58,8 @@ class AdaApi {
     submit,
   }) : _submit = submit,
        _readUtxoPage = readUtxoPage,
-       _readChainTip = readChainTip;
+       _readChainTip = readChainTip,
+       _lookup = lookup;
 
   String _base(bool isTest) =>
       RequestUrl().getUrl2(_coinType.name, 'rpc', isTest: isTest);
@@ -244,6 +253,19 @@ class AdaApi {
     } catch (e) {
       return _err(e);
     }
+  }
+
+  /// Single GET that exposes the HTTP status (no retry, no error mapping) so
+  /// a definite 404 can be told apart from a transport failure.
+  Future<HttpStatusResult> lookup(String path, {required bool isTest}) {
+    final url = '${_base(isTest)}$path';
+    if (_lookup != null) return _lookup(url, _header);
+    return BaseApi.requestEmptyH.requestWithStatus(
+      url,
+      method: 'GET',
+      header: _header,
+      timeout: const Duration(seconds: 15),
+    );
   }
 
   /// 查询交易详情
