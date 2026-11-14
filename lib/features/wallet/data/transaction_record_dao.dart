@@ -242,6 +242,43 @@ extension TransactionRecordDao on AppDatabase {
         1;
   }
 
+  /// Close the exact pending row as failed after the submission API explicitly
+  /// refused that signed transaction (SendResult.rejected). The row is kept
+  /// as failed history. Timeout/not-found is never sufficient for this call.
+  Future<bool> markMemoTransactionRejected(
+    TransationRecordModel record,
+    String reason,
+  ) async {
+    final values = Map<String, Object?>.from(record.toMapDb());
+    final id = record.trId;
+    final hash = values['txHash'] as String;
+    if (id <= 0 ||
+        !{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(values['coinMiniName']) ||
+        !_validMemoHash(values['coinMiniName'], hash)) {
+      return false;
+    }
+    final db = await database;
+    final updated = await db.update(
+      'TransationRecord',
+      {'state': 2, 'errorMessage': reason},
+      where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND to1=? AND price=? AND contract=? AND isTest=? AND state=0',
+      whereArgs: [
+        id,
+        hash,
+        values['userUuid'],
+        values['walletIndex'],
+        values['coinMiniName'],
+        values['coinId'],
+        values['from1'],
+        values['to1'],
+        values['price'],
+        values['contract'],
+        values['isTest'],
+      ],
+    );
+    return updated == 1;
+  }
+
   /// Release only the exact pending row after a sender proves no broadcast API
   /// was invoked. Timeout/not-found is never sufficient evidence for this call.
   Future<bool> releaseUnsubmittedMemoTransaction(

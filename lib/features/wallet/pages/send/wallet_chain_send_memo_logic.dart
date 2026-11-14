@@ -664,6 +664,29 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
         offerDismiss = true;
         return;
       }
+      if (result.definitelyRejected) {
+        // The network refused this exact signed transaction: it can never be
+        // included, so its record is closed as failed and a new send is
+        // allowed. Only the prepared hash may be closed this way.
+        final original = _preparedRecord;
+        final reason = result.error ?? S.current.g_key_175;
+        if (original != null && result.txHash == _preparedHash) {
+          final closed =
+              await (widget.markTransactionRejected?.call(original, reason) ??
+                  AppDatabase().markMemoTransactionRejected(original, reason));
+          if (closed) {
+            _preparedRecord = null;
+            _preparedHash = null;
+            trModel.trId = 0;
+            trModel.txHash = '';
+          }
+        }
+        if (mounted) {
+          errorMessage = reason;
+          ToastUtils.show(reason);
+        }
+        return;
+      }
       if (result.definitelyNotSubmitted) {
         final original = _preparedRecord;
         if (original != null && result.txHash == _preparedHash) {

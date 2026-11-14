@@ -63,6 +63,7 @@ void main() {
       'zero save ID',
       'storage failure',
       'pending reservation',
+      'rejected',
       'projection failure',
       'dispose before ack',
     ]) {
@@ -112,10 +113,12 @@ void main() {
           'dispatch key changed',
           'not submitted',
           'dispose before abort',
+          'rejected',
         ].contains(scenario);
         final dispatchChecks = <(int, String, int)>[];
         var releases = 0;
         var dismissals = 0;
+        var rejections = 0;
         var saves = 0;
         var broadcasts = 0;
         var submissions = 0;
@@ -147,6 +150,13 @@ void main() {
                   coin.privateKey = 'public-test-placeholder';
                 }
                 return scenario != 'dispatch rejected';
+              },
+              markTransactionRejected: (tr, reason) async {
+                rejections++;
+                expect(tr.trId, 42);
+                expect(tr.txHash, hash);
+                expect(reason, 'Network refused');
+                return true;
               },
               dismissPendingTransactions: (tr) async {
                 dismissals++;
@@ -193,6 +203,9 @@ void main() {
                   await ack.future;
                 }
                 if (scenario == 'success') return SendResult.ok(hash);
+                if (scenario == 'rejected') {
+                  return SendResult.rejected(hash, 'Network refused');
+                }
                 if (scenario == 'foreign hash') return SendResult.ok(otherHash);
                 return SendResult.uncertain(hash, 'Response lost');
               },
@@ -278,6 +291,12 @@ void main() {
           await state.signTx(record);
           expect(submissions, 2);
           expect(broadcasts, 0);
+        }
+        // An explicit refusal closes the record as failed and frees the page.
+        expect(rejections, scenario == 'rejected' ? 1 : 0);
+        if (scenario == 'rejected') {
+          await state.signTx(record);
+          expect(submissions, 2);
         }
         expect(tester.takeException(), isNull);
       });

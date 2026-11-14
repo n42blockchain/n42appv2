@@ -103,6 +103,12 @@ class SendParams {
 class SendResult {
   final bool success;
   final bool definitelyNotSubmitted;
+
+  /// The network explicitly refused this exact signed transaction (for
+  /// example a bad sequence/nonce or insufficient balance answer from the
+  /// submission API). It was not accepted and can never be included as
+  /// signed, so its local record may be closed as failed.
+  final bool definitelyRejected;
   final String? txHash;
   final double? actualAmount; // after fee deduction when sendMax=true
   final String? error;
@@ -110,23 +116,35 @@ class SendResult {
   const SendResult.ok(this.txHash, {this.actualAmount})
     : success = true,
       definitelyNotSubmitted = false,
+      definitelyRejected = false,
       error = null;
   const SendResult.fail(this.error)
     : success = false,
       definitelyNotSubmitted = false,
+      definitelyRejected = false,
       txHash = null,
       actualAmount = null;
 
   /// Broadcast may have been accepted. Query this hash; do not sign again.
   const SendResult.uncertain(this.txHash, this.error, {this.actualAmount})
     : success = false,
-      definitelyNotSubmitted = false;
+      definitelyNotSubmitted = false,
+      definitelyRejected = false;
+
+  /// The broadcast API definitively refused [txHash] (see
+  /// [definitelyRejected]). Never use this for a timeout or unreadable reply.
+  const SendResult.rejected(this.txHash, this.error)
+    : success = false,
+      definitelyNotSubmitted = false,
+      definitelyRejected = true,
+      actualAmount = null;
 
   /// The sender stopped before invoking its broadcast API. Only this explicit
   /// result, with the original hash, permits releasing a local reservation.
   const SendResult.notSubmitted(this.txHash, this.error)
     : success = false,
       definitelyNotSubmitted = true,
+      definitelyRejected = false,
       actualAmount = null;
 
   /// Convert to legacy MessageModel for compatibility.
@@ -136,6 +154,16 @@ class SendResult {
     }
     return MessageModel.error()..data = error;
   }
+}
+
+/// Placed in a chain API's error [MessageModel.data] when the submission
+/// endpoint explicitly refused the signed transaction (as opposed to a
+/// transport failure or an unreadable reply, which stay unknown).
+class BroadcastRejected {
+  final String reason;
+  const BroadcastRejected(this.reason);
+  @override
+  String toString() => reason;
 }
 
 /// Abstract base for all chain-specific senders.

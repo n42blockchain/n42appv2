@@ -18,6 +18,28 @@ import 'package:n42_wallet/core/network/retry_interceptor.dart';
 import 'package:n42_wallet/core/security/security_config.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+/// HTTP status and body of one request ([BaseHttp.requestWithStatus]).
+/// [statusCode] is null when no response arrived.
+class HttpStatusResult {
+  final int? statusCode;
+  final dynamic data;
+  const HttpStatusResult(this.statusCode, this.data);
+
+  /// The body as a JSON object, decoding a string body if needed.
+  Map<String, dynamic>? get jsonObject {
+    final body = data;
+    if (body is Map<String, dynamic>) return body;
+    if (body is Map) return Map<String, dynamic>.from(body);
+    if (body is String) {
+      try {
+        final decoded = json.decode(body);
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
+      } catch (_) {}
+    }
+    return null;
+  }
+}
+
 /// Base HTTP Client
 ///
 /// Provides a centralized HTTP client using Dio.
@@ -171,6 +193,44 @@ class BaseHttp {
       return Future.error(_handleDioError(e));
     } catch (e) {
       return Future.error(S.current.g_key_error_3);
+    }
+  }
+
+  /// One request that reports the HTTP status and body instead of mapping
+  /// them to a localized message. Never retried. A null [HttpStatusResult]
+  /// status means no HTTP response arrived (timeout, connection error,
+  /// cancellation): callers must treat that as an unknown outcome.
+  Future<HttpStatusResult> requestWithStatus(
+    String path, {
+    required String method,
+    dynamic data,
+    Map<String, dynamic>? header,
+    Duration? timeout,
+  }) async {
+    try {
+      final options = Options(
+        method: method,
+        followRedirects: false,
+        contentType: header?['content-type'] as String? ?? _contentTypeString,
+        connectTimeout: timeout,
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+        validateStatus: (_) => true,
+        headers: ProxyConfig.mergeAuthHeaders('${_options.baseUrl}$path', {
+          if (header != null)
+            ...header.map((key, value) => MapEntry(key, value.toString())),
+        }),
+      );
+      final response = await _dio.request<dynamic>(path, data: data, options: options);
+      return HttpStatusResult(response.statusCode, response.data);
+    } on DioException catch (e) {
+      final response = e.response;
+      if (e.type == DioExceptionType.badResponse && response != null) {
+        return HttpStatusResult(response.statusCode, response.data);
+      }
+      return const HttpStatusResult(null, null);
+    } catch (_) {
+      return const HttpStatusResult(null, null);
     }
   }
 

@@ -221,6 +221,9 @@ class XlmSender implements ChainSender {
         isTest: params.isTest,
       );
       final data = result.data;
+      if (result.error && data is BroadcastRejected) {
+        return SendResult.rejected(signed.txHash, data.reason);
+      }
       if (!result.error &&
           data is Map &&
           data['hash'] is String &&

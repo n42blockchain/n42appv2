@@ -255,6 +255,10 @@ class NearSender implements ChainSender {
     }
     try {
       final result = await nearApi.sendTransaction(signStr);
+      final rejection = result.data;
+      if (result.error && rejection is BroadcastRejected) {
+        return SendResult.rejected(hash, rejection.reason);
+      }
       if (!result.error && result.data == hash) {
         return SendResult.ok(hash, actualAmount: adjustedAmount);
       }

@@ -16,6 +16,7 @@ class _Api extends XlmApi {
   bool malformedLedger = false;
   int fee = 100;
   bool submissionError = false;
+  bool submissionRejected = false;
   bool submissionThrows = false;
   String hash = 'ab' * 32;
   VoidCallback? onSend;
@@ -64,6 +65,10 @@ class _Api extends XlmApi {
     onSend?.call();
     if (submissionThrows) throw StateError('Lost response');
     if (submissionError) return MessageModel.error();
+    if (submissionRejected) {
+      return MessageModel.error()
+        ..data = const BroadcastRejected('Stellar rejected: tx_bad_seq');
+    }
     return MessageModel()..data = {'hash': hash};
   }
 }
@@ -317,6 +322,7 @@ void main() {
   }
   for (final scenario in [
     'accepted',
+    'rejected',
     'dispatch failure',
     'owner during dispatch',
     'persist failure',
@@ -332,6 +338,7 @@ void main() {
       final api = _Api()
         ..submissionThrows = scenario == 'timeout'
         ..submissionError = scenario == 'error'
+        ..submissionRejected = scenario == 'rejected'
         ..hash = scenario == 'foreign hash' ? 'cd' * 32 : 'ab' * 32
         ..onSend = () {
           expect(saved, ['ab' * 32]);
@@ -380,7 +387,13 @@ void main() {
       expect(result.success, scenario == 'accepted');
       expect(result.txHash, 'ab' * 32);
       expect(result.definitelyNotSubmitted, aborted);
-      if (!aborted) expect(result.actualAmount, 1.25);
+      // Only the explicit refusal is a rejection; timeouts stay unknown.
+      expect(result.definitelyRejected, scenario == 'rejected');
+      if (scenario == 'rejected') {
+        expect(result.error, contains('tx_bad_seq'));
+      } else if (!aborted) {
+        expect(result.actualAmount, 1.25);
+      }
     });
   }
 }

@@ -5,6 +5,7 @@ import 'package:n42_wallet/features/wallet/services/egld_transaction_hash.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/network/base_http.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/egld_sender.dart';
@@ -218,6 +219,8 @@ void main() {
   }
   for (final scenario in [
     'accepted',
+    'rejected',
+    'gateway error',
     'timeout',
     'missing hash',
     'wrong hash',
@@ -252,6 +255,16 @@ void main() {
           if (scenario == 'missing hash') return <String, dynamic>{};
           if (scenario == 'wrong hash') return {'txHash': '00' * 32};
           if (scenario == 'malformed response') return [];
+          if (scenario == 'rejected') {
+            return HttpStatusResult(400, {
+              'message': 'lowerNonceInTx: true',
+              'error': 'Bad Request',
+              'statusCode': 400,
+            });
+          }
+          if (scenario == 'gateway error') {
+            return const HttpStatusResult(502, '<html>Bad gateway</html>');
+          }
           return {'txHash': original!.toUpperCase()};
         },
       );
@@ -285,6 +298,7 @@ void main() {
           scenario.contains('fails') || scenario.contains('after');
       expect(result.txHash, original);
       expect(result.definitelyNotSubmitted, notSubmitted);
+      expect(result.definitelyRejected, scenario == 'rejected');
       expect(
         stages.where((s) => s == 'broadcast').length,
         notSubmitted ? 0 : 1,

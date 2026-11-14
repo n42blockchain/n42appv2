@@ -278,6 +278,10 @@ class AdaSender implements ChainSender {
         signed.encoded,
         isTest: params.isTest,
       );
+      final rejection = sendMm.data;
+      if (sendMm.error && rejection is BroadcastRejected) {
+        return SendResult.rejected(signed.txHash, rejection.reason);
+      }
       if (sendMm.error ||
           sendMm.data is! String ||
           (sendMm.data as String).toLowerCase() != signed.txHash) {

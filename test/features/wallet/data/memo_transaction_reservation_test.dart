@@ -510,6 +510,24 @@ void main() {
     });
   }
 
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain explicit rejection closes only the exact row as failed', () async {
+      final sent = record(chain);
+      sent.trId = await db.reserveMemoTransaction(sent);
+      // A different identity never matches.
+      final other = TransationRecordModel.fromMap(sent.toMap())..to1 = 'x';
+      expect(await db.markMemoTransactionRejected(other, 'refused'), isFalse);
+      expect(await db.markMemoTransactionRejected(sent, 'refused'), isTrue);
+      final row = (await connection.query('TransationRecord')).single;
+      expect(row['state'], 2);
+      expect(row['errorMessage'], 'refused');
+      // A terminal row is not touched again and no longer blocks.
+      expect(await db.markMemoTransactionRejected(sent, 'again'), isFalse);
+      final next = record(chain, hash: 'cd');
+      expect(await db.reserveMemoTransaction(next), greaterThan(0));
+    });
+  }
+
   test('dismissal rejects other chains and incomplete identities', () async {
     for (final args in [
       ('BTC', 'alice', 'sender', 0),

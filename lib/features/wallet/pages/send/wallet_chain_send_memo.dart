@@ -56,6 +56,8 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
   releaseUnsubmittedTransaction;
   final Future<bool> Function(TransationRecordModel)? markTransactionDispatch;
   final Future<int> Function(TransationRecordModel)? dismissPendingTransactions;
+  final Future<bool> Function(TransationRecordModel, String)?
+  markTransactionRejected;
   const WalletChainSendMemo(
     this.coinModel, {
     super.key,
@@ -68,6 +70,7 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
     this.markTransactionDispatch,
     this.releaseUnsubmittedTransaction,
     this.dismissPendingTransactions,
+    this.markTransactionRejected,
   });
 
   @override

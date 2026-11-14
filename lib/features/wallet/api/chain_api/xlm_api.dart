@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/network/base_http.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -64,17 +66,36 @@ class XlmApi {
       final header = <String, dynamic>{
         'content-type': 'application/x-www-form-urlencoded',
       };
-      final data = _submit != null
+      final dynamic raw = _submit != null
           ? await _submit(url, body, header: header, enableRetry: false)
-          : await BaseApi.requestEmptyH.post(
+          : await BaseApi.requestEmptyH.requestWithStatus(
               url,
-              params: {},
+              method: 'POST',
               data: body,
-              defaultReturn: false,
               header: header,
-              enableRetry: false,
             );
-      if (data is! Map ||
+      final response = raw is HttpStatusResult
+          ? raw
+          : HttpStatusResult(200, raw);
+      final status = response.statusCode;
+      if (status == 400) {
+        // Horizon answers 400 only after stellar-core refused the envelope
+        // (or it failed in a ledger): it was not and will not be applied.
+        final problem = response.jsonObject;
+        final type = problem?['type'];
+        if (problem != null &&
+            problem['status'] == 400 &&
+            type is String &&
+            (type.endsWith('/transaction_failed') ||
+                type.endsWith('/transaction_malformed'))) {
+          return _err(BroadcastRejected(_rejectionReason(problem)));
+        }
+      }
+      if (status == null || status < 200 || status > 202) {
+        return _err('Stellar submission status is unknown');
+      }
+      final data = response.jsonObject;
+      if (data == null ||
           data['successful'] != true ||
           data['hash'] is! String ||
           !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(data['hash'] as String)) {
@@ -84,6 +105,21 @@ class XlmApi {
     } catch (e) {
       return _err(e);
     }
+  }
+
+  static String _rejectionReason(Map<String, dynamic> problem) {
+    final extras = problem['extras'];
+    final codes = extras is Map ? extras['result_codes'] : null;
+    if (codes is Map) {
+      final tx = codes['transaction'];
+      final ops = codes['operations'];
+      final parts = [
+        if (tx is String) tx,
+        if (ops is List) ...ops.whereType<String>(),
+      ];
+      if (parts.isNotEmpty) return 'Stellar rejected the transaction: ${parts.join(', ')}';
+    }
+    return 'Stellar rejected the transaction';
   }
 
   /// 查询交易状态
