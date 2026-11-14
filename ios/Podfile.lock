@@ -452,8 +452,8 @@ PODS:
   - TorusSessionManager (6.1.0):
     - curvelib.swift (~> 2.0.0)
     - KeychainSwift (~> 20.0.0)
-  - TrustWalletCore (4.8.7):
-    - WalletCoreSwiftProtobuf (= 4.8.7)
+  - TrustWalletCore (4.9.3):
+    - WalletCoreSwiftProtobuf (= 4.9.3)
   - twitter_login (0.0.1):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -471,7 +471,7 @@ PODS:
   - walletconnect_pay (0.0.1):
     - Flutter
     - YttriumWrapper (= 0.10.59)
-  - WalletCoreSwiftProtobuf (4.8.7)
+  - WalletCoreSwiftProtobuf (4.9.3)
   - Web3Auth (12.0.1):
     - AnalyticsSwiftCocoapod (~> 1.8.0)
     - BigInt (~> 5.2.0)
@@ -915,7 +915,7 @@ SPEC CHECKSUMS:
   Torus-fetchNodeDetails: 0ae97719263ee98f5bf5549a86464eea38a828f3
   Torus-utils: 7c53a9c71663c2f458bfdcf1a380d7a5b88f9632
   TorusSessionManager: cd2de693425cefb976c7bca42a45964297d8c2cc
-  TrustWalletCore: 7cf526013f2663a804d272e12ef7c8392dee4c7f
+  TrustWalletCore: 60bc4ff2baaebc1d01cd845ff296d9eeb6a127e7
   twitter_login: ea7069c8a3f4d3d786fae20495352c5e99926f03
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
   video_compress: f2133a07762889d67f0711ac831faa26f956980e
@@ -923,7 +923,7 @@ SPEC CHECKSUMS:
   video_thumbnail: b637e0ad5f588ca9945f6e2c927f73a69a661140
   wakelock_plus: d4ca1e4e4bc9de42cb55d57b5bdc158af318e3c6
   walletconnect_pay: f32ca9b9f5c9e29583072b082a6ef7b5d4e12288
-  WalletCoreSwiftProtobuf: 54df2ff1c711c0c10eb7f1bbc04995ee003964d1
+  WalletCoreSwiftProtobuf: be3fec8d321af4fc5ca333695fb38bbce4d383cc
   Web3Auth: 5459b2d5bcdb150c5e84c7229639422cba684814
   web3auth_flutter: 3c8ec5760dccbc0a3e4fc0c09000ae9eaae1c9d2
   WebRTC-SDK: 71bce2be85c3082d24bbfd1a9930ea07d0c494c1
@@ -931,6 +931,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK-XCFramework: 996f8fe4f5ca9d75529546f7246da459ef31aa0d
   YttriumWrapper: 64983f0edbf609b800ac3074010224fc5341aaeb
 
-PODFILE CHECKSUM: 3ae81dcf8584f2b7c0f881d8448f247f90d1be72
+PODFILE CHECKSUM: 5253623e9071ddda92625dcdd554d2db131c927b
 
 COCOAPODS: 1.17.0

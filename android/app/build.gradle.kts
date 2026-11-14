@@ -166,7 +166,7 @@ dependencies {
     implementation("com.google.mlkit:text-recognition-korean:16.0.1")
     // ✅ 加入 desugar_jdk_libs，解决 flutter_local_notifications 的需求
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    implementation("com.trustwallet:wallet-core:4.8.7")
+    implementation("com.trustwallet:wallet-core:4.9.3")
     implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("com.google.android.material:material:1.14.0")
     implementation("com.squareup.okhttp3:okhttp:5.4.0")
