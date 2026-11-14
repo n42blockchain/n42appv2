@@ -9,7 +9,10 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class SuiApi {
   String url = "";
-  SuiApi({bool isTest = false}) {
+
+  /// Optional JSON-RPC transport (tests); defaults to the shared HTTP client.
+  final Future<dynamic> Function(String url, Map<String, dynamic> body)? post;
+  SuiApi({bool isTest = false, this.post}) {
     url = RequestUrl().getUrl2(CoinType.SUI.name, "rpc", isTest: isTest);
   }
   Future<MessageModel> getBalanceSui(String address) async {
@@ -122,13 +125,13 @@ class SuiApi {
     return response;
   }
 
-  //查询交易信息
+  /// Read one transaction with its effects and input (for the sender).
   Future<MessageModel> getTransactionBlock(String txHash) async {
     return resultToMessageModel(
       await baseRPCSui("sui_getTransactionBlock", [
         txHash,
         {
-          "showInput": false,
+          "showInput": true,
           "showRawInput": false,
           "showEffects": true,
           "showEvents": false,
@@ -152,12 +155,14 @@ class SuiApi {
         "params": value,
         "id": AppGlobals.nextId,
       };
-      final data = await BaseApi.requestEmptyH.post(
-        url,
-        params: {},
-        data: postData,
-        enableRetry: enableRetry,
-      );
+      final data = post != null
+          ? await post!(url, postData)
+          : await BaseApi.requestEmptyH.post(
+              url,
+              params: {},
+              data: postData,
+              enableRetry: enableRetry,
+            );
       if (data.containsKey('error')) {
         return Result.failure(
           AppError.blockchain(

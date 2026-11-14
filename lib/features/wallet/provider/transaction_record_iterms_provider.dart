@@ -74,8 +74,10 @@ class TransactionRecordItemProvider with ChangeNotifier {
     }
   }
 
-  Future<int> _resolve(TransationRecordModel trm) =>
-      trm.coinMiniName == 'APT' ? _aptSettler(trm) : _resolver.resolveState(trm);
+  Future<(int, String?)> _resolve(TransationRecordModel trm) async =>
+      trm.coinMiniName == 'APT'
+      ? (await _aptSettler(trm), null)
+      : _resolver.resolveStateWithReason(trm);
 
   Object get _session => (_userUuid(), _sessionIdentity(), _loadGeneration);
   bool _isCurrent(Object session) => !_disposed && _session == session;
@@ -203,7 +205,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
   Future<void> checkUndoneTr(TransationRecordModel trm) async {
     final session = _session;
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
-    final int resolved = await _resolve(trm);
+    final (resolved, reason) = await _resolve(trm);
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
 
     // -1 = RPC 错误，无法判断状态，跳过本次
@@ -211,9 +213,12 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
     final candidate = TransationRecordModel.fromMap(trm.toMap())
       ..state = resolved;
+    // Keep the chain's own failure reason with a failed record.
+    if (resolved == 2 && reason != null) candidate.errorMessage = reason;
     final updated = await db.updateTransationRecordTxhash(candidate);
     if (!_isCurrent(session) || updated == 0) return;
     trm.state = resolved;
+    if (resolved == 2 && reason != null) trm.errorMessage = reason;
 
     if (resolved == 1) {
       ToastUtils.show(S.current.g_key_140);
@@ -240,15 +245,18 @@ class TransactionRecordItemProvider with ChangeNotifier {
   ) async {
     final session = _session;
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
-    final int resolved = await _resolve(trm);
+    final (resolved, reason) = await _resolve(trm);
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
 
     if (![0, 1, 2].contains(resolved)) return null;
     final candidate = TransationRecordModel.fromMap(trm.toMap())
       ..state = resolved;
+    // Keep the chain's own failure reason with a failed record.
+    if (resolved == 2 && reason != null) candidate.errorMessage = reason;
     final updated = await db.updateTransationRecordTxhash(candidate);
     if (!_isCurrent(session) || updated == 0) return null;
     trm.state = resolved;
+    if (resolved == 2 && reason != null) trm.errorMessage = reason;
     return trm;
   }
 

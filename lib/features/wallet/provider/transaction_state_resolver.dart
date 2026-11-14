@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/ada_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -33,8 +34,10 @@ class TransactionStateResolver {
   final AdaApi _adaApi;
   final EgldApi _egldApi;
   final NearApi Function(bool) _nearApiFactory;
+  final SuiApi Function(bool) _suiApiFactory;
 
   TransactionStateResolver({
+    SuiApi Function(bool)? suiApiFactory,
     TokenViewApi? tokenViewApi,
     XlmApi? xlmApi,
     AdaApi? adaApi,
@@ -44,6 +47,7 @@ class TransactionStateResolver {
        _xlmApi = xlmApi ?? XlmApi(),
        _egldApi = egldApi ?? EgldApi(),
        _nearApiFactory = nearApiFactory ?? ((test) => NearApi(isTest: test)),
+       _suiApiFactory = suiApiFactory ?? ((test) => SuiApi(isTest: test)),
        _adaApi =
            adaApi ??
            AdaApi(
@@ -76,6 +80,8 @@ class TransactionStateResolver {
         return _orNeverLands(trm, 'NEAR', _resolveNear, _nearNeverLands);
       case BlockchainType.Stellar:
         return _orNeverLands(trm, 'XLM', _resolveStellar, _stellarNeverLands);
+      case BlockchainType.Sui:
+        return (await _resolveSuiDetailed(trm)).$1;
       case BlockchainType.Filecoin:
         return _resolveFilecoin(trm);
       case BlockchainType.Harmony:
@@ -88,6 +94,90 @@ class TransactionStateResolver {
       default:
         // Unsupported chain type — return 0 (unknown confirmation count)
         return 0;
+    }
+  }
+
+  /// Resolve [trm] and, for a failure the chain reported itself, its reason.
+  /// Chains without a reason report null.
+  Future<(int, String?)> resolveStateWithReason(
+    TransationRecordModel trm,
+  ) async {
+    if (trm.coin['blockchainType'] == BlockchainType.Sui.name) {
+      return _resolveSuiDetailed(trm);
+    }
+    return (await resolveState(trm), null);
+  }
+
+  static String? _suiAddress(Object? value) {
+    if (value is! String || !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(value)) {
+      return null;
+    }
+    return '0x${value.substring(2).toLowerCase().padLeft(64, '0')}';
+  }
+
+  /// Sui: only the stored digest's own effects decide. Success or failure
+  /// counts once the transaction is in a checkpoint (final); an executed but
+  /// not yet checkpointed transaction stays pending. Not found, RPC errors
+  /// and unfamiliar replies are unknown (-1): absence alone never proves a
+  /// Sui transaction can no longer execute.
+  Future<(int, String?)> _resolveSuiDetailed(
+    TransationRecordModel record,
+  ) async {
+    final digest = record.txHash;
+    final network = record.isTest;
+    final sender = _suiAddress(record.from1);
+    try {
+      final bytes = Base58Decode(digest);
+      if (bytes.length != 32 ||
+          Base58Encode(bytes) != digest ||
+          sender == null ||
+          ![0, 1].contains(network) ||
+          record.contract.isNotEmpty) {
+        return (-1, null);
+      }
+      final response = await _suiApiFactory(network == 1)
+          .getTransactionBlock(digest);
+      if (record.txHash != digest ||
+          record.isTest != network ||
+          _suiAddress(record.from1) != sender ||
+          response.error) {
+        return (-1, null);
+      }
+      final data = response.data;
+      if (data is! Map || data['digest'] != digest) return (-1, null);
+      final transaction = data['transaction'];
+      final txData = transaction is Map ? transaction['data'] : null;
+      if (txData is! Map || _suiAddress(txData['sender']) != sender) {
+        return (-1, null);
+      }
+      final effects = data['effects'];
+      if (effects is! Map ||
+          (effects.containsKey('transactionDigest') &&
+              effects['transactionDigest'] != digest)) {
+        return (-1, null);
+      }
+      final status = effects['status'];
+      if (status is! Map) return (-1, null);
+      final checkpoint = data['checkpoint'];
+      final finalized =
+          checkpoint is String && RegExp(r'^[0-9]+$').hasMatch(checkpoint);
+      switch (status['status']) {
+        case 'success':
+          return (finalized ? 1 : 0, null);
+        case 'failure':
+          if (!finalized) return (0, null);
+          final error = status['error'];
+          return (
+            2,
+            error is String && error.isNotEmpty
+                ? 'Sui transaction failed: $error'
+                : 'Sui transaction failed',
+          );
+        default:
+          return (-1, null);
+      }
+    } catch (_) {
+      return (-1, null);
     }
   }
 
@@ -339,9 +429,7 @@ class TransactionStateResolver {
     if (validity == null || validity <= 0 || epoch == null || epoch <= 0) {
       return null;
     }
-    final block = (await api.rpcRaw('block', {
-      'finality': 'final',
-    }))?['result'];
+    final block = (await api.rpcRaw('block', {'finality': 'final'}))?['result'];
     final header = block is Map ? block['header'] : null;
     final height = header is Map ? _int(header['height']) : null;
     if (height == null) return null;
