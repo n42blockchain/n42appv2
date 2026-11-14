@@ -152,6 +152,57 @@ void main() {
     );
   }
 
+  for (final persisted in [true, false]) {
+    testWidgets('unknown outcome keeps the digest and blocks re-signing: '
+        'persisted=$persisted', (tester) async {
+      var sends = 0;
+      final saved = <TransationRecordModel>[];
+      final state = await mount(
+        tester,
+        transactionSender: (_) async {
+          sends++;
+          return const SendResult.uncertain(
+            'unknown-digest',
+            'Sui transfer outcome is unknown; check transaction unknown-digest',
+          );
+        },
+        transactionWriter: (record) async {
+          if (!persisted) throw StateError('disk unavailable');
+          saved.add(record);
+          return 9;
+        },
+      );
+      final record = recordFor(state);
+      await state.signTx(record);
+      expect(state.errorMessage, contains('unknown-digest'));
+      expect(record.txHash, 'unknown-digest');
+      expect(record.state, 0);
+      expect(saved, persisted ? [record] : isEmpty);
+      await state.signTx(record);
+      expect(sends, 1);
+      await tester.pump(const Duration(seconds: 8));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('plain failure before submission allows a retry', (tester) async {
+    var sends = 0;
+    final state = await mount(
+      tester,
+      transactionSender: (_) async {
+        sends++;
+        return const SendResult.fail('balance unavailable');
+      },
+      transactionWriter: (_) async => fail('nothing to record'),
+    );
+    final record = recordFor(state);
+    await state.signTx(record);
+    await state.signTx(record);
+    expect(sends, 2);
+    await tester.pump(const Duration(seconds: 8));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('local persistence failure does not enable a second broadcast', (
     tester,
   ) async {

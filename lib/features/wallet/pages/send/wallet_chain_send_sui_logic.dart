@@ -475,6 +475,20 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
+      } else if (!result.definitelyNotSubmitted &&
+          !result.definitelyRejected &&
+          (result.txHash ?? '').isNotEmpty) {
+        // Unknown outcome after submission: the signed coin objects may
+        // already be spent. Keep the digest in pending history and never sign
+        // them again from this page.
+        trModel.txHash = result.txHash!;
+        _acceptedHash = trModel.txHash;
+        errorMessage = result.error ?? trModel.txHash;
+        trModel.trId = await writeRecord(trModel);
+        if (trModel.trId <= 0) throw StateError('Transaction was not saved');
+        if (!ownerIsCurrent()) return;
+        ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
+        ToastUtils.show(errorMessage);
       } else {
         if (!ownerIsCurrent()) return;
         errorMessage = result.error ?? '';

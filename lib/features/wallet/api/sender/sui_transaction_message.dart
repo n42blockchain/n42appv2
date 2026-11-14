@@ -1,7 +1,23 @@
 import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:fast_base58/fast_base58.dart';
+import 'package:pointycastle/digests/blake2b.dart';
 
 /// A Sui gas budget is already denominated in MIST, not gas-price units.
 final suiTransferGasBudget = BigInt.from(2000000);
+
+/// Sui transaction digest of BCS TransactionData bytes (base64): Base58 of
+/// Blake2b-256 over the "TransactionData::" intent name and the bytes. It is
+/// known before submission, so an unknown outcome can still be tracked.
+String suiTransactionDigest(String transaction) {
+  final input = BytesBuilder()
+    ..add(utf8.encode('TransactionData::'))
+    ..add(base64Decode(transaction));
+  return Base58Encode(
+    Blake2bDigest(digestSize: 32).process(input.toBytes()).toList(),
+  );
+}
 
 /// Native signing returns the original bytes and the serialized signature.
 /// Never substitute unsigned bytes for a missing signature.

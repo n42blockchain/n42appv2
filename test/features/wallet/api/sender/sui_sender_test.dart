@@ -6,10 +6,13 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sui_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sui_transaction_message.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class FakeApi extends SuiApi {
   int submits = 0;
+  Object? submitError;
+  MessageModel? reply;
   int reads = 0;
   BigInt balance = BigInt.parse('10000000000000000');
   @override
@@ -32,7 +35,9 @@ class FakeApi extends SuiApi {
     submits++;
     expect(tx, 'AQID');
     expect(base64Decode(sig).length, 97);
-    return MessageModel()..data = {'digest': 'confirmed'};
+    if (submitError != null) throw submitError!;
+    return reply ??
+        (MessageModel()..data = {'digest': suiTransactionDigest(tx)});
   }
 }
 
@@ -99,6 +104,61 @@ void main() {
       ],
     });
     expect(api.submits, 1);
+  });
+  test('transaction digest follows the TransactionData intent hash', () {
+    // Blake2b-256(b"TransactionData::" + bytes), Base58: computed
+    // independently with Python hashlib for the fixture bytes 01 02 03.
+    expect(
+      suiTransactionDigest('AQID'),
+      '45BcYgib9Z6jfxixeAWNGjH8JfAx8NzrDnhRAnn7FnpG',
+    );
+  });
+  for (final scenario in [
+    'timeout',
+    'transport error',
+    'rpc error',
+    'unconfirmed reply',
+    'foreign digest',
+  ]) {
+    test(
+      '$scenario after submission is unknown with the local digest',
+      () async {
+        final api = FakeApi();
+        switch (scenario) {
+          case 'timeout':
+            api.submitError = TimeoutException('no reply');
+          case 'transport error':
+            api.submitError = StateError('socket closed');
+          case 'rpc error':
+            api.reply = MessageModel.error()..data = 'quorum not reached';
+          case 'unconfirmed reply':
+            api.reply = MessageModel()..data = {'effects': {}};
+          case 'foreign digest':
+            api.reply = MessageModel()
+              ..data = {'digest': '11111111111111111111111111111111'};
+        }
+        final result = await SuiSender(
+          trustdart: Signer(),
+          apiFactory: (_) => api,
+        ).send(params());
+        expect(api.submits, 1);
+        expect(result.success, isFalse);
+        expect(result.definitelyNotSubmitted, isFalse);
+        expect(result.definitelyRejected, isFalse);
+        expect(result.txHash, suiTransactionDigest('AQID'));
+        expect(result.error, contains(suiTransactionDigest('AQID')));
+      },
+    );
+  }
+  test('failures before submission stay plain failures', () async {
+    final api = FakeApi()..balance = BigInt.zero;
+    final result = await SuiSender(
+      trustdart: Signer(),
+      apiFactory: (_) => api,
+    ).send(params());
+    expect(result.success, isFalse);
+    expect(result.txHash, isNull);
+    expect(api.submits, 0);
   });
   for (final output in ['AQID', 'AQID|AQID', '|', 'AQID|!']) {
     test(

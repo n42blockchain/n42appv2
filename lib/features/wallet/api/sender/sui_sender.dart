@@ -10,6 +10,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 import 'sui_transaction_message.dart';
@@ -140,12 +141,29 @@ class SuiSender implements ChainSender {
     if (signed == null) {
       return const SendResult.fail('Invalid Sui signing output');
     }
-    final sendMm = await suiApi.submit(signed.transaction, signed.signature);
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
+    // From here on the signed coins may be spent: a transport error, timeout
+    // or unconfirmed reply is an unknown outcome, never a plain failure that
+    // invites signing the same coin objects again.
+    final digest = suiTransactionDigest(signed.transaction);
+    SendResult unknown(Object? reason) => SendResult.uncertain(
+      digest,
+      'Sui transfer outcome is unknown; check transaction $digest'
+      '${reason == null ? '' : ' ($reason)'}',
+      actualAmount: adjustedAmount,
+    );
+    final MessageModel sendMm;
+    try {
+      sendMm = await suiApi.submit(signed.transaction, signed.signature);
+    } catch (_) {
+      return unknown(null);
+    }
+    if (sendMm.error) return unknown(sendMm.data);
 
     final txHash = _extractSuiTxHash(sendMm.data);
-    if (txHash == null || txHash.isEmpty) {
-      return const SendResult.fail('Missing Sui transaction digest');
+    if (txHash == null || txHash.isEmpty) return unknown(null);
+    if (txHash != digest) {
+      // The node confirmed a transaction, but not the one signed here.
+      return unknown('node returned $txHash');
     }
     return SendResult.ok(txHash, actualAmount: adjustedAmount);
   }
