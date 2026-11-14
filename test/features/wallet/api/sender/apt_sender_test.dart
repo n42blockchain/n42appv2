@@ -59,6 +59,29 @@ class _Api extends AptApi {
     ).getServiceInfo(expectedChainId: expectedChainId);
   }
 
+  AptTransactionReceipt? receipt;
+  int receiptReads = 0;
+  @override
+  Future<MessageModel> getTransactionReceipt({
+    required String hash,
+    required String sender,
+    required BigInt sequence,
+    required int chainId,
+  }) async {
+    receiptReads++;
+    return receipt == null
+        ? (MessageModel.error()..data = 'unavailable')
+        : (MessageModel()..data = receipt);
+  }
+
+  @override
+  Future<bool> isExpiredWithoutExecution({
+    required String sender,
+    required BigInt sequence,
+    required BigInt expirationSeconds,
+    required int chainId,
+  }) async => false;
+
   @override
   Future<MessageModel> sendTxHash(String signedHex) async {
     submits++;
@@ -129,6 +152,66 @@ void main() {
     expect(api.submits, 1);
     expect(saved, hasLength(1));
   });
+  for (final status in [
+    AptTransactionStatus.succeeded,
+    AptTransactionStatus.failed,
+    AptTransactionStatus.pending,
+    null,
+  ]) {
+    test('next send settles the accepted transfer first: $status', () async {
+      final api = _Api();
+      final settled = <(String, AptTransactionStatus)>[];
+      final params = SendParams(
+        coinType: 'APT',
+        fromAddress:
+            '0x7df415e5b21bdaa8b2946e8f1f4278b39904e51a69627494cd3e6f2996732fbd',
+        toAddress: '0x2',
+        amount: 1,
+        decimals: 0,
+        path: '',
+        privateKey: 'fixture',
+      );
+      AptSender sender(_Signer signer) => AptSender(
+        ownerIdentity: () => 'owner',
+        trustdart: signer,
+        apiFactory: (_) => api,
+        reconcileWriter: (pending, receipt) async =>
+            settled.add((pending.hash, receipt.status)),
+      );
+      final first = await sender(
+        _Signer()..signed = aptosReferenceVectors.first['signed'] as String,
+      ).send(params);
+      expect(first.success, isTrue);
+      // Accepted is not confirmed: the journal still guards the account.
+      expect(api.receiptReads, 0);
+      if (status != null) {
+        api.receipt = AptTransactionReceipt(
+          first.txHash!,
+          status,
+          version: status == AptTransactionStatus.pending ? null : BigInt.one,
+        );
+      }
+      final nextSigner = _Signer()
+        ..signed = aptosReferenceVectors.first['signed'] as String;
+      final next = await sender(nextSigner).send(params);
+      expect(api.receiptReads, 1);
+      final terminal =
+          status == AptTransactionStatus.succeeded ||
+          status == AptTransactionStatus.failed;
+      if (terminal) {
+        expect(settled, [(first.txHash, status)]);
+        expect(nextSigner.received, isNotNull);
+        expect(api.submits, 2);
+      } else {
+        // Still pending or unknown: never sign or broadcast again.
+        expect(settled, isEmpty);
+        expect(next.success, isFalse);
+        expect(next.txHash, first.txHash);
+        expect(nextSigner.received, isNull);
+        expect(api.submits, 1);
+      }
+    });
+  }
   test(
     'failed history persistence prevents submission and preserves recovery',
     () async {

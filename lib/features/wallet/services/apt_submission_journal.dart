@@ -177,6 +177,35 @@ class AptSubmissionJournal {
     return record;
   });
 
+  /// Settle the journal entry that belongs to [hash] from chain state (its
+  /// receipt by hash, then the sequence/expiry proof). Returns the terminal
+  /// receipt once history is saved and the entry cleared; null while the
+  /// outcome is still pending or cannot be determined, or when the entry
+  /// belongs to another transaction.
+  Future<AptTransactionReceipt?> settle({
+    required int chainId,
+    required String sender,
+    required String hash,
+    required AptApi api,
+    required Future<void> Function(AptPendingSubmission, AptTransactionReceipt)
+    saveResult,
+  }) async {
+    final record = await pending(chainId, sender);
+    if (record == null || record.hash != hash.toLowerCase()) return null;
+    final receipt = await reconcile(
+      chainId: chainId,
+      sender: sender,
+      api: api,
+      saveResult: saveResult,
+    );
+    if (receipt == null ||
+        receipt.hash != record.hash ||
+        receipt.status == AptTransactionStatus.pending) {
+      return null;
+    }
+    return receipt;
+  }
+
   /// Persist the terminal result before releasing the account. Never rebroadcast.
   /// The callback must be idempotent: a crash/delete failure can repeat it.
   Future<AptTransactionReceipt?> reconcile({

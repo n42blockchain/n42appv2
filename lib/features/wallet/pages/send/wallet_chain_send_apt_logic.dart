@@ -20,13 +20,42 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       ) ??
       (widget.coinModel.isTest ? 0 : 1);
 
-  Future<void> refreshPending() async {
+  AptApi get _recoveryApi =>
+      widget.recoveryApi ?? AptApi(isTest: widget.coinModel.isTest);
+
+  Future<void> Function(AptPendingSubmission, AptTransactionReceipt)
+  get _recoveryWriter =>
+      widget.recoveryWriter ?? AppDatabase().completeAptFromReceipt;
+
+  /// Reload the durable journal. A previous submission is first settled from
+  /// chain state automatically; the manual recovery prompt remains only when
+  /// its outcome is still pending or cannot be determined.
+  Future<void> refreshPending({bool settle = true}) async {
     if (!mounted || _checkingPending) return;
     final chain = _selectedChain;
     final sender = widget.coinModel.address.toString();
     setState(() => _checkingPending = true);
     try {
-      final record = await _journal.pending(chain, sender);
+      var record = await _journal.pending(chain, sender);
+      if (record != null && settle) {
+        try {
+          final receipt = await _journal.reconcile(
+            chainId: chain,
+            sender: sender,
+            api: _recoveryApi,
+            saveResult: _recoveryWriter,
+          );
+          if (receipt != null &&
+              receipt.status != AptTransactionStatus.pending &&
+              mounted &&
+              receipt.hash == _acceptedHash) {
+            _acceptedHash = null;
+          }
+        } catch (_) {
+          // Undeterminable: keep the record for manual recovery.
+        }
+        record = await _journal.pending(chain, sender);
+      }
       if (!mounted ||
           chain != _selectedChain ||
           sender != widget.coinModel.address) {
@@ -52,18 +81,8 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       final receipt = await _journal.reconcile(
         chainId: chain,
         sender: sender,
-        api: widget.recoveryApi ?? AptApi(isTest: widget.coinModel.isTest),
-        saveResult:
-            widget.recoveryWriter ??
-            (pending, receipt) => AppDatabase().completeAptTransactionRecord(
-              chainId: pending.chainId,
-              sender: pending.sender,
-              hash: pending.hash,
-              success: receipt.status == AptTransactionStatus.succeeded,
-              neverSubmitted:
-                  !pending.submissionAttempted &&
-                  receipt.status == AptTransactionStatus.notSubmitted,
-            ),
+        api: _recoveryApi,
+        saveResult: _recoveryWriter,
       );
       if (mounted &&
           chain == _selectedChain &&
@@ -77,7 +96,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     } finally {
       if (mounted) {
         setState(() => _checkingPending = false);
-        await refreshPending();
+        await refreshPending(settle: false);
       }
     }
   }

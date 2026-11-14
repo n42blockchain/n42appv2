@@ -299,12 +299,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text(pending.hash), findsOneWidget);
-      final dynamic state = tester.state(find.byType(WalletChainSendApt));
-      await state.sendTransaction();
-      expect(sender.calls, 0);
-      await tester.tap(find.byKey(const ValueKey('apt-recovery-refresh')));
-      await tester.pumpAndSettle();
+      // Opening the page settles a determinable outcome automatically; only
+      // a pending or undeterminable one keeps the manual recovery prompt.
       final terminal = outcome == 'success' || outcome == 'failed';
       expect(
         await journal.pending(1, pending.sender),
@@ -312,6 +308,17 @@ void main() {
       );
       expect(find.text(pending.hash), terminal ? findsNothing : findsOneWidget);
       expect(saved, outcome == 'offline' || outcome == 'pending' ? 0 : 1);
+      final dynamic state = tester.state(find.byType(WalletChainSendApt));
+      if (!terminal) {
+        await state.sendTransaction();
+        expect(sender.calls, 0);
+        await tester.tap(find.byKey(const ValueKey('apt-recovery-refresh')));
+        await tester.pumpAndSettle();
+        expect(await journal.pending(1, pending.sender), isNotNull);
+        expect(find.text(pending.hash), findsOneWidget);
+        // Opening, the blocked send and the manual retry each query again.
+        expect(saved, outcome == 'save failure' ? 3 : 0);
+      }
       expect(sender.calls, 0);
       expect(tester.takeException(), isNull);
     });

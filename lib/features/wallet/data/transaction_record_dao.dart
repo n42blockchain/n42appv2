@@ -1,6 +1,8 @@
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
+import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -371,6 +373,21 @@ extension TransactionRecordDao on AppDatabase {
       return previous['trId'] as int;
     });
   }
+
+  /// Journal reconciliation writer shared by the send page, the sender and
+  /// the history poller.
+  Future<void> completeAptFromReceipt(
+    AptPendingSubmission pending,
+    AptTransactionReceipt receipt,
+  ) => completeAptTransactionRecord(
+    chainId: pending.chainId,
+    sender: pending.sender,
+    hash: pending.hash,
+    success: receipt.status == AptTransactionStatus.succeeded,
+    neverSubmitted:
+        !pending.submissionAttempted &&
+        receipt.status == AptTransactionStatus.notSubmitted,
+  );
 
   /// Complete existing records; never invent a payment on recovery.
   /// A proven unsubmitted reservation removes only local pending history so

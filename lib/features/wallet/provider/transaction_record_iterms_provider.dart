@@ -11,6 +11,8 @@ import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
+import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class TransactionRecordItemProvider with ChangeNotifier {
@@ -23,6 +25,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
   final TransactionStateResolver _resolver;
   final String Function() _userUuid;
   final Object? Function() _sessionIdentity;
+  final Future<int> Function(TransationRecordModel) _aptSettler;
   bool _disposed = false;
   int _loadGeneration = 0;
 
@@ -31,7 +34,9 @@ class TransactionRecordItemProvider with ChangeNotifier {
     TransactionStateResolver? resolver,
     String Function()? userUuid,
     Object? Function()? sessionIdentity,
+    Future<int> Function(TransationRecordModel)? aptSettler,
   }) : _db = database,
+       _aptSettler = aptSettler ?? _settleAptRecord,
        _resolver = resolver ?? TransactionStateResolver(),
        _userUuid = userUuid ?? (() => AppGlobals.userInfo?.uuid ?? ''),
        _sessionIdentity = sessionIdentity ?? _currentSession;
@@ -45,6 +50,32 @@ class TransactionRecordItemProvider with ChangeNotifier {
     }
     return (AppGlobals.userInfo, AppGlobals.walletStorageUuid, wallet);
   }
+
+  /// Aptos history is closed through its durable submission journal: the
+  /// receipt (by hash) or the sequence/expiry proof saves the result and then
+  /// clears the journal, so a confirmed transfer no longer blocks the next
+  /// send. Returns 1/2 for a terminal result of [trm], -1 otherwise.
+  static Future<int> _settleAptRecord(TransationRecordModel trm) async {
+    try {
+      final receipt = await AptSubmissionJournal().settle(
+        chainId: trm.coinId,
+        sender: trm.from1,
+        hash: trm.txHash,
+        api: AptApi(isTest: trm.isTest == 1),
+        saveResult: AppDatabase().completeAptFromReceipt,
+      );
+      return switch (receipt?.status) {
+        AptTransactionStatus.succeeded => 1,
+        AptTransactionStatus.failed || AptTransactionStatus.expired => 2,
+        _ => -1,
+      };
+    } catch (_) {
+      return -1;
+    }
+  }
+
+  Future<int> _resolve(TransationRecordModel trm) =>
+      trm.coinMiniName == 'APT' ? _aptSettler(trm) : _resolver.resolveState(trm);
 
   Object get _session => (_userUuid(), _sessionIdentity(), _loadGeneration);
   bool _isCurrent(Object session) => !_disposed && _session == session;
@@ -172,7 +203,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
   Future<void> checkUndoneTr(TransationRecordModel trm) async {
     final session = _session;
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
-    final int resolved = await _resolver.resolveState(trm);
+    final int resolved = await _resolve(trm);
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return;
 
     // -1 = RPC 错误，无法判断状态，跳过本次
@@ -209,7 +240,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
   ) async {
     final session = _session;
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
-    final int resolved = await _resolver.resolveState(trm);
+    final int resolved = await _resolve(trm);
     if (!_isCurrent(session) || trm.userUuid != _userUuid()) return null;
 
     if (![0, 1, 2].contains(resolved)) return null;
