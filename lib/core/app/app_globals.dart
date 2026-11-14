@@ -5,6 +5,8 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
@@ -90,29 +92,69 @@ class AppGlobals {
   ///
   /// Sets up user state and initializes related services.
   /// Also syncs the auth token to SecureStorage so both storage paths stay consistent.
-  static Future<void> login(UserInfo info) async {
-    userInfo = info;
-    final secureStorage = SecureStorage();
-    final syncTasks = <Future<void>>[];
-    if (info.token != null && info.token!.isNotEmpty) {
-      syncTasks.add(secureStorage.saveToken(info.token!));
-    }
-    if (info.uuid != null && info.uuid!.isNotEmpty) {
-      syncTasks.add(secureStorage.saveUuid(info.uuid!));
-    }
-    if (info.email != null && info.email!.isNotEmpty) {
-      syncTasks.add(secureStorage.saveEmail(info.email!));
-    }
-    syncTasks.add(secureStorage.saveUserInfo(info.toJson()));
-    await Future.wait(syncTasks);
-    await globalProviderContainer
+  static Future<void> login(UserInfo info) => switchUser(
+    info,
+    persist: () {
+      final secureStorage = SecureStorage();
+      final syncTasks = <Future<void>>[];
+      if (info.token != null && info.token!.isNotEmpty) {
+        syncTasks.add(secureStorage.saveToken(info.token!));
+      }
+      if (info.uuid != null && info.uuid!.isNotEmpty) {
+        syncTasks.add(secureStorage.saveUuid(info.uuid!));
+      }
+      if (info.email != null && info.email!.isNotEmpty) {
+        syncTasks.add(secureStorage.saveEmail(info.email!));
+      }
+      syncTasks.add(secureStorage.saveUserInfo(info.toJson()));
+      return Future.wait(syncTasks);
+    },
+    publish: () => globalProviderContainer
         .read(currentUserProvider.notifier)
-        .setUser(SharedUserInfo.fromLegacyUserInfo(info));
-    globalProviderContainer.invalidate(walletListProvider);
-    globalProviderContainer.invalidate(selectedWalletIndexProvider);
-    globalProviderContainer.invalidate(miningWalletIndexProvider);
-    globalWapAdapter.initWallet(shouldInitCoinInfo: true);
-    globalWcpInstance.cleanDataLogout();
+        .setUser(SharedUserInfo.fromLegacyUserInfo(info)),
+    isolate: () {
+      globalProviderContainer.invalidate(walletListProvider);
+      globalProviderContainer.invalidate(selectedWalletIndexProvider);
+      globalProviderContainer.invalidate(miningWalletIndexProvider);
+      globalWapAdapter.initWallet(shouldInitCoinInfo: true);
+      globalWcpInstance.cleanDataLogout();
+    },
+  );
+
+  /// Same cap as the startup account sync: flutter_secure_storage can block
+  /// indefinitely while the Android Keystore is unavailable.
+  static const loginStorageTimeout = Duration(seconds: 6);
+
+  /// Switch the in-memory session to [info]. Persistence ([persist], then
+  /// [publish]) is best effort and capped by [timeout]; the account isolation
+  /// step ([isolate]: provider invalidation, wallet reload and WalletConnect
+  /// cleanup) always runs, so a failed or stuck secure-storage write can
+  /// never leave the previous account's wallets or sessions active under the
+  /// new user. A persistence error is rethrown after isolation; a timeout is
+  /// logged, as at startup.
+  @visibleForTesting
+  static Future<void> switchUser(
+    UserInfo info, {
+    required Future<void> Function() persist,
+    required Future<void> Function() publish,
+    required void Function() isolate,
+    Duration timeout = loginStorageTimeout,
+  }) async {
+    userInfo = info;
+    Object? error;
+    StackTrace? stack;
+    for (final step in [persist, publish]) {
+      try {
+        await step().timeout(timeout);
+      } on TimeoutException {
+        AppLogger.w('AppGlobals', 'login storage timed out; continuing');
+      } catch (e, s) {
+        error ??= e;
+        stack ??= s;
+      }
+    }
+    isolate();
+    if (error != null) Error.throwWithStackTrace(error, stack!);
   }
 
   /// Handle user logout
