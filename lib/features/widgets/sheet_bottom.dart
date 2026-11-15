@@ -21,7 +21,11 @@ void sheetBottom(
   showModalBottomSheet(
     context: context,
     isDismissible: isDismissible,
-    backgroundColor: Colors.transparent,
+    // The sheet's own Material paints the background (theme shape: 20-point
+    // top corners). A transparent sheet with a decorated child hid every
+    // InkWell/ListTile splash under the fill and left the theme's drag handle
+    // floating on the scrim above the visible panel.
+    backgroundColor: AppColorTokens.of(context).bgBase,
     isScrollControlled: true,
     enableDrag: enableDrag,
     constraints: isWide ? const BoxConstraints(maxWidth: 500) : null,
@@ -41,63 +45,55 @@ class _NFTSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColorTokens.of(context).bgBase,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(ScreenUtil().setWidth(16.0)),
-        ),
-      ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            title == null || title!.isEmpty
-                ? const SizedBox()
-                : Stack(
-                    alignment: Alignment.centerRight,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSpacing.space8,
-                          vertical: AppSpacing.space8,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: ScreenUtil().setWidth(1.0),
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemBorderColor.name,
-                              ),
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          title == null || title!.isEmpty
+              ? const SizedBox()
+              : Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space8,
+                        vertical: AppSpacing.space8,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: ScreenUtil().setWidth(1.0),
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.itemBorderColor.name,
                             ),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            title ?? '',
-                            style: AppTypography.headline.copyWith(
-                              color: AppColorTokens.of(context).textPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-            Flexible(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                  vertical: AppSpacing.space8,
+                      child: Center(
+                        child: Text(
+                          title ?? '',
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: child,
+          Flexible(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.space8,
+                vertical: AppSpacing.space8,
               ),
+              child: child,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
