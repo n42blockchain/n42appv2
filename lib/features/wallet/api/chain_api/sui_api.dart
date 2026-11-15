@@ -27,6 +27,8 @@ query SuiBalance($owner: SuiAddress!) {
   address(address: $owner) {
     balance(coinType: "0x2::sui::SUI") {
       totalBalance
+      coinBalance
+      addressBalance
     }
   }
 }''';
@@ -34,6 +36,17 @@ query SuiBalance($owner: SuiAddress!) {
   static const gasPriceQuery = r'''
 query SuiReferenceGasPrice {
   epoch {
+    referenceGasPrice
+  }
+}''';
+
+  /// SIP-58 transactions that pay gas from the address balance declare the
+  /// epochs they are valid in and the chain they belong to.
+  static const networkQuery = r'''
+query SuiNetwork {
+  chainIdentifier
+  epoch {
+    epochId
     referenceGasPrice
   }
 }''';
@@ -163,6 +176,47 @@ query SuiTransaction($digest: String!) {
       return MessageModel.error()..data = 'Invalid Sui balance response';
     }
     return MessageModel()..data = total;
+  }
+
+  /// SUI held in coin objects and in the SIP-58 address balance. `data` is a
+  /// [SuiBalances]; a response whose parts do not add up to the total is
+  /// rejected rather than guessed at.
+  Future<MessageModel> getBalancesSui(String address) async {
+    final rmm = resultToMessageModel(
+      await graphQL(balanceQuery, {'owner': address}),
+    );
+    if (rmm.error) return rmm;
+    final balance = field(rmm.data, ['address', 'balance']);
+    final total = amount(field(balance, ['totalBalance']));
+    final coins = amount(field(balance, ['coinBalance']));
+    final funds = amount(field(balance, ['addressBalance']));
+    if (total == null ||
+        coins == null ||
+        funds == null ||
+        coins + funds != total) {
+      return MessageModel.error()..data = 'Invalid Sui balance response';
+    }
+    return MessageModel()
+      ..data = SuiBalances(total: total, coins: coins, address: funds);
+  }
+
+  /// Current epoch, reference gas price and chain identifier (`data` is a
+  /// [SuiNetworkState]).
+  Future<MessageModel> getNetworkSui() async {
+    final rmm = resultToMessageModel(await graphQL(networkQuery, const {}));
+    if (rmm.error) return rmm;
+    final epoch = amount(field(rmm.data, ['epoch', 'epochId']));
+    final price = amount(field(rmm.data, ['epoch', 'referenceGasPrice']));
+    final chain = field(rmm.data, ['chainIdentifier']);
+    if (epoch == null || price == null || !isDigest(chain)) {
+      return MessageModel.error()..data = 'Invalid Sui network response';
+    }
+    return MessageModel()
+      ..data = SuiNetworkState(
+        epoch: epoch,
+        referenceGasPrice: price,
+        chainIdentifier: chain as String,
+      );
   }
 
   Future<MessageModel> getGasPriceSui() async {
@@ -344,4 +398,29 @@ query SuiTransaction($digest: String!) {
       );
     }
   }
+}
+
+/// SUI balance split between coin objects and the SIP-58 address balance.
+class SuiBalances {
+  final BigInt total;
+  final BigInt coins;
+  final BigInt address;
+  const SuiBalances({
+    required this.total,
+    required this.coins,
+    required this.address,
+  });
+}
+
+class SuiNetworkState {
+  final BigInt epoch;
+  final BigInt referenceGasPrice;
+
+  /// Base58 digest of the genesis checkpoint.
+  final String chainIdentifier;
+  const SuiNetworkState({
+    required this.epoch,
+    required this.referenceGasPrice,
+    required this.chainIdentifier,
+  });
 }

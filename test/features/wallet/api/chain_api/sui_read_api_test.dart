@@ -325,4 +325,98 @@ void main() {
       expect((await api.getTransactionBlock('digest')).error, isTrue);
     });
   });
+
+  group('balance split (SIP-58)', () {
+    test('real mainnet coin and address balances', () async {
+      final api = ReplayApi([fixture('balance_split_mainnet.json')]);
+      final result = await api.getBalancesSui('0xowner');
+      expect(result.error, isFalse);
+      final balances = result.data as SuiBalances;
+      expect(balances.total, BigInt.parse('41878967321'));
+      expect(balances.coins, BigInt.parse('92101397'));
+      expect(balances.address, BigInt.parse('41786865924'));
+      expect(api.requests.single, {
+        'query': SuiApi.balanceQuery,
+        'variables': {'owner': '0xowner'},
+      });
+    });
+
+    test('the displayed balance stays the total', () async {
+      final api = ReplayApi([fixture('balance_split_mainnet.json')]);
+      expect(
+        (await api.getBalanceSui('0xowner')).data,
+        BigInt.parse('41878967321'),
+      );
+    });
+
+    Map<String, dynamic> split(Object? total, Object? coins, Object? funds) => {
+      'data': {
+        'address': {
+          'balance': {
+            'totalBalance': total,
+            'coinBalance': coins,
+            'addressBalance': funds,
+          },
+        },
+      },
+    };
+    for (final (name, reply) in [
+      ('total only', fixture('balance_mainnet.json')),
+      ('parts do not add up', split('10', '3', '6')),
+      ('missing address balance', split('10', '10', null)),
+      ('negative part', split('10', '11', '-1')),
+    ]) {
+      test('$name is an error', () async {
+        final api = ReplayApi([reply]);
+        expect((await api.getBalancesSui('0x1')).error, isTrue);
+      });
+    }
+  });
+
+  group('network state', () {
+    for (final (net, epoch, price, chain) in [
+      ('mainnet', 1312, 100, '4btiuiMPvEENsttpZC7CZ53DruC3MAgfznDbASZ7DR6S'),
+      ('testnet', 1284, 1000, '69WiPg3DAQiwdxfncX6wYQ2siKwAe6L9BZthQea3JNMD'),
+    ]) {
+      test('real $net epoch, gas price and chain identifier', () async {
+        final api = ReplayApi([fixture('network_$net.json')]);
+        final result = await api.getNetworkSui();
+        expect(result.error, isFalse);
+        final state = result.data as SuiNetworkState;
+        expect(state.epoch, BigInt.from(epoch));
+        expect(state.referenceGasPrice, BigInt.from(price));
+        expect(state.chainIdentifier, chain);
+        expect(api.requests.single['query'], SuiApi.networkQuery);
+      });
+    }
+
+    Map<String, dynamic> network(Object? chain, Object? epoch) => {
+      'data': {
+        'chainIdentifier': chain,
+        'epoch': {'epochId': epoch, 'referenceGasPrice': '100'},
+      },
+    };
+    for (final (name, reply) in [
+      ('missing chain', network(null, 5)),
+      ('chain is not base58', network('0OIl' * 11, 5)),
+      (
+        'missing epoch',
+        network('4btiuiMPvEENsttpZC7CZ53DruC3MAgfznDbASZ7DR6S', null),
+      ),
+      (
+        'negative epoch',
+        network('4btiuiMPvEENsttpZC7CZ53DruC3MAgfznDbASZ7DR6S', -1),
+      ),
+    ]) {
+      test('$name is an error', () async {
+        final api = ReplayApi([reply]);
+        expect((await api.getNetworkSui()).error, isTrue);
+      });
+    }
+
+    test('transport failure is an error', () async {
+      final api = ReplayApi([const SocketException('down')]);
+      expect((await api.getNetworkSui()).error, isTrue);
+    });
+  });
 }
