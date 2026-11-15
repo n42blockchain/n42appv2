@@ -84,6 +84,42 @@ InputDecoration _buildInputDecoration({
   );
 }
 
+/// Leading/trailing action inside a decorated field (MAX, address book,
+/// visibility toggles).
+///
+/// The field paints its own filled background, so a bare [InkWell] would
+/// splash on the Material below it and the press would stay invisible. A
+/// transparent [Material] gives the ink a surface above the fill, and the
+/// hit area grows to the 44-point minimum around the unchanged visual.
+/// Decorative slots without [onTap] render as before.
+class _FieldAction extends StatelessWidget {
+  const _FieldAction({required this.onTap, required this.child});
+
+  final VoidCallback? onTap;
+  final Widget child;
+
+  static const double _minTarget = 44;
+
+  @override
+  Widget build(BuildContext context) {
+    if (onTap == null) return child;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brPill,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: _minTarget,
+            minHeight: _minTarget,
+          ),
+          child: Center(widthFactor: 1, heightFactor: 1, child: child),
+        ),
+      ),
+    );
+  }
+}
+
 Widget textFieldStyle2(
   BuildContext context, {
   ValueChanged<String>? onChanged,
@@ -162,7 +198,7 @@ Widget textFieldStyle2(
         child: Row(
           children: [
             if (leftWidget != null)
-              InkWell(onTap: leftOnTap, child: leftWidget),
+              _FieldAction(onTap: leftOnTap, child: leftWidget),
             Expanded(
               child: TextField(
                 controller: controller,
@@ -190,11 +226,11 @@ Widget textFieldStyle2(
               ),
             ),
             if (rightWidget3 != null)
-              InkWell(onTap: rightOnTap3, child: rightWidget3),
+              _FieldAction(onTap: rightOnTap3, child: rightWidget3),
             if (rightWidget1 != null)
-              InkWell(onTap: rightOnTap1, child: rightWidget1),
+              _FieldAction(onTap: rightOnTap1, child: rightWidget1),
             if (rightWidget2 != null)
-              InkWell(onTap: rightOnTap2, child: rightWidget2),
+              _FieldAction(onTap: rightOnTap2, child: rightWidget2),
           ],
         ),
       ),
@@ -275,7 +311,7 @@ Widget textFieldStyle3(
         child: Row(
           children: [
             if (leftWidget != null)
-              InkWell(onTap: leftOnTap, child: leftWidget),
+              _FieldAction(onTap: leftOnTap, child: leftWidget),
             Expanded(
               child: TextField(
                 controller: controller,
@@ -304,9 +340,9 @@ Widget textFieldStyle3(
               ),
             ),
             if (rightWidget1 != null)
-              InkWell(onTap: rightOnTap1, child: rightWidget1),
+              _FieldAction(onTap: rightOnTap1, child: rightWidget1),
             if (rightWidget2 != null)
-              InkWell(onTap: rightOnTap2, child: rightWidget2),
+              _FieldAction(onTap: rightOnTap2, child: rightWidget2),
           ],
         ),
       ),
