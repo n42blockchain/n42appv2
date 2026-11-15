@@ -1159,6 +1159,23 @@ extension WalletCorePlugin {
         return result
     }
 
+    /// Current epoch (or current and next), Base58 chain identifier, uint32 nonce.
+    private func suiValidDuring(_ value: Any?) -> SuiValidDuring? {
+        guard let window = value as? [String: Any],
+              let min = suiUInt64(window["minEpoch"]),
+              let max = suiUInt64(window["maxEpoch"]),
+              max >= min, max - min <= 1,
+              let chain = window["chain"] as? String,
+              chain.range(of: "^[1-9A-HJ-NP-Za-km-z]{32,44}$", options: .regularExpression) != nil,
+              let nonce = suiUInt64(window["nonce"]), nonce <= UInt64(UInt32.max) else { return nil }
+        return SuiValidDuring.with {
+            $0.minEpoch = min
+            $0.maxEpoch = max
+            $0.chain = chain
+            $0.nonce = UInt32(nonce)
+        }
+    }
+
     func signSuiTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
         guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.sui, path: path, privateKey: privateKey) else {
@@ -1175,7 +1192,21 @@ extension WalletCorePlugin {
               let toAddress = txData["toAddress"] as? String,
               AnyAddress.isValid(string: toAddress, coin: .sui),
               let amount = suiUInt64(txData["amount"]), amount > 0,
-              let utxos = txData["utxo"] as? [[String: Any]], !utxos.isEmpty else { return nil }
+              let utxos = txData["utxo"] as? [[String: Any]] else { return nil }
+        // SIP-58: optional withdrawal from the address balance, and a validity
+        // window when gas is paid from that balance instead of a coin.
+        var withdraw: UInt64 = 0
+        if txData.keys.contains("addressBalanceAmount") {
+            guard let value = suiUInt64(txData["addressBalanceAmount"]), value > 0 else { return nil }
+            withdraw = value
+        }
+        var window: SuiValidDuring? = nil
+        if txData.keys.contains("validDuring") {
+            guard let value = suiValidDuring(txData["validDuring"]) else { return nil }
+            window = value
+        }
+        guard withdraw.addingReportingOverflow(gasBudget).overflow == false else { return nil }
+        if utxos.isEmpty && (window == nil || withdraw != amount) { return nil }
         if txData["type"] as? String == "SUI_TRANSFER" {
             guard let from = txData["fromAddress"] as? String,
                   AnyAddress(string: from, coin: .sui)?.description == CoinType.sui.deriveAddress(privateKey: pk) else { return nil }
@@ -1199,10 +1230,12 @@ extension WalletCorePlugin {
                 $0.amounts = [amount]
                 $0.recipients = [toAddress]
                 $0.inputCoins = inputCoins
+                if withdraw > 0 { $0.addressBalanceAmount = withdraw }
             }
             $0.privateKey = pk.data
             $0.gasBudget = gasBudget
             $0.referenceGasPrice = referenceGasPrice
+            if let window = window { $0.validDuring = window }
         }
         let output: SuiSigningOutput = AnySigner.sign(input: input, coin: .sui)
         guard output.error == .ok, !output.unsignedTx.isEmpty, !output.signature.isEmpty else { return nil }
