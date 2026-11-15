@@ -242,11 +242,26 @@ class SendErrorWidget extends StatelessWidget {
           AppThemeKeys.errorBgColor2.name,
         ),
       ),
-      child: Text(
-        message,
-        style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).danger,
-        ),
+      // Red body text on the red tint measured about 2.6:1; the icon carries
+      // the error state and the message uses the primary label color.
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: AppTypography.body.fontSize,
+            color: AppColorTokens.of(context).danger,
+          ),
+          SizedBox(width: AppSpacing.space4),
+          Expanded(
+            child: Text(
+              message,
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -315,10 +330,16 @@ class _FeeRow extends StatelessWidget {
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // The label may take the larger share and wrap to a second line:
+          // an equal split with a single line cut "Max fee per gas" at 130%
+          // text size while the short value left space unused.
           Flexible(
+            flex: 3,
             child: Text(
               label,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppTypography.body.copyWith(
                 color: AppColorTokens.of(context).textSubtitle,
@@ -326,7 +347,8 @@ class _FeeRow extends StatelessWidget {
             ),
           ),
           SizedBox(width: AppSpacing.space2),
-          Expanded(
+          Flexible(
+            flex: 2,
             child: Text(
               value,
               style: AppTypography.body.copyWith(color: valueColor),

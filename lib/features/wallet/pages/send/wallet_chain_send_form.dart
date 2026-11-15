@@ -68,14 +68,18 @@ class SendToWidget extends StatelessWidget {
             maxLines: 3,
             height: su.setWidth(170.0),
             errorMessage: toErrorMessage,
-            rightWidget1: Container(
-              width: su.setWidth(60.0),
-              height: su.setWidth(60.0),
-              padding: EdgeInsets.all(su.setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: su.setWidth(50.0),
-                color: AppColorTokens.of(context).brand,
+            // Icon-only action: the tooltip doubles as its spoken label.
+            rightWidget1: Tooltip(
+              message: S.of(context).g_key_108,
+              child: Container(
+                width: su.setWidth(60.0),
+                height: su.setWidth(60.0),
+                padding: EdgeInsets.all(su.setWidth(5.0)),
+                child: Icon(
+                  Icons.add,
+                  size: su.setWidth(50.0),
+                  color: AppColorTokens.of(context).brand,
+                ),
               ),
             ),
             rightOnTap1: onSearchTap,
@@ -179,7 +183,11 @@ class SendAmountWidget extends StatelessWidget {
               right: AppSpacing.space8,
               top: AppSpacing.space8,
             ),
+            // spaceBetween keeps the balance on the trailing edge; with an
+            // Expanded next to a loose Flexible the unused half of the label's
+            // share stayed empty and the balance ended mid-card.
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Text(
@@ -189,7 +197,7 @@ class SendAmountWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: AppSpacing.space4),
-                Expanded(child: _BalanceLabel(coinModel: coinModel)),
+                Flexible(child: _BalanceLabel(coinModel: coinModel)),
               ],
             ),
           ),
@@ -279,21 +287,27 @@ class _MaxButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    return Container(
-      margin: EdgeInsets.only(left: AppSpacing.space2),
-      height: su.setWidth(60.0),
-      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-      decoration: BoxDecoration(
-        color: AppColorTokens.of(context).brand,
-        borderRadius: AppRadius.brPill,
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        S.of(context).g_key_197,
-        style: AppTypography.bodySm.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainWhiteColor.name,
+    // Ink (not a Container decoration) so the pill is painted on the
+    // field action's Material and the press ripple shows on top of it.
+    return Padding(
+      padding: EdgeInsets.only(left: AppSpacing.space2),
+      child: Ink(
+        height: su.setWidth(60.0),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+        decoration: BoxDecoration(
+          color: AppColorTokens.of(context).brand,
+          borderRadius: AppRadius.brPill,
+        ),
+        child: Center(
+          widthFactor: 1,
+          child: Text(
+            S.of(context).g_key_197,
+            style: AppTypography.bodySm.copyWith(
+              color: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainWhiteColor.name,
+              ),
+            ),
           ),
         ),
       ),
