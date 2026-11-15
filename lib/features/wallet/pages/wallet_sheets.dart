@@ -359,15 +359,26 @@ class BackupReminderBanner extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            width: double.infinity,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              S.of(context).g_key_wallet_c35,
-              style: AppTypography.body.copyWith(
+          // Red body text measured about 3.5:1 on the card; the warning
+          // icon carries the alert and the message uses the primary label.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                size: AppTypography.body.fontSize,
                 color: AppColorTokens.of(context).danger,
               ),
-            ),
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Text(
+                  S.of(context).g_key_wallet_c35,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
+                ),
+              ),
+            ],
           ),
           InkWell(
             onTap: () {

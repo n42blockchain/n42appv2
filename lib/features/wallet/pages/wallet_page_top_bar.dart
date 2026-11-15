@@ -131,6 +131,8 @@ class _QrCodeMenu extends StatelessWidget {
     final su = ScreenUtil();
     return PopupMenuButton<int>(
       key: const ValueKey<String>('wallet_qr_menu'),
+      // Without a tooltip the icon-only menu is announced as "Show menu".
+      tooltip: '${S.of(context).g_key_4} / ${S.of(context).g_key_33}',
       icon: Icon(
         Icons.qr_code_rounded,
         size: su.setWidth(52.0),
@@ -234,57 +236,62 @@ class _WalletConnectButton extends ConsumerWidget {
     final iconUrl = wc.metadata?.icons.firstOrNull ?? "";
 
     // 触控 ≥88.w（44dp 红线）：外层命中区扩大，图标视觉 60.w 不变。
-    return InkWell(
-      key: const ValueKey<String>('wallet_connect'),
-      onTap: onTap,
-      borderRadius: AppRadius.brPill,
-      child: SizedBox(
-        width: 44,
-        height: 44,
-        child: Center(
-          child: SizedBox(
-            width: ScreenUtil().setWidth(60.0),
-            height: ScreenUtil().setWidth(60.0),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned.fill(
-                  child: isConnected
-                      ? ImageNetWork(
-                          imageUrl: iconUrl,
-                          placeholder: "assets/img/list_default.png",
-                        )
-                      : Image.asset(
-                          "assets/wallet/WalletConnect.png",
+    // The image-only button needs a tooltip to have a spoken name; the
+    // product name is not translated.
+    return Tooltip(
+      message: 'WalletConnect',
+      child: InkWell(
+        key: const ValueKey<String>('wallet_connect'),
+        onTap: onTap,
+        borderRadius: AppRadius.brPill,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Center(
+            child: SizedBox(
+              width: ScreenUtil().setWidth(60.0),
+              height: ScreenUtil().setWidth(60.0),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned.fill(
+                    child: isConnected
+                        ? ImageNetWork(
+                            imageUrl: iconUrl,
+                            placeholder: "assets/img/list_default.png",
+                          )
+                        : Image.asset(
+                            "assets/wallet/WalletConnect.png",
+                            color: AppColorTokens.of(context).brand,
+                          ),
+                  ),
+                  if (sessionCount > 0)
+                    Positioned(
+                      right: -ScreenUtil().setWidth(8),
+                      top: -ScreenUtil().setWidth(8),
+                      child: Container(
+                        padding: EdgeInsets.all(AppSpacing.space2),
+                        decoration: BoxDecoration(
                           color: AppColorTokens.of(context).brand,
+                          shape: BoxShape.circle,
                         ),
-                ),
-                if (sessionCount > 0)
-                  Positioned(
-                    right: -ScreenUtil().setWidth(8),
-                    top: -ScreenUtil().setWidth(8),
-                    child: Container(
-                      padding: EdgeInsets.all(AppSpacing.space2),
-                      decoration: BoxDecoration(
-                        color: AppColorTokens.of(context).brand,
-                        shape: BoxShape.circle,
-                      ),
-                      constraints: BoxConstraints(
-                        minWidth: ScreenUtil().setWidth(28),
-                        minHeight: ScreenUtil().setWidth(28),
-                      ),
-                      child: Text(
-                        '$sessionCount',
-                        // 品牌色底上反白（叠层 on-color，§2.7 边界允许固定色）
-                        style: AppTypography.captionSm.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                        constraints: BoxConstraints(
+                          minWidth: ScreenUtil().setWidth(28),
+                          minHeight: ScreenUtil().setWidth(28),
                         ),
-                        textAlign: TextAlign.center,
+                        child: Text(
+                          '$sessionCount',
+                          // 品牌色底上反白（叠层 on-color，§2.7 边界允许固定色）
+                          style: AppTypography.captionSm.copyWith(
+                            color: AppColorTokens.onOverlayPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

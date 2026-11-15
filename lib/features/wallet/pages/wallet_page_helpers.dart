@@ -73,9 +73,11 @@ class WalletPinIconButton extends StatelessWidget {
             child: Icon(
               isPinned ? Icons.push_pin : Icons.push_pin_outlined,
               size: ScreenUtil().setWidth(32),
+              // Unpinned uses the secondary label: the tertiary label is
+              // below the 3:1 minimum for a control's glyph in both themes.
               color: isPinned
                   ? AppColorTokens.of(context).brand
-                  : AppColorTokens.of(context).textTertiary,
+                  : AppColorTokens.of(context).textSecondary,
             ),
           ),
         ),
