@@ -28,12 +28,39 @@ class FakeApi extends SuiApi {
   @override
   Future<MessageModel> getGasPriceSui() async =>
       MessageModel()..data = BigInt.from(1000);
+  String coinBalance = '10000000000000000';
+  BigInt addressBalance = BigInt.zero;
   @override
   Future<List<dynamic>> getOwnedObjects(String address) async => [
     {
-      'data': {'objectId': 'coin', 'version': '7', 'digest': 'digest'},
+      'data': {
+        'objectId': 'coin',
+        'version': '7',
+        'digest': 'digest',
+        'content': {
+          'fields': {'balance': coinBalance},
+        },
+      },
     },
   ];
+  @override
+  Future<MessageModel> getBalancesSui(String address) async {
+    final coins = BigInt.parse(coinBalance);
+    return MessageModel()
+      ..data = SuiBalances(
+        total: coins + addressBalance,
+        coins: coins,
+        address: addressBalance,
+      );
+  }
+
+  @override
+  Future<MessageModel> getNetworkSui() async => MessageModel()
+    ..data = SuiNetworkState(
+      epoch: BigInt.from(1312),
+      referenceGasPrice: BigInt.from(1000),
+      chainIdentifier: '4btiuiMPvEENsttpZC7CZ53DruC3MAgfznDbASZ7DR6S',
+    );
   @override
   Future<MessageModel> submit(String tx, String sig) async {
     submits++;
@@ -119,6 +146,39 @@ void main() {
       ],
     });
     expect(api.submits, 1);
+  });
+  test(
+    'coins short of gas: address balance funds the send in a window',
+    () async {
+      final api = FakeApi()
+        ..coinBalance = '1000'
+        ..addressBalance = BigInt.parse('100000000000');
+      final signer = Signer();
+      final sender = SuiSender(trustdart: signer, apiFactory: (_) => api);
+      final result = await sender.send(params(exact: BigInt.from(5000000)));
+      expect(result.success, true);
+      final window = signer.received!['validDuring'] as Map;
+      expect(signer.received!['addressBalanceAmount'], '4999000');
+      expect(window['minEpoch'], '1312');
+      expect(window['maxEpoch'], '1313');
+      expect(window['chain'], '4btiuiMPvEENsttpZC7CZ53DruC3MAgfznDbASZ7DR6S');
+      expect(
+        int.parse(window['nonce'] as String),
+        inInclusiveRange(0, 4294967295),
+      );
+      expect(api.submits, 1);
+    },
+  );
+  test('insufficient coin and address balance signs nothing', () async {
+    final api = FakeApi()
+      ..coinBalance = '1000'
+      ..addressBalance = BigInt.from(1000);
+    final signer = Signer();
+    final sender = SuiSender(trustdart: signer, apiFactory: (_) => api);
+    final result = await sender.send(params(exact: BigInt.from(5000000)));
+    expect(result.success, false);
+    expect(signer.received, isNull);
+    expect(api.submits, 0);
   });
   test('transaction digest follows the TransactionData intent hash', () {
     // Blake2b-256(b"TransactionData::" + bytes), Base58: computed

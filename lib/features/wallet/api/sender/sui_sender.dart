@@ -14,6 +14,7 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 import 'sui_transaction_message.dart';
+import 'sui_transfer_plan.dart';
 import '../../pages/send/sui_amount_utils.dart';
 
 /// Sui chain sender.
@@ -146,29 +147,19 @@ class SuiSender implements ChainSender {
       return SendResult.fail(S.current.g_key_wallet_m5('SUI'));
     }
 
-    // Get owned objects (coins) for gas
-    final ownedObjects = await suiApi.getOwnedObjects(params.fromAddress);
-
-    if (ownedObjects.isEmpty) {
-      return const SendResult.fail('No spendable Sui coins');
+    // Coins first; the SIP-58 address balance covers any shortfall.
+    final request = await prepareSuiTransfer(
+      api: suiApi,
+      fromAddress: params.fromAddress,
+      toAddress: params.toAddress,
+      amount: valuePrice,
+      gasBudget: totalGas,
+      referenceGasPrice: gasPrice,
+    );
+    final signMap = request.signMap;
+    if (signMap == null) {
+      return SendResult.fail(request.error ?? 'No spendable Sui funds');
     }
-    final signMap = <String, dynamic>{
-      'type': 'SUI_TRANSFER',
-      'amount': valuePrice.toString(),
-      'toAddress': params.toAddress,
-      'fromAddress': params.fromAddress,
-      'gasBudget': totalGas.toString(),
-      'referenceGasPrice': gasPrice.toString(),
-      'utxo': ownedObjects.map((o) {
-        final data = (o as Map)['data'] as Map;
-        return {
-          'objectId': data['objectId'],
-          'version': data['version'],
-          'objectDigest': data['digest'],
-        };
-      }).toList(),
-    };
-
     if (!signerIsCurrent()) {
       return const SendResult.fail('Wallet changed before Sui signing');
     }

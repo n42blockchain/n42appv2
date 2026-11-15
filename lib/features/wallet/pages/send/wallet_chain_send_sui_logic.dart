@@ -160,16 +160,23 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         errorMessage = S.current.g_key_134;
         return false;
       }
-      final signData = <String, dynamic>{
-        "type": "SUI_TRANSFER",
-        "fromAddress": widget.coinModel.address,
-        "referenceGasPrice": gasPrice.toString(),
-        "gasBudget": suiTransferGasBudget.toString(),
-        "toAddress": toAddr,
-        "amount": exactAmount.toString(),
-        "utxo": utxos,
-      };
       final SuiApi suiApi = SuiApi(isTest: widget.coinModel.isTest);
+      // Same funding plan as the sender: coins first, then the address
+      // balance, so the simulated transaction has the submitted shape.
+      final request = await prepareSuiTransfer(
+        api: suiApi,
+        fromAddress: widget.coinModel.address,
+        toAddress: toAddr,
+        amount: exactAmount,
+        gasBudget: suiTransferGasBudget,
+        referenceGasPrice: gasPrice,
+      );
+      if (!mounted) return false;
+      final signData = request.signMap;
+      if (signData == null) {
+        errorMessage = request.error ?? S.current.g_key_wallet_m6;
+        return false;
+      }
       final String path = getPathWithIndex(
         widget.coinModel.config.pathForAddrType(widget.coinModel.addrType)!,
         widget.coinModel.pathIndex,
