@@ -1997,10 +1997,10 @@ packages:
     dependency: transitive
     description:
       name: matrix
-      sha256: "13cea705b53c9b8e1869a5aa7ace529b3ad2126bcfac3cb8988e7080951a301a"
+      sha256: "976b6dfeddb7d5f9821cc789b9aa1662ba31fccac1db16ee211de9fc88894a3d"
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.0"
+    version: "16.0.4"
   meta:
     dependency: transitive
     description:
@@ -2077,8 +2077,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: ad7ce8c41d2ad747db966ba1d8ff015f7d9230ef
-      resolved-ref: ad7ce8c41d2ad747db966ba1d8ff015f7d9230ef
+      ref: b8cccff935596307941590c6c0e4cc2c68d512db
+      resolved-ref: b8cccff935596307941590c6c0e4cc2c68d512db
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
