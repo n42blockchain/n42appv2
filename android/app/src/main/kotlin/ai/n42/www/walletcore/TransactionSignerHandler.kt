@@ -123,14 +123,14 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         if (txData != null && path != null && coin != null && mnemonic != null && pkStr != null) {
             if (mnemonic != "") {
                 val wallet = HDWallet(mnemonic, passphrase)
-                val txHash: String = signBitcoinTransactionP2wsh(wallet, path, txData, null)
-                result.success(txHash)
+                val txHash: String? = signBitcoinTransactionP2wsh(wallet, path, txData, null)
+                if (txHash == null) result.error("txhash_null", "failed to build and sign transaction", null) else result.success(txHash)
             } else if (pkStr != "") {
                 val pk: ByteArray = aBase64.decode(pkStr, 64)
 
                 val privateKey = PrivateKey(pk)
-                val txHash: String = signBitcoinTransactionP2wsh(null, path, txData, privateKey)
-                result.success(txHash)
+                val txHash: String? = signBitcoinTransactionP2wsh(null, path, txData, privateKey)
+                if (txHash == null) result.error("txhash_null", "failed to build and sign transaction", null) else result.success(txHash)
 
             } else {
                 result.error("no_wallet",
@@ -1020,12 +1020,23 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         return Numeric.toHexString(output.encoded.toByteArray())
     }
 
-    private fun signBitcoinTransactionP2wsh(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String {
+    /**
+     * Signs a BitcoinV2 transaction through TransactionCompiler.
+     *
+     * Each UTXO's `witnessValue` is the spending scriptPubkey of that output.
+     * WalletCore 4.9.3 builds witnesses for P2PKH / P2WPKH (ECDSA) only; P2SH
+     * and P2WSH scriptPubkeys and custom scripts are reported as unsupported,
+     * and so is anything that does not compile to a fully signed transaction:
+     * this returns null instead of an unsigned or partially signed result.
+     * The chain defaults to testnet, as before; `isTest == false` is mainnet.
+     */
+    private fun signBitcoinTransactionP2wsh(wallet: HDWallet?, path: String, txData: Map<String, Any>, pk: PrivateKey?): String? {
         val privateKey = pk ?: wallet!!.getKey(CoinType.BITCOIN, path)
+        val publicKey = privateKey.getPublicKeySecp256k1(true).data()
 
         val utxos: List<Map<String, Any>> = txData["utxo"] as List<Map<String, Any>>
+        if (utxos.isEmpty()) return null
         val amount: Long = (txData["amount"] as Number).toLong()
-        val useMaxAmount: Boolean = txData["max"] as Boolean
         val transactionV2 = BitcoinV2.TransactionBuilder.newBuilder()
             .setLockTime((utxos[0]["lockTime"] as Number).toInt())
             .setFeePerVb((txData["byteFee"] as Number).toLong())
@@ -1037,7 +1048,6 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         for (utx in utxos) {
             val txHash = Numeric.hexStringToByteArray(utx["txid"] as String)
             txHash.reverse()
-            val txScript = Numeric.hexStringToByteArray(utx["script"] as String)
             val witnessScript = Numeric.hexStringToByteArray(utx["witnessValue"] as String)
             val inputV2 = BitcoinV2.Input.newBuilder()
                 .setOutPoint(
@@ -1056,36 +1066,42 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
             .setToAddress(txData["toAddress"] as String)
             .setValue(amount).build()
         transactionV2.setMaxAmountOutput(outputV2)
+        val isTest = txData["isTest"] as? Boolean ?: true
         val signingInput = BitcoinV2.SigningInput.newBuilder()
             .setBuilder(transactionV2)
             .setChainInfo(
-                BitcoinV2.ChainInfo.newBuilder()
-                    .setP2PkhPrefix(111)
-                    .setP2ShPrefix(196)
-                    .setHrp("tb")
+                if (isTest) BitcoinV2.ChainInfo.newBuilder().setP2PkhPrefix(111).setP2ShPrefix(196).setHrp("tb")
+                else BitcoinV2.ChainInfo.newBuilder().setP2PkhPrefix(0).setP2ShPrefix(5).setHrp("bc")
             )
-        val legacySigningInput = Bitcoin.SigningInput.newBuilder()
-            .setSigningV2(signingInput)
-        val preImageHashes = TransactionCompiler.preImageHashes(CoinType.BITCOIN, legacySigningInput.build().toByteArray())
-        val preSigningOutput: Bitcoin.PreSigningOutput = Bitcoin.PreSigningOutput.parseFrom(preImageHashes)
+            // The compiler needs the signer's public key to match each input.
+            .addPublicKeys(ByteString.copyFrom(publicKey))
+        val inputData = Bitcoin.SigningInput.newBuilder()
+            .setSigningV2(signingInput).build().toByteArray()
+        val preSigningOutput = Bitcoin.PreSigningOutput.parseFrom(
+            TransactionCompiler.preImageHashes(CoinType.BITCOIN, inputData))
+        // BitcoinV2 reports its sighashes in preSigningResultV2, not hashPublicKeys.
+        val preV2 = preSigningOutput.preSigningResultV2
+        if (preSigningOutput.errorValue != 0 || preV2.errorValue != 0 ||
+            preV2.sighashesCount != utxos.size) return null
         val signatureVec = DataVector()
         val pubkeyVec = DataVector()
-        for (h in preSigningOutput.hashPublicKeysList) {
-            val preImageHash = h.dataHash.toByteArray()
-            val signature = privateKey.signAsDER(preImageHash)
-
-            val publicKey = privateKey.getPublicKeySecp256k1(true)
-
-            signatureVec.add(signature)
-            pubkeyVec.add(publicKey.data())
+        for (h in preV2.sighashesList) {
+            val method = h.signingMethod
+            if ((method != BitcoinV2.PreSigningOutput.SigningMethod.Legacy &&
+                    method != BitcoinV2.PreSigningOutput.SigningMethod.Segwit) ||
+                !h.publicKey.toByteArray().contentEquals(publicKey) || h.sighash.size() != 32) return null
+            signatureVec.add(privateKey.signAsDER(h.sighash.toByteArray()))
+            pubkeyVec.add(publicKey)
         }
-        val finalTx = TransactionCompiler.compileWithSignatures(
+        val output = Bitcoin.SigningOutput.parseFrom(TransactionCompiler.compileWithSignatures(
             CoinType.BITCOIN,
-            preImageHashes,
+            inputData,
             signatureVec,
             pubkeyVec
-        )
-        return Numeric.toHexString(finalTx)
+        ))
+        val signed = output.signingResultV2
+        if (output.errorValue != 0 || signed.errorValue != 0 || signed.encoded.isEmpty) return null
+        return Numeric.toHexString(signed.encoded.toByteArray())
     }
 
     private fun signBitcoinTransactionMaxValue(wallet: HDWallet?, path: String, txData: Map<String, Any>, coinType: CoinType, pk: PrivateKey?): String {

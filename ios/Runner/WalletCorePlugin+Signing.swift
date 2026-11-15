@@ -784,71 +784,84 @@ extension WalletCorePlugin {
 
     }
 
+    /// Signs a BitcoinV2 transaction through TransactionCompiler, matching the
+    /// Android implementation. Each UTXO's `witnessValue` is the spending
+    /// scriptPubkey of that output. WalletCore 4.9.3 builds witnesses for
+    /// P2PKH / P2WPKH (ECDSA) only; P2SH and P2WSH scriptPubkeys and custom
+    /// scripts are reported as unsupported, and so is anything that does not
+    /// compile to a fully signed transaction: this returns nil instead of an
+    /// unsigned or partially signed result. The chain defaults to testnet, as
+    /// on Android; `isTest == false` selects mainnet.
     func signBitcoinTransaction_p2wsh(wallet: HDWallet?, path: String, txData:  [String: Any],coinType: CoinType,pk: PrivateKey?) -> String? {
-        //if wallet == nil { return nil}
-        //let privateKey = wallet!.getKey(coin: coinType, derivationPath: path)
-        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk) else {
-            return nil
-        }
-        let utxos: [[String: Any]] = txData["utxo"] as! [[String: Any]]
-        var unspent: [BitcoinUnspentTransaction] = []
-        let max: Bool = txData["max"] as! Bool
-        var input: BitcoinSigningInput = BitcoinSigningInput.with {
-            $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)//TWBitcoinSigHashTypeAll.rawValue
-            //$0.amount = txData["amount"] as! Int64
-            //$0.useMaxAmount=max
-            $0.byteFee=txData["byteFee"] as! Int64
-            $0.toAddress = txData["toAddress"] as! String
-            $0.changeAddress = txData["changeAddress"] as! String // can be same sender address
-            $0.coinType=coinType.rawValue
-            $0.lockTime=UInt32(utxos[0]["lockTime"] as! Int32)
-            $0.privateKey = [privateKey.data]
-        }
-        //var scripts = [String: Data]()
-        if max==true{
-            input.useMaxAmount=true;
-        }else{
-            input.amount=txData["amount"] as! Int64
-        }
+        guard coinType == .bitcoin,
+              let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk),
+              let utxos = txData["utxo"] as? [[String: Any]], !utxos.isEmpty,
+              let lockTime = (utxos[0]["lockTime"] as? NSNumber)?.uint32Value,
+              let byteFee = (txData["byteFee"] as? NSNumber)?.int64Value,
+              let amount = (txData["amount"] as? NSNumber)?.int64Value,
+              let toAddress = txData["toAddress"] as? String else { return nil }
+        let publicKey = privateKey.getPublicKeySecp256k1(compressed: true).data
+        var inputs: [BitcoinV2Input] = []
         for utx in utxos {
-            let witnessValue : String = utx["witnessValue"] as! String
-            let witnessValueData = Data(hexString: witnessValue)
-            let witnessValueSa256 = Hash.sha256(data: witnessValueData!)
-            let witnessScript = BitcoinScript.buildPayToWitnessScriptHash(scriptHash: witnessValueSa256)
-            let witnessScriptKey : String = Hash.ripemd(data: witnessValueSa256).hexString
-            input.scripts[witnessScriptKey]=witnessScript.data
-            //let lockScript: Data = Data(hexString: utx["script"] as! String)!
-            unspent.append(BitcoinUnspentTransaction.with {
-                $0.outPoint.hash = Data.reverse(hexString: utx["txid"] as! String)
-                //Data(Data(hexString: utx["txid"] as! String)!.reversed())
-                $0.outPoint.index = utx["vout"] as! UInt32
-                $0.outPoint.sequence = UINT32_MAX
-                $0.amount = Int64.init(utx["value"] as! String)!
-                $0.script = witnessScript.data
+            guard let txid = utx["txid"] as? String,
+                  let txidBytes = Data(hexString: txid), txidBytes.count == 32,
+                  let vout = (utx["vout"] as? NSNumber)?.uint32Value,
+                  let valueText = utx["value"] as? String, let value = Int64(valueText),
+                  let scriptHex = utx["witnessValue"] as? String,
+                  let script = Data(hexString: scriptHex), !script.isEmpty else { return nil }
+            inputs.append(BitcoinV2Input.with {
+                $0.outPoint = UtxoOutPoint.with {
+                    $0.hash = Data(txidBytes.reversed())
+                    $0.vout = vout
+                }
+                $0.sequence = BitcoinV2Input.Sequence.with { $0.sequence = UInt32(Int32.max) }
+                $0.value = value
+                $0.sighashType = BitcoinSigHashType.all.rawValue
+                $0.scriptData = script
             })
         }
-        input.utxo=unspent
-        let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
-        input.plan=plan
-        let inputData = try? input.serializedData()
-        let preImageHashes = (try? TransactionCompiler.preImageHashes(coinType: coinType, txInputData: inputData!))
-        let preSigningOutput = try? BitcoinPreSigningOutput(serializedData: preImageHashes!)
+        let isTest = txData["isTest"] as? Bool ?? true
+        let signingInput = BitcoinV2SigningInput.with {
+            $0.builder = BitcoinV2TransactionBuilder.with {
+                $0.version = .v2
+                $0.lockTime = lockTime
+                $0.feePerVb = byteFee
+                $0.inputSelector = .useAll
+                $0.fixedDustThreshold = 546
+                $0.inputs = inputs
+                $0.maxAmountOutput = BitcoinV2Output.with {
+                    $0.toAddress = toAddress
+                    $0.value = amount
+                }
+            }
+            $0.chainInfo = BitcoinV2ChainInfo.with {
+                $0.p2PkhPrefix = isTest ? 111 : 0
+                $0.p2ShPrefix = isTest ? 196 : 5
+                $0.hrp = isTest ? "tb" : "bc"
+            }
+            // The compiler needs the signer's public key to match each input.
+            $0.publicKeys = [publicKey]
+        }
+        guard let inputData = try? BitcoinSigningInput.with({ $0.signingV2 = signingInput }).serializedData(),
+              let preSigning = try? BitcoinPreSigningOutput(
+                serializedBytes: TransactionCompiler.preImageHashes(coinType: .bitcoin, txInputData: inputData)) else { return nil }
+        // BitcoinV2 reports its sighashes in preSigningResultV2, not hashPublicKeys.
+        let preV2 = preSigning.preSigningResultV2
+        guard preSigning.error == .ok, preV2.error == .ok, preV2.sighashes.count == utxos.count else { return nil }
         let signatureVec = DataVector()
         let pubkeyVec = DataVector()
-        for h in preSigningOutput!.hashPublicKeys {
-            let signature = privateKey.signAsDER(digest: h.dataHash)!
-            let publicKey = privateKey.getPublicKeyNist256p1()
-
+        for h in preV2.sighashes {
+            guard h.signingMethod == .legacy || h.signingMethod == .segwit,
+                  h.publicKey == publicKey, h.sighash.count == 32,
+                  let signature = privateKey.signAsDER(digest: h.sighash) else { return nil }
             signatureVec.add(data: signature)
-            pubkeyVec.add(data: publicKey.data)
+            pubkeyVec.add(data: publicKey)
         }
-        let finalTx = TransactionCompiler.compileWithSignatures(
-            coinType: coinType,
-            txInputData: preImageHashes!,
-            signatures: signatureVec,
-            publicKeys: pubkeyVec
-        )
-        return finalTx.hexString
+        guard let output = try? BitcoinSigningOutput(serializedBytes: TransactionCompiler.compileWithSignatures(
+            coinType: .bitcoin, txInputData: inputData, signatures: signatureVec, publicKeys: pubkeyVec)),
+              output.error == .ok, output.signingResultV2.error == .ok,
+              !output.signingResultV2.encoded.isEmpty else { return nil }
+        return output.signingResultV2.encoded.hexString
     }
 
     func signBitcoinTransaction_maxValue(wallet: HDWallet?, path: String, txData:  [String: Any],coinType: CoinType,pk: PrivateKey?) -> String? {
