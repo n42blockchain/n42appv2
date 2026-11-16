@@ -104,3 +104,9 @@ The approved three-area UI plan is implemented, including shared search/navigati
 - n42_chat：`AppColors.primary` 固定靛蓝未跟随宿主 accent、`isDark ?` 70 处、`message_item` 其余裸色/字号；聊天新提交在 n42_chat main，但宿主 pin 的 ref 不在 main 上（main 落后 190 提交），未升级宿主 ref。
 - 真机（VoiceOver/TalkBack、iOS 实际 ripple/高亮、键盘遮挡）未验证。
 
+## 2026-11-16 UI round 2 (deferred items resolved)
+
+- **Brand fill for white text**: `AppContrast.fillForWhiteText` + `AppColorTokens.brandFill` (same hue, lightness lowered until white reaches 4.5:1). Theme filled/elevated buttons (AppButton primary), asset card (also covers the 9% white pills), filled chips/FABs/legacy buttonStyle fills. System blue + white 4.02:1 / 3.65:1 -> #0071ED 4.58:1 / #0073E8 4.55:1; asset card #0068D9 / #0069D3 with pills 4.5:1+.
+- **Brand text on brand tint**: `AppColorTokens.brandOnTint` / `brandOnTintAt(alpha)` (4.5:1 on tints up to 15% over bgBase/bgSurface/bgElevated; #005FC7 light / #4AA4FF dark). AppBadge brand tone, network filter chip, fee/slippage/period chips, ENS tags. n42_chat: `AppColors.primaryOnTintOf` (poll tag, BOT tag, call back, tabs, chips); in-bubble accents use the bubble text color on the own bubble.
+- **Narrow-screen hit areas**: `AppTouch.target` = max(88 design px, 44pt), `AppTouch.scaled(n)`; all 88-px hit sizes and tappable 70-103 px sizes. 320pt: 37.5 -> 44pt; 375pt and wider unchanged.
+- **n42_chat**: `AppColors.primaryOf(context)` follows the host accent (576 sites; fallback to `AppColors.primary` without a host theme); color `isDark ?` ternaries -> `ChatColors` ThemeExtension (129 replaced); message_item font sizes -> `AppFontSize`, media colors -> fixed tokens.
