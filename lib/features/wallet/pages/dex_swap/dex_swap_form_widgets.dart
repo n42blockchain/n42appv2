@@ -273,7 +273,9 @@ class DexPriceChart extends StatelessWidget {
         child: Text(
           label,
           style: AppTypography.caption.copyWith(
-            color: isSelected ? blueColor : subText,
+            color: isSelected
+                ? AppColorTokens.of(context).brandOnTint
+                : subText,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

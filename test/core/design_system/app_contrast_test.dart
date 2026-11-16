@@ -122,4 +122,49 @@ void main() {
       });
     }
   });
+
+  group('AppColorTokens.brandOnTint', () {
+    for (final dark in [false, true]) {
+      testWidgets('reaches 4.5:1 on brand tints (dark: $dark)', (tester) async {
+        final theme = dark
+            ? ThemeAdapter.buildDark(ThemeAdapter.defaultAccent)
+            : ThemeAdapter.buildLight(ThemeAdapter.defaultAccent);
+        late AppColorTokens c;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Builder(
+              builder: (context) {
+                c = AppColorTokens.of(context);
+                return const SizedBox();
+              },
+            ),
+          ),
+        );
+        for (final surface in [c.bgBase, c.bgSurface, c.bgElevated]) {
+          for (final alpha in [0.08, 0.1, 0.12, 0.15]) {
+            final bg = Color.alphaBlend(
+              c.brand.withValues(alpha: alpha),
+              surface,
+            );
+            expect(
+              AppContrast.ratio(c.brandOnTint, bg),
+              greaterThanOrEqualTo(4.5),
+            );
+          }
+          final bg20 = Color.alphaBlend(
+            c.brand.withValues(alpha: 0.2),
+            surface,
+          );
+          expect(
+            AppContrast.ratio(c.brandOnTintAt(0.2), bg20),
+            greaterThanOrEqualTo(4.5),
+          );
+        }
+        // The plain brand on its 12% tint is the failing pattern.
+        final subtle = Color.alphaBlend(c.brandSubtle, c.bgSurface);
+        expect(AppContrast.ratio(c.brand, subtle), lessThan(4.5));
+      });
+    }
+  });
 }

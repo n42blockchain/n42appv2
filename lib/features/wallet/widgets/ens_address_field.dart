@@ -440,7 +440,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
                   _resolveResult!.sourceChain!,
                   style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: blueColor,
+                    color: AppColorTokens.of(context).brandOnTint,
                   ),
                 ),
               ),

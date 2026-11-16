@@ -260,7 +260,7 @@ extension on _HomeDrawPageState {
                     style: AppTypography.bodyStrong.copyWith(
                       color: showWalletLogout
                           ? AppColorTokens.of(context).danger
-                          : AppColorTokens.of(context).brand,
+                          : AppColorTokens.of(context).brandOnTint,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

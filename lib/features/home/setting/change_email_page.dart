@@ -448,7 +448,7 @@ class _StepPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = active ? colors.brand : colors.textSubtitle;
+    final fg = active ? colors.brandOnTint : colors.textSubtitle;
     return Expanded(
       child: Container(
         alignment: Alignment.center,

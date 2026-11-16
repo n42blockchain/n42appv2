@@ -38,6 +38,10 @@ class AppBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
     final fg = _foreground(c);
+    // Brand labels on their own 12% tint measure ~3.0-3.5:1; use the
+    // contrast-safe shade for the label, keep the tint from the brand.
+    final tintBase = tone == AppBadgeTone.brand ? c.brand : fg;
+    final labelColor = tone == AppBadgeTone.brand ? c.brandOnTint : fg;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -45,7 +49,7 @@ class AppBadge extends StatelessWidget {
         vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: fg.withValues(alpha: 0.12),
+        color: tintBase.withValues(alpha: 0.12),
         borderRadius: AppRadius.brPill,
       ),
       child: Row(
@@ -55,7 +59,7 @@ class AppBadge extends StatelessWidget {
             leading!,
             SizedBox(width: AppSpacing.space2),
           ] else if (icon != null) ...[
-            Icon(icon, size: 14, color: fg),
+            Icon(icon, size: 14, color: labelColor),
             SizedBox(width: AppSpacing.space2),
           ] else if (dot) ...[
             Container(
@@ -68,7 +72,7 @@ class AppBadge extends StatelessWidget {
           Flexible(
             child: Text(
               label,
-              style: AppTypography.captionSm.copyWith(color: fg),
+              style: AppTypography.captionSm.copyWith(color: labelColor),
             ),
           ),
         ],

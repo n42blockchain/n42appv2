@@ -253,12 +253,12 @@ class _TopRow extends StatelessWidget {
               networkLabel,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTypography.bodySm.copyWith(color: colors.brand),
+              style: AppTypography.bodySm.copyWith(color: colors.brandOnTint),
             ),
           ),
           Icon(
             Icons.keyboard_arrow_down_rounded,
-            color: colors.brand,
+            color: colors.brandOnTint,
             size: 20,
           ),
         ],
@@ -629,13 +629,15 @@ class _ThresholdButton extends StatelessWidget {
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
               size: ScreenUtil().setWidth(24),
-              color: active ? blueColor : subColor,
+              color: active ? AppColorTokens.of(context).brandOnTint : subColor,
             ),
             SizedBox(width: AppSpacing.space2),
             Text(
               label,
               style: AppTypography.caption.copyWith(
-                color: active ? blueColor : subColor,
+                color: active
+                    ? AppColorTokens.of(context).brandOnTint
+                    : subColor,
                 fontWeight: active ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

@@ -503,7 +503,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
           style: TextStyle(
             fontSize: size * 0.5,
             fontWeight: FontWeight.w600,
-            color: blueColor,
+            color: AppColorTokens.of(context).brandOnTintAt(0.2),
           ),
         ),
       ),

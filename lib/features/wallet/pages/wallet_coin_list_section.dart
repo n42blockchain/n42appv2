@@ -283,7 +283,7 @@ class _DiscoveryBanner extends StatelessWidget {
               children: [
                 Icon(
                   Icons.manage_search_rounded,
-                  color: blueColor,
+                  color: AppColorTokens.of(context).brandOnTint,
                   size: ScreenUtil().setWidth(36),
                 ),
                 SizedBox(width: AppSpacing.space4),
@@ -291,7 +291,7 @@ class _DiscoveryBanner extends StatelessWidget {
                   child: Text(
                     S.of(context).g_key_token_discovery_banner(count),
                     style: AppTypography.bodySm.copyWith(
-                      color: blueColor,
+                      color: AppColorTokens.of(context).brandOnTint,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

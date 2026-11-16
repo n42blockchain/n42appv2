@@ -319,14 +319,18 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
               Icon(
                 icon,
                 size: ScreenUtil().setWidth(36),
-                color: isSelected ? blueColor : subtitleText,
+                color: isSelected
+                    ? AppColorTokens.of(context).brandOnTint
+                    : subtitleText,
               ),
               SizedBox(height: AppSpacing.space2),
               Text(
                 label,
                 style: AppTypography.caption.copyWith(
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected ? blueColor : mainText,
+                  color: isSelected
+                      ? AppColorTokens.of(context).brandOnTint
+                      : mainText,
                 ),
               ),
               SizedBox(height: AppSpacing.space2),

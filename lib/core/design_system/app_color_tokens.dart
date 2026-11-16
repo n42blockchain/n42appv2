@@ -61,6 +61,19 @@ class AppColorTokens {
   /// Foreground on [brandFill].
   Color get onBrandFill => const Color(0xFFFFFFFF);
 
+  /// Brand-colored text or icon on a brand tint (up to 15% alpha, such as
+  /// [brandSubtle]) over any page or card background: >= 4.5:1, where the
+  /// plain brand measures about 3.0-3.5:1.
+  Color get brandOnTint => brandOnTintAt(AppContrast.maxTintAlpha);
+
+  /// [brandOnTint] for a stronger brand tint of [alpha].
+  Color brandOnTintAt(double alpha) => AppContrast.textOnTint(
+    brand,
+    [bgBase, bgSurface, bgElevated],
+    dark: _isDark,
+    alpha: alpha,
+  );
+
   // ── 语义（复用现有表，缺失者补常量）──
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677
   Color get danger => _key(AppThemeKeys.errorTextColor); // #F03450
