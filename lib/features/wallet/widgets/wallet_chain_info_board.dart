@@ -149,7 +149,7 @@ class WalletChainInfoBoard extends StatelessWidget {
     return InkWell(
       onTap: tap,
       child: Container(
-        height: ScreenUtil().setWidth(80),
+        height: AppTouch.scaled(80),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         alignment: Alignment.center,
         decoration: BoxDecoration(

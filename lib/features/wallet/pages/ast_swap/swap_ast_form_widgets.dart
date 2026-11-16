@@ -64,7 +64,7 @@ class SwapAstPercentWidget extends StatelessWidget {
     final double itemWidth =
         (MediaQuery.of(context).size.width - ScreenUtil().setWidth(60)) / 4;
     return Container(
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       width: double.infinity,
       margin: AppSpacing.pageHorizontal,
       alignment: Alignment.center,
@@ -81,7 +81,7 @@ class SwapAstPercentWidget extends StatelessWidget {
               onTap: () => onPercentTap(percent),
               borderRadius: AppRadius.brSm,
               child: Container(
-                height: ScreenUtil().setWidth(88),
+                height: AppTouch.target,
                 width: itemWidth,
                 alignment: Alignment.center,
                 child: Text(
@@ -126,8 +126,8 @@ class SwapAstCheckWidget extends StatelessWidget {
               onTap: onToggle,
               customBorder: const CircleBorder(),
               child: SizedBox(
-                height: ScreenUtil().setWidth(88),
-                width: ScreenUtil().setWidth(88),
+                height: AppTouch.target,
+                width: AppTouch.target,
                 child: Icon(
                   readStatement
                       ? Icons.check_box_outlined
@@ -211,7 +211,7 @@ class SwapAstPreviewButton extends StatelessWidget {
       bottom: ScreenUtil().setWidth(36.0),
       child: Container(
         padding: AppSpacing.pageHorizontal,
-        height: ScreenUtil().setWidth(88.0),
+        height: AppTouch.target,
         child: load == Load.error
             ? AppButton(label: S.of(context).g_swap_key_6, onPressed: onRetry)
             : AppButton(

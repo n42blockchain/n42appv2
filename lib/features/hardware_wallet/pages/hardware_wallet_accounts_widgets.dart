@@ -127,7 +127,7 @@ class _HWCoinSelector extends StatelessWidget {
     final su = ScreenUtil();
 
     return Container(
-      height: su.setWidth(80),
+      height: AppTouch.scaled(80),
       margin: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

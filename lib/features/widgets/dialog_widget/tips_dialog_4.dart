@@ -69,7 +69,7 @@ Future<bool?> tipsDialog4(
 
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           SizedBox(
-            height: ScreenUtil().setWidth(80),
+            height: AppTouch.scaled(80),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

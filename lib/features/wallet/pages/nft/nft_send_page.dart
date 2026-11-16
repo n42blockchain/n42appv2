@@ -211,7 +211,7 @@ class _NftSendPageState extends State<NftSendPage> {
                 // 发送按钮
                 SizedBox(
                   width: double.infinity,
-                  height: ScreenUtil().setWidth(90),
+                  height: AppTouch.scaled(90),
                   child: ElevatedButton(
                     onPressed: _sending ? null : _send,
                     style: ElevatedButton.styleFrom(

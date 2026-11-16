@@ -22,7 +22,7 @@ class _MiningSettingState extends State<MiningSetting> {
       bottomNavigationBar: SafeArea(
         child: Container(
           width: double.infinity,
-          height: ScreenUtil().setWidth(88),
+          height: AppTouch.target,
           margin: EdgeInsets.all(AppSpacing.space8),
           child: AppButton(
             label: S.of(context).g_mining_key_82,

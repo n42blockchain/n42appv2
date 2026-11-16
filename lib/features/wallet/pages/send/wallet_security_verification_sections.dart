@@ -151,7 +151,7 @@ class _FaceSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
-      height: ScreenUtil().setWidth(100.0),
+      height: AppTouch.scaled(100),
       child: Row(
         children: [
           Expanded(

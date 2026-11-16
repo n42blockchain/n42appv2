@@ -74,7 +74,7 @@ class GroupConfirm extends StatelessWidget {
             ),
             SizedBox(height: ScreenUtil().setWidth(90)),
             SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

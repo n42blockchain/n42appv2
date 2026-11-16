@@ -12,8 +12,8 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
         InkWell(
           onTap: init,
           child: Container(
-            height: su.setWidth(80),
-            width: su.setWidth(80),
+            height: AppTouch.scaled(80),
+            width: AppTouch.scaled(80),
             padding: EdgeInsets.all(su.setWidth(10)),
             child: Icon(
               Icons.refresh,

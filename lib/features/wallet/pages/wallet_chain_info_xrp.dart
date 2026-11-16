@@ -367,7 +367,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               );
             },
             child: Container(
-              height: ScreenUtil().setWidth(80.0),
+              height: AppTouch.scaled(80),
               width: double.infinity,
               alignment: Alignment.center,
               child: Text(

@@ -188,7 +188,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
               onTap: deleteWalletAlert,
               child: Container(
                 alignment: Alignment.center,
-                height: ScreenUtil().setWidth(100.0),
+                height: AppTouch.scaled(100),
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Text(
                   S.of(context).g_key_113,

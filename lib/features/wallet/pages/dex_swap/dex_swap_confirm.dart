@@ -3,7 +3,6 @@ import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verificati
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class DexSwapConfirm extends StatefulWidget {
@@ -129,7 +128,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
 
   Widget _actionRow() {
     return SizedBox(
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       child: Row(
         children: [
           Expanded(

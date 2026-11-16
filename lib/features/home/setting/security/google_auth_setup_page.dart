@@ -207,7 +207,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               // 确认按钮
               SizedBox(
                 width: double.infinity,
-                height: ScreenUtil().setWidth(88.0),
+                height: AppTouch.target,
                 child: ElevatedButton(
                   onPressed: _verify,
                   style: ElevatedButton.styleFrom(

@@ -416,7 +416,7 @@ class _DirectionChip extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           // >=88.h（44dp 触控红线）
-          constraints: BoxConstraints(minHeight: 88.h),
+          constraints: BoxConstraints(minHeight: AppTouch.target),
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
           decoration: BoxDecoration(

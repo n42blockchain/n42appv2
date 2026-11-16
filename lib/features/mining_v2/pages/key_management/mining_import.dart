@@ -310,7 +310,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       onEditingComplete: () {
         FocusScope.of(context).unfocus();
       },
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       errorMessage: _passwordErrorMessage,
       hintText: S.of(context).g_mining_key_98(_passwordLength),
       obscure: obscure,
@@ -357,7 +357,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     final isLoading = _load == Load.loading;
     return SafeArea(
       child: Container(
-        height: ScreenUtil().setWidth(88),
+        height: AppTouch.target,
         width: double.infinity,
         margin: EdgeInsets.all(AppSpacing.space8),
         child: AppButton(

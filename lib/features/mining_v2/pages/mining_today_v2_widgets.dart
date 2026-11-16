@@ -17,7 +17,7 @@ mixin _MiningTodayV2WidgetsMixin
           return InkWell(
             onTap: showChangeAddress,
             child: Container(
-              height: ScreenUtil().setWidth(80),
+              height: AppTouch.scaled(80),
               alignment: Alignment.center,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -316,7 +316,7 @@ mixin _MiningTodayV2WidgetsMixin
       children: [
         if (mpValue.showRedemption == true && mpValue.redeem == false)
           Container(
-            height: ScreenUtil().setWidth(88),
+            height: AppTouch.target,
             width: double.infinity,
             margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             child: AppButton(

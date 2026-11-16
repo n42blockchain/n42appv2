@@ -162,7 +162,7 @@ class _SettingShareState extends State<SettingShare> {
             Positioned(
               left: 10,
               top: 0,
-              height: ScreenUtil().setWidth(100.0),
+              height: AppTouch.scaled(100),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 color: _color(AppThemeKeys.mainTextColor),

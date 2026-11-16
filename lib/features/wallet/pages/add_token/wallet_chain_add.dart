@@ -542,7 +542,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                           focusNode: browserNode,
                           hintText: 'https://…',
                           maxLines: 1,
-                          height: ScreenUtil().setWidth(88.0),
+                          height: AppTouch.target,
                           errorMessage: browserErrorMessage,
                           onEditingComplete: () =>
                               FocusScope.of(context).unfocus(),
@@ -584,7 +584,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                     ),
                     Container(
                       margin: EdgeInsets.all(AppSpacing.space8),
-                      height: ScreenUtil().setWidth(88),
+                      height: AppTouch.target,
                       child: AppButton(label: s.g_key_159, onPressed: addChain),
                     ),
                   ],

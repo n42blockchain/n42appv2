@@ -127,9 +127,7 @@ Future<bool?> showPhishingWarningDialog(
                         bottomLeft: Radius.circular(AppRadius.md),
                       ),
                       child: Container(
-                        constraints: BoxConstraints(
-                          minHeight: ScreenUtil().setWidth(88),
-                        ),
+                        constraints: BoxConstraints(minHeight: AppTouch.target),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 12,
@@ -159,9 +157,7 @@ Future<bool?> showPhishingWarningDialog(
                         bottomRight: Radius.circular(AppRadius.md),
                       ),
                       child: Container(
-                        constraints: BoxConstraints(
-                          minHeight: ScreenUtil().setWidth(88),
-                        ),
+                        constraints: BoxConstraints(minHeight: AppTouch.target),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 12,

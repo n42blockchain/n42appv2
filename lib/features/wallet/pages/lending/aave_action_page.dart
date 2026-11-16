@@ -6,7 +6,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:web3dart/web3dart.dart' show bytesToHex;
 
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -317,7 +316,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
             const Spacer(),
             SizedBox(
               width: double.infinity,
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: AppButton(
                 label: buttonLabel,
                 onPressed: _submitting ? null : _submit,

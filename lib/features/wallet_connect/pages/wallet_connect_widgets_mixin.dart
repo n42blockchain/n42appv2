@@ -374,7 +374,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   }) {
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(88.0),
+      height: AppTouch.target,
       child: AppButton(label: title, onPressed: onTap, variant: variant),
     );
   }
@@ -383,7 +383,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     final su = ScreenUtil();
     return bottomBar(
       child: Container(
-        height: su.setWidth(88),
+        height: AppTouch.target,
         width: double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(

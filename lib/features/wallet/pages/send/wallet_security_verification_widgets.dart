@@ -165,7 +165,7 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
 
   Widget _buildBottomBar(bool anyEnabled) {
     final su = ScreenUtil();
-    final h88 = su.setWidth(88.0);
+    final h88 = AppTouch.target;
     final pad30 = su.setWidth(30.0);
 
     Color themeColor(String key) => AppThemeUtils.getColorByKey(context, key);

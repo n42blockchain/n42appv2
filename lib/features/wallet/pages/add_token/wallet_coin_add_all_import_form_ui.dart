@@ -42,7 +42,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             borderRadius: BorderRadius.all(Radius.circular(su.setWidth(8.0))),
             color: _formColor(AppThemeKeys.itemBgColor.name),
           ),
-          height: su.setWidth(88.0),
+          height: AppTouch.target,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

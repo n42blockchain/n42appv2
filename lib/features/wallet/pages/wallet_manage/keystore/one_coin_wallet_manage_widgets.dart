@@ -208,7 +208,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     final su = ScreenUtil();
     return Container(
       alignment: Alignment.centerLeft,
-      height: su.setWidth(100.0),
+      height: AppTouch.scaled(100),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -526,7 +526,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           ),
           Divider(height: su.setWidth(1)),
           SizedBox(
-            height: su.setWidth(80),
+            height: AppTouch.scaled(80),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

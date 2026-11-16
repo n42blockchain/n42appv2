@@ -20,8 +20,8 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
               customBorder: const CircleBorder(),
               child: Container(
                 // 88.w≈44dp 命中区（触控红线），图标视觉 44.w 不变
-                height: ScreenUtil().setWidth(88),
-                width: ScreenUtil().setWidth(88),
+                height: AppTouch.target,
+                width: AppTouch.target,
                 alignment: Alignment.center,
                 child: SizedBox(
                   height: ScreenUtil().setWidth(44),
@@ -39,8 +39,8 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
               onTap: queryWidget,
               customBorder: const CircleBorder(),
               child: Container(
-                height: ScreenUtil().setWidth(88),
-                width: ScreenUtil().setWidth(88),
+                height: AppTouch.target,
+                width: AppTouch.target,
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(right: AppSpacing.space4),
                 child: Image.asset(

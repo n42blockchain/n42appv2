@@ -138,7 +138,7 @@ class _ShareMiningState extends State<ShareMining> {
                 ),
                 SafeArea(
                   child: Container(
-                    height: ScreenUtil().setWidth(88),
+                    height: AppTouch.target,
                     width: double.infinity,
                     margin: EdgeInsets.symmetric(vertical: AppSpacing.space8),
                     child: AppButton(

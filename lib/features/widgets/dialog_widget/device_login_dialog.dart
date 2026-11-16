@@ -71,7 +71,7 @@ Future<bool?> deviceLoginDialog(
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           // 双按钮: "知道了" + "修改密码"
           SizedBox(
-            height: ScreenUtil().setWidth(80),
+            height: AppTouch.scaled(80),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

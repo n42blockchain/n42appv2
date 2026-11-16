@@ -428,7 +428,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   Widget _buildSaveButton(BuildContext context, Color blueColor) {
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       child: ElevatedButton(
         onPressed: _saving ? null : _save,
         style: ElevatedButton.styleFrom(
@@ -457,7 +457,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   Widget _buildRemoveButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(76),
+      height: AppTouch.scaled(76),
       child: TextButton(
         onPressed: _saving ? null : _remove,
         style: TextButton.styleFrom(

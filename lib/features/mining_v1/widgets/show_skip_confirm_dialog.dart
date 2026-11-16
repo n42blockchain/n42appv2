@@ -71,7 +71,7 @@ class SkipDialogView extends StatelessWidget {
             ),
             SizedBox(height: AppSpacing.space12),
             SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

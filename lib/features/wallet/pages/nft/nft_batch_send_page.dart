@@ -330,7 +330,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
 
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       child: ElevatedButton(
         onPressed: !canSend
             ? null

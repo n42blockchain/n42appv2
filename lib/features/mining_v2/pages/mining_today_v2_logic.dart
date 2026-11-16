@@ -120,7 +120,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                         }
                       },
                       child: Container(
-                        height: ScreenUtil().setWidth(80.0),
+                        height: AppTouch.scaled(80),
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [

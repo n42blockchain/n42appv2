@@ -27,10 +27,10 @@ Widget buildCoinInfoHeader(
   final textColor = _tc(context, AppThemeKeys.mainTextColor.name);
   final iconSize = ScreenUtil().setWidth(44);
   // >=88.w（44dp 触控红线）
-  final touchSize = ScreenUtil().setWidth(88);
+  final touchSize = AppTouch.target;
 
   return SizedBox(
-    height: ScreenUtil().setWidth(100),
+    height: AppTouch.scaled(100),
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
@@ -261,9 +261,7 @@ Widget buildPeriodSelector(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
                 // >=88.w 命中高（44dp 触控红线，高频交互）
-                constraints: BoxConstraints(
-                  minHeight: ScreenUtil().setWidth(88),
-                ),
+                constraints: BoxConstraints(minHeight: AppTouch.target),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: selected

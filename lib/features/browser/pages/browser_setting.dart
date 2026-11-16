@@ -82,7 +82,7 @@ class _BrowserSettingState extends State<BrowserSetting> {
                 InkWell(
                   onTap: () => widget.webViewController!.clearLocalStorage(),
                   child: SizedBox(
-                    height: ScreenUtil().setWidth(100),
+                    height: AppTouch.scaled(100),
                     width: double.infinity,
                     child: Row(
                       children: [

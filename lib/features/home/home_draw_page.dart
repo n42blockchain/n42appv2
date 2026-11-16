@@ -88,8 +88,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     const Spacer(),
                     Container(
                       // 88.w≈44dp（触控红线；此前 44.w 仅 22dp）
-                      width: ScreenUtil().setWidth(88),
-                      height: ScreenUtil().setWidth(88),
+                      width: AppTouch.target,
+                      height: AppTouch.target,
                       decoration: BoxDecoration(
                         color: AppColorTokens.of(context).bgSurface,
                         shape: BoxShape.circle,
@@ -287,7 +287,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
             horizontal: AppSpacing.space4,
             vertical: AppSpacing.space2,
           ),
-          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(96)),
+          constraints: BoxConstraints(minHeight: AppTouch.scaled(96)),
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(borderRadius: AppRadius.brMd),

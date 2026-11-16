@@ -259,8 +259,8 @@ class _EmptyState extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 88.w,
-            height: 88.w,
+            width: AppTouch.target,
+            height: AppTouch.target,
             decoration: BoxDecoration(
               color: subColor.withAlpha(14),
               shape: BoxShape.circle,

@@ -265,7 +265,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
 
   Widget _buildCreateButton(BuildContext context) {
     return SizedBox(
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       child: ElevatedButton(
         onPressed: _creating ? null : _onCreate,
         style: ElevatedButton.styleFrom(

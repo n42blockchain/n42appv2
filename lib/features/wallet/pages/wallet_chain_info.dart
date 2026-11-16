@@ -441,7 +441,6 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       return IntrinsicHeight(child: Center(child: EmptyView()));
     }
 
-    final su = ScreenUtil();
     final cm = widget.coinModel;
     final isBtc = cm.config.blockchainType == BlockchainType.Bitcoin.name;
 
@@ -462,7 +461,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               );
             },
             child: Container(
-              height: su.setWidth(80.0),
+              height: AppTouch.scaled(80),
               width: double.infinity,
               alignment: Alignment.center,
               child: Text(

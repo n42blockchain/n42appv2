@@ -333,7 +333,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
           SizedBox(width: su.setWidth(16)),
           Expanded(
             child: SizedBox(
-              height: su.setWidth(80),
+              height: AppTouch.scaled(80),
               child: AppButton(
                 label: s.g_key_token_discovery_add_selected(selectedCount),
                 expand: false,

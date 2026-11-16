@@ -196,7 +196,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       child: containerStyle1(
         context,
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-        height: ScreenUtil().setWidth(88.0),
+        height: AppTouch.target,
         child: Row(
           children: [
             (coinType == CoinType.N.name)

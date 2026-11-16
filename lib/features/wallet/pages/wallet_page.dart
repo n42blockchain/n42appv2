@@ -653,7 +653,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   bottom: ScreenUtil().setWidth(180.0),
                   left: 0,
                   right: 0,
-                  height: ScreenUtil().setWidth(88.0),
+                  height: AppTouch.target,
                   child: Visibility(
                     visible: _showAddTokenButton && !_isTokenSearchVisible,
                     child: Container(

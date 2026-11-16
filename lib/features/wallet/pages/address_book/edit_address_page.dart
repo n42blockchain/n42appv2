@@ -204,7 +204,7 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
       child: containerStyle1(
         context,
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-        height: ScreenUtil().setWidth(88.0),
+        height: AppTouch.target,
         child: Row(
           children: [
             SizedBox(
@@ -402,7 +402,7 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
         }
       },
       child: Container(
-        height: ScreenUtil().setWidth(80.0),
+        height: AppTouch.scaled(80),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).danger,

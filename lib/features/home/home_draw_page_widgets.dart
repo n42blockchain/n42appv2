@@ -55,8 +55,8 @@ extension on _HomeDrawPageState {
                 child: InkWell(
                   onTap: _openChat,
                   child: Container(
-                    width: ScreenUtil().setWidth(88),
-                    height: ScreenUtil().setWidth(88),
+                    width: AppTouch.target,
+                    height: AppTouch.target,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
                         ScreenUtil().setWidth(36),
@@ -147,9 +147,7 @@ extension on _HomeDrawPageState {
               borderRadius: AppRadius.brXl,
               child: Container(
                 // >=88.w（44dp 触控红线，§2.1 按钮标准）
-                constraints: BoxConstraints(
-                  minHeight: ScreenUtil().setWidth(88),
-                ),
+                constraints: BoxConstraints(minHeight: AppTouch.target),
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 decoration: BoxDecoration(
@@ -224,7 +222,7 @@ extension on _HomeDrawPageState {
           },
           borderRadius: AppRadius.brMd,
           child: Container(
-            constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+            constraints: BoxConstraints(minHeight: AppTouch.target),
             padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
             alignment: Alignment.center,
             decoration: BoxDecoration(

@@ -53,7 +53,7 @@ Future<void> alertWidget(BuildContext context) async {
                     borderRadius: AppRadius.brSm,
                   ),
                   margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-                  height: ScreenUtil().setWidth(88),
+                  height: AppTouch.target,
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(

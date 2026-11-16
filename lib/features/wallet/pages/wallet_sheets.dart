@@ -150,7 +150,7 @@ class _WalletAddressList extends StatelessWidget {
             },
             child: Container(
               // 列表项最小可点高 ≥48dp（§2.2）
-              height: ScreenUtil().setWidth(96.0),
+              height: AppTouch.scaled(96),
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
@@ -286,7 +286,7 @@ class _AddTokenMenuItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: ScreenUtil().setWidth(88),
+        height: AppTouch.target,
         width: double.infinity,
         alignment: Alignment.center,
         child: Text(
@@ -397,7 +397,7 @@ class BackupReminderBanner extends StatelessWidget {
             },
             child: Container(
               // ≥88.w 命中区（44dp 触控红线）
-              constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+              constraints: BoxConstraints(minHeight: AppTouch.target),
               alignment: Alignment.centerRight,
               child: Text(
                 S.of(context).g_key_wallet_c36,
@@ -430,8 +430,8 @@ class AddTokenFloatingIcon extends StatelessWidget {
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Container(
-          width: ScreenUtil().setWidth(88.0),
-          height: ScreenUtil().setWidth(88.0),
+          width: AppTouch.target,
+          height: AppTouch.target,
           alignment: Alignment.center,
           child: Container(
             width: ScreenUtil().setWidth(56.0),

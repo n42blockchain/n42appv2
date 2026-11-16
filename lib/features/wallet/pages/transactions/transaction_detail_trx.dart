@@ -259,8 +259,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         InkWell(
           onTap: init,
           child: Container(
-            height: ScreenUtil().setWidth(80),
-            width: ScreenUtil().setWidth(80),
+            height: AppTouch.scaled(80),
+            width: AppTouch.scaled(80),
             padding: EdgeInsets.all(AppSpacing.space2),
             child: Icon(Icons.refresh, color: AppColorTokens.of(context).brand),
           ),

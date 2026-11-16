@@ -139,7 +139,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
             ),
             child: SizedBox(
               width: double.infinity,
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: AppButton(
                 label: S.of(context).g_key_78,
                 onPressed: _confirm,

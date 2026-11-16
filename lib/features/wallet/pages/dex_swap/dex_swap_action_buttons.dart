@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_confirm.dart';
@@ -85,7 +84,7 @@ class DexActionButtons extends StatelessWidget {
     required bool isLoading,
   }) {
     return SizedBox(
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       width: double.infinity,
       child: AppButton(
         label: label,

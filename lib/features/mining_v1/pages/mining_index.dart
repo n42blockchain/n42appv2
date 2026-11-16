@@ -62,7 +62,7 @@ class _MiningIndexState extends State<MiningIndex>
               titleChild: InkWell(
                 onTap: () => showChangeAddress(),
                 child: Container(
-                  height: ScreenUtil().setWidth(80),
+                  height: AppTouch.scaled(80),
                   alignment: Alignment.center,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -237,7 +237,7 @@ class _MiningIndexState extends State<MiningIndex>
                         }
                       },
                       child: Container(
-                        height: ScreenUtil().setWidth(80.0),
+                        height: AppTouch.scaled(80),
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [

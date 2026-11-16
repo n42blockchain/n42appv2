@@ -72,7 +72,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
-            height: ScreenUtil().setWidth(88.0),
+            height: AppTouch.target,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

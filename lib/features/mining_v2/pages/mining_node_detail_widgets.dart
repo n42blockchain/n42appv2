@@ -229,7 +229,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
     if (mpValue.showRedemption == true && mpValue.redeem == false) {
       final isLoading = mpValue.exitDepositLoad == Load.loading;
       return SizedBox(
-        height: ScreenUtil().setWidth(88),
+        height: AppTouch.target,
         child: AppButton(
           label: S.of(context).g_mining_key_77,
           loading: isLoading,

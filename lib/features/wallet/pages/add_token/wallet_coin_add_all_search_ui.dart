@@ -300,8 +300,8 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     if (rowValue['edit'] == true) {
       return Container(
         padding: EdgeInsets.all(su.setWidth(19.0)),
-        width: su.setWidth(78.0),
-        height: su.setWidth(78.0),
+        width: AppTouch.scaled(78),
+        height: AppTouch.scaled(78),
         child: CircularProgressIndicator(),
       );
     }
@@ -320,8 +320,8 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
       },
       child: Container(
         padding: EdgeInsets.all(su.setWidth(19.0)),
-        width: su.setWidth(78.0),
-        height: su.setWidth(78.0),
+        width: AppTouch.scaled(78),
+        height: AppTouch.scaled(78),
         child: Icon(isAdded ? Icons.remove : Icons.add, color: buttonBg),
       ),
     );

@@ -146,7 +146,7 @@ Future<void> showAddressPickerSheet(
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: ScreenUtil().setWidth(88),
+        height: AppTouch.target,
         width: double.infinity,
         child: Row(
           children: [

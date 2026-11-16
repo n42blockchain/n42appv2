@@ -160,7 +160,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
   Widget _buildMainToolbar(BrowserProvider bValue) {
     return Container(
       alignment: Alignment.center,
-      height: ScreenUtil().setWidth(100.0),
+      height: AppTouch.scaled(100),
       child: Row(
         children: [
           _toolbarAssetButton("close", onTap: () => Navigator.pop(context)),

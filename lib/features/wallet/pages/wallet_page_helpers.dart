@@ -47,7 +47,7 @@ class WalletPinIconButton extends StatelessWidget {
     required this.onTap,
   });
 
-  static double get touchExtent => max(44, ScreenUtil().setWidth(88));
+  static double get touchExtent => AppTouch.target;
 
   final bool isPinned;
   final VoidCallback onTap;

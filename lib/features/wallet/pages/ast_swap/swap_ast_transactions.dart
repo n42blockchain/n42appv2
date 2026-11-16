@@ -119,7 +119,7 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
               ),
               child: Container(
                 // >=96.w（48dp 列表项最小可点高，§2.2）
-                height: ScreenUtil().setWidth(96),
+                height: AppTouch.scaled(96),
                 width: double.infinity,
                 margin: EdgeInsets.only(bottom: AppSpacing.space12),
                 child: Column(

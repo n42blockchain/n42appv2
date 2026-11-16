@@ -315,7 +315,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             Expanded(
                               child: SizedBox(
                                 width: double.infinity,
-                                height: ScreenUtil().setWidth(88.0),
+                                height: AppTouch.target,
                                 child: AppButton(
                                   label: S.of(context).g_key_79,
                                   variant: AppButtonVariant.secondary,
@@ -328,7 +328,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                             Expanded(
                               child: SizedBox(
                                 width: double.infinity,
-                                height: ScreenUtil().setWidth(88.0),
+                                height: AppTouch.target,
                                 child: AppButton(
                                   label: S.of(context).g_key_t_31,
                                   onPressed: () async {

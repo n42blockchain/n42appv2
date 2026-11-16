@@ -88,7 +88,7 @@ extension on _SecuritySettingState {
           : AppThemeKeys.itemSubtitleTextColor.name,
     );
     return Container(
-      height: ScreenUtil().setWidth(88.0),
+      height: AppTouch.target,
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [

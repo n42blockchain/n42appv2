@@ -59,7 +59,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
   Widget _stepIndicator() {
     return Container(
       height: ScreenUtil().setWidth(10.0),
-      width: ScreenUtil().setWidth(88.0),
+      width: AppTouch.target,
       decoration: BoxDecoration(
         borderRadius: AppRadius.brSm,
         color: AppColorTokens.of(context).brand,

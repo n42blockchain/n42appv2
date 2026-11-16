@@ -301,8 +301,8 @@ class _DiscoveryBanner extends StatelessWidget {
                   customBorder: const CircleBorder(),
                   child: SizedBox(
                     // >=88.w 命中区（44dp 触控红线）
-                    width: ScreenUtil().setWidth(88),
-                    height: ScreenUtil().setWidth(88),
+                    width: AppTouch.target,
+                    height: AppTouch.target,
                     child: Icon(
                       Icons.close_rounded,
                       color: blueColor.withValues(alpha: 0.70),
@@ -416,8 +416,8 @@ class _AllHiddenHint extends StatelessWidget {
               borderRadius: AppRadius.brSm,
               child: Container(
                 constraints: BoxConstraints(
-                  minHeight: ScreenUtil().setWidth(88),
-                  minWidth: ScreenUtil().setWidth(88),
+                  minHeight: AppTouch.target,
+                  minWidth: AppTouch.target,
                 ),
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),

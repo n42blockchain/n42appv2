@@ -322,7 +322,7 @@ class _WalletConnectAlertWidgetState
         children: [
           Expanded(
             child: SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: AppButton(
                 label: cancelLabel,
                 variant: AppButtonVariant.secondary,
@@ -333,7 +333,7 @@ class _WalletConnectAlertWidgetState
           SizedBox(width: AppSpacing.space4),
           Expanded(
             child: SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: AppButton(label: confirmLabel, onPressed: onConfirm),
             ),
           ),

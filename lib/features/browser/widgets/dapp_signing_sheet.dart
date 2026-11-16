@@ -177,7 +177,7 @@ class DAppSigningSheet extends StatelessWidget {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: ScreenUtil().setWidth(88),
+                      height: AppTouch.target,
                       child: AppButton(
                         label: s.g_key_79,
                         variant: AppButtonVariant.secondary,
@@ -188,7 +188,7 @@ class DAppSigningSheet extends StatelessWidget {
                   SizedBox(width: AppSpacing.space4),
                   Expanded(
                     child: SizedBox(
-                      height: ScreenUtil().setWidth(88),
+                      height: AppTouch.target,
                       child: AppButton(
                         label: s.g_key_78,
                         onPressed: () => Navigator.pop(context, true),
