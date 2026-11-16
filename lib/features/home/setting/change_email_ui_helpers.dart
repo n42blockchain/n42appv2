@@ -89,7 +89,7 @@ Widget changeEmailPrimaryButton({
     child: ElevatedButton(
       onPressed: loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: accentColor,
+        backgroundColor: AppContrast.fillForWhiteText(accentColor),
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brXl),
       ),

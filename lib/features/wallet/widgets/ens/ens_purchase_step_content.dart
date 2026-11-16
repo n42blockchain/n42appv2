@@ -359,7 +359,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_swap_key_6,
           onPressed: onRetry,
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandFill,
         );
 
       default:

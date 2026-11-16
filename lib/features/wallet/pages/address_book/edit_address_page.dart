@@ -303,7 +303,7 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(

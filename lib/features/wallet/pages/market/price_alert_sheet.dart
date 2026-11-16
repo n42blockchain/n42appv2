@@ -357,7 +357,9 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                     child: ElevatedButton(
                       onPressed: _saving ? null : _save,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: accentColor,
+                        backgroundColor: AppContrast.fillForWhiteText(
+                          accentColor,
+                        ),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: AppRadius.brXl,

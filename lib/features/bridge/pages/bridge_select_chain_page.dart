@@ -145,7 +145,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
       width: ScreenUtil().setWidth(48),
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
-        color: AppColorTokens.of(context).brand,
+        color: AppColorTokens.of(context).brandFill,
         shape: BoxShape.circle,
       ),
       child: Center(

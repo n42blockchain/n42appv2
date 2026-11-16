@@ -269,7 +269,9 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                       ElevatedButton(
                         onPressed: _loading ? null : _save,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: accentColor,
+                          backgroundColor: AppContrast.fillForWhiteText(
+                            accentColor,
+                          ),
                           foregroundColor: Colors.white,
                           // 96.h≈48dp（44dp 触控红线）
                           minimumSize: Size(160.w, 96.h),

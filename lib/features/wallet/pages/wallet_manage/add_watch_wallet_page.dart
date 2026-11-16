@@ -191,7 +191,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               child: ElevatedButton(
                 onPressed: _loading ? null : _submit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: blueColor,
+                  backgroundColor: AppContrast.fillForWhiteText(blueColor),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: _loading

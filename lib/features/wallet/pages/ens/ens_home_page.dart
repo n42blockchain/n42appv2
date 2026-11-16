@@ -57,7 +57,7 @@ class _EnsHomePageState extends State<EnsHomePage>
       body: RefreshIndicator(onRefresh: loadOwnedNames, child: _buildContent()),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _hasWalletAddress ? navigateToSearch : _showUnsupportedSnack,
-        backgroundColor: AppColorTokens.of(context).brand,
+        backgroundColor: AppColorTokens.of(context).brandFill,
         icon: const Icon(Icons.search, color: Colors.white),
         label: Text(
           S.of(context).g_key_ens_search,

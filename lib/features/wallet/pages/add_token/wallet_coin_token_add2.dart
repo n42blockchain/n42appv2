@@ -288,7 +288,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
               height: _sw(60.0),
               decoration: BoxDecoration(
-                color: _themeColor(AppThemeKeys.mainButtonBgColor),
+                color: AppColorTokens.of(context).brandFill,
                 borderRadius: BorderRadius.circular(_sw(60.0)),
               ),
               alignment: Alignment.center,

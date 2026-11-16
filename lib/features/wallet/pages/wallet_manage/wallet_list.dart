@@ -95,7 +95,7 @@ class _WalletListState extends ConsumerState<WalletList>
                 ),
                 selected: _selectedTag == null,
                 onSelected: (_) => setState(() => _selectedTag = null),
-                selectedColor: AppColorTokens.of(context).brand,
+                selectedColor: AppColorTokens.of(context).brandFill,
                 labelStyle: AppTypography.caption.copyWith(
                   color: _selectedTag == null ? Colors.white : null,
                 ),
@@ -111,7 +111,7 @@ class _WalletListState extends ConsumerState<WalletList>
                   label: Text(tag, style: AppTypography.caption),
                   selected: _selectedTag == tag,
                   onSelected: (_) => setState(() => _selectedTag = tag),
-                  selectedColor: AppColorTokens.of(context).brand,
+                  selectedColor: AppColorTokens.of(context).brandFill,
                   labelStyle: AppTypography.caption.copyWith(
                     color: _selectedTag == tag ? Colors.white : null,
                   ),

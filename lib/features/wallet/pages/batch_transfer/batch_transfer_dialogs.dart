@@ -94,7 +94,7 @@ class BatchConfirmDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColorTokens.of(context).brand,
+            backgroundColor: AppColorTokens.of(context).brandFill,
           ),
           child: Text(
             S.of(context).g_key_78,

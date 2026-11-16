@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../presentation/themes/theme_adapter.dart';
+import 'app_contrast.dart';
 
 /// 语义颜色令牌。见 `docs/DESIGN_SYSTEM.md` §1.1 / §1.2。
 ///
@@ -50,6 +51,15 @@ class AppColorTokens {
   // mainBlueColor 经 colorScheme.primary 解析，自动反映用户自定义 accent。
   Color get brand => _key(AppThemeKeys.mainBlueColor);
   Color get brandSubtle => brand.withValues(alpha: 0.12);
+
+  /// Brand shade for fills that carry white text (filled buttons, the asset
+  /// card): same hue, darkened only until white reaches 4.5:1. System blue
+  /// gives about 4.0:1 (light) / 3.65:1 (dark) with white; this gives 4.5:1+.
+  /// Keep [brand] itself for icons, outlines and other accents.
+  Color get brandFill => AppContrast.fillForWhiteText(brand);
+
+  /// Foreground on [brandFill].
+  Color get onBrandFill => const Color(0xFFFFFFFF);
 
   // ── 语义（复用现有表，缺失者补常量）──
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677

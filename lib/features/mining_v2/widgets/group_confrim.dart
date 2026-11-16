@@ -121,7 +121,7 @@ class GroupConfirm extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColorTokens.of(context).brand,
+                          color: AppColorTokens.of(context).brandFill,
                           borderRadius: AppRadius.brSm,
                         ),
                         child: Center(

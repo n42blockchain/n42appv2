@@ -173,10 +173,7 @@ class _BackupTwoState extends State<BackupTwo> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainButtonBgColor.name,
-            ),
+            color: AppColorTokens.of(context).brandFill,
             borderRadius: AppRadius.brSm,
           ),
           child: Center(

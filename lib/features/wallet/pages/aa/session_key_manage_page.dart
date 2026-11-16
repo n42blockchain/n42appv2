@@ -169,7 +169,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _createNewSessionKey,
-        backgroundColor: blueColor,
+        backgroundColor: AppContrast.fillForWhiteText(blueColor),
         icon: const Icon(Icons.add, color: Colors.white),
         label: Text(
           s.g_key_aa_create_session,

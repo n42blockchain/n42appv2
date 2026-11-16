@@ -288,7 +288,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
               padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
               height: su.setWidth(60.0),
               decoration: BoxDecoration(
-                color: _color(AppThemeKeys.mainButtonBgColor),
+                color: AppColorTokens.of(context).brandFill,
                 borderRadius: BorderRadius.circular(su.setWidth(60.0)),
               ),
               alignment: Alignment.center,

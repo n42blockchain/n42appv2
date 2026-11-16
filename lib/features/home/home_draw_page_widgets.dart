@@ -153,7 +153,7 @@ extension on _HomeDrawPageState {
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 decoration: BoxDecoration(
-                  color: AppColorTokens.of(context).brand,
+                  color: AppColorTokens.of(context).brandFill,
                   borderRadius: AppRadius.brXl,
                 ),
                 child: Row(

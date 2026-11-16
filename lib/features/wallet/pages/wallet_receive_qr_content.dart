@@ -166,7 +166,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             icon: Icon(Icons.copy_outlined, size: iconSize),
             label: Text(S.of(context).g_key_119),
             style: ElevatedButton.styleFrom(
-              backgroundColor: blueColor,
+              backgroundColor: AppContrast.fillForWhiteText(blueColor),
               foregroundColor: Colors.white,
               padding: btnPadding,
               shape: RoundedRectangleBorder(borderRadius: btnRadius),

@@ -26,7 +26,7 @@ class DexChainChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnBg = _dexColor(context, AppThemeKeys.mainButtonBgColor);
+    final btnBg = AppColorTokens.of(context).brandFill;
     final itemBg = _dexColor(context, AppThemeKeys.itemBgColor);
     final btnText = _dexColor(context, AppThemeKeys.mainButtonTextColor);
     final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
@@ -68,7 +68,7 @@ class DexSlippageRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnBg = _dexColor(context, AppThemeKeys.mainButtonBgColor);
+    final btnBg = AppColorTokens.of(context).brandFill;
     final itemBg = _dexColor(context, AppThemeKeys.itemBgColor);
     final btnText = _dexColor(context, AppThemeKeys.mainButtonTextColor);
     final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
@@ -131,7 +131,7 @@ class DexSwapArrow extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
-            color: _dexColor(context, AppThemeKeys.mainButtonBgColor),
+            color: AppColorTokens.of(context).brandFill,
             shape: BoxShape.circle,
           ),
           child: Icon(

@@ -215,7 +215,7 @@ class _NftSendPageState extends State<NftSendPage> {
                   child: ElevatedButton(
                     onPressed: _sending ? null : _send,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: blueColor,
+                      backgroundColor: AppContrast.fillForWhiteText(blueColor),
                       shape: RoundedRectangleBorder(
                         borderRadius: AppRadius.brMd,
                       ),

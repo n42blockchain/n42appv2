@@ -295,7 +295,7 @@ class _MaxButton extends StatelessWidget {
         height: su.setWidth(60.0),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: AppRadius.brPill,
         ),
         child: Center(

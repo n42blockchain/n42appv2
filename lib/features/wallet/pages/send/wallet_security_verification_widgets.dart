@@ -60,10 +60,7 @@ class _PillButton extends StatelessWidget {
           horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainButtonBgColor.name,
-          ),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: AppRadius.brXl,
         ),
         child: Text(

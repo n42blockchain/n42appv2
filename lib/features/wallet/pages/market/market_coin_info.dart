@@ -442,7 +442,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
           ? FloatingActionButton(
               onPressed: _openTradeSheet,
               tooltip: S.of(context).g_pnl_add_trade,
-              backgroundColor: AppColorTokens.of(context).brand,
+              backgroundColor: AppColorTokens.of(context).brandFill,
               child: const Icon(Icons.add, color: Colors.white),
             )
           : null,

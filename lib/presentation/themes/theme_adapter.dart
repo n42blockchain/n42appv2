@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../core/design_system/app_typography.dart';
+import '../../core/design_system/app_contrast.dart';
 import '../../core/design_system/app_radius.dart';
 
 /// Theme Adapter
@@ -184,6 +185,9 @@ class ThemeAdapter {
         ? (dark ? color.darkColor : color.color)
         : color;
     final primary = apple ? resolve(CupertinoColors.systemBlue) : accent;
+    // Filled buttons carry white labels: use the deeper brand shade that
+    // reaches 4.5:1 with white (system blue alone is ~4.0:1 / ~3.65:1).
+    final primaryFill = AppContrast.fillForWhiteText(primary);
     final colors = AppThemeUtils.palette(base.brightness, accent);
     final foreground = colors[AppThemeKeys.mainTextColor.name]!;
     final surface = colors[AppThemeKeys.itemBgColor.name]!;
@@ -244,15 +248,15 @@ class ThemeAdapter {
         style: button.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.disabled)
-                ? primary.withValues(alpha: 0.3)
-                : primary,
+                ? primaryFill.withValues(alpha: 0.3)
+                : primaryFill,
           ),
           foregroundColor: const WidgetStatePropertyAll(Colors.white),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: button.copyWith(
-          backgroundColor: WidgetStatePropertyAll(primary),
+          backgroundColor: WidgetStatePropertyAll(primaryFill),
           foregroundColor: const WidgetStatePropertyAll(Colors.white),
           elevation: const WidgetStatePropertyAll(0),
         ),

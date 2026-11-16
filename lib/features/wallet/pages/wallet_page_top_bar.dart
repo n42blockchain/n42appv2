@@ -272,7 +272,7 @@ class _WalletConnectButton extends ConsumerWidget {
                       child: Container(
                         padding: EdgeInsets.all(AppSpacing.space2),
                         decoration: BoxDecoration(
-                          color: AppColorTokens.of(context).brand,
+                          color: AppColorTokens.of(context).brandFill,
                           shape: BoxShape.circle,
                         ),
                         constraints: BoxConstraints(

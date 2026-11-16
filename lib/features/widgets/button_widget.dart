@@ -45,10 +45,7 @@ Widget buttonStyle2(BuildContext context, VoidCallback? onTap, String title) {
     onPressed: onTap,
     style: ButtonStyle(
       backgroundColor: ButtonStyleButton.allOrNull<Color>(
-        AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainButtonBgColor.name,
-        ),
+        AppColorTokens.of(context).brandFill,
       ),
       shape: ButtonStyleButton.allOrNull<RoundedRectangleBorder>(
         RoundedRectangleBorder(borderRadius: AppRadius.brMd),

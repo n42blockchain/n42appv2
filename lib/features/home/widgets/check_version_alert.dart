@@ -128,7 +128,7 @@ class CheckVersionAlert extends StatelessWidget {
                 height: ScreenUtil().setWidth(80),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: accentColor,
+                    backgroundColor: AppContrast.fillForWhiteText(accentColor),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: AppRadius.brXl),
                     elevation: 0,

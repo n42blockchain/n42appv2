@@ -432,7 +432,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       child: ElevatedButton(
         onPressed: _saving ? null : _save,
         style: ElevatedButton.styleFrom(
-          backgroundColor: blueColor,
+          backgroundColor: AppContrast.fillForWhiteText(blueColor),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
           disabledBackgroundColor: blueColor.withAlpha(120),

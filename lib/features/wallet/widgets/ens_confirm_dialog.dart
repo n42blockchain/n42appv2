@@ -217,7 +217,7 @@ class EnsConfirmDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: blueColor,
+            backgroundColor: AppContrast.fillForWhiteText(blueColor),
             foregroundColor: Colors.white,
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.space6,

@@ -153,10 +153,7 @@ class WalletChainInfoBoard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainButtonBgColor.name,
-          ),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: AppRadius.brXl,
         ),
         child: FittedBox(

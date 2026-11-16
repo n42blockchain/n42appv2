@@ -192,7 +192,7 @@ class _CreateThreeState extends State<CreateThree> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: _tc(AppThemeKeys.mainButtonBgColor.name),
+                color: AppColorTokens.of(context).brandFill,
                 borderRadius: borderRadius,
               ),
               child: Center(

@@ -262,7 +262,7 @@ mixin BridgeHomeWidgetsMixin
           icon: Container(
             padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
-              color: AppColorTokens.of(context).brand,
+              color: AppColorTokens.of(context).brandFill,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -301,18 +301,12 @@ mixin BridgeHomeWidgetsMixin
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                     decoration: BoxDecoration(
                       color: selected
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainButtonBgColor.name,
-                            )
+                          ? AppColorTokens.of(context).brandFill
                           : AppColorTokens.of(context).bgSurface,
                       borderRadius: AppRadius.brSm,
                       border: Border.all(
                         color: selected
-                            ? AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainButtonBgColor.name,
-                              )
+                            ? AppColorTokens.of(context).brandFill
                             : AppColorTokens.of(context).border,
                       ),
                     ),

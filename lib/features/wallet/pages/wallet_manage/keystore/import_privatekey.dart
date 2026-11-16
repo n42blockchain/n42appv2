@@ -205,7 +205,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: AppColorTokens.of(context).brand,
+                              color: AppColorTokens.of(context).brandFill,
                               borderRadius: AppRadius.brMd,
                             ),
                             child: Text(

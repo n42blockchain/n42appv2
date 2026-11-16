@@ -338,7 +338,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
             ? _finish
             : () => _send(retryFailedOnly: _failedCount > 0),
         style: ElevatedButton.styleFrom(
-          backgroundColor: tokens.brand,
+          backgroundColor: tokens.brandFill,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: _sending

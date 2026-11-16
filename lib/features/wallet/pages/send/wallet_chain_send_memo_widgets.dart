@@ -150,7 +150,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                       horizontal: su.setWidth(20.0),
                     ),
                     decoration: BoxDecoration(
-                      color: AppColorTokens.of(context).brand,
+                      color: AppColorTokens.of(context).brandFill,
                       borderRadius: BorderRadius.all(
                         Radius.circular(su.setWidth(60.0)),
                       ),

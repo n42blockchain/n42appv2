@@ -70,7 +70,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
           children: [
             SlidableAction(
               onPressed: (_) => _onManage(info, index),
-              backgroundColor: AppColorTokens.of(context).brand,
+              backgroundColor: AppColorTokens.of(context).brandFill,
               foregroundColor: Colors.white,
               icon: Icons.edit_outlined,
               label: S.of(context).g_key_wallet_manage,

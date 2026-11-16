@@ -233,7 +233,7 @@ class _DexLimitOrderFormState extends State<_LimitOrderForm> {
             child: ElevatedButton(
               onPressed: _canSubmit ? _submit : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColorTokens.of(context).brand,
+                backgroundColor: AppColorTokens.of(context).brandFill,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -368,7 +368,7 @@ class _DexLimitOrderFormState extends State<_LimitOrderForm> {
               onSelected: _submitLoad == Load.loading
                   ? null
                   : (_) => setState(() => _expiresIn = e.value),
-              selectedColor: AppColorTokens.of(context).brand,
+              selectedColor: AppColorTokens.of(context).brandFill,
               labelStyle: AppTypography.caption.copyWith(
                 color: _expiresIn == e.value ? Colors.white : null,
               ),

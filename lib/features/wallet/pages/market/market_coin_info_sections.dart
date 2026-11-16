@@ -266,12 +266,9 @@ Widget buildPeriodSelector(
                 ),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: _tc(
-                    context,
-                    selected
-                        ? AppThemeKeys.mainButtonBgColor.name
-                        : AppThemeKeys.itemBgColor.name,
-                  ),
+                  color: selected
+                      ? AppColorTokens.of(context).brandFill
+                      : _tc(context, AppThemeKeys.itemBgColor.name),
                   borderRadius: AppRadius.brSm,
                 ),
                 child: Text(

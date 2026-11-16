@@ -246,7 +246,7 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
                     vertical: su.setWidth(6),
                   ),
                   decoration: BoxDecoration(
-                    color: tokens.brand,
+                    color: tokens.brandFill,
                     borderRadius: BorderRadius.circular(su.setWidth(8)),
                   ),
                   child: Text(

@@ -396,10 +396,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
                 height: ScreenUtil().setWidth(60.0),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainButtonBgColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brandFill,
                   borderRadius: BorderRadius.all(
                     Radius.circular(ScreenUtil().setWidth(60.0)),
                   ),

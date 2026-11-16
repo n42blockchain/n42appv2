@@ -122,7 +122,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreate,
-        backgroundColor: AppColorTokens.of(context).brand,
+        backgroundColor: AppColorTokens.of(context).brandFill,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

@@ -49,10 +49,7 @@ Future<void> alertWidget(BuildContext context) async {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainButtonBgColor.name,
-                    ),
+                    color: AppColorTokens.of(context).brandFill,
                     borderRadius: AppRadius.brSm,
                   ),
                   margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),

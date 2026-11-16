@@ -181,7 +181,7 @@ class _AAHomePageState extends State<AAHomePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: navigateToCreateAccount,
-        backgroundColor: AppColorTokens.of(context).brand,
+        backgroundColor: AppColorTokens.of(context).brandFill,
         icon: const Icon(Icons.add, color: Colors.white),
         label: Text(
           S.of(context).g_key_aa_create_account,

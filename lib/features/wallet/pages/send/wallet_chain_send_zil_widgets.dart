@@ -121,7 +121,7 @@ mixin _ZilSendWidgetsMixin on _ZilSendLogicMixin {
                       horizontal: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColorTokens.of(context).brand,
+                      color: AppColorTokens.of(context).brandFill,
                       borderRadius: BorderRadius.all(
                         Radius.circular(ScreenUtil().setWidth(60.0)),
                       ),

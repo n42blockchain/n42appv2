@@ -406,7 +406,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             icon: const Icon(Icons.search, size: 20),
             label: Text(S.of(context).g_key_ens_search_register),
             style: ElevatedButton.styleFrom(
-              backgroundColor: blueColor,
+              backgroundColor: AppContrast.fillForWhiteText(blueColor),
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
                 horizontal: AppSpacing.space6,

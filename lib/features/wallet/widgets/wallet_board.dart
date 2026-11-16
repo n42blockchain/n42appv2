@@ -7,6 +7,9 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+/// White overlay of the card's action pills.
+const double _actionPillAlpha = 0.09;
+
 class WalletBoard extends StatefulWidget {
   final double accountPrice;
   final String? walletName;
@@ -68,8 +71,13 @@ class _WalletBoardState extends State<WalletBoard> {
         vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
-        // Follow the system blue or the user's selected accent.
-        color: AppColorTokens.of(context).brand,
+        // Follow the system blue or the user's selected accent, deepened so
+        // white labels on the card and on its 9% white action pills reach
+        // 4.5:1 (plain system blue: ~4.0:1 light / ~3.65:1 dark).
+        color: AppContrast.fillForWhiteText(
+          AppColorTokens.of(context).brand,
+          whiteOverlay: _actionPillAlpha,
+        ),
         borderRadius: AppRadius.brXl,
         boxShadow: [
           BoxShadow(
@@ -237,7 +245,9 @@ class _WalletBoardState extends State<WalletBoard> {
             vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
-            color: AppColorTokens.onOverlayPrimary.withValues(alpha: 0.09),
+            color: AppColorTokens.onOverlayPrimary.withValues(
+              alpha: _actionPillAlpha,
+            ),
             borderRadius: AppRadius.brMd,
             border: Border.all(color: AppColorTokens.onOverlayBorder),
           ),
