@@ -117,9 +117,8 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
     'device protected image and payment detail callbacks obey state',
     (tester) async {
       final policy = _Policy();
-      when(
-        () => policy.shouldAutoDownload(AutoDownloadMediaType.image),
-      ).thenAnswer((_) async => false);
+      when(() => policy.shouldAutoDownload(AutoDownloadMediaType.image))
+          .thenAnswer((_) async => false);
       var viewed = 0;
       var details = 0;
       Widget page({bool consumed = false}) => Scaffold(
@@ -182,9 +181,8 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
       tester.testTextInput.register();
       addTearDown(tester.testTextInput.unregister);
       final repository = _AuthRepository();
-      when(
-        () => repository.loginStateStream,
-      ).thenAnswer((_) => const Stream<bool>.empty());
+      when(() => repository.loginStateStream)
+          .thenAnswer((_) => const Stream<bool>.empty());
       when(
         () => repository.register(
           homeserver: any(named: 'homeserver'),
