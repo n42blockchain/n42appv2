@@ -144,6 +144,14 @@ mixin _StakeLogicMixin on State<StakePage> {
     );
     if (!confirmed || !context.mounted || _isLoading) return;
 
+    // Same password/biometric gate as the wallet send flow before a
+    // transaction is built.
+    final verified = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletSecurityVerification()),
+    );
+    if (verified != true || !mounted) return;
+
     setState(() {
       _isLoading = true;
       _errorMessage = '';
@@ -266,6 +274,13 @@ mixin _StakeLogicMixin on State<StakePage> {
     final messenger = ScaffoldMessenger.of(context);
     // SOL/ATOM 的解质押交易同样只构建不广播（专用签名流程未接）——如实提示。
     final unsupportedMsg = S.of(context).g_key_stake_broadcast_unsupported;
+
+    // Same password/biometric gate as the wallet send flow.
+    final verified = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletSecurityVerification()),
+    );
+    if (verified != true || !mounted) return;
 
     setState(() {
       _isLoading = true;

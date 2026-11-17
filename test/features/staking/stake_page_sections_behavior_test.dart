@@ -5,7 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/staking/pages/stake_page.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 import '../../helpers/widget_test_helpers.dart';
@@ -124,4 +126,39 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('stake asks for password or biometric verification after confirming', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      wrapForTest(
+        StakePage(
+          protocol: StakingProtocols.ethLido,
+          userAddress: '0x1111111111111111111111111111111111111111',
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, '1');
+    await tester.pumpAndSettle();
+
+    final stakeButton = find.widgetWithText(AppButton, S.current.g_key_stake_stake);
+    await tester.ensureVisible(stakeButton);
+    await tester.pumpAndSettle();
+    await tester.tap(stakeButton);
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AppDialog),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(WalletSecurityVerification), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
