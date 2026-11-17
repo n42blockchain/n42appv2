@@ -233,7 +233,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                           _itemWidget(S.of(context).g_key_wallet_c38, () async {
                             if (!walletHasBackupableMnemonic(walletInfo!)) {
                               ToastUtils.show(
-                                walletBackupPhraseUnavailableMessage,
+                                S.of(context).g_ui3_backup_phrase_unavailable,
                               );
                               return;
                             }
@@ -265,7 +265,13 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                             );
                           }),
                         _buildCoinList(context),
-                        SizedBox(height: ScreenUtil().setWidth(148.0)),
+                        // Room for the bottom bar: 48pt button + padding.
+                        SizedBox(
+                          height:
+                              kMinInteractiveDimension +
+                              AppSpacing.space8 * 2 +
+                              MediaQuery.paddingOf(context).bottom,
+                        ),
                       ],
                     ),
                   ),
@@ -275,24 +281,28 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                     bottom: 0,
                     left: 0,
                     right: 0,
+                    // No fixed height: a 148px box clamped the button to
+                    // 42pt (32pt at 320pt width).
                     child: Container(
-                      height: ScreenUtil().setWidth(148.0),
                       width: double.infinity,
                       padding: EdgeInsets.all(AppSpacing.space8),
                       color: AppColorTokens.of(context).bgBase,
-                      child: AppButton(
-                        label: S.of(context).g_key_15,
-                        onPressed: () async {
-                          final mm = ref
-                              .read(wapBridgeProvider)
-                              .setMainWallet(widget.walletIndex);
-                          if (!context.mounted) return;
-                          if (mm.error) {
-                            ToastUtils.show(mm.data);
-                          } else {
-                            Navigator.pop(context, true);
-                          }
-                        },
+                      child: SafeArea(
+                        top: false,
+                        child: AppButton(
+                          label: S.of(context).g_key_15,
+                          onPressed: () async {
+                            final mm = ref
+                                .read(wapBridgeProvider)
+                                .setMainWallet(widget.walletIndex);
+                            if (!context.mounted) return;
+                            if (mm.error) {
+                              ToastUtils.show(mm.data);
+                            } else {
+                              Navigator.pop(context, true);
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -319,7 +329,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   Widget _walletName(BuildContext context, String title, String value) {
     final mainText = AppColorTokens.of(context).textPrimary;
 
-    return InkWell(
+    return _tile(
       onTap: () async {
         final res = await Navigator.push(
           context,
@@ -334,33 +344,25 @@ class _WalletManageState extends ConsumerState<WalletManage> {
         walletInfo = res;
         setState(() {});
       },
-      child: Container(
-        margin: _tileMargin,
-        padding: _tilePadding,
-        decoration: _tileDecoration,
-        child: Row(
-          children: [
-            Text(
-              title,
-              style: AppTypography.headline.copyWith(color: mainText),
+      child: Row(
+        children: [
+          Text(title, style: AppTypography.headline.copyWith(color: mainText)),
+          Expanded(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.body.copyWith(color: mainText),
+              textAlign: TextAlign.right,
             ),
-            Expanded(
-              child: Text(
-                value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.body.copyWith(color: mainText),
-                textAlign: TextAlign.right,
-              ),
-            ),
-            SizedBox(width: AppSpacing.space4),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(30.0),
-              color: mainText,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(width: AppSpacing.space4),
+          Icon(
+            Icons.arrow_forward_ios_sharp,
+            size: ScreenUtil().setWidth(30.0),
+            color: mainText,
+          ),
+        ],
       ),
     );
   }
@@ -368,27 +370,45 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   Widget _itemWidget(String title, VoidCallback onTap) {
     final mainText = AppColorTokens.of(context).textPrimary;
 
-    return InkWell(
+    return _tile(
       onTap: onTap,
-      child: Container(
-        margin: _tileMargin,
-        padding: _tilePadding,
-        decoration: _tileDecoration,
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                style: AppTypography.headline.copyWith(color: mainText),
-              ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: AppTypography.headline.copyWith(color: mainText),
             ),
-            SizedBox(width: AppSpacing.space2),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(30.0),
-              color: mainText,
+          ),
+          SizedBox(width: AppSpacing.space2),
+          Icon(
+            Icons.arrow_forward_ios_sharp,
+            size: ScreenUtil().setWidth(30.0),
+            color: mainText,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Settings tile: painted with [Ink] so the pressed state shows on the
+  /// filled background, and at least 44pt tall on its own (the margins
+  /// around it are not part of the hit area).
+  Widget _tile({required VoidCallback onTap, required Widget child}) {
+    return Padding(
+      padding: _tileMargin,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brSm,
+        child: Ink(
+          padding: _tilePadding,
+          decoration: _tileDecoration,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: AppTouch.minTarget - _tilePadding.vertical,
             ),
-          ],
+            child: child,
+          ),
         ),
       ),
     );

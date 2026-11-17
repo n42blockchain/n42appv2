@@ -89,7 +89,7 @@ class _ChooseImportCoinState extends State<ChooseImportCoin> {
     VoidCallback callback, {
     String? coinPath,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: callback,
       child: Container(
         color: Colors.transparent,

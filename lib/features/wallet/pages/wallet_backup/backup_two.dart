@@ -31,7 +31,9 @@ class _BackupTwoState extends State<BackupTwo> {
         crossAxisCount: 3,
         mainAxisSpacing: ScreenUtil().setWidth(20.0),
         crossAxisSpacing: ScreenUtil().setWidth(20.0),
-        childAspectRatio: 2.4,
+        // Fixed 44pt rows: the 2.4 aspect ratio gave 40pt tiles at 375pt
+        // and 33pt at 320pt.
+        mainAxisExtent: AppTouch.target,
       );
 
   @override
@@ -47,7 +49,7 @@ class _BackupTwoState extends State<BackupTwo> {
 
   void _onConfirmTap() {
     if (mnemonicWordsList.isEmpty) {
-      ToastUtils.show(walletBackupPhraseUnavailableMessage);
+      ToastUtils.show(S.of(context).g_ui3_backup_phrase_unavailable);
       return;
     }
     if (isCanClick) {
@@ -108,7 +110,10 @@ class _BackupTwoState extends State<BackupTwo> {
                     _buildUserHandList(),
                     SizedBox(height: ScreenUtil().setWidth(50.0)),
                     _buildGridView(),
-                    SizedBox(height: ScreenUtil().setWidth(148.0)),
+                    // Room for the bottom bar: 48pt button + padding.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -120,10 +125,11 @@ class _BackupTwoState extends State<BackupTwo> {
               child: Column(
                 children: [
                   const Divider(height: 1),
+                  // No fixed height: a 148px box clamped the button to
+                  // 42pt (32pt at 320pt width).
                   Container(
                     padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
-                    height: ScreenUtil().setWidth(148),
                     child: AppButton(
                       label: S.of(context).g_key_wallet_c43,
                       onPressed: _onConfirmTap,
@@ -168,7 +174,7 @@ class _BackupTwoState extends State<BackupTwo> {
   Widget _filledSlot(int index) {
     final item = userHandList[index];
     final isWrong = item.word != mnemonicWordsList[index];
-    return Stack(
+    final tile = Stack(
       fit: StackFit.expand,
       children: [
         Container(
@@ -217,6 +223,18 @@ class _BackupTwoState extends State<BackupTwo> {
             ),
           ),
       ],
+    );
+    if (!isWrong) return tile;
+    // The 18pt X badge is too small to hit; the whole wrong tile removes
+    // the word as well.
+    return Semantics(
+      button: true,
+      label: S.of(context).g_alert_remove,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _removeUserWord(index),
+        child: tile,
+      ),
     );
   }
 

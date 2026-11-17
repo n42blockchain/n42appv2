@@ -4,6 +4,10 @@ part of 'wallet_chain_send_btc.dart';
 ///
 /// Depends on [_BtcSendLogicMixin] for all shared state and business methods.
 mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
+  /// True while the send checks and the confirm page are in flight, so a
+  /// second tap cannot open a second confirm page (double submit).
+  bool _sendPreparing = false;
+
   Widget toWidget() {
     return Container(
       margin: EdgeInsets.all(AppSpacing.space8),
@@ -313,42 +317,51 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(AppSpacing.space8),
-            height: ScreenUtil().setWidth(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(
+              minHeight: ScreenUtil().setWidth(148.0),
+            ),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
-              loading: load == Load.loading,
+              loading: load == Load.loading || _sendPreparing,
               onPressed: () async {
-                closeKeyboard();
-                amountCheck();
-                if (amountErrorMessage != '') return;
-                await toAddressCheck(toTextEditingController.text.trim());
-                if (toErrorMessage != '') return;
-                if (widget.coinModel.balance == BigInt.zero) return;
-                if (errorMessage != '') return;
-                if (!mounted) return;
+                if (_sendPreparing) return;
+                setState(() => _sendPreparing = true);
+                try {
+                  closeKeyboard();
+                  amountCheck();
+                  if (amountErrorMessage != '') return;
+                  await toAddressCheck(toTextEditingController.text.trim());
+                  if (toErrorMessage != '') return;
+                  if (widget.coinModel.balance == BigInt.zero) return;
+                  if (errorMessage != '') return;
+                  if (!mounted) return;
 
-                final trModel = BtcTransactionRecodeModel()
-                  ..address = widget.coinModel.address
-                  ..to1 = toTextEditingController.text.trim()
-                  ..coin = widget.coinModel.coin
-                  ..coinMiniName = widget.coinModel.config.coinType
-                  ..walletIndex = ref.read(wapBridgeProvider).walletIndex
-                  ..price = price
-                  ..gasPrice = _fee.totalFees;
+                  final trModel = BtcTransactionRecodeModel()
+                    ..address = widget.coinModel.address
+                    ..to1 = toTextEditingController.text.trim()
+                    ..coin = widget.coinModel.coin
+                    ..coinMiniName = widget.coinModel.config.coinType
+                    ..walletIndex = ref.read(wapBridgeProvider).walletIndex
+                    ..price = price
+                    ..gasPrice = _fee.totalFees;
 
-                final check = await Navigator.push<bool>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WalletBaseSend(
-                      null,
-                      trModel,
-                      widget.coinModel.coin['unit'],
+                  final check = await Navigator.push<bool>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WalletBaseSend(
+                        null,
+                        trModel,
+                        widget.coinModel.coin['unit'],
+                      ),
                     ),
-                  ),
-                );
-                if (!mounted) return;
-                if (check == true) signTx(trModel);
+                  );
+                  if (!mounted) return;
+                  if (check == true) signTx(trModel);
+                } finally {
+                  if (mounted) setState(() => _sendPreparing = false);
+                }
               },
             ),
           ),

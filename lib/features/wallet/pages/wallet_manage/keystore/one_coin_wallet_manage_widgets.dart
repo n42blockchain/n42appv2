@@ -117,7 +117,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           ),
         ),
         if (pathCount > 1)
-          InkWell(
+          AppTapArea(
             onTap: showChangeAddress,
             child: Container(
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(20.0)),
@@ -167,8 +167,10 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
             ),
           ),
         ),
-        InkWell(
+        AppTapArea(
           onTap: addPath,
+          tooltip: S.of(context).g_a11y_add_path,
+          customBorder: const CircleBorder(),
           child: Container(
             height: ScreenUtil().setWidth(50.0),
             width: ScreenUtil().setWidth(50.0),
@@ -187,7 +189,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   Widget _buildPathList() {
     final visibleCount = pathList.length > 4 ? 4 : pathList.length;
     return SizedBox(
-      height: ScreenUtil().setWidth(101.0 * visibleCount),
+      // Rows are AppTouch.scaled(100) tall plus a 1px divider.
+      height:
+          (AppTouch.scaled(100) + ScreenUtil().setWidth(1.0)) * visibleCount,
       child: ListView.separated(
         itemCount: pathList.length,
         separatorBuilder: (_, _) => Divider(height: ScreenUtil().setWidth(1.0)),
@@ -212,8 +216,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          InkWell(
+          AppTapArea(
             onTap: isSelected ? null : () => chagePath(index),
+            semanticLabel: path,
             child: Container(
               margin: EdgeInsets.only(right: su.setWidth(10.0)),
               height: su.setWidth(50.0),
@@ -242,8 +247,10 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
             ),
           ),
           if (pIndex != 0 && !isSelected)
-            InkWell(
+            AppTapArea(
               onTap: () => removePath(index),
+              tooltip: S.of(context).g_alert_remove,
+              customBorder: const CircleBorder(),
               child: Container(
                 padding: EdgeInsets.all(10.0),
                 child: Icon(
@@ -285,7 +292,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               ),
             ),
           ),
-          InkWell(
+          AppTapArea(
+            tooltip: S.of(context).g_key_119,
+            customBorder: const CircleBorder(),
             onTap: () async {
               await Clipboard.setData(ClipboardData(text: pub));
               if (!mounted) return;
@@ -308,28 +317,32 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   // ── Sign message entry ──────────────────────────────────────────────────────
 
   Widget _buildSignMessageEntry() {
-    return InkWell(
-      onTap: _onSignMessageTap,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: _sectionDecoration,
-        padding: _sectionPadding,
-        margin: _sectionMargin,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              S.of(context).g_key_msgsign_title,
-              style: AppTypography.headline.copyWith(
-                color: _color(AppThemeKeys.mainTextColor),
+    // The section is painted with Ink so the pressed state shows on it.
+    return Padding(
+      padding: _sectionMargin,
+      child: InkWell(
+        onTap: _onSignMessageTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          width: MediaQuery.of(context).size.width,
+          decoration: _sectionDecoration,
+          padding: _sectionPadding,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.of(context).g_key_msgsign_title,
+                style: AppTypography.headline.copyWith(
+                  color: _color(AppThemeKeys.mainTextColor),
+                ),
               ),
-            ),
-            Icon(
-              Icons.chevron_right,
-              size: ScreenUtil().setWidth(40.0),
-              color: _color(AppThemeKeys.itemSubtitleTextColor),
-            ),
-          ],
+              Icon(
+                Icons.chevron_right,
+                size: ScreenUtil().setWidth(40.0),
+                color: _color(AppThemeKeys.itemSubtitleTextColor),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -378,7 +391,8 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   }
 
   Widget _buildExportKeystoreRow() {
-    return InkWell(
+    // AppTapArea: 44pt minimum and ink drawn above the section fill.
+    return AppTapArea(
       onTap: _onExportKeystoreTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
@@ -569,16 +583,20 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   }
 
   Widget _buildDialogButton(String text, Color color, VoidCallback onTap) {
+    // Transparent Material: the dialog card fill would hide the ink.
     return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            style: AppTypography.headline.copyWith(
-              color: color,
-              fontWeight: FontWeight.w400,
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              text,
+              style: AppTypography.headline.copyWith(
+                color: color,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ),
@@ -587,7 +605,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   }
 
   Widget _buildExportPrivateKeyRow() {
-    return InkWell(
+    return AppTapArea(
       onTap: _onExportPrivateKeyTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),

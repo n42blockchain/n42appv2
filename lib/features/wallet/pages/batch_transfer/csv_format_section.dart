@@ -7,6 +7,8 @@ part of 'csv_import_page.dart';
 mixin _CsvFormatSectionMixin on _CsvValidationMixin {
   Widget _buildFormatSection() {
     final blue = AppColorTokens.of(context).brand;
+    // Text-safe brand shade for labels on the brand-tinted card.
+    final blueText = AppColorTokens.of(context).brandOnTint;
     final itemBg = AppColorTokens.of(context).bgSurface;
     final subText = AppColorTokens.of(context).textSubtitle;
     final mainText = AppColorTokens.of(context).textPrimary;
@@ -23,7 +25,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildToggleHeader(blue, scr, pad16),
+          _buildToggleHeader(blueText, scr, pad16),
           if (_docExpanded) ...[
             Padding(
               padding: EdgeInsets.symmetric(horizontal: pad16),
@@ -31,7 +33,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
             ),
             _buildExpandedContent(mainText, subText, itemBg, scr, pad16),
           ],
-          _buildActionRow(blue, scr, pad16),
+          _buildActionRow(blueText, scr, pad16),
         ],
       ),
     );
@@ -41,33 +43,37 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
     return InkWell(
       borderRadius: BorderRadius.circular(scr.setWidth(12)),
       onTap: () => setState(() => _docExpanded = !_docExpanded),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: pad16,
-          vertical: scr.setWidth(12),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.description_outlined,
-              color: blue,
-              size: scr.setWidth(28),
-            ),
-            SizedBox(width: scr.setWidth(8)),
-            Expanded(
-              child: Text(
-                S.of(context).g_key_batch_csv_format,
-                style: AppTypography.bodySm.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: blue,
+      // Full-width toggle row, at least 44pt tall.
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: AppTouch.target),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: pad16,
+            vertical: scr.setWidth(12),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.description_outlined,
+                color: blue,
+                size: scr.setWidth(28),
+              ),
+              SizedBox(width: scr.setWidth(8)),
+              Expanded(
+                child: Text(
+                  S.of(context).g_key_batch_csv_format,
+                  style: AppTypography.bodySm.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: blue,
+                  ),
                 ),
               ),
-            ),
-            Icon(
-              _docExpanded ? Icons.expand_less : Icons.expand_more,
-              color: blue,
-            ),
-          ],
+              Icon(
+                _docExpanded ? Icons.expand_less : Icons.expand_more,
+                color: blue,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -93,47 +99,43 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _docSectionTitle('Columns', mainText, scr),
+          _docSectionTitle(S.of(context).g_ui3_csv_columns, mainText, scr),
           gap6,
           _docRow(
             'address',
-            'Required — EVM address (0x + 40 hex)',
+            S.of(context).g_ui3_csv_address_desc,
             fieldStyle,
             bodyStyle,
             scr,
           ),
           _docRow(
             'amount',
-            'Required — Decimal number (e.g. 1.5)',
+            S.of(context).g_ui3_csv_amount_desc,
             fieldStyle,
             bodyStyle,
             scr,
           ),
           _docRow(
             'memo',
-            'Optional — Label or note',
+            S.of(context).g_ui3_csv_memo_desc,
             fieldStyle,
             bodyStyle,
             scr,
           ),
           gap12,
-          _docSectionTitle('Rules', mainText, scr),
+          _docSectionTitle(S.of(context).g_ui3_csv_rules, mainText, scr),
           gap6,
+          _docBullet(S.of(context).g_ui3_csv_rule_header, bodyStyle, scr),
+          _docBullet(S.of(context).g_ui3_csv_rule_comments, bodyStyle, scr),
+          _docBullet(S.of(context).g_ui3_csv_rule_blank, bodyStyle, scr),
+          _docBullet(S.of(context).g_ui3_csv_rule_duplicates, bodyStyle, scr),
           _docBullet(
-            'Header row (address,amount,memo) is optional — auto-detected',
+            S.of(context).g_key_batch_max_recipients(200),
             bodyStyle,
             scr,
           ),
-          _docBullet(
-            'Lines starting with # are comments and will be ignored',
-            bodyStyle,
-            scr,
-          ),
-          _docBullet('Blank lines are ignored', bodyStyle, scr),
-          _docBullet('Duplicate addresses will be flagged', bodyStyle, scr),
-          _docBullet('Maximum 200 recipients per batch', bodyStyle, scr),
           gap12,
-          _docSectionTitle('Example', mainText, scr),
+          _docSectionTitle(S.of(context).g_ui3_csv_example, mainText, scr),
           gap6,
           Container(
             width: double.infinity,
@@ -169,7 +171,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
           Expanded(
             child: _actionBtn(
               Icons.copy,
-              'Copy Template',
+              S.of(context).g_ui3_copy_template,
               _copyTemplate,
               blue,
               scr,
@@ -179,7 +181,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
           Expanded(
             child: _actionBtn(
               Icons.paste,
-              'Paste',
+              S.of(context).g_key_166,
               _pasteFromClipboard,
               blue,
               scr,
@@ -189,7 +191,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
           Expanded(
             child: _actionBtn(
               Icons.folder_open,
-              'Pick File',
+              S.of(context).g_ui3_pick_file,
               _pickFile,
               blue,
               scr,

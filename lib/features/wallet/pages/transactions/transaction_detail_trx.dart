@@ -284,7 +284,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           itemWidget(s.g_key_wallet_k37, info['hash'] ?? "", copy: true),
           _divider(),
-          itemWidget(s.g_key_wallet_k33, resultStr),
+          itemWidget(s.g_key_wallet_k33, _txDisplayText(s, resultStr)),
           _divider(),
           itemWidget(s.g_key_wallet_k54, info['block'].toString(), copy: true),
           _divider(),
@@ -340,8 +340,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               onEditingComplete: _searchAndReload,
             ),
           ),
-          InkWell(
+          AppTapArea(
             onTap: _searchAndReload,
+            tooltip: S.of(context).search,
             child: SizedBox(
               width: ScreenUtil().setWidth(60.0),
               height: ScreenUtil().setWidth(60.0),
@@ -376,7 +377,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         ),
       ),
       child: Text(
-        errorMessage,
+        _txDisplayText(S.of(context), errorMessage),
         style: AppTypography.body.copyWith(
           color: AppColorTokens.of(context).danger,
         ),
@@ -406,11 +407,15 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               Expanded(
                 child: Text(
                   value,
-                  style: AppTypography.body.copyWith(color: blueColor),
+                  // Text-safe brand shade (system blue is 4.0:1 as text).
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).brandOnTint,
+                  ),
                 ),
               ),
               if (copy)
-                InkWell(
+                AppTapArea(
+                  tooltip: S.of(context).g_key_119,
                   onTap: () {
                     ToastUtils.init(context);
                     Clipboard.setData(ClipboardData(text: value));
@@ -462,3 +467,16 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     );
   }
 }
+
+/// Localizes the fixed English status / error strings set by the page logic
+/// at display time; server-provided messages pass through unchanged.
+String _txDisplayText(S s, String value) => switch (value) {
+  'Pending' => s.g_key_t_2,
+  'Success' => s.g_key_191,
+  'Failed' => s.g_key_dex_status_failed,
+  'Not found' => s.g_ui3_tx_not_found,
+  'Invalid transaction hash' => s.g_ui3_invalid_tx_hash,
+  'Receipt lookup failed' => s.g_ui3_receipt_lookup_failed,
+  'Invalid transaction receipt' => s.g_ui3_invalid_tx_receipt,
+  _ => value,
+};

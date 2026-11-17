@@ -98,6 +98,7 @@ class _AddressSheetHeader extends StatelessWidget {
           ),
           // IconButton 默认 48dp 命中区（§5 触控红线）
           IconButton(
+            tooltip: S.of(context).g_key_wallet_manage,
             onPressed: () {
               Navigator.push(
                 context,
@@ -424,28 +425,34 @@ class AddTokenFloatingIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brand = AppColorTokens.of(context).brand;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Container(
-          width: AppTouch.target,
-          height: AppTouch.target,
-          alignment: Alignment.center,
+    return Tooltip(
+      message: S.of(context).g_token_m_key_3,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
           child: Container(
-            width: ScreenUtil().setWidth(56.0),
-            height: ScreenUtil().setWidth(56.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColorTokens.of(context).bgElevated,
-              border: Border.all(color: brand),
-            ),
+            width: AppTouch.target,
+            height: AppTouch.target,
             alignment: Alignment.center,
-            child: Icon(
-              Icons.add,
-              color: brand,
-              size: ScreenUtil().setWidth(40.0),
+            // Ink paints the opaque disc on the Material, so the ripple
+            // stays visible on top of it.
+            child: Ink(
+              width: ScreenUtil().setWidth(56.0),
+              height: ScreenUtil().setWidth(56.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColorTokens.of(context).bgElevated,
+                border: Border.all(color: brand),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  color: brand,
+                  size: ScreenUtil().setWidth(40.0),
+                ),
+              ),
             ),
           ),
         ),

@@ -162,7 +162,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 ),
               ),
               if (copy)
-                InkWell(
+                AppTapArea(
+                  tooltip: S.of(context).g_key_119,
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: content));
                     ToastUtils.show(S.of(context).copy);

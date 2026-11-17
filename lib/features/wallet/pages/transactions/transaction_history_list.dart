@@ -179,7 +179,8 @@ class _FilterBadge extends StatelessWidget {
       width: 16,
       height: 16,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.error,
+        // Red shade that carries white text at 4.5:1.
+        color: AppColorTokens.of(context).dangerFill,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,

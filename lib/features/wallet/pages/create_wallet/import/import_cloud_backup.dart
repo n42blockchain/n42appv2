@@ -271,7 +271,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
               controller: _passwordController,
               maxLines: 1,
               style: AppTypography.bodySm.copyWith(
-                color: _color(AppThemeKeys.ff888888),
+                color: _color(AppThemeKeys.mainTextColor),
               ),
             ),
           ),
@@ -313,7 +313,8 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
             ],
           ),
 
-          SizedBox(height: su.setWidth(160)),
+          // Room for the bottom bar: 48pt button + padding.
+          SizedBox(height: kMinInteractiveDimension + su.setWidth(60)),
         ],
       ),
     );
@@ -337,7 +338,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           vertical: su.setWidth(12),
         ),
         decoration: BoxDecoration(
-          color: _color(AppThemeKeys.mainBlueColor),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: BorderRadius.circular(su.setWidth(20)),
         ),
         child: Text(
@@ -355,9 +356,9 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Divider(height: su.setWidth(1)),
+        // No fixed height: a 148px box clamped the button to 38pt at 320pt.
         Container(
           padding: EdgeInsets.all(su.setWidth(30)),
-          height: su.setWidth(148),
           width: double.infinity,
           color: _color(AppThemeKeys.backGroundColor),
           child: AppButton(

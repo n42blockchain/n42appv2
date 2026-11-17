@@ -82,21 +82,21 @@ class WalletChainInfoBoard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // No fixed 40-px box: it clipped the 22pt line (and more
+                  // at larger text sizes).
                   Flexible(
-                    child: SizedBox(
-                      height: ScreenUtil().setWidth(40),
-                      child: Text(
-                        "${S.of(context).g_key_xml_0}: ${lockAmountStr ?? ""} ",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: AppTypography.body.copyWith(
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
+                    child: Text(
+                      "${S.of(context).g_key_xml_0}: ${lockAmountStr ?? ""} ",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: AppTypography.body.copyWith(
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                   ),
-                  InkWell(
+                  AppTapArea(
                     onTap: xmlLockInfoTap,
+                    tooltip: S.of(context).g_key_aa_details,
                     child: Container(
                       margin: EdgeInsets.only(left: AppSpacing.space8),
                       width: ScreenUtil().setWidth(40.0),
@@ -146,24 +146,26 @@ class WalletChainInfoBoard extends StatelessWidget {
     String lable,
     GestureTapCallback? tap,
   ) {
-    return InkWell(
-      onTap: tap,
-      child: Container(
-        height: AppTouch.scaled(80),
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).brandFill,
-          borderRadius: AppRadius.brXl,
-        ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            lable,
-            style: AppTypography.bodySm.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
+    // The fill is a Material so the ripple paints above it.
+    return Material(
+      color: AppColorTokens.of(context).brandFill,
+      borderRadius: AppRadius.brXl,
+      child: InkWell(
+        onTap: tap,
+        borderRadius: AppRadius.brXl,
+        child: Container(
+          height: AppTouch.scaled(80),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+          alignment: Alignment.center,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              lable,
+              style: AppTypography.bodySm.copyWith(
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.mainButtonTextColor.name,
+                ),
               ),
             ),
           ),

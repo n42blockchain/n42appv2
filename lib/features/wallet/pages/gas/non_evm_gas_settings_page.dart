@@ -132,17 +132,21 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.space8,
-              vertical: AppSpacing.space8,
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              height: AppTouch.target,
-              child: AppButton(
-                label: S.of(context).g_key_78,
-                onPressed: _confirm,
+          // The body has no SafeArea: keep the button above the home bar.
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.space8,
+                vertical: AppSpacing.space8,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                height: AppTouch.target,
+                child: AppButton(
+                  label: S.of(context).g_key_78,
+                  onPressed: _confirm,
+                ),
               ),
             ),
           ),

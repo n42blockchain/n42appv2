@@ -42,7 +42,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
             copy: true,
           ),
           divider,
-          buildItemWidget(s.g_key_wallet_k33, resultStr),
+          buildItemWidget(s.g_key_wallet_k33, _txDisplayText(s, resultStr)),
           divider,
           buildItemWidget(
             s.g_key_wallet_k54,
@@ -172,8 +172,9 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
               onEditingComplete: searchAction,
             ),
           ),
-          InkWell(
+          AppTapArea(
             onTap: searchAction,
+            tooltip: S.of(context).search,
             child: Container(
               width: su.setWidth(60.0),
               height: su.setWidth(60.0),
@@ -207,7 +208,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
         color: _color(AppThemeKeys.errorBgColor2),
       ),
       child: Text(
-        errorMessage,
+        _txDisplayText(S.of(context), errorMessage),
         style: AppTypography.body.copyWith(
           color: _color(AppThemeKeys.errorTextColor),
         ),
@@ -228,11 +229,15 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
           Expanded(
             child: Text(
               value,
-              style: AppTypography.body.copyWith(color: accent),
+              // Text-safe brand shade (system blue is 4.0:1 as text).
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).brandOnTint,
+              ),
             ),
           ),
           if (copy)
-            InkWell(
+            AppTapArea(
+              tooltip: S.of(context).g_key_119,
               onTap: () {
                 ToastUtils.init(context);
                 Clipboard.setData(ClipboardData(text: value));
@@ -295,3 +300,16 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
     );
   }
 }
+
+/// Localizes the fixed English status / error strings set by the page logic
+/// at display time; server-provided messages pass through unchanged.
+String _txDisplayText(S s, String value) => switch (value) {
+  'Pending' => s.g_key_t_2,
+  'Success' => s.g_key_191,
+  'Failed' => s.g_key_dex_status_failed,
+  'Not found' => s.g_ui3_tx_not_found,
+  'Invalid transaction hash' => s.g_ui3_invalid_tx_hash,
+  'Receipt lookup failed' => s.g_ui3_receipt_lookup_failed,
+  'Invalid transaction receipt' => s.g_ui3_invalid_tx_receipt,
+  _ => value,
+};

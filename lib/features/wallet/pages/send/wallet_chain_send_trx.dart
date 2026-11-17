@@ -121,7 +121,8 @@ class _WalletChainSendTrxState extends ConsumerState<WalletChainSendTrx>
           Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(sw(30.0)),
-            height: sw(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(minHeight: sw(148.0)),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,

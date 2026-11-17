@@ -274,8 +274,10 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
           ],
         ),
         actions: [
-          InkWell(
+          // The margin stays inside the tap area: >= 44pt at 320pt too.
+          AppTapArea(
             onTap: showActionButtonListWidget,
+            tooltip: S.of(context).g_key_m_7,
             child: Container(
               width: ScreenUtil().setWidth(40.0),
               height: ScreenUtil().setWidth(40.0),

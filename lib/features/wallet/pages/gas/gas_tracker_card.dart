@@ -6,6 +6,12 @@
 part of 'gas_tracker_page.dart';
 
 extension _GasTrackerCardBuilders on _GasTrackerPageState {
+  /// Text-safe shade of a chain / status [hue] on its light tint over the
+  /// card (raw hues such as BNB yellow or system green are ~2:1 as text).
+  Color _hueText(Color hue) => AppContrast.ensure(hue, [
+    Color.alphaBlend(hue.withAlpha(40), AppColorTokens.of(context).bgSurface),
+  ], darken: Theme.of(context).brightness != Brightness.dark);
+
   Widget buildHeader() {
     final blueColor = AppColorTokens.of(context).brand;
     return Container(
@@ -93,8 +99,9 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   ],
                 ),
               ),
-              GestureDetector(
+              AppTapArea(
                 onTap: () => _showAlertSheet(network),
+                tooltip: S.of(context).g_key_gas_alert,
                 child: Icon(
                   hasAlert
                       ? Icons.notifications_active
@@ -177,7 +184,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               '${history.last.toStringAsFixed(1)} Gwei',
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
-                color: network.color,
+                color: _hueText(network.color),
               ),
             ),
           ],
@@ -243,7 +250,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               value,
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
-                color: color,
+                color: _hueText(color),
               ),
             ),
           ),
@@ -275,7 +282,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
         statusText,
         style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
-          color: statusColor,
+          color: _hueText(statusColor),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -328,13 +335,28 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   ),
                   SizedBox(width: su.setWidth(12)),
                   if (pred.low != null)
-                    _predBadge('Slow', pred.low!, c.success, su),
+                    _predBadge(
+                      S.of(context).g_key_gas_slow,
+                      pred.low!,
+                      c.success,
+                      su,
+                    ),
                   SizedBox(width: su.setWidth(8)),
                   if (pred.medium != null)
-                    _predBadge('Avg', pred.medium!, c.warning, su),
+                    _predBadge(
+                      S.of(context).g_key_gas_standard,
+                      pred.medium!,
+                      c.warning,
+                      su,
+                    ),
                   SizedBox(width: su.setWidth(8)),
                   if (pred.high != null)
-                    _predBadge('Fast', pred.high!, c.danger, su),
+                    _predBadge(
+                      S.of(context).g_key_gas_fast,
+                      pred.high!,
+                      c.danger,
+                      su,
+                    ),
                 ],
               ),
             );
@@ -358,7 +380,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
         '$label: ${value.toStringAsFixed(1)}',
         style: AppTypography.captionSm.copyWith(
           fontWeight: FontWeight.w600,
-          color: color,
+          color: _hueText(color),
         ),
       ),
     );
@@ -390,9 +412,9 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           SizedBox(width: su.setWidth(8)),
           if (data.pendingCount != null)
             Text(
-              '${_formatCount(data.pendingCount!)} pending',
+              '${_formatCount(data.pendingCount!)} ${S.of(context).g_key_t_2}',
               style: AppTypography.caption.copyWith(
-                color: data.congestionColor,
+                color: _hueText(data.congestionColor),
               ),
             ),
           const Spacer(),

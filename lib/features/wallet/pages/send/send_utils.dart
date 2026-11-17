@@ -32,7 +32,7 @@ BigInt maxTransferableAmount({
 
 /// Small icon button for the address input field (scan / paste / address book).
 Widget buildSendIconBtn(BuildContext context, IconData icon) {
-  return Container(
+  final button = Container(
     width: ScreenUtil().setWidth(50.0),
     height: ScreenUtil().setWidth(50.0),
     padding: EdgeInsets.all(AppSpacing.space2),
@@ -42,6 +42,19 @@ Widget buildSendIconBtn(BuildContext context, IconData icon) {
       color: AppColorTokens.of(context).brand,
     ),
   );
+  // Icon-only field action: the tooltip doubles as its spoken label.
+  final String? label;
+  if (icon == Icons.qr_code_scanner) {
+    label = S.of(context).g_key_4;
+  } else if (icon == Icons.paste_outlined) {
+    label = S.of(context).g_key_166;
+  } else if (icon == Icons.menu_book_outlined) {
+    label = S.of(context).g_key_108;
+  } else {
+    label = null;
+  }
+  if (label == null) return button;
+  return Tooltip(message: label, child: button);
 }
 
 /// USD equivalent display below the amount input field.

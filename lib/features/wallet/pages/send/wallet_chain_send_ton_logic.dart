@@ -54,7 +54,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
 
   Future<void> initData() async {
     if (_coinType.isEmpty || _blockchainType.isEmpty) {
-      errorMessage = 'Invalid coin configuration';
+      errorMessage = S.current.g_ui3_invalid_coin_config;
       ToastUtils.show(errorMessage);
       if (mounted) setState(() => load = Load.finish);
       return;
@@ -69,7 +69,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
         return true;
       });
       if (cIndex < 0) {
-        errorMessage = 'Missing parent chain for $_coinType';
+        errorMessage = S.current.g_ui3_missing_parent_chain(_coinType);
         ToastUtils.show(errorMessage);
         if (mounted) setState(() => load = Load.finish);
         return;

@@ -179,7 +179,10 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
                     horizontal: su.setWidth(16.0),
                     vertical: su.setWidth(6.0),
                   ),
-                  minimumSize: Size.zero,
+                  minimumSize: const Size(
+                    AppTouch.minTarget,
+                    AppTouch.minTarget,
+                  ),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
@@ -207,39 +210,62 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
     final su = ScreenUtil();
     final mainColor = AppColorTokens.of(context).textPrimary;
     final subColor = AppColorTokens.of(context).textSubtitle;
+    final caption = AppTypography.caption;
+    // The pill keeps its compact look; the keyword and the X each get a
+    // full-height hit area of at least 44pt drawn over it.
+    final pillHeight =
+        caption.fontSize! * (caption.height ?? 1) + su.setWidth(20.0);
+    final pillInset = pillHeight >= AppTouch.minTarget
+        ? 0.0
+        : (AppTouch.minTarget - pillHeight) / 2;
 
-    return GestureDetector(
-      onTap: () => _applyHistoryKeyword(keyword, waValue),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: su.setWidth(20.0),
-          vertical: su.setWidth(10.0),
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(su.setWidth(30.0)),
-          color: AppColorTokens.of(context).bgSurface,
-          border: Border.all(color: AppColorTokens.of(context).border),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              keyword,
-              style: AppTypography.caption.copyWith(color: mainColor),
-            ),
-            SizedBox(width: su.setWidth(8.0)),
-            // 单独点击 X 只删除这条历史，不影响其他 chip
-            GestureDetector(
-              onTap: () => _removeFromHistory(keyword),
-              behavior: HitTestBehavior.opaque,
-              child: Icon(
-                Icons.close,
-                size: su.setWidth(24.0),
-                color: subColor,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: AppTouch.minTarget),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            top: pillInset,
+            bottom: pillInset,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(su.setWidth(30.0)),
+                color: AppColorTokens.of(context).bgSurface,
+                border: Border.all(color: AppColorTokens.of(context).border),
               ),
             ),
-          ],
-        ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppTapArea(
+                onTap: () => _applyHistoryKeyword(keyword, waValue),
+                borderRadius: BorderRadius.circular(su.setWidth(30.0)),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: su.setWidth(20.0),
+                    right: su.setWidth(8.0),
+                  ),
+                  child: Text(
+                    keyword,
+                    style: caption.copyWith(color: mainColor),
+                  ),
+                ),
+              ),
+              // 单独点击 X 只删除这条历史，不影响其他 chip
+              AppTapArea(
+                onTap: () => _removeFromHistory(keyword),
+                tooltip: S.of(context).g_key_113,
+                customBorder: const CircleBorder(),
+                child: Icon(
+                  Icons.close,
+                  size: su.setWidth(24.0),
+                  color: subColor,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

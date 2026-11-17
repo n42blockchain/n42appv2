@@ -51,35 +51,39 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
 
   Widget _buildRevealPlaceholder() {
     final textStyle = AppTypography.body.copyWith(color: _itemTextColor());
+    // Ink paints the card on the Material so the press splash shows on it.
     return InkWell(
       onTap: () => setState(() => showMnemonic = true),
-      child: Container(
-        width: double.infinity,
-        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(400)),
-        padding: EdgeInsets.all(AppSpacing.space8),
+      borderRadius: AppRadius.brMd,
+      child: Ink(
         decoration: BoxDecoration(
           color: _itemBgColor(),
           borderRadius: AppRadius.brMd,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
-              child: Icon(
-                Icons.visibility_off_outlined,
-                color: _itemTextColor(),
-                size: ScreenUtil().setWidth(80.0),
+        child: Container(
+          width: double.infinity,
+          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(400)),
+          padding: EdgeInsets.all(AppSpacing.space8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
+                child: Icon(
+                  Icons.visibility_off_outlined,
+                  color: _itemTextColor(),
+                  size: ScreenUtil().setWidth(80.0),
+                ),
               ),
-            ),
-            Text(S.of(context).g_key_wallet_c44, style: textStyle),
-            Text(
-              S.of(context).g_key_wallet_c45,
-              style: textStyle,
-              textAlign: TextAlign.center,
-            ),
-          ],
+              Text(S.of(context).g_key_wallet_c44, style: textStyle),
+              Text(
+                S.of(context).g_key_wallet_c45,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -94,10 +98,8 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
           color: _itemBgColor(),
           borderRadius: AppRadius.brMd,
         ),
-        constraints: BoxConstraints(
-          minHeight: ScreenUtil().setWidth(472.0),
-          maxHeight: ScreenUtil().setWidth(550.0),
-        ),
+        // No max height: at 130% text the fixed box clipped the buttons.
+        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(472.0)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +113,9 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
               textAlign: TextAlign.center,
             ),
             Container(
-              height: ScreenUtil().setWidth(200.0),
+              constraints: BoxConstraints(
+                minHeight: ScreenUtil().setWidth(200.0),
+              ),
               width: double.infinity,
               alignment: Alignment.center,
               child: Text(

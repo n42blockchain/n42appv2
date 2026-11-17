@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:web3dart/web3dart.dart' show bytesToHex, keccak256;
 
 import 'falcon_crypto.dart';
@@ -29,6 +30,7 @@ class _FalconPageState extends State<FalconPage> {
   FalconVault? vault;
   Uint8List? publicKey;
   String? status;
+  bool libraryUnavailable = false;
   bool busy = false;
   final fields = <String, TextEditingController>{
     for (final entry in {
@@ -46,8 +48,6 @@ class _FalconPageState extends State<FalconPage> {
       entry.key: TextEditingController(text: entry.value),
   };
   String? output;
-  bool get zh => Localizations.localeOf(context).languageCode == 'zh';
-  String t(String en, String cn) => zh ? cn : en;
   @override
   void initState() {
     super.initState();
@@ -64,7 +64,8 @@ class _FalconPageState extends State<FalconPage> {
         setState(() => publicKey = key);
       }
     } catch (_) {
-      if (mounted) setState(() => status = 'Falcon native library unavailable');
+      // Localized at build time: this can run before initState completes.
+      if (mounted) setState(() => libraryUnavailable = true);
     }
   }
 
@@ -81,15 +82,13 @@ class _FalconPageState extends State<FalconPage> {
     setState(() {
       busy = true;
       status = null;
+      libraryUnavailable = false;
       output = null;
     });
     try {
       // OS device credentials or biometrics, even if the normal wallet disables it.
       final allowed = await LocalAuthentication().authenticate(
-        localizedReason: t(
-          'Authorize Falcon wallet operation',
-          '授权 Falcon 钱包操作',
-        ),
+        localizedReason: S.of(context).g_ui3_falcon_auth_reason,
         biometricOnly: false,
       );
       if (!allowed || !mounted || !widget.isOwnerCurrent()) return;
@@ -98,28 +97,17 @@ class _FalconPageState extends State<FalconPage> {
       if (mounted && widget.isOwnerCurrent()) {
         if (error is FalconNetworkNotEnabled) {
           setState(
-            () => status = t(
-              'This network has not enabled Falcon-512 transactions. Offline signing is available.',
-              '该网络尚未启用 Falcon-512 交易，可先使用离线签名。',
-            ),
+            () => status = S.of(context).g_ui3_falcon_network_not_enabled,
           );
           return;
         }
         if (error is FalconSubmissionPending) {
           setState(
-            () => status = t(
-              'Query the previous submission before another payment.',
-              '请先查询上一笔发送结果，再进行新的支付。',
-            ),
+            () => status = S.of(context).g_ui3_falcon_query_previous_first,
           );
           return;
         }
-        setState(
-          () => status = t(
-            'Operation failed. Check inputs, backup password and device authentication. If sending was attempted, query the previous submission before retrying.',
-            '操作失败，请检查输入、备份密码及设备认证。如已尝试发送，请先查询上一笔结果，勿重复支付。',
-          ),
-        );
+        setState(() => status = S.of(context).g_ui3_falcon_operation_failed);
       }
     } finally {
       if (mounted) setState(() => busy = false);
@@ -169,8 +157,8 @@ class _FalconPageState extends State<FalconPage> {
       builder: (ctx) => AlertDialog(
         title: Text(
           send
-              ? t('Confirm Falcon transaction', '确认 Falcon 交易')
-              : t('Confirm offline signature', '确认离线签名'),
+              ? S.of(ctx).g_ui3_falcon_confirm_transaction
+              : S.of(ctx).g_ui3_falcon_confirm_offline_signature,
         ),
         content: SingleChildScrollView(
           child: SelectableText(
@@ -182,11 +170,15 @@ class _FalconPageState extends State<FalconPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(t('Cancel', '取消')),
+            child: Text(S.of(ctx).g_key_79),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(send ? t('Sign and send', '签名并发送') : t('Sign', '签名')),
+            child: Text(
+              send
+                  ? S.of(ctx).g_ui3_falcon_sign_and_send
+                  : S.of(ctx).g_key_msgsign_btn,
+            ),
           ),
         ],
       ),
@@ -229,19 +221,16 @@ class _FalconPageState extends State<FalconPage> {
   Widget build(BuildContext context) => !widget.isOwnerCurrent()
       ? Scaffold(
           appBar: AppBar(title: const Text('Falcon-512')),
-          body: Center(child: Text(t('Wallet owner changed', '账户已切换'))),
+          body: Center(child: Text(S.of(context).g_ui3_falcon_owner_changed)),
         )
       : Scaffold(
           appBar: AppBar(title: const Text('Falcon-512')),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(
-                t(
-                  'Use only a network that explicitly supports Falcon-512 transactions. Verify the RPC and backup before funding. Falcon keys require a separate encrypted backup; your EVM recovery phrase cannot restore them. If submission is uncertain, query its status before another payment.',
-                  '仅使用明确支持 Falcon-512 交易的网络。转入资产前请核对 RPC 并验证备份。Falcon 密钥须独立加密备份，不能通过原 EVM 助记词恢复。发送结果不明时，请先查询状态，勿重复支付。',
-                ),
-              ),
+              Text(S.of(context).g_ui3_falcon_notice),
+              if (libraryUnavailable)
+                Text(S.of(context).g_ui3_falcon_library_unavailable),
               if (status != null) Text(status!),
               if (publicKey == null)
                 FilledButton(
@@ -254,11 +243,15 @@ class _FalconPageState extends State<FalconPage> {
                             setState(() => publicKey = p);
                           }
                         }),
-                  child: Text(t('Create Falcon account', '创建 Falcon 账户')),
+                  child: Text(S.of(context).g_ui3_falcon_create_account),
                 ),
               if (publicKey != null)
                 SelectableText(
-                  'Public key: ${bytesToHex(publicKey!, include0x: true)}',
+                  S
+                      .of(context)
+                      .g_ui3_falcon_public_key(
+                        bytesToHex(publicKey!, include0x: true),
+                      ),
                 ),
               for (final name in [
                 'rpc',
@@ -279,28 +272,25 @@ class _FalconPageState extends State<FalconPage> {
                 onPressed: busy || publicKey == null
                     ? null
                     : () => run(() => sign()),
-                child: Text(t('Review and sign offline', '预览并离线签名')),
+                child: Text(S.of(context).g_ui3_falcon_review_sign_offline),
               ),
               FilledButton(
                 onPressed: busy || publicKey == null
                     ? null
                     : () => run(() => sign(send: true)),
-                child: Text(t('Review and send', '预览并发送')),
+                child: Text(S.of(context).g_ui3_falcon_review_send),
               ),
               TextButton(
                 onPressed: busy || publicKey == null
                     ? null
                     : () => run(() => sign(recover: true)),
-                child: Text(t('Query previous submission', '查询上一笔发送状态')),
+                child: Text(S.of(context).g_ui3_falcon_query_previous),
               ),
               TextField(
                 controller: fields['backupPassword'],
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: t(
-                    'Backup password (12+ characters)',
-                    '备份密码（至少 12 字符）',
-                  ),
+                  labelText: S.of(context).g_ui3_falcon_backup_password,
                 ),
                 enabled: !busy,
               ),
@@ -315,13 +305,13 @@ class _FalconPageState extends State<FalconPage> {
                           setState(() => output = blob);
                         }
                       }),
-                child: Text(t('Export encrypted backup', '导出加密备份')),
+                child: Text(S.of(context).g_ui3_falcon_export_backup),
               ),
               TextField(
                 controller: fields['backupBlob'],
                 maxLines: 3,
                 decoration: InputDecoration(
-                  labelText: t('Encrypted backup to restore', '待恢复的加密备份'),
+                  labelText: S.of(context).g_ui3_falcon_backup_to_restore,
                 ),
                 enabled: !busy,
               ),
@@ -338,7 +328,7 @@ class _FalconPageState extends State<FalconPage> {
                           setState(() => publicKey = p);
                         }
                       }),
-                child: Text(t('Restore Falcon account', '恢复 Falcon 账户')),
+                child: Text(S.of(context).g_ui3_falcon_restore_account),
               ),
               TextButton(
                 onPressed: busy || publicKey == null
@@ -350,14 +340,13 @@ class _FalconPageState extends State<FalconPage> {
                         );
                         if (mounted && widget.isOwnerCurrent()) {
                           setState(
-                            () => status = t(
-                              'Encrypted backup verified',
-                              '加密备份已验证',
-                            ),
+                            () => status = S
+                                .of(context)
+                                .g_ui3_falcon_backup_verified,
                           );
                         }
                       }),
-                child: Text(t('Verify saved backup', '验证已保存的备份')),
+                child: Text(S.of(context).g_ui3_falcon_verify_backup),
               ),
               if (output != null) ...[
                 SelectableText(output!),
@@ -369,7 +358,7 @@ class _FalconPageState extends State<FalconPage> {
                       Clipboard.setData(ClipboardData(text: result));
                     }
                   },
-                  child: Text(t('Copy result', '复制结果')),
+                  child: Text(S.of(context).g_ui3_falcon_copy_result),
                 ),
               ],
             ],

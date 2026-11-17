@@ -8,10 +8,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
   bool get _hasContent => _textController.text.trim().isNotEmpty;
 
-  void _showSnack(String message, {Color? color}) {
+  void _showSnack(String message, {Color? color, Color? textColor}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(message, style: TextStyle(color: textColor)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: color,
       ),
@@ -39,6 +39,8 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       _showSnack(
         S.of(context).g_key_batch_max_recipients(200),
         color: AppColorTokens.of(context).warning,
+        // White on orange is ~2.2:1; use the dark warning label.
+        textColor: AppColorTokens.of(context).onWarningFill,
       );
       return;
     }
@@ -110,7 +112,17 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     return value != null && value > 0;
   }
 
-  void _clearInput() => _textController.clear();
+  /// Clearing the pasted CSV cannot be undone, so ask first.
+  Future<void> _clearInput() async {
+    final s = S.of(context);
+    final ok = await AppDialog.confirm(
+      context,
+      title: s.g_key_batch_clear_all,
+      confirmText: s.g_key_batch_clear_all,
+      danger: true,
+    );
+    if (ok && mounted) _textController.clear();
+  }
 
   void _copyTemplate() {
     const template =
@@ -154,7 +166,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       if (!mounted) return;
       _showSnack(
         S.of(context).g_ui_file_read_failed,
-        color: AppColorTokens.of(context).danger,
+        color: AppColorTokens.of(context).dangerFill,
       );
     }
   }
@@ -165,7 +177,6 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     String rawContent,
   ) {
     final c = AppColorTokens.of(context);
-    final blue = c.brand;
 
     showDialog<void>(
       context: context,
@@ -213,7 +224,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                   Text(
                     S.of(context).g_ui_validation_more(errors.length - 5),
                     style: AppTypography.caption.copyWith(
-                      color: c.textTertiary,
+                      color: c.textSubtitle,
                     ),
                   ),
               ],
@@ -231,7 +242,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                 Navigator.pop(ctx);
                 Navigator.pop(context, rawContent);
               },
-              style: ElevatedButton.styleFrom(backgroundColor: blue),
+              style: ElevatedButton.styleFrom(backgroundColor: c.brandFill),
               child: Text(
                 S.of(context).g_ui_import_valid(validCount),
                 style: const TextStyle(color: Colors.white),

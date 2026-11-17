@@ -50,6 +50,9 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
   GoplusSecurityResult? _goplResult;
   bool _goplLoading = false;
 
+  /// True while the security verification page is open (blocks double taps).
+  bool _confirming = false;
+
   Map<String, dynamic> securityMap = {"email": false, "face": false};
   @override
   void initState() {
@@ -239,7 +242,13 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
               children: [
                 Positioned.fill(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.all(AppSpacing.space8),
+                    // Bottom inset clears the action bar (44pt + padding).
+                    padding: EdgeInsets.fromLTRB(
+                      AppSpacing.space8,
+                      AppSpacing.space8,
+                      AppSpacing.space8,
+                      AppTouch.target + AppSpacing.space8 * 3,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -309,7 +318,11 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                       Container(
                         padding: EdgeInsets.all(AppSpacing.space8),
                         color: _themeColor(AppThemeKeys.backGroundColor),
-                        height: ScreenUtil().setWidth(148),
+                        // Grows past the design height so the 44pt
+                        // buttons are never clipped on narrow screens.
+                        constraints: BoxConstraints(
+                          minHeight: ScreenUtil().setWidth(148),
+                        ),
                         child: Row(
                           children: [
                             Expanded(
@@ -331,7 +344,10 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                                 height: AppTouch.target,
                                 child: AppButton(
                                   label: S.of(context).g_key_t_31,
+                                  loading: _confirming,
                                   onPressed: () async {
+                                    if (_confirming) return;
+                                    setState(() => _confirming = true);
                                     final r = await Navigator.push<bool>(
                                       context,
                                       MaterialPageRoute(
@@ -340,6 +356,7 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                                       ),
                                     );
                                     if (!context.mounted) return;
+                                    setState(() => _confirming = false);
                                     if (r == true) Navigator.pop(context, true);
                                   },
                                 ),

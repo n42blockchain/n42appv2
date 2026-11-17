@@ -240,8 +240,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       return;
     }
     if (toBalanceMM.data['code'] == 404) {
-      errorMessage =
-          'To Address ($toAddr) did not add USDC ($contract) and cannot be traded.';
+      errorMessage = S.current.g_ui3_algo_recipient_no_asset(toAddr, contract);
       _finishLoading();
       return;
     }

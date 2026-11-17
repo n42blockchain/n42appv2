@@ -12,14 +12,15 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
 
   /// Builds a pill-shaped action button (blue bg, white text, fully rounded)
   Widget _pillButton({required String label, required VoidCallback onTap}) {
-    return InkWell(
+    // 44pt hit area around the unchanged 30pt pill; fill is text-safe brand.
+    return AppTapArea(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
         height: ScreenUtil().setWidth(60.0),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
-          color: _tc(AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: BorderRadius.all(
             Radius.circular(ScreenUtil().setWidth(60.0)),
           ),
@@ -68,7 +69,12 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                   widget.coinModel.address,
                 ),
             style: AppTypography.bodySm.copyWith(
-              color: _tc(AppThemeKeys.textColorOrange.name),
+              // Plain orange text is ~2:1 on the page; keep the hue, fix L.
+              color: AppContrast.ensure(
+                _tc(AppThemeKeys.textColorOrange.name),
+                [_tc(AppThemeKeys.backGroundColor.name)],
+                darken: Theme.of(context).brightness != Brightness.dark,
+              ),
             ),
             textAlign: TextAlign.center,
           ),
@@ -140,8 +146,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                     },
                   ),
                 ),
-                InkWell(
+                AppTapArea(
                   onTap: scanQR,
+                  tooltip: S.of(context).g_key_4,
                   child: Container(
                     width: ScreenUtil().setWidth(60.0),
                     height: ScreenUtil().setWidth(60.0),
@@ -312,7 +319,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
           _tc(AppThemeKeys.errorTextColor.name),
         ),
         _balanceText(
-          'Available balance:${regular.formartNumDouble(availableBalance, 14, isCrop: true, isFill0: false)} $unit',
+          '${S.of(context).g_key_43}: ${regular.formartNumDouble(availableBalance, 14, isCrop: true, isFill0: false)} $unit',
           _tc(AppThemeKeys.rightTextColor.name),
         ),
       ],
@@ -387,12 +394,12 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             _tc(AppThemeKeys.mainBlueColor.name),
           ),
           balanceRow(
-            "Min balance",
+            S.of(context).g_ui3_min_balance,
             '${regular.formartNumDouble(minBalance, 14, isCrop: true, isFill0: false)} $unit',
             _tc(AppThemeKeys.errorTextColor.name),
           ),
           balanceRow(
-            "Available balance",
+            S.of(context).g_key_43,
             '${regular.formartNumDouble(availableBalance, 14, isCrop: true, isFill0: false)} $unit',
             _tc(AppThemeKeys.rightTextColor.name),
           ),

@@ -85,7 +85,21 @@ class _ImportOneState extends ConsumerState<ImportOne>
     );
   }
 
+  /// True while the phrase is checked and the password page is open, so a
+  /// second tap cannot start a parallel import.
+  bool _submitting = false;
+
   Future<void> _onSubmit() async {
+    if (_submitting) return;
+    setState(() => _submitting = true);
+    try {
+      await _submit();
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  Future<void> _submit() async {
     if (inputMW.isEmpty) return;
     bool checkMnemonic = await Trustdart().checkMnemonic(inputMW);
     if (!mounted) return;
@@ -243,6 +257,11 @@ class _ImportOneState extends ConsumerState<ImportOne>
                             textAlign: TextAlign.center,
                           ),
                         ),
+                      // Room for the bottom bar: 48pt button + padding.
+                      SizedBox(
+                        height:
+                            kMinInteractiveDimension + AppSpacing.space8 * 2,
+                      ),
                     ],
                   ),
                 ),
@@ -254,14 +273,16 @@ class _ImportOneState extends ConsumerState<ImportOne>
                 child: Column(
                   children: [
                     const Divider(height: 1),
+                    // No fixed height: a 148px box clamped the button to
+                    // 42pt (32pt at 320pt width).
                     Container(
-                      height: ScreenUtil().setWidth(148.0),
                       padding: EdgeInsets.all(AppSpacing.space8),
                       width: double.infinity,
                       color: AppColorTokens.of(context).bgBase,
                       child: AppButton(
                         label: S.of(context).g_key_11,
                         onPressed: _onSubmit,
+                        loading: _submitting,
                       ),
                     ),
                   ],

@@ -104,6 +104,14 @@ class BatchTransferListItem extends StatelessWidget {
         color: AppColorTokens.of(context).danger,
         child: const Icon(Icons.delete, color: Colors.white),
       ),
+      // Removing a recipient has no undo: confirm the swipe first.
+      confirmDismiss: (_) => AppDialog.confirm(
+        context,
+        title: S.of(context).g_key_113,
+        message: shortenAddress(item.toAddress),
+        confirmText: S.of(context).g_key_113,
+        danger: true,
+      ),
       onDismissed: (_) => onDismiss(),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
@@ -141,7 +149,7 @@ class BatchTransferListItem extends StatelessWidget {
           '${index + 1}',
           style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColorTokens.of(context).brand,
+            color: AppColorTokens.of(context).brandOnTint,
           ),
         ),
       ),
@@ -228,7 +236,7 @@ Color batchStatusColor(BuildContext context, BatchTransferStatus status) {
 
 String batchStatusText(BuildContext context, BatchTransferStatus status) =>
     switch (status) {
-      BatchTransferStatus.pending => 'Pending',
+      BatchTransferStatus.pending => S.of(context).g_key_t_2,
       BatchTransferStatus.processing => S.of(context).g_key_batch_broadcasting,
       BatchTransferStatus.success => S.of(context).g_key_batch_done,
       BatchTransferStatus.failed => S.of(context).g_key_175,

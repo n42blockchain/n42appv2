@@ -150,9 +150,10 @@ class BatchResultSheet extends StatelessWidget {
             SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_140,
+              // Green text is ~2.2:1; the check icon above carries the hue.
               style: AppTypography.title.copyWith(
                 fontWeight: FontWeight.w600,
-                color: success,
+                color: mainText,
               ),
             ),
             SizedBox(height: AppSpacing.space6),
@@ -181,11 +182,12 @@ class BatchResultSheet extends StatelessWidget {
                   if (txHash.isNotEmpty) ...[
                     SizedBox(height: AppSpacing.space2),
                     _ResultRow(
-                      label: 'TxHash',
+                      label: S.of(context).g_key_wallet_k37,
                       value: shortenAddress(txHash),
                       labelColor: subText,
                       valueColor: mainText,
                       trailing: IconButton(
+                        tooltip: S.of(context).g_key_119,
                         icon: Icon(
                           Icons.copy_outlined,
                           size: ScreenUtil().setWidth(32),
@@ -219,7 +221,7 @@ class BatchResultSheet extends StatelessWidget {
                 ),
                 label: Text(S.of(context).g_key_batch_export_csv),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: blue,
+                  backgroundColor: AppColorTokens.of(context).brandFill,
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   textStyle: AppTypography.body.copyWith(

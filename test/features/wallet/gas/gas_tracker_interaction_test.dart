@@ -74,7 +74,13 @@ void main() {
   ) async {
     await openTracker(tester);
 
-    await tester.tap(find.byTooltip('Gas Alert'));
+    // Each network card also has a 'Gas Alert' bell; open the app-bar one.
+    await tester.tap(
+      find.descendant(
+        of: find.byWidgetPredicate((w) => w is AppBar),
+        matching: find.byTooltip('Gas Alert'),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Ethereum'), findsNWidgets(2));
     expect(find.text('BNB Chain'), findsNWidgets(2));

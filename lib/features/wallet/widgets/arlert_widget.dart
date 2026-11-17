@@ -43,26 +43,30 @@ Future<void> alertWidget(BuildContext context) async {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: AppSpacing.space12),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColorTokens.of(context).brandFill,
+              // The fill is a Material so the ripple paints above it.
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+                child: Material(
+                  color: AppColorTokens.of(context).brandFill,
+                  borderRadius: AppRadius.brSm,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     borderRadius: AppRadius.brSm,
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-                  height: AppTouch.target,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: Text(
-                    S.of(context).g_swap_key_18,
-                    textAlign: TextAlign.center,
-                    style: AppTypography.body.copyWith(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainButtonTextColor.name,
+                    child: Container(
+                      height: AppTouch.target,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: Text(
+                        S.of(context).g_swap_key_18,
+                        textAlign: TextAlign.center,
+                        style: AppTypography.body.copyWith(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainButtonTextColor.name,
+                          ),
+                        ),
                       ),
                     ),
                   ),

@@ -14,12 +14,12 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
 
   Widget buildItem(BuildContext context, int index) {
     final info = filteredItems[index];
-    final content = _buildItemContent(context, info);
 
     if (isPickerMode) {
-      return GestureDetector(
+      return _buildItemContent(
+        context,
+        info,
         onTap: () => Navigator.pop(context, info.address),
-        child: content,
       );
     }
 
@@ -38,11 +38,19 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
           size: ScreenUtil().setWidth(52),
         ),
       ),
-      child: GestureDetector(onTap: () => navigateToEdit(info), child: content),
+      child: _buildItemContent(
+        context,
+        info,
+        onTap: () => navigateToEdit(info),
+      ),
     );
   }
 
-  Widget _buildItemContent(BuildContext context, AddressBookModel info) {
+  Widget _buildItemContent(
+    BuildContext context,
+    AddressBookModel info, {
+    required VoidCallback onTap,
+  }) {
     final mainText = AppColorTokens.of(context).textPrimary;
     final subtitleText = AppColorTokens.of(context).textSubtitle;
     final itemBg = AppColorTokens.of(context).bgSurface;
@@ -51,85 +59,99 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
       AppThemeKeys.ff888888.name,
     );
 
-    return Container(
-      margin: EdgeInsets.symmetric(
+    // Card color on a Material so the row shows press feedback.
+    return Padding(
+      padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space8,
         vertical: AppSpacing.space2,
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.space8,
-        vertical: AppSpacing.space4,
-      ),
-      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
-      child: Row(
-        children: [
-          _buildAvatar(info),
-          SizedBox(width: AppSpacing.space4),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+      child: Material(
+        color: itemBg,
+        borderRadius: AppRadius.brMd,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
+            ),
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        info.name ?? '',
-                        style: AppTypography.body.copyWith(
-                          color: mainText,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                _buildAvatar(info),
+                SizedBox(width: AppSpacing.space4),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              info.name ?? '',
+                              style: AppTypography.body.copyWith(
+                                color: mainText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(width: AppSpacing.space4),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.space4,
+                              vertical: AppSpacing.space2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: subtitleText.withValues(alpha: 0.1),
+                              borderRadius: AppRadius.brMd,
+                            ),
+                            child: Text(
+                              info.coinName ?? '',
+                              style: AppTypography.captionSm.copyWith(
+                                color: subtitleText,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: AppSpacing.space4),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.space4,
-                        vertical: AppSpacing.space2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: subtitleText.withValues(alpha: 0.1),
-                        borderRadius: AppRadius.brMd,
-                      ),
-                      child: Text(
-                        info.coinName ?? '',
-                        style: AppTypography.captionSm.copyWith(
+                      SizedBox(height: AppSpacing.space2),
+
+                      EnsAddressText(
+                        address: info.address ?? '',
+                        coinType: info.coinName ?? 'ETH',
+                        style: AppTypography.caption.copyWith(
                           color: subtitleText,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: AppSpacing.space2),
 
-                EnsAddressText(
-                  address: info.address ?? '',
-                  coinType: info.coinName ?? 'ETH',
-                  style: AppTypography.caption.copyWith(color: subtitleText),
-                ),
-
-                if (info.desc != null && info.desc!.isNotEmpty) ...[
-                  SizedBox(height: AppSpacing.space2),
-                  Text(
-                    info.desc!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.caption.copyWith(color: mutedText),
+                      if (info.desc != null && info.desc!.isNotEmpty) ...[
+                        SizedBox(height: AppSpacing.space2),
+                        Text(
+                          info.desc!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.caption.copyWith(
+                            color: mutedText,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ],
+                ),
+
+                if (!isPickerMode)
+                  Icon(
+                    Icons.chevron_right,
+                    size: ScreenUtil().setWidth(40),
+                    color: subtitleText,
+                  ),
               ],
             ),
           ),
-
-          if (!isPickerMode)
-            Icon(
-              Icons.chevron_right,
-              size: ScreenUtil().setWidth(40),
-              color: subtitleText,
-            ),
-        ],
+        ),
       ),
     );
   }

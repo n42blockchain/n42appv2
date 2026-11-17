@@ -70,6 +70,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
               }
             },
             icon: Icon(Icons.search, size: scr.setWidth(48.0)),
+            tooltip: S.of(context).search,
           ),
         ],
       ),
@@ -113,7 +114,8 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
     final scr = ScreenUtil();
     final isSelected = index == selectIndex;
 
-    return GestureDetector(
+    // InkWell (not GestureDetector) so the row shows press feedback.
+    return InkWell(
       onTap: () {
         setState(() => selectIndex = index);
         Navigator.of(context).pop(model);

@@ -38,7 +38,9 @@ void main() {
   });
 
   Future<void> pumpTracker(WidgetTester tester) async {
-    tester.view.physicalSize = const Size(400, 900);
+    // The 360pt design grid doubles the 44pt hit areas; keep all six network
+    // cards inside the lazily built ListView.
+    tester.view.physicalSize = const Size(400, 2000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);

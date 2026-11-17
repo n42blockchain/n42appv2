@@ -261,13 +261,16 @@ class EnsConfirmDialog extends StatelessWidget {
             children: [
               Icon(icon, color: iconColor, size: ScreenUtil().setWidth(24)),
               SizedBox(width: AppSpacing.space2),
-              Text(
-                label,
-                style: AppTypography.caption.copyWith(color: subtitleColor),
+              // Flexible label leaves room for the 44pt copy target.
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
+                ),
               ),
-              const Spacer(),
-              GestureDetector(
+              AppTapArea(
                 onTap: onCopy,
+                tooltip: S.of(context).g_key_119,
                 child: Icon(
                   Icons.copy_rounded,
                   color: subtitleColor,

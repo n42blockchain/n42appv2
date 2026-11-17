@@ -10,8 +10,11 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     final available = chains.where(_WalletReceiveQrState._hasAddress).toList();
     if (available.length <= 1) return const SizedBox.shrink();
 
+    final colors = AppColorTokens.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // The row is a full touch target high; each chip keeps its 72-px visual.
     return SizedBox(
-      height: ScreenUtil().setWidth(72),
+      height: AppTouch.target,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
@@ -27,41 +30,53 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
           return InkWell(
             onTap: () => _switchChain(cm),
             borderRadius: AppRadius.brPill,
-            child: AnimatedContainer(
-              duration: AppMotion.fast,
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? chipColor.withValues(alpha: 0.12)
-                    : Colors.transparent,
-                border: Border.all(
+            child: Center(
+              child: AnimatedContainer(
+                duration: AppMotion.fast,
+                height: ScreenUtil().setWidth(72),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
+                decoration: BoxDecoration(
                   color: isSelected
-                      ? chipColor
-                      : mainText.withValues(alpha: 0.2),
-                  width: isSelected ? 1.5 : 1.0,
+                      ? chipColor.withValues(alpha: 0.12)
+                      : Colors.transparent,
+                  border: Border.all(
+                    color: isSelected
+                        ? chipColor
+                        : mainText.withValues(alpha: 0.2),
+                    width: isSelected ? 1.5 : 1.0,
+                  ),
+                  borderRadius: AppRadius.brPill,
                 ),
-                borderRadius: AppRadius.brPill,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ImageNetWork(
-                    imageUrl: cm.config.icon,
-                    width: ScreenUtil().setWidth(32),
-                    height: ScreenUtil().setWidth(32),
-                    placeholder: 'assets/img/list_default.png',
-                  ),
-                  SizedBox(width: AppSpacing.space2),
-                  Text(
-                    ct,
-                    style: AppTypography.caption.copyWith(
-                      color: isSelected ? chipColor : mainText,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.w400,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ImageNetWork(
+                      imageUrl: cm.config.icon,
+                      width: ScreenUtil().setWidth(32),
+                      height: ScreenUtil().setWidth(32),
+                      placeholder: 'assets/img/list_default.png',
                     ),
-                  ),
-                ],
+                    SizedBox(width: AppSpacing.space2),
+                    Text(
+                      ct,
+                      style: AppTypography.caption.copyWith(
+                        // Raw chain colors (e.g. BNB yellow) are < 2:1 as
+                        // text; keep the hue and reach 4.5:1 on the tint.
+                        color: isSelected
+                            ? AppContrast.textOnTint(
+                                chipColor,
+                                [colors.bgBase],
+                                dark: isDark,
+                                alpha: 0.12,
+                              )
+                            : mainText,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -227,6 +242,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
         hintStyle: textStyle.copyWith(color: mainText.withValues(alpha: 0.35)),
         suffixIcon: amountCtrl.text.isNotEmpty
             ? IconButton(
+                tooltip: S.of(context).g_a11y_clear,
                 icon: Icon(
                   Icons.clear,
                   size: ScreenUtil().setWidth(36),

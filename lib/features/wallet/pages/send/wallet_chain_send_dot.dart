@@ -131,7 +131,10 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(AppSpacing.space8),
-            height: ScreenUtil().setWidth(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(
+              minHeight: ScreenUtil().setWidth(148.0),
+            ),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: title,

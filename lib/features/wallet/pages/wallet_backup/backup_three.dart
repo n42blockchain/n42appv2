@@ -80,14 +80,20 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
           ),
         ),
         obscure: obscure,
-        rightWidget1: Container(
-          width: ScreenUtil().setWidth(50.0),
-          height: ScreenUtil().setWidth(50.0),
-          alignment: Alignment.center,
-          child: Image.asset(
-            'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
-            width: ScreenUtil().setWidth(34.0),
-            color: AppColorTokens.of(context).brand,
+        rightWidget1: Semantics(
+          button: true,
+          label: obscure
+              ? S.of(context).g_a11y_show_password
+              : S.of(context).g_a11y_hide_password,
+          child: Container(
+            width: ScreenUtil().setWidth(50.0),
+            height: ScreenUtil().setWidth(50.0),
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
+              width: ScreenUtil().setWidth(34.0),
+              color: AppColorTokens.of(context).brand,
+            ),
           ),
         ),
         rightOnTap1: onToggleObscure,
@@ -161,10 +167,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                   children: [
                     LoginTitle(
                       title: S.of(context).login_password,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor10.name,
-                      ),
+                      color: AppColorTokens.of(context).textSecondary,
                       must: true,
                     ),
                     _buildPasswordField(
@@ -181,10 +184,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                     ),
                     LoginTitle(
                       title: S.of(context).rest_Confirm_password,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor10.name,
-                      ),
+                      color: AppColorTokens.of(context).textSecondary,
                       must: true,
                     ),
                     _buildPasswordField(
@@ -199,7 +199,10 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       onEditingComplete: () => FocusScope.of(context).unfocus(),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(148.0)),
+                    // Room for the bottom bar: 48pt button + padding.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -211,8 +214,9 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
               child: Column(
                 children: [
                   const Divider(height: 1, indent: 0, endIndent: 0),
+                  // No fixed height: a 148px box clamped the button to
+                  // 42pt (32pt at 320pt width).
                   Container(
-                    height: ScreenUtil().setWidth(148.0),
                     padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
                     child: AppButton(

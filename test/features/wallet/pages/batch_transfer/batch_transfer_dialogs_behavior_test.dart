@@ -203,7 +203,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('3.5 USDC'), findsOneWidget);
-    expect(find.text('TxHash:'), findsOneWidget);
+    expect(find.text('${S.current.g_key_wallet_k37}:'), findsOneWidget);
     expect(find.byIcon(Icons.copy_outlined), findsOneWidget);
     expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
 

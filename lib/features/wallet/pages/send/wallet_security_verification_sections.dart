@@ -85,8 +85,11 @@ class _WalletPasswordSection extends StatelessWidget {
               onEditingComplete: onEditingComplete,
             ),
           ),
-          InkWell(
+          AppTapArea(
             onTap: onToggleObscure,
+            tooltip: obscure
+                ? S.of(context).g_a11y_show_password
+                : S.of(context).g_a11y_hide_password,
             child: SizedBox(
               height: ScreenUtil().setWidth(40.0),
               width: ScreenUtil().setWidth(40.0),
@@ -231,7 +234,8 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
-      height: ScreenUtil().setWidth(100.0),
+      // Same row height as the face row: never below 44pt for the pill.
+      height: AppTouch.scaled(100),
       child: Row(
         children: [
           Expanded(

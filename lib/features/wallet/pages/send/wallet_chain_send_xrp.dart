@@ -136,7 +136,8 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
           Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(sw(30.0)),
-            height: sw(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(minHeight: sw(148.0)),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,
@@ -155,7 +156,8 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
       appBar: AppBarWidget(
         text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
         actions: [
-          InkWell(
+          AppTapArea(
+            tooltip: S.of(context).g_key_108,
             onTap: () async {
               final value = await Navigator.push(
                 context,

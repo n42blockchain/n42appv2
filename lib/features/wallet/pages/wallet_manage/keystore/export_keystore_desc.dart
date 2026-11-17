@@ -1,6 +1,5 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_page.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -31,10 +30,7 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.ff888888.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSecondary;
     final errorBg = AppColorTokens.of(context).dangerBg;
     final errorText = AppColorTokens.of(context).danger;
     final mainText = AppColorTokens.of(context).textPrimary;
@@ -91,7 +87,10 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                           setState(() => _riskAcknowledged = v ?? false),
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(148)),
+                    // Room for the bottom bar: 48pt button + padding.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -105,9 +104,10 @@ class _ExportKeystoreDescState extends State<ExportKeystoreDesc> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Divider(height: ScreenUtil().setWidth(1)),
+                  // No fixed height: a 148px box clamped the button to
+                  // 42pt (32pt at 320pt width).
                   Container(
                     width: double.infinity,
-                    height: ScreenUtil().setWidth(148),
                     padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
                     child: AppButton(
@@ -147,39 +147,44 @@ class _RiskCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => onChanged(!value),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: ScreenUtil().setWidth(44),
-            height: ScreenUtil().setWidth(44),
-            child: Checkbox(
-              value: value,
-              onChanged: onChanged,
-              activeColor: AppColorTokens.of(context).brand,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
+    // One screen-reader element: the checkbox state plus its label.
+    return MergeSemantics(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onChanged(!value),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: ScreenUtil().setWidth(44),
+              height: ScreenUtil().setWidth(44),
+              child: Checkbox(
+                value: value,
+                onChanged: onChanged,
+                activeColor: AppColorTokens.of(context).brand,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-          ),
-          SizedBox(width: AppSpacing.space4),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),
-              child: Text(
-                label,
-                style: AppTypography.body.copyWith(
-                  color: AppColorTokens.of(context).textPrimary,
-                  height: 1.5,
+            SizedBox(width: AppSpacing.space4),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),
+                child: Text(
+                  label,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                    height: 1.5,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            // Zero-width strut: the whole row stays >= 44pt tall to tap.
+            const SizedBox(height: AppTouch.minTarget),
+          ],
+        ),
       ),
     );
   }

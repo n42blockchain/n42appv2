@@ -266,6 +266,16 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pumpAndSettle();
+      // Editable rows ask for a destructive confirmation before removal.
+      expect(
+        find.byType(FilledButton),
+        editable ? findsOneWidget : findsNothing,
+      );
+      if (editable) {
+        expect(wap.coinList.contains(coin), isTrue);
+        await tester.tap(find.byType(FilledButton));
+        await tester.pumpAndSettle();
+      }
       expect(wap.coinList.contains(coin), !editable);
       expect(tester.takeException(), isNull);
     });

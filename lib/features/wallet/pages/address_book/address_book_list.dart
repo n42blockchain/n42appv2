@@ -294,6 +294,7 @@ class _AddressBookListState extends ConsumerState<AddressBookList>
                     color: mainText.withValues(alpha: 0.4),
                   ),
                   onPressed: _searchCtrl.clear,
+                  tooltip: S.of(context).g_a11y_clear_search,
                 )
               : null,
           contentPadding: EdgeInsets.symmetric(

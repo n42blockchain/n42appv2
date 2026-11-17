@@ -114,7 +114,8 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo>
           child: Stack(
             children: [
               Positioned.fill(
-                bottom: ScreenUtil().setWidth(148.0) + 1,
+                // Bar height: 44pt button + 16pt padding each side + divider.
+                bottom: AppTouch.target + AppSpacing.space8 * 2 + 1,
                 child: SingleChildScrollView(child: buildForm()),
               ),
               buildSendButton(),

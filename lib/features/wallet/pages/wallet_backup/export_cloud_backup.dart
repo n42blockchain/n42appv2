@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_crypto.dart';
@@ -201,7 +200,8 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             SizedBox(height: AppSpacing.space4),
           ],
 
-          SizedBox(height: ScreenUtil().setWidth(160)),
+          // Room for the bottom bar: 48pt button + padding.
+          SizedBox(height: kMinInteractiveDimension + AppSpacing.space8 * 2),
         ],
       ),
     );
@@ -317,7 +317,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
       controller: controller,
       maxLines: 1,
       style: AppTypography.bodySm.copyWith(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
+        color: AppColorTokens.of(context).textPrimary,
       ),
     ),
   );
@@ -334,9 +334,10 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     mainAxisSize: MainAxisSize.min,
     children: [
       Divider(height: ScreenUtil().setWidth(1)),
+      // No fixed height: a 148px box clamped the button to 42pt (32pt at
+      // 320pt width).
       Container(
         padding: EdgeInsets.all(AppSpacing.space8),
-        height: ScreenUtil().setWidth(148),
         width: double.infinity,
         color: AppColorTokens.of(context).bgBase,
         child: AppButton(

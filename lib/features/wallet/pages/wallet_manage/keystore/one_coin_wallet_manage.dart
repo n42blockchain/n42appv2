@@ -197,6 +197,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
           Navigator.pop(context);
         },
         child: Container(
+          constraints: const BoxConstraints(minHeight: AppTouch.minTarget),
           padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           alignment: Alignment.center,
           child: Text(
@@ -227,6 +228,10 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                     if (!widget.walletInfo.watchOnly &&
                         widget.walletInfo.privateKey == null)
                       _buildExport(),
+                    // Keeps the last section clear of the bottom bar.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -242,8 +247,9 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                     indent: 0,
                     endIndent: 0,
                   ),
+                  // No fixed height: a 148px box clamped the button to
+                  // 42pt (32pt at 320pt width).
                   Container(
-                    height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,

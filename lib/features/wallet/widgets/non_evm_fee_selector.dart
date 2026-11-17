@@ -61,73 +61,82 @@ class NonEvmFeeCompact extends StatelessWidget {
 
     final feeColor = hasError ? errorColor : mainText;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: AppRadius.brMd,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space8,
-          vertical: AppSpacing.space4,
-        ),
-        margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-        decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
-        child: Row(
-          children: [
-            // 图标
-            Icon(
-              Icons.local_gas_station,
-              size: ScreenUtil().setWidth(40),
-              color: blueColor,
+    // The card color sits on a Material so the press ink is visible.
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      child: Material(
+        color: itemBg,
+        borderRadius: AppRadius.brMd,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
-            SizedBox(width: AppSpacing.space4),
-
-            // 左侧：标签 + 时间/速度
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    speedLabel ?? label ?? S.of(context).g_key_t_16,
-                    style: AppTypography.body.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: mainText,
-                    ),
-                  ),
-                  if (estimatedTime != null || rateText != null)
-                    Text(
-                      [estimatedTime, rateText].whereType<String>().join('  '),
-                      style: AppTypography.caption.copyWith(
-                        color: subtitleText,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-            // 右侧：费用 + 可选 edit 图标
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
+            child: Row(
               children: [
-                Text(
-                  feeText,
-                  style: AppTypography.body.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: feeColor,
+                // 图标
+                Icon(
+                  Icons.local_gas_station,
+                  size: ScreenUtil().setWidth(40),
+                  color: blueColor,
+                ),
+                SizedBox(width: AppSpacing.space4),
+
+                // 左侧：标签 + 时间/速度
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        speedLabel ?? label ?? S.of(context).g_key_t_16,
+                        style: AppTypography.body.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: mainText,
+                        ),
+                      ),
+                      if (estimatedTime != null || rateText != null)
+                        Text(
+                          [
+                            estimatedTime,
+                            rateText,
+                          ].whereType<String>().join('  '),
+                          style: AppTypography.caption.copyWith(
+                            color: subtitleText,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
+
+                // 右侧：费用 + 可选 edit 图标
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      feeText,
+                      style: AppTypography.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: feeColor,
+                      ),
+                    ),
+                  ],
+                ),
+                if (onTap != null) ...[
+                  SizedBox(width: AppSpacing.space2),
+                  Icon(
+                    Icons.edit_outlined,
+                    size: ScreenUtil().setWidth(32),
+                    color: blueColor,
+                  ),
+                ],
               ],
             ),
-            if (onTap != null) ...[
-              SizedBox(width: AppSpacing.space2),
-              Icon(
-                Icons.edit_outlined,
-                size: ScreenUtil().setWidth(32),
-                color: blueColor,
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -183,20 +192,21 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-      decoration: BoxDecoration(
+      // Material (not a decoration) so the option ink stays visible.
+      child: Material(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 头部：Gas Fee + 当前总费用
-          _buildHeader(context),
-          // 速度按钮
-          _buildSpeedRow(context),
-          if (widget.showDetails) _buildDetails(context),
-          SizedBox(height: AppSpacing.space4),
-        ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 头部：Gas Fee + 当前总费用
+            _buildHeader(context),
+            // 速度按钮
+            _buildSpeedRow(context),
+            if (widget.showDetails) _buildDetails(context),
+            SizedBox(height: AppSpacing.space4),
+          ],
+        ),
       ),
     );
   }
@@ -297,54 +307,62 @@ class _NonEvmFeeSelectorState extends State<NonEvmFeeSelector> {
     );
 
     return Expanded(
-      child: GestureDetector(
-        onTap: () => _onTap(speed),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: AppSpacing.space4,
-            horizontal: AppSpacing.space4,
-          ),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? blueColor.withValues(alpha: 0.1)
-                : Colors.transparent,
-            borderRadius: AppRadius.brMd,
-            border: Border.all(
-              color: isSelected ? blueColor : dividerColor,
-              width: isSelected ? 2 : 1,
+      child: Semantics(
+        selected: isSelected,
+        child: InkWell(
+          onTap: () => _onTap(speed),
+          borderRadius: AppRadius.brMd,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: AppSpacing.space4,
+              horizontal: AppSpacing.space4,
             ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: ScreenUtil().setWidth(36),
-                color: isSelected
-                    ? AppColorTokens.of(context).brandOnTint
-                    : subtitleText,
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? blueColor.withValues(alpha: 0.1)
+                  : Colors.transparent,
+              borderRadius: AppRadius.brMd,
+              border: Border.all(
+                color: isSelected ? blueColor : dividerColor,
+                width: isSelected ? 2 : 1,
               ),
-              SizedBox(height: AppSpacing.space2),
-              Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  icon,
+                  size: ScreenUtil().setWidth(36),
                   color: isSelected
                       ? AppColorTokens.of(context).brandOnTint
-                      : mainText,
+                      : subtitleText,
                 ),
-              ),
-              SizedBox(height: AppSpacing.space2),
-              Text(
-                estimatedTime,
-                style: AppTypography.caption.copyWith(color: subtitleText),
-              ),
-              // 费率（BTC 专有）
-              if (option.feeRate != null)
+                SizedBox(height: AppSpacing.space2),
                 Text(
-                  '${option.feeRate} ${option.feeRateUnit ?? ''}',
-                  style: AppTypography.captionSm.copyWith(color: subtitleText),
+                  label,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                    color: isSelected
+                        ? AppColorTokens.of(context).brandOnTint
+                        : mainText,
+                  ),
                 ),
-            ],
+                SizedBox(height: AppSpacing.space2),
+                Text(
+                  estimatedTime,
+                  style: AppTypography.caption.copyWith(color: subtitleText),
+                ),
+                // 费率（BTC 专有）
+                if (option.feeRate != null)
+                  Text(
+                    '${option.feeRate} ${option.feeRateUnit ?? ''}',
+                    style: AppTypography.captionSm.copyWith(
+                      color: subtitleText,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

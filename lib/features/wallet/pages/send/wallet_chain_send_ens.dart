@@ -184,7 +184,10 @@ class _FailedBanner extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: AppTypography.caption.copyWith(color: warningColor),
+              // Orange text is ~2:1 on the page; the icon keeps the hue.
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
         ],
@@ -218,7 +221,8 @@ class _ResolvedBanner extends StatelessWidget {
     );
     final successColor = AppColorTokens.of(context).success;
 
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(w8),
       onTap: () {
         Clipboard.setData(ClipboardData(text: resolvedAddr));
         ScaffoldMessenger.of(context).showSnackBar(
@@ -231,6 +235,8 @@ class _ResolvedBanner extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.only(top: w8),
+        // Full-width copy row, at least 44pt tall (was ~37pt).
+        constraints: BoxConstraints(minHeight: AppTouch.target),
         padding: EdgeInsets.symmetric(
           horizontal: su.setWidth(12),
           vertical: w8,
@@ -284,7 +290,7 @@ class _ResolvedBanner extends StatelessWidget {
                   result.sourceChain!,
                   style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: blueColor,
+                    color: AppColorTokens.of(context).brandOnTint,
                   ),
                 ),
               ),

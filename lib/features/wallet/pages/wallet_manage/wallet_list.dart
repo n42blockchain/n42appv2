@@ -81,8 +81,9 @@ class _WalletListState extends ConsumerState<WalletList>
         horizontal: AppSpacing.space8,
         vertical: AppSpacing.space2,
       ),
+      // Padded chips keep their compact look with a 48pt hit area.
       child: SizedBox(
-        height: 34,
+        height: kMinInteractiveDimension,
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
@@ -100,7 +101,6 @@ class _WalletListState extends ConsumerState<WalletList>
                   color: _selectedTag == null ? Colors.white : null,
                 ),
                 side: BorderSide.none,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
               ),
             ),
@@ -116,7 +116,6 @@ class _WalletListState extends ConsumerState<WalletList>
                     color: _selectedTag == tag ? Colors.white : null,
                   ),
                   side: BorderSide.none,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
                 ),
               ),
@@ -135,6 +134,7 @@ class _WalletListState extends ConsumerState<WalletList>
         actions: [
           IconButton(
             onPressed: _openAddWalletSheet,
+            tooltip: S.of(context).g_key_wallet_c32,
             icon: Icon(
               Icons.add_circle_outline,
               color: AppColorTokens.of(context).brand,
