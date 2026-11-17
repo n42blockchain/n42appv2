@@ -38,10 +38,13 @@ class AppBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
     final fg = _foreground(c);
-    // Brand labels on their own 12% tint measure ~3.0-3.5:1; use the
-    // contrast-safe shade for the label, keep the tint from the brand.
-    final tintBase = tone == AppBadgeTone.brand ? c.brand : fg;
-    final labelColor = tone == AppBadgeTone.brand ? c.brandOnTint : fg;
+    // Labels on their own 12% tint measure ~2-3.5:1 (brand, success,
+    // warning, danger); use the contrast-safe shade for the label and keep
+    // the tint from the tone color.
+    final tintBase = fg;
+    final labelColor = tone == AppBadgeTone.neutral
+        ? fg
+        : c.textOnTintOf(fg, alpha: 0.12);
 
     return Container(
       padding: EdgeInsets.symmetric(

@@ -164,12 +164,16 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
                           isDark,
                           Icons.keyboard_arrow_up,
                           _scrollToTop,
+                        
+                          S.of(context).g_a11y_scroll_to_top,
                         ),
                         SizedBox(height: AppSpacing.space4),
                         _buildScrollButton(
                           isDark,
                           Icons.keyboard_arrow_down,
                           _scrollToBottom,
+                        
+                          S.of(context).g_a11y_scroll_to_bottom,
                         ),
                       ],
                     ),
@@ -248,9 +252,16 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
     );
   }
 
-  Widget _buildScrollButton(bool isDark, IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
+  Widget _buildScrollButton(
+    bool isDark,
+    IconData icon,
+    VoidCallback onTap,
+    String label,
+  ) {
+    // Icon-only control: tooltip doubles as the screen-reader label. The ink
+    // is drawn on a transparent Material above the circle fill.
+    return Tooltip(
+      message: label,
       child: Container(
         width: ScreenUtil().setWidth(120),
         height: ScreenUtil().setWidth(120),
@@ -267,10 +278,17 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
             ),
           ],
         ),
-        child: Icon(
-          icon,
-          size: ScreenUtil().setWidth(64),
-          color: AppColorTokens.of(context).brand,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: Icon(
+              icon,
+              size: ScreenUtil().setWidth(64),
+              color: AppColorTokens.of(context).brand,
+            ),
+          ),
         ),
       ),
     );

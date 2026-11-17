@@ -164,6 +164,7 @@ class _SettingShareState extends State<SettingShare> {
               top: 0,
               height: AppTouch.scaled(100),
               child: IconButton(
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
                 icon: const Icon(Icons.arrow_back_ios),
                 color: _color(AppThemeKeys.mainTextColor),
                 onPressed: () => Navigator.pop(context),
@@ -178,7 +179,11 @@ class _SettingShareState extends State<SettingShare> {
                   Divider(height: ScreenUtil().setWidth(1)),
                   Container(
                     padding: EdgeInsets.all(AppSpacing.space8),
-                    height: ScreenUtil().setWidth(148.0),
+                    // minHeight: the fixed 148px left the button 42pt tall at
+                    // 375 and 31pt at 320.
+                    constraints: BoxConstraints(
+                      minHeight: ScreenUtil().setWidth(148.0),
+                    ),
                     child: AppButton(
                       label: S.of(context).g_share_v2_key_5,
                       onPressed: _share,
@@ -258,41 +263,47 @@ class _SettingShareState extends State<SettingShare> {
   }
 
   Widget _buildCopyableRow(String label, String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-      padding: EdgeInsets.all(AppSpacing.space8),
-      decoration: BoxDecoration(
-        borderRadius: AppRadius.brMd,
+    // The whole 52pt row copies (the 16pt copy icon alone was the target);
+    // the fill is on the Material so the ink stays visible.
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      child: Material(
         color: _color(AppThemeKeys.itemBgColor),
-      ),
-      child: Row(
-        children: [
-          Text(
-            label,
-            style: AppTypography.bodySm.copyWith(
-              color: AppColorTokens.of(context).textItem,
+        borderRadius: AppRadius.brMd,
+        child: InkWell(
+          onTap: () => _copyToClipboard(value),
+          borderRadius: AppRadius.brMd,
+          child: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.all(AppSpacing.space8),
+            child: Row(
+              children: [
+                Text(
+                  label,
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).textItem,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    value,
+                    textAlign: TextAlign.end,
+                    style: AppTypography.bodySm.copyWith(
+                      color: _color(AppThemeKeys.itemTextColor),
+                    ),
+                  ),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                Icon(
+                  Icons.copy,
+                  color: _color(AppThemeKeys.mainBlueColor),
+                  size: ScreenUtil().setWidth(32.0),
+                  semanticLabel: S.of(context).g_key_119,
+                ),
+              ],
             ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: AppTypography.bodySm.copyWith(
-                color: _color(AppThemeKeys.itemTextColor),
-              ),
-            ),
-          ),
-          SizedBox(width: AppSpacing.space4),
-          InkWell(
-            onTap: () => _copyToClipboard(value),
-            child: Icon(
-              Icons.copy,
-              color: _color(AppThemeKeys.mainBlueColor),
-              size: ScreenUtil().setWidth(32.0),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

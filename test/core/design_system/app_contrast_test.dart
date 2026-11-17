@@ -167,4 +167,40 @@ void main() {
       });
     }
   });
+
+  group('AppColorTokens danger / warning fills', () {
+    for (final dark in [false, true]) {
+      testWidgets('solid danger and warning labels reach 4.5:1 (dark: $dark)', (
+        tester,
+      ) async {
+        final theme = dark
+            ? ThemeAdapter.buildDark(ThemeAdapter.defaultAccent)
+            : ThemeAdapter.buildLight(ThemeAdapter.defaultAccent);
+        late AppColorTokens c;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Builder(
+              builder: (context) {
+                c = AppColorTokens.of(context);
+                return const SizedBox();
+              },
+            ),
+          ),
+        );
+        // System red / orange with white text are the failing patterns.
+        expect(AppContrast.ratio(c.danger, _white), lessThan(4.5));
+        expect(AppContrast.ratio(c.warning, _white), lessThan(4.5));
+        expect(
+          AppContrast.ratio(c.dangerFill, _white),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(_hue(c.dangerFill), closeTo(_hue(c.danger), 1.0));
+        expect(
+          AppContrast.ratio(c.warning, c.onWarningFill),
+          greaterThanOrEqualTo(4.5),
+        );
+      });
+    }
+  });
 }

@@ -74,6 +74,18 @@ class AppColorTokens {
     alpha: alpha,
   );
 
+  /// [color] as a label on its own tint of up to [alpha] (0 = plain page
+  /// or card background): lightness shifted until it reaches 4.5:1. Use for
+  /// semantic text such as success / warning / danger labels and badges;
+  /// system green / orange / red text measure about 2.2 / 2.2 / 3.6:1.
+  Color textOnTintOf(Color color, {double alpha = AppContrast.maxTintAlpha}) =>
+      AppContrast.textOnTint(
+        color,
+        [bgBase, bgSurface, bgElevated],
+        dark: _isDark,
+        alpha: alpha,
+      );
+
   // ── 语义（复用现有表，缺失者补常量）──
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677
   Color get danger => _key(AppThemeKeys.errorTextColor); // #F03450
@@ -81,6 +93,16 @@ class AppColorTokens {
   Color get info => _apple
       ? _system(CupertinoColors.systemBlue)
       : _tone(const Color(0xFF2E90FA), const Color(0xFF4FACFE));
+
+  /// Fill shade of [danger] for solid buttons carrying white text: same
+  /// hue, darkened until white reaches 4.5:1 (system red + white is about
+  /// 3.55:1 light / 3.4:1 dark).
+  Color get dangerFill => AppContrast.fillForWhiteText(danger);
+
+  /// Foreground on a [warning] fill. Orange cannot carry white text (about
+  /// 2.2:1) without turning brown, so solid warning buttons keep the orange
+  /// and use a dark label (about 8:1).
+  Color get onWarningFill => const Color(0xFF1C1C1E);
 
   /// 危险态背景填充（errorBgColor）——错误提示卡 / 横幅底。
   Color get dangerBg =>

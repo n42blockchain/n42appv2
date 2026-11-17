@@ -269,7 +269,11 @@ class ThemeAdapter {
       ),
       textButtonTheme: TextButtonThemeData(
         style: button.copyWith(
-          foregroundColor: WidgetStatePropertyAll(primary),
+          // Brand labels on page/card backgrounds: system blue alone is
+          // ~4.0:1 on white and ~3.6:1 on the grouped background.
+          foregroundColor: WidgetStatePropertyAll(
+            AppContrast.ensure(primary, [background, surface], darken: !dark),
+          ),
         ),
       ),
       iconButtonTheme: const IconButtonThemeData(
@@ -407,6 +411,16 @@ class AppThemeUtils {
     return colorMap[key] ?? const Color(0xff000000);
   }
 
+  /// Secondary text. Light-mode secondaryLabel measures about 3.4:1 on
+  /// white and 3.3:1 on the grouped background, below the 4.5:1 that
+  /// small text needs (HIG accessibility, color contrast). #6C6C70 keeps
+  /// the same neutral gray at 5.1:1 / 4.6:1; dark mode is unchanged.
+  static const CupertinoDynamicColor _secondaryText =
+      CupertinoDynamicColor.withBrightness(
+        color: Color(0xFF6C6C70),
+        darkColor: Color(0x99EBEBF5),
+      );
+
   /// Existing custom palette with Apple's semantic colors as the default.
   static Map<String, Color> palette(Brightness brightness, Color accent) {
     final dark = brightness == Brightness.dark;
@@ -454,7 +468,7 @@ class AppThemeUtils {
       AppThemeKeys.mainTextColor6,
       AppThemeKeys.itemSubtitleTextColor,
       AppThemeKeys.mainTextColor8,
-    ], CupertinoColors.secondaryLabel);
+    ], _secondaryText);
     set([
       AppThemeKeys.mainTextColor4,
       AppThemeKeys.mainTextColor3,

@@ -192,6 +192,8 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
                 final enabled = state.torchState == TorchState.on;
                 return IconButton(
                   key: const ValueKey('scan_flash_button'),
+                  tooltip: S.of(context).g_a11y_flashlight,
+                  isSelected: enabled,
                   onPressed:
                       state.isRunning &&
                           state.torchState != TorchState.unavailable
@@ -267,7 +269,7 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
           SizedBox(height: ScreenUtil().setWidth(24)),
           TextButton(
             onPressed: _checkCameraPermission,
-            child: const Text('Retry'),
+            child: Text(S.of(context).g_key_retry),
           ),
           TextButton(
             onPressed: _openSettings,

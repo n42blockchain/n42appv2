@@ -61,6 +61,8 @@ class DAppSecurityIcon extends StatelessWidget {
       _levelIcon(info!.level),
       color: Color(info!.level.colorValue),
       size: size.sp,
+      // The level is shown only by icon and color; name it for screen readers.
+      semanticLabel: _levelLabel(context, info!.level),
     );
   }
 }
@@ -86,6 +88,14 @@ class DAppSecurityBadge extends StatelessWidget {
     final color = Color(info.level.colorValue);
     final bgColor = color.withAlpha(25);
     final label = _levelLabel(context, info.level);
+    // Level color as small text on its own ~10% tint: shifted to 4.5:1.
+    final tokens = AppColorTokens.of(context);
+    final textColor = AppContrast.textOnTint(
+      color,
+      [tokens.bgBase, tokens.bgSurface, tokens.bgElevated],
+      dark: Theme.of(context).brightness == Brightness.dark,
+      alpha: 25 / 255,
+    );
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
@@ -107,7 +117,7 @@ class DAppSecurityBadge extends StatelessWidget {
                 label,
                 style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: color,
+                  color: textColor,
                 ),
               ),
               if (showReason && info.reason != null)
@@ -115,7 +125,7 @@ class DAppSecurityBadge extends StatelessWidget {
                   info.reason!,
                   style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w400,
-                    color: color.withAlpha(200),
+                    color: textColor,
                   ),
                 ),
             ],

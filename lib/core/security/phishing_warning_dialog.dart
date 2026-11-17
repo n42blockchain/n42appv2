@@ -89,7 +89,7 @@ Future<bool?> showPhishingWarningDialog(
                   Text(
                     s.g_phishing_warning_url_label,
                     style: AppTypography.caption.copyWith(
-                      color: themeColor(AppThemeKeys.ff888888),
+                      color: AppColorTokens.of(context).textSecondary,
                     ),
                   ),
                   SizedBox(height: AppSpacing.space2),
@@ -103,7 +103,13 @@ Future<bool?> showPhishingWarningDialog(
                     child: Text(
                       url,
                       style: AppTypography.caption.copyWith(
-                        color: themeColor(AppThemeKeys.errorTextColor),
+                        // errorBgColor is light in both modes: darken the red
+                        // until the small URL text reaches 4.5:1.
+                        color: AppContrast.ensure(
+                          themeColor(AppThemeKeys.errorTextColor),
+                          [themeColor(AppThemeKeys.errorBgColor)],
+                          darken: true,
+                        ),
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
@@ -116,64 +122,73 @@ Future<bool?> showPhishingWarningDialog(
             Divider(height: ScreenUtil().setWidth(1)),
 
             // ── Action buttons ───────────────────────────────────────────────
-            IntrinsicHeight(
-              child: Row(
-                children: [
-                  // "Go Back (Safe)" — safe / primary action
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => navigator.pop(false),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(AppRadius.md),
-                      ),
-                      child: Container(
-                        constraints: BoxConstraints(minHeight: AppTouch.target),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 12,
+            // Transparent Material above the dialog fill so the InkWell
+            // splash is visible (it was painted under the opaque Container).
+            Material(
+              type: MaterialType.transparency,
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    // "Go Back (Safe)" — safe / primary action
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => navigator.pop(false),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(AppRadius.md),
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          s.g_phishing_go_back,
-                          textAlign: TextAlign.center,
-                          style: AppTypography.bodyStrong.copyWith(
-                            color: themeColor(AppThemeKeys.mainBlueColor),
+                        child: Container(
+                          constraints: BoxConstraints(
+                            minHeight: AppTouch.target,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 12,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            s.g_phishing_go_back,
+                            textAlign: TextAlign.center,
+                            style: AppTypography.bodyStrong.copyWith(
+                              color: themeColor(AppThemeKeys.mainBlueColor),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
 
-                  VerticalDivider(
-                    width: ScreenUtil().setWidth(1),
-                    thickness: 1,
-                  ),
+                    VerticalDivider(
+                      width: ScreenUtil().setWidth(1),
+                      thickness: 1,
+                    ),
 
-                  // "Proceed Anyway" — danger / secondary action
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => navigator.pop(true),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(AppRadius.md),
-                      ),
-                      child: Container(
-                        constraints: BoxConstraints(minHeight: AppTouch.target),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 12,
+                    // "Proceed Anyway" — danger / secondary action
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => navigator.pop(true),
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(AppRadius.md),
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          s.g_phishing_proceed_anyway,
-                          textAlign: TextAlign.center,
-                          style: AppTypography.body.copyWith(
-                            color: themeColor(AppThemeKeys.ff888888),
+                        child: Container(
+                          constraints: BoxConstraints(
+                            minHeight: AppTouch.target,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 12,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            s.g_phishing_proceed_anyway,
+                            textAlign: TextAlign.center,
+                            style: AppTypography.body.copyWith(
+                              color: AppColorTokens.of(context).textSecondary,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

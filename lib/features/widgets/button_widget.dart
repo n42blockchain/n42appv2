@@ -87,36 +87,49 @@ Widget buttonStyle3(
   double paddingV = 6,
   double paddingH = 16,
 }) {
-  return InkWell(
-    onTap: onTap,
-    child: Container(
-      constraints: BoxConstraints(
-        minWidth: 44,
-        minHeight: height < 44 ? 44 : height,
-      ),
-      padding: EdgeInsets.symmetric(vertical: paddingV, horizontal: paddingH),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha((0.1 * 255).round()),
-            offset: const Offset(2, 2),
-            blurRadius: 2,
-            spreadRadius: -1,
-          ),
-        ],
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        title,
-        style: AppTypography.headline.copyWith(
-          fontSize: fontSize,
-          color: textColor,
+  final radius = BorderRadius.all(Radius.circular(borderRadius));
+  // The fill stays on the outer Container; the ink is drawn on a transparent
+  // Material above it, so the press is visible (it was painted under the
+  // opaque fill before).
+  return Container(
+    decoration: BoxDecoration(
+      color: backgroundColor,
+      borderRadius: radius,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withAlpha((0.1 * 255).round()),
+          offset: const Offset(2, 2),
+          blurRadius: 2,
+          spreadRadius: -1,
         ),
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+      ],
+    ),
+    child: Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: radius,
+        child: Container(
+          constraints: BoxConstraints(
+            minWidth: 44,
+            minHeight: height < 44 ? 44 : height,
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: paddingV,
+            horizontal: paddingH,
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: AppTypography.headline.copyWith(
+              fontSize: fontSize,
+              color: textColor,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ),
     ),
   );

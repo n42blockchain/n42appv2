@@ -107,6 +107,14 @@ class ContractSecurityCard extends StatelessWidget {
         break;
     }
 
+    // Risk color as small text on its own ~8% tint: shifted to 4.5:1.
+    final tokens = AppColorTokens.of(context);
+    final textColor = AppContrast.textOnTint(
+      color,
+      [tokens.bgBase, tokens.bgSurface, tokens.bgElevated],
+      dark: Theme.of(context).brightness == Brightness.dark,
+      alpha: 20 / 255,
+    );
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space4,
@@ -130,7 +138,7 @@ class ContractSecurityCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: color,
+                    color: textColor,
                   ),
                 ),
               ),
@@ -152,7 +160,7 @@ class ContractSecurityCard extends StatelessWidget {
               runSpacing: ScreenUtil().setWidth(4),
               children: result.risks
                   .take(5)
-                  .map((r) => _buildRiskChip(r))
+                  .map((r) => _buildRiskChip(context, r))
                   .toList(),
             ),
           ],
@@ -161,10 +169,18 @@ class ContractSecurityCard extends StatelessWidget {
     );
   }
 
-  Widget _buildRiskChip(GoplusRisk risk) {
+  Widget _buildRiskChip(BuildContext context, GoplusRisk risk) {
     final color = risk.level == GoplusRiskLevel.danger
         ? const Color(0xFFEF5350)
         : const Color(0xFFF9A825);
+    // Chip label on its ~12% tint: shifted to 4.5:1.
+    final tokens = AppColorTokens.of(context);
+    final textColor = AppContrast.textOnTint(
+      color,
+      [tokens.bgBase, tokens.bgSurface, tokens.bgElevated],
+      dark: Theme.of(context).brightness == Brightness.dark,
+      alpha: 30 / 255,
+    );
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space2,
@@ -177,7 +193,7 @@ class ContractSecurityCard extends StatelessWidget {
       child: Text(
         risk.label,
         style: AppTypography.captionSm.copyWith(
-          color: color,
+          color: textColor,
           fontWeight: FontWeight.w500,
         ),
       ),

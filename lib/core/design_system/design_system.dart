@@ -21,4 +21,5 @@ export 'widgets/app_button.dart';
 export 'widgets/app_card.dart';
 export 'widgets/app_dialog.dart';
 export 'widgets/app_empty_state.dart';
+export 'widgets/app_tap_area.dart';
 export 'widgets/app_text_field.dart';

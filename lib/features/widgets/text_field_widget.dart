@@ -28,6 +28,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
   return (borderColor: defaultBorder, textColor: textColor);
 }
 
+/// Danger red shifted to 4.5:1 on the page and card backgrounds, for the
+/// small error copy under a field.
+Color _dangerText(BuildContext context) {
+  final colors = AppColorTokens.of(context);
+  return AppContrast.ensure(colors.danger, [
+    colors.bgBase,
+    colors.bgSurface,
+  ], darken: Theme.of(context).brightness != Brightness.dark);
+}
+
 /// Builds the common message widget shown below a text field.
 Widget? _buildMessageWidget(
   BuildContext context, {
@@ -42,9 +52,7 @@ Widget? _buildMessageWidget(
       width: double.infinity,
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).danger,
-        ),
+        style: AppTypography.body.copyWith(color: _dangerText(context)),
       ),
     );
   }
@@ -56,7 +64,7 @@ Widget? _buildMessageWidget(
       child: Text(
         message,
         style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandOnTint,
         ),
       ),
     );
@@ -372,7 +380,7 @@ Widget textFieldStyle3(
                 child: Text(
                   errorMessage,
                   style: AppTypography.body.copyWith(
-                    color: AppColorTokens.of(context).danger,
+                    color: _dangerText(context),
                   ),
                 ),
               ),

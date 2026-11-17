@@ -5,7 +5,6 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/tx_simulation_result.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 /// Compact card showing the result of an on-chain transaction simulation.
 ///
@@ -120,10 +119,7 @@ class _SimulatingCard extends StatelessWidget {
                   child: Text(
                     label,
                     style: AppTypography.caption.copyWith(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.ff888888.name,
-                      ),
+                      color: AppColorTokens.of(context).textSecondary,
                     ),
                   ),
                 ),
@@ -156,6 +152,10 @@ class _StatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Status green / orange / red as small text: shifted to 4.5:1 on the card.
+    final textColor = AppContrast.ensure(color, [
+      AppColorTokens.of(context).bgSurface,
+    ], darken: Theme.of(context).brightness != Brightness.dark);
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: AppSpacing.space8,
@@ -185,7 +185,7 @@ class _StatusCard extends StatelessWidget {
                     label,
                     style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: color,
+                      color: textColor,
                     ),
                   ),
                 ),
@@ -202,17 +202,14 @@ class _StatusCard extends StatelessWidget {
                     ? SelectableText(
                         detail!,
                         style: AppTypography.caption.copyWith(
-                          color: color,
+                          color: textColor,
                           height: 1.45,
                         ),
                       )
                     : Text(
                         detail!,
                         style: AppTypography.caption.copyWith(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.ff888888.name,
-                          ),
+                          color: AppColorTokens.of(context).textSecondary,
                           height: 1.45,
                         ),
                       ),
