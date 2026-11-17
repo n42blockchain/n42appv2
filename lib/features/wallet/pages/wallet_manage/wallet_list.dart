@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage.dart';
