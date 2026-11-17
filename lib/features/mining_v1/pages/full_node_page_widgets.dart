@@ -31,7 +31,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
     bool isSelected = false,
     GestureTapCallback? onTap,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -69,7 +69,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
     String? errTips,
     bool isEnough = true,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(

@@ -129,7 +129,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                               itemBuilder: (context, index) {
                                 var item = taskList[index];
                                 if (item == null) {
-                                  return GestureDetector(
+                                  return InkWell(
                                     onTap: () async {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -140,6 +140,10 @@ mixin _SectionsMixin on _WidgetsMixin {
                                       );
                                     },
                                     child: Container(
+                                      // "More" row: was ~22pt tall.
+                                      constraints: BoxConstraints(
+                                        minHeight: AppTouch.target,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: AppThemeUtils.getColorByKey(
                                           context,
@@ -161,7 +165,7 @@ mixin _SectionsMixin on _WidgetsMixin {
                                   );
                                 }
 
-                                return GestureDetector(
+                                return InkWell(
                                   onTap: () async {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(

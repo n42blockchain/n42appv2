@@ -100,6 +100,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   ),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
+                          tooltip: S.of(context).g_a11y_clear_search,
                           icon: const Icon(Icons.clear),
                           onPressed: () {
                             _searchController.clear();
@@ -166,68 +167,72 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
     bool isSelected,
   ) {
     final blueColor = AppColorTokens.of(context).brand;
-    return InkWell(
-      onTap: () => Navigator.pop(context, chain),
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space8,
-          vertical: AppSpacing.space2,
-        ),
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? blueColor.withAlpha(30)
-              : AppColorTokens.of(context).bgSurface,
-          borderRadius: AppRadius.brMd,
-          border: isSelected ? Border.all(color: blueColor, width: 2) : null,
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: AppRadius.brLg,
-              child: chain.logoUri.isNotEmpty
-                  ? Image.network(
-                      chain.logoUri,
-                      width: ScreenUtil().setWidth(48),
-                      height: ScreenUtil().setWidth(48),
-                      errorBuilder: (ctx, err, stack) =>
-                          _buildChainInitial(context, chain),
-                    )
-                  : _buildChainInitial(context, chain),
-            ),
-
-            SizedBox(width: AppSpacing.space4),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    chain.name,
-                    style: AppTypography.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColorTokens.of(context).textPrimary,
-                    ),
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  Text(
-                    chain.nativeToken,
-                    style: AppTypography.bodySm.copyWith(
-                      color: AppColorTokens.of(context).textSubtitle,
-                    ),
-                  ),
-                ],
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
+      ),
+      child: InkWell(
+        onTap: () => Navigator.pop(context, chain),
+        borderRadius: AppRadius.brMd,
+        // Ink paints the fill on the Material so the ripple stays visible.
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? blueColor.withAlpha(30)
+                : AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
+            border: isSelected ? Border.all(color: blueColor, width: 2) : null,
+          ),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: AppRadius.brLg,
+                child: chain.logoUri.isNotEmpty
+                    ? Image.network(
+                        chain.logoUri,
+                        width: ScreenUtil().setWidth(48),
+                        height: ScreenUtil().setWidth(48),
+                        errorBuilder: (ctx, err, stack) =>
+                            _buildChainInitial(context, chain),
+                      )
+                    : _buildChainInitial(context, chain),
               ),
-            ),
 
-            // 选中标记
-            if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: blueColor,
-                size: ScreenUtil().setWidth(40),
+              SizedBox(width: AppSpacing.space4),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      chain.name,
+                      style: AppTypography.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColorTokens.of(context).textPrimary,
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.space2),
+                    Text(
+                      chain.nativeToken,
+                      style: AppTypography.bodySm.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-          ],
+
+              // 选中标记
+              if (isSelected)
+                Icon(
+                  Icons.check_circle,
+                  color: blueColor,
+                  size: ScreenUtil().setWidth(40),
+                ),
+            ],
+          ),
         ),
       ),
     );

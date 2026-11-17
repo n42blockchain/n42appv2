@@ -162,13 +162,15 @@ class _MiningSettingsState extends State<MiningSettings> {
     final textColor = _mainTextColor();
     return wrapItem(
       Padding(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+        // The 44pt value target now sets the row height (was 8pt + 22pt
+        // text + 8pt = 38pt with a 22pt target).
+        padding: EdgeInsets.zero,
         child: Row(
           children: [
             Expanded(child: label),
             SizedBox(width: AppSpacing.space16),
             Flexible(
-              child: GestureDetector(
+              child: AppTapArea(
                 onTap: onTap,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

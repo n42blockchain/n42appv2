@@ -192,7 +192,8 @@ class _ShareMiningState extends State<ShareMining>
                           SizedBox(height: AppSpacing.space16),
                           FadeTransition(
                             opacity: _fadeAnimation,
-                            child: GestureDetector(
+                            child: InkWell(
+                              borderRadius: AppRadius.brXl,
                               onTap: () {
                                 SharePlus.instance.share(
                                   ShareParams(

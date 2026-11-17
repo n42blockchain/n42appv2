@@ -103,7 +103,7 @@ class _ShareMiningState extends State<ShareMining> {
                 ),
                 Expanded(
                   child: Center(
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         SharePlus.instance.share(
                           ShareParams(

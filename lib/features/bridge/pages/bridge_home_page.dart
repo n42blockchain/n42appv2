@@ -47,7 +47,11 @@ class _BridgeHomePageState extends ConsumerState<BridgeHomePage>
       appBar: AppBarWidget(
         text: S.of(context).g_key_bridge_title,
         actions: [
-          IconButton(icon: const Icon(Icons.history), onPressed: openHistory),
+          IconButton(
+            tooltip: S.of(context).g_key_bridge_history,
+            icon: const Icon(Icons.history),
+            onPressed: openHistory,
+          ),
         ],
       ),
       body: ListenableBuilder(

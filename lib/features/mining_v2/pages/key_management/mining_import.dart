@@ -267,7 +267,8 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     required String text,
     required VoidCallback onTap,
   }) {
-    return InkWell(
+    // 44pt hit area around the unchanged text link.
+    return AppTapArea(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),

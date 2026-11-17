@@ -40,6 +40,14 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
   }
 
   Future<void> removeKey(int index) async {
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_key_113,
+      message: S.of(context).g_ui3_delete_validator_key_confirm,
+      confirmText: S.of(context).g_key_113,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     miningData!.remove(miningKeyList[index]);
     await SPUtil().setMiningData(miningData!);
     getMiningData();
@@ -93,7 +101,8 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                     ),
                     const SizedBox(width: 10),
                     if (!isMining)
-                      InkWell(
+                      AppTapArea(
+                        tooltip: S.of(context).g_key_113,
                         onTap: () => removeKey(index),
                         child: Icon(
                           Icons.delete_forever_outlined,
@@ -102,7 +111,8 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                         ),
                       ),
                     if (isMining)
-                      InkWell(
+                      AppTapArea(
+                        tooltip: S.of(context).g_a11y_export_key,
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -135,7 +145,8 @@ class _MiningKeyListState extends ConsumerState<MiningKeyList> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    InkWell(
+                    AppTapArea(
+                      tooltip: S.of(context).g_key_119,
                       onTap: () {
                         Clipboard.setData(
                           ClipboardData(text: keyValue['keypart']['publicKey']),

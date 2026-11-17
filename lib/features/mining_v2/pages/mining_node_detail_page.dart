@@ -154,7 +154,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              GestureDetector(
+              AppTapArea(
+                tooltip: S.of(context).g_key_119,
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: pubKey));
                   ToastUtils.show(S.of(context).copy);

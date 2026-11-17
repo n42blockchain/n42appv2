@@ -238,7 +238,8 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
                 style: AppTypography.bodyStrong.copyWith(color: tokens.success),
               ),
               SizedBox(height: su.setWidth(6)),
-              GestureDetector(
+              // 44pt hit area around the unchanged small pill.
+              AppTapArea(
                 onTap: () => _openLending(e.chainId),
                 child: Container(
                   padding: EdgeInsets.symmetric(

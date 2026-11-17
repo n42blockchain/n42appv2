@@ -128,6 +128,22 @@ mixin _StakeLogicMixin on State<StakePage> {
     final unsupportedMsg = S.of(context).g_key_stake_broadcast_unsupported;
     final successColor = AppColorTokens.of(context).success;
 
+    // Review step before an on-chain stake: the ETH path signs and
+    // broadcasts right away.
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_key_stake_stake,
+      message: S
+          .of(context)
+          .g_ui3_stake_confirm_message(
+            amountText,
+            widget.protocol.chainSymbol,
+            widget.protocol.name,
+          ),
+      confirmText: S.of(context).g_key_stake_stake,
+    );
+    if (!confirmed || !context.mounted || _isLoading) return;
+
     setState(() {
       _isLoading = true;
       _errorMessage = '';

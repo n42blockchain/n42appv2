@@ -72,7 +72,8 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        GestureDetector(
+                        AppTapArea(
+                          tooltip: S.of(context).g_a11y_previous,
                           onTap: () {
                             if (currentPage > 0) {
                               _controller.animateToPage(
@@ -95,7 +96,8 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                           ),
                         ),
                         SizedBox(width: AppSpacing.space12),
-                        GestureDetector(
+                        AppTapArea(
+                          tooltip: S.of(context).next,
                           onTap: () {
                             if (currentPage < depositsList.length - 1) {
                               _controller.animateToPage(
@@ -138,7 +140,11 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: ScreenUtil().setWidth(148),
+                  // minHeight: a fixed box squeezed the button
+                  // to 42pt@375 / 31pt@320.
+                  constraints: BoxConstraints(
+                    minHeight: ScreenUtil().setWidth(148),
+                  ),
                   padding: EdgeInsets.all(AppSpacing.space8),
                   child: AppButton(
                     label: S.of(context).g_key_78,

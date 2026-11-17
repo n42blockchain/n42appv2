@@ -46,14 +46,15 @@ mixin _MiningFullNodeV2WidgetsMixin
         : Colors.black.withValues(alpha: 0.06);
 
     return Material(
-      color: Colors.transparent,
+      // Card fill on the Material so the ripple is not hidden under it.
+      color: AppColorTokens.of(context).bgSurface,
+      borderRadius: AppRadius.brMd,
       child: InkWell(
         onTap: onTap,
         borderRadius: AppRadius.brMd,
         child: Container(
           padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
-            color: AppColorTokens.of(context).bgSurface,
             borderRadius: AppRadius.brMd,
             border: Border.all(
               color: isSelected ? blueColor : idleBorder,
@@ -366,7 +367,9 @@ mixin _MiningFullNodeV2WidgetsMixin
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
             width: double.infinity,
-            height: ScreenUtil().setWidth(148),
+            // minHeight: a fixed box squeezed the button
+            // to 42pt@375 / 31pt@320.
+            constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(148)),
             padding: EdgeInsets.all(AppSpacing.space8),
             child: AppButton(
               label: S.of(context).g_key_78,

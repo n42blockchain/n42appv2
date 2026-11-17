@@ -27,7 +27,8 @@ class PlansWidget extends StatelessWidget {
               );
             },
         borderRadius: AppRadius.brMd,
-        child: Container(
+        // Ink paints the gradient on the Material so the ripple shows.
+        child: Ink(
           height: ScreenUtil().setWidth(290),
           decoration: BoxDecoration(
             gradient: LinearGradient(

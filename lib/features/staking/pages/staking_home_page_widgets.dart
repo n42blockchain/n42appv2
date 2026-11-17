@@ -94,16 +94,14 @@ mixin StakingHomePageWidgetsMixin
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
       child: Material(
-        color: Colors.transparent,
+        // Card fill on the Material so the ripple is not hidden under it.
+        color: _themeColor(AppThemeKeys.itemBgColor),
+        borderRadius: AppRadius.brMd,
         child: InkWell(
           onTap: () => navigateToStakePage(context, protocol),
           borderRadius: AppRadius.brMd,
           child: Container(
             padding: EdgeInsets.all(AppSpacing.space6),
-            decoration: BoxDecoration(
-              color: _themeColor(AppThemeKeys.itemBgColor),
-              borderRadius: AppRadius.brMd,
-            ),
             child: Row(
               children: [
                 // 协议 Logo

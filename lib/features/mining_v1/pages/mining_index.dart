@@ -99,7 +99,8 @@ class _MiningIndexState extends State<MiningIndex>
               onLeftImageUri: "assets/wallet/menu.png",
               actions: [
                 SizedBox(width: AppSpacing.space2),
-                InkWell(
+                AppTapArea(
+                  tooltip: S.of(context).g_key_94,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const MiningSettings()),

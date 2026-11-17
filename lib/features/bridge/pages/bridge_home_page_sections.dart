@@ -91,7 +91,9 @@ mixin BridgeHomeSectionsMixin
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       child: Material(
-        color: Colors.transparent,
+        // Card fill lives on the Material so the ripple stays visible.
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
         child: InkWell(
           onTap: () => provider.selectRoute(route),
           borderRadius: AppRadius.brMd,
@@ -99,7 +101,6 @@ mixin BridgeHomeSectionsMixin
             duration: const Duration(milliseconds: 200),
             padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
-              color: AppColorTokens.of(context).bgSurface,
               borderRadius: AppRadius.brMd,
               border: Border.all(
                 color: isSelected ? selectedColor : Colors.transparent,

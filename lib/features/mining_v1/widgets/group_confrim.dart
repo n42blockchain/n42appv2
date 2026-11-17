@@ -83,7 +83,8 @@ class GroupConfirm extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).pop(false);
                       },
-                      child: Container(
+                      // Ink keeps the ripple visible above the fill.
+                      child: Ink(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).bgSurface,
                           borderRadius: AppRadius.brSm,
@@ -107,7 +108,8 @@ class GroupConfirm extends StatelessWidget {
                         sureCall?.call();
                         Navigator.of(context).pop(true);
                       },
-                      child: Container(
+                      // Ink keeps the ripple visible above the fill.
+                      child: Ink(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).brandFill,
                           borderRadius: AppRadius.brSm,

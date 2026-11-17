@@ -112,68 +112,71 @@ mixin BridgeHomeWidgetsMixin
     BridgeChain? chain,
     bool isFrom,
   ) {
-    return InkWell(
+    return Material(
+      // Fill on the Material so the ripple is not hidden under it.
+      color: AppColorTokens.of(context).bgBase,
       borderRadius: AppRadius.brMd,
-      onTap: () async {
-        final selected = await Navigator.push<BridgeChain>(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BridgeSelectChainPage(
-              chains: provider.chains,
-              selectedChain: chain,
-              excludeChain: isFrom ? provider.toChain : provider.fromChain,
+      child: InkWell(
+        borderRadius: AppRadius.brMd,
+        onTap: () async {
+          final selected = await Navigator.push<BridgeChain>(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BridgeSelectChainPage(
+                chains: provider.chains,
+                selectedChain: chain,
+                excludeChain: isFrom ? provider.toChain : provider.fromChain,
+              ),
             ),
-          ),
-        );
-        if (selected != null) {
-          if (isFrom) {
-            provider.setFromChain(selected);
-          } else {
-            provider.setToChain(selected);
+          );
+          if (selected != null) {
+            if (isFrom) {
+              provider.setFromChain(selected);
+            } else {
+              provider.setToChain(selected);
+            }
           }
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space2,
-        ),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgBase,
-          borderRadius: AppRadius.brMd,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (chain?.logoUri.isNotEmpty == true)
-              ClipRRect(
-                borderRadius: AppRadius.brMd,
-                child: Image.network(
-                  chain!.logoUri,
-                  width: ScreenUtil().setWidth(32),
-                  height: ScreenUtil().setWidth(32),
-                  errorBuilder: (ctx, err, stack) =>
-                      Icon(Icons.circle, size: ScreenUtil().setWidth(32)),
+        },
+        child: Container(
+          // Pill grows from ~30 to 44pt so the picker is a full target.
+          constraints: BoxConstraints(minHeight: AppTouch.target),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (chain?.logoUri.isNotEmpty == true)
+                ClipRRect(
+                  borderRadius: AppRadius.brMd,
+                  child: Image.network(
+                    chain!.logoUri,
+                    width: ScreenUtil().setWidth(32),
+                    height: ScreenUtil().setWidth(32),
+                    errorBuilder: (ctx, err, stack) =>
+                        Icon(Icons.circle, size: ScreenUtil().setWidth(32)),
+                  ),
+                ),
+              SizedBox(width: AppSpacing.space2),
+              Flexible(
+                child: Text(
+                  chain?.name ?? S.of(context).g_key_17,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
-            SizedBox(width: AppSpacing.space2),
-            Flexible(
-              child: Text(
-                chain?.name ?? S.of(context).g_key_17,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColorTokens.of(context).textPrimary,
-                ),
+              SizedBox(width: AppSpacing.space2),
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: ScreenUtil().setWidth(32),
+                color: AppColorTokens.of(context).textPrimary,
               ),
-            ),
-            SizedBox(width: AppSpacing.space2),
-            Icon(
-              Icons.keyboard_arrow_down,
-              size: ScreenUtil().setWidth(32),
-              color: AppColorTokens.of(context).textPrimary,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -186,61 +189,63 @@ mixin BridgeHomeWidgetsMixin
     BridgeToken? token,
     bool isFrom,
   ) {
-    return InkWell(
+    return Material(
+      // Fill on the Material so the ripple is not hidden under it.
+      color: AppColorTokens.of(context).bgBase,
       borderRadius: AppRadius.brMd,
-      onTap: () async {
-        if (chain == null) return;
-        final tokens = provider.getTokensForChain(chain.chainId);
-        if (tokens.isEmpty) return;
-        final selected = await showTokenSelector(context, tokens, token);
-        if (selected != null) {
-          if (isFrom) {
-            provider.setFromToken(selected);
-          } else {
-            provider.setToToken(selected);
+      child: InkWell(
+        borderRadius: AppRadius.brMd,
+        onTap: () async {
+          if (chain == null) return;
+          final tokens = provider.getTokensForChain(chain.chainId);
+          if (tokens.isEmpty) return;
+          final selected = await showTokenSelector(context, tokens, token);
+          if (selected != null) {
+            if (isFrom) {
+              provider.setFromToken(selected);
+            } else {
+              provider.setToToken(selected);
+            }
           }
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space4,
-        ),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgBase,
-          borderRadius: AppRadius.brMd,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (token?.logoUri.isNotEmpty == true)
-              ClipRRect(
-                borderRadius: AppRadius.brMd,
-                child: Image.network(
-                  token!.logoUri,
-                  width: ScreenUtil().setWidth(40),
-                  height: ScreenUtil().setWidth(40),
-                  errorBuilder: (ctx, err, stack) =>
-                      Icon(Icons.token, size: ScreenUtil().setWidth(40)),
+        },
+        child: Container(
+          constraints: BoxConstraints(minHeight: AppTouch.target),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (token?.logoUri.isNotEmpty == true)
+                ClipRRect(
+                  borderRadius: AppRadius.brMd,
+                  child: Image.network(
+                    token!.logoUri,
+                    width: ScreenUtil().setWidth(40),
+                    height: ScreenUtil().setWidth(40),
+                    errorBuilder: (ctx, err, stack) =>
+                        Icon(Icons.token, size: ScreenUtil().setWidth(40)),
+                  ),
+                ),
+              SizedBox(width: AppSpacing.space2),
+              Flexible(
+                child: Text(
+                  token?.symbol ?? S.of(context).g_key_bridge_select,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
-            SizedBox(width: AppSpacing.space2),
-            Flexible(
-              child: Text(
-                token?.symbol ?? S.of(context).g_key_bridge_select,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColorTokens.of(context).textPrimary,
-                ),
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: ScreenUtil().setWidth(28),
+                color: AppColorTokens.of(context).textPrimary,
               ),
-            ),
-            Icon(
-              Icons.keyboard_arrow_down,
-              size: ScreenUtil().setWidth(28),
-              color: AppColorTokens.of(context).textPrimary,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -253,6 +258,7 @@ mixin BridgeHomeWidgetsMixin
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: IconButton(
+          tooltip: S.of(context).g_a11y_swap_direction,
           onPressed: provider.state == BridgeState.idle
               ? () {
                   provider.swapChains();
@@ -295,9 +301,12 @@ mixin BridgeHomeWidgetsMixin
             return Expanded(
               child: Padding(
                 padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () => provider.setSlippage(pct),
+                  borderRadius: AppRadius.brSm,
                   child: Container(
+                    // Chip grows from ~36 to 44pt so it is a full target.
+                    constraints: BoxConstraints(minHeight: AppTouch.target),
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                     decoration: BoxDecoration(
                       color: selected

@@ -117,7 +117,8 @@ class BackgroundMiningWidget extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      child: InkWell(
+      // 44pt hit area around the unchanged ~32pt pill.
+      child: AppTapArea(
         onTap: isEnabled ? () => MiningBackground().backgroundStart() : null,
         borderRadius: AppRadius.brXl,
         child: Container(

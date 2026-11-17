@@ -344,16 +344,14 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
     final itemBg = AppColorTokens.of(context).bgSurface;
 
     return Material(
-      color: Colors.transparent,
+      // Card fill on the Material so the ripple is not hidden under it.
+      color: itemBg,
+      borderRadius: BorderRadius.circular(su.setWidth(16)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(su.setWidth(16)),
         child: Container(
           padding: EdgeInsets.all(su.setWidth(16)),
-          decoration: BoxDecoration(
-            color: itemBg,
-            borderRadius: BorderRadius.circular(su.setWidth(16)),
-          ),
           child: Row(
             children: [
               Container(

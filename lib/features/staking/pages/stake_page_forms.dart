@@ -22,14 +22,15 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     final su = ScreenUtil();
 
     return Material(
-      color: Colors.transparent,
+      // Card fill on the Material so the ripple is not hidden under it.
+      color: itemBg,
+      borderRadius: BorderRadius.circular(su.setWidth(12)),
       child: InkWell(
         onTap: () => _navigateToValidatorList(context, provider),
         borderRadius: BorderRadius.circular(su.setWidth(12)),
         child: Container(
           padding: EdgeInsets.all(su.setWidth(20)),
           decoration: BoxDecoration(
-            color: itemBg,
             borderRadius: BorderRadius.circular(su.setWidth(12)),
             border: Border.all(color: itemBg),
           ),
@@ -148,8 +149,10 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     final su = ScreenUtil();
 
     return Expanded(
-      child: GestureDetector(
+      // 44pt hit area (with ripple) around the unchanged ~28pt chip.
+      child: AppTapArea(
         onTap: () => _setQuickAmount(percentage),
+        borderRadius: BorderRadius.circular(su.setWidth(8)),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: su.setWidth(12)),
           decoration: BoxDecoration(
@@ -161,7 +164,8 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
               label,
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppColorTokens.of(context).brand,
+                // brandOnTint: >= 4.5:1 (plain brand is ~4.0:1).
+                color: AppColorTokens.of(context).brandOnTint,
               ),
             ),
           ),

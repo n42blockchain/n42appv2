@@ -112,6 +112,12 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.delete_forever_outlined));
     await tester.pumpAndSettle();
+    // Deleting a key now asks for confirmation first.
+    expect(find.text('stopped-key'), findsOneWidget);
+    await tester.tap(
+      find.widgetWithText(FilledButton, S.of(context).g_key_113),
+    );
+    await tester.pumpAndSettle();
 
     final persisted = jsonDecode(storage.data['miningData']!) as Map;
     final walletKeys = persisted['AstranetWallet'] as Map;

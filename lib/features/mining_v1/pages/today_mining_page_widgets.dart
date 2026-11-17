@@ -80,7 +80,10 @@ mixin _WidgetsMixin on _LogicMixin {
                           ),
                         ),
                       ),
-                      GestureDetector(
+                      AppTapArea(
+                        tooltip: isActive
+                            ? S.of(context).g_a11y_stop
+                            : S.of(context).g_key_wallet_c4,
                         onTap: () async {
                           if (miningStartLoad == Load.loading) return;
                           if (mpValue.miningType == null) return;

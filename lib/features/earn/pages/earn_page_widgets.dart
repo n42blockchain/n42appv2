@@ -189,7 +189,8 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
       child: InkWell(
         onTap: onTap,
         borderRadius: AppRadius.brMd,
-        child: Container(
+        // Ink paints the gradient on the Material so the ripple shows.
+        child: Ink(
           width: ScreenUtil().setWidth(230),
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -325,8 +326,9 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
     VoidCallback? onTap,
   }) {
     return Expanded(
-      child: GestureDetector(
+      child: InkWell(
         onTap: onTap,
+        borderRadius: AppRadius.brMd,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

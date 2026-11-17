@@ -162,6 +162,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
           prefixIcon: Icon(Icons.search, color: _subtitleColor()),
           suffixIcon: _searchController.text.isNotEmpty
               ? IconButton(
+                  tooltip: S.of(context).g_a11y_clear_search,
                   icon: const Icon(Icons.clear),
                   onPressed: () {
                     _searchController.clear();
@@ -214,15 +215,20 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
   ) {
     final isSelected = _sortBy == sortBy;
 
-    return GestureDetector(
+    // 44pt hit area (with ripple) around the unchanged ~24pt chip.
+    return AppTapArea(
       onTap: () => _changeSortBy(sortBy),
+      borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space4,
           vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? _blueColor() : _itemBgColor(),
+          // brandFill keeps the white label at >= 4.5:1.
+          color: isSelected
+              ? AppColorTokens.of(context).brandFill
+              : _itemBgColor(),
           borderRadius: AppRadius.brMd,
         ),
         child: Row(
@@ -275,121 +281,125 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     final textColor = _mainTextColor();
     final logoSize = ScreenUtil().setWidth(48);
 
-    return GestureDetector(
-      onTap: () => Navigator.pop(context, validator),
-      child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: _itemBgColor(),
-          borderRadius: AppRadius.brMd,
-          border: isSelected ? Border.all(color: blue, width: 2) : null,
-        ),
-        child: Row(
-          children: [
-            // 排名
-            Container(
-              width: ScreenUtil().setWidth(40),
-              height: ScreenUtil().setWidth(40),
-              decoration: BoxDecoration(
-                color: rank <= 3 ? _getRankColor(rank) : blue.withAlpha(50),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  '$rank',
-                  style: AppTypography.caption.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: rank <= 3 ? Colors.white : textColor,
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+      child: InkWell(
+        onTap: () => Navigator.pop(context, validator),
+        borderRadius: AppRadius.brMd,
+        // Ink paints the fill on the Material so the ripple stays visible.
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: _itemBgColor(),
+            borderRadius: AppRadius.brMd,
+            border: isSelected ? Border.all(color: blue, width: 2) : null,
+          ),
+          child: Row(
+            children: [
+              // 排名
+              Container(
+                width: ScreenUtil().setWidth(40),
+                height: ScreenUtil().setWidth(40),
+                decoration: BoxDecoration(
+                  color: rank <= 3 ? _getRankColor(rank) : blue.withAlpha(50),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '$rank',
+                    style: AppTypography.caption.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: rank <= 3 ? Colors.white : textColor,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            SizedBox(width: AppSpacing.space4),
+              SizedBox(width: AppSpacing.space4),
 
-            // 验证者 Logo
-            ClipRRect(
-              borderRadius: AppRadius.brLg,
-              child: validator.logoUri.isNotEmpty
-                  ? Image.network(
-                      validator.logoUri,
-                      width: logoSize,
-                      height: logoSize,
-                      errorBuilder: (_, _, _) =>
-                          _buildDefaultValidatorLogo(context, validator),
-                    )
-                  : _buildDefaultValidatorLogo(context, validator),
-            ),
+              // 验证者 Logo
+              ClipRRect(
+                borderRadius: AppRadius.brLg,
+                child: validator.logoUri.isNotEmpty
+                    ? Image.network(
+                        validator.logoUri,
+                        width: logoSize,
+                        height: logoSize,
+                        errorBuilder: (_, _, _) =>
+                            _buildDefaultValidatorLogo(context, validator),
+                      )
+                    : _buildDefaultValidatorLogo(context, validator),
+              ),
 
-            SizedBox(width: AppSpacing.space4),
+              SizedBox(width: AppSpacing.space4),
 
-            // 验证者信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          validator.name,
-                          style: AppTypography.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: textColor,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (validator.isActive)
-                        Container(
-                          width: ScreenUtil().setWidth(12),
-                          height: ScreenUtil().setWidth(12),
-                          decoration: BoxDecoration(
-                            color: AppColorTokens.of(context).success,
-                            shape: BoxShape.circle,
+              // 验证者信息
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            validator.name,
+                            style: AppTypography.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: textColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                    ],
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  Text(
-                    shortenStakingAddress(validator.address),
-                    style: AppTypography.caption.copyWith(
-                      color: _subtitleColor(),
+                        if (validator.isActive)
+                          Container(
+                            width: ScreenUtil().setWidth(12),
+                            height: ScreenUtil().setWidth(12),
+                            decoration: BoxDecoration(
+                              color: AppColorTokens.of(context).success,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                      ],
                     ),
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  Row(
-                    children: [
-                      _buildInfoChip(
-                        context,
-                        'APY',
-                        '${validator.apy.toStringAsFixed(1)}%',
-                        AppColorTokens.of(context).success,
+                    SizedBox(height: AppSpacing.space2),
+                    Text(
+                      shortenStakingAddress(validator.address),
+                      style: AppTypography.caption.copyWith(
+                        color: _subtitleColor(),
                       ),
-                      SizedBox(width: AppSpacing.space2),
-                      _buildInfoChip(
-                        context,
-                        'Fee',
-                        '${validator.commission.toStringAsFixed(1)}%',
-                        AppColorTokens.of(context).warning,
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(height: AppSpacing.space2),
+                    Row(
+                      children: [
+                        _buildInfoChip(
+                          context,
+                          'APY',
+                          '${validator.apy.toStringAsFixed(1)}%',
+                          AppColorTokens.of(context).success,
+                        ),
+                        SizedBox(width: AppSpacing.space2),
+                        _buildInfoChip(
+                          context,
+                          'Fee',
+                          '${validator.commission.toStringAsFixed(1)}%',
+                          AppColorTokens.of(context).warning,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // 选中标记
-            if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: blue,
-                size: ScreenUtil().setWidth(36),
-              ),
-          ],
+              // 选中标记
+              if (isSelected)
+                Icon(
+                  Icons.check_circle,
+                  color: blue,
+                  size: ScreenUtil().setWidth(36),
+                ),
+            ],
+          ),
         ),
       ),
     );

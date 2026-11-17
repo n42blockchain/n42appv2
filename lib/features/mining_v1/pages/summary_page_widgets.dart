@@ -143,7 +143,8 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
           ),
         ),
         if (isCanUnlock)
-          GestureDetector(
+          // 44pt hit area around the unchanged ~32pt pill.
+          AppTapArea(
             onTap: unLockAstMining,
             child: Container(
               decoration: BoxDecoration(
