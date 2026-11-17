@@ -124,6 +124,7 @@ Future<void> _exerciseColdDeepLink(WidgetTester tester) async {
 Future<void> _acceptTermsIfNeeded(WidgetTester tester) async {
   final agree = find.byKey(const ValueKey<String>('terms_agree'));
   if (agree.evaluate().isEmpty) return;
+  await _waitForTermsLoaded(tester, agree);
 
   debugPrint('DEVICE_STEP terms: accept');
   await tester.tap(agree);
@@ -540,4 +541,22 @@ Future<String> _waitForAnyKey(
 
 void _expectNoException(WidgetTester tester, String step) {
   expect(tester.takeException(), isNull, reason: 'Flutter error after $step');
+}
+
+/// Waits for the terms page to load: Agree stays disabled until then.
+Future<void> _waitForTermsLoaded(WidgetTester tester, Finder agree) async {
+  final button = find.descendant(
+    of: agree,
+    matching: find.byType(FilledButton),
+  );
+  final stopwatch = Stopwatch()..start();
+  bool enabled() => tester.widget<FilledButton>(button).onPressed != null;
+  while (!enabled() && stopwatch.elapsed < const Duration(seconds: 60)) {
+    final retry = find.byKey(const ValueKey<String>('terms_retry'));
+    if (retry.evaluate().isNotEmpty) {
+      await tester.tap(retry);
+    }
+    await tester.pump(const Duration(milliseconds: 250));
+  }
+  expect(enabled(), isTrue, reason: 'terms page did not load');
 }

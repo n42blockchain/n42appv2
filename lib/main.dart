@@ -405,53 +405,73 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveViewport(
-      child: AdaptiveScreenUtil(
-        builder: (screenContext, child) {
-          final locale = ref.watch(localeProvider);
-          final themeMode = ref.watch(themeModeProvider);
-          final accentColor = ref.watch(accentColorProvider);
-          return GestureDetector(
-            onTap: () {
-              SystemChannels.textInput.invokeMethod('TextInput.hide');
+    final themeMode = ref.watch(themeModeProvider);
+    final accentColor = ref.watch(accentColorProvider);
+    final isDark = switch (themeMode) {
+      ThemeMode.dark => true,
+      ThemeMode.light => false,
+      ThemeMode.system =>
+        MediaQuery.platformBrightnessOf(context) == Brightness.dark,
+    };
+    // Outside MaterialApp: resolve the page background for the pane that a
+    // fold leaves empty (e.g. iPhone Duo book pose).
+    return Theme(
+      data: isDark
+          ? ThemeAdapter.buildDark(accentColor)
+          : ThemeAdapter.buildLight(accentColor),
+      child: Builder(
+        builder: (themed) => AdaptiveViewport(
+          backgroundColor: AppColorTokens.of(themed).bgBase,
+          child: AdaptiveScreenUtil(
+            builder: (screenContext, child) {
+              final locale = ref.watch(localeProvider);
+              final themeMode = ref.watch(themeModeProvider);
+              final accentColor = ref.watch(accentColorProvider);
+              return GestureDetector(
+                onTap: () {
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                },
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  locale: locale,
+                  localizationsDelegates: [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    S.delegate,
+                    chat_l10n.S.delegate,
+                  ],
+                  navigatorKey: AppGlobals.navigatorKey,
+                  supportedLocales: S.delegate.supportedLocales,
+                  localeResolutionCallback: (locale, supported) {
+                    if (locale?.languageCode == 'zh') {
+                      return const Locale('zh', 'TW');
+                    }
+                    for (final s in supported) {
+                      if (s.languageCode == locale?.languageCode) return s;
+                    }
+                    return const Locale('en');
+                  },
+                  themeMode: themeMode,
+                  theme: ThemeAdapter.buildLight(
+                    accentColor,
+                    textScaler: MediaQuery.textScalerOf(screenContext),
+                  ),
+                  darkTheme: ThemeAdapter.buildDark(
+                    accentColor,
+                    textScaler: MediaQuery.textScalerOf(screenContext),
+                  ),
+                  title: 'N42Wallet',
+                  home: _widgetPage(),
+                  routes: _routes,
+                  navigatorObservers: <NavigatorObserver>[
+                    AppGlobals.routeObserver,
+                  ],
+                ),
+              );
             },
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              locale: locale,
-              localizationsDelegates: [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                S.delegate,
-                chat_l10n.S.delegate,
-              ],
-              navigatorKey: AppGlobals.navigatorKey,
-              supportedLocales: S.delegate.supportedLocales,
-              localeResolutionCallback: (locale, supported) {
-                if (locale?.languageCode == 'zh') {
-                  return const Locale('zh', 'TW');
-                }
-                for (final s in supported) {
-                  if (s.languageCode == locale?.languageCode) return s;
-                }
-                return const Locale('en');
-              },
-              themeMode: themeMode,
-              theme: ThemeAdapter.buildLight(
-                accentColor,
-                textScaler: MediaQuery.textScalerOf(screenContext),
-              ),
-              darkTheme: ThemeAdapter.buildDark(
-                accentColor,
-                textScaler: MediaQuery.textScalerOf(screenContext),
-              ),
-              title: 'N42Wallet',
-              home: _widgetPage(),
-              routes: _routes,
-              navigatorObservers: <NavigatorObserver>[AppGlobals.routeObserver],
-            ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

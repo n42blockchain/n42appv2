@@ -22,69 +22,67 @@ const _runManualSystemUi = bool.fromEnvironment('T26_RUN_MANUAL_SYSTEM_UI');
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets(
-    'T26 B1-B4 physical-device dependency regressions',
-    (tester) async {
-      app.main();
-      await _waitForKey(
-        tester,
-        'home_page',
-        timeout: const Duration(seconds: 60),
-      );
-      await _acceptTermsIfNeeded(tester);
-      await tester.runAsync(_waitForWalletOrderStable);
-      await tester.pump();
-      final startupException = tester.takeException();
-      if (startupException != null) {
-        debugPrint('T26_SETUP drained startup exception: $startupException');
-      }
+  testWidgets('T26 B1-B4 physical-device dependency regressions', (
+    tester,
+  ) async {
+    app.main();
+    await _waitForKey(
+      tester,
+      'home_page',
+      timeout: const Duration(seconds: 60),
+    );
+    await _acceptTermsIfNeeded(tester);
+    await tester.runAsync(_waitForWalletOrderStable);
+    await tester.pump();
+    final startupException = tester.takeException();
+    if (startupException != null) {
+      debugPrint('T26_SETUP drained startup exception: $startupException');
+    }
 
-      final failures = <String>[];
+    final failures = <String>[];
+    await _runStep(
+      tester,
+      'B1 wallet chain reorder',
+      () => _verifyWalletChainReorder(tester),
+      failures,
+    );
+    await _runStep(
+      tester,
+      'B1 quick reply reorder',
+      () => _verifyQuickReplyReorder(tester),
+      failures,
+    );
+    if (_runManualSystemUi) {
       await _runStep(
         tester,
-        'B1 wallet chain reorder',
-        () => _verifyWalletChainReorder(tester),
+        'B2 Face ID',
+        () => _verifyFaceIdToggle(tester),
         failures,
       );
+    } else {
+      debugPrint('T26_STEP B2 Face ID: MANUAL REQUIRED (not requested)');
+    }
+    await _runStep(
+      tester,
+      'B4 scanner',
+      () => _verifyScannerReentry(tester),
+      failures,
+    );
+    if (_runManualSystemUi) {
       await _runStep(
         tester,
-        'B1 quick reply reorder',
-        () => _verifyQuickReplyReorder(tester),
+        'B4 file picker',
+        () => _verifyFilePickerOpenCancel(tester),
         failures,
       );
-      if (_runManualSystemUi) {
-        await _runStep(
-          tester,
-          'B2 Face ID',
-          () => _verifyFaceIdToggle(tester),
-          failures,
-        );
-      } else {
-        debugPrint('T26_STEP B2 Face ID: MANUAL REQUIRED (not requested)');
-      }
-      await _runStep(
-        tester,
-        'B4 scanner',
-        () => _verifyScannerReentry(tester),
-        failures,
-      );
-      if (_runManualSystemUi) {
-        await _runStep(
-          tester,
-          'B4 file picker',
-          () => _verifyFilePickerOpenCancel(tester),
-          failures,
-        );
-      } else {
-        debugPrint('T26_STEP B4 file picker: MANUAL REQUIRED (not requested)');
-      }
+    } else {
+      debugPrint('T26_STEP B4 file picker: MANUAL REQUIRED (not requested)');
+    }
 
-      _expectNoException(tester, 'final T26 B1-B4 state');
-      expect(find.byKey(const ValueKey<String>('home_page')), findsOneWidget);
-      expect(failures, isEmpty, reason: failures.join('\n'));
-    },
-    timeout: const Timeout(Duration(minutes: 8)),
-  );
+    _expectNoException(tester, 'final T26 B1-B4 state');
+    expect(find.byKey(const ValueKey<String>('home_page')), findsOneWidget);
+    expect(failures, isEmpty, reason: failures.join('\n'));
+  }, timeout: const Timeout(Duration(minutes: 8)));
 }
 
 Future<void> _runStep(
@@ -375,6 +373,7 @@ Future<void> _pop(WidgetTester tester) async {
 Future<void> _acceptTermsIfNeeded(WidgetTester tester) async {
   final agree = find.byKey(const ValueKey<String>('terms_agree'));
   if (agree.evaluate().isEmpty) return;
+  await _waitForTermsLoaded(tester, agree);
   await tester.tap(agree);
   await tester.pump(const Duration(seconds: 1));
 }
@@ -395,4 +394,22 @@ Future<void> _waitForKey(
 
 void _expectNoException(WidgetTester tester, String step) {
   expect(tester.takeException(), isNull, reason: 'Flutter error after $step');
+}
+
+/// Waits for the terms page to load: Agree stays disabled until then.
+Future<void> _waitForTermsLoaded(WidgetTester tester, Finder agree) async {
+  final button = find.descendant(
+    of: agree,
+    matching: find.byType(FilledButton),
+  );
+  final stopwatch = Stopwatch()..start();
+  bool enabled() => tester.widget<FilledButton>(button).onPressed != null;
+  while (!enabled() && stopwatch.elapsed < const Duration(seconds: 60)) {
+    final retry = find.byKey(const ValueKey<String>('terms_retry'));
+    if (retry.evaluate().isNotEmpty) {
+      await tester.tap(retry);
+    }
+    await tester.pump(const Duration(milliseconds: 250));
+  }
+  expect(enabled(), isTrue, reason: 'terms page did not load');
 }

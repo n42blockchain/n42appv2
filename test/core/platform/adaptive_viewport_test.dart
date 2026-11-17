@@ -266,4 +266,46 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     },
   );
+
+  testWidgets('the pane beyond an active fold is filled with the app color', (
+    tester,
+  ) async {
+    const fill = Color(0xFFF2F2F7);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 720);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: AdaptiveViewport(
+          backgroundColor: fill,
+          child: SizedBox.expand(key: fieldKey),
+        ),
+      ),
+    );
+    await nativeRegions(tester, const Size(800, 720), [
+      {
+        'kind': 'division',
+        'x': 390.0,
+        'y': 0.0,
+        'width': 20.0,
+        'height': 720.0,
+      },
+    ]);
+
+    final box = find.ancestor(
+      of: find.byKey(fieldKey),
+      matching: find.byType(ColoredBox),
+    );
+    expect(tester.widget<ColoredBox>(box.first).color, fill);
+    expect(tester.getRect(box.first), const Rect.fromLTWH(0, 0, 800, 720));
+    expect(
+      tester.getRect(find.byKey(fieldKey)),
+      const Rect.fromLTWH(410, 0, 390, 720),
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    debugDefaultTargetPlatformOverride = null;
+  });
 }
