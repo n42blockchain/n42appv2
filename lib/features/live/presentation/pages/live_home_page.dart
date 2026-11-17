@@ -54,7 +54,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
       appBar: AppBar(
         // 嵌入主 App（从聊天「发现」进入）时关闭返回；独立运行时 maybePop 无副作用。
         leading: IconButton(
-          tooltip: '关闭',
+          tooltip: S.of(context).g_a11y_close,
           icon: const Icon(Icons.close),
           onPressed: () =>
               Navigator.of(context, rootNavigator: true).maybePop(),
@@ -62,7 +62,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
         title: const Text('N42 Live'),
         actions: [
           IconButton(
-            tooltip: '开始直播',
+            tooltip: S.of(context).g_ui3_live_start,
             icon: const Icon(Icons.videocam),
             onPressed: () => context.push('/live/go'),
           ),
@@ -90,7 +90,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
                 SizedBox(width: AppSpacing.space4),
                 FilledButton(
                   onPressed: () => _enterRoom(_roomController.text),
-                  child: const Text('进入'),
+                  child: Text(S.of(context).g_ui3_live_enter),
                 ),
               ],
             ),
@@ -98,7 +98,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
             Row(
               children: [
                 Text(
-                  '直播列表',
+                  S.of(context).g_ui3_live_list,
                   style: AppTypography.headline.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
                   ),
@@ -113,7 +113,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.refresh),
-                  label: const Text('加载'),
+                  label: Text(S.of(context).g_key_bridge_refresh),
                 ),
               ],
             ),
@@ -129,7 +129,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
     if (_roomsError != null) {
       return Center(
         child: Text(
-          '加载失败：$_roomsError',
+          S.of(context).g_ui3_live_load_failed('$_roomsError'),
           textAlign: TextAlign.center,
           style: AppTypography.bodySm.copyWith(
             color: AppColorTokens.of(context).danger,
@@ -138,15 +138,18 @@ class _LiveHomePageState extends State<LiveHomePage> {
       );
     }
     if (_rooms == null) {
-      return const AppEmptyState(
+      return AppEmptyState(
         icon: Icons.live_tv,
-        title: '查看直播间',
-        message: '点击右上角"加载"',
+        title: S.of(context).g_ui3_live_browse_title,
+        message: S.of(context).g_ui3_live_browse_hint,
       );
     }
     final rooms = _rooms!;
     if (rooms.isEmpty) {
-      return const AppEmptyState(icon: Icons.inbox_outlined, title: '暂无直播间');
+      return AppEmptyState(
+        icon: Icons.inbox_outlined,
+        title: S.of(context).g_ui3_live_empty,
+      );
     }
     return ListView.separated(
       itemCount: rooms.length,
@@ -156,7 +159,7 @@ class _LiveHomePageState extends State<LiveHomePage> {
         return ListTile(
           leading: const CircleAvatar(child: Icon(Icons.live_tv)),
           title: Text(r.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text('${r.memberCount} 人'),
+          subtitle: Text(S.of(context).g_ui3_live_viewers(r.memberCount)),
           trailing: const _LiveBadge(),
           onTap: () => _enterRoom(r.id),
         );

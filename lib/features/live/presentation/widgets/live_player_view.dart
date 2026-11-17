@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:livekit_client/livekit_client.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import '../../services/live_video_service.dart';
 
@@ -22,7 +23,7 @@ class LivePlayerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final listenable = videoService.listenable;
     if (listenable == null) {
-      return const _Placeholder(text: '连接中…');
+      return _Placeholder(text: S.of(context).g_ui3_live_connecting);
     }
     return ListenableBuilder(
       listenable: listenable,
@@ -31,7 +32,7 @@ class LivePlayerView extends StatelessWidget {
             ? videoService.localVideoTrack
             : videoService.primaryVideoTrack;
         if (track == null) {
-          return const _Placeholder(text: '等待画面…');
+          return _Placeholder(text: S.of(context).g_ui3_live_waiting_video);
         }
         return VideoTrackRenderer(track, fit: VideoViewFit.cover);
       },

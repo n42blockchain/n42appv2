@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import 'gift_catalog.dart';
 import 'gift_economy.dart';
@@ -49,7 +50,7 @@ class _GiftPickerSheetState extends ConsumerState<GiftPickerSheet> {
           Row(
             children: [
               Text(
-                '送礼物',
+                S.of(context).g_ui3_live_send_gift,
                 style: AppTypography.title.copyWith(color: c.textPrimary),
               ),
               const Spacer(),
@@ -63,7 +64,7 @@ class _GiftPickerSheetState extends ConsumerState<GiftPickerSheet> {
               SizedBox(width: AppSpacing.space4),
               TextButton(
                 onPressed: () => economy.recharge(100),
-                child: const Text('充值'),
+                child: Text(S.of(context).g_ui3_live_top_up),
               ),
             ],
           ),
@@ -99,7 +100,9 @@ class _GiftPickerSheetState extends ConsumerState<GiftPickerSheet> {
       setState(() => _sending = false);
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(const SnackBar(content: Text('金币不足，请先充值')));
+        ..showSnackBar(
+          SnackBar(content: Text(S.of(context).g_ui3_live_coins_insufficient)),
+        );
     }
   }
 }
@@ -116,7 +119,8 @@ class _GiftTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: AppRadius.brMd,
-      child: Container(
+      // Ink keeps the pressed ripple visible above the tile fill.
+      child: Ink(
         decoration: BoxDecoration(
           color: c.bgElevated,
           borderRadius: AppRadius.brMd,
@@ -128,7 +132,7 @@ class _GiftTile extends StatelessWidget {
             Text(gift.emoji, style: const TextStyle(fontSize: 28)),
             SizedBox(height: AppSpacing.space2),
             Text(
-              gift.label,
+              liveGiftLabel(S.of(context), gift),
               style: AppTypography.captionSm.copyWith(color: c.textSecondary),
             ),
             SizedBox(height: AppSpacing.space2),

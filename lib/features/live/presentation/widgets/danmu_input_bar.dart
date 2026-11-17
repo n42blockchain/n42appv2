@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// 底部弹幕输入框（"说点什么…"）。内置发送节流，防止刷屏。
 class DanmuInputBar extends StatefulWidget {
@@ -42,9 +43,9 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(
-            content: Text('发送太快了，稍后再试'),
-            duration: Duration(milliseconds: 700),
+          SnackBar(
+            content: Text(S.of(context).g_key_error_24),
+            duration: const Duration(milliseconds: 700),
           ),
         );
       return;
@@ -57,8 +58,9 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
       _controller.clear();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('发送失败，请重试')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).g_ui3_send_failed_retry)),
+        );
       }
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -92,9 +94,9 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
                     color: AppColorTokens.onOverlayPrimary,
                   ),
                   cursorColor: AppColorTokens.onOverlayPrimary,
-                  decoration: const InputDecoration(
-                    hintText: '说点什么…',
-                    hintStyle: TextStyle(
+                  decoration: InputDecoration(
+                    hintText: S.of(context).g_ui3_live_say_something,
+                    hintStyle: const TextStyle(
                       color: AppColorTokens.onOverlaySecondary,
                     ),
                     border: InputBorder.none,
@@ -106,6 +108,7 @@ class _DanmuInputBarState extends State<DanmuInputBar> {
             ),
             SizedBox(width: AppSpacing.space4),
             IconButton(
+              tooltip: S.of(context).g_key_48,
               onPressed: _sending ? null : _handleSend,
               icon: _sending
                   ? const SizedBox(

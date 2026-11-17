@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/live/presentation/widgets/gift_providers.dar
 import 'package:n42_wallet/features/live/prediction/providers/prediction_providers.dart';
 import 'package:n42_wallet/features/live/services/live_chat_service.dart';
 import 'package:n42_wallet/features/live/services/live_video_service.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,7 +59,8 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('开始直播'));
+      final l10n = S.of(tester.element(find.byType(GoLivePage)));
+      await tester.tap(find.text(l10n.g_ui3_live_start));
       await tester.pumpAndSettle();
 
       expect(chat.calls, [
@@ -68,7 +70,7 @@ void main() {
         'markLive:$roomId',
       ]);
       expect(video.calls, ['join:$roomId', 'leave']);
-      expect(find.text('视频暂不可用，其他直播功能可继续使用'), findsOneWidget);
+      expect(find.text(l10n.g_ui3_live_video_unavailable), findsOneWidget);
       expect(find.text('Bad state: LiveKit unavailable'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox.shrink());
@@ -111,10 +113,14 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('开始直播'));
+    final l10n = S.of(tester.element(find.byType(GoLivePage)));
+    await tester.tap(find.text(l10n.g_ui3_live_start));
     await tester.pumpAndSettle();
 
-    expect(find.text('Bad state: 需要摄像头与麦克风权限才能开播'), findsOneWidget);
+    expect(
+      find.text('Bad state: ${l10n.g_ui3_live_permission_required}'),
+      findsOneWidget,
+    );
     expect(chat.calls, isEmpty);
     expect(video.calls, isEmpty);
   });
@@ -153,7 +159,8 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('开始直播'));
+    final l10n = S.of(tester.element(find.byType(GoLivePage)));
+    await tester.tap(find.text(l10n.g_ui3_live_start));
     await tester.pumpAndSettle();
 
     expect(find.text('Bad state: Matrix join failed'), findsOneWidget);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// 直播间右侧竖排操作：点赞 / 分享 / 礼物（抖音式）。
 class LiveSideActions extends StatelessWidget {
@@ -16,21 +17,26 @@ class LiveSideActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _ActionButton(icon: Icons.favorite, label: '点赞', onTap: onLike),
+        _ActionButton(
+          icon: Icons.favorite,
+          label: s.g_ui3_live_like,
+          onTap: onLike,
+        ),
         SizedBox(height: AppSpacing.space8),
         _ActionButton(
           icon: Icons.card_giftcard,
-          label: '礼物',
-          onTap: onGift ?? () => _toast(context, '礼物功能开发中'),
+          label: s.g_ui3_live_gift,
+          onTap: onGift ?? () => _toast(context, s.g_key_aa_coming_soon),
         ),
         SizedBox(height: AppSpacing.space8),
         _ActionButton(
           icon: Icons.share,
-          label: '分享',
-          onTap: onShare ?? () => _toast(context, '分享功能开发中'),
+          label: s.g_share_v2_key_5,
+          onTap: onShare ?? () => _toast(context, s.g_key_aa_coming_soon),
         ),
       ],
     );
