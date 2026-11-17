@@ -198,72 +198,115 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m75(value) =>
       "RPC চেইন আইডি ${value} প্রদান করেছে, যা আপনি যে মান লিখেছেন তার সাথে মেলে না।";
 
-  static String m76(asset, contract, address) =>
+  static String m76(address, asset) =>
+      "প্রাপকের ঠিকানা ${address} সম্পদ ${asset} গ্রহণে অপ্ট-ইন করেনি, তাই এটি গ্রহণ করতে পারবে না।";
+
+  static String m77(action) => "${action} অনুমোদন করুন";
+
+  static String m78(name) => "${name} · সম্পদ প্রদর্শন সেটিংস";
+
+  static String m79(index) => "অপারেশন #${index}: অবৈধ ঠিকানা বা পরিমাণ";
+
+  static String m80(action) => "${action} নিশ্চিত করুন";
+
+  static String m81(key) => "পাবলিক কী: ${key}";
+
+  static String m82(count) => "${count}টি ডিভাইস পাওয়া গেছে";
+
+  static String m83(name) => "${name} ফিল্টার";
+
+  static String m84(name, gift) => "${name} ${gift} পাঠিয়েছেন";
+
+  static String m85(reason) => "লোড করা যায়নি: ${reason}";
+
+  static String m86(name) => "${name} যোগ দিয়েছেন";
+
+  static String m87(count) => "${count} জন দর্শক";
+
+  static String m88(value) => "${value}-এর প্যারেন্ট চেইন পাওয়া যায়নি";
+
+  static String m89(time) => "${time} পরে বন্ধ হবে";
+
+  static String m90(shares) => "ধারণ: ${shares}";
+
+  static String m91(amount, symbol) => "ভলিউম ${amount} ${symbol}";
+
+  static String m92(name) => "${name} সরাবেন?";
+
+  static String m93(host) =>
+      "আন্তর্জাতিকীকৃত RPC হোস্টনেম: ${host}\\nএই নামটি অন্য কোনো পরিষেবার মতো দেখাতে পারে। ASCII হোস্টনেমটি আলাদাভাবে যাচাই করুন।";
+
+  static String m94(amount, symbol, protocol) =>
+      "${protocol}-এর মাধ্যমে ${amount} ${symbol} স্টেক করবেন? এটি আপনার ওয়ালেট থেকে একটি অন-চেইন লেনদেন পাঠাবে।";
+
+  static String m95(name, decimals) => "${name} · ${decimals} দশমিক";
+
+  static String m96(asset, contract, address) =>
       "অ্যাসেট ${asset} (${contract}) একাউন্ট ${address} এ যোগ করা হয়নি।";
 
-  static String m77(imported, skipped) =>
+  static String m97(imported, skipped) =>
       "ওয়ালেটগুলি আমদানি করা হয়েছে: ${imported}। বাদ দেওয়া হয়েছে: ${skipped}।";
 
-  static String m78(value) => "ব্যালেন্স: ${value}";
+  static String m98(value) => "ব্যালেন্স: ${value}";
 
-  static String m79(value) => "বেস ফি: ${value} গীয়ে";
+  static String m99(value) => "বেস ফি: ${value} গীয়ে";
 
-  static String m80(value) =>
+  static String m100(value) =>
       "ক্লিপবোর্ড ${value} সেকেন্ডের মধ্যে স্বয়ংক্রিয়ভাবে পরিষ্কার হবে";
 
-  static String m81(value) => "পংক্তি ${value}: ক্ষেত্রগুলি অনুপস্থিত";
+  static String m101(value) => "পংক্তি ${value}: ক্ষেত্রগুলি অনুপস্থিত";
 
-  static String m82(value) => "${value} দিন";
+  static String m102(value) => "${value} দিন";
 
-  static String m83(value) => "${value} এর সাথে সংযুক্ত";
+  static String m103(value) => "${value} এর সাথে সংযুক্ত";
 
-  static String m84(value) => "গ্যাস: ${value}";
+  static String m104(value) => "গ্যাস: ${value}";
 
-  static String m85(value) => "${value} ঘণ্টা";
+  static String m105(value) => "${value} ঘণ্টা";
 
-  static String m86(value) => "বৈধ প্রাপক (${value}) আমদানি করা হয়েছে";
+  static String m106(value) => "বৈধ প্রাপক (${value}) আমদানি করা হয়েছে";
 
-  static String m87(quote, base) => "সীমা মূল্য (${quote} প্রতি ${base})";
+  static String m107(quote, base) => "সীমা মূল্য (${quote} প্রতি ${base})";
 
-  static String m88(value) => "লিমিট ${value}";
+  static String m108(value) => "লিমিট ${value}";
 
-  static String m89(value) => "মার্কেট (${value})";
+  static String m109(value) => "মার্কেট (${value})";
 
-  static String m90(value) => "ন্যূনতম ব্যালেন্স: ${value}";
+  static String m110(value) => "ন্যূনতম ব্যালেন্স: ${value}";
 
-  static String m91(value) => "অর্ডার (${value})";
+  static String m111(value) => "অর্ডার (${value})";
 
-  static String m92(value) => "পজিশন (${value})";
+  static String m112(value) => "পজিশন (${value})";
 
-  static String m93(value) => "প্রাপক: ${value}";
+  static String m113(value) => "প্রাপক: ${value}";
 
-  static String m94(value) => "টোকেন পাওয়া গেছে: ${value}";
+  static String m114(value) => "টোকেন পাওয়া গেছে: ${value}";
 
-  static String m95(value) => "টোকেন: ${value}";
+  static String m115(value) => "টোকেন: ${value}";
 
-  static String m96(value) => "লেনদেন: ${value}";
+  static String m116(value) => "লেনদেন: ${value}";
 
-  static String m97(valid, issues) => "বৈধ: ${valid}. সমস্যা: ${issues}.";
+  static String m117(valid, issues) => "বৈধ: ${valid}. সমস্যা: ${issues}.";
 
-  static String m98(value) => "… আরও ${value} সমস্যা";
+  static String m118(value) => "… আরও ${value} সমস্যা";
 
-  static String m99(volume, interest) => "ভলিউম: ${volume} · ওআই: ${interest}";
+  static String m119(volume, interest) => "ভলিউম: ${volume} · ওআই: ${interest}";
 
-  static String m100(value) => "ওয়ালেট ${value}";
+  static String m120(value) => "ওয়ালেট ${value}";
 
-  static String m101(value) => "${value}h আগে আপডেট করা হয়েছে";
+  static String m121(value) => "${value}h আগে আপডেট করা হয়েছে";
 
-  static String m102(value) => "${value}m আগে আপডেট করা হয়েছে";
+  static String m122(value) => "${value}m আগে আপডেট করা হয়েছে";
 
-  static String m103(number) => "ব্লক #${number}";
+  static String m123(number) => "ব্লক #${number}";
 
-  static String m104(index) => "ডিভাইস ${index}";
+  static String m124(index) => "ডিভাইস ${index}";
 
-  static String m105(value) => "${value} মিলিসেকেন্ড";
+  static String m125(value) => "${value} মিলিসেকেন্ড";
 
-  static String m106(count) => "${count}টি লেনদেন";
+  static String m126(count) => "${count}টি লেনদেন";
 
-  static String m107(value) => "0~${value} অক্ষর";
+  static String m127(value) => "0~${value} অক্ষর";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -282,6 +325,45 @@ class MessageLookup extends MessageLookupByLibrary {
       "নতুন ডিভাইস লগইন",
     ),
     "file": MessageLookupByLibrary.simpleMessage("ফাইল"),
+    "g_a11y_add_path": MessageLookupByLibrary.simpleMessage(
+      "ডেরিভেশন পাথ যোগ করুন",
+    ),
+    "g_a11y_clear": MessageLookupByLibrary.simpleMessage("মুছুন"),
+    "g_a11y_clear_search": MessageLookupByLibrary.simpleMessage(
+      "অনুসন্ধান মুছুন",
+    ),
+    "g_a11y_clear_text": MessageLookupByLibrary.simpleMessage("টেক্সট মুছুন"),
+    "g_a11y_close": MessageLookupByLibrary.simpleMessage("বন্ধ করুন"),
+    "g_a11y_export_key": MessageLookupByLibrary.simpleMessage(
+      "কী রপ্তানি করুন",
+    ),
+    "g_a11y_flashlight": MessageLookupByLibrary.simpleMessage("টর্চ"),
+    "g_a11y_forward": MessageLookupByLibrary.simpleMessage("সামনে"),
+    "g_a11y_group_by_collection": MessageLookupByLibrary.simpleMessage(
+      "কালেকশন অনুযায়ী গ্রুপ করুন",
+    ),
+    "g_a11y_hide_password": MessageLookupByLibrary.simpleMessage(
+      "পাসওয়ার্ড লুকান",
+    ),
+    "g_a11y_new_tab": MessageLookupByLibrary.simpleMessage("নতুন ট্যাব"),
+    "g_a11y_previous": MessageLookupByLibrary.simpleMessage("পূর্ববর্তী"),
+    "g_a11y_reverse_tokens": MessageLookupByLibrary.simpleMessage(
+      "টোকেন অদলবদল করুন",
+    ),
+    "g_a11y_scroll_to_bottom": MessageLookupByLibrary.simpleMessage(
+      "নিচে স্ক্রল করুন",
+    ),
+    "g_a11y_scroll_to_top": MessageLookupByLibrary.simpleMessage(
+      "উপরে স্ক্রল করুন",
+    ),
+    "g_a11y_show_password": MessageLookupByLibrary.simpleMessage(
+      "পাসওয়ার্ড দেখান",
+    ),
+    "g_a11y_stop": MessageLookupByLibrary.simpleMessage("থামান"),
+    "g_a11y_swap_direction": MessageLookupByLibrary.simpleMessage(
+      "দিক অদলবদল করুন",
+    ),
+    "g_a11y_tabs": MessageLookupByLibrary.simpleMessage("ট্যাবসমূহ"),
     "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
       "সংরক্ষিত ব্যালেন্স · আপডেট ব্যর্থ হয়েছে",
     ),
@@ -3245,6 +3327,487 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
       "চেইন থেকে এখনও কোনো নিশ্চিতকরণ আসেনি এবং ফলাফল অজানা। এটি এখনও যাচাই করা হচ্ছে এবং এখনও সম্পন্ন হতে পারে। আবার পাঠানোর আগে এটি একটি ব্লক এক্সপ্লোরারে দেখে নিন।",
     ),
+    "g_ui3_aave_unavailable": MessageLookupByLibrary.simpleMessage(
+      "এই চেইনে Aave V3 উপলব্ধ নয়",
+    ),
+    "g_ui3_account_security": MessageLookupByLibrary.simpleMessage(
+      "অ্যাকাউন্ট নিরাপত্তা",
+    ),
+    "g_ui3_activation_time": MessageLookupByLibrary.simpleMessage(
+      "সক্রিয়করণের সময়",
+    ),
+    "g_ui3_address_or_ens": MessageLookupByLibrary.simpleMessage(
+      "ঠিকানা বা ENS নাম",
+    ),
+    "g_ui3_algo_recipient_no_asset": m76,
+    "g_ui3_approve_action": m77,
+    "g_ui3_approve_failed": MessageLookupByLibrary.simpleMessage(
+      "অনুমোদন ব্যর্থ হয়েছে",
+    ),
+    "g_ui3_asset_controls_body": MessageLookupByLibrary.simpleMessage(
+      "এই সেটিংস শুধু এই ওয়ালেটের প্রদর্শনকে প্রভাবিত করে। লুকালে অনুমোদন বাতিল হয় না বা ব্যালেন্স বদলায় না। কোয়ারেন্টাইন করলে ওয়ালেট তালিকা থেকে এই সম্পদ খোলাও বন্ধ হয়। DApp ইন্টারঅ্যাকশন ব্লক হয় না।",
+    ),
+    "g_ui3_asset_controls_title": m78,
+    "g_ui3_asset_display_controls": MessageLookupByLibrary.simpleMessage(
+      "সম্পদ প্রদর্শন সেটিংস",
+    ),
+    "g_ui3_asset_display_local_note": MessageLookupByLibrary.simpleMessage(
+      "শুধু স্থানীয় পছন্দ। চেইনের ব্যালেন্স ও অনুমোদন অপরিবর্তিত থাকে।",
+    ),
+    "g_ui3_asset_hidden_reviewed": MessageLookupByLibrary.simpleMessage(
+      "লুকানো ও পর্যালোচনাধীন সম্পদ",
+    ),
+    "g_ui3_asset_hide": MessageLookupByLibrary.simpleMessage(
+      "তালিকা থেকে লুকান",
+    ),
+    "g_ui3_asset_mark_review": MessageLookupByLibrary.simpleMessage(
+      "পর্যালোচনার জন্য চিহ্নিত করুন",
+    ),
+    "g_ui3_asset_marked_review_hint": MessageLookupByLibrary.simpleMessage(
+      "আপনি এটি পর্যালোচনার জন্য চিহ্নিত করেছেন। পর্যালোচনা বা পুনরুদ্ধার করতে দীর্ঘক্ষণ চাপুন।",
+    ),
+    "g_ui3_asset_quarantine": MessageLookupByLibrary.simpleMessage(
+      "তালিকা থেকে কোয়ারেন্টাইন করুন",
+    ),
+    "g_ui3_asset_restore": MessageLookupByLibrary.simpleMessage("পুনরুদ্ধার"),
+    "g_ui3_asset_restore_display": MessageLookupByLibrary.simpleMessage(
+      "স্বাভাবিক প্রদর্শন ফিরিয়ে আনুন",
+    ),
+    "g_ui3_asset_restore_failed": MessageLookupByLibrary.simpleMessage(
+      "সম্পদের প্রদর্শন পুনরুদ্ধার করা যায়নি।",
+    ),
+    "g_ui3_asset_save_failed": MessageLookupByLibrary.simpleMessage(
+      "সম্পদ প্রদর্শনের পছন্দ সংরক্ষণ করা যায়নি।",
+    ),
+    "g_ui3_asset_state_hidden": MessageLookupByLibrary.simpleMessage("লুকানো"),
+    "g_ui3_asset_state_quarantined": MessageLookupByLibrary.simpleMessage(
+      "কোয়ারেন্টাইনে",
+    ),
+    "g_ui3_backup_phrase_unavailable": MessageLookupByLibrary.simpleMessage(
+      "এই ওয়ালেটের জন্য কোনো রিকভারি ফ্রেজ সংরক্ষিত নেই।",
+    ),
+    "g_ui3_batch_build_failed": MessageLookupByLibrary.simpleMessage(
+      "অপারেশন তৈরি করা যায়নি",
+    ),
+    "g_ui3_batch_nft_transfer": MessageLookupByLibrary.simpleMessage(
+      "একসাথে NFT স্থানান্তর",
+    ),
+    "g_ui3_batch_operation_invalid": m79,
+    "g_ui3_borrow": MessageLookupByLibrary.simpleMessage("ধার নিন"),
+    "g_ui3_borrow_apr": MessageLookupByLibrary.simpleMessage("ধারের APR"),
+    "g_ui3_borrow_submitted": MessageLookupByLibrary.simpleMessage(
+      "ধারের অনুরোধ পাঠানো হয়েছে",
+    ),
+    "g_ui3_calldata_required": MessageLookupByLibrary.simpleMessage(
+      "Calldata আবশ্যক",
+    ),
+    "g_ui3_chain_config_invalid": MessageLookupByLibrary.simpleMessage(
+      "অবৈধ চেইন কনফিগারেশন",
+    ),
+    "g_ui3_chain_config_missing_parent": MessageLookupByLibrary.simpleMessage(
+      "প্যারেন্ট চেইন কনফিগারেশন পাওয়া যায়নি",
+    ),
+    "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
+      "ব্রাউজারের ক্যাশে থাকা সাইট ডেটা মুছবেন? সাইটগুলো আবার সাইন ইন করতে বলতে পারে।",
+    ),
+    "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
+      "সব ট্যাব বন্ধ করবেন?",
+    ),
+    "g_ui3_confirm_action": m80,
+    "g_ui3_copy_template": MessageLookupByLibrary.simpleMessage(
+      "টেমপ্লেট কপি করুন",
+    ),
+    "g_ui3_csv_address_desc": MessageLookupByLibrary.simpleMessage(
+      "আবশ্যক — EVM ঠিকানা (0x + 40টি হেক্স অক্ষর)",
+    ),
+    "g_ui3_csv_amount_desc": MessageLookupByLibrary.simpleMessage(
+      "আবশ্যক — দশমিক সংখ্যা (যেমন 1.5)",
+    ),
+    "g_ui3_csv_columns": MessageLookupByLibrary.simpleMessage("কলাম"),
+    "g_ui3_csv_example": MessageLookupByLibrary.simpleMessage("উদাহরণ"),
+    "g_ui3_csv_memo_desc": MessageLookupByLibrary.simpleMessage(
+      "ঐচ্ছিক — লেবেল বা নোট",
+    ),
+    "g_ui3_csv_rule_blank": MessageLookupByLibrary.simpleMessage(
+      "ফাঁকা লাইন উপেক্ষা করা হয়",
+    ),
+    "g_ui3_csv_rule_comments": MessageLookupByLibrary.simpleMessage(
+      "# দিয়ে শুরু হওয়া লাইনগুলো মন্তব্য, সেগুলো উপেক্ষা করা হবে",
+    ),
+    "g_ui3_csv_rule_duplicates": MessageLookupByLibrary.simpleMessage(
+      "ডুপ্লিকেট ঠিকানাগুলো চিহ্নিত করা হবে",
+    ),
+    "g_ui3_csv_rule_header": MessageLookupByLibrary.simpleMessage(
+      "হেডার সারি (address,amount,memo) ঐচ্ছিক — স্বয়ংক্রিয়ভাবে শনাক্ত হয়",
+    ),
+    "g_ui3_csv_rules": MessageLookupByLibrary.simpleMessage("নিয়মাবলি"),
+    "g_ui3_data": MessageLookupByLibrary.simpleMessage("ডেটা"),
+    "g_ui3_delete_bookmark_confirm": MessageLookupByLibrary.simpleMessage(
+      "এই বুকমার্ক মুছবেন?",
+    ),
+    "g_ui3_delete_trade_confirm": MessageLookupByLibrary.simpleMessage(
+      "এই ট্রেড রেকর্ডটি মুছবেন?",
+    ),
+    "g_ui3_delete_validator_key_confirm": MessageLookupByLibrary.simpleMessage(
+      "এই ডিভাইস থেকে এই ভ্যালিডেটর কী মুছবেন? নিশ্চিত করুন যে আপনার ব্যাকআপ আছে।",
+    ),
+    "g_ui3_enter_amount": MessageLookupByLibrary.simpleMessage(
+      "অনুগ্রহ করে একটি পরিমাণ লিখুন",
+    ),
+    "g_ui3_falcon_auth_reason": MessageLookupByLibrary.simpleMessage(
+      "Falcon ওয়ালেট অপারেশন অনুমোদন করুন",
+    ),
+    "g_ui3_falcon_backup_password": MessageLookupByLibrary.simpleMessage(
+      "ব্যাকআপ পাসওয়ার্ড (কমপক্ষে 12 অক্ষর)",
+    ),
+    "g_ui3_falcon_backup_to_restore": MessageLookupByLibrary.simpleMessage(
+      "পুনরুদ্ধারের জন্য এনক্রিপ্টেড ব্যাকআপ",
+    ),
+    "g_ui3_falcon_backup_verified": MessageLookupByLibrary.simpleMessage(
+      "এনক্রিপ্টেড ব্যাকআপ যাচাই করা হয়েছে",
+    ),
+    "g_ui3_falcon_confirm_offline_signature":
+        MessageLookupByLibrary.simpleMessage("অফলাইন স্বাক্ষর নিশ্চিত করুন"),
+    "g_ui3_falcon_confirm_transaction": MessageLookupByLibrary.simpleMessage(
+      "Falcon লেনদেন নিশ্চিত করুন",
+    ),
+    "g_ui3_falcon_copy_result": MessageLookupByLibrary.simpleMessage(
+      "ফলাফল কপি করুন",
+    ),
+    "g_ui3_falcon_create_account": MessageLookupByLibrary.simpleMessage(
+      "Falcon অ্যাকাউন্ট তৈরি করুন",
+    ),
+    "g_ui3_falcon_export_backup": MessageLookupByLibrary.simpleMessage(
+      "এনক্রিপ্টেড ব্যাকআপ রপ্তানি করুন",
+    ),
+    "g_ui3_falcon_library_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Falcon নেটিভ লাইব্রেরি উপলব্ধ নয়",
+    ),
+    "g_ui3_falcon_network_not_enabled": MessageLookupByLibrary.simpleMessage(
+      "এই নেটওয়ার্কে Falcon-512 লেনদেন চালু নেই। অফলাইন স্বাক্ষর উপলব্ধ।",
+    ),
+    "g_ui3_falcon_notice": MessageLookupByLibrary.simpleMessage(
+      "শুধু এমন নেটওয়ার্ক ব্যবহার করুন যা স্পষ্টভাবে Falcon-512 লেনদেন সমর্থন করে। তহবিল জমার আগে RPC ও ব্যাকআপ যাচাই করুন। Falcon কী-এর জন্য আলাদা এনক্রিপ্টেড ব্যাকআপ প্রয়োজন; আপনার EVM রিকভারি ফ্রেজ দিয়ে এগুলো পুনরুদ্ধার করা যায় না। জমা অনিশ্চিত হলে আরেকটি পেমেন্টের আগে এর অবস্থা যাচাই করুন।",
+    ),
+    "g_ui3_falcon_operation_failed": MessageLookupByLibrary.simpleMessage(
+      "অপারেশন ব্যর্থ হয়েছে। ইনপুট, ব্যাকআপ পাসওয়ার্ড ও ডিভাইস প্রমাণীকরণ যাচাই করুন। পাঠানোর চেষ্টা হয়ে থাকলে আবার চেষ্টার আগে আগের জমার অবস্থা যাচাই করুন।",
+    ),
+    "g_ui3_falcon_owner_changed": MessageLookupByLibrary.simpleMessage(
+      "ওয়ালেটের মালিক পরিবর্তিত হয়েছে",
+    ),
+    "g_ui3_falcon_public_key": m81,
+    "g_ui3_falcon_query_previous": MessageLookupByLibrary.simpleMessage(
+      "আগের জমার অবস্থা দেখুন",
+    ),
+    "g_ui3_falcon_query_previous_first": MessageLookupByLibrary.simpleMessage(
+      "আরেকটি পেমেন্টের আগে আগের জমার অবস্থা যাচাই করুন।",
+    ),
+    "g_ui3_falcon_restore_account": MessageLookupByLibrary.simpleMessage(
+      "Falcon অ্যাকাউন্ট পুনরুদ্ধার করুন",
+    ),
+    "g_ui3_falcon_review_send": MessageLookupByLibrary.simpleMessage(
+      "পর্যালোচনা করে পাঠান",
+    ),
+    "g_ui3_falcon_review_sign_offline": MessageLookupByLibrary.simpleMessage(
+      "পর্যালোচনা করে অফলাইনে স্বাক্ষর করুন",
+    ),
+    "g_ui3_falcon_sign_and_send": MessageLookupByLibrary.simpleMessage(
+      "স্বাক্ষর করে পাঠান",
+    ),
+    "g_ui3_falcon_verify_backup": MessageLookupByLibrary.simpleMessage(
+      "সংরক্ষিত ব্যাকআপ যাচাই করুন",
+    ),
+    "g_ui3_hw_bt_disabled_message": MessageLookupByLibrary.simpleMessage(
+      "আপনার হার্ডওয়্যার ওয়ালেটে সংযোগ করতে ডিভাইস সেটিংসে ব্লুটুথ চালু করুন।",
+    ),
+    "g_ui3_hw_bt_disabled_title": MessageLookupByLibrary.simpleMessage(
+      "ব্লুটুথ বন্ধ",
+    ),
+    "g_ui3_hw_bt_permission_message": MessageLookupByLibrary.simpleMessage(
+      "হার্ডওয়্যার ওয়ালেট খুঁজতে ব্লুটুথ অনুমতি দিন।",
+    ),
+    "g_ui3_hw_bt_permission_title": MessageLookupByLibrary.simpleMessage(
+      "ব্লুটুথ অনুমতি প্রয়োজন",
+    ),
+    "g_ui3_hw_devices_found": m82,
+    "g_ui3_hw_ledger_device": MessageLookupByLibrary.simpleMessage(
+      "Ledger ডিভাইস",
+    ),
+    "g_ui3_hw_no_devices": MessageLookupByLibrary.simpleMessage(
+      "কোনো ডিভাইস পাওয়া যায়নি",
+    ),
+    "g_ui3_hw_scan_again": MessageLookupByLibrary.simpleMessage(
+      "আবার স্ক্যান করুন",
+    ),
+    "g_ui3_hw_search_complete": MessageLookupByLibrary.simpleMessage(
+      "অনুসন্ধান সম্পূর্ণ",
+    ),
+    "g_ui3_hw_searching": MessageLookupByLibrary.simpleMessage(
+      "ডিভাইস খোঁজা হচ্ছে...",
+    ),
+    "g_ui3_hw_stop_scan": MessageLookupByLibrary.simpleMessage(
+      "স্ক্যান বন্ধ করুন",
+    ),
+    "g_ui3_iap_purchase_not_started": MessageLookupByLibrary.simpleMessage(
+      "কেনাকাটা শুরু করা যায়নি",
+    ),
+    "g_ui3_idhub_approve_login_prompt": MessageLookupByLibrary.simpleMessage(
+      "আপনার N42 পরিচয় দিয়ে সাইন-ইন অনুমোদন করবেন?",
+    ),
+    "g_ui3_idhub_approved": MessageLookupByLibrary.simpleMessage(
+      "অনুমোদিত। অন্য ডিভাইসে ফিরে যান।",
+    ),
+    "g_ui3_idhub_bind": MessageLookupByLibrary.simpleMessage("যুক্ত করুন"),
+    "g_ui3_idhub_bind_prompt": MessageLookupByLibrary.simpleMessage(
+      "এই ওয়ালেটটি আপনার N42 পরিচয়ের সাথে যুক্ত করবেন?",
+    ),
+    "g_ui3_idhub_bind_wallet": MessageLookupByLibrary.simpleMessage(
+      "ওয়ালেট যুক্ত করা",
+    ),
+    "g_ui3_idhub_bind_wallet_title": MessageLookupByLibrary.simpleMessage(
+      "ওয়ালেট যুক্ত করুন",
+    ),
+    "g_ui3_idhub_bound": MessageLookupByLibrary.simpleMessage(
+      "ওয়ালেট যুক্ত হয়েছে। অন্য ডিভাইসে ফিরে যান।",
+    ),
+    "g_ui3_idhub_load_failed": MessageLookupByLibrary.simpleMessage(
+      "এই অনুরোধটি লোড করা যায়নি।",
+    ),
+    "g_ui3_idhub_login_request": MessageLookupByLibrary.simpleMessage(
+      "লগইন অনুরোধ",
+    ),
+    "g_ui3_idhub_request": MessageLookupByLibrary.simpleMessage("অনুরোধ"),
+    "g_ui3_idhub_server": MessageLookupByLibrary.simpleMessage("সার্ভার"),
+    "g_ui3_idhub_sign_failed": MessageLookupByLibrary.simpleMessage(
+      "স্বাক্ষর ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+    ),
+    "g_ui3_idhub_sign_in": MessageLookupByLibrary.simpleMessage("সাইন ইন"),
+    "g_ui3_idhub_type_mismatch": MessageLookupByLibrary.simpleMessage(
+      "এই অনুরোধের ধরন স্ক্যান করা কোডের সাথে মেলে না।",
+    ),
+    "g_ui3_idhub_unlock_wallet": MessageLookupByLibrary.simpleMessage(
+      "আপনার ওয়ালেট আনলক করুন, তারপর এই অনুরোধটি আবার খুলুন।",
+    ),
+    "g_ui3_idhub_untrusted_server": MessageLookupByLibrary.simpleMessage(
+      "এই অনুরোধটি একটি অবিশ্বস্ত সার্ভারের দিকে নির্দেশ করে এবং ব্লক করা হয়েছে।",
+    ),
+    "g_ui3_idhub_wallet_changed": MessageLookupByLibrary.simpleMessage(
+      "সক্রিয় ওয়ালেট পরিবর্তিত হয়েছে। এই অনুরোধটি আবার খুলুন।",
+    ),
+    "g_ui3_invalid_amount": MessageLookupByLibrary.simpleMessage("অবৈধ পরিমাণ"),
+    "g_ui3_invalid_coin_config": MessageLookupByLibrary.simpleMessage(
+      "অবৈধ কয়েন কনফিগারেশন",
+    ),
+    "g_ui3_invalid_tx_hash": MessageLookupByLibrary.simpleMessage(
+      "অবৈধ লেনদেন হ্যাশ",
+    ),
+    "g_ui3_invalid_tx_receipt": MessageLookupByLibrary.simpleMessage(
+      "অবৈধ লেনদেন রসিদ",
+    ),
+    "g_ui3_lending": MessageLookupByLibrary.simpleMessage("ঋণদান"),
+    "g_ui3_limit": MessageLookupByLibrary.simpleMessage("লিমিট"),
+    "g_ui3_live_beauty": MessageLookupByLibrary.simpleMessage(
+      "বিউটি ও ফিল্টার",
+    ),
+    "g_ui3_live_beauty_reset": MessageLookupByLibrary.simpleMessage(
+      "আসল অবস্থায় ফেরান",
+    ),
+    "g_ui3_live_brighten": MessageLookupByLibrary.simpleMessage("উজ্জ্বল করুন"),
+    "g_ui3_live_browse_hint": MessageLookupByLibrary.simpleMessage(
+      "লাইভ রুম লোড করতে রিফ্রেশে ট্যাপ করুন",
+    ),
+    "g_ui3_live_browse_title": MessageLookupByLibrary.simpleMessage(
+      "লাইভ রুম দেখুন",
+    ),
+    "g_ui3_live_coins_insufficient": MessageLookupByLibrary.simpleMessage(
+      "কয়েন পর্যাপ্ত নয়। আগে টপ আপ করুন।",
+    ),
+    "g_ui3_live_connecting": MessageLookupByLibrary.simpleMessage(
+      "সংযোগ হচ্ছে…",
+    ),
+    "g_ui3_live_empty": MessageLookupByLibrary.simpleMessage(
+      "কোনো লাইভ রুম নেই",
+    ),
+    "g_ui3_live_end": MessageLookupByLibrary.simpleMessage("লাইভ শেষ করুন"),
+    "g_ui3_live_end_confirm": MessageLookupByLibrary.simpleMessage(
+      "এই লাইভ স্ট্রিম শেষ করবেন? দর্শকদের সংযোগ বিচ্ছিন্ন হবে।",
+    ),
+    "g_ui3_live_enter": MessageLookupByLibrary.simpleMessage("প্রবেশ করুন"),
+    "g_ui3_live_filter": MessageLookupByLibrary.simpleMessage("ফিল্টার"),
+    "g_ui3_live_filter_cool": MessageLookupByLibrary.simpleMessage("শীতল"),
+    "g_ui3_live_filter_mono": MessageLookupByLibrary.simpleMessage("সাদাকালো"),
+    "g_ui3_live_filter_named": m83,
+    "g_ui3_live_filter_natural": MessageLookupByLibrary.simpleMessage(
+      "প্রাকৃতিক",
+    ),
+    "g_ui3_live_filter_original": MessageLookupByLibrary.simpleMessage("আসল"),
+    "g_ui3_live_filter_vivid": MessageLookupByLibrary.simpleMessage("উজ্জ্বল"),
+    "g_ui3_live_filter_warm": MessageLookupByLibrary.simpleMessage("উষ্ণ"),
+    "g_ui3_live_gift": MessageLookupByLibrary.simpleMessage("উপহার"),
+    "g_ui3_live_gift_cheers": MessageLookupByLibrary.simpleMessage("চিয়ার্স"),
+    "g_ui3_live_gift_crown": MessageLookupByLibrary.simpleMessage("মুকুট"),
+    "g_ui3_live_gift_diamond": MessageLookupByLibrary.simpleMessage("হীরা"),
+    "g_ui3_live_gift_rocket": MessageLookupByLibrary.simpleMessage("রকেট"),
+    "g_ui3_live_gift_rose": MessageLookupByLibrary.simpleMessage("গোলাপ"),
+    "g_ui3_live_gift_sent": m84,
+    "g_ui3_live_hold_compare": MessageLookupByLibrary.simpleMessage(
+      "আসল দেখতে চেপে ধরে রাখুন",
+    ),
+    "g_ui3_live_like": MessageLookupByLibrary.simpleMessage("লাইক"),
+    "g_ui3_live_list": MessageLookupByLibrary.simpleMessage("লাইভ স্ট্রিম"),
+    "g_ui3_live_load_failed": m85,
+    "g_ui3_live_mute": MessageLookupByLibrary.simpleMessage("মিউট"),
+    "g_ui3_live_pause_video": MessageLookupByLibrary.simpleMessage(
+      "ভিডিও বিরতি দিন",
+    ),
+    "g_ui3_live_permission_required": MessageLookupByLibrary.simpleMessage(
+      "লাইভে যেতে ক্যামেরা ও মাইক্রোফোন অ্যাক্সেস প্রয়োজন",
+    ),
+    "g_ui3_live_resume_video": MessageLookupByLibrary.simpleMessage(
+      "ভিডিও আবার চালু করুন",
+    ),
+    "g_ui3_live_room_id_copied": MessageLookupByLibrary.simpleMessage(
+      "রুম আইডি কপি হয়েছে",
+    ),
+    "g_ui3_live_rosy": MessageLookupByLibrary.simpleMessage("গোলাপি আভা"),
+    "g_ui3_live_say_something": MessageLookupByLibrary.simpleMessage(
+      "কিছু বলুন…",
+    ),
+    "g_ui3_live_send_gift": MessageLookupByLibrary.simpleMessage("উপহার পাঠান"),
+    "g_ui3_live_smooth": MessageLookupByLibrary.simpleMessage("মসৃণ"),
+    "g_ui3_live_start": MessageLookupByLibrary.simpleMessage("লাইভে যান"),
+    "g_ui3_live_starting": MessageLookupByLibrary.simpleMessage("শুরু হচ্ছে…"),
+    "g_ui3_live_switch_camera": MessageLookupByLibrary.simpleMessage(
+      "ক্যামেরা পরিবর্তন করুন",
+    ),
+    "g_ui3_live_top_up": MessageLookupByLibrary.simpleMessage("টপ আপ"),
+    "g_ui3_live_torch_off": MessageLookupByLibrary.simpleMessage(
+      "ফ্ল্যাশলাইট বন্ধ করুন",
+    ),
+    "g_ui3_live_torch_on": MessageLookupByLibrary.simpleMessage(
+      "ফ্ল্যাশলাইট চালু করুন",
+    ),
+    "g_ui3_live_torch_unsupported": MessageLookupByLibrary.simpleMessage(
+      "ফ্ল্যাশলাইট সমর্থন করে এমন পিছনের ক্যামেরায় যান",
+    ),
+    "g_ui3_live_unmute": MessageLookupByLibrary.simpleMessage("আনমিউট"),
+    "g_ui3_live_user_joined": m86,
+    "g_ui3_live_video_unavailable": MessageLookupByLibrary.simpleMessage(
+      "ভিডিও অনুপলব্ধ। অন্যান্য লাইভ ফিচার এখনও কাজ করছে।",
+    ),
+    "g_ui3_live_viewers": m87,
+    "g_ui3_live_waiting_video": MessageLookupByLibrary.simpleMessage(
+      "ভিডিওর অপেক্ষায়…",
+    ),
+    "g_ui3_long": MessageLookupByLibrary.simpleMessage("লং"),
+    "g_ui3_market": MessageLookupByLibrary.simpleMessage("মার্কেট"),
+    "g_ui3_method": MessageLookupByLibrary.simpleMessage("মেথড"),
+    "g_ui3_min_balance": MessageLookupByLibrary.simpleMessage(
+      "ন্যূনতম ব্যালেন্স",
+    ),
+    "g_ui3_missing_parent_chain": m88,
+    "g_ui3_nft_transfer_unsupported": MessageLookupByLibrary.simpleMessage(
+      "NFT স্থানান্তর সমর্থিত নয়",
+    ),
+    "g_ui3_no_markets": MessageLookupByLibrary.simpleMessage(
+      "কোনো মার্কেট উপলব্ধ নেই",
+    ),
+    "g_ui3_no_trending_data": MessageLookupByLibrary.simpleMessage(
+      "কোনো ট্রেন্ডিং ডেটা নেই",
+    ),
+    "g_ui3_no_wallet_for_chain": MessageLookupByLibrary.simpleMessage(
+      "এই চেইনের জন্য কোনো ওয়ালেট অ্যাকাউন্ট পাওয়া যায়নি",
+    ),
+    "g_ui3_phone": MessageLookupByLibrary.simpleMessage("ফোন"),
+    "g_ui3_pick_file": MessageLookupByLibrary.simpleMessage("ফাইল বেছে নিন"),
+    "g_ui3_pred_awaiting": MessageLookupByLibrary.simpleMessage(
+      "ফলাফলের অপেক্ষায়",
+    ),
+    "g_ui3_pred_claim_refund": MessageLookupByLibrary.simpleMessage(
+      "রিফান্ড নিন",
+    ),
+    "g_ui3_pred_closed": MessageLookupByLibrary.simpleMessage("বন্ধ"),
+    "g_ui3_pred_closes_in": m89,
+    "g_ui3_pred_held": m90,
+    "g_ui3_pred_redeem_winnings": MessageLookupByLibrary.simpleMessage(
+      "জয়ের অর্থ তুলুন",
+    ),
+    "g_ui3_pred_resolve": MessageLookupByLibrary.simpleMessage("ফলাফল ঘোষণা"),
+    "g_ui3_pred_volume": m91,
+    "g_ui3_receipt_lookup_failed": MessageLookupByLibrary.simpleMessage(
+      "রসিদ খোঁজা ব্যর্থ হয়েছে",
+    ),
+    "g_ui3_remove_asset_message": MessageLookupByLibrary.simpleMessage(
+      "এটি আর এই ওয়ালেটে দেখানো হবে না। চেইনে থাকা আপনার সম্পদ প্রভাবিত হবে না।",
+    ),
+    "g_ui3_remove_asset_title": m92,
+    "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
+      "RPC জেনেসিস ব্লক যাচাই করা যায়নি। নেটওয়ার্ক যোগ করা হয়নি।",
+    ),
+    "g_ui3_rpc_idn_hostname_warning": m93,
+    "g_ui3_rpc_url_not_configured": MessageLookupByLibrary.simpleMessage(
+      "RPC URL কনফিগার করা হয়নি",
+    ),
+    "g_ui3_search_coin": MessageLookupByLibrary.simpleMessage("কয়েন খুঁজুন"),
+    "g_ui3_search_failed": MessageLookupByLibrary.simpleMessage(
+      "অনুসন্ধান ব্যর্থ হয়েছে",
+    ),
+    "g_ui3_sell": MessageLookupByLibrary.simpleMessage("বিক্রি"),
+    "g_ui3_send_failed_retry": MessageLookupByLibrary.simpleMessage(
+      "পাঠানো যায়নি। আবার চেষ্টা করুন।",
+    ),
+    "g_ui3_short": MessageLookupByLibrary.simpleMessage("শর্ট"),
+    "g_ui3_signing_config_changed": MessageLookupByLibrary.simpleMessage(
+      "ওয়ালেটের সাইনিং কনফিগারেশন পরিবর্তিত হয়েছে",
+    ),
+    "g_ui3_signing_key_mismatch": MessageLookupByLibrary.simpleMessage(
+      "সাইনিং কী প্রেরকের ঠিকানার সাথে মেলে না",
+    ),
+    "g_ui3_similar_address_body": MessageLookupByLibrary.simpleMessage(
+      "এই ঠিকানাটি সাম্প্রতিক একজন প্রাপকের মতো, কিন্তু আলাদা।",
+    ),
+    "g_ui3_similar_address_note": MessageLookupByLibrary.simpleMessage(
+      "উৎস: স্থানীয় পাঠানোর ইতিহাস, এইমাত্র যাচাই করা হয়েছে। এটি সাদৃশ্যের সতর্কতা, প্রতারণার প্রমাণ নয়।",
+    ),
+    "g_ui3_similar_address_title": MessageLookupByLibrary.simpleMessage(
+      "প্রাপকের সম্পূর্ণ ঠিকানা যাচাই করুন",
+    ),
+    "g_ui3_stake_confirm_message": m94,
+    "g_ui3_supply": MessageLookupByLibrary.simpleMessage("জমা দিন"),
+    "g_ui3_supply_apy": MessageLookupByLibrary.simpleMessage("জমার APY"),
+    "g_ui3_supply_submitted": MessageLookupByLibrary.simpleMessage(
+      "জমার অনুরোধ পাঠানো হয়েছে",
+    ),
+    "g_ui3_token": MessageLookupByLibrary.simpleMessage("টোকেন"),
+    "g_ui3_token_added": MessageLookupByLibrary.simpleMessage(
+      "সফলভাবে যোগ করা হয়েছে",
+    ),
+    "g_ui3_token_already_exists": MessageLookupByLibrary.simpleMessage(
+      "ইতিমধ্যে আছে",
+    ),
+    "g_ui3_token_contract_invalid": MessageLookupByLibrary.simpleMessage(
+      "অবৈধ টোকেন কন্ট্রাক্ট ঠিকানা",
+    ),
+    "g_ui3_token_contract_required": MessageLookupByLibrary.simpleMessage(
+      "টোকেন কন্ট্রাক্ট ঠিকানা আবশ্যক",
+    ),
+    "g_ui3_token_name_decimals": m95,
+    "g_ui3_turn_off": MessageLookupByLibrary.simpleMessage("বন্ধ করুন"),
+    "g_ui3_turn_off_verification_message": MessageLookupByLibrary.simpleMessage(
+      "এর সংরক্ষিত সেটআপ মুছে যাবে। আবার চালু করতে আপনাকে নতুন করে সেট আপ করতে হবে।",
+    ),
+    "g_ui3_turn_off_verification_title": MessageLookupByLibrary.simpleMessage(
+      "এই যাচাইকরণ বন্ধ করবেন?",
+    ),
+    "g_ui3_tx_not_found": MessageLookupByLibrary.simpleMessage(
+      "লেনদেন পাওয়া যায়নি",
+    ),
+    "g_ui3_unknown": MessageLookupByLibrary.simpleMessage("অজানা"),
+    "g_ui3_update_account_email": MessageLookupByLibrary.simpleMessage(
+      "অ্যাকাউন্টের ইমেল আপডেট করুন",
+    ),
+    "g_ui3_uptime": MessageLookupByLibrary.simpleMessage("আপটাইম"),
+    "g_ui3_ws_status": MessageLookupByLibrary.simpleMessage("WS স্ট্যাটাস"),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 লেনদেন"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
       "অ্যাকাউন্ট ইমেইল",
@@ -3252,7 +3815,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
       "এই অ্যাসেট যোগ করতে নেটওয়ার্ক ফি প্রয়োজন। চালিয়ে যাওয়ার জন্য যোগ করুন।",
     ),
-    "g_ui_algo_asset_missing": m76,
+    "g_ui_algo_asset_missing": m96,
     "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
       "ব্যালেন্স, পোর্টফোলিও, গ্যাস সম্পর্কে জিজ্ঞাসা করুন",
     ),
@@ -3286,7 +3849,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
       "ব্যাকআপ পুনরুদ্ধার করা যায়নি। পাসওয়ার্ড এবং ব্যাকআপ ফাইল পরীক্ষা করে পুনরায় চেষ্টা করুন।",
     ),
-    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_result": m97,
     "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেটগুলি আমদানি করুন",
     ),
@@ -3335,8 +3898,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
       "এই ব্যাকআপে আপনার প্রাইভেট কি / মনেমোনিক, ওয়ালেট পাসওয়ার্ড এবং ওয়ালেট সেটিংস রয়েছে। ব্যাকআপ ফাইল এবং পাসওয়ার্ড নিরাপদে রাখুন। কাউকে কখনো এগুলি শেয়ার করবেন না।",
     ),
-    "g_ui_balance_value": m78,
-    "g_ui_base_fee_value": m79,
+    "g_ui_balance_value": m98,
+    "g_ui_base_fee_value": m99,
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "N42 প্রোটোকল ব্যবহার করে N ক্রয় করুন",
     ),
@@ -3353,7 +3916,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
       "অনুমতি পরীক্ষা করা হচ্ছে…",
     ),
-    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_clear": m100,
     "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
       "ক্লিপবোর্ডটি খালি",
     ),
@@ -3375,16 +3938,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
       "কোনো ডেটা সারি পাওয়া যায়নি (শুধুমাত্র হেডার শনাক্ত করা হয়েছে)।",
     ),
-    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_missing_fields": m101,
     "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
       "মন্তব্য সরানোর পর কোনো ডেটা পাওয়া যায়নি।",
     ),
     "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("কাস্টম ট্যাগ..."),
-    "g_ui_days": m82,
+    "g_ui_days": m102,
     "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
       "গন্তব্য ট্যাগ",
     ),
-    "g_ui_device_connected": m83,
+    "g_ui_device_connected": m103,
     "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
       "Uniswap / 1inch / Jupiter ব্যবহার করে টোকেন সোয়াপ করুন",
     ),
@@ -3415,9 +3978,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
       "পরবর্তী ব্লক গ্যাস পূর্বানুমান",
     ),
-    "g_ui_gas_value": m84,
-    "g_ui_hours": m85,
-    "g_ui_import_valid": m86,
+    "g_ui_gas_value": m104,
+    "g_ui_hours": m105,
+    "g_ui_import_valid": m106,
     "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
       "একটি বৈধ ইমেইল ঠিকানা দিন",
     ),
@@ -3429,17 +3992,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "সীমাবদ্ধ অর্ডার",
     ),
     "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("সীমা মূল্য"),
-    "g_ui_limit_price_pair": m87,
-    "g_ui_limit_value": m88,
+    "g_ui_limit_price_pair": m107,
+    "g_ui_limit_value": m108,
     "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
       "লিকুইডেশন মূল্য",
     ),
     "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("ব্যবহার"),
-    "g_ui_markets_count": m89,
+    "g_ui_markets_count": m109,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("মেমো"),
     "g_ui_mempool": MessageLookupByLibrary.simpleMessage("মেমপুল"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("বার্তা"),
-    "g_ui_min_balance_value": m90,
+    "g_ui_min_balance_value": m110,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
       "মনেমোনিক ওয়ালেট",
     ),
@@ -3494,7 +4057,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage(
       "ট্রিগার করা হয়েছে",
     ),
-    "g_ui_orders_count": m91,
+    "g_ui_orders_count": m111,
     "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
       "সীমাবদ্ধ অর্ডারগুলি লোড করা যাচ্ছে না",
     ),
@@ -3511,12 +4074,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "জনপ্রিয় টোকেন",
     ),
     "g_ui_position_size": MessageLookupByLibrary.simpleMessage("সাইজ"),
-    "g_ui_positions_count": m92,
+    "g_ui_positions_count": m112,
     "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
       "প্রাইভেট কি ওয়ালেট",
     ),
     "g_ui_read_only": MessageLookupByLibrary.simpleMessage("শুধুমাত্র পড়া"),
-    "g_ui_recipients_count": m93,
+    "g_ui_recipients_count": m113,
     "g_ui_room_id": MessageLookupByLibrary.simpleMessage("রুম আইডি"),
     "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
       "সংরক্ষণ ব্যর্থ হয়েছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।",
@@ -3535,31 +4098,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
       "টোকেন কন্ট্রাক্ট (0x...)",
     ),
-    "g_ui_token_found": m94,
+    "g_ui_token_found": m114,
     "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
       "টোকেন তথ্য খুঁজছে…",
     ),
     "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
       "তালিকায় টোকেন পাওয়া যায়নি — সিম্বল ও দশমিক মান স্বয়ংক্রিয়ভাবে পূরণ করুন",
     ),
-    "g_ui_token_value": m95,
+    "g_ui_token_value": m115,
     "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
       "লেনদেন মুছে ফেলা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
     ),
     "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
       "লেনদেন সংরক্ষণ করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
     ),
-    "g_ui_transaction_hash_value": m96,
+    "g_ui_transaction_hash_value": m116,
     "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage("অজানা অবস্থা"),
     "g_ui_update": MessageLookupByLibrary.simpleMessage("আপডেট করুন"),
     "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
       "ইমেইল আপডেট করুন",
     ),
-    "g_ui_validation_counts": m97,
+    "g_ui_validation_counts": m117,
     "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
       "যাচাইয়ের সমস্যা",
     ),
-    "g_ui_validation_more": m98,
+    "g_ui_validation_more": m118,
     "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
       "যাচাইকরণ কোড",
     ),
@@ -3568,7 +4131,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "মার্কেট ডেটা দেখুন",
     ),
     "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("24h আওয়ার আয়তন"),
-    "g_ui_volume_interest": m99,
+    "g_ui_volume_interest": m119,
     "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("ওয়ালেট এআই"),
     "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
       "শুরু করতে ওয়ালেট তৈরি করুন বা আমদানি করুন",
@@ -3579,7 +4142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
       "ওয়ালেট লোড হচ্ছে...",
     ),
-    "g_ui_wallet_number": m100,
+    "g_ui_wallet_number": m120,
     "g_version_later": MessageLookupByLibrary.simpleMessage("পরে"),
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "ব্যালেন্স আপডেট করা যায়নি",
@@ -3600,11 +4163,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
       "সংরক্ষিত মূল্য",
     ),
-    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_hours": m121,
     "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
       "এখনই আপডেট করা হয়েছে",
     ),
-    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_minutes": m122,
     "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
       "আংশিক মূল্য",
     ),
@@ -3673,7 +4236,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "ব্যাকগ্রাউন্ডে বিরত",
     ),
-    "miningV3Block": m103,
+    "miningV3Block": m123,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("ব্লক হ্যাশ"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage(
       "সনদপ্রাপ্ত ব্লক",
@@ -3692,7 +4255,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
       "ব্লক হ্যাশ কপি করুন",
     ),
-    "miningV3Device": m104,
+    "miningV3Device": m124,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage("সেশনের সময়"),
     "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
       "আপনার যাচাইকৃত ব্লক ও সনদ দেখতে মাইনিং শুরু করুন।",
@@ -3718,7 +4281,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "ডিফল্ট নোডটি স্থানীয় টেস্টনেটে রয়েছে। আপনি নিজস্ব ঠিকানাও লিখতে পারেন।",
     ),
-    "miningV3Milliseconds": m105,
+    "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("যাচাই নোড"),
     "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("নোডের ঠিকানা"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
@@ -3782,7 +4345,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("নথিভুক্ত সময়"),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("মাইনিং"),
-    "miningV3Transactions": m106,
+    "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("লেনদেন"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "সনদপ্রাপ্ত নয়",
@@ -3792,7 +4355,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("যাচাইকৃত ব্লক"),
     "next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),
-    "nicknameMessage": m107,
+    "nicknameMessage": m127,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "প্রোফাইল সম্পাদনা করুন",
     ),

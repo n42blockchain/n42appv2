@@ -15267,6 +15267,2175 @@ class S {
       args: [],
     );
   }
+
+  /// `Show password`
+  String get g_a11y_show_password {
+    return Intl.message(
+      'Show password',
+      name: 'g_a11y_show_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide password`
+  String get g_a11y_hide_password {
+    return Intl.message(
+      'Hide password',
+      name: 'g_a11y_hide_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear search`
+  String get g_a11y_clear_search {
+    return Intl.message(
+      'Clear search',
+      name: 'g_a11y_clear_search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum balance`
+  String get g_ui3_min_balance {
+    return Intl.message(
+      'Minimum balance',
+      name: 'g_ui3_min_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The recipient address {address} has not opted in to asset {asset} and cannot receive it.`
+  String g_ui3_algo_recipient_no_asset(Object address, Object asset) {
+    return Intl.message(
+      'The recipient address $address has not opted in to asset $asset and cannot receive it.',
+      name: 'g_ui3_algo_recipient_no_asset',
+      desc: '',
+      args: [address, asset],
+    );
+  }
+
+  /// `Check the full recipient address`
+  String get g_ui3_similar_address_title {
+    return Intl.message(
+      'Check the full recipient address',
+      name: 'g_ui3_similar_address_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This address resembles a recent recipient but is different.`
+  String get g_ui3_similar_address_body {
+    return Intl.message(
+      'This address resembles a recent recipient but is different.',
+      name: 'g_ui3_similar_address_body',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Source: local send history, checked now. This is a similarity warning, not proof of fraud.`
+  String get g_ui3_similar_address_note {
+    return Intl.message(
+      'Source: local send history, checked now. This is a similarity warning, not proof of fraud.',
+      name: 'g_ui3_similar_address_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid coin configuration`
+  String get g_ui3_invalid_coin_config {
+    return Intl.message(
+      'Invalid coin configuration',
+      name: 'g_ui3_invalid_coin_config',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Missing parent chain for {value}`
+  String g_ui3_missing_parent_chain(Object value) {
+    return Intl.message(
+      'Missing parent chain for $value',
+      name: 'g_ui3_missing_parent_chain',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Enter an amount`
+  String get g_ui3_enter_amount {
+    return Intl.message(
+      'Enter an amount',
+      name: 'g_ui3_enter_amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid amount`
+  String get g_ui3_invalid_amount {
+    return Intl.message(
+      'Invalid amount',
+      name: 'g_ui3_invalid_amount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet signing configuration changed`
+  String get g_ui3_signing_config_changed {
+    return Intl.message(
+      'Wallet signing configuration changed',
+      name: 'g_ui3_signing_config_changed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signing key does not match sender address`
+  String get g_ui3_signing_key_mismatch {
+    return Intl.message(
+      'Signing key does not match sender address',
+      name: 'g_ui3_signing_key_mismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Columns`
+  String get g_ui3_csv_columns {
+    return Intl.message(
+      'Columns',
+      name: 'g_ui3_csv_columns',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rules`
+  String get g_ui3_csv_rules {
+    return Intl.message('Rules', name: 'g_ui3_csv_rules', desc: '', args: []);
+  }
+
+  /// `Example`
+  String get g_ui3_csv_example {
+    return Intl.message(
+      'Example',
+      name: 'g_ui3_csv_example',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Required — EVM address (0x + 40 hex)`
+  String get g_ui3_csv_address_desc {
+    return Intl.message(
+      'Required — EVM address (0x + 40 hex)',
+      name: 'g_ui3_csv_address_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Required — Decimal number (e.g. 1.5)`
+  String get g_ui3_csv_amount_desc {
+    return Intl.message(
+      'Required — Decimal number (e.g. 1.5)',
+      name: 'g_ui3_csv_amount_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Optional — Label or note`
+  String get g_ui3_csv_memo_desc {
+    return Intl.message(
+      'Optional — Label or note',
+      name: 'g_ui3_csv_memo_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Header row (address,amount,memo) is optional — auto-detected`
+  String get g_ui3_csv_rule_header {
+    return Intl.message(
+      'Header row (address,amount,memo) is optional — auto-detected',
+      name: 'g_ui3_csv_rule_header',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lines starting with # are comments and will be ignored`
+  String get g_ui3_csv_rule_comments {
+    return Intl.message(
+      'Lines starting with # are comments and will be ignored',
+      name: 'g_ui3_csv_rule_comments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blank lines are ignored`
+  String get g_ui3_csv_rule_blank {
+    return Intl.message(
+      'Blank lines are ignored',
+      name: 'g_ui3_csv_rule_blank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Duplicate addresses will be flagged`
+  String get g_ui3_csv_rule_duplicates {
+    return Intl.message(
+      'Duplicate addresses will be flagged',
+      name: 'g_ui3_csv_rule_duplicates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy Template`
+  String get g_ui3_copy_template {
+    return Intl.message(
+      'Copy Template',
+      name: 'g_ui3_copy_template',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick File`
+  String get g_ui3_pick_file {
+    return Intl.message(
+      'Pick File',
+      name: 'g_ui3_pick_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear text`
+  String get g_a11y_clear_text {
+    return Intl.message(
+      'Clear text',
+      name: 'g_a11y_clear_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add derivation path`
+  String get g_a11y_add_path {
+    return Intl.message(
+      'Add derivation path',
+      name: 'g_a11y_add_path',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone`
+  String get g_ui3_phone {
+    return Intl.message('Phone', name: 'g_ui3_phone', desc: '', args: []);
+  }
+
+  /// `No recovery phrase is stored for this wallet.`
+  String get g_ui3_backup_phrase_unavailable {
+    return Intl.message(
+      'No recovery phrase is stored for this wallet.',
+      name: 'g_ui3_backup_phrase_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Internationalized RPC hostname: {host}\nThis name may resemble another service. Verify the ASCII hostname independently.`
+  String g_ui3_rpc_idn_hostname_warning(Object host) {
+    return Intl.message(
+      'Internationalized RPC hostname: $host\\nThis name may resemble another service. Verify the ASCII hostname independently.',
+      name: 'g_ui3_rpc_idn_hostname_warning',
+      desc: '',
+      args: [host],
+    );
+  }
+
+  /// `Cannot verify the RPC genesis block. Network was not added.`
+  String get g_ui3_rpc_genesis_unverified {
+    return Intl.message(
+      'Cannot verify the RPC genesis block. Network was not added.',
+      name: 'g_ui3_rpc_genesis_unverified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid chain configuration`
+  String get g_ui3_chain_config_invalid {
+    return Intl.message(
+      'Invalid chain configuration',
+      name: 'g_ui3_chain_config_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Missing parent chain configuration`
+  String get g_ui3_chain_config_missing_parent {
+    return Intl.message(
+      'Missing parent chain configuration',
+      name: 'g_ui3_chain_config_missing_parent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already exists`
+  String get g_ui3_token_already_exists {
+    return Intl.message(
+      'Already exists',
+      name: 'g_ui3_token_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Successfully added`
+  String get g_ui3_token_added {
+    return Intl.message(
+      'Successfully added',
+      name: 'g_ui3_token_added',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} · {decimals} decimals`
+  String g_ui3_token_name_decimals(Object name, Object decimals) {
+    return Intl.message(
+      '$name · $decimals decimals',
+      name: 'g_ui3_token_name_decimals',
+      desc: '',
+      args: [name, decimals],
+    );
+  }
+
+  /// `Purchase could not be started`
+  String get g_ui3_iap_purchase_not_started {
+    return Intl.message(
+      'Purchase could not be started',
+      name: 'g_ui3_iap_purchase_not_started',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supply`
+  String get g_ui3_supply {
+    return Intl.message('Supply', name: 'g_ui3_supply', desc: '', args: []);
+  }
+
+  /// `Borrow`
+  String get g_ui3_borrow {
+    return Intl.message('Borrow', name: 'g_ui3_borrow', desc: '', args: []);
+  }
+
+  /// `Supply APY`
+  String get g_ui3_supply_apy {
+    return Intl.message(
+      'Supply APY',
+      name: 'g_ui3_supply_apy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Borrow APR`
+  String get g_ui3_borrow_apr {
+    return Intl.message(
+      'Borrow APR',
+      name: 'g_ui3_borrow_apr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No markets available`
+  String get g_ui3_no_markets {
+    return Intl.message(
+      'No markets available',
+      name: 'g_ui3_no_markets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aave V3 is not available on this chain`
+  String get g_ui3_aave_unavailable {
+    return Intl.message(
+      'Aave V3 is not available on this chain',
+      name: 'g_ui3_aave_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No wallet account found for this chain`
+  String get g_ui3_no_wallet_for_chain {
+    return Intl.message(
+      'No wallet account found for this chain',
+      name: 'g_ui3_no_wallet_for_chain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approval failed`
+  String get g_ui3_approve_failed {
+    return Intl.message(
+      'Approval failed',
+      name: 'g_ui3_approve_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supply submitted`
+  String get g_ui3_supply_submitted {
+    return Intl.message(
+      'Supply submitted',
+      name: 'g_ui3_supply_submitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Borrow submitted`
+  String get g_ui3_borrow_submitted {
+    return Intl.message(
+      'Borrow submitted',
+      name: 'g_ui3_borrow_submitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve {action}`
+  String g_ui3_approve_action(Object action) {
+    return Intl.message(
+      'Approve $action',
+      name: 'g_ui3_approve_action',
+      desc: '',
+      args: [action],
+    );
+  }
+
+  /// `Confirm {action}`
+  String g_ui3_confirm_action(Object action) {
+    return Intl.message(
+      'Confirm $action',
+      name: 'g_ui3_confirm_action',
+      desc: '',
+      args: [action],
+    );
+  }
+
+  /// `Long`
+  String get g_ui3_long {
+    return Intl.message('Long', name: 'g_ui3_long', desc: '', args: []);
+  }
+
+  /// `Short`
+  String get g_ui3_short {
+    return Intl.message('Short', name: 'g_ui3_short', desc: '', args: []);
+  }
+
+  /// `Sell`
+  String get g_ui3_sell {
+    return Intl.message('Sell', name: 'g_ui3_sell', desc: '', args: []);
+  }
+
+  /// `Lending`
+  String get g_ui3_lending {
+    return Intl.message('Lending', name: 'g_ui3_lending', desc: '', args: []);
+  }
+
+  /// `Market`
+  String get g_ui3_market {
+    return Intl.message('Market', name: 'g_ui3_market', desc: '', args: []);
+  }
+
+  /// `Limit`
+  String get g_ui3_limit {
+    return Intl.message('Limit', name: 'g_ui3_limit', desc: '', args: []);
+  }
+
+  /// `Search failed`
+  String get g_ui3_search_failed {
+    return Intl.message(
+      'Search failed',
+      name: 'g_ui3_search_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete this trade record?`
+  String get g_ui3_delete_trade_confirm {
+    return Intl.message(
+      'Delete this trade record?',
+      name: 'g_ui3_delete_trade_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `NFT transfer is not supported`
+  String get g_ui3_nft_transfer_unsupported {
+    return Intl.message(
+      'NFT transfer is not supported',
+      name: 'g_ui3_nft_transfer_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch NFT Transfer`
+  String get g_ui3_batch_nft_transfer {
+    return Intl.message(
+      'Batch NFT Transfer',
+      name: 'g_ui3_batch_nft_transfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction not found`
+  String get g_ui3_tx_not_found {
+    return Intl.message(
+      'Transaction not found',
+      name: 'g_ui3_tx_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid transaction hash`
+  String get g_ui3_invalid_tx_hash {
+    return Intl.message(
+      'Invalid transaction hash',
+      name: 'g_ui3_invalid_tx_hash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Receipt lookup failed`
+  String get g_ui3_receipt_lookup_failed {
+    return Intl.message(
+      'Receipt lookup failed',
+      name: 'g_ui3_receipt_lookup_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid transaction receipt`
+  String get g_ui3_invalid_tx_receipt {
+    return Intl.message(
+      'Invalid transaction receipt',
+      name: 'g_ui3_invalid_tx_receipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Calldata is required`
+  String get g_ui3_calldata_required {
+    return Intl.message(
+      'Calldata is required',
+      name: 'g_ui3_calldata_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token contract address is required`
+  String get g_ui3_token_contract_required {
+    return Intl.message(
+      'Token contract address is required',
+      name: 'g_ui3_token_contract_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid token contract address`
+  String get g_ui3_token_contract_invalid {
+    return Intl.message(
+      'Invalid token contract address',
+      name: 'g_ui3_token_contract_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token`
+  String get g_ui3_token {
+    return Intl.message('Token', name: 'g_ui3_token', desc: '', args: []);
+  }
+
+  /// `Operation #{index}: invalid address or amount`
+  String g_ui3_batch_operation_invalid(Object index) {
+    return Intl.message(
+      'Operation #$index: invalid address or amount',
+      name: 'g_ui3_batch_operation_invalid',
+      desc: '',
+      args: [index],
+    );
+  }
+
+  /// `Failed to build operations`
+  String get g_ui3_batch_build_failed {
+    return Intl.message(
+      'Failed to build operations',
+      name: 'g_ui3_batch_build_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address or ENS name`
+  String get g_ui3_address_or_ens {
+    return Intl.message(
+      'Address or ENS name',
+      name: 'g_ui3_address_or_ens',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No trending data`
+  String get g_ui3_no_trending_data {
+    return Intl.message(
+      'No trending data',
+      name: 'g_ui3_no_trending_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search for a coin`
+  String get g_ui3_search_coin {
+    return Intl.message(
+      'Search for a coin',
+      name: 'g_ui3_search_coin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reverse tokens`
+  String get g_a11y_reverse_tokens {
+    return Intl.message(
+      'Reverse tokens',
+      name: 'g_a11y_reverse_tokens',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group by collection`
+  String get g_a11y_group_by_collection {
+    return Intl.message(
+      'Group by collection',
+      name: 'g_a11y_group_by_collection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close`
+  String get g_a11y_close {
+    return Intl.message('Close', name: 'g_a11y_close', desc: '', args: []);
+  }
+
+  /// `Clear`
+  String get g_a11y_clear {
+    return Intl.message('Clear', name: 'g_a11y_clear', desc: '', args: []);
+  }
+
+  /// `RPC URL not configured`
+  String get g_ui3_rpc_url_not_configured {
+    return Intl.message(
+      'RPC URL not configured',
+      name: 'g_ui3_rpc_url_not_configured',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove {name}?`
+  String g_ui3_remove_asset_title(Object name) {
+    return Intl.message(
+      'Remove $name?',
+      name: 'g_ui3_remove_asset_title',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `It will no longer be shown in this wallet. Your assets on chain are not affected.`
+  String get g_ui3_remove_asset_message {
+    return Intl.message(
+      'It will no longer be shown in this wallet. Your assets on chain are not affected.',
+      name: 'g_ui3_remove_asset_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} · Asset controls`
+  String g_ui3_asset_controls_title(Object name) {
+    return Intl.message(
+      '$name · Asset controls',
+      name: 'g_ui3_asset_controls_title',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `These controls only affect this wallet display. Hiding does not revoke approvals or change balances. Quarantine also disables opening this asset from the wallet list. DApp interactions are not blocked.`
+  String get g_ui3_asset_controls_body {
+    return Intl.message(
+      'These controls only affect this wallet display. Hiding does not revoke approvals or change balances. Quarantine also disables opening this asset from the wallet list. DApp interactions are not blocked.',
+      name: 'g_ui3_asset_controls_body',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore normal display`
+  String get g_ui3_asset_restore_display {
+    return Intl.message(
+      'Restore normal display',
+      name: 'g_ui3_asset_restore_display',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark for review`
+  String get g_ui3_asset_mark_review {
+    return Intl.message(
+      'Mark for review',
+      name: 'g_ui3_asset_mark_review',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide from list`
+  String get g_ui3_asset_hide {
+    return Intl.message(
+      'Hide from list',
+      name: 'g_ui3_asset_hide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quarantine from list`
+  String get g_ui3_asset_quarantine {
+    return Intl.message(
+      'Quarantine from list',
+      name: 'g_ui3_asset_quarantine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not save asset display preference.`
+  String get g_ui3_asset_save_failed {
+    return Intl.message(
+      'Could not save asset display preference.',
+      name: 'g_ui3_asset_save_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Marked for review by you. Long press to review or restore.`
+  String get g_ui3_asset_marked_review_hint {
+    return Intl.message(
+      'Marked for review by you. Long press to review or restore.',
+      name: 'g_ui3_asset_marked_review_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hidden and reviewed assets`
+  String get g_ui3_asset_hidden_reviewed {
+    return Intl.message(
+      'Hidden and reviewed assets',
+      name: 'g_ui3_asset_hidden_reviewed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Asset display controls`
+  String get g_ui3_asset_display_controls {
+    return Intl.message(
+      'Asset display controls',
+      name: 'g_ui3_asset_display_controls',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local user choices only. On-chain balances and approvals are unchanged.`
+  String get g_ui3_asset_display_local_note {
+    return Intl.message(
+      'Local user choices only. On-chain balances and approvals are unchanged.',
+      name: 'g_ui3_asset_display_local_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore`
+  String get g_ui3_asset_restore {
+    return Intl.message(
+      'Restore',
+      name: 'g_ui3_asset_restore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not restore asset display.`
+  String get g_ui3_asset_restore_failed {
+    return Intl.message(
+      'Could not restore asset display.',
+      name: 'g_ui3_asset_restore_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hidden`
+  String get g_ui3_asset_state_hidden {
+    return Intl.message(
+      'Hidden',
+      name: 'g_ui3_asset_state_hidden',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quarantined`
+  String get g_ui3_asset_state_quarantined {
+    return Intl.message(
+      'Quarantined',
+      name: 'g_ui3_asset_state_quarantined',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authorize Falcon wallet operation`
+  String get g_ui3_falcon_auth_reason {
+    return Intl.message(
+      'Authorize Falcon wallet operation',
+      name: 'g_ui3_falcon_auth_reason',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This network has not enabled Falcon-512 transactions. Offline signing is available.`
+  String get g_ui3_falcon_network_not_enabled {
+    return Intl.message(
+      'This network has not enabled Falcon-512 transactions. Offline signing is available.',
+      name: 'g_ui3_falcon_network_not_enabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Query the previous submission before another payment.`
+  String get g_ui3_falcon_query_previous_first {
+    return Intl.message(
+      'Query the previous submission before another payment.',
+      name: 'g_ui3_falcon_query_previous_first',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation failed. Check inputs, backup password and device authentication. If sending was attempted, query the previous submission before retrying.`
+  String get g_ui3_falcon_operation_failed {
+    return Intl.message(
+      'Operation failed. Check inputs, backup password and device authentication. If sending was attempted, query the previous submission before retrying.',
+      name: 'g_ui3_falcon_operation_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Falcon transaction`
+  String get g_ui3_falcon_confirm_transaction {
+    return Intl.message(
+      'Confirm Falcon transaction',
+      name: 'g_ui3_falcon_confirm_transaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm offline signature`
+  String get g_ui3_falcon_confirm_offline_signature {
+    return Intl.message(
+      'Confirm offline signature',
+      name: 'g_ui3_falcon_confirm_offline_signature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign and send`
+  String get g_ui3_falcon_sign_and_send {
+    return Intl.message(
+      'Sign and send',
+      name: 'g_ui3_falcon_sign_and_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet owner changed`
+  String get g_ui3_falcon_owner_changed {
+    return Intl.message(
+      'Wallet owner changed',
+      name: 'g_ui3_falcon_owner_changed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use only a network that explicitly supports Falcon-512 transactions. Verify the RPC and backup before funding. Falcon keys require a separate encrypted backup; your EVM recovery phrase cannot restore them. If submission is uncertain, query its status before another payment.`
+  String get g_ui3_falcon_notice {
+    return Intl.message(
+      'Use only a network that explicitly supports Falcon-512 transactions. Verify the RPC and backup before funding. Falcon keys require a separate encrypted backup; your EVM recovery phrase cannot restore them. If submission is uncertain, query its status before another payment.',
+      name: 'g_ui3_falcon_notice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Falcon native library unavailable`
+  String get g_ui3_falcon_library_unavailable {
+    return Intl.message(
+      'Falcon native library unavailable',
+      name: 'g_ui3_falcon_library_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Falcon account`
+  String get g_ui3_falcon_create_account {
+    return Intl.message(
+      'Create Falcon account',
+      name: 'g_ui3_falcon_create_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Public key: {key}`
+  String g_ui3_falcon_public_key(Object key) {
+    return Intl.message(
+      'Public key: $key',
+      name: 'g_ui3_falcon_public_key',
+      desc: '',
+      args: [key],
+    );
+  }
+
+  /// `Review and sign offline`
+  String get g_ui3_falcon_review_sign_offline {
+    return Intl.message(
+      'Review and sign offline',
+      name: 'g_ui3_falcon_review_sign_offline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Review and send`
+  String get g_ui3_falcon_review_send {
+    return Intl.message(
+      'Review and send',
+      name: 'g_ui3_falcon_review_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Query previous submission`
+  String get g_ui3_falcon_query_previous {
+    return Intl.message(
+      'Query previous submission',
+      name: 'g_ui3_falcon_query_previous',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup password (12+ characters)`
+  String get g_ui3_falcon_backup_password {
+    return Intl.message(
+      'Backup password (12+ characters)',
+      name: 'g_ui3_falcon_backup_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export encrypted backup`
+  String get g_ui3_falcon_export_backup {
+    return Intl.message(
+      'Export encrypted backup',
+      name: 'g_ui3_falcon_export_backup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Encrypted backup to restore`
+  String get g_ui3_falcon_backup_to_restore {
+    return Intl.message(
+      'Encrypted backup to restore',
+      name: 'g_ui3_falcon_backup_to_restore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore Falcon account`
+  String get g_ui3_falcon_restore_account {
+    return Intl.message(
+      'Restore Falcon account',
+      name: 'g_ui3_falcon_restore_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify saved backup`
+  String get g_ui3_falcon_verify_backup {
+    return Intl.message(
+      'Verify saved backup',
+      name: 'g_ui3_falcon_verify_backup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Encrypted backup verified`
+  String get g_ui3_falcon_backup_verified {
+    return Intl.message(
+      'Encrypted backup verified',
+      name: 'g_ui3_falcon_backup_verified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy result`
+  String get g_ui3_falcon_copy_result {
+    return Intl.message(
+      'Copy result',
+      name: 'g_ui3_falcon_copy_result',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Security`
+  String get g_ui3_account_security {
+    return Intl.message(
+      'Account Security',
+      name: 'g_ui3_account_security',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update account email`
+  String get g_ui3_update_account_email {
+    return Intl.message(
+      'Update account email',
+      name: 'g_ui3_update_account_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn off this verification?`
+  String get g_ui3_turn_off_verification_title {
+    return Intl.message(
+      'Turn off this verification?',
+      name: 'g_ui3_turn_off_verification_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Its saved setup will be removed. You will need to set it up again to turn it back on.`
+  String get g_ui3_turn_off_verification_message {
+    return Intl.message(
+      'Its saved setup will be removed. You will need to set it up again to turn it back on.',
+      name: 'g_ui3_turn_off_verification_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn Off`
+  String get g_ui3_turn_off {
+    return Intl.message('Turn Off', name: 'g_ui3_turn_off', desc: '', args: []);
+  }
+
+  /// `Flashlight`
+  String get g_a11y_flashlight {
+    return Intl.message(
+      'Flashlight',
+      name: 'g_a11y_flashlight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scroll to top`
+  String get g_a11y_scroll_to_top {
+    return Intl.message(
+      'Scroll to top',
+      name: 'g_a11y_scroll_to_top',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scroll to bottom`
+  String get g_a11y_scroll_to_bottom {
+    return Intl.message(
+      'Scroll to bottom',
+      name: 'g_a11y_scroll_to_bottom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This request points to an untrusted server and was blocked.`
+  String get g_ui3_idhub_untrusted_server {
+    return Intl.message(
+      'This request points to an untrusted server and was blocked.',
+      name: 'g_ui3_idhub_untrusted_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlock your wallet, then reopen this request.`
+  String get g_ui3_idhub_unlock_wallet {
+    return Intl.message(
+      'Unlock your wallet, then reopen this request.',
+      name: 'g_ui3_idhub_unlock_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This request type does not match the scanned code.`
+  String get g_ui3_idhub_type_mismatch {
+    return Intl.message(
+      'This request type does not match the scanned code.',
+      name: 'g_ui3_idhub_type_mismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not load this request.`
+  String get g_ui3_idhub_load_failed {
+    return Intl.message(
+      'Could not load this request.',
+      name: 'g_ui3_idhub_load_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active wallet changed. Reopen this request.`
+  String get g_ui3_idhub_wallet_changed {
+    return Intl.message(
+      'Active wallet changed. Reopen this request.',
+      name: 'g_ui3_idhub_wallet_changed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signing failed. Please try again.`
+  String get g_ui3_idhub_sign_failed {
+    return Intl.message(
+      'Signing failed. Please try again.',
+      name: 'g_ui3_idhub_sign_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login Request`
+  String get g_ui3_idhub_login_request {
+    return Intl.message(
+      'Login Request',
+      name: 'g_ui3_idhub_login_request',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bind Wallet`
+  String get g_ui3_idhub_bind_wallet_title {
+    return Intl.message(
+      'Bind Wallet',
+      name: 'g_ui3_idhub_bind_wallet_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approved. Return to the other device.`
+  String get g_ui3_idhub_approved {
+    return Intl.message(
+      'Approved. Return to the other device.',
+      name: 'g_ui3_idhub_approved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet bound. Return to the other device.`
+  String get g_ui3_idhub_bound {
+    return Intl.message(
+      'Wallet bound. Return to the other device.',
+      name: 'g_ui3_idhub_bound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approve sign-in with your N42 identity?`
+  String get g_ui3_idhub_approve_login_prompt {
+    return Intl.message(
+      'Approve sign-in with your N42 identity?',
+      name: 'g_ui3_idhub_approve_login_prompt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bind this wallet to your N42 identity?`
+  String get g_ui3_idhub_bind_prompt {
+    return Intl.message(
+      'Bind this wallet to your N42 identity?',
+      name: 'g_ui3_idhub_bind_prompt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request`
+  String get g_ui3_idhub_request {
+    return Intl.message(
+      'Request',
+      name: 'g_ui3_idhub_request',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in`
+  String get g_ui3_idhub_sign_in {
+    return Intl.message(
+      'Sign in',
+      name: 'g_ui3_idhub_sign_in',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bind wallet`
+  String get g_ui3_idhub_bind_wallet {
+    return Intl.message(
+      'Bind wallet',
+      name: 'g_ui3_idhub_bind_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server`
+  String get g_ui3_idhub_server {
+    return Intl.message(
+      'Server',
+      name: 'g_ui3_idhub_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bind`
+  String get g_ui3_idhub_bind {
+    return Intl.message('Bind', name: 'g_ui3_idhub_bind', desc: '', args: []);
+  }
+
+  /// `Export key`
+  String get g_a11y_export_key {
+    return Intl.message(
+      'Export key',
+      name: 'g_a11y_export_key',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forward`
+  String get g_a11y_forward {
+    return Intl.message('Forward', name: 'g_a11y_forward', desc: '', args: []);
+  }
+
+  /// `New tab`
+  String get g_a11y_new_tab {
+    return Intl.message('New tab', name: 'g_a11y_new_tab', desc: '', args: []);
+  }
+
+  /// `Previous`
+  String get g_a11y_previous {
+    return Intl.message(
+      'Previous',
+      name: 'g_a11y_previous',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop`
+  String get g_a11y_stop {
+    return Intl.message('Stop', name: 'g_a11y_stop', desc: '', args: []);
+  }
+
+  /// `Swap direction`
+  String get g_a11y_swap_direction {
+    return Intl.message(
+      'Swap direction',
+      name: 'g_a11y_swap_direction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tabs`
+  String get g_a11y_tabs {
+    return Intl.message('Tabs', name: 'g_a11y_tabs', desc: '', args: []);
+  }
+
+  /// `Activation Time`
+  String get g_ui3_activation_time {
+    return Intl.message(
+      'Activation Time',
+      name: 'g_ui3_activation_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear cached site data for the browser? Sites may ask you to sign in again.`
+  String get g_ui3_clear_browser_cache_confirm {
+    return Intl.message(
+      'Clear cached site data for the browser? Sites may ask you to sign in again.',
+      name: 'g_ui3_clear_browser_cache_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Close all tabs?`
+  String get g_ui3_close_all_tabs_confirm {
+    return Intl.message(
+      'Close all tabs?',
+      name: 'g_ui3_close_all_tabs_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data`
+  String get g_ui3_data {
+    return Intl.message('Data', name: 'g_ui3_data', desc: '', args: []);
+  }
+
+  /// `Delete this bookmark?`
+  String get g_ui3_delete_bookmark_confirm {
+    return Intl.message(
+      'Delete this bookmark?',
+      name: 'g_ui3_delete_bookmark_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete this validator key from this device? Make sure you have a backup.`
+  String get g_ui3_delete_validator_key_confirm {
+    return Intl.message(
+      'Delete this validator key from this device? Make sure you have a backup.',
+      name: 'g_ui3_delete_validator_key_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enable Bluetooth in your device settings to connect to your hardware wallet.`
+  String get g_ui3_hw_bt_disabled_message {
+    return Intl.message(
+      'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
+      name: 'g_ui3_hw_bt_disabled_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bluetooth Disabled`
+  String get g_ui3_hw_bt_disabled_title {
+    return Intl.message(
+      'Bluetooth Disabled',
+      name: 'g_ui3_hw_bt_disabled_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please grant Bluetooth permission to scan for hardware wallets.`
+  String get g_ui3_hw_bt_permission_message {
+    return Intl.message(
+      'Please grant Bluetooth permission to scan for hardware wallets.',
+      name: 'g_ui3_hw_bt_permission_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bluetooth Permission Required`
+  String get g_ui3_hw_bt_permission_title {
+    return Intl.message(
+      'Bluetooth Permission Required',
+      name: 'g_ui3_hw_bt_permission_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} device(s) found`
+  String g_ui3_hw_devices_found(Object count) {
+    return Intl.message(
+      '$count device(s) found',
+      name: 'g_ui3_hw_devices_found',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Ledger Device`
+  String get g_ui3_hw_ledger_device {
+    return Intl.message(
+      'Ledger Device',
+      name: 'g_ui3_hw_ledger_device',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No devices found`
+  String get g_ui3_hw_no_devices {
+    return Intl.message(
+      'No devices found',
+      name: 'g_ui3_hw_no_devices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan Again`
+  String get g_ui3_hw_scan_again {
+    return Intl.message(
+      'Scan Again',
+      name: 'g_ui3_hw_scan_again',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search complete`
+  String get g_ui3_hw_search_complete {
+    return Intl.message(
+      'Search complete',
+      name: 'g_ui3_hw_search_complete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Searching for devices...`
+  String get g_ui3_hw_searching {
+    return Intl.message(
+      'Searching for devices...',
+      name: 'g_ui3_hw_searching',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop Scanning`
+  String get g_ui3_hw_stop_scan {
+    return Intl.message(
+      'Stop Scanning',
+      name: 'g_ui3_hw_stop_scan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Beauty & filters`
+  String get g_ui3_live_beauty {
+    return Intl.message(
+      'Beauty & filters',
+      name: 'g_ui3_live_beauty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset to original`
+  String get g_ui3_live_beauty_reset {
+    return Intl.message(
+      'Reset to original',
+      name: 'g_ui3_live_beauty_reset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brighten`
+  String get g_ui3_live_brighten {
+    return Intl.message(
+      'Brighten',
+      name: 'g_ui3_live_brighten',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap Refresh to load live rooms`
+  String get g_ui3_live_browse_hint {
+    return Intl.message(
+      'Tap Refresh to load live rooms',
+      name: 'g_ui3_live_browse_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Browse live rooms`
+  String get g_ui3_live_browse_title {
+    return Intl.message(
+      'Browse live rooms',
+      name: 'g_ui3_live_browse_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not enough coins. Top up first.`
+  String get g_ui3_live_coins_insufficient {
+    return Intl.message(
+      'Not enough coins. Top up first.',
+      name: 'g_ui3_live_coins_insufficient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connecting…`
+  String get g_ui3_live_connecting {
+    return Intl.message(
+      'Connecting…',
+      name: 'g_ui3_live_connecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No live rooms`
+  String get g_ui3_live_empty {
+    return Intl.message(
+      'No live rooms',
+      name: 'g_ui3_live_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End live`
+  String get g_ui3_live_end {
+    return Intl.message('End live', name: 'g_ui3_live_end', desc: '', args: []);
+  }
+
+  /// `End this live stream? Viewers will be disconnected.`
+  String get g_ui3_live_end_confirm {
+    return Intl.message(
+      'End this live stream? Viewers will be disconnected.',
+      name: 'g_ui3_live_end_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter`
+  String get g_ui3_live_enter {
+    return Intl.message('Enter', name: 'g_ui3_live_enter', desc: '', args: []);
+  }
+
+  /// `Filter`
+  String get g_ui3_live_filter {
+    return Intl.message(
+      'Filter',
+      name: 'g_ui3_live_filter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cool`
+  String get g_ui3_live_filter_cool {
+    return Intl.message(
+      'Cool',
+      name: 'g_ui3_live_filter_cool',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mono`
+  String get g_ui3_live_filter_mono {
+    return Intl.message(
+      'Mono',
+      name: 'g_ui3_live_filter_mono',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} filter`
+  String g_ui3_live_filter_named(Object name) {
+    return Intl.message(
+      '$name filter',
+      name: 'g_ui3_live_filter_named',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `Natural`
+  String get g_ui3_live_filter_natural {
+    return Intl.message(
+      'Natural',
+      name: 'g_ui3_live_filter_natural',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Original`
+  String get g_ui3_live_filter_original {
+    return Intl.message(
+      'Original',
+      name: 'g_ui3_live_filter_original',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vivid`
+  String get g_ui3_live_filter_vivid {
+    return Intl.message(
+      'Vivid',
+      name: 'g_ui3_live_filter_vivid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warm`
+  String get g_ui3_live_filter_warm {
+    return Intl.message(
+      'Warm',
+      name: 'g_ui3_live_filter_warm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gift`
+  String get g_ui3_live_gift {
+    return Intl.message('Gift', name: 'g_ui3_live_gift', desc: '', args: []);
+  }
+
+  /// `Cheers`
+  String get g_ui3_live_gift_cheers {
+    return Intl.message(
+      'Cheers',
+      name: 'g_ui3_live_gift_cheers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crown`
+  String get g_ui3_live_gift_crown {
+    return Intl.message(
+      'Crown',
+      name: 'g_ui3_live_gift_crown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Diamond`
+  String get g_ui3_live_gift_diamond {
+    return Intl.message(
+      'Diamond',
+      name: 'g_ui3_live_gift_diamond',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rocket`
+  String get g_ui3_live_gift_rocket {
+    return Intl.message(
+      'Rocket',
+      name: 'g_ui3_live_gift_rocket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rose`
+  String get g_ui3_live_gift_rose {
+    return Intl.message(
+      'Rose',
+      name: 'g_ui3_live_gift_rose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} sent {gift}`
+  String g_ui3_live_gift_sent(Object name, Object gift) {
+    return Intl.message(
+      '$name sent $gift',
+      name: 'g_ui3_live_gift_sent',
+      desc: '',
+      args: [name, gift],
+    );
+  }
+
+  /// `Hold to view original`
+  String get g_ui3_live_hold_compare {
+    return Intl.message(
+      'Hold to view original',
+      name: 'g_ui3_live_hold_compare',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Like`
+  String get g_ui3_live_like {
+    return Intl.message('Like', name: 'g_ui3_live_like', desc: '', args: []);
+  }
+
+  /// `Live streams`
+  String get g_ui3_live_list {
+    return Intl.message(
+      'Live streams',
+      name: 'g_ui3_live_list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load: {reason}`
+  String g_ui3_live_load_failed(Object reason) {
+    return Intl.message(
+      'Failed to load: $reason',
+      name: 'g_ui3_live_load_failed',
+      desc: '',
+      args: [reason],
+    );
+  }
+
+  /// `Mute`
+  String get g_ui3_live_mute {
+    return Intl.message('Mute', name: 'g_ui3_live_mute', desc: '', args: []);
+  }
+
+  /// `Pause video`
+  String get g_ui3_live_pause_video {
+    return Intl.message(
+      'Pause video',
+      name: 'g_ui3_live_pause_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Camera and microphone access is required to go live`
+  String get g_ui3_live_permission_required {
+    return Intl.message(
+      'Camera and microphone access is required to go live',
+      name: 'g_ui3_live_permission_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resume video`
+  String get g_ui3_live_resume_video {
+    return Intl.message(
+      'Resume video',
+      name: 'g_ui3_live_resume_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Room ID copied`
+  String get g_ui3_live_room_id_copied {
+    return Intl.message(
+      'Room ID copied',
+      name: 'g_ui3_live_room_id_copied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rosy`
+  String get g_ui3_live_rosy {
+    return Intl.message('Rosy', name: 'g_ui3_live_rosy', desc: '', args: []);
+  }
+
+  /// `Say something…`
+  String get g_ui3_live_say_something {
+    return Intl.message(
+      'Say something…',
+      name: 'g_ui3_live_say_something',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send a gift`
+  String get g_ui3_live_send_gift {
+    return Intl.message(
+      'Send a gift',
+      name: 'g_ui3_live_send_gift',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Smooth`
+  String get g_ui3_live_smooth {
+    return Intl.message(
+      'Smooth',
+      name: 'g_ui3_live_smooth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go live`
+  String get g_ui3_live_start {
+    return Intl.message(
+      'Go live',
+      name: 'g_ui3_live_start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Starting…`
+  String get g_ui3_live_starting {
+    return Intl.message(
+      'Starting…',
+      name: 'g_ui3_live_starting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch camera`
+  String get g_ui3_live_switch_camera {
+    return Intl.message(
+      'Switch camera',
+      name: 'g_ui3_live_switch_camera',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top up`
+  String get g_ui3_live_top_up {
+    return Intl.message(
+      'Top up',
+      name: 'g_ui3_live_top_up',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn off flashlight`
+  String get g_ui3_live_torch_off {
+    return Intl.message(
+      'Turn off flashlight',
+      name: 'g_ui3_live_torch_off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn on flashlight`
+  String get g_ui3_live_torch_on {
+    return Intl.message(
+      'Turn on flashlight',
+      name: 'g_ui3_live_torch_on',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Switch to a rear camera that supports the flashlight`
+  String get g_ui3_live_torch_unsupported {
+    return Intl.message(
+      'Switch to a rear camera that supports the flashlight',
+      name: 'g_ui3_live_torch_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unmute`
+  String get g_ui3_live_unmute {
+    return Intl.message(
+      'Unmute',
+      name: 'g_ui3_live_unmute',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} joined`
+  String g_ui3_live_user_joined(Object name) {
+    return Intl.message(
+      '$name joined',
+      name: 'g_ui3_live_user_joined',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `Video is unavailable. Other live features still work.`
+  String get g_ui3_live_video_unavailable {
+    return Intl.message(
+      'Video is unavailable. Other live features still work.',
+      name: 'g_ui3_live_video_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} viewers`
+  String g_ui3_live_viewers(Object count) {
+    return Intl.message(
+      '$count viewers',
+      name: 'g_ui3_live_viewers',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Waiting for video…`
+  String get g_ui3_live_waiting_video {
+    return Intl.message(
+      'Waiting for video…',
+      name: 'g_ui3_live_waiting_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Method`
+  String get g_ui3_method {
+    return Intl.message('Method', name: 'g_ui3_method', desc: '', args: []);
+  }
+
+  /// `Awaiting result`
+  String get g_ui3_pred_awaiting {
+    return Intl.message(
+      'Awaiting result',
+      name: 'g_ui3_pred_awaiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Claim refund`
+  String get g_ui3_pred_claim_refund {
+    return Intl.message(
+      'Claim refund',
+      name: 'g_ui3_pred_claim_refund',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Closed`
+  String get g_ui3_pred_closed {
+    return Intl.message(
+      'Closed',
+      name: 'g_ui3_pred_closed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Closes in {time}`
+  String g_ui3_pred_closes_in(Object time) {
+    return Intl.message(
+      'Closes in $time',
+      name: 'g_ui3_pred_closes_in',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Held {shares}`
+  String g_ui3_pred_held(Object shares) {
+    return Intl.message(
+      'Held $shares',
+      name: 'g_ui3_pred_held',
+      desc: '',
+      args: [shares],
+    );
+  }
+
+  /// `Redeem winnings`
+  String get g_ui3_pred_redeem_winnings {
+    return Intl.message(
+      'Redeem winnings',
+      name: 'g_ui3_pred_redeem_winnings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resolve`
+  String get g_ui3_pred_resolve {
+    return Intl.message(
+      'Resolve',
+      name: 'g_ui3_pred_resolve',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Volume {amount} {symbol}`
+  String g_ui3_pred_volume(Object amount, Object symbol) {
+    return Intl.message(
+      'Volume $amount $symbol',
+      name: 'g_ui3_pred_volume',
+      desc: '',
+      args: [amount, symbol],
+    );
+  }
+
+  /// `Failed to send. Please try again.`
+  String get g_ui3_send_failed_retry {
+    return Intl.message(
+      'Failed to send. Please try again.',
+      name: 'g_ui3_send_failed_retry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stake {amount} {symbol} with {protocol}? This sends an on-chain transaction from your wallet.`
+  String g_ui3_stake_confirm_message(
+    Object amount,
+    Object symbol,
+    Object protocol,
+  ) {
+    return Intl.message(
+      'Stake $amount $symbol with $protocol? This sends an on-chain transaction from your wallet.',
+      name: 'g_ui3_stake_confirm_message',
+      desc: '',
+      args: [amount, symbol, protocol],
+    );
+  }
+
+  /// `Unknown`
+  String get g_ui3_unknown {
+    return Intl.message('Unknown', name: 'g_ui3_unknown', desc: '', args: []);
+  }
+
+  /// `Uptime`
+  String get g_ui3_uptime {
+    return Intl.message('Uptime', name: 'g_ui3_uptime', desc: '', args: []);
+  }
+
+  /// `WS Status`
+  String get g_ui3_ws_status {
+    return Intl.message(
+      'WS Status',
+      name: 'g_ui3_ws_status',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
