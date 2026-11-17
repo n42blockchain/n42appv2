@@ -168,7 +168,9 @@ class _DeviceScanPageState extends State<DeviceScanPage>
           SizedBox(height: su.setWidth(24)),
 
           Text(
-            isScanning ? 'Searching for devices...' : 'Search complete',
+            isScanning
+                ? S.of(context).g_ui3_hw_searching
+                : S.of(context).g_ui3_hw_search_complete,
             style: AppTypography.headline.copyWith(color: _textColor(context)),
           ),
 
@@ -176,8 +178,12 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
           Text(
             isScanning
-                ? 'Make sure your Ledger is unlocked and Bluetooth is enabled'
-                : '${provider.discoveredDevices.length} device(s) found',
+                ? S.of(context).g_key_hw_ble_hint
+                : S
+                      .of(context)
+                      .g_ui3_hw_devices_found(
+                        provider.discoveredDevices.length,
+                      ),
             style: AppTypography.caption.copyWith(
               color: _subtitleColor(context),
             ),
@@ -212,8 +218,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
             Text(
               provider.errorMessage ??
                   (provider.isScanning
-                      ? 'Looking for devices...'
-                      : 'No devices found'),
+                      ? S.of(context).g_ui3_hw_searching
+                      : S.of(context).g_ui3_hw_no_devices),
               style: AppTypography.body.copyWith(
                 color: provider.errorMessage == null
                     ? subtitle
@@ -243,84 +249,90 @@ class _DeviceScanPageState extends State<DeviceScanPage>
     final blueColor = _blueColor(context);
     final su = ScreenUtil();
 
-    return GestureDetector(
-      onTap: isConnecting
-          ? null
-          : () => _connectDevice(context, provider, device),
-      child: Container(
-        margin: EdgeInsets.only(bottom: su.setWidth(12)),
-        padding: EdgeInsets.all(su.setWidth(20)),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(su.setWidth(12)),
-        ),
-        child: Row(
-          children: [
-            // 设备图标
-            Container(
-              width: su.setWidth(56),
-              height: su.setWidth(56),
-              decoration: BoxDecoration(
-                color: blueColor.withAlpha(30),
-                borderRadius: BorderRadius.circular(su.setWidth(12)),
+    return Padding(
+      padding: EdgeInsets.only(bottom: su.setWidth(12)),
+      child: InkWell(
+        onTap: isConnecting
+            ? null
+            : () => _connectDevice(context, provider, device),
+        borderRadius: BorderRadius.circular(su.setWidth(12)),
+        // Ink paints the fill on the Material so the ripple stays visible.
+        child: Ink(
+          padding: EdgeInsets.all(su.setWidth(20)),
+          decoration: BoxDecoration(
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: BorderRadius.circular(su.setWidth(12)),
+          ),
+          child: Row(
+            children: [
+              // 设备图标
+              Container(
+                width: su.setWidth(56),
+                height: su.setWidth(56),
+                decoration: BoxDecoration(
+                  color: blueColor.withAlpha(30),
+                  borderRadius: BorderRadius.circular(su.setWidth(12)),
+                ),
+                child: Icon(Icons.usb, color: blueColor, size: su.setWidth(32)),
               ),
-              child: Icon(Icons.usb, color: blueColor, size: su.setWidth(32)),
-            ),
 
-            SizedBox(width: su.setWidth(16)),
+              SizedBox(width: su.setWidth(16)),
 
-            // 设备信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    device.name,
-                    style: AppTypography.bodyStrong.copyWith(
-                      color: _textColor(context),
-                    ),
-                  ),
-                  SizedBox(height: su.setWidth(4)),
-                  Row(
-                    children: [
-                      // 信号强度
-                      ...List.generate(4, (index) {
-                        return Container(
-                          width: su.setWidth(6),
-                          height: su.setWidth(8 + index * 4),
-                          margin: EdgeInsets.only(right: su.setWidth(2)),
-                          decoration: BoxDecoration(
-                            color: index < device.signalStrength
-                                ? AppColorTokens.of(context).success
-                                : AppColorTokens.of(context).textTertiary
-                                      .withAlpha(50),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        );
-                      }),
-                      SizedBox(width: su.setWidth(8)),
-                      Text(
-                        device.isLedger ? 'Ledger Device' : 'Unknown',
-                        style: AppTypography.caption.copyWith(
-                          color: _subtitleColor(context),
-                        ),
+              // 设备信息
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      device.name,
+                      style: AppTypography.bodyStrong.copyWith(
+                        color: _textColor(context),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(height: su.setWidth(4)),
+                    Row(
+                      children: [
+                        // 信号强度
+                        ...List.generate(4, (index) {
+                          return Container(
+                            width: su.setWidth(6),
+                            height: su.setWidth(8 + index * 4),
+                            margin: EdgeInsets.only(right: su.setWidth(2)),
+                            decoration: BoxDecoration(
+                              color: index < device.signalStrength
+                                  ? AppColorTokens.of(context).success
+                                  : AppColorTokens.of(context).textTertiary
+                                        .withAlpha(50),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          );
+                        }),
+                        SizedBox(width: su.setWidth(8)),
+                        Text(
+                          device.isLedger
+                              ? S.of(context).g_ui3_hw_ledger_device
+                              : S.of(context).g_ui3_unknown,
+                          style: AppTypography.caption.copyWith(
+                            color: _subtitleColor(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // 连接按钮
-            if (isConnecting)
-              SizedBox(
-                width: su.setWidth(32),
-                height: su.setWidth(32),
-                child: const CircularProgressIndicator(strokeWidth: 2),
-              )
-            else
-              Icon(Icons.chevron_right, color: _subtitleColor(context)),
-          ],
+              // 连接按钮
+              if (isConnecting)
+                SizedBox(
+                  width: su.setWidth(32),
+                  height: su.setWidth(32),
+                  child: const CircularProgressIndicator(strokeWidth: 2),
+                )
+              else
+                Icon(Icons.chevron_right, color: _subtitleColor(context)),
+            ],
+          ),
         ),
       ),
     );
@@ -347,8 +359,15 @@ class _DeviceScanPageState extends State<DeviceScanPage>
             ),
           ),
           child: Text(
-            provider.isScanning ? 'Stop Scanning' : 'Scan Again',
-            style: AppTypography.headline.copyWith(color: Colors.white),
+            provider.isScanning
+                ? S.of(context).g_ui3_hw_stop_scan
+                : S.of(context).g_ui3_hw_scan_again,
+            // White on the orange fill is ~2.2:1; use the dark label.
+            style: AppTypography.headline.copyWith(
+              color: provider.isScanning
+                  ? AppColorTokens.of(context).onWarningFill
+                  : Colors.white,
+            ),
           ),
         ),
       ),
@@ -386,9 +405,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
   void _showPermissionDialog() {
     _showAlertDialog(
-      title: 'Bluetooth Permission Required',
-      content:
-          'Please grant Bluetooth permission to scan for hardware wallets.',
+      title: S.of(context).g_ui3_hw_bt_permission_title,
+      content: S.of(context).g_ui3_hw_bt_permission_message,
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
@@ -407,8 +425,8 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
   void _showBluetoothDisabledDialog() {
     _showAlertDialog(
-      title: 'Bluetooth Disabled',
-      content: 'Please enable Bluetooth in your device settings to connect to your hardware wallet.',
+      title: S.of(context).g_ui3_hw_bt_disabled_title,
+      content: S.of(context).g_ui3_hw_bt_disabled_message,
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

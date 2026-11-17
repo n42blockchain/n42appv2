@@ -194,6 +194,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
         ),
         backgroundColor: AppColorTokens.of(context).bgBase,
         leading: IconButton(
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
           color: AppColorTokens.of(context).textPrimary,
