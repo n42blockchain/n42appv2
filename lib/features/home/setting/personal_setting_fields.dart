@@ -54,14 +54,15 @@ extension on _PersonalSettingState {
                 child: Text(userInfo?.inviteCode ?? '', style: _subtitleStyle),
               ),
               // IconButton 默认 48dp 命中区（§5 触控红线；此前 16dp 且嵌套热区冲突）
+              // No compact density: it shrank the hit area to 40pt.
               IconButton(
+                tooltip: S.of(context).g_key_119,
                 onPressed: () {
                   Clipboard.setData(
                     ClipboardData(text: userInfo?.inviteCode ?? ''),
                   );
                   ToastUtils.showSuccess(S.of(context).copy);
                 },
-                visualDensity: VisualDensity.compact,
                 icon: Icon(
                   Icons.copy,
                   color: _blueColor,
@@ -101,7 +102,9 @@ extension on _PersonalSettingState {
           : Text(
               _ensName ?? '—',
               style: AppTypography.body.copyWith(
-                color: _ensName != null ? _blueColor : _subtitleColor,
+                color: _ensName != null
+                    ? AppColorTokens.of(context).brandOnTint
+                    : _subtitleColor,
               ),
             ),
     );

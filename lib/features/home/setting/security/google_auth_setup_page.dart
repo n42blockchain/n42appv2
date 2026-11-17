@@ -59,7 +59,13 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
     final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
     final Color itemBg = AppColorTokens.of(context).bgSurface;
     final Color mainBlue = AppColorTokens.of(context).brand;
-    final Color errorColor = AppColorTokens.of(context).danger;
+    // Brand / danger text shades that reach 4.5:1 on the page background.
+    final Color linkColor = AppColorTokens.of(context).brandOnTint;
+    final Color errorColor = AppContrast.ensure(
+      AppColorTokens.of(context).danger,
+      [AppColorTokens.of(context).bgBase],
+      darken: Theme.of(context).brightness != Brightness.dark,
+    );
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_google_auth_key1),
@@ -94,65 +100,79 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               ),
               SizedBox(height: AppSpacing.space4),
               // 手动输入密钥折叠区
-              GestureDetector(
-                onTap: () => setState(() => _showManualKey = !_showManualKey),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        S.of(context).g_google_auth_key3,
-                        style: AppTypography.bodySm.copyWith(color: mainBlue),
-                      ),
-                    ),
-                    Icon(
-                      _showManualKey
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      color: mainBlue,
-                      size: ScreenUtil().setWidth(32.0),
-                    ),
-                  ],
-                ),
-              ),
-              if (_showManualKey) ...[
-                SizedBox(height: AppSpacing.space4),
-                GestureDetector(
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: _secret));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(S.of(context).g_google_auth_key8),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.space6,
-                      vertical: AppSpacing.space4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: itemBg,
-                      borderRadius: AppRadius.brSm,
-                    ),
+              // 44pt row with visible ink (was a 20pt GestureDetector).
+              Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: () => setState(() => _showManualKey = !_showManualKey),
+                  borderRadius: AppRadius.brSm,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: AppTouch.target),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
-                            _secret,
+                            S.of(context).g_google_auth_key3,
                             style: AppTypography.bodySm.copyWith(
-                              color: mainText,
-                              fontFamily: 'monospace',
+                              color: linkColor,
                             ),
                           ),
                         ),
                         Icon(
-                          Icons.copy,
-                          color: subtitleColor,
-                          size: ScreenUtil().setWidth(36.0),
+                          _showManualKey
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
+                          color: mainBlue,
+                          size: ScreenUtil().setWidth(32.0),
                         ),
                       ],
+                    ),
+                  ),
+                ),
+              ),
+              if (_showManualKey) ...[
+                SizedBox(height: AppSpacing.space4),
+                // Ink on the fill's own Material so the press stays visible;
+                // the row is at least 44pt tall (was 36pt).
+                Material(
+                  color: itemBg,
+                  borderRadius: AppRadius.brSm,
+                  child: InkWell(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: _secret));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(S.of(context).copy),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    borderRadius: AppRadius.brSm,
+                    child: Container(
+                      width: double.infinity,
+                      constraints: BoxConstraints(minHeight: AppTouch.target),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space6,
+                        vertical: AppSpacing.space4,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _secret,
+                              style: AppTypography.bodySm.copyWith(
+                                color: mainText,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.copy,
+                            color: subtitleColor,
+                            size: ScreenUtil().setWidth(36.0),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -205,13 +225,17 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
               ],
               SizedBox(height: AppSpacing.space16),
               // 确认按钮
-              SizedBox(
-                width: double.infinity,
-                height: AppTouch.target,
+              // minHeight (not a fixed height) so 130% text is not clipped.
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: double.infinity,
+                  minHeight: AppTouch.target,
+                ),
                 child: ElevatedButton(
                   onPressed: _verify,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: mainBlue,
+                    // White label needs the 4.5:1 brand fill shade.
+                    backgroundColor: AppColorTokens.of(context).brandFill,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         ScreenUtil().setWidth(44.0),

@@ -238,6 +238,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Close all'));
     await tester.pumpAndSettle();
+    // Closing all tabs now asks for confirmation.
+    await tester.tap(find.widgetWithText(FilledButton, 'Close all'));
+    await tester.pumpAndSettle();
     expect(browser.wvcList, hasLength(1));
     expect(browser.wInfoList, hasLength(1));
     expect(browser.wListIndex, 0);

@@ -229,10 +229,12 @@ extension _BrowserPageTabs on _BrowserPageState {
                 ],
               ),
             ),
-            GestureDetector(
+            // 44pt hit area around the unchanged 18pt close icon.
+            AppTapArea(
               onTap: () {
                 bValue.wListDelete(index);
               },
+              tooltip: S.of(context).g_a11y_close,
               child: Container(
                 width: ScreenUtil().setWidth(36.0),
                 height: ScreenUtil().setWidth(36.0),

@@ -159,6 +159,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
         actions: [
           if (historyList.isNotEmpty)
             IconButton(
+              tooltip: s.g_browser_key19,
               onPressed: clearAllHistory,
               icon: Icon(Icons.delete_sweep, color: mainText),
             ),
@@ -238,54 +239,58 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
                 onDismissed: (_) => deleteHistory(item),
-                child: InkWell(
-                  onTap: () => Navigator.pop(context, item.url),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: su.setWidth(6.0)),
-                    padding: EdgeInsets.symmetric(
-                      vertical: su.setWidth(16.0),
-                      horizontal: su.setWidth(20.0),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(su.setWidth(16.0)),
-                      color: itemBg,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                (item.title?.isNotEmpty ?? false)
-                                    ? item.title!
-                                    : (item.url ?? ''),
-                                style: AppTypography.body.copyWith(
-                                  color: mainText,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: su.setWidth(6.0)),
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context, item.url),
+                    borderRadius: BorderRadius.circular(su.setWidth(16.0)),
+                    // Ink paints the fill on the Material so the ripple shows.
+                    child: Ink(
+                      padding: EdgeInsets.symmetric(
+                        vertical: su.setWidth(16.0),
+                        horizontal: su.setWidth(20.0),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(su.setWidth(16.0)),
+                        color: itemBg,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  (item.title?.isNotEmpty ?? false)
+                                      ? item.title!
+                                      : (item.url ?? ''),
+                                  style: AppTypography.body.copyWith(
+                                    color: mainText,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: su.setWidth(6.0)),
-                              Text(
-                                item.url ?? '',
-                                style: AppTypography.caption.copyWith(
-                                  color: subtitleColor,
+                                SizedBox(height: su.setWidth(6.0)),
+                                Text(
+                                  item.url ?? '',
+                                  style: AppTypography.caption.copyWith(
+                                    color: subtitleColor,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: su.setWidth(10.0)),
-                        Text(
-                          _timeLabel(item),
-                          style: AppTypography.caption.copyWith(
-                            color: subtitleColor,
+                          SizedBox(width: su.setWidth(10.0)),
+                          Text(
+                            _timeLabel(item),
+                            style: AppTypography.caption.copyWith(
+                              color: subtitleColor,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

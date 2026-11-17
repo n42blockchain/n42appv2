@@ -81,8 +81,16 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
 
   Future<void> deleteCollection(int index) async {
     if (index < 0 || index >= collectionList.length) return;
-    _requestId++;
     BrowserCollectionModel bcm = collectionList[index];
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_key_113,
+      message: S.of(context).g_ui3_delete_bookmark_confirm,
+      confirmText: S.of(context).g_key_113,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
+    _requestId++;
     await browserApi.deleteBrowserCollection(bcm.id!);
     if (!mounted) return;
     collectionList.removeWhere((element) => element.id == bcm.id);
@@ -184,108 +192,114 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
             );
           }
           BrowserCollectionModel bcm = collectionList[index];
-          return InkWell(
-            onTap: () async {
-              if (widget.type == 0) {
-                Navigator.pop(context, bcm.url);
-              } else {
-                _navigateToInfo(bcm, index);
-              }
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-                horizontal: AppSpacing.space8,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: AppRadius.brMd,
-                color: AppColorTokens.of(context).bgSurface,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.space2,
-                          ),
-                          child: Text(
-                            bcm.name ?? "",
-                            style: AppTypography.body.copyWith(
-                              color: AppColorTokens.of(context).textPrimary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.space2,
-                          ),
-                          child: Text(
-                            bcm.url ?? "",
-                            style: _subtitleStyle(context),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Visibility(
-                          visible: (bcm.desc ?? "").isNotEmpty,
-                          child: Container(
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+            child: InkWell(
+              onTap: () async {
+                if (widget.type == 0) {
+                  Navigator.pop(context, bcm.url);
+                } else {
+                  _navigateToInfo(bcm, index);
+                }
+              },
+              // Ink paints the fill on the Material so the ripple is visible.
+              child: Ink(
+                padding: EdgeInsets.symmetric(
+                  vertical: AppSpacing.space4,
+                  horizontal: AppSpacing.space8,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: AppRadius.brMd,
+                  color: AppColorTokens.of(context).bgSurface,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
                             padding: EdgeInsets.symmetric(
                               vertical: AppSpacing.space2,
                             ),
                             child: Text(
-                              bcm.desc ?? "",
-                              style: _subtitleStyle(context),
-                              maxLines: 2,
+                              bcm.name ?? "",
+                              style: AppTypography.body.copyWith(
+                                color: AppColorTokens.of(context).textPrimary,
+                              ),
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: AppSpacing.space2,
+                            ),
+                            child: Text(
+                              bcm.url ?? "",
+                              style: _subtitleStyle(context),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Visibility(
+                            visible: (bcm.desc ?? "").isNotEmpty,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: AppSpacing.space2,
+                              ),
+                              child: Text(
+                                bcm.desc ?? "",
+                                style: _subtitleStyle(context),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Side by side: two 44pt targets without doubling the
+                    // card height.
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppTapArea(
+                          onTap: () => deleteCollection(index),
+                          tooltip: S.of(context).g_key_113,
+                          child: SizedBox(
+                            height: ScreenUtil().setWidth(40.0),
+                            width: ScreenUtil().setWidth(40.0),
+                            child: Icon(
+                              Icons.delete,
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainButtonBgColor.name,
+                              ),
+                            ),
+                          ),
+                        ),
+                        AppTapArea(
+                          onTap: () => _navigateToInfo(bcm, index),
+                          tooltip: S.of(context).Edit,
+                          child: SizedBox(
+                            height: ScreenUtil().setWidth(40.0),
+                            width: ScreenUtil().setWidth(40.0),
+                            child: Icon(
+                              Icons.edit_note,
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainButtonBgColor.name,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () => deleteCollection(index),
-                        child: SizedBox(
-                          height: ScreenUtil().setWidth(40.0),
-                          width: ScreenUtil().setWidth(40.0),
-                          child: Icon(
-                            Icons.delete,
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainButtonBgColor.name,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: AppSpacing.space2),
-                      InkWell(
-                        onTap: () => _navigateToInfo(bcm, index),
-                        child: SizedBox(
-                          height: ScreenUtil().setWidth(40.0),
-                          width: ScreenUtil().setWidth(40.0),
-                          child: Icon(
-                            Icons.edit_note,
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainButtonBgColor.name,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

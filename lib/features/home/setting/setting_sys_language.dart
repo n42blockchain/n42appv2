@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 class SettingSysLanguage extends ConsumerWidget {
@@ -54,10 +53,7 @@ class _LanguageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemBgColor = AppColorTokens.of(context).bgSurface;
     final mainTextColor = AppColorTokens.of(context).textPrimary;
-    final subTextColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.ff888888.name,
-    );
+    final subTextColor = AppColorTokens.of(context).textSecondary;
     final accentColor = AppColorTokens.of(context).brand;
 
     return Padding(

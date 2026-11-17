@@ -97,6 +97,27 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
     setState(() {});
   }
 
+  /// Turning off gesture / Google verification wipes the saved setup, so it
+  /// needs an explicit confirmation.
+  Future<bool> _confirmTurnOff() async {
+    if (!mounted) return false;
+    return AppDialog.confirm(
+      context,
+      title: S.of(context).g_ui3_turn_off_verification_title,
+      message: S.of(context).g_ui3_turn_off_verification_message,
+      confirmText: S.of(context).g_ui3_turn_off,
+      danger: true,
+    );
+  }
+
+  /// Danger red darkened / lightened to 4.5:1 on the card surface.
+  Color _dangerText(BuildContext context) {
+    final colors = AppColorTokens.of(context);
+    return AppContrast.ensure(colors.danger, [
+      colors.bgSurface,
+    ], darken: Theme.of(context).brightness != Brightness.dark);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_pageAccessGranted) {
@@ -113,7 +134,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSectionTitle('Account Security'),
+              buildSectionTitle(S.of(context).g_ui3_account_security),
               Container(
                 margin: EdgeInsets.only(
                   top: AppSpacing.space4,
@@ -126,7 +147,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                 child: buildNavigationWidget(
                   title: S.of(context).g_ui_change_email,
                   subtitle:
-                      AppGlobals.currentUserEmail ?? 'Update account email',
+                      AppGlobals.currentUserEmail ??
+                      S.of(context).g_ui3_update_account_email,
                   icon: Icons.mail_outline,
                   onTap: () {
                     // 未登录门禁:uuid/token 为空时后端请求必然无效
@@ -145,7 +167,10 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
               ),
               // ── 转账验证区块 ──────────────────────────────────────
               Container(
-                height: ScreenUtil().setWidth(60.0),
+                // minHeight keeps the label from clipping at large text sizes.
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setWidth(60.0),
+                ),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   S.of(context).g_lock_key26,
@@ -210,7 +235,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                               child: Text(
                                 S.of(context).g_lock_key7,
                                 style: AppTypography.body.copyWith(
-                                  color: AppColorTokens.of(context).danger,
+                                  color: _dangerText(context),
                                 ),
                               ),
                             ),
@@ -225,7 +250,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTypography.body.copyWith(
-                                  color: AppColorTokens.of(context).brand,
+                                  color: AppColorTokens.of(context).brandOnTint,
                                 ),
                               ),
                             ),
@@ -254,6 +279,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                             saveSecurity();
                           }
                         } else {
+                          if (!await _confirmTurnOff()) return;
                           securityMap['gesture'] = false;
                           securityMap['gesturePwd'] = '';
                           saveSecurity();
@@ -306,7 +332,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTypography.body.copyWith(
-                                color: AppColorTokens.of(context).brand,
+                                color: AppColorTokens.of(context).brandOnTint,
                               ),
                             ),
                           ),
@@ -334,6 +360,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                             saveSecurity();
                           }
                         } else {
+                          if (!await _confirmTurnOff()) return;
                           securityMap['google'] = false;
                           securityMap['googleSecret'] = '';
                           saveSecurity();

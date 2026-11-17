@@ -24,6 +24,7 @@ extension on _HomeDrawPageState {
     final displayEmail =
         chatUser?.userId ?? currentUser?.email ?? userInfo?.email ?? '';
     final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
+    final tokens = AppColorTokens.of(context);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
@@ -54,6 +55,8 @@ extension on _HomeDrawPageState {
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
                   onTap: _openChat,
+                  // Same action as the labelled name area next to it.
+                  excludeFromSemantics: true,
                   child: Container(
                     width: AppTouch.target,
                     height: AppTouch.target,
@@ -80,68 +83,81 @@ extension on _HomeDrawPageState {
               ),
               SizedBox(width: AppSpacing.space4),
               Expanded(
-                child: GestureDetector(
-                  onTap: _openChat,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                // InkWell (was a GestureDetector without press feedback) with
+                // the row's 44pt height as its hit area.
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    onTap: _openChat,
+                    borderRadius: AppRadius.brMd,
+                    child: Container(
+                      constraints: BoxConstraints(minHeight: AppTouch.target),
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Text(
-                              isLoggedIn
-                                  ? (displayName ?? '-')
-                                  : S.of(context).g_key_login,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  isLoggedIn
+                                      ? (displayName ?? '-')
+                                      : S.of(context).g_key_login,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTypography.headline.copyWith(
+                                    color: tokens.textPrimary,
+                                  ),
+                                ),
+                              ),
+                              if (isChatOnlySession) ...[
+                                SizedBox(width: AppSpacing.space2),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: AppSpacing.space2,
+                                    vertical: AppSpacing.space2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColorTokens.of(context).brand
+                                        .withValues(alpha: 0.12),
+                                    borderRadius: AppRadius.brPill,
+                                  ),
+                                  child: Text(
+                                    S.of(context).g_key_squad,
+                                    style: AppTypography.captionSm.copyWith(
+                                      color: tokens.brandOnTint,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (isLoggedIn) ...[
+                            SizedBox(height: AppSpacing.space2),
+                            Text(
+                              displayEmail,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: AppTypography.headline.copyWith(
-                                color: AppColorTokens.of(context).textPrimary,
-                              ),
-                            ),
-                          ),
-                          if (isChatOnlySession) ...[
-                            SizedBox(width: AppSpacing.space2),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppSpacing.space2,
-                                vertical: AppSpacing.space2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColorTokens.of(context).brand
-                                    .withValues(alpha: 0.12),
-                                borderRadius: AppRadius.brPill,
-                              ),
-                              child: Text(
-                                S.of(context).g_key_squad,
-                                style: AppTypography.captionSm.copyWith(
-                                  color: AppColorTokens.of(context).brand,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              style: AppTypography.caption.copyWith(
+                                color: tokens.textSubtitle,
                               ),
                             ),
                           ],
                         ],
                       ),
-                      if (isLoggedIn) ...[
-                        SizedBox(height: AppSpacing.space2),
-                        Text(
-                          displayEmail,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.caption.copyWith(
-                            color: AppColorTokens.of(context).textSubtitle,
-                          ),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
                 ),
               ),
             ],
           ),
           SizedBox(height: AppSpacing.space4),
+          // The fill lives on the Material so the ink is not painted under an
+          // opaque Container and the press stays visible.
           Material(
-            color: Colors.transparent,
+            color: tokens.brandFill,
+            borderRadius: AppRadius.brXl,
             child: InkWell(
               onTap: _openChat,
               borderRadius: AppRadius.brXl,
@@ -150,10 +166,6 @@ extension on _HomeDrawPageState {
                 constraints: BoxConstraints(minHeight: AppTouch.target),
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
-                decoration: BoxDecoration(
-                  color: AppColorTokens.of(context).brandFill,
-                  borderRadius: AppRadius.brXl,
-                ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -190,6 +202,13 @@ extension on _HomeDrawPageState {
     final isWalletLoggedIn = currentUser != null || AppGlobals.userInfo != null;
     final showWalletLogout = isWalletLoggedIn;
     final showChatEntry = !showWalletLogout && isChatLoggedIn;
+    // Red label / icon on the 10% red tint: shifted to reach 4.5:1.
+    final dangerOnTint = AppContrast.textOnTint(
+      AppColorTokens.of(context).danger,
+      [AppColorTokens.of(context).bgBase],
+      dark: Theme.of(context).brightness == Brightness.dark,
+      alpha: 0.1,
+    );
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
@@ -244,7 +263,7 @@ extension on _HomeDrawPageState {
                   showWalletLogout ? Icons.logout_rounded : Icons.chat_rounded,
                   size: ScreenUtil().setWidth(24),
                   color: showWalletLogout
-                      ? AppColorTokens.of(context).danger
+                      ? dangerOnTint
                       : AppColorTokens.of(context).brand,
                 ),
                 SizedBox(width: AppSpacing.space4),
@@ -257,7 +276,7 @@ extension on _HomeDrawPageState {
                         : S.of(context).g_key_login,
                     style: AppTypography.bodyStrong.copyWith(
                       color: showWalletLogout
-                          ? AppColorTokens.of(context).danger
+                          ? dangerOnTint
                           : AppColorTokens.of(context).brandOnTint,
                     ),
                     overflow: TextOverflow.ellipsis,

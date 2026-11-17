@@ -40,18 +40,22 @@ extension on _HomePageState {
       labelType: MediaQuery.textScalerOf(context).scale(13) >= 19.5
           ? NavigationRailLabelType.none
           : NavigationRailLabelType.all,
-      leading: InkWell(
-        onTap: () => _scaffoldKey.currentState?.openDrawer(),
-        customBorder: const CircleBorder(),
-        child: SizedBox(
-          // 48dp 命中区（§5 触控红线），图标视觉 24 不变
-          width: 48,
-          height: 48,
-          child: Center(
-            child: Image.asset(
-              "assets/img/menu.png",
-              width: 24,
-              color: selectedColor,
+      // Icon-only menu button: the tooltip doubles as its screen-reader label.
+      leading: Tooltip(
+        message: MaterialLocalizations.of(context).openAppDrawerTooltip,
+        child: InkWell(
+          onTap: () => _scaffoldKey.currentState?.openDrawer(),
+          customBorder: const CircleBorder(),
+          child: SizedBox(
+            // 48dp 命中区（§5 触控红线），图标视觉 24 不变
+            width: 48,
+            height: 48,
+            child: Center(
+              child: Image.asset(
+                "assets/img/menu.png",
+                width: 24,
+                color: selectedColor,
+              ),
             ),
           ),
         ),
@@ -297,7 +301,9 @@ extension on _HomePageState {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        // Stretch so each tab's hit area is the full bar height (the
+        // centered column alone was about 43pt tall).
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: bottomItems,
       ),
     );
@@ -317,7 +323,8 @@ extension on _HomePageState {
     final width = (media.size.width - media.padding.horizontal) / pagesLength;
     final iSize = fixedIconSize ?? 22;
     final fSize = fixedFontSize ?? 11;
-    final unselectedColor = AppColorTokens.of(context).textTertiary;
+    // Secondary, not tertiary: tab labels are text and need contrast.
+    final unselectedColor = AppColorTokens.of(context).textSecondary;
 
     // 底部导航是全 App 最高频交互——恢复按压反馈（§5 红线，此前被 transparent 关闭）
     return InkWell(
@@ -381,7 +388,8 @@ extension on _HomePageState {
     final isSelected = currentIndex == index;
 
     final selectedColor = AppColorTokens.of(context).brand;
-    final unselectedColor = AppColorTokens.of(context).textTertiary;
+    // Secondary, not tertiary: tab labels are text and need contrast.
+    final unselectedColor = AppColorTokens.of(context).textSecondary;
 
     return InkWell(
       key: automationKey,

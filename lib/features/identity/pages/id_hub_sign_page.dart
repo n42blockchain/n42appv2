@@ -53,12 +53,12 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
   Future<void> _load() async {
     // Anti-phishing: refuse a hub that is not on the allowlist.
     if (!IdHubBindSigner.isHubAllowed(widget.hubUrl)) {
-      _fail('This request points to an untrusted server and was blocked.');
+      _fail(S.current.g_ui3_idhub_untrusted_server);
       return;
     }
     final address = _bridge.walletAddress;
     if (address == null || address.isEmpty) {
-      _fail('Unlock your wallet, then reopen this request.');
+      _fail(S.current.g_ui3_idhub_unlock_wallet);
       return;
     }
     try {
@@ -73,7 +73,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       // cannot present a wallet-binding as a mere sign-in (or vice versa).
       final expectedType = widget.isLogin ? 'login' : 'wallet-binding';
       if (session.type != expectedType) {
-        _fail('This request type does not match the scanned code.');
+        _fail(S.current.g_ui3_idhub_type_mismatch);
         return;
       }
       // Fetch the exact message to sign from the hub (never from the QR).
@@ -93,7 +93,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       _fail(idHubUserFacingError(e));
     } catch (e) {
       AppLogger.w('IdHubSignPage', 'load error: $e');
-      _fail('Could not load this request.');
+      _fail(S.current.g_ui3_idhub_load_failed);
     }
   }
 
@@ -106,7 +106,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
     final current = _bridge.walletAddress;
     if (current == null ||
         current.toLowerCase() != (_address ?? '').toLowerCase()) {
-      _fail('Active wallet changed. Reopen this request.');
+      _fail(S.current.g_ui3_idhub_wallet_changed);
       return;
     }
     setState(() => _stage = _Stage.signing);
@@ -128,7 +128,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       _fail(idHubUserFacingError(e));
     } catch (e) {
       AppLogger.w('IdHubSignPage', 'sign error: $e');
-      _fail('Signing failed. Please try again.');
+      _fail(S.current.g_ui3_idhub_sign_failed);
     }
   }
 
@@ -145,7 +145,9 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
     final colors = AppColorTokens.of(context);
     return Scaffold(
       appBar: AppBarWidget(
-        text: widget.isLogin ? 'Login Request' : 'Bind Wallet',
+        text: widget.isLogin
+            ? S.of(context).g_ui3_idhub_login_request
+            : S.of(context).g_ui3_idhub_bind_wallet_title,
       ),
       body: SafeArea(
         child: Padding(
@@ -167,8 +169,8 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
           Icons.check_circle_outline,
           colors.success,
           widget.isLogin
-              ? 'Approved. Return to the other device.'
-              : 'Wallet bound. Return to the other device.',
+              ? S.of(context).g_ui3_idhub_approved
+              : S.of(context).g_ui3_idhub_bound,
           colors,
         );
       case _Stage.ready:
@@ -182,34 +184,57 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          widget.isLogin
-              ? 'Approve sign-in with your N42 identity?'
-              : 'Bind this wallet to your N42 identity?',
-          style: AppTypography.headline.copyWith(color: colors.textPrimary),
-        ),
-        const SizedBox(height: 24),
-        _row('Request', widget.isLogin ? 'Sign in' : 'Bind wallet', colors),
-        _row('Wallet', _short(_address ?? ''), colors),
-        _row('Server', _hubHost, colors),
-        const SizedBox(height: 16),
-        Text(
-          S.of(context).g_ui_message,
-          style: AppTypography.caption.copyWith(color: colors.textSecondary),
-        ),
-        const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: colors.bgSurface,
-            borderRadius: BorderRadius.circular(8),
+        // Request details scroll so a long message or 130% text cannot
+        // overflow; the actions stay pinned at the bottom.
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  widget.isLogin
+                      ? S.of(context).g_ui3_idhub_approve_login_prompt
+                      : S.of(context).g_ui3_idhub_bind_prompt,
+                  style: AppTypography.headline.copyWith(
+                    color: colors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _row(
+                  S.of(context).g_ui3_idhub_request,
+                  widget.isLogin
+                      ? S.of(context).g_ui3_idhub_sign_in
+                      : S.of(context).g_ui3_idhub_bind_wallet,
+                  colors,
+                ),
+                _row(S.of(context).g_key_6, _short(_address ?? ''), colors),
+                _row(S.of(context).g_ui3_idhub_server, _hubHost, colors),
+                const SizedBox(height: 16),
+                Text(
+                  S.of(context).g_ui_message,
+                  style: AppTypography.caption.copyWith(
+                    color: colors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: colors.bgSurface,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _message,
+                    style: AppTypography.body.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Text(
-            _message,
-            style: AppTypography.body.copyWith(color: colors.textPrimary),
-          ),
         ),
-        const Spacer(),
+        const SizedBox(height: 12),
         ElevatedButton(
           onPressed: signing ? null : _confirm,
           child: signing
@@ -218,7 +243,11 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
                   width: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Text(widget.isLogin ? 'Approve' : 'Bind'),
+              : Text(
+                  widget.isLogin
+                      ? S.of(context).g_key_aa_approve
+                      : S.of(context).g_ui3_idhub_bind,
+                ),
         ),
         const SizedBox(height: 12),
         TextButton(

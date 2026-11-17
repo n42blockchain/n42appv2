@@ -122,9 +122,13 @@ class CheckVersionAlert extends StatelessWidget {
               SizedBox(height: AppSpacing.space8),
 
               // ── 立即更新按钮 ──────────────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                height: AppTouch.scaled(80),
+              // minHeight (not a fixed 44pt height): the 22pt label plus the
+              // button's 24pt padding did not fit, and 130% text clipped.
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: double.infinity,
+                  minHeight: AppTouch.scaled(80),
+                ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppContrast.fillForWhiteText(accentColor),

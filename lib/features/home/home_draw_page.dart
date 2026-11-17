@@ -96,6 +96,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       ),
                       child: IconButton(
                         padding: EdgeInsets.zero,
+                        tooltip: MaterialLocalizations.of(context)
+                            .closeButtonTooltip,
                         onPressed: () {
                           Scaffold.of(context).closeDrawer();
                         },

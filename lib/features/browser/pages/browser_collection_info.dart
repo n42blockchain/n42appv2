@@ -51,6 +51,14 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
 
   Future<void> deleteCollection() async {
     if (_deleting) return;
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_key_113,
+      message: S.of(context).g_ui3_delete_bookmark_confirm,
+      confirmText: S.of(context).g_key_113,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     setState(() => _deleting = true);
     bool completedWithExit = false;
     try {
@@ -104,8 +112,9 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
       appBar: AppBarWidget(
         text: S.of(context).g_browser_key5,
         actions: [
-          InkWell(
+          AppTapArea(
             onTap: _deleting ? null : deleteCollection,
+            tooltip: S.of(context).g_key_113,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               height: ScreenUtil().setWidth(40.0),
@@ -240,7 +249,9 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   );
   Widget saveWidget() {
     return Container(
-      height: ScreenUtil().setWidth(148.0),
+      // minHeight, not height: a fixed 74px box squeezed the 44pt button
+      // to 42pt@375 / 31pt@320.
+      constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(148.0)),
       width: double.infinity,
       color: AppColorTokens.of(context).bgBase,
       padding: EdgeInsets.all(AppSpacing.space8),

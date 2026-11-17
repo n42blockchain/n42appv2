@@ -92,26 +92,29 @@ class BrowserCollectionState extends State<BrowserCollection> {
           ),
         ),
         actions: [
-          InkWell(
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BrowserCollectionList(type: 1),
-                ),
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: Icon(
-                  Icons.list_alt,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainButtonBgColor.name,
+          Tooltip(
+            message: S.of(context).g_browser_key3,
+            child: InkWell(
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BrowserCollectionList(type: 1),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Icon(
+                    Icons.list_alt,
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                   ),
                 ),
               ),
@@ -237,7 +240,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
 
   Widget saveWidget() {
     return Container(
-      height: ScreenUtil().setWidth(148.0),
+      // minHeight, not height: a fixed 74px box squeezed the 44pt button
+      // to 42pt@375 / 31pt@320.
+      constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(148.0)),
       width: double.infinity,
       color: AppColorTokens.of(context).bgBase,
       padding: EdgeInsets.all(AppSpacing.space8),

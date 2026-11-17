@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:n42_wallet/core/security/signature_decoder.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/features/wallet_connect/widgets/tx_risk_banner_widget.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +33,7 @@ class DAppSigningSheet extends StatelessWidget {
     final isTransaction = method.contains('Transaction');
     final title = _isConnect
         ? s.g_key_dapp_connect_title
-        : (isTransaction ? 'Transaction' : 'Sign Message');
+        : (isTransaction ? s.s_key_3 : s.g_key_msgsign_title);
 
     // 高度上限 + 底部安全区：sheet 以 isScrollControlled 打开时最大可占满全屏，
     // 若不设上限，长内容会把底部按钮顶出可视区域，用户无法批准/拒绝。
@@ -95,7 +94,7 @@ class DAppSigningSheet extends StatelessWidget {
                   if (!_isConnect)
                     Builder(
                       builder: (context) {
-                        final analysis = _decode();
+                        final analysis = _decode(s);
                         if (analysis == null) return const SizedBox.shrink();
                         return Padding(
                           padding: EdgeInsets.only(bottom: AppSpacing.space4),
@@ -120,32 +119,40 @@ class DAppSigningSheet extends StatelessWidget {
                         details['address'].toString(),
                       ),
                   ] else ...[
-                    _itemWidget(context, 'Method', method),
+                    _itemWidget(context, s.g_ui3_method, method),
                   ],
                   if (!_isConnect)
                     if (isTransaction) ...[
                       if (details['from'] != null)
                         _itemWidget(
                           context,
-                          'From',
+                          s.g_key_75,
                           details['from'].toString(),
                         ),
                       if (details['to'] != null)
-                        _itemWidget(context, 'To', details['to'].toString()),
+                        _itemWidget(
+                          context,
+                          s.g_key_38,
+                          details['to'].toString(),
+                        ),
                       if (details['value'] != null && details['value'] != '0x0')
                         _itemWidget(
                           context,
-                          'Value',
+                          s.g_key_wallet_k55,
                           details['value'].toString(),
                         ),
                       if (details['data'] != null && details['data'] != '0x')
                         _itemWidget(
                           context,
-                          'Data',
+                          s.g_ui3_data,
                           _truncate(details['data'].toString(), 200),
                         ),
                     ] else ...[
-                      _itemWidget(context, 'Data', _formatSignData(details)),
+                      _itemWidget(
+                        context,
+                        s.g_ui3_data,
+                        _formatSignData(details),
+                      ),
                     ],
                 ],
               ),
@@ -181,7 +188,7 @@ class DAppSigningSheet extends StatelessWidget {
                       child: AppButton(
                         label: s.g_key_79,
                         variant: AppButtonVariant.secondary,
-                        onPressed: () => Navigator.pop(context, false),
+                        onPressed: () => _close(context, false),
                       ),
                     ),
                   ),
@@ -191,7 +198,7 @@ class DAppSigningSheet extends StatelessWidget {
                       height: AppTouch.target,
                       child: AppButton(
                         label: s.g_key_78,
-                        onPressed: () => Navigator.pop(context, true),
+                        onPressed: () => _close(context, true),
                       ),
                     ),
                   ),
@@ -207,7 +214,15 @@ class DAppSigningSheet extends StatelessWidget {
   /// 按请求类型选择合适的解码器，返回 [TxRiskAnalysis]（复用 WalletConnect
   /// 流程的展示模型）。解析失败（如无法识别的 typed data 结构）返回 null，
   /// 调用方隐藏横幅、不影响原始数据的展示。
-  TxRiskAnalysis? _decode() {
+  /// Pops the sheet once. A fast double tap would otherwise pop a second
+  /// time and close the browser page underneath.
+  void _close(BuildContext context, bool approved) {
+    final route = ModalRoute.of(context);
+    if (route != null && !route.isCurrent) return;
+    Navigator.pop(context, approved);
+  }
+
+  TxRiskAnalysis? _decode(S s) {
     try {
       final isTransaction = method.contains('Transaction');
       final SignatureDecodedResult result;
@@ -242,7 +257,7 @@ class DAppSigningSheet extends StatelessWidget {
         functionName: result.title,
         fields: [
           if (result.description.isNotEmpty)
-            TxRiskField('Details', result.description),
+            TxRiskField(s.g_key_aa_details, result.description),
           for (final f in result.fields)
             TxRiskField(f.label, f.value, isHighlighted: f.isHighlighted),
         ],
@@ -262,11 +277,9 @@ class DAppSigningSheet extends StatelessWidget {
         children: [
           Text(
             label,
+            // textSubtitle: #888888 measured ~3.5:1 on the sheet background.
             style: AppTypography.caption.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.ff888888.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           SizedBox(height: AppSpacing.space2),

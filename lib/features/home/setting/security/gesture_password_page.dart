@@ -162,6 +162,10 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
     final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
     final Color bgColor = AppColorTokens.of(context).bgBase;
     final Color mainTextColor = AppColorTokens.of(context).textPrimary;
+    // Error copy uses the 4.5:1 shade of the danger red.
+    final Color errorText = AppContrast.ensure(errorColor, [
+      bgColor,
+    ], darken: Theme.of(context).brightness != Brightness.dark);
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_lock_key16),
@@ -185,7 +189,7 @@ class _GesturePasswordPageState extends State<GesturePasswordPage> {
                   Text(
                     _subtitle,
                     style: AppTypography.body.copyWith(
-                      color: _errorCount > 0 ? errorColor : subtitleColor,
+                      color: _errorCount > 0 ? errorText : subtitleColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
