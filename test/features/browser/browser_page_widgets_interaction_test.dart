@@ -125,8 +125,8 @@ void main() {
         .setMockMethodCallHandler(toast, null);
   });
 
-  Future<void> open(WidgetTester tester) async {
-    tester.view.physicalSize = const Size(390, 844);
+  Future<void> open(WidgetTester tester, {double width = 390}) async {
+    tester.view.physicalSize = Size(width, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -288,6 +288,30 @@ void main() {
       ),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('main toolbar tappables are at least 44pt at 320pt wide', (
+    tester,
+  ) async {
+    await open(tester, width: 320);
+    final icons = <Finder>[
+      _asset('close.png'),
+      _asset('refresh.png'),
+      _asset('arrow-left.png'),
+      _asset('arrow-right.png'),
+      _asset('star_border.png'),
+      find.byIcon(Icons.history),
+      _asset('note.png'),
+      _asset('setting.png'),
+    ];
+    for (final icon in icons) {
+      final hit = tester.getSize(
+        find.ancestor(of: icon, matching: find.byType(InkWell)).first,
+      );
+      expect(hit.width, greaterThanOrEqualTo(44), reason: '$icon width');
+      expect(hit.height, greaterThanOrEqualTo(44), reason: '$icon height');
+    }
     expect(tester.takeException(), isNull);
   });
 }

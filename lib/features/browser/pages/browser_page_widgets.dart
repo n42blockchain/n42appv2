@@ -164,8 +164,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
     return Container(
       alignment: Alignment.center,
       height: AppTouch.scaled(100),
-      child: Row(
-        children: [
+      child: _toolbarRow([
           _toolbarAssetButton(
             "close",
             tooltip: S.of(context).g_a11y_close,
@@ -256,8 +255,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           if (ref.watch(wcpBridgeProvider).walletConnectState ==
               WalletConnectState.connect)
             _buildWalletConnectButton(),
-        ],
-      ),
+      ]),
     );
   }
 
@@ -400,6 +398,26 @@ extension _BrowserPageWidgets on _BrowserPageState {
       onTap: onTap,
       tooltip: tooltip,
       child: Icon(icon, color: _mainTextColor(), size: sw(40.0)),
+    );
+  }
+
+  /// Spreads toolbar buttons evenly, but never narrower than the 44pt minimum:
+  /// when the screen is too narrow for that, the row scrolls horizontally.
+  Widget _toolbarRow(List<Widget> buttons) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final minWidth = AppTouch.minTarget * buttons.length;
+        if (constraints.maxWidth >= minWidth) {
+          return Row(children: buttons);
+        }
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: minWidth,
+            child: Row(children: buttons),
+          ),
+        );
+      },
     );
   }
 
