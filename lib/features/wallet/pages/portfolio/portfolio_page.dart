@@ -75,6 +75,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         backgroundColor: itemBg,
         elevation: 0,
         leading: IconButton(
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: textColor,

@@ -252,7 +252,13 @@ void main() {
 
     await tester.longPress(find.text('Alpha Dragon'));
     await tester.pumpAndSettle();
-    expect(find.text('1 selected'), findsOneWidget);
+    expect(
+      find.text(
+        MaterialLocalizations.of(tester.element(find.byType(Scaffold).first))
+            .selectedRowCountTitle(1),
+      ),
+      findsOneWidget,
+    );
     expect(find.byIcon(Icons.check), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.close));

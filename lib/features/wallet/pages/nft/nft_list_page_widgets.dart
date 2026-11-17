@@ -28,6 +28,7 @@ extension _NftListPageWidgets on _NftListPageState {
           ),
           suffixIcon: _query.isNotEmpty
               ? IconButton(
+                  tooltip: MaterialLocalizations.of(context).clearButtonTooltip,
                   icon: const Icon(Icons.clear),
                   iconSize: su.setWidth(24),
                   onPressed: () {
@@ -77,7 +78,8 @@ extension _NftListPageWidgets on _NftListPageState {
     final accentColor = AppColorTokens.of(context).brand;
 
     return SizedBox(
-      height: ScreenUtil().setWidth(52),
+      // 44pt bar so each chip/toggle gets a 44pt hit area (chips unchanged).
+      height: AppTouch.target,
       child: Row(
         children: [
           if (showTypeFilters)
@@ -91,33 +93,31 @@ extension _NftListPageWidgets on _NftListPageState {
                 itemBuilder: (context, i) {
                   final (type, label) = filters[i];
                   final selected = _filter == type;
-                  return Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => _updateView(() => _filter = type),
-                      borderRadius: AppRadius.brMd,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSpacing.space4,
-                          vertical: AppSpacing.space2,
-                        ),
-                        decoration: BoxDecoration(
+                  return AppTapArea(
+                    onTap: () => _updateView(() => _filter = type),
+                    borderRadius: AppRadius.brMd,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space4,
+                        vertical: AppSpacing.space2,
+                      ),
+                      decoration: BoxDecoration(
+                        // Brand fill shade: white label reaches 4.5:1.
+                        color: selected
+                            ? AppColorTokens.of(context).brandFill
+                            : accentColor.withAlpha(20),
+                        borderRadius: AppRadius.brMd,
+                      ),
+                      child: Text(
+                        label,
+                        style: AppTypography.caption.copyWith(
+                          fontWeight: selected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                           color: selected
-                              ? accentColor
-                              : accentColor.withAlpha(20),
-                          borderRadius: AppRadius.brMd,
-                        ),
-                        child: Text(
-                          label,
-                          style: AppTypography.caption.copyWith(
-                            fontWeight: selected
-                                ? FontWeight.w600
-                                : FontWeight.normal,
-                            color: selected
-                                ? Colors.white
-                                : AppColorTokens.of(context).textPrimary,
-                          ),
+                              ? Colors.white
+                              : AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ),
@@ -141,27 +141,24 @@ extension _NftListPageWidgets on _NftListPageState {
     final tokens = AppColorTokens.of(context);
     final active = _groupByCollection;
     final color = active ? tokens.brand : tokens.textSubtitle;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () =>
-            _updateView(() => _groupByCollection = !_groupByCollection),
-        borderRadius: AppRadius.brMd,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space4,
-            vertical: AppSpacing.space2,
-          ),
-          decoration: BoxDecoration(
-            color: active ? tokens.brand.withAlpha(20) : Colors.transparent,
-            borderRadius: AppRadius.brMd,
-            border: Border.all(color: color.withAlpha(60)),
-          ),
-          child: Icon(
-            active ? Icons.dashboard : Icons.dashboard_outlined,
-            size: ScreenUtil().setWidth(16),
-            color: color,
-          ),
+    return AppTapArea(
+      onTap: () => _updateView(() => _groupByCollection = !_groupByCollection),
+      tooltip: S.of(context).g_a11y_group_by_collection,
+      borderRadius: AppRadius.brMd,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
+        ),
+        decoration: BoxDecoration(
+          color: active ? tokens.brand.withAlpha(20) : Colors.transparent,
+          borderRadius: AppRadius.brMd,
+          border: Border.all(color: color.withAlpha(60)),
+        ),
+        child: Icon(
+          active ? Icons.dashboard : Icons.dashboard_outlined,
+          size: ScreenUtil().setWidth(16),
+          color: color,
         ),
       ),
     );
@@ -172,36 +169,35 @@ extension _NftListPageWidgets on _NftListPageState {
     final tokens = AppColorTokens.of(context);
     final active = _hideSpam;
     final color = active ? tokens.brand : tokens.textSubtitle;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => _updateView(() => _hideSpam = !_hideSpam),
-        borderRadius: AppRadius.brMd,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space4,
-            vertical: AppSpacing.space2,
-          ),
-          decoration: BoxDecoration(
-            color: active ? tokens.brand.withAlpha(20) : Colors.transparent,
-            borderRadius: AppRadius.brMd,
-            border: Border.all(color: color.withAlpha(60)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                active ? Icons.shield : Icons.shield_outlined,
-                size: ScreenUtil().setWidth(16),
-                color: color,
+    return AppTapArea(
+      onTap: () => _updateView(() => _hideSpam = !_hideSpam),
+      borderRadius: AppRadius.brMd,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
+        ),
+        decoration: BoxDecoration(
+          color: active ? tokens.brand.withAlpha(20) : Colors.transparent,
+          borderRadius: AppRadius.brMd,
+          border: Border.all(color: color.withAlpha(60)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              active ? Icons.shield : Icons.shield_outlined,
+              size: ScreenUtil().setWidth(16),
+              color: color,
+            ),
+            SizedBox(width: AppSpacing.space2),
+            Text(
+              '${S.of(context).g_key_nft_hide_spam} ($_spamCount)',
+              style: AppTypography.captionSm.copyWith(
+                color: active ? tokens.brandOnTint : color,
               ),
-              SizedBox(width: AppSpacing.space2),
-              Text(
-                '${S.of(context).g_key_nft_hide_spam} ($_spamCount)',
-                style: AppTypography.captionSm.copyWith(color: color),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

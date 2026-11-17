@@ -829,11 +829,14 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Mode tab widget ────────────────────────────────────────────────────────
 
-  Widget _modeTab(String label, bool active) {
+  Widget _modeTab(String label, bool active, {required bool limit}) {
     final blueColor = AppColorTokens.of(context).brand;
-    return GestureDetector(
+    // 44pt hit area around the pill; the active pill uses the brand fill
+    // shade so its white label reaches 4.5:1.
+    return AppTapArea(
+      borderRadius: BorderRadius.circular(8),
       onTap: () {
-        final newMode = label == 'Limit';
+        final newMode = limit;
         if (newMode == _isLimitMode) return;
         _clearQuote();
         setState(() => _isLimitMode = newMode);
@@ -844,7 +847,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
-          color: active ? blueColor : Colors.transparent,
+          color: active
+              ? AppColorTokens.of(context).brandFill
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: active
               ? null
@@ -854,7 +859,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           label,
           style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
-            color: active ? Colors.white : blueColor,
+            color: active
+                ? Colors.white
+                : AppColorTokens.of(context).brandOnTint,
           ),
         ),
       ),
@@ -879,12 +886,13 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             S.of(context).g_dex_use_smart_account,
             style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
-              color: _useSmartAccount ? c.success : c.textTertiary,
+              color: _useSmartAccount ? c.success : c.textSubtitle,
             ),
           ),
           const Spacer(),
           SizedBox(
-            height: 28,
+            // Was 28pt, which clipped the switch's 48pt touch target.
+            height: AppTouch.minTarget,
             child: Switch.adaptive(
               value: _useSmartAccount,
               onChanged:
@@ -954,9 +962,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               // Market / Limit mode toggle
               Row(
                 children: [
-                  _modeTab('Market', !_isLimitMode),
+                  _modeTab(s.g_ui3_market, !_isLimitMode, limit: false),
                   SizedBox(width: AppSpacing.space4),
-                  _modeTab('Limit', _isLimitMode),
+                  _modeTab(s.g_ui3_limit, _isLimitMode, limit: true),
                 ],
               ),
               SizedBox(height: AppSpacing.space4),

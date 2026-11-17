@@ -90,7 +90,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
       if (!mounted) return;
       chain = chains![symbolStr];
       if (chain == null) {
-        ToastUtils.show('Missing parent chain configuration');
+        ToastUtils.show(S.of(context).g_ui3_chain_config_missing_parent);
         updateView(() => coinMap['edit'] = false);
         return;
       }
@@ -206,7 +206,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     final baseInfo = _currentTokenBaseInfo();
     final coinType = baseInfo?['coinType']?.toString() ?? '';
     if (coinType.isEmpty) {
-      tokenErrorMessage = 'Invalid chain configuration';
+      tokenErrorMessage = S.of(context).g_ui3_chain_config_invalid;
       return false;
     }
     final check = await Trustdart().validateAddress(coinType, addr);
@@ -294,7 +294,9 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
           final displayName = info.name.isNotEmpty ? info.name : info.symbol;
           updateView(() {
             _contractState = 'found';
-            _contractHint = '$displayName · ${info.decimals} decimals';
+            _contractHint = S
+                .of(context)
+                .g_ui3_token_name_decimals(displayName, info.decimals);
             symbolErrorMessage = '';
             decimalErrorMessage = '';
           });
@@ -322,7 +324,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     decimalEditingController.text = dec;
     updateView(() {
       _contractState = 'found';
-      _contractHint = '$name · $dec decimals';
+      _contractHint = S.of(context).g_ui3_token_name_decimals(name, dec);
       symbolErrorMessage = '';
       decimalErrorMessage = '';
     });
@@ -335,7 +337,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     final tokenAddress = tokenEditingController.text;
     final cKeys = chainsToken.keys.toList();
     if (networkIndexToken < 0 || networkIndexToken >= cKeys.length) {
-      ToastUtils.show('Invalid chain configuration');
+      ToastUtils.show(S.of(context).g_ui3_chain_config_invalid);
       updateView(() => load = Load.finish);
       return;
     }
@@ -346,7 +348,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         .toString()
         .toUpperCase();
     if (chain == null || baseInfo == null || symbolStr.isEmpty) {
-      ToastUtils.show('Invalid chain configuration');
+      ToastUtils.show(S.of(context).g_ui3_chain_config_invalid);
       updateView(() => load = Load.finish);
       return;
     }
@@ -360,11 +362,11 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     );
     if (cIndex != -1) {
       if (coinlist[cIndex]['isAdd']) {
-        ToastUtils.show("Already exists");
+        ToastUtils.show(S.of(context).g_ui3_token_already_exists);
       } else {
         await addCoinToken(coinlist[cIndex]);
         if (!mounted) return;
-        ToastUtils.show("Successfully added");
+        ToastUtils.show(S.of(context).g_ui3_token_added);
       }
       updateView(() => load = Load.finish);
       return;
@@ -375,7 +377,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
         ? chain['testnets'][0]['testnetContract'][tokenAddress.toUpperCase()]
         : chain['mainnets'][tokenAddress.toUpperCase()];
     if (token != null) {
-      ToastUtils.show("Already exists");
+      ToastUtils.show(S.of(context).g_ui3_token_already_exists);
       updateView(() => load = Load.finish);
       return;
     }
@@ -394,7 +396,7 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
     addSymbol = '$addSymbol,${symbolEditingController.text}';
     wap.addWalletChainToken(baseToken);
     init();
-    ToastUtils.show("Successfully added");
+    ToastUtils.show(S.of(context).g_ui3_token_added);
     updateView(() => load = Load.finish);
   }
 

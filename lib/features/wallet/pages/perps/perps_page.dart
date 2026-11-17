@@ -84,6 +84,7 @@ class _PerpsPageState extends State<PerpsPage>
         elevation: 0,
         actions: [
           IconButton(
+            tooltip: S.of(context).g_key_bridge_refresh,
             icon: const Icon(Icons.refresh, size: 20),
             onPressed: _loadData,
           ),
@@ -279,6 +280,9 @@ class _PerpsPageState extends State<PerpsPage>
         final p = _positions[index];
         final isProfitable = p.unrealizedPnl >= 0;
         final c = AppColorTokens.of(context);
+        final side = p.isLong
+            ? S.of(context).g_ui3_long
+            : S.of(context).g_ui3_short;
         return Container(
           margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
           padding: EdgeInsets.all(AppSpacing.space4),
@@ -302,7 +306,7 @@ class _PerpsPageState extends State<PerpsPage>
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      '${p.sideLabel} ${p.leverage.toStringAsFixed(1)}x',
+                      '$side ${p.leverage.toStringAsFixed(1)}x',
                       style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w600,
                         color: p.isLong ? c.success : c.danger,
@@ -397,6 +401,9 @@ class _PerpsPageState extends State<PerpsPage>
       itemCount: _orders.length,
       itemBuilder: (context, index) {
         final o = _orders[index];
+        final side = o.isBuy
+            ? S.of(context).g_pred_buy
+            : S.of(context).g_ui3_sell;
         return ListTile(
           dense: true,
           leading: Icon(
@@ -407,7 +414,7 @@ class _PerpsPageState extends State<PerpsPage>
             size: 20,
           ),
           title: Text(
-            '${o.sideLabel} ${o.symbol} × ${o.size}',
+            '$side ${o.symbol} × ${o.size}',
             style: AppTypography.caption.copyWith(
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -419,6 +426,7 @@ class _PerpsPageState extends State<PerpsPage>
             ),
           ),
           trailing: IconButton(
+            tooltip: S.of(context).g_ui_cancel_order,
             icon: Icon(
               Icons.close,
               size: 18,

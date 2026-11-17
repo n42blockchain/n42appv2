@@ -151,9 +151,10 @@ class _DexLimitOrdersPageState extends State<_LimitOrdersView> {
       0 => blueColor,
       1 => c.warning,
       2 => c.success,
-      3 => c.textTertiary,
-      4 => c.textTertiary,
-      _ => c.textTertiary,
+      // Status text needs 4.5:1; tertiary is ~1.7:1 in light mode.
+      3 => c.textSubtitle,
+      4 => c.textSubtitle,
+      _ => c.textSubtitle,
     };
 
     final expiryDate = DateTime.fromMillisecondsSinceEpoch(
@@ -257,11 +258,19 @@ class _DexLimitOrdersPageState extends State<_LimitOrdersView> {
             SizedBox(height: AppSpacing.space4),
             SizedBox(
               width: double.infinity,
-              height: 36,
+              height: AppTouch.minTarget,
               child: OutlinedButton(
+                // Cancelling cannot be undone: confirm first.
                 onPressed: _cancelling.contains(order.orderId)
                     ? null
-                    : () => _cancelOrder(order),
+                    : () async {
+                        final ok = await AppDialog.confirm(
+                          context,
+                          title: S.of(context).g_ui_cancel_order,
+                          danger: true,
+                        );
+                        if (ok) _cancelOrder(order);
+                      },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: c.danger,
                   side: BorderSide(color: c.danger),
@@ -292,7 +301,7 @@ class _DexLimitOrdersPageState extends State<_LimitOrdersView> {
             SizedBox(height: AppSpacing.space4),
             SizedBox(
               width: double.infinity,
-              height: 36,
+              height: AppTouch.minTarget,
               child: OutlinedButton(
                 onPressed: () => Navigator.push(
                   context,

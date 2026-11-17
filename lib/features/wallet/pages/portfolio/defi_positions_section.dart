@@ -162,7 +162,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     if (portfolio.lendingValue > 0) {
       categories.add(
         _CategoryChip(
-          'Lending',
+          S.of(context).g_ui3_lending,
           portfolio.lendingValue,
           const Color(0xFF3C85FF),
         ),
@@ -176,7 +176,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     if (portfolio.stakingValue > 0) {
       categories.add(
         _CategoryChip(
-          'Staking',
+          S.of(context).g_key_stake_title,
           portfolio.stakingValue,
           const Color(0xFF9333EA),
         ),
@@ -185,7 +185,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     if (portfolio.rewardsValue > 0) {
       categories.add(
         _CategoryChip(
-          'Rewards',
+          S.of(context).g_key_stake_rewards,
           portfolio.rewardsValue,
           const Color(0xFFF97316),
         ),
@@ -193,6 +193,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     }
 
     if (categories.isEmpty) return const SizedBox.shrink();
+    final tokens = AppColorTokens.of(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
@@ -200,6 +201,13 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         spacing: ScreenUtil().setWidth(12),
         runSpacing: ScreenUtil().setWidth(8),
         children: categories.map((c) {
+          // Category hues on their own tint need a 4.5:1 text shade.
+          final textColor = AppContrast.textOnTint(
+            c.color,
+            [tokens.bgBase, tokens.bgSurface],
+            dark: Theme.of(context).brightness == Brightness.dark,
+            alpha: 0.1,
+          );
           return Container(
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.space4,
@@ -212,7 +220,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             child: Text(
               '${c.label}: ${fmtUsd(c.value)}',
               style: AppTypography.caption.copyWith(
-                color: c.color,
+                color: textColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -369,7 +377,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         child: TextButton.icon(
           onPressed: _loadPositions,
           icon: const Icon(Icons.refresh, size: 16),
-          label: Text(_error ?? 'Error'),
+          label: Text(_error ?? S.of(context).g_key_retry),
         ),
       ),
     );

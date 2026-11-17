@@ -141,6 +141,14 @@ void main() {
     await tester.tap(find.text(S.of(context).g_alert_remove));
     await tester.pumpAndSettle();
 
+    // Removal asks for a destructive confirmation first.
+    expect(result, isNull);
+    expect(await CoinPriceAlertService.loadAll(), isNotEmpty);
+    await tester.tap(
+      find.widgetWithText(FilledButton, S.of(context).g_alert_remove),
+    );
+    await tester.pumpAndSettle();
+
     expect(result, isTrue);
     expect(await CoinPriceAlertService.loadAll(), isEmpty);
     expect(tester.takeException(), isNull);

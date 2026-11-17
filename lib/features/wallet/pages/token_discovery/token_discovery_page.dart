@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:n42_wallet/features/wallet/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
@@ -94,6 +96,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
         text: S.of(context).g_key_token_discovery_title,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          tooltip: S.of(context).g_key_nft_220,
           onPressed: _popResult,
         ),
       ),
@@ -180,28 +183,34 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => setState(() => token.isSelected = !token.isSelected),
-            child: Container(
-              width: su.setWidth(40),
-              height: su.setWidth(40),
-              decoration: BoxDecoration(
-                color: token.isSelected ? accent : Colors.transparent,
-                border: Border.all(
-                  color: token.isSelected
-                      ? accent
-                      : _color(AppThemeKeys.dividerColor),
-                  width: 1.5,
+          // 20pt box, 44pt hit area; announced as a checkbox.
+          Semantics(
+            checked: token.isSelected,
+            label: token.displaySymbol,
+            child: AppTapArea(
+              onTap: () => setState(() => token.isSelected = !token.isSelected),
+              borderRadius: BorderRadius.circular(su.setWidth(8)),
+              child: Container(
+                width: su.setWidth(40),
+                height: su.setWidth(40),
+                decoration: BoxDecoration(
+                  color: token.isSelected ? accent : Colors.transparent,
+                  border: Border.all(
+                    color: token.isSelected
+                        ? accent
+                        : _color(AppThemeKeys.dividerColor),
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(su.setWidth(8)),
                 ),
-                borderRadius: BorderRadius.circular(su.setWidth(8)),
+                child: token.isSelected
+                    ? Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: su.setWidth(24),
+                      )
+                    : null,
               ),
-              child: token.isSelected
-                  ? Icon(
-                      Icons.check_rounded,
-                      color: Colors.white,
-                      size: su.setWidth(24),
-                    )
-                  : null,
             ),
           ),
           SizedBox(width: su.setWidth(16)),
@@ -229,7 +238,11 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
             ),
           ),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: su.setWidth(170)),
+            // Room for two 44pt actions side by side (85pt@375 and
+            // 72.5pt@320 before).
+            constraints: BoxConstraints(
+              maxWidth: math.max(su.setWidth(170), AppTouch.minTarget * 2),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -243,9 +256,8 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
                 SizedBox(height: su.setWidth(8)),
                 Wrap(
                   alignment: WrapAlignment.end,
-                  spacing: su.setWidth(16),
                   children: [
-                    GestureDetector(
+                    AppTapArea(
                       onTap: () => _ignoreToken(token),
                       child: Text(
                         s.g_key_token_discovery_ignore,
@@ -255,15 +267,18 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
+                    // Ink: the splash shows on the fill. brandFill carries
+                    // white caption text at 4.5:1 (systemBlue was 4.0:1).
+                    AppTapArea(
                       onTap: () => _addToken(token),
-                      child: Container(
+                      borderRadius: BorderRadius.circular(su.setWidth(8)),
+                      child: Ink(
                         padding: EdgeInsets.symmetric(
                           horizontal: su.setWidth(20),
                           vertical: su.setWidth(8),
                         ),
                         decoration: BoxDecoration(
-                          color: accent,
+                          color: AppColorTokens.of(context).brandFill,
                           borderRadius: BorderRadius.circular(su.setWidth(8)),
                         ),
                         child: Text(
@@ -312,7 +327,7 @@ class _TokenDiscoveryPageState extends ConsumerState<TokenDiscoveryPage> {
         children: [
           SizedBox(
             width: su.setWidth(110),
-            child: GestureDetector(
+            child: AppTapArea(
               onTap: () => setState(() {
                 for (final t in _tokens) {
                   t.isSelected = !allSelected;

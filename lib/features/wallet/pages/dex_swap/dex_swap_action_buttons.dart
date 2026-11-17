@@ -58,6 +58,9 @@ class DexActionButtons extends StatelessWidget {
     return _sizedButton(
       onTap: hasQuote && !loading
           ? () async {
+              // A second tap while the confirm page is opening would push
+              // another confirm page (and a second swap).
+              if (ModalRoute.of(context)?.isCurrent != true) return;
               final displayedQuote = quote!;
               FocusScope.of(context).unfocus();
               final bool? confirmed = await Navigator.push<bool>(

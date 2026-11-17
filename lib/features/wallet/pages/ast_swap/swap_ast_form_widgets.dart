@@ -87,7 +87,7 @@ class SwapAstPercentWidget extends StatelessWidget {
                 child: Text(
                   "$percent%",
                   style: AppTypography.body.copyWith(
-                    color: AppColorTokens.of(context).brand,
+                    color: AppColorTokens.of(context).brandOnTint,
                   ),
                 ),
               ),
@@ -134,9 +134,10 @@ class SwapAstCheckWidget extends StatelessWidget {
                       : Icons.check_box_outline_blank,
                   color: AppThemeUtils.getColorByKey(
                     context,
+                    // Unchecked outline needs 3:1 (separator is ~1.6:1).
                     readStatement
                         ? AppThemeKeys.mainBlueColor.name
-                        : AppThemeKeys.dividerColor.name,
+                        : AppThemeKeys.itemSubtitleTextColor.name,
                   ),
                 ),
               ),
@@ -144,10 +145,10 @@ class SwapAstCheckWidget extends StatelessWidget {
           ),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: ScreenUtil().setWidth(500)),
-            child: RichText(
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              text: TextSpan(
+            // Text.rich follows the system text size (RichText does not), and
+            // the sentence wraps instead of cutting off the terms link.
+            child: Text.rich(
+              TextSpan(
                 text: S.of(context).g_swap_key_16,
                 style: AppTypography.caption.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
@@ -170,9 +171,12 @@ class SwapAstCheckWidget extends StatelessWidget {
                         ),
                         child: Text(
                           S.of(context).g_swap_key_17,
+                          // The enclosing Text.rich already scales this span.
+                          textScaler: TextScaler.noScaling,
                           style: AppTypography.caption.copyWith(
                             decoration: TextDecoration.underline,
-                            color: AppColorTokens.of(context).brand,
+                            // Text-safe brand shade (system blue is 4.0:1).
+                            color: AppColorTokens.of(context).brandOnTint,
                           ),
                         ),
                       ),

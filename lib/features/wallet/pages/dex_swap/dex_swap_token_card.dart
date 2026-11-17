@@ -97,8 +97,10 @@ class DexTokenCard extends StatelessWidget {
   }
 
   Widget _tokenButton(BuildContext context) {
-    return GestureDetector(
+    // 44pt hit area with visible ink around the 38pt pill.
+    return AppTapArea(
       onTap: onTokenTap,
+      borderRadius: AppRadius.brSm,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space4,
@@ -127,7 +129,7 @@ class DexTokenCard extends StatelessWidget {
                 token?.symbol ?? S.of(context).g_key_dex_select_token,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.body.copyWith(
-                  color: AppColorTokens.of(context).brand,
+                  color: AppColorTokens.of(context).brandOnTint,
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -203,10 +203,10 @@ class _CoinTile extends StatelessWidget {
               SizedBox(width: 6.w),
             ],
             if (_coinId.isNotEmpty)
-              // IconButton 默认 48dp 命中区（§5 触控红线）
+              // Default IconButton density keeps the 48pt hit area.
               IconButton(
+                tooltip: S.of(context).g_alert_set,
                 onPressed: () => onSetAlert(context, coin),
-                visualDensity: VisualDensity.compact,
                 icon: Icon(
                   alertActive
                       ? Icons.notifications_active_rounded
@@ -218,8 +218,8 @@ class _CoinTile extends StatelessWidget {
                 ),
               ),
             IconButton(
+              tooltip: S.of(context).g_market_watchlist,
               onPressed: () => onToggleWatchlist(_symbol),
-              visualDensity: VisualDensity.compact,
               icon: Icon(
                 inWatchlist ? Icons.star_rounded : Icons.star_outline_rounded,
                 color: inWatchlist ? AppColorTokens.highlight : subColor,

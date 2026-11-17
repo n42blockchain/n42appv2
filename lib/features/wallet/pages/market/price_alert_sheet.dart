@@ -173,216 +173,234 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                 height: 160.h,
                 child: const Center(child: CircularProgressIndicator()),
               )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40.w,
-                      height: 4.h,
-                      decoration: BoxDecoration(
-                        color: dividerColor,
-                        borderRadius: BorderRadius.circular(2.r),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.notifications_outlined,
-                        color: accentColor,
-                        size: 22.sp,
-                      ),
-                      SizedBox(width: 8.w),
-                      Expanded(
-                        child: Text(
-                          S
-                              .of(context)
-                              .g_alert_title(widget.symbol.toUpperCase()),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.headline.copyWith(
-                            color: textColor,
-                          ),
+            // Scrolls so the save button stays reachable above the keyboard.
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40.w,
+                        height: 4.h,
+                        decoration: BoxDecoration(
+                          color: dividerColor,
+                          borderRadius: BorderRadius.circular(2.r),
                         ),
                       ),
-                      if (_existing != null)
-                        TextButton(
-                          onPressed: _saving ? null : _delete,
+                    ),
+                    SizedBox(height: 16.h),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.notifications_outlined,
+                          color: accentColor,
+                          size: 22.sp,
+                        ),
+                        SizedBox(width: 8.w),
+                        Expanded(
                           child: Text(
-                            S.of(context).g_alert_remove,
-                            style: AppTypography.caption.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: AppColorTokens.of(context).danger,
+                            S
+                                .of(context)
+                                .g_alert_title(widget.symbol.toUpperCase()),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.headline.copyWith(
+                              color: textColor,
                             ),
                           ),
                         ),
-                    ],
-                  ),
-
-                  if (widget.currentPrice > 0) ...[
-                    SizedBox(height: 4.h),
-                    Text(
-                      S
-                          .of(context)
-                          .g_alert_current_price(
-                            formatMarketPriceDisplay(widget.currentPrice),
+                        if (_existing != null)
+                          TextButton(
+                            // Removing an alert cannot be undone: confirm.
+                            onPressed: _saving
+                                ? null
+                                : () async {
+                                    final ok = await AppDialog.confirm(
+                                      context,
+                                      title: S.of(context).g_alert_remove,
+                                      confirmText: S.of(context).g_alert_remove,
+                                      danger: true,
+                                    );
+                                    if (ok) _delete();
+                                  },
+                            child: Text(
+                              S.of(context).g_alert_remove,
+                              style: AppTypography.caption.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: AppColorTokens.of(context).danger,
+                              ),
+                            ),
                           ),
+                      ],
+                    ),
+
+                    if (widget.currentPrice > 0) ...[
+                      SizedBox(height: 4.h),
+                      Text(
+                        S
+                            .of(context)
+                            .g_alert_current_price(
+                              formatMarketPriceDisplay(widget.currentPrice),
+                            ),
+                        style: AppTypography.caption.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: subColor,
+                        ),
+                      ),
+                    ],
+                    SizedBox(height: 20.h),
+
+                    Text(
+                      S.of(context).g_alert_direction,
                       style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w400,
                         color: subColor,
                       ),
                     ),
-                  ],
-                  SizedBox(height: 20.h),
-
-                  Text(
-                    S.of(context).g_alert_direction,
-                    style: AppTypography.caption.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: subColor,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _DirectionChip(
-                          label: S.of(context).g_alert_above,
-                          selected: _alertAbove,
-                          onTap: () => setState(() => _alertAbove = true),
-                          accentColor: accentColor,
-                          textColor: textColor,
-                          dividerColor: dividerColor,
+                    SizedBox(height: 8.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _DirectionChip(
+                            label: S.of(context).g_alert_above,
+                            selected: _alertAbove,
+                            onTap: () => setState(() => _alertAbove = true),
+                            accentColor: accentColor,
+                            textColor: textColor,
+                            dividerColor: dividerColor,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: _DirectionChip(
-                          label: S.of(context).g_alert_below,
-                          selected: !_alertAbove,
-                          onTap: () => setState(() => _alertAbove = false),
-                          accentColor: accentColor,
-                          textColor: textColor,
-                          dividerColor: dividerColor,
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: _DirectionChip(
+                            label: S.of(context).g_alert_below,
+                            selected: !_alertAbove,
+                            onTap: () => setState(() => _alertAbove = false),
+                            accentColor: accentColor,
+                            textColor: textColor,
+                            dividerColor: dividerColor,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20.h),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
 
-                  Text(
-                    S.of(context).g_alert_target_price,
-                    style: AppTypography.caption.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: subColor,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  TextField(
-                    controller: _priceCtrl,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d*\.?\d{0,8}'),
-                      ),
-                    ],
-                    style: AppTypography.caption.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      prefixText: '\$ ',
-                      prefixStyle: AppTypography.caption.copyWith(
+                    Text(
+                      S.of(context).g_alert_target_price,
+                      style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w400,
                         color: subColor,
                       ),
-                      hintText: '0.00',
-                      hintStyle: AppTypography.caption.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: subColor,
-                      ),
-                      filled: true,
-                      fillColor: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemBgColor2.name,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 14.w,
-                        vertical: 14.h,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: BorderSide(color: accentColor, width: 1.5),
-                      ),
                     ),
-                  ),
-                  SizedBox(height: 20.h),
-
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          S.of(context).g_alert_enable,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.caption.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: textColor,
+                    SizedBox(height: 8.h),
+                    TextField(
+                      controller: _priceCtrl,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d*\.?\d{0,8}'),
+                        ),
+                      ],
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                      ),
+                      decoration: InputDecoration(
+                        prefixText: '\$ ',
+                        prefixStyle: AppTypography.caption.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: subColor,
+                        ),
+                        hintText: '0.00',
+                        hintStyle: AppTypography.caption.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: subColor,
+                        ),
+                        filled: true,
+                        fillColor: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.itemBgColor2.name,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 14.h,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide: BorderSide(
+                            color: accentColor,
+                            width: 1.5,
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      Switch.adaptive(
-                        value: _enabled,
-                        onChanged: (v) => setState(() => _enabled = v),
-                        activeTrackColor: accentColor,
-                        activeThumbColor: Colors.white,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
-
-                  SizedBox(
-                    width: double.infinity,
-                    // 96.h≈48dp（§2.1 Primary 标准高，44dp 触控红线）
-                    height: 96.h,
-                    child: ElevatedButton(
-                      onPressed: _saving ? null : _save,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppContrast.fillForWhiteText(
-                          accentColor,
-                        ),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppRadius.brXl,
-                        ),
-                      ),
-                      child: _saving
-                          ? SizedBox(
-                              width: 20.w,
-                              height: 20.h,
-                              child: const CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : Text(
-                              _existing != null
-                                  ? S.of(context).g_alert_update
-                                  : S.of(context).g_alert_set,
-                              style: AppTypography.bodyStrong,
-                            ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 20.h),
+
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            S.of(context).g_alert_enable,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.caption.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Switch.adaptive(
+                          value: _enabled,
+                          onChanged: (v) => setState(() => _enabled = v),
+                          activeTrackColor: accentColor,
+                          activeThumbColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.h),
+
+                    SizedBox(
+                      width: double.infinity,
+                      // 96.h≈48dp（§2.1 Primary 标准高，44dp 触控红线）; clamped
+                      // so it stays >= 44pt on 320pt screens.
+                      height: AppTouch.scaled(96),
+                      child: ElevatedButton(
+                        onPressed: _saving ? null : _save,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppContrast.fillForWhiteText(
+                            accentColor,
+                          ),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppRadius.brXl,
+                          ),
+                        ),
+                        child: _saving
+                            ? SizedBox(
+                                width: 20.w,
+                                height: 20.h,
+                                child: const CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                _existing != null
+                                    ? S.of(context).g_alert_update
+                                    : S.of(context).g_alert_set,
+                                style: AppTypography.bodyStrong,
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
       ),
     );
@@ -444,7 +462,9 @@ class _DirectionChip extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTypography.body.copyWith(
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                    color: selected ? accentColor : textColor.withAlpha(153),
+                    color: selected
+                        ? AppColorTokens.of(context).brandOnTint
+                        : textColor.withAlpha(153),
                   ),
                 ),
               ),

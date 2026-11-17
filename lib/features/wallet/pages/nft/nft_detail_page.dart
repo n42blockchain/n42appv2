@@ -197,7 +197,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
       if (!mounted) return;
 
       if (!result.success) {
-        ToastUtils.showWarning(result.error ?? 'Burn failed');
+        ToastUtils.showWarning(result.error ?? S.of(context).g_key_175);
       } else {
         ToastUtils.showSuccess(S.of(context).g_key_nft_41);
         completedWithExit = true;

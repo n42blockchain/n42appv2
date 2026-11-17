@@ -76,7 +76,21 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
       .where((i) => i.status == _NftBatchStatus.failed)
       .toList(growable: false);
 
+  /// Set for the whole of [_send], including the address check that runs
+  /// before [_sending]; a second tap in that window would send twice.
+  bool _inFlight = false;
+
   Future<void> _send({bool retryFailedOnly = false}) async {
+    if (_inFlight || _sending) return;
+    _inFlight = true;
+    try {
+      await _sendInner(retryFailedOnly: retryFailedOnly);
+    } finally {
+      _inFlight = false;
+    }
+  }
+
+  Future<void> _sendInner({bool retryFailedOnly = false}) async {
     if (_sending) return;
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_items.isEmpty) return;
@@ -133,7 +147,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
             item.txHash = result.txHash;
           } else {
             item.status = _NftBatchStatus.failed;
-            item.error = result.error ?? 'Send failed';
+            item.error = result.error ?? S.of(context).g_key_175;
           }
         });
       } catch (e) {
@@ -165,7 +179,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
   Widget build(BuildContext context) {
     final tokens = AppColorTokens.of(context);
     return Scaffold(
-      appBar: AppBarWidget(text: 'Batch NFT Transfer'),
+      appBar: AppBarWidget(text: S.of(context).g_ui3_batch_nft_transfer),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
@@ -199,6 +213,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
         labelText: S.of(context).g_key_38,
         hintText: S.of(context).g_key_41,
         suffixIcon: IconButton(
+          tooltip: S.of(context).g_key_166,
           icon: Icon(Icons.paste, color: tokens.brand),
           onPressed: _sending || _allSucceeded
               ? null

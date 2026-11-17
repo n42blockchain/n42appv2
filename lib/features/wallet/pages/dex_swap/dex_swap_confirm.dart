@@ -143,6 +143,8 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
             child: AppButton(
               label: S.of(context).g_key_78,
               onPressed: () async {
+                // Ignore a second tap while verification is already open.
+                if (ModalRoute.of(context)?.isCurrent != true) return;
                 final nav = Navigator.of(context);
                 final bool? verified = await nav.push(
                   MaterialPageRoute(

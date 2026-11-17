@@ -35,8 +35,9 @@ Widget buildCoinInfoHeader(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
-          InkWell(
+          AppTapArea(
             onTap: onBack,
+            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
             customBorder: const CircleBorder(),
             child: SizedBox(
               width: touchSize,
@@ -77,8 +78,9 @@ Widget buildCoinInfoHeader(
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          InkWell(
+          AppTapArea(
             onTap: onAlertTap,
+            tooltip: S.of(context).g_alert_set,
             borderRadius: BorderRadius.circular(20),
             child: Padding(
               padding: EdgeInsets.all(AppSpacing.space4),
@@ -196,6 +198,7 @@ Widget buildPnlCard(
               ),
               const Spacer(),
               IconButton(
+                tooltip: S.of(context).g_key_159,
                 onPressed: onAddTrade,
                 icon: Icon(
                   Icons.add_circle_outline,
@@ -451,7 +454,7 @@ Widget buildAboutSection(
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: InkWell(
+                child: AppTapArea(
                   onTap: () => aboutShowDialog(context, desc, s.g_key_m_6),
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -461,11 +464,9 @@ Widget buildAboutSection(
                     margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                     child: Text(
                       s.g_key_m_7,
+                      // Text-safe brand shade (system blue is 4.0:1).
                       style: AppTypography.body.copyWith(
-                        color: _tc(
-                          context,
-                          AppThemeKeys.mainButtonBgColor.name,
-                        ),
+                        color: AppColorTokens.of(context).brandOnTint,
                       ),
                     ),
                   ),

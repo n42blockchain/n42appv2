@@ -278,17 +278,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Claim reward now'), findsOneWidget);
 
+    // The selection title uses the platform's localized count string.
+    final selectedTitle = MaterialLocalizations.of(
+      tester.element(find.byType(Scaffold).first),
+    ).selectedRowCountTitle;
     await tester.tap(find.byIcon(Icons.checklist_outlined));
     await tester.pumpAndSettle();
-    expect(find.text('0 selected'), findsOneWidget);
+    expect(find.text(selectedTitle(0)), findsOneWidget);
 
     await tester.longPress(find.text('Azuki #1'));
     await tester.pumpAndSettle();
-    expect(find.text('1 selected'), findsOneWidget);
+    expect(find.text(selectedTitle(1)), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
-    expect(find.text('1 selected'), findsNothing);
+    expect(find.text(selectedTitle(1)), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
   });

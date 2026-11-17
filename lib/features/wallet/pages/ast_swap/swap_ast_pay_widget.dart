@@ -128,7 +128,8 @@ class SwapAstPayWidget extends ConsumerWidget {
 
   Widget _buildInputRow(BuildContext context) {
     return SizedBox(
-      height: ScreenUtil().setWidth(100),
+      // Never below 44pt so the chain selector keeps its hit area at 320pt.
+      height: AppTouch.scaled(100),
       width: double.infinity,
       child: Row(
         children: [
@@ -185,6 +186,7 @@ class SwapAstPayWidget extends ConsumerWidget {
       },
       child: Container(
         width: ScreenUtil().setWidth(200),
+        constraints: BoxConstraints(minHeight: AppTouch.minTarget),
         margin: EdgeInsets.only(left: AppSpacing.space4),
         child: Row(
           children: [
@@ -272,13 +274,18 @@ class SwapAstPayWidget extends ConsumerWidget {
   }) {
     return Row(
       children: [
-        Text(
-          label,
-          style: AppTypography.bodySm.copyWith(
-            color: AppColorTokens.of(context).danger,
+        // Flexible: a long chain/coin name must wrap, not overflow at 130%.
+        Flexible(
+          child: Text(
+            label,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).danger,
+            ),
           ),
         ),
-        InkWell(
+        // 44pt hit area around the small pill.
+        AppTapArea(
+          borderRadius: AppRadius.brPill,
           onTap: () async {
             onCloseKeyboard();
             final r =

@@ -63,8 +63,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
               child: const CircularProgressIndicator(),
             )
           else
-            InkWell(
+            AppTapArea(
               onTap: () => removeCustomerCoinToken(rowValue),
+              tooltip: S.of(context).g_alert_remove,
+              customBorder: const CircleBorder(),
               child: Container(
                 padding: EdgeInsets.all(AppSpacing.space4),
                 width: AppTouch.scaled(80),

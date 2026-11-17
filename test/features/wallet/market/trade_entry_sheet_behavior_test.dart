@@ -161,6 +161,10 @@ void main() {
     expect(find.textContaining('1.25 ×'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.delete_outline));
     await tester.pumpAndSettle();
+    // Deletion asks for a destructive confirmation first.
+    expect(store.deletedIds, isEmpty);
+    await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
 
     expect(store.deletedIds, [5]);
     expect(find.textContaining('1.25 ×'), findsNothing);
@@ -176,6 +180,8 @@ void main() {
     final result = await openSheet(tester, store: store);
 
     await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(FilledButton));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
