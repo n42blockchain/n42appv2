@@ -1954,6 +1954,8 @@
   "g_ui3_activation_time": "Date d'activation",
   "g_ui3_clear_browser_cache_confirm": "Effacer les données de sites en cache du navigateur ? Les sites pourront vous demander de vous reconnecter.",
   "g_ui3_close_all_tabs_confirm": "Fermer tous les onglets ?",
+  "g_ui3_clear_search_history_title": "Effacer les recherches récentes ?",
+  "g_ui3_remove_search_history_title": "Supprimer cette recherche récente ?",
   "g_ui3_data": "Données",
   "g_ui3_delete_bookmark_confirm": "Supprimer ce favori ?",
   "g_ui3_delete_validator_key_confirm": "Supprimer cette clé de validateur de cet appareil ? Assurez-vous d'en avoir une sauvegarde.",

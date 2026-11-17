@@ -1982,6 +1982,8 @@
   "g_ui3_activation_time": "Czas aktywacji",
   "g_ui3_clear_browser_cache_confirm": "Wyczyścić dane witryn zapisane w pamięci podręcznej przeglądarki? Witryny mogą poprosić o ponowne zalogowanie.",
   "g_ui3_close_all_tabs_confirm": "Zamknąć wszystkie karty?",
+  "g_ui3_clear_search_history_title": "Wyczyścić ostatnie wyszukiwania?",
+  "g_ui3_remove_search_history_title": "Usunąć to ostatnie wyszukiwanie?",
   "g_ui3_data": "Dane",
   "g_ui3_delete_bookmark_confirm": "Usunąć tę zakładkę?",
   "g_ui3_delete_validator_key_confirm": "Usunąć ten klucz walidatora z tego urządzenia? Upewnij się, że masz kopię zapasową.",

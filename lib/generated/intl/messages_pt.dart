@@ -3489,6 +3489,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Limpar os dados de sites em cache do navegador? Os sites podem pedir-lhe para iniciar sessão novamente.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Limpar as pesquisas recentes?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Fechar todos os separadores?",
     ),
@@ -3830,6 +3833,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Deixará de ser apresentado nesta carteira. Os seus ativos na blockchain não são afetados.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Remover esta pesquisa recente?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Não é possível verificar o bloco génese do RPC. A rede não foi adicionada.",
     ),

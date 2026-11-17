@@ -1982,6 +1982,8 @@
   "g_ui3_activation_time": "Время активации",
   "g_ui3_clear_browser_cache_confirm": "Очистить кэшированные данные сайтов в браузере? Сайты могут попросить войти снова.",
   "g_ui3_close_all_tabs_confirm": "Закрыть все вкладки?",
+  "g_ui3_clear_search_history_title": "Очистить недавние поиски?",
+  "g_ui3_remove_search_history_title": "Удалить этот недавний поиск?",
   "g_ui3_data": "Данные",
   "g_ui3_delete_bookmark_confirm": "Удалить эту закладку?",
   "g_ui3_delete_validator_key_confirm": "Удалить этот ключ валидатора с устройства? Убедитесь, что у вас есть резервная копия.",

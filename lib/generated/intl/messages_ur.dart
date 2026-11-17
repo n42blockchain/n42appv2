@@ -3391,6 +3391,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "براؤزر کا کیش شدہ سائٹ ڈیٹا صاف کریں؟ سائٹس آپ سے دوبارہ سائن اِن کرنے کو کہہ سکتی ہیں۔",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "حالیہ تلاشیں صاف کریں؟",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "تمام ٹیبز بند کریں؟",
     ),
@@ -3718,6 +3721,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "یہ اب اس والیٹ میں نظر نہیں آئے گا۔ چین پر موجود آپ کے اثاثے متاثر نہیں ہوں گے۔",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "یہ حالیہ تلاش ہٹائیں؟",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC جینیسس بلاک کی تصدیق نہیں ہو سکی۔ نیٹ ورک شامل نہیں کیا گیا۔",
     ),

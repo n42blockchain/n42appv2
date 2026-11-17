@@ -1954,6 +1954,8 @@
   "g_ui3_activation_time": "Thời gian kích hoạt",
   "g_ui3_clear_browser_cache_confirm": "Xóa dữ liệu trang web đã lưu trong bộ nhớ đệm của trình duyệt? Các trang web có thể yêu cầu bạn đăng nhập lại.",
   "g_ui3_close_all_tabs_confirm": "Đóng tất cả thẻ?",
+  "g_ui3_clear_search_history_title": "Xóa các tìm kiếm gần đây?",
+  "g_ui3_remove_search_history_title": "Xóa tìm kiếm gần đây này?",
   "g_ui3_data": "Dữ liệu",
   "g_ui3_delete_bookmark_confirm": "Xóa dấu trang này?",
   "g_ui3_delete_validator_key_confirm": "Xóa khóa trình xác thực này khỏi thiết bị? Hãy đảm bảo bạn đã sao lưu.",

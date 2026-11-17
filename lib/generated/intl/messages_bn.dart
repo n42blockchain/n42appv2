@@ -3410,6 +3410,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "ব্রাউজারের ক্যাশে থাকা সাইট ডেটা মুছবেন? সাইটগুলো আবার সাইন ইন করতে বলতে পারে।",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "সাম্প্রতিক অনুসন্ধান মুছবেন?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "সব ট্যাব বন্ধ করবেন?",
     ),
@@ -3741,6 +3744,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "এটি আর এই ওয়ালেটে দেখানো হবে না। চেইনে থাকা আপনার সম্পদ প্রভাবিত হবে না।",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "এই সাম্প্রতিক অনুসন্ধানটি সরাবেন?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC জেনেসিস ব্লক যাচাই করা যায়নি। নেটওয়ার্ক যোগ করা হয়নি।",
     ),

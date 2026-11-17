@@ -16693,6 +16693,26 @@ class S {
     );
   }
 
+  /// `Clear recent searches?`
+  String get g_ui3_clear_search_history_title {
+    return Intl.message(
+      'Clear recent searches?',
+      name: 'g_ui3_clear_search_history_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove this recent search?`
+  String get g_ui3_remove_search_history_title {
+    return Intl.message(
+      'Remove this recent search?',
+      name: 'g_ui3_remove_search_history_title',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Data`
   String get g_ui3_data {
     return Intl.message('Data', name: 'g_ui3_data', desc: '', args: []);

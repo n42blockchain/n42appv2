@@ -2715,6 +2715,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "ブラウザにキャッシュされたサイトデータを消去しますか？サイトで再度サインインが必要になる場合があります。",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "最近の検索を消去しますか？",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "すべてのタブを閉じますか？",
     ),
@@ -2998,6 +3001,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "このウォレットには表示されなくなります。オンチェーン上の資産には影響しません。",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "この最近の検索を削除しますか？",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC のジェネシスブロックを検証できません。ネットワークは追加されませんでした。",
     ),

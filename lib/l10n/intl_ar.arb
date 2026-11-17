@@ -1975,6 +1975,8 @@
   "g_ui3_activation_time": "وقت التفعيل",
   "g_ui3_clear_browser_cache_confirm": "مسح بيانات المواقع المخزّنة مؤقتًا في المتصفح؟ قد تطلب منك المواقع تسجيل الدخول مجددًا.",
   "g_ui3_close_all_tabs_confirm": "إغلاق كل علامات التبويب؟",
+  "g_ui3_clear_search_history_title": "مسح عمليات البحث الأخيرة؟",
+  "g_ui3_remove_search_history_title": "هل تريد إزالة عملية البحث هذه؟",
   "g_ui3_data": "البيانات",
   "g_ui3_delete_bookmark_confirm": "حذف هذه الإشارة المرجعية؟",
   "g_ui3_delete_validator_key_confirm": "هل تريد حذف مفتاح المدقق هذا من هذا الجهاز؟ تأكد من وجود نسخة احتياطية.",

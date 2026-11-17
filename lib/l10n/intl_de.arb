@@ -1954,6 +1954,8 @@
   "g_ui3_activation_time": "Aktivierungszeit",
   "g_ui3_clear_browser_cache_confirm": "Zwischengespeicherte Websitedaten des Browsers löschen? Websites fordern Sie möglicherweise zur erneuten Anmeldung auf.",
   "g_ui3_close_all_tabs_confirm": "Alle Tabs schließen?",
+  "g_ui3_clear_search_history_title": "Letzte Suchanfragen löschen?",
+  "g_ui3_remove_search_history_title": "Diese letzte Suche entfernen?",
   "g_ui3_data": "Daten",
   "g_ui3_delete_bookmark_confirm": "Dieses Lesezeichen löschen?",
   "g_ui3_delete_validator_key_confirm": "Diesen Validator-Schlüssel von diesem Gerät löschen? Stelle sicher, dass du ein Backup hast.",

@@ -3342,6 +3342,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Xóa dữ liệu trang web đã lưu trong bộ nhớ đệm của trình duyệt? Các trang web có thể yêu cầu bạn đăng nhập lại.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Xóa các tìm kiếm gần đây?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Đóng tất cả thẻ?",
     ),
@@ -3669,6 +3672,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tài sản này sẽ không còn hiển thị trong ví. Tài sản on-chain của bạn không bị ảnh hưởng.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Xóa tìm kiếm gần đây này?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Không thể xác minh khối genesis của RPC. Mạng chưa được thêm.",
     ),

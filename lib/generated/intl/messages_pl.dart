@@ -3444,6 +3444,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Wyczyścić dane witryn zapisane w pamięci podręcznej przeglądarki? Witryny mogą poprosić o ponowne zalogowanie.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Wyczyścić ostatnie wyszukiwania?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Zamknąć wszystkie karty?",
     ),
@@ -3793,6 +3796,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nie będzie już wyświetlany w tym portfelu. Twoje aktywa w łańcuchu pozostaną bez zmian.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Usunąć to ostatnie wyszukiwanie?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Nie można zweryfikować bloku genesis RPC. Sieć nie została dodana.",
     ),

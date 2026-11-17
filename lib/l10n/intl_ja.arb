@@ -1954,6 +1954,8 @@
   "g_ui3_activation_time": "有効化日時",
   "g_ui3_clear_browser_cache_confirm": "ブラウザにキャッシュされたサイトデータを消去しますか？サイトで再度サインインが必要になる場合があります。",
   "g_ui3_close_all_tabs_confirm": "すべてのタブを閉じますか？",
+  "g_ui3_clear_search_history_title": "最近の検索を消去しますか？",
+  "g_ui3_remove_search_history_title": "この最近の検索を削除しますか？",
   "g_ui3_data": "データ",
   "g_ui3_delete_bookmark_confirm": "このブックマークを削除しますか？",
   "g_ui3_delete_validator_key_confirm": "このデバイスからこのバリデーターキーを削除しますか？バックアップがあることを確認してください。",

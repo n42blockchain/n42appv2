@@ -1975,6 +1975,8 @@
   "g_ui3_activation_time": "Muda wa Kuwezesha",
   "g_ui3_clear_browser_cache_confirm": "Futa data ya tovuti iliyohifadhiwa kwenye kivinjari? Tovuti zinaweza kukuomba uingie tena.",
   "g_ui3_close_all_tabs_confirm": "Funga vichupo vyote?",
+  "g_ui3_clear_search_history_title": "Futa utafutaji wa hivi karibuni?",
+  "g_ui3_remove_search_history_title": "Ondoa utafutaji huu wa hivi karibuni?",
   "g_ui3_data": "Taarifa",
   "g_ui3_delete_bookmark_confirm": "Futa alamisho hili?",
   "g_ui3_delete_validator_key_confirm": "Futa ufunguo huu wa mthibitishaji kwenye kifaa hiki? Hakikisha una nakala rudufu.",

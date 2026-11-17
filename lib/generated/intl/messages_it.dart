@@ -3528,6 +3528,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Cancellare i dati dei siti memorizzati nella cache del browser? I siti potrebbero chiederti di accedere di nuovo.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Cancellare le ricerche recenti?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Chiudere tutte le schede?",
     ),
@@ -3867,6 +3870,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Non verrà più mostrato in questo portafoglio. I tuoi asset on-chain non saranno influenzati.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Rimuovere questa ricerca recente?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Impossibile verificare il blocco genesi dell\'RPC. La rete non è stata aggiunta.",
     ),

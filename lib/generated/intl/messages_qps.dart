@@ -4042,6 +4042,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "[# Çĺéàŗ çàçĥéð šìťé ðàťà ƒöŗ ťĥé ƀŗöŵšéŗ? Šìťéš ṁàý àšķ ýöü ťö šìĝñ ìñ àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺéàŕ ŕéçéńţ śéàŕçĥéś? ~~~#]",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "[# Çĺöšé àĺĺ ťàƀš? ~~~~~~~#]",
     ),
@@ -4433,6 +4436,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ìť ŵìĺĺ ñö ĺöñĝéŗ ƀé šĥöŵñ ìñ ťĥìš ŵàĺĺéť. Ýöüŗ àššéťš öñ çĥàìñ àŗé ñöť àƒƒéçťéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ŕéḿóṽé ţĥíś ŕéçéńţ śéàŕçĥ? ~~~#]",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "[# Çàññöť ṽéŗìƒý ťĥé ŖƤÇ ĝéñéšìš ƀĺöçķ. Ñéťŵöŗķ ŵàš ñöť àððéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),

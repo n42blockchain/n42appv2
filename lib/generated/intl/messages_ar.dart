@@ -3276,6 +3276,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "مسح بيانات المواقع المخزّنة مؤقتًا في المتصفح؟ قد تطلب منك المواقع تسجيل الدخول مجددًا.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "مسح عمليات البحث الأخيرة؟",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "إغلاق كل علامات التبويب؟",
     ),
@@ -3607,6 +3610,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "لن يظهر بعد الآن في هذه المحفظة. لن تتأثر أصولك على السلسلة.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "هل تريد إزالة عملية البحث هذه؟",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "تعذر التحقق من كتلة التكوين الخاصة بـ RPC. لم تتم إضافة الشبكة.",
     ),

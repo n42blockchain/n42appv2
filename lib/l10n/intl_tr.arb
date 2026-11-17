@@ -1982,6 +1982,8 @@
   "g_ui3_activation_time": "Etkinleştirme Zamanı",
   "g_ui3_clear_browser_cache_confirm": "Tarayıcının önbelleğe alınmış site verileri temizlensin mi? Siteler yeniden giriş yapmanızı isteyebilir.",
   "g_ui3_close_all_tabs_confirm": "Tüm sekmeler kapatılsın mı?",
+  "g_ui3_clear_search_history_title": "Son aramalar temizlensin mi?",
+  "g_ui3_remove_search_history_title": "Bu son arama silinsin mi?",
   "g_ui3_data": "Veri",
   "g_ui3_delete_bookmark_confirm": "Bu yer imi silinsin mi?",
   "g_ui3_delete_validator_key_confirm": "Bu doğrulayıcı anahtarı bu cihazdan silinsin mi? Yedeğiniz olduğundan emin olun.",

@@ -1947,6 +1947,8 @@
   "g_ui3_activation_time": "सक्रियण समय",
   "g_ui3_clear_browser_cache_confirm": "ब्राउज़र का कैश किया गया साइट डेटा साफ़ करें? साइटें आपसे दोबारा साइन इन करने को कह सकती हैं।",
   "g_ui3_close_all_tabs_confirm": "सभी टैब बंद करें?",
+  "g_ui3_clear_search_history_title": "हाल की खोजें साफ़ करें?",
+  "g_ui3_remove_search_history_title": "यह हाल की खोज हटाएँ?",
   "g_ui3_data": "डेटा",
   "g_ui3_delete_bookmark_confirm": "यह बुकमार्क हटाएँ?",
   "g_ui3_delete_validator_key_confirm": "इस डिवाइस से यह वैलिडेटर कुंजी हटाएं? सुनिश्चित करें कि आपके पास बैकअप है।",

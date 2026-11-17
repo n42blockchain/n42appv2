@@ -1975,6 +1975,8 @@
   "g_ui3_activation_time": "Čas aktivace",
   "g_ui3_clear_browser_cache_confirm": "Vymazat data webů uložená v mezipaměti prohlížeče? Weby vás mohou požádat o nové přihlášení.",
   "g_ui3_close_all_tabs_confirm": "Zavřít všechny karty?",
+  "g_ui3_clear_search_history_title": "Vymazat nedávná hledání?",
+  "g_ui3_remove_search_history_title": "Odstranit toto nedávné hledání?",
   "g_ui3_data": "Údaje",
   "g_ui3_delete_bookmark_confirm": "Smazat tuto záložku?",
   "g_ui3_delete_validator_key_confirm": "Smazat tento klíč validátoru z tohoto zařízení? Ujistěte se, že máte zálohu.",

@@ -1947,6 +1947,8 @@
   "g_ui3_activation_time": "Hora de activación",
   "g_ui3_clear_browser_cache_confirm": "¿Borrar los datos de sitios en caché del navegador? Es posible que los sitios te pidan volver a iniciar sesión.",
   "g_ui3_close_all_tabs_confirm": "¿Cerrar todas las pestañas?",
+  "g_ui3_clear_search_history_title": "¿Borrar las búsquedas recientes?",
+  "g_ui3_remove_search_history_title": "¿Quitar esta búsqueda reciente?",
   "g_ui3_data": "Datos",
   "g_ui3_delete_bookmark_confirm": "¿Eliminar este marcador?",
   "g_ui3_delete_validator_key_confirm": "¿Eliminar esta clave de validador de este dispositivo? Asegúrate de tener una copia de seguridad.",

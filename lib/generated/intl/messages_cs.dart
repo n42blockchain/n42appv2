@@ -3374,6 +3374,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Vymazat data webů uložená v mezipaměti prohlížeče? Weby vás mohou požádat o nové přihlášení.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Vymazat nedávná hledání?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Zavřít všechny karty?",
     ),
@@ -3715,6 +3718,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "V této peněžence se již nebude zobrazovat. Vaše aktiva na blockchainu nejsou ovlivněna.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Odstranit toto nedávné hledání?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Genesis blok RPC nelze ověřit. Síť nebyla přidána.",
     ),

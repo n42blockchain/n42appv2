@@ -120,6 +120,13 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   }
 
   Future<void> _removeFromHistory(String keyword) async {
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_ui3_remove_search_history_title,
+      confirmText: S.of(context).g_alert_remove,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     final updated = _history.where((e) => e != keyword).toList();
     final previous = List<String>.from(_history);
     setState(() => _history = updated);
@@ -134,6 +141,13 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   }
 
   Future<void> _clearHistory() async {
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_ui3_clear_search_history_title,
+      confirmText: S.of(context).g_key_batch_clear_all,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     final previous = List<String>.from(_history);
     setState(() => _history = []);
     try {

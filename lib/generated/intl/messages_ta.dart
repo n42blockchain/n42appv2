@@ -3608,6 +3608,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "உலாவியில் தற்காலிகமாகச் சேமிக்கப்பட்ட தளத் தரவை அழிக்கவா? தளங்கள் மீண்டும் உள்நுழையக் கேட்கலாம்.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "சமீபத்திய தேடல்களை அழிக்கவா?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "எல்லா தாவல்களையும் மூடவா?",
     ),
@@ -3957,6 +3960,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "இது இனி இந்த வாலட்டில் காட்டப்படாது. செயினில் உள்ள உங்கள் சொத்துகள் பாதிக்கப்படாது.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "இந்தச் சமீபத்தியத் தேடலை நீக்கவா?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC ஜெனிசிஸ் பிளாக்கைச் சரிபார்க்க முடியவில்லை. நெட்வொர்க் சேர்க்கப்படவில்லை.",
     ),

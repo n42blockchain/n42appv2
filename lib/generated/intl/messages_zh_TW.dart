@@ -2369,6 +2369,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "清除瀏覽器快取的網站資料？網站可能需要重新登入。",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "清除最近的搜尋紀錄？",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "關閉所有分頁？",
     ),
@@ -2616,6 +2619,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "它將不再顯示在此錢包中，鏈上資產不受影響。",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "移除這筆最近的搜尋紀錄？",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "無法驗證 RPC 創世區塊，未新增網路。",
     ),

@@ -1947,6 +1947,8 @@
   "g_ui3_activation_time": "সক্রিয়করণের সময়",
   "g_ui3_clear_browser_cache_confirm": "ব্রাউজারের ক্যাশে থাকা সাইট ডেটা মুছবেন? সাইটগুলো আবার সাইন ইন করতে বলতে পারে।",
   "g_ui3_close_all_tabs_confirm": "সব ট্যাব বন্ধ করবেন?",
+  "g_ui3_clear_search_history_title": "সাম্প্রতিক অনুসন্ধান মুছবেন?",
+  "g_ui3_remove_search_history_title": "এই সাম্প্রতিক অনুসন্ধানটি সরাবেন?",
   "g_ui3_data": "ডেটা",
   "g_ui3_delete_bookmark_confirm": "এই বুকমার্ক মুছবেন?",
   "g_ui3_delete_validator_key_confirm": "এই ডিভাইস থেকে এই ভ্যালিডেটর কী মুছবেন? নিশ্চিত করুন যে আপনার ব্যাকআপ আছে।",

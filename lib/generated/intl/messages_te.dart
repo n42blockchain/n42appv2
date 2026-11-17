@@ -3524,6 +3524,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "బ్రౌజర్‌లో కాష్ చేసిన సైట్ డేటాను క్లియర్ చేయాలా? సైట్‌లు మళ్లీ సైన్ ఇన్ చేయమని అడగవచ్చు.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "ఇటీవలి శోధనలను క్లియర్ చేయాలా?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "అన్ని ట్యాబ్‌లను మూసివేయాలా?",
     ),
@@ -3869,6 +3872,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "ఇది ఇకపై ఈ వాలెట్‌లో కనిపించదు. చెయిన్‌లోని మీ ఆస్తులపై ప్రభావం ఉండదు.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "ఈ ఇటీవలి శోధనను తీసివేయాలా?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC జెనెసిస్ బ్లాక్‌ను ధృవీకరించలేకపోయాము. నెట్‌వర్క్ జోడించబడలేదు.",
     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -134,6 +135,24 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text(S.current.g_key_batch_clear_all));
       await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppDialog),
+          matching: find.text(S.current.g_key_79),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(history.entries, ['eth']);
+
+      await tester.tap(find.text(S.current.g_key_batch_clear_all));
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppDialog),
+          matching: find.text(S.current.g_key_batch_clear_all),
+        ),
+      );
+      await tester.pumpAndSettle();
       expect(history.entries, isEmpty);
       expect(find.text('eth'), findsNothing);
       expect(tester.takeException(), isNull);
@@ -162,6 +181,24 @@ void main() {
       await tester.enterText(find.byType(TextField), '');
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.close).first);
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppDialog),
+          matching: find.text(S.current.g_key_79),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(history.entries, ['eth', 'btc']);
+
+      await tester.tap(find.byIcon(Icons.close).first);
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppDialog),
+          matching: find.text(S.current.g_alert_remove),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(history.entries, ['btc']);
       expect(find.text('eth'), findsNothing);

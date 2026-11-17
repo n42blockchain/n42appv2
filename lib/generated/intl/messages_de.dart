@@ -3515,6 +3515,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Zwischengespeicherte Websitedaten des Browsers löschen? Websites fordern Sie möglicherweise zur erneuten Anmeldung auf.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Letzte Suchanfragen löschen?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Alle Tabs schließen?",
     ),
@@ -3856,6 +3859,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Es wird in dieser Wallet nicht mehr angezeigt. Ihre On-Chain-Assets bleiben unberührt.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Diese letzte Suche entfernen?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Der Genesis-Block des RPC kann nicht verifiziert werden. Das Netzwerk wurde nicht hinzugefügt.",
     ),

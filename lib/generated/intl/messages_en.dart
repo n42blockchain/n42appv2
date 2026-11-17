@@ -3270,6 +3270,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Clear cached site data for the browser? Sites may ask you to sign in again.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Clear recent searches?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Close all tabs?",
     ),
@@ -3599,6 +3602,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "It will no longer be shown in this wallet. Your assets on chain are not affected.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Remove this recent search?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Cannot verify the RPC genesis block. Network was not added.",
     ),

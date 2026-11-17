@@ -3348,6 +3348,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Tarayıcının önbelleğe alınmış site verileri temizlensin mi? Siteler yeniden giriş yapmanızı isteyebilir.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Son aramalar temizlensin mi?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Tüm sekmeler kapatılsın mı?",
     ),
@@ -3679,6 +3682,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Artık bu cüzdanda gösterilmeyecek. Zincir üzerindeki varlıklarınız etkilenmez.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Bu son arama silinsin mi?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC genesis bloğu doğrulanamıyor. Ağ eklenmedi.",
     ),

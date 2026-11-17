@@ -3407,6 +3407,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Hapus data situs yang di-cache di browser? Situs mungkin meminta Anda masuk lagi.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Hapus pencarian terbaru?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Tutup semua tab?",
     ),
@@ -3740,6 +3743,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Aset ini tidak akan ditampilkan lagi di dompet ini. Aset Anda di chain tidak terpengaruh.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Hapus pencarian terbaru ini?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Tidak dapat memverifikasi blok genesis RPC. Jaringan tidak ditambahkan.",
     ),

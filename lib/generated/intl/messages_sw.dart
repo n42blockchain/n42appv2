@@ -3508,6 +3508,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Futa data ya tovuti iliyohifadhiwa kwenye kivinjari? Tovuti zinaweza kukuomba uingie tena.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Futa utafutaji wa hivi karibuni?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Funga vichupo vyote?",
     ),
@@ -3841,6 +3844,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Haitaonyeshwa tena kwenye pochi hii. Mali zako kwenye mnyororo haziathiriwi.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Ondoa utafutaji huu wa hivi karibuni?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Haiwezekani kuthibitisha bloku ya mwanzo ya RPC. Mtandao haukuongezwa.",
     ),

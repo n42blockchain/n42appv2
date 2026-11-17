@@ -2052,6 +2052,8 @@
   "g_ui3_activation_time": "啟用時間",
   "g_ui3_clear_browser_cache_confirm": "清除瀏覽器快取的網站資料？網站可能需要重新登入。",
   "g_ui3_close_all_tabs_confirm": "關閉所有分頁？",
+  "g_ui3_clear_search_history_title": "清除最近的搜尋紀錄？",
+  "g_ui3_remove_search_history_title": "移除這筆最近的搜尋紀錄？",
   "g_ui3_data": "資料",
   "g_ui3_delete_bookmark_confirm": "刪除此書籤？",
   "g_ui3_delete_validator_key_confirm": "從此裝置刪除該驗證者金鑰？請確認已備份。",

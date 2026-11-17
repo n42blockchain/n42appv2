@@ -403,6 +403,16 @@ extension _WalletCoinAddAllLogic on _WalletCoinAddAllState {
   Future<void> removeCustomerCoinToken(Map<String, dynamic> coinMap) async {
     try {
       if (coinMap['edit'] == true) return;
+      final confirmed = await AppDialog.confirm(
+        context,
+        title: S
+            .of(context)
+            .g_ui3_remove_asset_title(coinMap['miniName'].toString()),
+        message: S.of(context).g_ui3_remove_asset_message,
+        confirmText: S.of(context).g_alert_remove,
+        danger: true,
+      );
+      if (!confirmed || !mounted) return;
       updateView(() => coinMap['edit'] = true);
       final symbolStr = coinMap['coinType'].toString().toUpperCase();
       final wap = ref.read(wapBridgeProvider);

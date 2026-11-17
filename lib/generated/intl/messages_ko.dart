@@ -2636,6 +2636,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "브라우저에 캐시된 사이트 데이터를 삭제할까요? 사이트에 다시 로그인해야 할 수 있습니다.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "최근 검색어를 삭제하시겠습니까?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "모든 탭을 닫을까요?",
     ),
@@ -2909,6 +2912,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "이 지갑에 더 이상 표시되지 않습니다. 온체인 자산에는 영향이 없습니다.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "이 최근 검색어를 삭제하시겠습니까?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC 제네시스 블록을 확인할 수 없습니다. 네트워크가 추가되지 않았습니다.",
     ),

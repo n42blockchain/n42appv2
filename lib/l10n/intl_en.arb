@@ -2124,6 +2124,8 @@
   "g_ui3_activation_time": "Activation Time",
   "g_ui3_clear_browser_cache_confirm": "Clear cached site data for the browser? Sites may ask you to sign in again.",
   "g_ui3_close_all_tabs_confirm": "Close all tabs?",
+  "g_ui3_clear_search_history_title": "Clear recent searches?",
+  "g_ui3_remove_search_history_title": "Remove this recent search?",
   "g_ui3_data": "Data",
   "g_ui3_delete_bookmark_confirm": "Delete this bookmark?",
   "g_ui3_delete_validator_key_confirm": "Delete this validator key from this device? Make sure you have a backup.",

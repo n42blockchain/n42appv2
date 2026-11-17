@@ -1954,6 +1954,8 @@
   "g_ui3_activation_time": "Waktu Aktivasi",
   "g_ui3_clear_browser_cache_confirm": "Hapus data situs yang di-cache di browser? Situs mungkin meminta Anda masuk lagi.",
   "g_ui3_close_all_tabs_confirm": "Tutup semua tab?",
+  "g_ui3_clear_search_history_title": "Hapus pencarian terbaru?",
+  "g_ui3_remove_search_history_title": "Hapus pencarian terbaru ini?",
   "g_ui3_data": "Isi data",
   "g_ui3_delete_bookmark_confirm": "Hapus markah ini?",
   "g_ui3_delete_validator_key_confirm": "Hapus kunci validator ini dari perangkat ini? Pastikan Anda memiliki cadangan.",

@@ -3299,6 +3299,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "ब्राउझरमधील कॅश केलेला साइट डेटा साफ करायचा? साइट्स तुम्हाला पुन्हा साइन इन करण्यास सांगू शकतात.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "अलीकडील शोध साफ करायचे?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "सर्व टॅब बंद करायचे?",
     ),
@@ -3630,6 +3633,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "हे या वॉलेटमध्ये यापुढे दिसणार नाही. चेनवरील तुमच्या मालमत्तेवर परिणाम होणार नाही.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "ही अलीकडील शोध काढायची?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "RPC जेनेसिस ब्लॉक पडताळता आला नाही. नेटवर्क जोडले गेले नाही.",
     ),

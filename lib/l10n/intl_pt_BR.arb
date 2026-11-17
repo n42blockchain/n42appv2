@@ -1954,6 +1954,8 @@
   "g_ui3_activation_time": "Data de ativação",
   "g_ui3_clear_browser_cache_confirm": "Limpar os dados de sites em cache do navegador? Os sites podem pedir que você faça login novamente.",
   "g_ui3_close_all_tabs_confirm": "Fechar todas as guias?",
+  "g_ui3_clear_search_history_title": "Limpar as pesquisas recentes?",
+  "g_ui3_remove_search_history_title": "Remover esta pesquisa recente?",
   "g_ui3_data": "Dados",
   "g_ui3_delete_bookmark_confirm": "Excluir este favorito?",
   "g_ui3_delete_validator_key_confirm": "Excluir esta chave de validador deste dispositivo? Verifique se você tem um backup.",

@@ -3507,6 +3507,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "¿Borrar los datos de sitios en caché del navegador? Es posible que los sitios te pidan volver a iniciar sesión.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "¿Borrar las búsquedas recientes?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "¿Cerrar todas las pestañas?",
     ),
@@ -3846,6 +3849,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Dejará de mostrarse en esta cartera. Tus activos en la cadena no se verán afectados.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "¿Quitar esta búsqueda reciente?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "No se puede verificar el bloque génesis del RPC. No se ha añadido la red.",
     ),

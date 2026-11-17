@@ -3476,6 +3476,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
       "Очистити кешовані дані сайтів у браузері? Сайти можуть попросити увійти знову.",
     ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Очистити нещодавні пошуки?",
+    ),
     "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
       "Закрити всі вкладки?",
     ),
@@ -3809,6 +3812,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Він більше не відображатиметься в цьому гаманці. Ваші активи в блокчейні не зміняться.",
     ),
     "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "Видалити цей нещодавній пошук?",
+    ),
     "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
       "Не вдалося перевірити генезис-блок RPC. Мережу не додано.",
     ),

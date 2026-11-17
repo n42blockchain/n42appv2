@@ -1975,6 +1975,8 @@
   "g_ui3_activation_time": "యాక్టివేషన్ సమయం",
   "g_ui3_clear_browser_cache_confirm": "బ్రౌజర్‌లో కాష్ చేసిన సైట్ డేటాను క్లియర్ చేయాలా? సైట్‌లు మళ్లీ సైన్ ఇన్ చేయమని అడగవచ్చు.",
   "g_ui3_close_all_tabs_confirm": "అన్ని ట్యాబ్‌లను మూసివేయాలా?",
+  "g_ui3_clear_search_history_title": "ఇటీవలి శోధనలను క్లియర్ చేయాలా?",
+  "g_ui3_remove_search_history_title": "ఈ ఇటీవలి శోధనను తీసివేయాలా?",
   "g_ui3_data": "డేటా",
   "g_ui3_delete_bookmark_confirm": "ఈ బుక్‌మార్క్‌ను తొలగించాలా?",
   "g_ui3_delete_validator_key_confirm": "ఈ పరికరం నుండి ఈ వాలిడేటర్ కీని తొలగించాలా? మీ వద్ద బ్యాకప్ ఉందని నిర్ధారించుకోండి.",
