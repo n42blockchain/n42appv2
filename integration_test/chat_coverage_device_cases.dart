@@ -95,13 +95,10 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
         );
         await enterOption(tester, strings.chatOptionHintWithIndex(1), ' One ');
         await enterOption(tester, strings.chatOptionHintWithIndex(2), ' Two ');
-        await reveal(tester, find.text('Quiz mode'));
-        final quiz = find.descendant(
-          of: find
-              .ancestor(of: find.text('Quiz mode'), matching: find.byType(Row))
-              .first,
-          matching: find.byType(Switch),
-        );
+        // The quiz label is localized in newer chat builds; the quiz switch
+        // is the last switch, right below the anonymous-poll switch.
+        await reveal(tester, find.text(strings.chatAnonymousPollSwitch));
+        final quiz = find.byType(Switch).last;
         await tap(tester, quiz);
         await tap(tester, find.text(strings.chatMultiChoiceLabel));
         await tap(tester, find.text(strings.scheduledSendTitle));
