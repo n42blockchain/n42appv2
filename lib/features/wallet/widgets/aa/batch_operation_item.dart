@@ -224,12 +224,14 @@ class BatchOperationItem extends StatelessWidget {
               _buildActionButton(
                 onPressed: onEdit!,
                 icon: Icons.edit,
+                tooltip: S.of(context).Edit,
                 color: AppColorTokens.of(context).brand,
               ),
             if (onRemove != null)
               _buildActionButton(
                 onPressed: onRemove!,
                 icon: Icons.delete_outline,
+                tooltip: S.of(context).g_key_113,
                 color: AppColorTokens.of(context).danger,
               ),
           ],
@@ -258,13 +260,15 @@ class BatchOperationItem extends StatelessWidget {
     required VoidCallback onPressed,
     required IconData icon,
     required Color color,
+    required String tooltip,
   }) {
     return IconButton(
       onPressed: onPressed,
+      tooltip: tooltip,
       icon: Icon(icon, size: ScreenUtil().setWidth(22), color: color),
       constraints: BoxConstraints(
-        maxWidth: ScreenUtil().setWidth(36),
-        maxHeight: ScreenUtil().setWidth(36),
+        minWidth: AppTouch.target,
+        minHeight: AppTouch.target,
       ),
       padding: EdgeInsets.zero,
     );

@@ -240,7 +240,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColorTokens.of(ctx).danger,
+              backgroundColor: AppColorTokens.of(ctx).dangerFill,
             ),
             child: Text(
               S.of(ctx).g_key_ens_subdomain_delete,
@@ -313,7 +313,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   Navigator.pop(ctx, true);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColorTokens.of(ctx).danger,
+                  backgroundColor: AppColorTokens.of(ctx).dangerFill,
                 ),
                 child: Text(
                   S.of(ctx).g_key_ens_transfer,

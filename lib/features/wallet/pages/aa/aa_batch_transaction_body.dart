@@ -298,9 +298,11 @@ class AABatchTransactionBody extends StatelessWidget {
   }
 
   Widget _buildPaymasterSection(BuildContext context) {
-    return GestureDetector(
+    // The card owns the tap so its ink stays visible.
+    return PaymasterOptionCard(
+      option: selectedPaymaster,
+      isSelected: true,
       onTap: onShowPaymaster,
-      child: PaymasterOptionCard(option: selectedPaymaster, isSelected: true),
     );
   }
 
@@ -423,7 +425,8 @@ class AABatchTransactionBody extends StatelessWidget {
           onPressed: canSend ? onSendBatch : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFF9800),
-            foregroundColor: Colors.white,
+            // White on this orange is 2.2:1; the dark label reaches 7.9:1.
+            foregroundColor: AppColorTokens.of(context).onWarningFill,
             padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
@@ -435,9 +438,11 @@ class AABatchTransactionBody extends StatelessWidget {
                     SizedBox(
                       width: ScreenUtil().setWidth(20),
                       height: ScreenUtil().setWidth(20),
-                      child: const CircularProgressIndicator(
+                      child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                        valueColor: AlwaysStoppedAnimation(
+                          AppColorTokens.of(context).onWarningFill,
+                        ),
                       ),
                     ),
                     SizedBox(width: AppSpacing.space2),

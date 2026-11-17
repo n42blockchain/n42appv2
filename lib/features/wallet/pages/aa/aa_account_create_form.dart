@@ -61,7 +61,6 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   Widget _buildChainSelector() {
     final chains = AAConfig.supportedChains.toList();
-    final blueColor = _themeColor(AppThemeKeys.mainBlueColor);
     final itemBg = _themeColor(AppThemeKeys.itemBgColor);
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor);
     final textColor = _themeColor(AppThemeKeys.mainTextColor);
@@ -76,16 +75,19 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           runSpacing: 12.w,
           children: chains.map((chain) {
             final isSelected = selectedChain == chain;
-            return GestureDetector(
+            // White label on the brand fill shade (4.5:1); 44pt hit area.
+            final fill = AppColorTokens.of(context).brandFill;
+            return AppTapArea(
               onTap: () =>
                   (this as _AAAccountCreatePageState)._onChainChanged(chain),
+              borderRadius: AppRadius.brMd,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.w),
                 decoration: BoxDecoration(
-                  color: isSelected ? blueColor : itemBg,
+                  color: isSelected ? fill : itemBg,
                   borderRadius: AppRadius.brMd,
                   border: Border.all(
-                    color: isSelected ? blueColor : subtitleColor.withAlpha(30),
+                    color: isSelected ? fill : subtitleColor.withAlpha(30),
                   ),
                 ),
                 child: Text(
@@ -134,84 +136,95 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor);
     final textColor = _themeColor(AppThemeKeys.mainTextColor);
 
-    return GestureDetector(
-      onTap: isAvailable
-          ? () => (this as _AAAccountCreatePageState)._onTypeChanged(type)
-          : null,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 12.w),
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: isSelected ? typeColor.withAlpha(15) : itemBg,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.w),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: isAvailable
+              ? () => (this as _AAAccountCreatePageState)._onTypeChanged(type)
+              : null,
           borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: isSelected ? typeColor : subtitleColor.withAlpha(30),
-            width: isSelected ? 2 : 1,
-          ),
-        ),
-        child: Opacity(
-          opacity: isAvailable ? 1.0 : 0.5,
-          child: Row(
-            children: [
-              Container(
-                width: 44.w,
-                height: 44.w,
-                decoration: BoxDecoration(
-                  color: typeColor.withAlpha(25),
-                  borderRadius: AppRadius.brMd,
-                ),
-                child: Icon(_getTypeIcon(type), size: 24.w, color: typeColor),
+          child: Ink(
+            padding: EdgeInsets.all(AppSpacing.space4),
+            decoration: BoxDecoration(
+              color: isSelected ? typeColor.withAlpha(15) : itemBg,
+              borderRadius: AppRadius.brMd,
+              border: Border.all(
+                color: isSelected ? typeColor : subtitleColor.withAlpha(30),
+                width: isSelected ? 2 : 1,
               ),
-              SizedBox(width: 14.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+            ),
+            child: Opacity(
+              opacity: isAvailable ? 1.0 : 0.5,
+              child: Row(
+                children: [
+                  Container(
+                    width: 44.w,
+                    height: 44.w,
+                    decoration: BoxDecoration(
+                      color: typeColor.withAlpha(25),
+                      borderRadius: AppRadius.brMd,
+                    ),
+                    child: Icon(
+                      _getTypeIcon(type),
+                      size: 24.w,
+                      color: typeColor,
+                    ),
+                  ),
+                  SizedBox(width: 14.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          type.displayName,
-                          style: AppTypography.bodySm.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: textColor,
-                          ),
-                        ),
-                        if (!isAvailable) ...[
-                          SizedBox(width: AppSpacing.space2),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSpacing.space2,
-                              vertical: 2.w,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColorTokens.of(context).textTertiary
-                                  .withAlpha(30),
-                              borderRadius: AppRadius.brSm,
-                            ),
-                            child: Text(
-                              S.of(context).g_key_aa_coming_soon,
-                              style: AppTypography.captionSm.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: AppColorTokens.of(context).textTertiary,
+                        Row(
+                          children: [
+                            Text(
+                              type.displayName,
+                              style: AppTypography.bodySm.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: textColor,
                               ),
                             ),
+                            if (!isAvailable) ...[
+                              SizedBox(width: AppSpacing.space2),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.space2,
+                                  vertical: 2.w,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColorTokens.of(context).textTertiary
+                                      .withAlpha(30),
+                                  borderRadius: AppRadius.brSm,
+                                ),
+                                child: Text(
+                                  S.of(context).g_key_aa_coming_soon,
+                                  style: AppTypography.captionSm.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColorTokens.of(context)
+                                        .textTertiary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        SizedBox(height: 4.w),
+                        Text(
+                          _getTypeDescription(type),
+                          style: AppTypography.caption.copyWith(
+                            color: subtitleColor,
                           ),
-                        ],
+                        ),
                       ],
                     ),
-                    SizedBox(height: 4.w),
-                    Text(
-                      _getTypeDescription(type),
-                      style: AppTypography.caption.copyWith(
-                        color: subtitleColor,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  if (isSelected)
+                    Icon(Icons.check_circle, size: 28.w, color: typeColor),
+                ],
               ),
-              if (isSelected)
-                Icon(Icons.check_circle, size: 28.w, color: typeColor),
-            ],
+            ),
           ),
         ),
       ),
@@ -326,6 +339,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                 ),
               );
             },
+            tooltip: S.of(context).g_key_119,
             icon: Icon(Icons.copy, size: 22.w, color: blueColor),
           ),
         ],
@@ -369,7 +383,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           ? null
           : (this as _AAAccountCreatePageState)._createAccount,
       style: ElevatedButton.styleFrom(
-        backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
+        backgroundColor: AppColorTokens.of(context).brandFill,
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: 18.w),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),

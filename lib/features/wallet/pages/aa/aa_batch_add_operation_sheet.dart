@@ -54,13 +54,13 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     bool valid = true;
 
     if (!FeatureAddressUtils.isValidEvmAddress(_toController.text.trim())) {
-      setState(() => _toError = 'Invalid address (0x...)');
+      setState(() => _toError = S.of(context).g_key_t_50);
       valid = false;
     }
 
     if (_selectedType == BatchOperationType.custom &&
         _calldataController.text.trim().isEmpty) {
-      setState(() => _calldataError = 'Calldata is required');
+      setState(() => _calldataError = S.of(context).g_ui3_calldata_required);
       valid = false;
     }
 
@@ -68,7 +68,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
         _selectedType == BatchOperationType.approve) {
       final amount = double.tryParse(_amountController.text.trim());
       if (amount == null || amount <= 0) {
-        setState(() => _amountError = 'Invalid amount');
+        setState(() => _amountError = S.of(context).g_key_134);
         valid = false;
       }
     }
@@ -81,11 +81,14 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
       final tokenAddress = _tokenAddressController.text.trim();
       if (tokenAddress.isEmpty) {
         setState(
-          () => _tokenAddressError = 'Token contract address is required',
+          () =>
+              _tokenAddressError = S.of(context).g_ui3_token_contract_required,
         );
         valid = false;
       } else if (!FeatureAddressUtils.isValidEvmAddress(tokenAddress)) {
-        setState(() => _tokenAddressError = 'Invalid token contract address');
+        setState(
+          () => _tokenAddressError = S.of(context).g_ui3_token_contract_invalid,
+        );
         valid = false;
       }
     }
@@ -217,7 +220,8 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   backgroundColor: const Color(0xFFFF9800),
-                  foregroundColor: Colors.white,
+                  // Dark label: white on this orange is only 2.2:1.
+                  foregroundColor: AppColorTokens.of(context).onWarningFill,
                 ),
                 child: Text(S.of(context).g_key_159),
               ),
@@ -250,7 +254,9 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
               onSelected: (_) => setState(() => _selectedType = type),
               selectedColor: const Color(0xFFFF9800),
               labelStyle: AppTypography.caption.copyWith(
-                color: isSelected ? Colors.white : null,
+                color: isSelected
+                    ? AppColorTokens.of(context).onWarningFill
+                    : null,
               ),
             );
           }).toList(),
@@ -264,8 +270,8 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     return DropdownButtonFormField<String>(
       initialValue: _selectedToken,
       decoration: InputDecoration(
-        labelText: 'Token',
-        border: OutlineInputBorder(),
+        labelText: S.of(context).g_ui3_token,
+        border: const OutlineInputBorder(),
       ),
       items: tokens
           .map((t) => DropdownMenuItem(value: t, child: Text(t)))

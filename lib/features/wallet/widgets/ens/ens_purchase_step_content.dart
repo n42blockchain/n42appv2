@@ -376,7 +376,8 @@ class EnsPurchaseActionButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: color,
+        // Darkened until the white label reaches 4.5:1.
+        backgroundColor: AppContrast.fillForWhiteText(color),
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),

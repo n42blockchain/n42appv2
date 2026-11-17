@@ -119,12 +119,14 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   onPressed: () {
                     // 扫码
                   },
+                  tooltip: S.of(context).g_key_4,
                   icon: const Icon(Icons.qr_code_scanner),
                 ),
                 IconButton(
                   onPressed: () {
                     // 地址簿
                   },
+                  tooltip: S.of(context).g_key_108,
                   icon: const Icon(Icons.contacts_outlined),
                 ),
               ],
@@ -259,12 +261,10 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
           ],
         ),
         SizedBox(height: AppSpacing.space4),
-        GestureDetector(
+        PaymasterOptionCard(
+          option: selectedPaymaster,
+          isSelected: true,
           onTap: selectPaymaster,
-          child: PaymasterOptionCard(
-            option: selectedPaymaster,
-            isSelected: true,
-          ),
         ),
       ],
     );
@@ -360,7 +360,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     return ElevatedButton(
       onPressed: canSend ? showTransactionPreview : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
+        backgroundColor: AppColorTokens.of(context).brandFill,
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),

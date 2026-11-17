@@ -95,6 +95,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   ),
                 ),
                 IconButton(
+                  tooltip: S.of(context).g_key_119,
                   onPressed: copyAddress,
                   icon: Icon(
                     Icons.copy,
@@ -183,45 +184,49 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
         ? AppColorTokens.of(context).textTertiary
         : color;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: effectiveColor.withAlpha(20),
-          borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: effectiveColor.withAlpha(isDisabled ? 30 : 40),
-          ),
-        ),
-        child: Column(
-          children: [
-            if (isLoading)
-              SizedBox(
-                width: ScreenUtil().setWidth(28),
-                height: ScreenUtil().setWidth(28),
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation(color),
-                ),
-              )
-            else
-              Icon(
-                icon,
-                size: ScreenUtil().setWidth(28),
-                color: effectiveColor,
-              ),
-            SizedBox(height: AppSpacing.space2),
-            Text(
-              label,
-              style: AppTypography.caption.copyWith(
-                fontWeight: FontWeight.w500,
-                color: isDisabled
-                    ? AppColorTokens.of(context).textTertiary
-                    : _mainText,
-              ),
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: effectiveColor.withAlpha(20),
+            borderRadius: AppRadius.brMd,
+            border: Border.all(
+              color: effectiveColor.withAlpha(isDisabled ? 30 : 40),
             ),
-          ],
+          ),
+          child: Column(
+            children: [
+              if (isLoading)
+                SizedBox(
+                  width: ScreenUtil().setWidth(28),
+                  height: ScreenUtil().setWidth(28),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(color),
+                  ),
+                )
+              else
+                Icon(
+                  icon,
+                  size: ScreenUtil().setWidth(28),
+                  color: effectiveColor,
+                ),
+              SizedBox(height: AppSpacing.space2),
+              Text(
+                label,
+                style: AppTypography.caption.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: isDisabled
+                      ? AppColorTokens.of(context).textTertiary
+                      : _mainText,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
