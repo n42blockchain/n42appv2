@@ -73,6 +73,7 @@ void main() {
 
   Map<String, dynamic> request(bool transaction) => {
     'signType': transaction ? 'transaction' : 'message',
+    if (!transaction) 'method': 'personal_sign',
     'network': 'Fixture Network', 'from': address, 'to': address,
     'data': transaction ? '0x' : 'Sign in to the fixture app',
     'gas': '21000', 'value': '0x0',
@@ -81,7 +82,7 @@ void main() {
   };
 
   testWidgets(
-    'plain message shows the message and address without transaction warnings',
+    'plain message shows the message and address with a review badge',
     (tester) async {
       await openSheet(tester, request(false));
       expect(find.text('Fixture DApp'), findsOneWidget);
@@ -89,7 +90,8 @@ void main() {
       expect(find.text(address), findsOneWidget);
       expect(find.text('Sign in to the fixture app'), findsOneWidget);
       expect(find.text('Gas'), findsNothing);
-      expect(find.byType(TxRiskBannerWidget), findsNothing);
+      expect(find.byType(TxRiskBannerWidget), findsOneWidget);
+      expect(find.text(S.current.g_tx_risk_caution), findsOneWidget);
       expect(find.byType(TxSimulationCard), findsNothing);
       expect(actions.transactions, 0);
       expect(actions.messages, 0);
@@ -146,6 +148,7 @@ void main() {
     (tester) async {
       await openSheet(tester, {
         ...request(false),
+        'method': 'eth_signTypedData_v4',
         'data': jsonEncode({
           'primaryType': 'Permit',
           'message': {
@@ -168,6 +171,7 @@ void main() {
   ) async {
     await openSheet(tester, {
       ...request(false),
+      'method': 'eth_signTypedData_v4',
       'data': jsonEncode({
         'primaryType': 'PermitBatch',
         'domain': {'chainId': 1, 'verifyingContract': address},
@@ -185,6 +189,45 @@ void main() {
     expect(find.text('50'), findsOneWidget);
     expect(find.text('details[1].amount'), findsOneWidget);
     expect(find.text('UNLIMITED'), findsOneWidget);
+    expect(actions.messages, 0);
+  });
+
+  testWidgets('classifies message previews by the requested method', (
+    tester,
+  ) async {
+    final text = jsonEncode({
+      'primaryType': 'Permit',
+      'message': {'text': 'Personal message fixture'},
+    });
+    await openSheet(tester, {
+      ...request(false),
+      'method': 'personal_sign',
+      'data': text,
+    });
+    expect(find.text(S.current.g_tx_risk_caution), findsOneWidget);
+    expect(find.text('Gasless Approve (Permit)'), findsNothing);
+    expect(actions.messages, 0);
+  });
+
+  testWidgets('unavailable typed preview retains the full unsigned payload', (
+    tester,
+  ) async {
+    final raw = '${'input ' * 100}last field';
+    await openSheet(tester, {
+      ...request(false),
+      'method': 'eth_signTypedData_v4',
+      'data': raw,
+    });
+    expect(find.text(S.current.g_tx_risk_caution), findsOneWidget);
+    await tester.ensureVisible(find.byType(ExpansionTile));
+    await tester.tap(find.byType(ExpansionTile));
+    await tester.pumpAndSettle();
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is SelectableText && widget.data == raw,
+      ),
+      findsOneWidget,
+    );
     expect(actions.messages, 0);
   });
 

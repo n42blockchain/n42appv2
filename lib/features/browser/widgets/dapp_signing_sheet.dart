@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:n42_wallet/core/security/signature_decoder.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/features/wallet_connect/widgets/tx_risk_banner_widget.dart';
+import 'package:n42_wallet/features/widgets/signing_payload_details.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class DAppSigningSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = S.of(context);
     final isTransaction = method.contains('Transaction');
+    final payload = details['message'] ?? details['data'];
     final title = _isConnect
         ? s.g_key_dapp_connect_title
         : (isTransaction ? 'Transaction' : 'Sign Message');
@@ -87,8 +89,8 @@ class DAppSigningSheet extends StatelessWidget {
                 children: [
                   // 签名可读化：把原始 calldata/EIP-712/personal_sign 翻译成人类
                   // 可读的标题+说明+风险等级+关键字段高亮（复用 WalletConnect 签名
-                  // 流程同款 TxRiskBannerWidget，视觉一致）。解码失败时静默回退，
-                  // 不影响下方原始数据展示——用户始终能看到真实请求内容。
+                  // 流程同款 TxRiskBannerWidget）。结构化签名无法解码时仍显示
+                  // 提示，完整的签名请求可在下方展开。
                   //
                   // 必须放在可滚动区内：风险字段/警告较多时该横幅很高，若留在
                   // Flexible 之外会挤压滚动区并把底部按钮顶出屏幕。
@@ -146,6 +148,8 @@ class DAppSigningSheet extends StatelessWidget {
                         ),
                     ] else ...[
                       _itemWidget(context, 'Data', _formatSignData(details)),
+                      if (payload is String && payload.isNotEmpty)
+                        SigningPayloadDetails(payload: payload),
                     ],
                 ],
               ),
@@ -204,10 +208,9 @@ class DAppSigningSheet extends StatelessWidget {
     );
   }
 
-  /// 按请求类型选择合适的解码器，返回 [TxRiskAnalysis]（复用 WalletConnect
-  /// 流程的展示模型）。解析失败（如无法识别的 typed data 结构）返回 null，
-  /// 调用方隐藏横幅、不影响原始数据的展示。
+  /// Decodes the requested signing method while preserving the source payload.
   TxRiskAnalysis? _decode() {
+    final isTypedData = method.startsWith('eth_signTypedData');
     try {
       final isTransaction = method.contains('Transaction');
       final SignatureDecodedResult result;
@@ -219,7 +222,7 @@ class DAppSigningSheet extends StatelessWidget {
           fromAddress: details['from']?.toString(),
           value: details['value']?.toString(),
         );
-      } else if (method.contains('signTypedData')) {
+      } else if (isTypedData) {
         final raw = details['data'] ?? details['message'];
         Map<String, dynamic>? typedData;
         if (raw is Map<String, dynamic>) {
@@ -228,7 +231,7 @@ class DAppSigningSheet extends StatelessWidget {
           final decoded = json.decode(raw);
           if (decoded is Map<String, dynamic>) typedData = decoded;
         }
-        if (typedData == null) return null;
+        if (typedData == null) return TxRiskAnalyzer.unavailableTypedPreview;
         result = SignatureDecoder.decodeTypedData(typedData);
       } else {
         // personal_sign / eth_sign
@@ -237,20 +240,9 @@ class DAppSigningSheet extends StatelessWidget {
         result = SignatureDecoder.decodePersonalSign(msg);
       }
 
-      return TxRiskAnalysis(
-        level: result.riskLevel,
-        functionName: result.title,
-        fields: [
-          if (result.description.isNotEmpty)
-            TxRiskField('Details', result.description),
-          for (final f in result.fields)
-            TxRiskField(f.label, f.value, isHighlighted: f.isHighlighted),
-        ],
-        warnings: result.warnings,
-      );
+      return result.toRiskAnalysis(includeDescription: true);
     } catch (_) {
-      // 解析失败（畸形/未知结构）：静默回退，不阻断签名流程，原始数据仍可见。
-      return null;
+      return isTypedData ? TxRiskAnalyzer.unavailableTypedPreview : null;
     }
   }
 

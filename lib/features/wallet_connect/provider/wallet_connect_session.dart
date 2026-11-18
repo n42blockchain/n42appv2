@@ -571,7 +571,10 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         final isPersonalSign = eventData.method == "personal_sign";
         final address = isPersonalSign ? params[1] : params[0];
         final data = isPersonalSign ? params[0] : params[1];
-        actionDataMap = _buildMessageData(networkName, address, data);
+        actionDataMap = {
+          ..._buildMessageData(networkName, address, data),
+          'method': eventData.method,
+        };
         viewStateDeal(WalletConnectState.messageSignOK);
 
       case "tron_signMessage":

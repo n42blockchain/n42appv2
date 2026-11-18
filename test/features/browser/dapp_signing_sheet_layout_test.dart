@@ -56,6 +56,35 @@ void main() {
   }
 
   group('DAppSigningSheet 布局', () {
+    testWidgets('long message exposes the unmodified unsigned payload', (
+      tester,
+    ) async {
+      final raw = 'Sign in ${'message ' * 100}final line';
+      await pumpSheet(tester, method: 'personal_sign', details: {'message': raw});
+      expect(find.text('Sign In to DApp'), findsNothing);
+      await tester.ensureVisible(find.byType(ExpansionTile));
+      await tester.tap(find.byType(ExpansionTile));
+      await tester.pumpAndSettle();
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SelectableText && widget.data == raw,
+        ),
+        findsOneWidget,
+      );
+      await expectButtonsVisible(tester);
+    });
+
+    testWidgets('unreadable typed data displays a review prompt', (tester) async {
+      await pumpSheet(
+        tester,
+        method: 'eth_signTypedData_v4',
+        details: {'data': 'unavailable preview'},
+      );
+      expect(find.text('Typed Data Preview Unavailable'), findsOneWidget);
+      expect(find.byType(ExpansionTile), findsOneWidget);
+      await expectButtonsVisible(tester);
+    });
+
     testWidgets('超长 calldata 交易：按钮仍在可视区域内', (tester) async {
       await pumpSheet(
         tester,

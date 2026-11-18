@@ -322,7 +322,7 @@ void main() {
           .map((b) => b.toRadixString(16).padLeft(2, '0'))
           .join();
       expect(SignatureDecoder.decodePersonalSign('0x$hex').description, text);
-      for (final bad in ['0x0', '0xGG']) {
+      for (final bad in ['0x', '0x0', '0xGG']) {
         expect(SignatureDecoder.decodePersonalSign(bad).description, bad);
       }
     });
@@ -338,23 +338,14 @@ void main() {
         );
       },
     );
-    test('terms and login descriptions retain short message details', () {
-      expect(
-        SignatureDecoder.decodePersonalSign('I accept terms').title,
-        'Accept Terms',
-      );
-      expect(
-        SignatureDecoder.decodePersonalSign('Terms of Service ${'x' * 300}')
-            .description
-            .length,
-        203,
-      );
-      final login = SignatureDecoder.decodePersonalSign('Sign in\nNonce: 1234');
-      expect(field(login, 'Message'), 'Sign in\nNonce: 1234');
-      expect(
-        SignatureDecoder.decodePersonalSign('Login ${'x' * 501}').fields,
-        isEmpty,
-      );
+    test('personal message wording does not verify the purpose of a signature', () {
+      for (final message in ['I accept terms', 'Sign in\nNonce: 1234']) {
+        final result = SignatureDecoder.decodePersonalSign(message);
+        expect(result.title, 'Sign Message');
+        expect(result.description, message);
+        expect(result.riskLevel, TxRiskLevel.caution);
+      }
+      expect(SignatureDecoder.decodePersonalSign('0xff').description, '0xff');
     });
   });
 }

@@ -69,10 +69,10 @@ class SignatureDecoder {
   static SignatureDecodedResult decodePersonalSign(String message) {
     // Try to decode as UTF-8
     String decoded;
-    if (message.startsWith('0x')) {
+    if (message.startsWith('0x') && message.length > 2) {
       try {
         final bytes = _hexToBytes(message.substring(2));
-        decoded = utf8.decode(bytes, allowMalformed: true);
+        decoded = utf8.decode(bytes);
       } catch (_) {
         decoded = message;
       }
@@ -80,38 +80,12 @@ class SignatureDecoder {
       decoded = message;
     }
 
-    // Check for common patterns
-    if (decoded.contains('Terms of Service') || decoded.contains('I accept')) {
-      return SignatureDecodedResult(
-        title: 'Accept Terms',
-        description: decoded.length > 200
-            ? '${decoded.substring(0, 200)}...'
-            : decoded,
-        riskLevel: TxRiskLevel.safe,
-        fields: [],
-        warnings: [],
-      );
-    }
-
-    if (decoded.contains('Sign in') ||
-        decoded.contains('Login') ||
-        decoded.contains('Nonce:')) {
-      return SignatureDecodedResult(
-        title: 'Sign In to DApp',
-        description: 'This signature verifies your identity. It does NOT approve any transaction.',
-        riskLevel: TxRiskLevel.safe,
-        fields: [if (decoded.length <= 500) DecodedField('Message', decoded)],
-        warnings: [],
-      );
-    }
-
-    // Generic
     return SignatureDecodedResult(
       title: 'Sign Message',
       description: decoded.length > 200
           ? '${decoded.substring(0, 200)}...'
           : decoded,
-      riskLevel: TxRiskLevel.safe,
+      riskLevel: TxRiskLevel.caution,
       fields: [],
       warnings: decoded.length > 500
           ? ['Message is very long — review carefully']
@@ -698,6 +672,23 @@ class SignatureDecodedResult {
 
   bool get hasWarnings => warnings.isNotEmpty;
   bool get isDangerous => riskLevel == TxRiskLevel.danger;
+
+  TxRiskAnalysis toRiskAnalysis({bool includeDescription = false}) =>
+      TxRiskAnalysis(
+        level: riskLevel,
+        functionName: title,
+        warnings: warnings,
+        fields: [
+          if (includeDescription && description.isNotEmpty)
+            TxRiskField('Details', description),
+          for (final field in fields)
+            TxRiskField(
+              field.label,
+              field.value,
+              isHighlighted: field.isHighlighted,
+            ),
+        ],
+      );
 }
 
 /// A decoded field with label and value.

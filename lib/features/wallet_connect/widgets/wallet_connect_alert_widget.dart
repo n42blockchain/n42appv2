@@ -1,6 +1,7 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'package:n42_wallet/core/security/address_label_service.dart';
+import 'package:n42_wallet/core/security/signature_decoder.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/core/security/tx_simulation_result.dart';
 import 'package:n42_wallet/features/wallet/services/tx_simulation_service.dart';
@@ -10,6 +11,7 @@ import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provi
 import 'package:n42_wallet/features/wallet_connect/widgets/tx_risk_banner_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
+import 'package:n42_wallet/features/widgets/signing_payload_details.dart';
 import 'package:n42_wallet/features/widgets/tx_simulation_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -128,25 +130,26 @@ class _WalletConnectAlertWidgetState
   @override
   Widget build(BuildContext context) {
     final isTransaction = widget.actionDataMap['signType'] == 'transaction';
+    final data = widget.actionDataMap['data'] as String?;
 
     // Compute risk analysis synchronously — pure function, no I/O
-    final TxRiskAnalysis riskAnalysis;
+    final TxRiskAnalysis? riskAnalysis;
     if (isTransaction) {
       riskAnalysis = TxRiskAnalyzer.analyze(
-        calldata: widget.actionDataMap['data'] as String?,
+        calldata: data,
         ethValue: widget.actionDataMap['value'] as String?,
         toAddress: widget.actionDataMap['to'] as String?,
       );
     } else {
-      // Message sign — try EIP-712 typed data analysis
-      riskAnalysis =
-          TxRiskAnalyzer.analyzeTypedData(
-            widget.actionDataMap['data'] as String?,
-          ) ??
-          const TxRiskAnalysis(
-            level: TxRiskLevel.safe,
-            functionName: 'Message Signature',
-          );
+      riskAnalysis = switch (widget.actionDataMap['method']) {
+        'eth_signTypedData' || 'eth_signTypedData_v3' || 'eth_signTypedData_v4' =>
+          TxRiskAnalyzer.analyzeTypedData(data) ??
+              TxRiskAnalyzer.unavailableTypedPreview,
+        'personal_sign' => SignatureDecoder.decodePersonalSign(
+          data ?? '',
+        ).toRiskAnalysis(),
+        _ => null,
+      };
     }
 
     return Column(
@@ -176,12 +179,10 @@ class _WalletConnectAlertWidgetState
                 // Simulation card — only for transactions
                 if (isTransaction) TxSimulationCard(result: _simResult),
 
-                // Risk banner — always shown for transaction; for message only
-                // when a meaningful analysis is available (e.g. Permit detected)
-                if (isTransaction ||
-                    riskAnalysis.level != TxRiskLevel.safe ||
-                    riskAnalysis.hasWarnings)
+                if (riskAnalysis != null)
                   TxRiskBannerWidget(analysis: riskAnalysis),
+                if (!isTransaction && data != null && data.isNotEmpty)
+                  SigningPayloadDetails(payload: data),
               ],
             ),
           ),

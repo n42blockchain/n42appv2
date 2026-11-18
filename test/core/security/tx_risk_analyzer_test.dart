@@ -361,15 +361,16 @@ void main() {
         ); // only gasless warning, not unlimited
       });
 
-      test('non-Permit typed data is safe', () {
+      test('unrecognized typed data has a review warning', () {
         final data = jsonEncode({
           'primaryType': 'Order',
           'message': {'orderHash': '0x123'},
         });
         final result = TxRiskAnalyzer.analyzeTypedData(data);
         expect(result, isNotNull);
-        expect(result!.level, TxRiskLevel.safe);
+        expect(result!.level, TxRiskLevel.caution);
         expect(result.functionName, 'Signed Message (Order)');
+        expect(result.hasWarnings, isTrue);
       });
 
       test('WalletConnect shows Permit2 allowance amounts and full spender', () {

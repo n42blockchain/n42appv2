@@ -112,7 +112,13 @@ class TxRiskAnalyzer {
     return _dispatch(selector, params);
   }
 
-  /// Analyze EIP-712 typed data (from eth_signTypedData / personal_sign with JSON).
+  static const unavailableTypedPreview = TxRiskAnalysis(
+    level: TxRiskLevel.caution,
+    functionName: 'Typed Data Preview Unavailable',
+    warnings: ['Review the request details before signing.'],
+  );
+
+  /// Analyze data from an EIP-712 signing method.
   ///
   /// Returns `null` if [jsonStr] is not valid EIP-712 data.
   static TxRiskAnalysis? analyzeTypedData(String? jsonStr) {
@@ -138,30 +144,18 @@ class TxRiskAnalyzer {
             : null,
         'message': message is Map<String, dynamic> ? message : null,
       });
-      return TxRiskAnalysis(
-        level: result.riskLevel,
-        functionName: result.title,
-        warnings: result.warnings,
-        fields: [
-          for (final field in result.fields)
-            TxRiskField(
-              field.label,
-              field.value,
-              isHighlighted: field.isHighlighted,
-            ),
-        ],
-      );
+      return result.toRiskAnalysis();
     }
 
     // EIP-2612 Permit — gasless approval
     if (primaryType == 'Permit' && message is Map<String, dynamic>) {
-      final spender = message['spender'] as String? ?? '';
+      final spender = message['spender'];
       final value = message['value'];
       final deadline = message['deadline'];
       final isUnlimited = txRiskIsUnlimitedPermitValue(value);
 
       final fields = <TxRiskField>[];
-      if (spender.isNotEmpty) {
+      if (spender is String && spender.isNotEmpty) {
         fields.add(TxRiskField('Spender', spender));
       }
       fields.add(
@@ -186,10 +180,10 @@ class TxRiskAnalyzer {
       );
     }
 
-    // Other well-known types — no special risk surfaced
     return TxRiskAnalysis(
-      level: TxRiskLevel.safe,
+      level: TxRiskLevel.caution,
       functionName: 'Signed Message ($primaryType)',
+      warnings: const ['Review the request details before signing.'],
     );
   }
 

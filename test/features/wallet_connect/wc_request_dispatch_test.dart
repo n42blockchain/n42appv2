@@ -189,6 +189,7 @@ void main() {
           'from': 'address',
           'data': 'payload',
           'signType': 'message',
+          'method': method,
         });
         expect(provider.states, [WalletConnectState.messageSignOK]);
         expect(
