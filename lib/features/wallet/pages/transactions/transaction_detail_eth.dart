@@ -138,6 +138,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     _pollingTimer?.cancel();
     transactionInfo = null;
     transactionInfoReceipt = null;
+    _receiptLookupFailed = false;
     resultStr = "Pending";
     errorMessage = "";
     final normalizedTxHash = normalizeEvmTransactionHashInput(
@@ -199,6 +200,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
 
   Map<String, dynamic>? transactionInfo;
   Map<String, dynamic>? transactionInfoReceipt;
+  bool _receiptLookupFailed = false;
   String resultStr = "Pending";
   String value = '';
   String gasPrice = '';
@@ -278,6 +280,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   /// 链上拿到原交易数据（含 nonce/gasPrice）。
   bool get _canReplace =>
       owner &&
+      !_receiptLookupFailed &&
       transactionInfo != null &&
       transactionInfoReceipt == null &&
       (transactionInfo!['nonce'] != null) &&
@@ -292,7 +295,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
   /// - 取消：0 值自转，仅为占用同一 nonce 使原交易作废。
   Future<void> _replaceTx(bool isCancel) async {
     final info = transactionInfo;
-    if (info == null || _replacing) return;
+    if (info == null || _replacing || !_canReplace) return;
 
     final origNonce = hexToInt(info['nonce'] ?? '0x0');
     final origGasPrice = hexToInt(info['gasPrice'] ?? '0x0');
@@ -398,7 +401,8 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
             );
     } catch (_) {
       if (!mounted || generation != _requestGeneration) return;
-      errorMessage = 'Receipt lookup failed';
+      _receiptLookupFailed = true;
+      errorMessage = S.of(context).g_key_error_19;
       _startPolling(generation);
       return;
     }
@@ -407,8 +411,10 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     // Transport failures are not evidence that a previously observed receipt
     // disappeared. Only a successful null response returns it to pending.
     if (rData.error != false) {
-      errorMessage = data.toString();
+      _receiptLookupFailed = true;
+      errorMessage = S.of(context).g_key_error_19;
     } else if (data == null) {
+      _receiptLookupFailed = false;
       transactionInfoReceipt = null;
       resultStr = 'Pending';
       errorMessage = '';
@@ -416,6 +422,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     } else if (data is Map<String, dynamic> &&
         _isReceiptSuccess(data['status']) != null &&
         (data['transactionHash'] == null || data['transactionHash'] == hash)) {
+      _receiptLookupFailed = false;
       transactionInfoReceipt = data;
       resultStr = _isReceiptSuccess(data['status'])! ? 'Success' : 'Failed';
       errorMessage = '';
@@ -423,6 +430,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         transactionInfo?['blockHash'] = data['blockHash'];
       }
     } else {
+      _receiptLookupFailed = true;
       errorMessage = 'Invalid transaction receipt';
     }
     // Continue observing while the detail page is open, including after the

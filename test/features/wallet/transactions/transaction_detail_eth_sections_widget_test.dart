@@ -100,8 +100,10 @@ void main() {
           ? _result('RPC unavailable', error: true)
           : _result({'status': '0x1'});
     });
-    expect(find.text('RPC unavailable'), findsOneWidget);
-    expect(find.text('Pending'), findsOneWidget);
+    expect(find.text('Service is not available'), findsOneWidget);
+    expect(find.text('Unknown status'), findsOneWidget);
+    expect(find.text('Pending'), findsNothing);
+    expect(find.byType(FilledButton), findsNothing);
     await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
     expect(find.text('Success'), findsOneWidget);
@@ -179,7 +181,8 @@ void main() {
     await tester.pump(const Duration(seconds: 12));
     await tester.pumpAndSettle();
     expect(find.text('Success'), findsOneWidget);
-    expect(find.text('timeout'), findsOneWidget);
+    expect(find.text('Service is not available'), findsOneWidget);
+    expect(find.text('timeout'), findsNothing);
     expect(find.byType(FilledButton), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
@@ -193,7 +196,8 @@ void main() {
       if (++calls == 1) throw StateError('fixture transport closed');
       return _result({'status': '0x1'});
     });
-    expect(find.text('Receipt lookup failed'), findsOneWidget);
+    expect(find.text('Service is not available'), findsOneWidget);
+    expect(find.text('Unknown status'), findsOneWidget);
     await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
     expect(find.text('Success'), findsOneWidget);
@@ -213,11 +217,11 @@ void main() {
             : {'status': '0x1', 'transactionHash': 'foreign-hash'},
       );
     });
-    expect(find.text('Pending'), findsOneWidget);
+    expect(find.text('Unknown status'), findsOneWidget);
     expect(find.text('Invalid transaction receipt'), findsOneWidget);
     await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
-    expect(find.text('Pending'), findsOneWidget);
+    expect(find.text('Unknown status'), findsOneWidget);
     expect(find.text('Success'), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());

@@ -42,7 +42,12 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
             copy: true,
           ),
           divider,
-          buildItemWidget(s.g_key_wallet_k33, resultStr),
+          buildItemWidget(
+            s.g_key_wallet_k33,
+            _receiptLookupFailed && transactionInfoReceipt == null
+                ? s.g_ui_unknown_status
+                : resultStr,
+          ),
           divider,
           buildItemWidget(
             s.g_key_wallet_k54,
