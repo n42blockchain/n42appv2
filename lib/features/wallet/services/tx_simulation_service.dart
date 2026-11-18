@@ -21,6 +21,7 @@ class TxSimulationService {
 
   static const Duration _callTimeout = Duration(seconds: 10);
   static const Duration _gasTimeout = Duration(seconds: 5);
+  static final _rpcBytes = RegExp(r'^0x(?:[0-9a-fA-F]{2})*$');
 
   /// Simulate [to]/[data]/[value] as sent from [from] on the chain identified
   /// by [coinType].
@@ -78,6 +79,11 @@ class TxSimulationService {
       if (error is BlockchainError && _isExecutionRevert(error)) {
         return TxSimulationResult.reverted(_extractRevertReason(error));
       }
+      return TxSimulationResult.unavailable();
+    }
+
+    final output = callResult.valueOrNull;
+    if (output is! String || !_rpcBytes.hasMatch(output)) {
       return TxSimulationResult.unavailable();
     }
 

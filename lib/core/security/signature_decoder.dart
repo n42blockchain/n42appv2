@@ -345,7 +345,7 @@ class SignatureDecoder {
     final deadline = message['deadline']?.toString() ?? '';
     final tokenName = domain['name']?.toString() ?? 'Token';
 
-    final isUnlimited = value == _maxUint256Str;
+    final isUnlimited = BigInt.tryParse(value) == BigInt.parse(_maxUint256Str);
     final deadlineDate = _parseDeadline(deadline);
 
     return SignatureDecodedResult(
@@ -356,6 +356,7 @@ class SignatureDecoder {
       riskLevel: isUnlimited ? TxRiskLevel.danger : TxRiskLevel.caution,
       fields: [
         DecodedField('Token', tokenName),
+        ..._approvalDomainFields(domain),
         DecodedField('Spender', spender),
         DecodedField(
           'Amount',
@@ -377,17 +378,52 @@ class SignatureDecoder {
     Map<String, dynamic> domain,
     String type,
   ) {
+    final details = message['details'];
+    final fields = _flattenMessage(Map.of(message)..remove('details'));
+    final amounts = <DecodedField>[];
+    if (details is Map<String, dynamic>) {
+      amounts.addAll(_flattenMessage(details, prefix: 'details'));
+    } else if (details is List) {
+      for (final (index, entry) in details.indexed) {
+        if (entry is Map<String, dynamic>) {
+          amounts.addAll(_flattenMessage(entry, prefix: 'details[$index]'));
+        } else {
+          amounts.add(DecodedField('details[$index]', entry.toString()));
+        }
+      }
+    } else if (details != null) {
+      amounts.add(DecodedField('details', details.toString()));
+    }
+    final maxAllowance = (BigInt.one << 160) - BigInt.one;
+    var hasUnlimited = false;
+    for (final field in amounts) {
+      if (field.label.endsWith('.amount') &&
+          BigInt.tryParse(field.value) == maxAllowance) {
+        hasUnlimited = true;
+        fields.add(DecodedField(field.label, 'UNLIMITED', isHighlighted: true));
+      } else {
+        fields.add(field);
+      }
+    }
+    final batch = type == 'PermitBatch';
     return SignatureDecodedResult(
-      title: 'Permit2: Batch Approval',
-      description: 'Uniswap Permit2 — batch token approval',
-      riskLevel: TxRiskLevel.caution,
-      fields: _flattenMessage(message),
+      title: batch ? 'Permit2: Batch Approval' : 'Permit2: Token Approval',
+      description: 'Off-chain token spending approval',
+      riskLevel: hasUnlimited ? TxRiskLevel.danger : TxRiskLevel.caution,
+      fields: [..._approvalDomainFields(domain), ...fields],
       warnings: [
-        'Permit2 allows batch operations on your tokens',
+        if (hasUnlimited) 'UNLIMITED approval for one or more tokens',
         'Review the permitted amounts and spender carefully',
       ],
     );
   }
+
+  static List<DecodedField> _approvalDomainFields(Map<String, dynamic> domain) => [
+    if (domain['verifyingContract'] case final String address)
+      DecodedField('Verifying Contract', address),
+    if (domain['chainId'] case final Object chain)
+      DecodedField('Chain ID', chain.toString()),
+  ];
 
   static SignatureDecodedResult _decodeSeaportOrder(
     Map<String, dynamic> message,

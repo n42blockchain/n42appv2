@@ -104,6 +104,7 @@ class _WalletConnectAlertWidgetState
       to: widget.actionDataMap['to'] as String? ?? '',
       data: widget.actionDataMap['data'] as String? ?? '0x',
       value: _parseHexValue(widget.actionDataMap['value']),
+      isTest: widget.actionDataMap['isTest'] == true,
     );
 
     if (mounted) setState(() => _simResult = result);

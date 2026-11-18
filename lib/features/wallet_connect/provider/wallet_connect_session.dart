@@ -599,6 +599,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         actionDataMap = {
           "network": networkName,
           "coinType": coinModels[coinModelsIndex].config.coinType,
+          "isTest": coinModels[coinModelsIndex].isTest,
           "gas": (walletConnectGasLimit(trMap) ?? 0).toString(),
           "from": trMap['from'] ?? "0x",
           "to": trMap['to'] ?? "0x",

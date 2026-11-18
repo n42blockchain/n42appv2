@@ -14,6 +14,25 @@ class _DeferredPreview extends SessionPreviewProvider {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
+    'transaction preview keeps the selected testnet for simulation',
+    () async {
+      final provider = _DeferredPreview()
+        ..coinModels = [sessionCoin()..isTest = true]
+        ..coinModelsIndex = 0;
+      addTearDown(provider.dispose);
+      final request = sessionRequest('eth_sendTransaction', [
+        {
+          'from': '0x1111111111111111111111111111111111111111',
+          'to': '0x2222222222222222222222222222222222222222',
+        },
+      ], chain: 'eip155:11155111');
+      provider.pending.complete(true);
+      await provider.setActionDataMap(request);
+      expect(provider.actionDataMap?['isTest'], isTrue);
+    },
+  );
+
+  test(
     'old chain initialization cannot overwrite a newer request preview',
     () async {
       final provider = _DeferredPreview()

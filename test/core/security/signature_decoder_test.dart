@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/security/signature_decoder.dart';
 import 'package:n42_wallet/core/security/tx_risk_models.dart';
@@ -206,6 +207,85 @@ void main() {
         expect(field(result, 'details.token'), 'token');
         expect(field(result, 'spender'), spender);
       }
+    });
+    test('Permit2 batch lists each token and highlights maximum allowance', () {
+      final result = SignatureDecoder.decodeTypedData({
+        'primaryType': 'PermitBatch',
+        'domain': {'chainId': 1, 'verifyingContract': spender},
+        'message': {
+          'spender': spender,
+          'details': [
+            {'token': 'token-a', 'amount': '999', 'expiration': '1800000000'},
+            {'token': 'token-b', 'amount': '0x${'f' * 40}'},
+          ],
+        },
+      });
+      expect(result.isDangerous, isTrue);
+      expect(field(result, 'spender'), spender);
+      expect(field(result, 'Verifying Contract'), spender);
+      expect(field(result, 'Chain ID'), '1');
+      expect(field(result, 'details[0].token'), 'token-a');
+      expect(field(result, 'details[0].amount'), '999');
+      expect(field(result, 'details[1].token'), 'token-b');
+      expect(field(result, 'details[1].amount'), 'UNLIMITED');
+    });
+    test('authorization corpus preserves spender and allowance for 200 cases', () {
+      final elapsed = <int>[];
+      var falsePositives = 0;
+      var falseNegatives = 0;
+      for (var i = 0; i < 200; i++) {
+        final unlimited = (i ~/ 4).isOdd;
+        final address = '0x${(i + 1).toRadixString(16).padLeft(40, '0')}';
+        final contract = '0x${(i + 201).toRadixString(16).padLeft(40, '0')}';
+        final family = i % 4;
+        final amount = unlimited
+            ? (BigInt.one << (family < 2 ? 256 : 160)) - BigInt.one
+            : BigInt.from(i + 1) << 40;
+        final amountHex = amount.toRadixString(16);
+        final details = {'token': contract, 'amount': '0x$amountHex'};
+        final timer = Stopwatch()..start();
+        final decoded = family == 0
+            ? SignatureDecoder.decodeContractCall(
+                calldata: '0x095ea7b3${address.substring(2).padLeft(64, '0')}'
+                    '${amountHex.padLeft(64, '0')}',
+                contractAddress: contract,
+              )
+            : SignatureDecoder.decodeTypedData({
+                'primaryType': ['Approve', 'Permit', 'PermitSingle', 'PermitBatch'][family],
+                'domain': {'chainId': 1, 'verifyingContract': contract},
+                'message': {
+                  'spender': address,
+                  if (family == 1) 'value': amount.toString(),
+                  if (family == 2) 'details': details,
+                  if (family == 3) 'details': [
+                    {'token': address, 'amount': '100'},
+                    details,
+                  ],
+                },
+              });
+        elapsed.add(timer.elapsedMicroseconds);
+        final spenderField = family < 2 ? 'Spender' : 'spender';
+        final amountField = switch (family) {
+          0 || 1 => 'Amount',
+          2 => 'details.amount',
+          _ => 'details[1].amount',
+        };
+        expect(field(decoded, spenderField), address);
+        expect(
+          field(decoded, family == 0 ? 'Token Contract' : 'Verifying Contract'),
+          contract,
+        );
+        expect(
+          field(decoded, amountField),
+          unlimited ? 'UNLIMITED' : (family < 2 ? amount.toString() : '0x$amountHex'),
+        );
+        if (decoded.isDangerous && !unlimited) falsePositives++;
+        if (!decoded.isDangerous && unlimited) falseNegatives++;
+      }
+      expect(falsePositives, 0);
+      expect(falseNegatives, 0);
+      elapsed.sort();
+      debugPrint('Local authorization corpus p95: ${elapsed[189]} microseconds');
     });
     test('Safe transaction preserves nonce and target; unknown typed data stays caution', () {
       final safe = SignatureDecoder.decodeTypedData({

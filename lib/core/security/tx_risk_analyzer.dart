@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:n42_wallet/core/security/signature_decoder.dart';
 import 'package:n42_wallet/core/security/tx_risk_decoders.dart';
 import 'package:n42_wallet/core/security/tx_risk_formatters.dart';
 import 'package:n42_wallet/core/security/tx_risk_models.dart';
@@ -125,13 +126,35 @@ class TxRiskAnalyzer {
     }
     if (decoded is! Map<String, dynamic>) return null;
 
-    final primaryType = decoded['primaryType'] as String?;
-    final message = decoded['message'] as Map<String, dynamic>?;
+    final primaryType = decoded['primaryType'];
+    final message = decoded['message'];
+    if (primaryType is! String) return null;
 
-    if (primaryType == null) return null;
+    if (primaryType == 'PermitSingle' || primaryType == 'PermitBatch') {
+      final result = SignatureDecoder.decodeTypedData({
+        ...decoded,
+        'domain': decoded['domain'] is Map<String, dynamic>
+            ? decoded['domain']
+            : null,
+        'message': message is Map<String, dynamic> ? message : null,
+      });
+      return TxRiskAnalysis(
+        level: result.riskLevel,
+        functionName: result.title,
+        warnings: result.warnings,
+        fields: [
+          for (final field in result.fields)
+            TxRiskField(
+              field.label,
+              field.value,
+              isHighlighted: field.isHighlighted,
+            ),
+        ],
+      );
+    }
 
     // EIP-2612 Permit — gasless approval
-    if (primaryType == 'Permit' && message != null) {
+    if (primaryType == 'Permit' && message is Map<String, dynamic>) {
       final spender = message['spender'] as String? ?? '';
       final value = message['value'];
       final deadline = message['deadline'];
@@ -139,7 +162,7 @@ class TxRiskAnalyzer {
 
       final fields = <TxRiskField>[];
       if (spender.isNotEmpty) {
-        fields.add(TxRiskField('Spender', txRiskFormatAddress(spender)));
+        fields.add(TxRiskField('Spender', spender));
       }
       fields.add(
         TxRiskField(

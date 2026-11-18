@@ -371,6 +371,25 @@ void main() {
         expect(result!.level, TxRiskLevel.safe);
         expect(result.functionName, 'Signed Message (Order)');
       });
+
+      test('WalletConnect shows Permit2 allowance amounts and full spender', () {
+        const spender = '0x1234567890abcdef1234567890abcdef12345678';
+        final result = TxRiskAnalyzer.analyzeTypedData(
+          jsonEncode({
+            'primaryType': 'PermitSingle',
+            'domain': {'chainId': 1, 'verifyingContract': spender},
+            'message': {
+              'spender': spender,
+              'details': {'token': spender, 'amount': '0x${'f' * 40}'},
+            },
+          }),
+        )!;
+        final fields = {for (final field in result.fields) field.label: field.value};
+        expect(result.level, TxRiskLevel.danger);
+        expect(fields['spender'], spender);
+        expect(fields['Verifying Contract'], spender);
+        expect(fields['details.amount'], 'UNLIMITED');
+      });
     });
 
     group('TxRiskAnalysis', () {

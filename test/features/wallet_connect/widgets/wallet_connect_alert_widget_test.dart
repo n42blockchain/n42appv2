@@ -163,6 +163,31 @@ void main() {
     },
   );
 
+  testWidgets('Permit2 batch shows each allowance before confirmation', (
+    tester,
+  ) async {
+    await openSheet(tester, {
+      ...request(false),
+      'data': jsonEncode({
+        'primaryType': 'PermitBatch',
+        'domain': {'chainId': 1, 'verifyingContract': address},
+        'message': {
+          'spender': address,
+          'details': [
+            {'token': address, 'amount': '50'},
+            {'token': address, 'amount': '0x${'f' * 40}'},
+          ],
+        },
+      }),
+    });
+    expect(find.text(S.current.g_tx_risk_danger), findsOneWidget);
+    expect(find.text('details[0].amount'), findsOneWidget);
+    expect(find.text('50'), findsOneWidget);
+    expect(find.text('details[1].amount'), findsOneWidget);
+    expect(find.text('UNLIMITED'), findsOneWidget);
+    expect(actions.messages, 0);
+  });
+
   testWidgets('known recipient exposes its address label in dark mode', (
     tester,
   ) async {
