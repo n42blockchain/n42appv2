@@ -129,9 +129,9 @@ PODS:
     - Flutter
   - flutter_contacts (0.0.1):
     - Flutter
-  - flutter_edge_ai (2.6.0):
+  - flutter_edge_ai (2.5.6):
     - Flutter
-  - flutter_edge_ai_mediapipe (1.3.0):
+  - flutter_edge_ai_mediapipe (1.2.6):
     - Flutter
     - MediaPipeTasksGenAI (= 0.10.35)
     - MediaPipeTasksGenAIC (= 0.10.35)
@@ -418,9 +418,8 @@ PODS:
   - quick_actions_ios (0.0.1):
     - Flutter
   - RecaptchaInterop (101.0.0)
-  - record_darwin (2.0.0):
+  - record_ios (2.0.0):
     - Flutter
-    - FlutterMacOS
   - saver_gallery (0.0.1):
     - Flutter
   - share_plus (0.0.1):
@@ -560,7 +559,7 @@ DEPENDENCIES:
   - photo_manager (from `.symlinks/plugins/photo_manager/darwin`)
   - pro_image_editor (from `.symlinks/plugins/pro_image_editor/darwin`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
-  - record_darwin (from `.symlinks/plugins/record_darwin/darwin`)
+  - record_ios (from `.symlinks/plugins/record_ios/ios`)
   - saver_gallery (from `.symlinks/plugins/saver_gallery/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -761,8 +760,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/pro_image_editor/darwin"
   quick_actions_ios:
     :path: ".symlinks/plugins/quick_actions_ios/ios"
-  record_darwin:
-    :path: ".symlinks/plugins/record_darwin/darwin"
+  record_ios:
+    :path: ".symlinks/plugins/record_ios/ios"
   saver_gallery:
     :path: ".symlinks/plugins/saver_gallery/ios"
   share_plus:
@@ -802,7 +801,7 @@ SPEC CHECKSUMS:
   AnalyticsSwiftCocoapod: cc3e4d4e381a080c89a6f5f56845577c298bc627
   app_badge_plus: 0a94831a7789a3de4c2c53947d8b624cb525637e
   app_links: a754cbec3c255bd4bbb4d236ecc06f28cd9a7ce8
-  AppAuth: 5dec4b6a833eb0342b26bacbc5f3af694f71274a
+  AppAuth: b19b479e4e20f31869ce3fc2302312dc3fce98b8
   AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
   audioplayers_darwin: 835ced6edd4c9fc8ebb0a7cc9e294a91d99917d5
   background_downloader: 50e91d979067b82081aba359d7d916b3ba5fadad
@@ -833,8 +832,8 @@ SPEC CHECKSUMS:
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_callkit_incoming: b2eaad1ac106ac4c78b4b9827f7e181767438dea
   flutter_contacts: 2ec1d6b62ca2869c3bbb3871bd74d4e3ef157135
-  flutter_edge_ai: 4d764bd3e730269c8f41d2c0eac85448a90dd1ed
-  flutter_edge_ai_mediapipe: b9416109334adbdddc607134fab1a808896abb6f
+  flutter_edge_ai: 94f48b0ab04d980be6635be8b5d626d32c7507fc
+  flutter_edge_ai_mediapipe: 627b93d76406e976d58a73a13552f86ef18c4be4
   flutter_facebook_auth: 70c89fd428090ad550fbf87580292e57a8eccd1a
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
   flutter_mining: f52eca3bf550343500995599625ca479ae83b557
@@ -858,10 +857,10 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: f2f676480e4c97936df934aa181bc29caea46975
   GoogleDataTransport: a24e58982ab3ba2f64d79613e027fe7f57e88539
   GoogleMLKit: b1eee21a41c57704fe72483b15c85cb2c0cd7444
-  GoogleSignIn: 52f0c3c702ae6ff72fcbcf695a9f26c52f31dc4b
+  GoogleSignIn: 6c0681460b202440022a4029ac0cbd71ef72068f
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
   GoogleUtilities: 7dc09b3fa9ecb5c2298b952313d14628b61b9da3
-  GTMAppAuth: 66e839a30bb63acb109b8986a0c3f642d56d48fd
+  GTMAppAuth: d5a53b9611d30bb40d92293f72f12c3ac3a08321
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: 872ad7b7cb44bf470e7324191b51ee0e26f45cb9
   in_app_purchase_storekit: 22cca7d08eebca9babdf4d07d0baccb73325d3c8
@@ -903,7 +902,7 @@ SPEC CHECKSUMS:
   PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
   quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
-  record_darwin: 4af4f79edec94b4b8356a7a43b0def39d807d3ea
+  record_ios: 390a30c7caaf8b5d0fb1cb1d2fd5064b48b4520c
   saver_gallery: 44507a28b0ace1a0446473fb8cbd36179402f5af
   share_plus: eccd7beb7cea61271aeed1800e8ccb2b952c0c7f
   shared_preferences_foundation: a7c3904f2dedb3701dd1903cb152ef5e7df92422
