@@ -18,11 +18,13 @@ void main() {
   late List<MethodCall> calls;
   var sessionKey = '';
   var loginKey = '';
+  var serviceUnavailable = false;
 
   setUp(() {
     calls = [];
     sessionKey = '';
     loginKey = key;
+    serviceUnavailable = false;
     provider = Web3AuthMpcProvider(
       clientId: 'test-client',
       redirectUrl: Uri.parse('n42://auth'),
@@ -30,6 +32,14 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (call) async {
           calls.add(call);
+          if (serviceUnavailable &&
+              const [
+                'initialize',
+                'getPrivateKey',
+                'connectTo',
+              ].contains(call.method)) {
+            throw PlatformException(code: 'service_unavailable');
+          }
           switch (call.method) {
             case 'init':
             case 'initialize':
@@ -74,6 +84,39 @@ void main() {
     await provider.initialize();
     expect(calls.length, 3);
   });
+
+  test(
+    'provider outage permits only a previously loaded signing session',
+    () async {
+      await provider.login(MpcLoginType.google);
+      final warmAddress = provider.currentAddress;
+      serviceUnavailable = true;
+      final count = calls.length;
+      expect(
+        (await provider.signMessage(Uint8List.fromList([1]))).signature,
+        hasLength(65),
+      );
+      expect(provider.currentAddress, warmAddress);
+      expect(calls, hasLength(count));
+
+      provider.dispose();
+      provider = Web3AuthMpcProvider(
+        clientId: 'test-client',
+        redirectUrl: Uri.parse('n42://auth'),
+      );
+      await provider.initialize();
+      expect(provider.currentAddress, isNull);
+      expect(provider.isLoggedIn, isFalse);
+      await expectLater(
+        provider.login(MpcLoginType.google),
+        throwsA(isA<PlatformException>()),
+      );
+      await expectLater(
+        provider.signMessage(Uint8List.fromList([1])),
+        throwsA(isA<MpcNotLoggedInException>()),
+      );
+    },
+  );
 
   for (final entry in {
     MpcLoginType.google: 'google',
