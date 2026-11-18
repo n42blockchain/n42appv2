@@ -1,11 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
+import 'package:n42_wallet/features/wallet/mpc/mpc_evm_transaction_signer.dart';
+import 'package:n42_wallet/features/wallet/mpc/mpc_provider.dart';
+import 'package:n42_wallet/features/wallet/mpc/web3auth_mpc_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:wallet/wallet.dart' as wallet;
 import 'package:wallet/wallet.dart' show EthereumAddress, EtherAmount;
@@ -97,12 +102,91 @@ class _LocalSigner extends Trustdart {
   }
 }
 
+Future<void> _exerciseProviderOutage(
+  Web3Client client,
+  Uri rpc,
+  EthereumAddress recipient,
+  int amount,
+) async {
+  const channel = MethodChannel('web3auth_flutter');
+  final messenger =
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  final key = _LocalSigner.restore(wallet.generateMnemonic().join(' '), '');
+  var unavailable = false;
+  var failedCalls = 0;
+  messenger.setMockMethodCallHandler(channel, (call) async {
+    if (call.method == 'init') return null;
+    if (unavailable) {
+      failedCalls++;
+      throw PlatformException(code: 'service_unavailable');
+    }
+    if (call.method == 'initialize') return null;
+    if (call.method == 'getPrivateKey') return '';
+    if (call.method == 'connectTo') {
+      return jsonEncode({'privKey': bytesToHex(key.privateKey)});
+    }
+    throw MissingPluginException(call.method);
+  });
+  addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
+  Web3AuthMpcProvider provider() => Web3AuthMpcProvider(
+    clientId: 'outage-fixture',
+    redirectUrl: Uri.parse('n42://auth'),
+  );
+  final loaded = provider();
+  final cold = provider();
+  addTearDown(loaded.dispose);
+  addTearDown(cold.dispose);
+  final login = await loaded.login(MpcLoginType.google);
+  expect(login.address.toLowerCase(), key.address.without0x.toLowerCase());
+  await client.makeRPCCall<dynamic>('anvil_setBalance', [
+    key.address.with0x,
+    '0xde0b6b3a7640000',
+  ]);
+  unavailable = true;
+
+  EvmSender sender(Web3AuthMpcProvider provider) => EvmSender(
+    mpcSigner: MpcEvmTransactionSigner(provider, isCurrent: () => true),
+    ownerIdentity: () => key.address.with0x,
+  );
+  final prepared = <String>[];
+  final params = SendParams(
+    coinType: 'ETH',
+    fromAddress: key.address.with0x,
+    toAddress: recipient.with0x,
+    amount: 0,
+    decimals: 18,
+    path: _path,
+    isTest: true,
+    chainConfig: {'chainId_test': _chainId, 'service_test': rpc.toString()},
+    valueWeiOverride: BigInt.from(amount),
+    beforeBroadcast: (hash) async => prepared.add(hash),
+  );
+  final warmResult = await sender(loaded).send(params);
+  expect(warmResult.success, isTrue);
+  expect(prepared, [warmResult.txHash]);
+  expect(failedCalls, 0, reason: 'Loaded signing must not call the provider');
+  final receipt = await client.getTransactionReceipt(warmResult.txHash!);
+  expect(receipt?.status, isTrue);
+  expect(receipt?.from, key.address);
+  expect(receipt?.to, recipient);
+
+  loaded.dispose();
+  await cold.initialize();
+  expect(cold.isLoggedIn, isFalse);
+  expect(failedCalls, greaterThan(0));
+  final coldResult = await sender(cold).send(params);
+  expect(coldResult.success, isFalse);
+  expect(coldResult.txHash, isNull);
+  expect(prepared, hasLength(1));
+  expect(await client.getTransactionCount(key.address), 1);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final endpoint = Platform.environment['N42_RECOVERY_LOOPBACK_RPC'];
 
   test(
-    'restore mnemonic and private key and transfer through a replacement RPC',
+    'local backups and loaded social signer transfer during service outage',
     () async {
       final uri = Uri.parse(endpoint!);
       if (uri.scheme != 'http' ||
@@ -186,9 +270,10 @@ void main() {
         expect(receipt?.from, original.address);
         expect(receipt?.to, recipient);
       }
+      await _exerciseProviderOutage(client, uri, recipient, value);
       expect(
         (await client.getBalance(recipient)).getInWei,
-        BigInt.from(2 * value),
+        BigInt.from(3 * value),
       );
       expect(loopback.deniedConnections, 0);
     },

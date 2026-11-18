@@ -159,6 +159,14 @@ void main() {
       expect(submitted, isNotNull);
     },
   );
+  test('MPC provider and reviewed sender may differ by hex prefix', () async {
+    when(() => provider.currentAddress).thenReturn(key.address.without0x);
+    final wallet = mpcWallet();
+    final result = await routed(() => wallet).send(params());
+    expect(result.success, isTrue, reason: result.error);
+    expect(result.txHash, persisted);
+    expect(submitted, isNotNull);
+  });
   test('wallet switch during routed MPC signing prevents dispatch', () async {
     var wallet = mpcWallet();
     final cached = routed(() => wallet);

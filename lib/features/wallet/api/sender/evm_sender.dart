@@ -79,6 +79,11 @@ class EvmSender implements ChainSender {
     }
   }
 
+  static bool _matchesEvmAddress(String? providerAddress, String walletAddress) =>
+      providerAddress != null &&
+      EthereumAddress.fromHex(providerAddress.trim()) ==
+          EthereumAddress.fromHex(walletAddress.trim());
+
   EvmSender({
     Map<String, dynamic>? chainConfig,
     Trustdart? trustdart,
@@ -119,8 +124,7 @@ class EvmSender implements ChainSender {
           if (provider == null ||
               provider.providerId != providerId ||
               !provider.isLoggedIn ||
-              provider.currentAddress?.toLowerCase() !=
-                  walletAddress.toLowerCase()) {
+              !_matchesEvmAddress(provider.currentAddress, walletAddress)) {
             return Future.value(
               const SendResult.fail('Sign in to the selected MPC wallet'),
             );
@@ -178,10 +182,11 @@ class EvmSender implements ChainSender {
               _mpcSigner.isCurrent() &&
               _mpcSigner.provider.isLoggedIn &&
               mpcAddress != null &&
-              _mpcSigner.provider.currentAddress?.toLowerCase() ==
-                  mpcAddress.toLowerCase() &&
-              mpcAddress.toLowerCase() ==
-                  params.fromAddress.trim().toLowerCase();
+              _matchesEvmAddress(
+                _mpcSigner.provider.currentAddress,
+                mpcAddress,
+              ) &&
+              _matchesEvmAddress(mpcAddress, params.fromAddress);
         }
         return _ownerIdentity() == owner &&
             (params.privateKey != null ||
