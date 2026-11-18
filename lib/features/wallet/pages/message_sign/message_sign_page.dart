@@ -194,7 +194,7 @@ class _MessageSignPageState extends State<MessageSignPage> {
               Text(
                 '· ${widget.model.config.name}',
                 style: AppTypography.body.copyWith(
-                  color: _c(AppThemeKeys.mainTextColor4),
+                  color: _c(AppThemeKeys.itemSubtitleTextColor),
                 ),
               ),
             ],
@@ -203,7 +203,7 @@ class _MessageSignPageState extends State<MessageSignPage> {
           Text(
             shortAddr,
             style: AppTypography.bodySm.copyWith(
-              color: _c(AppThemeKeys.mainTextColor4),
+              color: _c(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
         ],
@@ -260,8 +260,9 @@ class _MessageSignPageState extends State<MessageSignPage> {
           Expanded(
             child: Text(
               S.of(context).g_key_msgsign_warning,
+              // Orange text on the red tint is ~2:1; the icon keeps the hue.
               style: AppTypography.bodySm.copyWith(
-                color: _c(AppThemeKeys.textColorOrange),
+                color: _c(AppThemeKeys.mainTextColor),
               ),
             ),
           ),
@@ -301,15 +302,13 @@ class _MessageSignPageState extends State<MessageSignPage> {
                   color: _c(AppThemeKeys.mainTextColor),
                 ),
               ),
-              InkWell(
+              AppTapArea(
                 onTap: _copySignature,
-                child: Padding(
-                  padding: EdgeInsets.all(AppSpacing.space4),
-                  child: Icon(
-                    Icons.copy_rounded,
-                    size: 20,
-                    color: _c(AppThemeKeys.mainBlueColor),
-                  ),
+                tooltip: S.of(context).g_key_119,
+                child: Icon(
+                  Icons.copy_rounded,
+                  size: 20,
+                  color: _c(AppThemeKeys.mainBlueColor),
                 ),
               ),
             ],
@@ -318,7 +317,7 @@ class _MessageSignPageState extends State<MessageSignPage> {
           SelectableText(
             _signature ?? '',
             style: AppTypography.bodySm.copyWith(
-              color: _c(AppThemeKeys.mainTextColor4),
+              color: _c(AppThemeKeys.mainTextColor),
             ),
           ),
         ],

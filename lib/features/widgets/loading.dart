@@ -23,7 +23,8 @@ class Loading extends StatelessWidget {
               text ?? "${S.of(context).g_key_106}...",
               overflow: TextOverflow.ellipsis,
               style: AppTypography.body.copyWith(
-                color: textColor ?? const Color(0xFF666666),
+                // Theme-aware default (#666 was 3.4:1 on the dark background).
+                color: textColor ?? AppColorTokens.of(context).textSecondary,
               ),
             ),
           ),

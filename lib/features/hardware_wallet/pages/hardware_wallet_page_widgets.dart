@@ -137,8 +137,10 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     IconData icon,
     VoidCallback onTap,
   ) {
-    return GestureDetector(
+    // 44pt hit area (with ripple) around the unchanged ~30pt pill.
+    return AppTapArea(
       onTap: onTap,
+      borderRadius: AppRadius.brSm,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space4,
@@ -273,11 +275,13 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
           // 操作按钮（未连接时显示）
           if (!isConnected) ...[
             IconButton(
+              tooltip: s.g_connect_key1,
               onPressed: () =>
                   _connectSavedDevice(context, s, provider, device),
               icon: Icon(_connectionIcon(device.type), color: blueColor),
             ),
             IconButton(
+              tooltip: s.g_key_hw_remove_device,
               onPressed: () => _showDeleteDialog(context, s, provider, device),
               icon: Icon(
                 Icons.delete_outline,
@@ -358,34 +362,41 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
   }) {
     final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: _themeColor(context, AppThemeKeys.itemBgColor),
-          borderRadius: AppRadius.brMd,
-          border: Border.all(color: blueColor.withAlpha(80)),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: blueColor, size: ScreenUtil().setWidth(32)),
-            SizedBox(width: AppSpacing.space4),
-            Expanded(
-              child: Text(
-                label,
-                style: AppTypography.body.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: _themeColor(context, AppThemeKeys.mainTextColor),
+    return Material(
+      // Fill on the Material so the ripple is not hidden under it.
+      color: _themeColor(context, AppThemeKeys.itemBgColor),
+      borderRadius: AppRadius.brMd,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Container(
+          // Row grows from ~38 to 44pt so the option is a full target.
+          constraints: BoxConstraints(minHeight: AppTouch.target),
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: blueColor.withAlpha(80)),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: blueColor, size: ScreenUtil().setWidth(32)),
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: _themeColor(context, AppThemeKeys.mainTextColor),
+                  ),
                 ),
               ),
-            ),
-            Icon(
-              Icons.chevron_right,
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
-              size: ScreenUtil().setWidth(28),
-            ),
-          ],
+              Icon(
+                Icons.chevron_right,
+                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                size: ScreenUtil().setWidth(28),
+              ),
+            ],
+          ),
         ),
       ),
     );

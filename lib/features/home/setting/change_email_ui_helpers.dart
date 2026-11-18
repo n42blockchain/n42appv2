@@ -82,14 +82,17 @@ Widget changeEmailPrimaryButton({
   required bool loading,
   required Color accentColor,
 }) {
-  return SizedBox(
-    width: double.infinity,
-    // 96.h≈48dp（§2.1 Primary 标准高，44dp 触控红线）
-    height: 96.h,
+  return ConstrainedBox(
+    // 48pt at 375, never below 44pt at 320 (96.h was 41pt there); minHeight
+    // instead of a fixed height so 130% text is not clipped.
+    constraints: BoxConstraints(
+      minWidth: double.infinity,
+      minHeight: AppTouch.scaled(96),
+    ),
     child: ElevatedButton(
       onPressed: loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: accentColor,
+        backgroundColor: AppContrast.fillForWhiteText(accentColor),
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brXl),
       ),

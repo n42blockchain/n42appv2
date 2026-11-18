@@ -82,14 +82,18 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             maxLines: 3,
             errorMessage: toErrorMessage,
             height: ScreenUtil().setWidth(170.0),
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: ScreenUtil().setWidth(50.0),
-                color: _themeColor(AppThemeKeys.mainBlueColor.name),
+            // Icon-only field action: the tooltip doubles as its spoken label.
+            rightWidget1: Tooltip(
+              message: S.of(context).g_key_108,
+              child: Container(
+                width: ScreenUtil().setWidth(60.0),
+                height: ScreenUtil().setWidth(60.0),
+                padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
+                child: Icon(
+                  Icons.add,
+                  size: ScreenUtil().setWidth(50.0),
+                  color: _themeColor(AppThemeKeys.mainBlueColor.name),
+                ),
               ),
             ),
             rightOnTap1: searchToAddressWidget,
@@ -173,7 +177,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                       horizontal: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
-                      color: _themeColor(AppThemeKeys.mainBlueColor.name),
+                      // Text-safe brand fill (white on plain brand ~4.0:1).
+                      color: AppColorTokens.of(context).brandFill,
                       borderRadius: BorderRadius.all(
                         Radius.circular(ScreenUtil().setWidth(60.0)),
                       ),
@@ -344,7 +349,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   style: AppTypography.body.copyWith(color: buttonColor),
                 ),
               ),
-              InkWell(
+              // 44pt hit area around the 24pt pill; text-safe brand fill.
+              AppTapArea(
                 onTap: () {
                   if (accountXrp['load'] == Load.loading) return;
                   checkAccountXRP(toTextEditingController.text);
@@ -355,7 +361,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                     horizontal: AppSpacing.space4,
                   ),
                   decoration: BoxDecoration(
-                    color: buttonColor,
+                    color: AppColorTokens.of(context).brandFill,
                     borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Row(

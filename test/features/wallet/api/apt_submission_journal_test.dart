@@ -380,6 +380,47 @@ void main() {
       await send(journal, bytes: '02');
     });
   }
+  test('history settlement only closes its own confirmed transaction', () async {
+    final journal = AptSubmissionJournal();
+    final record = await send(journal);
+    final saved = <String>[];
+    Future<void> save(AptPendingSubmission p, AptTransactionReceipt _) async =>
+        saved.add(p.hash);
+    // Another history row never settles this journal entry.
+    expect(
+      await journal.settle(
+        chainId: 1,
+        sender: '0x1',
+        hash: '0x${'cd' * 32}',
+        api: api(record.hash),
+        saveResult: save,
+      ),
+      isNull,
+    );
+    // Still pending on chain: nothing is cleared.
+    expect(
+      await journal.settle(
+        chainId: 1,
+        sender: '0x1',
+        hash: record.hash,
+        api: api(record.hash, type: 'pending_transaction'),
+        saveResult: save,
+      ),
+      isNull,
+    );
+    expect(saved, isEmpty);
+    expect(await journal.pending(1, '0x1'), isNotNull);
+    final receipt = await journal.settle(
+      chainId: 1,
+      sender: '0x1',
+      hash: record.hash.toUpperCase().replaceFirst('0X', '0x'),
+      api: api(record.hash),
+      saveResult: save,
+    );
+    expect(receipt?.status, AptTransactionStatus.succeeded);
+    expect(saved, [record.hash]);
+    expect(await journal.pending(1, '0x1'), isNull);
+  });
   test('save failure retains record for idempotent recovery', () async {
     final journal = AptSubmissionJournal();
     final record = await send(journal);

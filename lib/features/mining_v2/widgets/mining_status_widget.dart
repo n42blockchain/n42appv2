@@ -106,7 +106,10 @@ class MiningStatusWidget extends StatelessWidget {
                 ),
               ),
               if (mpValue.depositsEnable == true) ...[
-                InkWell(
+                AppTapArea(
+                  tooltip: isActive
+                      ? S.of(context).miningV3Pause
+                      : S.of(context).g_key_wallet_c4,
                   onTap: () {
                     if (isActive) {
                       mpValue.disconnectWebSocket();
@@ -126,7 +129,8 @@ class MiningStatusWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                InkWell(
+                AppTapArea(
+                  tooltip: S.of(context).g_key_aa_details,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

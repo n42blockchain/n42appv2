@@ -99,7 +99,6 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
   Widget _buildTransactionCard(BuildContext context, BridgeTransaction tx) {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
-    final blueColor = AppColorTokens.of(context).brand;
     final hasBridgeTool = tx.bridgeTool?.isNotEmpty == true;
     final hasDestTx = tx.destinationTxHash?.isNotEmpty == true;
     final isPending =
@@ -180,7 +179,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             SizedBox(height: AppSpacing.space4),
             Align(
               alignment: Alignment.centerRight,
-              child: InkWell(
+              // 44pt hit area around the unchanged small pill.
+              child: AppTapArea(
                 onTap: () => widget.provider.checkTransactionStatus(tx),
                 borderRadius: AppRadius.brSm,
                 child: Container(
@@ -189,7 +189,8 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                     vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
-                    color: blueColor,
+                    // brandFill keeps the white label at >= 4.5:1.
+                    color: AppColorTokens.of(context).brandFill,
                     borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
@@ -277,31 +278,36 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required int chainId,
   }) {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
-    final blueColor = AppColorTokens.of(context).brand;
-    return GestureDetector(
+    // brandOnTint: link text at >= 4.5:1 (plain brand is ~4.0:1).
+    final blueColor = AppColorTokens.of(context).brandOnTint;
+    return InkWell(
       onTap: () => _openExplorer(chainId, hash),
-      child: Row(
-        children: [
-          Text(
-            '$label: ',
-            style: AppTypography.caption.copyWith(color: subtitleColor),
-          ),
-          Expanded(
-            child: Text(
-              _shortenHash(hash),
-              style: AppTypography.caption.copyWith(
-                color: blueColor,
-                decoration: TextDecoration.underline,
-              ),
-              overflow: TextOverflow.ellipsis,
+      // Row grows from ~16 to 44pt so the link is a full target.
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: AppTouch.target),
+        child: Row(
+          children: [
+            Text(
+              '$label: ',
+              style: AppTypography.caption.copyWith(color: subtitleColor),
             ),
-          ),
-          Icon(
-            Icons.open_in_new,
-            size: ScreenUtil().setWidth(26),
-            color: blueColor,
-          ),
-        ],
+            Expanded(
+              child: Text(
+                _shortenHash(hash),
+                style: AppTypography.caption.copyWith(
+                  color: blueColor,
+                  decoration: TextDecoration.underline,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Icon(
+              Icons.open_in_new,
+              size: ScreenUtil().setWidth(26),
+              color: blueColor,
+            ),
+          ],
+        ),
       ),
     );
   }

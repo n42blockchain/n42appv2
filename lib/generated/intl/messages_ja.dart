@@ -184,71 +184,114 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m75(value) => "RPCが報告するChain ID ${value} が、入力した値と一致しません。";
 
-  static String m76(asset, contract, address) =>
+  static String m76(address, asset) =>
+      "受取アドレス ${address} はアセット ${asset} をオプトインしていないため、受け取れません。";
+
+  static String m77(action) => "${action}を承認";
+
+  static String m78(name) => "${name} · 資産の表示設定";
+
+  static String m79(index) => "操作 #${index}:アドレスまたは金額が無効です";
+
+  static String m80(action) => "${action}を確認";
+
+  static String m81(key) => "公開鍵: ${key}";
+
+  static String m82(count) => "${count} 台のデバイスが見つかりました";
+
+  static String m83(name) => "${name}フィルター";
+
+  static String m84(name, gift) => "${name} が ${gift} を贈りました";
+
+  static String m85(reason) => "読み込みに失敗しました: ${reason}";
+
+  static String m86(name) => "${name} が入室しました";
+
+  static String m87(count) => "${count} 人視聴中";
+
+  static String m88(value) => "${value} の親チェーンがありません";
+
+  static String m89(time) => "締切まで ${time}";
+
+  static String m90(shares) => "保有 ${shares}";
+
+  static String m91(amount, symbol) => "出来高 ${amount} ${symbol}";
+
+  static String m92(name) => "${name} を削除しますか？";
+
+  static String m93(host) =>
+      "国際化 RPC ホスト名:${host}\\nこの名前は別のサービスに似ている可能性があります。ASCII ホスト名を別途確認してください。";
+
+  static String m94(amount, symbol, protocol) =>
+      "${protocol} で ${amount} ${symbol} をステーキングしますか？ウォレットからオンチェーン取引が送信されます。";
+
+  static String m95(name, decimals) => "${name} · 小数点以下 ${decimals} 桁";
+
+  static String m96(asset, contract, address) =>
       "アセット ${asset} (${contract}) がアカウント ${address} に追加されていません。";
 
-  static String m77(imported, skipped) =>
+  static String m97(imported, skipped) =>
       "ウォレットをインポート: ${imported}。スキップ: ${skipped}。";
 
-  static String m78(value) => "残高: ${value}";
+  static String m98(value) => "残高: ${value}";
 
-  static String m79(value) => "基本手数料: ${value} Gwei";
+  static String m99(value) => "基本手数料: ${value} Gwei";
 
-  static String m80(value) => "クリップボードは ${value} 秒後に自動クリアされます";
+  static String m100(value) => "クリップボードは ${value} 秒後に自動クリアされます";
 
-  static String m81(value) => "行 ${value}: フィールドが欠落しています";
+  static String m101(value) => "行 ${value}: フィールドが欠落しています";
 
-  static String m82(value) => "${value}日";
+  static String m102(value) => "${value}日";
 
-  static String m83(value) => "${value} に接続されました";
+  static String m103(value) => "${value} に接続されました";
 
-  static String m84(value) => "ガス: ${value}";
+  static String m104(value) => "ガス: ${value}";
 
-  static String m85(value) => "${value}時間";
+  static String m105(value) => "${value}時間";
 
-  static String m86(value) => "有効な受取人をインポート (${value})";
+  static String m106(value) => "有効な受取人をインポート (${value})";
 
-  static String m87(quote, base) => "指値価格 (${quote} あたり ${base})";
+  static String m107(quote, base) => "指値価格 (${quote} あたり ${base})";
 
-  static String m88(value) => "リミット ${value}";
+  static String m108(value) => "リミット ${value}";
 
-  static String m89(value) => "市場 (${value})";
+  static String m109(value) => "市場 (${value})";
 
-  static String m90(value) => "最小残高: ${value}";
+  static String m110(value) => "最小残高: ${value}";
 
-  static String m91(value) => "注文 (${value})";
+  static String m111(value) => "注文 (${value})";
 
-  static String m92(value) => "ポジション (${value})";
+  static String m112(value) => "ポジション (${value})";
 
-  static String m93(value) => "受取人: ${value}";
+  static String m113(value) => "受取人: ${value}";
 
-  static String m94(value) => "トークンが見つかりました: ${value}";
+  static String m114(value) => "トークンが見つかりました: ${value}";
 
-  static String m95(value) => "トークン: ${value}";
+  static String m115(value) => "トークン: ${value}";
 
-  static String m96(value) => "取引: ${value}";
+  static String m116(value) => "取引: ${value}";
 
-  static String m97(valid, issues) => "有効: ${valid}。問題: ${issues}。";
+  static String m117(valid, issues) => "有効: ${valid}。問題: ${issues}。";
 
-  static String m98(value) => "… および ${value} 件のその他の問題";
+  static String m118(value) => "… および ${value} 件のその他の問題";
 
-  static String m99(volume, interest) => "取引高: ${volume} · 未決済: ${interest}";
+  static String m119(volume, interest) => "取引高: ${volume} · 未決済: ${interest}";
 
-  static String m100(value) => "ウォレット ${value}";
+  static String m120(value) => "ウォレット ${value}";
 
-  static String m101(value) => "${value}時間前に更新";
+  static String m121(value) => "${value}時間前に更新";
 
-  static String m102(value) => "${value}分前に更新";
+  static String m122(value) => "${value}分前に更新";
 
-  static String m103(number) => "ブロック #${number}";
+  static String m123(number) => "ブロック #${number}";
 
-  static String m104(index) => "デバイス ${index}";
+  static String m124(index) => "デバイス ${index}";
 
-  static String m105(value) => "${value} ミリ秒";
+  static String m125(value) => "${value} ミリ秒";
 
-  static String m106(count) => "${count} 件の取引";
+  static String m126(count) => "${count} 件の取引";
 
-  static String m107(value) => "0〜${value}文字";
+  static String m127(value) => "0〜${value}文字";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -265,6 +308,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "device_login_message": m0,
     "device_login_title": MessageLookupByLibrary.simpleMessage("新しいデバイスでログイン"),
     "file": MessageLookupByLibrary.simpleMessage("ファイル"),
+    "g_a11y_add_path": MessageLookupByLibrary.simpleMessage("派生パスを追加"),
+    "g_a11y_clear": MessageLookupByLibrary.simpleMessage("クリア"),
+    "g_a11y_clear_search": MessageLookupByLibrary.simpleMessage("検索をクリア"),
+    "g_a11y_clear_text": MessageLookupByLibrary.simpleMessage("テキストをクリア"),
+    "g_a11y_close": MessageLookupByLibrary.simpleMessage("閉じる"),
+    "g_a11y_export_key": MessageLookupByLibrary.simpleMessage("鍵をエクスポート"),
+    "g_a11y_flashlight": MessageLookupByLibrary.simpleMessage("ライト"),
+    "g_a11y_forward": MessageLookupByLibrary.simpleMessage("進む"),
+    "g_a11y_group_by_collection": MessageLookupByLibrary.simpleMessage(
+      "コレクションごとにグループ化",
+    ),
+    "g_a11y_hide_password": MessageLookupByLibrary.simpleMessage("パスワードを非表示"),
+    "g_a11y_new_tab": MessageLookupByLibrary.simpleMessage("新しいタブ"),
+    "g_a11y_previous": MessageLookupByLibrary.simpleMessage("前へ"),
+    "g_a11y_reverse_tokens": MessageLookupByLibrary.simpleMessage("トークンを入れ替え"),
+    "g_a11y_scroll_to_bottom": MessageLookupByLibrary.simpleMessage(
+      "一番下へスクロール",
+    ),
+    "g_a11y_scroll_to_top": MessageLookupByLibrary.simpleMessage("一番上へスクロール"),
+    "g_a11y_show_password": MessageLookupByLibrary.simpleMessage("パスワードを表示"),
+    "g_a11y_stop": MessageLookupByLibrary.simpleMessage("停止"),
+    "g_a11y_swap_direction": MessageLookupByLibrary.simpleMessage("方向を入れ替え"),
+    "g_a11y_tabs": MessageLookupByLibrary.simpleMessage("タブ"),
     "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
       "保存済みの残高 · 更新に失敗しました",
     ),
@@ -2177,6 +2243,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage("コインを検索..."),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("トレンド"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("ウォッチリスト"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("待機をやめる"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "再度送信できます。以前の取引は引き続き確認されます。",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "待機を続ける",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "このアドレスからの以前の送金がまだ確認されておらず、結果をまだ判断できないため、新しい送金はブロックされています。待機をやめても、その取引は保留中として履歴に残り、引き続き確認されます。警告：その取引はまだチェーン上で完了する可能性があるため、再送信すると二重に支払うおそれがあります。まずブロックエクスプローラーで以前の取引を確認してください。",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "以前の取引の状態が不明です",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "バリデーターの非活動スコアが高いです。ペナルティを避けるため、ノードのステータスを確認してください。",
     ),
@@ -2559,12 +2638,437 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("注意"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高リスク"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage("未確認"),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "まだチェーン上で確認されておらず、結果は不明です。引き続き確認中で、まだ完了する可能性があります。再送信する前にブロックエクスプローラーで確認してください。",
+    ),
+    "g_ui3_aave_unavailable": MessageLookupByLibrary.simpleMessage(
+      "このチェーンでは Aave V3 を利用できません",
+    ),
+    "g_ui3_account_security": MessageLookupByLibrary.simpleMessage(
+      "アカウントのセキュリティ",
+    ),
+    "g_ui3_activation_time": MessageLookupByLibrary.simpleMessage("有効化日時"),
+    "g_ui3_address_or_ens": MessageLookupByLibrary.simpleMessage(
+      "アドレスまたは ENS 名",
+    ),
+    "g_ui3_algo_recipient_no_asset": m76,
+    "g_ui3_approve_action": m77,
+    "g_ui3_approve_failed": MessageLookupByLibrary.simpleMessage("承認に失敗しました"),
+    "g_ui3_asset_controls_body": MessageLookupByLibrary.simpleMessage(
+      "これらの設定はこのウォレットでの表示にのみ影響します。非表示にしても承認は取り消されず、残高も変わりません。隔離するとウォレット一覧からこの資産を開くこともできなくなります。DApp とのやり取りはブロックされません。",
+    ),
+    "g_ui3_asset_controls_title": m78,
+    "g_ui3_asset_display_controls": MessageLookupByLibrary.simpleMessage(
+      "資産の表示設定",
+    ),
+    "g_ui3_asset_display_local_note": MessageLookupByLibrary.simpleMessage(
+      "端末内の設定のみです。オンチェーンの残高と承認は変わりません。",
+    ),
+    "g_ui3_asset_hidden_reviewed": MessageLookupByLibrary.simpleMessage(
+      "非表示・要確認の資産",
+    ),
+    "g_ui3_asset_hide": MessageLookupByLibrary.simpleMessage("一覧から非表示"),
+    "g_ui3_asset_mark_review": MessageLookupByLibrary.simpleMessage(
+      "要確認としてマーク",
+    ),
+    "g_ui3_asset_marked_review_hint": MessageLookupByLibrary.simpleMessage(
+      "要確認としてマーク済みです。長押しで確認または復元できます。",
+    ),
+    "g_ui3_asset_quarantine": MessageLookupByLibrary.simpleMessage("一覧から隔離"),
+    "g_ui3_asset_restore": MessageLookupByLibrary.simpleMessage("復元"),
+    "g_ui3_asset_restore_display": MessageLookupByLibrary.simpleMessage(
+      "通常表示に戻す",
+    ),
+    "g_ui3_asset_restore_failed": MessageLookupByLibrary.simpleMessage(
+      "資産の表示を復元できませんでした。",
+    ),
+    "g_ui3_asset_save_failed": MessageLookupByLibrary.simpleMessage(
+      "資産の表示設定を保存できませんでした。",
+    ),
+    "g_ui3_asset_state_hidden": MessageLookupByLibrary.simpleMessage("非表示"),
+    "g_ui3_asset_state_quarantined": MessageLookupByLibrary.simpleMessage(
+      "隔離済み",
+    ),
+    "g_ui3_backup_phrase_unavailable": MessageLookupByLibrary.simpleMessage(
+      "このウォレットにはリカバリーフレーズが保存されていません。",
+    ),
+    "g_ui3_batch_build_failed": MessageLookupByLibrary.simpleMessage(
+      "操作の作成に失敗しました",
+    ),
+    "g_ui3_batch_nft_transfer": MessageLookupByLibrary.simpleMessage(
+      "NFT 一括送付",
+    ),
+    "g_ui3_batch_operation_invalid": m79,
+    "g_ui3_borrow": MessageLookupByLibrary.simpleMessage("借入"),
+    "g_ui3_borrow_apr": MessageLookupByLibrary.simpleMessage("借入 APR"),
+    "g_ui3_borrow_submitted": MessageLookupByLibrary.simpleMessage("借入を送信しました"),
+    "g_ui3_calldata_required": MessageLookupByLibrary.simpleMessage(
+      "Calldata は必須です",
+    ),
+    "g_ui3_chain_config_invalid": MessageLookupByLibrary.simpleMessage(
+      "無効なチェーン設定",
+    ),
+    "g_ui3_chain_config_missing_parent": MessageLookupByLibrary.simpleMessage(
+      "親チェーンの設定がありません",
+    ),
+    "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
+      "ブラウザにキャッシュされたサイトデータを消去しますか？サイトで再度サインインが必要になる場合があります。",
+    ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "最近の検索を消去しますか？",
+    ),
+    "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
+      "すべてのタブを閉じますか？",
+    ),
+    "g_ui3_confirm_action": m80,
+    "g_ui3_copy_template": MessageLookupByLibrary.simpleMessage("テンプレートをコピー"),
+    "g_ui3_csv_address_desc": MessageLookupByLibrary.simpleMessage(
+      "必須 — EVM アドレス(0x + 16進数40桁)",
+    ),
+    "g_ui3_csv_amount_desc": MessageLookupByLibrary.simpleMessage(
+      "必須 — 小数(例: 1.5)",
+    ),
+    "g_ui3_csv_columns": MessageLookupByLibrary.simpleMessage("列"),
+    "g_ui3_csv_example": MessageLookupByLibrary.simpleMessage("例"),
+    "g_ui3_csv_memo_desc": MessageLookupByLibrary.simpleMessage(
+      "任意 — ラベルまたはメモ",
+    ),
+    "g_ui3_csv_rule_blank": MessageLookupByLibrary.simpleMessage("空行は無視されます"),
+    "g_ui3_csv_rule_comments": MessageLookupByLibrary.simpleMessage(
+      "# で始まる行はコメントとして無視されます",
+    ),
+    "g_ui3_csv_rule_duplicates": MessageLookupByLibrary.simpleMessage(
+      "重複したアドレスはマークされます",
+    ),
+    "g_ui3_csv_rule_header": MessageLookupByLibrary.simpleMessage(
+      "ヘッダー行(address,amount,memo)は任意です — 自動検出されます",
+    ),
+    "g_ui3_csv_rules": MessageLookupByLibrary.simpleMessage("ルール"),
+    "g_ui3_data": MessageLookupByLibrary.simpleMessage("データ"),
+    "g_ui3_delete_bookmark_confirm": MessageLookupByLibrary.simpleMessage(
+      "このブックマークを削除しますか？",
+    ),
+    "g_ui3_delete_trade_confirm": MessageLookupByLibrary.simpleMessage(
+      "この取引記録を削除しますか?",
+    ),
+    "g_ui3_delete_validator_key_confirm": MessageLookupByLibrary.simpleMessage(
+      "このデバイスからこのバリデーターキーを削除しますか？バックアップがあることを確認してください。",
+    ),
+    "g_ui3_enter_amount": MessageLookupByLibrary.simpleMessage("金額を入力してください"),
+    "g_ui3_falcon_auth_reason": MessageLookupByLibrary.simpleMessage(
+      "Falcon ウォレットの操作を承認",
+    ),
+    "g_ui3_falcon_backup_password": MessageLookupByLibrary.simpleMessage(
+      "バックアップパスワード（12文字以上）",
+    ),
+    "g_ui3_falcon_backup_to_restore": MessageLookupByLibrary.simpleMessage(
+      "復元する暗号化バックアップ",
+    ),
+    "g_ui3_falcon_backup_verified": MessageLookupByLibrary.simpleMessage(
+      "暗号化バックアップを検証しました",
+    ),
+    "g_ui3_falcon_confirm_offline_signature":
+        MessageLookupByLibrary.simpleMessage("オフライン署名を確認"),
+    "g_ui3_falcon_confirm_transaction": MessageLookupByLibrary.simpleMessage(
+      "Falcon トランザクションを確認",
+    ),
+    "g_ui3_falcon_copy_result": MessageLookupByLibrary.simpleMessage("結果をコピー"),
+    "g_ui3_falcon_create_account": MessageLookupByLibrary.simpleMessage(
+      "Falcon アカウントを作成",
+    ),
+    "g_ui3_falcon_export_backup": MessageLookupByLibrary.simpleMessage(
+      "暗号化バックアップをエクスポート",
+    ),
+    "g_ui3_falcon_library_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Falcon ネイティブライブラリを利用できません",
+    ),
+    "g_ui3_falcon_network_not_enabled": MessageLookupByLibrary.simpleMessage(
+      "このネットワークでは Falcon-512 トランザクションが有効になっていません。オフライン署名は利用できます。",
+    ),
+    "g_ui3_falcon_notice": MessageLookupByLibrary.simpleMessage(
+      "Falcon-512 トランザクションを明示的にサポートするネットワークのみを使用してください。入金前に RPC とバックアップを確認してください。Falcon の鍵には別途暗号化バックアップが必要で、EVM のリカバリーフレーズでは復元できません。送信結果が不明な場合は、次の支払いの前にステータスを確認してください。",
+    ),
+    "g_ui3_falcon_operation_failed": MessageLookupByLibrary.simpleMessage(
+      "操作に失敗しました。入力内容、バックアップパスワード、端末認証を確認してください。送信を試みた場合は、再試行の前に前回の送信結果を確認してください。",
+    ),
+    "g_ui3_falcon_owner_changed": MessageLookupByLibrary.simpleMessage(
+      "ウォレットの所有者が変更されました",
+    ),
+    "g_ui3_falcon_public_key": m81,
+    "g_ui3_falcon_query_previous": MessageLookupByLibrary.simpleMessage(
+      "前回の送信を確認",
+    ),
+    "g_ui3_falcon_query_previous_first": MessageLookupByLibrary.simpleMessage(
+      "次の支払いの前に、前回の送信結果を確認してください。",
+    ),
+    "g_ui3_falcon_restore_account": MessageLookupByLibrary.simpleMessage(
+      "Falcon アカウントを復元",
+    ),
+    "g_ui3_falcon_review_send": MessageLookupByLibrary.simpleMessage("確認して送信"),
+    "g_ui3_falcon_review_sign_offline": MessageLookupByLibrary.simpleMessage(
+      "確認してオフライン署名",
+    ),
+    "g_ui3_falcon_sign_and_send": MessageLookupByLibrary.simpleMessage(
+      "署名して送信",
+    ),
+    "g_ui3_falcon_verify_backup": MessageLookupByLibrary.simpleMessage(
+      "保存したバックアップを検証",
+    ),
+    "g_ui3_hw_bt_disabled_message": MessageLookupByLibrary.simpleMessage(
+      "ハードウェアウォレットに接続するには、デバイスの設定で Bluetooth をオンにしてください。",
+    ),
+    "g_ui3_hw_bt_disabled_title": MessageLookupByLibrary.simpleMessage(
+      "Bluetooth がオフです",
+    ),
+    "g_ui3_hw_bt_permission_message": MessageLookupByLibrary.simpleMessage(
+      "ハードウェアウォレットを検索するには Bluetooth の権限を許可してください。",
+    ),
+    "g_ui3_hw_bt_permission_title": MessageLookupByLibrary.simpleMessage(
+      "Bluetooth の権限が必要です",
+    ),
+    "g_ui3_hw_devices_found": m82,
+    "g_ui3_hw_ledger_device": MessageLookupByLibrary.simpleMessage(
+      "Ledger デバイス",
+    ),
+    "g_ui3_hw_no_devices": MessageLookupByLibrary.simpleMessage("デバイスが見つかりません"),
+    "g_ui3_hw_scan_again": MessageLookupByLibrary.simpleMessage("再スキャン"),
+    "g_ui3_hw_search_complete": MessageLookupByLibrary.simpleMessage("検索完了"),
+    "g_ui3_hw_searching": MessageLookupByLibrary.simpleMessage("デバイスを検索中..."),
+    "g_ui3_hw_stop_scan": MessageLookupByLibrary.simpleMessage("スキャンを停止"),
+    "g_ui3_iap_purchase_not_started": MessageLookupByLibrary.simpleMessage(
+      "購入を開始できませんでした",
+    ),
+    "g_ui3_idhub_approve_login_prompt": MessageLookupByLibrary.simpleMessage(
+      "N42 ID でのサインインを承認しますか？",
+    ),
+    "g_ui3_idhub_approved": MessageLookupByLibrary.simpleMessage(
+      "承認しました。もう一方の端末に戻ってください。",
+    ),
+    "g_ui3_idhub_bind": MessageLookupByLibrary.simpleMessage("連携"),
+    "g_ui3_idhub_bind_prompt": MessageLookupByLibrary.simpleMessage(
+      "このウォレットを N42 ID に連携しますか？",
+    ),
+    "g_ui3_idhub_bind_wallet": MessageLookupByLibrary.simpleMessage("ウォレット連携"),
+    "g_ui3_idhub_bind_wallet_title": MessageLookupByLibrary.simpleMessage(
+      "ウォレットを連携",
+    ),
+    "g_ui3_idhub_bound": MessageLookupByLibrary.simpleMessage(
+      "ウォレットを連携しました。もう一方の端末に戻ってください。",
+    ),
+    "g_ui3_idhub_load_failed": MessageLookupByLibrary.simpleMessage(
+      "このリクエストを読み込めませんでした。",
+    ),
+    "g_ui3_idhub_login_request": MessageLookupByLibrary.simpleMessage(
+      "ログインリクエスト",
+    ),
+    "g_ui3_idhub_request": MessageLookupByLibrary.simpleMessage("リクエスト"),
+    "g_ui3_idhub_server": MessageLookupByLibrary.simpleMessage("サーバー"),
+    "g_ui3_idhub_sign_failed": MessageLookupByLibrary.simpleMessage(
+      "署名に失敗しました。もう一度お試しください。",
+    ),
+    "g_ui3_idhub_sign_in": MessageLookupByLibrary.simpleMessage("サインイン"),
+    "g_ui3_idhub_type_mismatch": MessageLookupByLibrary.simpleMessage(
+      "このリクエストの種類はスキャンしたコードと一致しません。",
+    ),
+    "g_ui3_idhub_unlock_wallet": MessageLookupByLibrary.simpleMessage(
+      "ウォレットのロックを解除してから、このリクエストを開き直してください。",
+    ),
+    "g_ui3_idhub_untrusted_server": MessageLookupByLibrary.simpleMessage(
+      "このリクエストは信頼されていないサーバーを指しているため、ブロックされました。",
+    ),
+    "g_ui3_idhub_wallet_changed": MessageLookupByLibrary.simpleMessage(
+      "使用中のウォレットが切り替わりました。このリクエストを開き直してください。",
+    ),
+    "g_ui3_invalid_amount": MessageLookupByLibrary.simpleMessage("無効な金額"),
+    "g_ui3_invalid_coin_config": MessageLookupByLibrary.simpleMessage(
+      "無効なコイン設定",
+    ),
+    "g_ui3_invalid_tx_hash": MessageLookupByLibrary.simpleMessage("無効な取引ハッシュ"),
+    "g_ui3_invalid_tx_receipt": MessageLookupByLibrary.simpleMessage(
+      "無効な取引レシート",
+    ),
+    "g_ui3_lending": MessageLookupByLibrary.simpleMessage("レンディング"),
+    "g_ui3_limit": MessageLookupByLibrary.simpleMessage("指値"),
+    "g_ui3_live_beauty": MessageLookupByLibrary.simpleMessage("美肌＆フィルター"),
+    "g_ui3_live_beauty_reset": MessageLookupByLibrary.simpleMessage("元に戻す"),
+    "g_ui3_live_brighten": MessageLookupByLibrary.simpleMessage("美白"),
+    "g_ui3_live_browse_hint": MessageLookupByLibrary.simpleMessage(
+      "「更新」をタップしてライブルームを読み込みます",
+    ),
+    "g_ui3_live_browse_title": MessageLookupByLibrary.simpleMessage(
+      "ライブルームを見る",
+    ),
+    "g_ui3_live_coins_insufficient": MessageLookupByLibrary.simpleMessage(
+      "コインが足りません。先にチャージしてください。",
+    ),
+    "g_ui3_live_connecting": MessageLookupByLibrary.simpleMessage("接続中…"),
+    "g_ui3_live_empty": MessageLookupByLibrary.simpleMessage("ライブルームはありません"),
+    "g_ui3_live_end": MessageLookupByLibrary.simpleMessage("配信を終了"),
+    "g_ui3_live_end_confirm": MessageLookupByLibrary.simpleMessage(
+      "この配信を終了しますか？視聴者の接続は切断されます。",
+    ),
+    "g_ui3_live_enter": MessageLookupByLibrary.simpleMessage("入室"),
+    "g_ui3_live_filter": MessageLookupByLibrary.simpleMessage("フィルター"),
+    "g_ui3_live_filter_cool": MessageLookupByLibrary.simpleMessage("クール"),
+    "g_ui3_live_filter_mono": MessageLookupByLibrary.simpleMessage("モノクロ"),
+    "g_ui3_live_filter_named": m83,
+    "g_ui3_live_filter_natural": MessageLookupByLibrary.simpleMessage("ナチュラル"),
+    "g_ui3_live_filter_original": MessageLookupByLibrary.simpleMessage("オリジナル"),
+    "g_ui3_live_filter_vivid": MessageLookupByLibrary.simpleMessage("ビビッド"),
+    "g_ui3_live_filter_warm": MessageLookupByLibrary.simpleMessage("ウォーム"),
+    "g_ui3_live_gift": MessageLookupByLibrary.simpleMessage("ギフト"),
+    "g_ui3_live_gift_cheers": MessageLookupByLibrary.simpleMessage("乾杯"),
+    "g_ui3_live_gift_crown": MessageLookupByLibrary.simpleMessage("王冠"),
+    "g_ui3_live_gift_diamond": MessageLookupByLibrary.simpleMessage("ダイヤモンド"),
+    "g_ui3_live_gift_rocket": MessageLookupByLibrary.simpleMessage("ロケット"),
+    "g_ui3_live_gift_rose": MessageLookupByLibrary.simpleMessage("バラ"),
+    "g_ui3_live_gift_sent": m84,
+    "g_ui3_live_hold_compare": MessageLookupByLibrary.simpleMessage(
+      "長押しで元の画像を表示",
+    ),
+    "g_ui3_live_like": MessageLookupByLibrary.simpleMessage("いいね"),
+    "g_ui3_live_list": MessageLookupByLibrary.simpleMessage("ライブ配信"),
+    "g_ui3_live_load_failed": m85,
+    "g_ui3_live_mute": MessageLookupByLibrary.simpleMessage("ミュート"),
+    "g_ui3_live_pause_video": MessageLookupByLibrary.simpleMessage("映像を一時停止"),
+    "g_ui3_live_permission_required": MessageLookupByLibrary.simpleMessage(
+      "ライブ配信にはカメラとマイクへのアクセスが必要です",
+    ),
+    "g_ui3_live_resume_video": MessageLookupByLibrary.simpleMessage("映像を再開"),
+    "g_ui3_live_room_id_copied": MessageLookupByLibrary.simpleMessage(
+      "ルーム ID をコピーしました",
+    ),
+    "g_ui3_live_rosy": MessageLookupByLibrary.simpleMessage("血色"),
+    "g_ui3_live_say_something": MessageLookupByLibrary.simpleMessage(
+      "何か話しかけよう…",
+    ),
+    "g_ui3_live_send_gift": MessageLookupByLibrary.simpleMessage("ギフトを贈る"),
+    "g_ui3_live_smooth": MessageLookupByLibrary.simpleMessage("美肌"),
+    "g_ui3_live_start": MessageLookupByLibrary.simpleMessage("ライブ配信を開始"),
+    "g_ui3_live_starting": MessageLookupByLibrary.simpleMessage("開始中…"),
+    "g_ui3_live_switch_camera": MessageLookupByLibrary.simpleMessage(
+      "カメラを切り替え",
+    ),
+    "g_ui3_live_top_up": MessageLookupByLibrary.simpleMessage("チャージ"),
+    "g_ui3_live_torch_off": MessageLookupByLibrary.simpleMessage("ライトをオフ"),
+    "g_ui3_live_torch_on": MessageLookupByLibrary.simpleMessage("ライトをオン"),
+    "g_ui3_live_torch_unsupported": MessageLookupByLibrary.simpleMessage(
+      "ライト対応の背面カメラに切り替えてください",
+    ),
+    "g_ui3_live_unmute": MessageLookupByLibrary.simpleMessage("ミュート解除"),
+    "g_ui3_live_user_joined": m86,
+    "g_ui3_live_video_unavailable": MessageLookupByLibrary.simpleMessage(
+      "映像を利用できません。その他のライブ機能は引き続き使えます。",
+    ),
+    "g_ui3_live_viewers": m87,
+    "g_ui3_live_waiting_video": MessageLookupByLibrary.simpleMessage(
+      "映像を待っています…",
+    ),
+    "g_ui3_long": MessageLookupByLibrary.simpleMessage("ロング"),
+    "g_ui3_market": MessageLookupByLibrary.simpleMessage("成行"),
+    "g_ui3_method": MessageLookupByLibrary.simpleMessage("メソッド"),
+    "g_ui3_min_balance": MessageLookupByLibrary.simpleMessage("最低残高"),
+    "g_ui3_missing_parent_chain": m88,
+    "g_ui3_nft_transfer_unsupported": MessageLookupByLibrary.simpleMessage(
+      "NFT の送付はサポートされていません",
+    ),
+    "g_ui3_no_markets": MessageLookupByLibrary.simpleMessage(
+      "利用可能なマーケットがありません",
+    ),
+    "g_ui3_no_trending_data": MessageLookupByLibrary.simpleMessage(
+      "トレンドデータがありません",
+    ),
+    "g_ui3_no_wallet_for_chain": MessageLookupByLibrary.simpleMessage(
+      "このチェーンのウォレットアカウントが見つかりません",
+    ),
+    "g_ui3_phone": MessageLookupByLibrary.simpleMessage("電話番号"),
+    "g_ui3_pick_file": MessageLookupByLibrary.simpleMessage("ファイルを選択"),
+    "g_ui3_pred_awaiting": MessageLookupByLibrary.simpleMessage("結果待ち"),
+    "g_ui3_pred_claim_refund": MessageLookupByLibrary.simpleMessage("返金を受け取る"),
+    "g_ui3_pred_closed": MessageLookupByLibrary.simpleMessage("締切"),
+    "g_ui3_pred_closes_in": m89,
+    "g_ui3_pred_held": m90,
+    "g_ui3_pred_redeem_winnings": MessageLookupByLibrary.simpleMessage(
+      "賞金を受け取る",
+    ),
+    "g_ui3_pred_resolve": MessageLookupByLibrary.simpleMessage("結果を確定"),
+    "g_ui3_pred_volume": m91,
+    "g_ui3_receipt_lookup_failed": MessageLookupByLibrary.simpleMessage(
+      "レシートの取得に失敗しました",
+    ),
+    "g_ui3_remove_asset_message": MessageLookupByLibrary.simpleMessage(
+      "このウォレットには表示されなくなります。オンチェーン上の資産には影響しません。",
+    ),
+    "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "この最近の検索を削除しますか？",
+    ),
+    "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
+      "RPC のジェネシスブロックを検証できません。ネットワークは追加されませんでした。",
+    ),
+    "g_ui3_rpc_idn_hostname_warning": m93,
+    "g_ui3_rpc_url_not_configured": MessageLookupByLibrary.simpleMessage(
+      "RPC URL が設定されていません",
+    ),
+    "g_ui3_search_coin": MessageLookupByLibrary.simpleMessage("コインを検索"),
+    "g_ui3_search_failed": MessageLookupByLibrary.simpleMessage("検索に失敗しました"),
+    "g_ui3_sell": MessageLookupByLibrary.simpleMessage("売却"),
+    "g_ui3_send_failed_retry": MessageLookupByLibrary.simpleMessage(
+      "送信に失敗しました。もう一度お試しください。",
+    ),
+    "g_ui3_short": MessageLookupByLibrary.simpleMessage("ショート"),
+    "g_ui3_signing_config_changed": MessageLookupByLibrary.simpleMessage(
+      "ウォレットの署名設定が変更されました",
+    ),
+    "g_ui3_signing_key_mismatch": MessageLookupByLibrary.simpleMessage(
+      "署名キーが送信元アドレスと一致しません",
+    ),
+    "g_ui3_similar_address_body": MessageLookupByLibrary.simpleMessage(
+      "このアドレスは最近の送金先に似ていますが、異なります。",
+    ),
+    "g_ui3_similar_address_note": MessageLookupByLibrary.simpleMessage(
+      "出典:端末内の送金履歴(たった今確認)。これは類似性の警告であり、詐欺の証拠ではありません。",
+    ),
+    "g_ui3_similar_address_title": MessageLookupByLibrary.simpleMessage(
+      "受取アドレス全体を確認してください",
+    ),
+    "g_ui3_stake_confirm_message": m94,
+    "g_ui3_supply": MessageLookupByLibrary.simpleMessage("供給"),
+    "g_ui3_supply_apy": MessageLookupByLibrary.simpleMessage("供給 APY"),
+    "g_ui3_supply_submitted": MessageLookupByLibrary.simpleMessage("供給を送信しました"),
+    "g_ui3_token": MessageLookupByLibrary.simpleMessage("トークン"),
+    "g_ui3_token_added": MessageLookupByLibrary.simpleMessage("追加しました"),
+    "g_ui3_token_already_exists": MessageLookupByLibrary.simpleMessage(
+      "既に存在します",
+    ),
+    "g_ui3_token_contract_invalid": MessageLookupByLibrary.simpleMessage(
+      "無効なトークンコントラクトアドレス",
+    ),
+    "g_ui3_token_contract_required": MessageLookupByLibrary.simpleMessage(
+      "トークンのコントラクトアドレスは必須です",
+    ),
+    "g_ui3_token_name_decimals": m95,
+    "g_ui3_turn_off": MessageLookupByLibrary.simpleMessage("オフにする"),
+    "g_ui3_turn_off_verification_message": MessageLookupByLibrary.simpleMessage(
+      "保存された設定は削除されます。再度オンにするには、もう一度設定する必要があります。",
+    ),
+    "g_ui3_turn_off_verification_title": MessageLookupByLibrary.simpleMessage(
+      "この認証をオフにしますか？",
+    ),
+    "g_ui3_tx_not_found": MessageLookupByLibrary.simpleMessage("取引が見つかりません"),
+    "g_ui3_unknown": MessageLookupByLibrary.simpleMessage("不明"),
+    "g_ui3_update_account_email": MessageLookupByLibrary.simpleMessage(
+      "アカウントのメールアドレスを更新",
+    ),
+    "g_ui3_uptime": MessageLookupByLibrary.simpleMessage("稼働率"),
+    "g_ui3_ws_status": MessageLookupByLibrary.simpleMessage("WS ステータス"),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 レンディング"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage("アカウントメール"),
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
       "このアセットを追加するにはネットワーク手数料が必要です。追加を続行するには[追加]をタップしてください。",
     ),
-    "g_ui_algo_asset_missing": m76,
+    "g_ui_algo_asset_missing": m96,
     "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
       "残高、ポートフォリオ、ガスについて質問してください",
     ),
@@ -2598,7 +3102,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
       "バックアップを復元できませんでした。パスワードとバックアップファイルを確認して、もう一度お試しください。",
     ),
-    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_result": m97,
     "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
       "ウォレットをインポート",
     ),
@@ -2645,8 +3149,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
       "このバックアップにはプライベートキー / ミスノニック、ウォレットパスワード、ウォレット設定が含まれます。バックアップファイルとパスワードを安全に保管してください。誰とも共有しないでください。",
     ),
-    "g_ui_balance_value": m78,
-    "g_ui_base_fee_value": m79,
+    "g_ui_balance_value": m98,
+    "g_ui_base_fee_value": m99,
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "N42プロトコルを通じてNを購入",
     ),
@@ -2659,7 +3163,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage("注文をキャンセル"),
     "g_ui_change_email": MessageLookupByLibrary.simpleMessage("メールアドレスを変更"),
     "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage("承認の確認中…"),
-    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_clear": m100,
     "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage("クリップボードは空です"),
     "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
       "コインの読み込みに失敗しました。もう一度お試しください。",
@@ -2671,14 +3175,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
       "データ行が見つかりませんでした（ヘッダーのみ検出）。",
     ),
-    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_missing_fields": m101,
     "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
       "コメントを除外した後、データが見つかりませんでした。",
     ),
     "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("カスタムタグ..."),
-    "g_ui_days": m82,
+    "g_ui_days": m102,
     "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage("送金先タグ"),
-    "g_ui_device_connected": m83,
+    "g_ui_device_connected": m103,
     "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
       "Uniswap / 1inch / Jupiter でトークンを交換",
     ),
@@ -2705,9 +3209,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("フリー"),
     "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage("次のブロックのガス予測"),
-    "g_ui_gas_value": m84,
-    "g_ui_hours": m85,
-    "g_ui_import_valid": m86,
+    "g_ui_gas_value": m104,
+    "g_ui_hours": m105,
+    "g_ui_import_valid": m106,
     "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
       "有効なメールアドレスを入力してください",
     ),
@@ -2717,15 +3221,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage("指値注文"),
     "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("指値価格"),
-    "g_ui_limit_price_pair": m87,
-    "g_ui_limit_value": m88,
+    "g_ui_limit_price_pair": m107,
+    "g_ui_limit_value": m108,
     "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage("清算価格"),
     "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("利用率"),
-    "g_ui_markets_count": m89,
+    "g_ui_markets_count": m109,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("メモ"),
     "g_ui_mempool": MessageLookupByLibrary.simpleMessage("メモポール"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("メッセージ"),
-    "g_ui_min_balance_value": m90,
+    "g_ui_min_balance_value": m110,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage("ミスノニックウォレット"),
     "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
       "ソーシャルアカウントでログインして、安全なMPCウォレットを作成します。あなたの秘密鍵は暗号化されたシェアに分割され、シードフレーズを紛失する心配がありません。",
@@ -2758,7 +3262,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_order_executed": MessageLookupByLibrary.simpleMessage("実行済み"),
     "g_ui_order_place": MessageLookupByLibrary.simpleMessage("指値注文を出す"),
     "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage("トリガーされました"),
-    "g_ui_orders_count": m91,
+    "g_ui_orders_count": m111,
     "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
       "指値注文の読み込みに失敗しました",
     ),
@@ -2769,12 +3273,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage("保留中 (メモポール)"),
     "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage("人気トークン"),
     "g_ui_position_size": MessageLookupByLibrary.simpleMessage("サイズ"),
-    "g_ui_positions_count": m92,
+    "g_ui_positions_count": m112,
     "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
       "プライベートキー・ウォレット",
     ),
     "g_ui_read_only": MessageLookupByLibrary.simpleMessage("読み取り専用"),
-    "g_ui_recipients_count": m93,
+    "g_ui_recipients_count": m113,
     "g_ui_room_id": MessageLookupByLibrary.simpleMessage("ルームID"),
     "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
       "保存に失敗しました。もう一度お試しください。",
@@ -2791,30 +3295,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
       "トークンコントラクト (0x...)",
     ),
-    "g_ui_token_found": m94,
+    "g_ui_token_found": m114,
     "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage("トークン情報の検索中…"),
     "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
       "トークンリストに見つかりません — トークン記号と小数点以下の桁数を手動で入力してください",
     ),
-    "g_ui_token_value": m95,
+    "g_ui_token_value": m115,
     "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
       "取引を削除できませんでした。もう一度お試しください。",
     ),
     "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
       "取引を保存できませんでした。もう一度お試しください。",
     ),
-    "g_ui_transaction_hash_value": m96,
+    "g_ui_transaction_hash_value": m116,
     "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage("不明なステータス"),
     "g_ui_update": MessageLookupByLibrary.simpleMessage("更新"),
     "g_ui_update_email": MessageLookupByLibrary.simpleMessage("メールアドレスを更新"),
-    "g_ui_validation_counts": m97,
+    "g_ui_validation_counts": m117,
     "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage("検証の問題"),
-    "g_ui_validation_more": m98,
+    "g_ui_validation_more": m118,
     "g_ui_verification_code": MessageLookupByLibrary.simpleMessage("確認コード"),
     "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("コードを確認"),
     "g_ui_view_market": MessageLookupByLibrary.simpleMessage("市場データを表示"),
     "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("24時間の取引高"),
-    "g_ui_volume_interest": m99,
+    "g_ui_volume_interest": m119,
     "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("ウォレットAI"),
     "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
       "ウォレットを作成するかインポートして、始めましょう",
@@ -2825,7 +3329,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
       "ウォレットを読み込み中...",
     ),
-    "g_ui_wallet_number": m100,
+    "g_ui_wallet_number": m120,
     "g_version_later": MessageLookupByLibrary.simpleMessage("後で"),
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "残高の更新に失敗しました",
@@ -2840,11 +3344,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage("トークンをピン留め"),
     "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage("保存済み価格"),
-    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_hours": m121,
     "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
       "今更新しました",
     ),
-    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_minutes": m122,
     "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage("部分的な価格"),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "価格が利用できません",
@@ -2897,7 +3401,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "バックグラウンドで一時停止中",
     ),
-    "miningV3Block": m103,
+    "miningV3Block": m123,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("ブロックハッシュ"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage("証明書取得済みブロック"),
     "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("証明書取得済み"),
@@ -2908,7 +3412,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Copied": MessageLookupByLibrary.simpleMessage("ブロックハッシュをコピーしました"),
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("ブロックハッシュをコピー"),
-    "miningV3Device": m104,
+    "miningV3Device": m124,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage("セッション時間"),
     "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
       "マイニングを開始すると、検証済みブロックと証明書が表示されます。",
@@ -2928,7 +3432,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "既定のノードはローカルテストネット上にあります。独自のアドレスも入力できます。",
     ),
-    "miningV3Milliseconds": m105,
+    "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("検証ノード"),
     "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("ノードアドレス"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
@@ -2976,7 +3480,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("検証成功率"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("記録時刻"),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("マイニング"),
-    "miningV3Transactions": m106,
+    "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("取引"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("証明書未取得"),
     "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
@@ -2984,7 +3488,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("検証済みブロック"),
     "next": MessageLookupByLibrary.simpleMessage("次へ"),
-    "nicknameMessage": m107,
+    "nicknameMessage": m127,
     "personalInformation": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
     "photograph": MessageLookupByLibrary.simpleMessage("撮影"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(

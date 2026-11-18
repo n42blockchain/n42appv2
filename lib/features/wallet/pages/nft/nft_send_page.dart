@@ -50,7 +50,21 @@ class _NftSendPageState extends State<NftSendPage> {
     super.dispose();
   }
 
+  /// Set for the whole of [_send], including the address check that runs
+  /// before [_sending]; a second tap in that window would send twice.
+  bool _inFlight = false;
+
   Future<void> _send() async {
+    if (_inFlight || _sending) return;
+    _inFlight = true;
+    try {
+      await _sendInner();
+    } finally {
+      _inFlight = false;
+    }
+  }
+
+  Future<void> _sendInner() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final toAddress = _addressCtrl.text.trim();
@@ -105,7 +119,7 @@ class _NftSendPageState extends State<NftSendPage> {
       if (!mounted) return;
 
       if (!result.success) {
-        ToastUtils.showWarning(result.error ?? 'Send failed');
+        ToastUtils.showWarning(result.error ?? S.of(context).g_key_175);
       } else {
         ToastUtils.showSuccess(S.of(context).g_key_nft_41);
         completedWithExit = true;
@@ -128,114 +142,144 @@ class _NftSendPageState extends State<NftSendPage> {
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_nft_send),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: AppSpacing.space8),
+      // Scrolls when the content (larger text, small screens) does not fit;
+      // the Spacer still pins the actions to the bottom otherwise.
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: AppSpacing.space8),
 
-                // NFT 简要信息
-                _buildNftInfo(context, textColor, subtitleColor),
+                      // NFT 简要信息
+                      _buildNftInfo(context, textColor, subtitleColor),
 
-                SizedBox(height: AppSpacing.space8),
+                      SizedBox(height: AppSpacing.space8),
 
-                // 收款地址
-                Text(
-                  S.of(context).g_key_38, // To
-                  style: AppTypography.body.copyWith(color: subtitleColor),
-                ),
-                SizedBox(height: AppSpacing.space2),
-                TextFormField(
-                  controller: _addressCtrl,
-                  decoration: InputDecoration(
-                    hintText: S.of(context).g_key_41,
-                    hintStyle: AppTypography.bodySm.copyWith(
-                      color: subtitleColor,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.paste, color: blueColor),
-                      onPressed: () async {
-                        final data = await Clipboard.getData('text/plain');
-                        if (!mounted) return;
-                        if (data?.text != null) {
-                          _addressCtrl.text = data!.text!;
-                        }
-                      },
-                    ),
-                    border: OutlineInputBorder(borderRadius: AppRadius.brSm),
-                  ),
-                  style: AppTypography.bodySm.copyWith(color: textColor),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) {
-                      return S.of(context).g_key_41;
-                    }
-                    return null;
-                  },
-                ),
-
-                // ERC1155 数量字段
-                if (nft.isErc1155) ...[
-                  SizedBox(height: AppSpacing.space6),
-                  Text(
-                    S.of(context).g_key_nft_quantity,
-                    style: AppTypography.body.copyWith(color: subtitleColor),
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  TextFormField(
-                    controller: _quantityCtrl,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(
-                      hintText: '1 ~ ${nft.balance}',
-                      hintStyle: AppTypography.bodySm.copyWith(
-                        color: subtitleColor,
+                      // 收款地址
+                      Text(
+                        S.of(context).g_key_38, // To
+                        style: AppTypography.body.copyWith(
+                          color: subtitleColor,
+                        ),
                       ),
-                      border: OutlineInputBorder(borderRadius: AppRadius.brSm),
-                    ),
-                    style: AppTypography.bodySm.copyWith(color: textColor),
-                    validator: (v) {
-                      final n = int.tryParse(v ?? '');
-                      if (n == null || n <= 0) return S.of(context).g_key_t_43;
-                      if (n > nft.balance) return S.of(context).g_key_47;
-                      return null;
-                    },
-                  ),
-                ],
-
-                const Spacer(),
-
-                // 发送按钮
-                SizedBox(
-                  width: double.infinity,
-                  height: ScreenUtil().setWidth(90),
-                  child: ElevatedButton(
-                    onPressed: _sending ? null : _send,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: blueColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: AppRadius.brMd,
+                      SizedBox(height: AppSpacing.space2),
+                      TextFormField(
+                        controller: _addressCtrl,
+                        decoration: InputDecoration(
+                          hintText: S.of(context).g_key_41,
+                          hintStyle: AppTypography.bodySm.copyWith(
+                            color: subtitleColor,
+                          ),
+                          suffixIcon: IconButton(
+                            tooltip: S.of(context).g_key_166,
+                            icon: Icon(Icons.paste, color: blueColor),
+                            onPressed: () async {
+                              final data = await Clipboard.getData(
+                                'text/plain',
+                              );
+                              if (!mounted) return;
+                              if (data?.text != null) {
+                                _addressCtrl.text = data!.text!;
+                              }
+                            },
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: AppRadius.brSm,
+                          ),
+                        ),
+                        style: AppTypography.bodySm.copyWith(color: textColor),
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return S.of(context).g_key_41;
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    child: _sending
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                            S.of(context).g_key_48, // Send
-                            style: AppTypography.body.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
+
+                      // ERC1155 数量字段
+                      if (nft.isErc1155) ...[
+                        SizedBox(height: AppSpacing.space6),
+                        Text(
+                          S.of(context).g_key_nft_quantity,
+                          style: AppTypography.body.copyWith(
+                            color: subtitleColor,
+                          ),
+                        ),
+                        SizedBox(height: AppSpacing.space2),
+                        TextFormField(
+                          controller: _quantityCtrl,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          decoration: InputDecoration(
+                            hintText: '1 ~ ${nft.balance}',
+                            hintStyle: AppTypography.bodySm.copyWith(
+                              color: subtitleColor,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: AppRadius.brSm,
                             ),
                           ),
+                          style: AppTypography.bodySm.copyWith(
+                            color: textColor,
+                          ),
+                          validator: (v) {
+                            final n = int.tryParse(v ?? '');
+                            if (n == null || n <= 0) {
+                              return S.of(context).g_key_t_43;
+                            }
+                            if (n > nft.balance) return S.of(context).g_key_47;
+                            return null;
+                          },
+                        ),
+                      ],
+
+                      const Spacer(),
+
+                      // 发送按钮
+                      SizedBox(
+                        width: double.infinity,
+                        height: AppTouch.scaled(90),
+                        child: ElevatedButton(
+                          onPressed: _sending ? null : _send,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppContrast.fillForWhiteText(
+                              blueColor,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: AppRadius.brMd,
+                            ),
+                          ),
+                          child: _sending
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  S.of(context).g_key_48, // Send
+                                  style: AppTypography.body.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.space8),
+                    ],
                   ),
                 ),
-                SizedBox(height: AppSpacing.space8),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

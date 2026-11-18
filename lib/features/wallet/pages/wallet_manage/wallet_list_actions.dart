@@ -44,58 +44,15 @@ mixin _WalletListActionsMixin on ConsumerState<WalletList> {
 
   /// 删除钱包（与原 deleteWalletAlert 逻辑一致）
   Future<void> _onDelete(WalletInfo info) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog.adaptive(
-        title: Text(
-          S.of(ctx).g_face_3,
-          style: AppTypography.headline.copyWith(
-            color: AppThemeUtils.getColorByKey(
-              ctx,
-              AppThemeKeys.mainTextColor.name,
-            ),
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Text(
-            S.of(ctx).g_key_192,
-            style: AppTypography.body.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                ctx,
-                AppThemeKeys.mainTextColor.name,
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(
-              S.of(ctx).g_key_79,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  ctx,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(
-              S.of(ctx).g_key_78,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  ctx,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    final s = S.of(context);
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: s.g_face_3,
+      message: s.g_key_192,
+      confirmText: s.g_key_113,
+      danger: true,
     );
-    if (!mounted || confirmed != true) return;
+    if (!mounted || !confirmed) return;
     final rmm = await ref.read(wapBridgeProvider).deleteWalletInfo(info: info);
     if (!mounted) return;
     if (rmm != null) {

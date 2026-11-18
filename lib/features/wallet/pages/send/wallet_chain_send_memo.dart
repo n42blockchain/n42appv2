@@ -55,6 +55,9 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
   final Future<bool> Function(TransationRecordModel)?
   releaseUnsubmittedTransaction;
   final Future<bool> Function(TransationRecordModel)? markTransactionDispatch;
+  final Future<int> Function(TransationRecordModel)? dismissPendingTransactions;
+  final Future<bool> Function(TransationRecordModel, String)?
+  markTransactionRejected;
   const WalletChainSendMemo(
     this.coinModel, {
     super.key,
@@ -66,6 +69,8 @@ class WalletChainSendMemo extends ConsumerStatefulWidget {
     this.persistTransaction,
     this.markTransactionDispatch,
     this.releaseUnsubmittedTransaction,
+    this.dismissPendingTransactions,
+    this.markTransactionRejected,
   });
 
   @override
@@ -109,7 +114,8 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo>
           child: Stack(
             children: [
               Positioned.fill(
-                bottom: ScreenUtil().setWidth(148.0) + 1,
+                // Bar height: 44pt button + 16pt padding each side + divider.
+                bottom: AppTouch.target + AppSpacing.space8 * 2 + 1,
                 child: SingleChildScrollView(child: buildForm()),
               ),
               buildSendButton(),

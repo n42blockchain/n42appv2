@@ -6,7 +6,6 @@ import 'package:n42_wallet/generated/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:web3dart/web3dart.dart' show bytesToHex;
 
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -123,14 +122,14 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
   Future<void> _submitInner() async {
     final amountWei = _amountWei();
     if (amountWei == BigInt.zero) {
-      setState(() => _error = 'Enter an amount');
+      setState(() => _error = S.of(context).g_ui3_enter_amount);
       return;
     }
 
     final cm = _resolveNativeCoin();
     final poolAddr = AaveService.getPoolAddress(widget.chainId);
     if (cm == null || poolAddr == null) {
-      setState(() => _error = 'No wallet account found for this chain');
+      setState(() => _error = S.of(context).g_ui3_no_wallet_for_chain);
       return;
     }
 
@@ -178,7 +177,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
       if (!approveResult.success) {
         setState(() {
           _submitting = false;
-          _error = approveResult.error ?? 'Approve failed';
+          _error = approveResult.error ?? S.of(context).g_ui3_approve_failed;
         });
         return;
       }
@@ -217,7 +216,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
     setState(() => _submitting = false);
 
     if (!result.success) {
-      setState(() => _error = result.error ?? 'Transaction failed');
+      setState(() => _error = result.error ?? S.of(context).g_key_175);
       return;
     }
 
@@ -226,7 +225,9 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
     messenger.showSnackBar(
       SnackBar(
         content: Text(
-          widget.isSupply ? 'Supply submitted' : 'Borrow submitted',
+          widget.isSupply
+              ? S.of(context).g_ui3_supply_submitted
+              : S.of(context).g_ui3_borrow_submitted,
         ),
       ),
     );
@@ -238,12 +239,14 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
     final apy = widget.isSupply
         ? widget.reserve.supplyApy
         : widget.reserve.borrowApy;
-    final actionLabel = widget.isSupply ? 'Supply' : 'Borrow';
+    final s = S.of(context);
+    final actionLabel = widget.isSupply ? s.g_ui3_supply : s.g_ui3_borrow;
     final buttonLabel = _submitting
-        ? 'Submitting...'
+        ? s.g_key_aa_batch_submitting
         : (widget.isSupply && _needsApproval)
-        ? 'Approve $actionLabel'
-        : 'Confirm $actionLabel';
+        ? s.g_ui3_approve_action(actionLabel)
+        : s.g_ui3_confirm_action(actionLabel);
+    final apyLabel = widget.isSupply ? s.g_ui3_supply_apy : s.g_ui3_borrow_apr;
 
     return Scaffold(
       appBar: AppBar(
@@ -258,73 +261,84 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
         elevation: 0,
       ),
       backgroundColor: c.bgBase,
-      body: Padding(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
+      // Scrolls when the keyboard leaves less room than the form needs;
+      // the Spacer still pins the button to the bottom otherwise.
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
               padding: EdgeInsets.all(AppSpacing.space4),
-              decoration: BoxDecoration(
-                color: c.bgSurface,
-                borderRadius: AppRadius.brMd,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.reserve.symbol,
-                    style: AppTypography.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: c.textPrimary,
+                  Container(
+                    padding: EdgeInsets.all(AppSpacing.space4),
+                    decoration: BoxDecoration(
+                      color: c.bgSurface,
+                      borderRadius: AppRadius.brMd,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.reserve.symbol,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: c.textPrimary,
+                          ),
+                        ),
+                        Text(
+                          '${apy.toStringAsFixed(2)}% $apyLabel',
+                          style: AppTypography.caption.copyWith(
+                            color: widget.isSupply ? c.success : c.warning,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    '${apy.toStringAsFixed(2)}% ${widget.isSupply ? 'Supply APY' : 'Borrow APR'}',
-                    style: AppTypography.caption.copyWith(
-                      color: widget.isSupply ? c.success : c.warning,
-                      fontWeight: FontWeight.w600,
+                  SizedBox(height: AppSpacing.space6),
+                  AppTextField(
+                    controller: _amountCtrl,
+                    label: S.of(context).g_key_stake_amount,
+                    hint: '0.0',
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onChanged: (_) => _refreshApprovalState(),
+                    enabled: !_submitting,
+                  ),
+                  if (_checkingApproval) ...[
+                    SizedBox(height: AppSpacing.space2),
+                    Text(
+                      S.of(context).g_ui_checking_approval,
+                      style: AppTypography.caption.copyWith(
+                        color: c.textSubtitle,
+                      ),
+                    ),
+                  ],
+                  if (_error != null) ...[
+                    SizedBox(height: AppSpacing.space4),
+                    Text(
+                      _error!,
+                      style: AppTypography.caption.copyWith(color: c.danger),
+                    ),
+                  ],
+                  const Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    height: AppTouch.target,
+                    child: AppButton(
+                      label: buttonLabel,
+                      onPressed: _submitting ? null : _submit,
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: AppSpacing.space6),
-            AppTextField(
-              controller: _amountCtrl,
-              label: S.of(context).g_key_stake_amount,
-              hint: '0.0',
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              onChanged: (_) => _refreshApprovalState(),
-              enabled: !_submitting,
-            ),
-            if (_checkingApproval) ...[
-              SizedBox(height: AppSpacing.space2),
-              Text(
-                S.of(context).g_ui_checking_approval,
-                style: AppTypography.caption.copyWith(color: c.textSubtitle),
-              ),
-            ],
-            if (_error != null) ...[
-              SizedBox(height: AppSpacing.space4),
-              Text(
-                _error!,
-                style: AppTypography.caption.copyWith(color: c.danger),
-              ),
-            ],
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: ScreenUtil().setWidth(88),
-              child: AppButton(
-                label: buttonLabel,
-                onPressed: _submitting ? null : _submit,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

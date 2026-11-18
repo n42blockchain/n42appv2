@@ -194,6 +194,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
         ),
         backgroundColor: AppColorTokens.of(context).bgBase,
         leading: IconButton(
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
           color: AppColorTokens.of(context).textPrimary,
@@ -227,7 +228,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
           ElevatedButton(
             onPressed: _proceedToScan,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColorTokens.of(context).brand,
+              backgroundColor: AppColorTokens.of(context).brandFill,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),

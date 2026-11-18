@@ -162,8 +162,10 @@ class _KeystoneScanErrorCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: AppSpacing.space4),
-          GestureDetector(
+          // 44pt hit area around the unchanged small pill.
+          AppTapArea(
             onTap: onRetry,
+            borderRadius: AppRadius.brSm,
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: AppSpacing.space6,

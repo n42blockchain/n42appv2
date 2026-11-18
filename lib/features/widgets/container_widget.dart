@@ -14,28 +14,32 @@ Widget containerStyle1(
   Color? bgColor,
   GestureTapCallback? onTap,
 }) {
-  return InkWell(
-    onTap: onTap,
-    child: Container(
-      height: height,
-      width: width,
-      margin: margin,
-      padding: padding,
-      alignment: alignment,
-      decoration: BoxDecoration(
-        color: bgColor ?? AppColorTokens.of(context).bgSurface,
+  // The ink is drawn on a transparent Material above the card fill (it was
+  // painted under the opaque fill before, so presses were invisible).
+  return Container(
+    height: height,
+    width: width,
+    margin: margin,
+    decoration: BoxDecoration(
+      color: bgColor ?? AppColorTokens.of(context).bgSurface,
+      borderRadius: AppRadius.brMd,
+      boxShadow: [
+        BoxShadow(
+          color: Color(0xFF101828).withAlpha((0.05 * 255).round()), //底色,阴影颜色
+          offset: Offset(0, 1), //阴影位置,从什么位置开始
+          blurRadius: ScreenUtil().setWidth(4.0), // 阴影模糊层度
+          spreadRadius: 0,
+        ),
+      ],
+      border: border,
+    ),
+    child: Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: AppRadius.brMd,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFF101828).withAlpha((0.05 * 255).round()), //底色,阴影颜色
-            offset: Offset(0, 1), //阴影位置,从什么位置开始
-            blurRadius: ScreenUtil().setWidth(4.0), // 阴影模糊层度
-            spreadRadius: 0,
-          ),
-        ],
-        border: border,
+        child: Container(padding: padding, alignment: alignment, child: child),
       ),
-      child: child,
     ),
   );
 }

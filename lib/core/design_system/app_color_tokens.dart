@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../presentation/themes/theme_adapter.dart';
+import 'app_contrast.dart';
 
 /// 语义颜色令牌。见 `docs/DESIGN_SYSTEM.md` §1.1 / §1.2。
 ///
@@ -51,6 +52,40 @@ class AppColorTokens {
   Color get brand => _key(AppThemeKeys.mainBlueColor);
   Color get brandSubtle => brand.withValues(alpha: 0.12);
 
+  /// Brand shade for fills that carry white text (filled buttons, the asset
+  /// card): same hue, darkened only until white reaches 4.5:1. System blue
+  /// gives about 4.0:1 (light) / 3.65:1 (dark) with white; this gives 4.5:1+.
+  /// Keep [brand] itself for icons, outlines and other accents.
+  Color get brandFill => AppContrast.fillForWhiteText(brand);
+
+  /// Foreground on [brandFill].
+  Color get onBrandFill => const Color(0xFFFFFFFF);
+
+  /// Brand-colored text or icon on a brand tint (up to 15% alpha, such as
+  /// [brandSubtle]) over any page or card background: >= 4.5:1, where the
+  /// plain brand measures about 3.0-3.5:1.
+  Color get brandOnTint => brandOnTintAt(AppContrast.maxTintAlpha);
+
+  /// [brandOnTint] for a stronger brand tint of [alpha].
+  Color brandOnTintAt(double alpha) => AppContrast.textOnTint(
+    brand,
+    [bgBase, bgSurface, bgElevated],
+    dark: _isDark,
+    alpha: alpha,
+  );
+
+  /// [color] as a label on its own tint of up to [alpha] (0 = plain page
+  /// or card background): lightness shifted until it reaches 4.5:1. Use for
+  /// semantic text such as success / warning / danger labels and badges;
+  /// system green / orange / red text measure about 2.2 / 2.2 / 3.6:1.
+  Color textOnTintOf(Color color, {double alpha = AppContrast.maxTintAlpha}) =>
+      AppContrast.textOnTint(
+        color,
+        [bgBase, bgSurface, bgElevated],
+        dark: _isDark,
+        alpha: alpha,
+      );
+
   // ── 语义（复用现有表，缺失者补常量）──
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677
   Color get danger => _key(AppThemeKeys.errorTextColor); // #F03450
@@ -58,6 +93,16 @@ class AppColorTokens {
   Color get info => _apple
       ? _system(CupertinoColors.systemBlue)
       : _tone(const Color(0xFF2E90FA), const Color(0xFF4FACFE));
+
+  /// Fill shade of [danger] for solid buttons carrying white text: same
+  /// hue, darkened until white reaches 4.5:1 (system red + white is about
+  /// 3.55:1 light / 3.4:1 dark).
+  Color get dangerFill => AppContrast.fillForWhiteText(danger);
+
+  /// Foreground on a [warning] fill. Orange cannot carry white text (about
+  /// 2.2:1) without turning brown, so solid warning buttons keep the orange
+  /// and use a dark label (about 8:1).
+  Color get onWarningFill => const Color(0xFF1C1C1E);
 
   /// 危险态背景填充（errorBgColor）——错误提示卡 / 横幅底。
   Color get dangerBg =>

@@ -148,7 +148,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
   Widget _buildProgressDot({required bool active}) {
     return Container(
       height: ScreenUtil().setWidth(10.0),
-      width: ScreenUtil().setWidth(88.0),
+      width: AppTouch.target,
       decoration: BoxDecoration(
         borderRadius: AppRadius.brSm,
         color: AppThemeUtils.getColorByKey(

@@ -1,6 +1,5 @@
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:rate_us_on_store/rate_us_on_store.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -76,7 +75,7 @@ class CheckVersionAlert extends StatelessWidget {
               // ── 图标 ──────────────────────────────────────────────────
               Image.asset(
                 "assets/img/huojian.png",
-                width: ScreenUtil().setWidth(88),
+                width: AppTouch.target,
                 fit: BoxFit.cover,
               ),
               SizedBox(height: AppSpacing.space6),
@@ -123,12 +122,16 @@ class CheckVersionAlert extends StatelessWidget {
               SizedBox(height: AppSpacing.space8),
 
               // ── 立即更新按钮 ──────────────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                height: ScreenUtil().setWidth(80),
+              // minHeight (not a fixed 44pt height): the 22pt label plus the
+              // button's 24pt padding did not fit, and 130% text clipped.
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: double.infinity,
+                  minHeight: AppTouch.scaled(80),
+                ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: accentColor,
+                    backgroundColor: AppContrast.fillForWhiteText(accentColor),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: AppRadius.brXl),
                     elevation: 0,

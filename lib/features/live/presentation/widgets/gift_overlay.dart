@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import '../../services/live_chat_service.dart';
 import 'gift_catalog.dart';
@@ -49,6 +50,8 @@ class _GiftOverlayState extends ConsumerState<GiftOverlay> {
     final gift = giftById(e.data['g'] as String? ?? '');
     if (gift == null) return;
 
+    final s = S.of(context);
+    final giftName = '${gift.emoji}${liveGiftLabel(s, gift)}';
     final key = UniqueKey();
     final flight = _GiftFlight(
       key: key,
@@ -61,7 +64,7 @@ class _GiftOverlayState extends ConsumerState<GiftOverlay> {
     setState(() {
       _flights.add(flight);
       if (_flights.length > _maxConcurrent) _flights.removeAt(0);
-      _banner = '${e.senderName} 送出 ${gift.emoji}${gift.label}';
+      _banner = s.g_ui3_live_gift_sent(e.senderName, giftName);
     });
     _bannerTimer?.cancel();
     _bannerTimer = Timer(const Duration(seconds: 3), () {

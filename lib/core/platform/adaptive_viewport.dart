@@ -10,9 +10,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// Keeps the same navigator alive as a scene resizes or crosses a display fold.
 /// UIKit reports regions in this Flutter view's logical coordinate space.
 class AdaptiveViewport extends StatefulWidget {
-  const AdaptiveViewport({super.key, required this.child});
+  const AdaptiveViewport({
+    super.key,
+    required this.child,
+    this.backgroundColor,
+  });
 
   final Widget child;
+
+  /// Fills the area left outside the usable viewport (e.g. the pane beyond
+  /// a fold) so it matches the app instead of showing the bare window.
+  final Color? backgroundColor;
 
   @override
   State<AdaptiveViewport> createState() => _AdaptiveViewportState();
@@ -117,7 +125,7 @@ class _AdaptiveViewportState extends State<AdaptiveViewport> {
       math.max(0, value.right - insets.right),
       math.max(0, value.bottom - insets.bottom),
     );
-    return Padding(
+    final content = Padding(
       padding: insets,
       child: MediaQuery(
         data: media.copyWith(
@@ -140,6 +148,9 @@ class _AdaptiveViewportState extends State<AdaptiveViewport> {
         child: widget.child,
       ),
     );
+    final background = widget.backgroundColor;
+    if (background == null) return content;
+    return ColoredBox(color: background, child: content);
   }
 }
 

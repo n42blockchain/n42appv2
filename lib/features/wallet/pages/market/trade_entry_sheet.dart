@@ -223,6 +223,8 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                       ),
                     ),
                     IconButton(
+                      tooltip: MaterialLocalizations.of(context)
+                          .closeButtonTooltip,
                       onPressed: _loading
                           ? null
                           : () => Navigator.pop(context, _changed),
@@ -269,10 +271,12 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                       ElevatedButton(
                         onPressed: _loading ? null : _save,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: accentColor,
+                          backgroundColor: AppContrast.fillForWhiteText(
+                            accentColor,
+                          ),
                           foregroundColor: Colors.white,
                           // 96.h≈48dp（44dp 触控红线）
-                          minimumSize: Size(160.w, 96.h),
+                          minimumSize: Size(160.w, AppTouch.scaled(96)),
                           shape: RoundedRectangleBorder(
                             borderRadius: AppRadius.brXl,
                           ),
@@ -335,12 +339,23 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                           ),
                         ),
                         trailing: IconButton(
+                          tooltip: MaterialLocalizations.of(context)
+                              .deleteButtonTooltip,
                           icon: Icon(
                             Icons.delete_outline,
                             color: AppColorTokens.of(context).danger,
                             size: 24.sp,
                           ),
-                          onPressed: () => _deleteTrade(t),
+                          // Deleting a trade cannot be undone: confirm.
+                          onPressed: () async {
+                            final ok = await AppDialog.confirm(
+                              context,
+                              title: s.g_ui3_delete_trade_confirm,
+                              confirmText: s.g_key_113,
+                              danger: true,
+                            );
+                            if (ok) _deleteTrade(t);
+                          },
                         ),
                       );
                     },

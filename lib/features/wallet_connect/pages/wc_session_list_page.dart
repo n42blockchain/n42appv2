@@ -163,6 +163,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       ),
       body: entries.isEmpty ? _buildEmptyState() : _buildSessionList(entries),
       floatingActionButton: FloatingActionButton(
+        tooltip: S.of(context).g_key_4,
         onPressed: _scanNewConnection,
         backgroundColor: AppColorTokens.of(context).brand,
         child: const Icon(Icons.qr_code_scanner, color: Colors.white),
@@ -229,7 +230,8 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
     return InkWell(
       onTap: () => _onSessionTap(session),
       borderRadius: AppRadius.brMd,
-      child: Container(
+      // Ink paints the fill on the Material so the ripple stays visible.
+      child: Ink(
         padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
@@ -330,8 +332,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   // Expiry
                   Text(
                     isExpired
-                        ? 'Expired'
-                        : 'Expires: ${_formatDate(expiryDate)}',
+                        ? S.of(context).g_key_aa_expired
+                        : '${S.of(context).g_key_aa_expires}: '
+                              '${_formatDate(expiryDate)}',
                     style: AppTypography.caption.copyWith(
                       color: isExpired
                           ? AppColorTokens.of(context).danger

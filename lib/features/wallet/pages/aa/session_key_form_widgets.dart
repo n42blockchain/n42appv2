@@ -83,11 +83,13 @@ class _TokenChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const tokens = ['ETH', 'USDC', 'USDT'];
+    final c = AppColorTokens.of(context);
     return Row(
       children: tokens.map((t) {
         final isSelected = selected == t;
-        return GestureDetector(
+        return AppTapArea(
           onTap: () => onChanged(t),
+          borderRadius: AppRadius.brSm,
           child: Container(
             margin: EdgeInsets.only(left: ScreenUtil().setWidth(6)),
             padding: EdgeInsets.symmetric(
@@ -109,8 +111,13 @@ class _TokenChips extends StatelessWidget {
               t,
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
+                // Violet text on its own tint needs a 4.5:1 shade.
                 color: isSelected
-                    ? const Color(0xFF8B5CF6)
+                    ? AppContrast.textOnTint(const Color(0xFF8B5CF6), [
+                        c.bgBase,
+                        c.bgSurface,
+                        c.bgElevated,
+                      ], dark: Theme.of(context).brightness == Brightness.dark)
                     : AppColorTokens.of(context).textSubtitle,
               ),
             ),
@@ -277,14 +284,19 @@ class SessionKeyConfirmCheckbox extends StatelessWidget {
           activeColor: AppColorTokens.of(context).brand,
         ),
         Expanded(
-          child: GestureDetector(
+          // The label toggles the checkbox; keep it 44pt+ with visible ink.
+          child: InkWell(
             onTap: () => onChanged(!value),
-            child: Padding(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
-              child: Text(
-                S.of(context).g_key_aa_session_confirm_risk,
-                style: AppTypography.caption.copyWith(
-                  color: AppColorTokens.of(context).textPrimary,
+            borderRadius: AppRadius.brSm,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: AppTouch.minTarget),
+              child: Padding(
+                padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
+                child: Text(
+                  S.of(context).g_key_aa_session_confirm_risk,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
             ),

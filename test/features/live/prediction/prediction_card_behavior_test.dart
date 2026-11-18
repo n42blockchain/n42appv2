@@ -35,7 +35,7 @@ void main() {
     closesAt: closesAt,
   );
 
-  Future<void> mount(WidgetTester tester, {String roomId = _roomId}) async {
+  Future<S> mount(WidgetTester tester, {String roomId = _roomId}) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -49,23 +49,24 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
+    return S.of(tester.element(find.byType(PredictionCard)));
   }
 
   testWidgets('an empty room hides the card and a new market appears', (
     tester,
   ) async {
-    await mount(tester);
+    final l10n = await mount(tester);
     expect(find.text('Will the launch happen today?'), findsNothing);
 
     await createMarket();
     await tester.pumpAndSettle();
 
     expect(find.text('Will the launch happen today?'), findsOneWidget);
-    expect(find.text('进行中'), findsOneWidget);
+    expect(find.text(l10n.g_key_bridge_status_in_progress), findsOneWidget);
     expect(find.text('YES'), findsOneWidget);
     expect(find.text('NO'), findsOneWidget);
     expect(find.text('50%'), findsNWidgets(2));
-    expect(find.text('成交量 0 tUSDC'), findsOneWidget);
+    expect(find.text(l10n.g_ui3_pred_volume('0', 'tUSDC')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -75,11 +76,10 @@ void main() {
     final market = await createMarket(
       closesAt: DateTime.now().add(const Duration(minutes: 2)),
     );
-    await mount(tester);
-    final l10n = S.of(tester.element(find.byType(PredictionCard)));
+    final l10n = await mount(tester);
 
-    expect(find.text('进行中'), findsOneWidget);
-    expect(find.textContaining('后截止'), findsOneWidget);
+    expect(find.text(l10n.g_key_bridge_status_in_progress), findsOneWidget);
+    expect(find.textContaining(l10n.g_ui3_pred_closes_in('')), findsOneWidget);
     await tester.tap(find.text('YES'));
     await tester.pumpAndSettle();
 
@@ -96,8 +96,11 @@ void main() {
 
     expect(shares, greaterThan(0));
     expect(find.byType(TradeSheet), findsNothing);
-    expect(find.text('持 ${shares.toStringAsFixed(1)}'), findsOneWidget);
-    expect(find.text('成交量 10 tUSDC'), findsOneWidget);
+    expect(
+      find.text(l10n.g_ui3_pred_held(shares.toStringAsFixed(1))),
+      findsOneWidget,
+    );
+    expect(find.text(l10n.g_ui3_pred_volume('10', 'tUSDC')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -111,18 +114,24 @@ void main() {
       collateralIn: 20,
     );
     await repository.resolveMarket(market.id, market.outcomes.first.id);
-    await mount(tester);
+    final l10n = await mount(tester);
     final position = await repository.watchPosition(market.id).first;
     final shares = position.sharesOf(market.outcomes.first.id);
 
-    expect(find.text('已开奖：YES'), findsOneWidget);
-    expect(find.text('持 ${shares.toStringAsFixed(1)}'), findsOneWidget);
-    expect(find.text('赎回奖金'), findsOneWidget);
-    await tester.tap(find.text('赎回奖金'));
+    expect(find.text(l10n.g_pred_result_label('YES')), findsOneWidget);
+    expect(
+      find.text(l10n.g_ui3_pred_held(shares.toStringAsFixed(1))),
+      findsOneWidget,
+    );
+    expect(find.text(l10n.g_ui3_pred_redeem_winnings), findsOneWidget);
+    await tester.tap(find.text(l10n.g_ui3_pred_redeem_winnings));
     await tester.pumpAndSettle();
 
-    expect(find.text('赎回奖金'), findsNothing);
-    expect(find.text('持 ${shares.toStringAsFixed(1)}'), findsNothing);
+    expect(find.text(l10n.g_ui3_pred_redeem_winnings), findsNothing);
+    expect(
+      find.text(l10n.g_ui3_pred_held(shares.toStringAsFixed(1))),
+      findsNothing,
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -136,13 +145,13 @@ void main() {
       collateralIn: 20,
     );
     await repository.cancelMarket(market.id);
-    await mount(tester);
+    final l10n = await mount(tester);
 
-    expect(find.text('已取消'), findsOneWidget);
-    expect(find.text('领取退款'), findsOneWidget);
-    await tester.tap(find.text('领取退款'));
+    expect(find.text(l10n.g_iap_cancelled), findsOneWidget);
+    expect(find.text(l10n.g_ui3_pred_claim_refund), findsOneWidget);
+    await tester.tap(find.text(l10n.g_ui3_pred_claim_refund));
     await tester.pumpAndSettle();
-    expect(find.text('领取退款'), findsNothing);
+    expect(find.text(l10n.g_ui3_pred_claim_refund), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -151,10 +160,10 @@ void main() {
   ) async {
     final market = await createMarket();
     await repository.cancelMarket(market.id);
-    await mount(tester);
+    final l10n = await mount(tester);
 
-    expect(find.text('已取消'), findsOneWidget);
-    expect(find.text('领取退款'), findsNothing);
+    expect(find.text(l10n.g_iap_cancelled), findsOneWidget);
+    expect(find.text(l10n.g_ui3_pred_claim_refund), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -164,15 +173,15 @@ void main() {
     final market = await createMarket(
       closesAt: DateTime.now().add(const Duration(minutes: 2)),
     );
-    await mount(tester);
+    final l10n = await mount(tester);
 
-    expect(find.text('进行中'), findsOneWidget);
-    expect(find.textContaining('后截止'), findsOneWidget);
+    expect(find.text(l10n.g_key_bridge_status_in_progress), findsOneWidget);
+    expect(find.textContaining(l10n.g_ui3_pred_closes_in('')), findsOneWidget);
     await repository.closeMarket(market.id);
     await tester.pumpAndSettle();
 
-    expect(find.text('待开奖'), findsOneWidget);
-    expect(find.textContaining('后截止'), findsNothing);
+    expect(find.text(l10n.g_ui3_pred_awaiting), findsOneWidget);
+    expect(find.textContaining(l10n.g_ui3_pred_closes_in('')), findsNothing);
     await tester.tap(find.text('YES'));
     await tester.pumpAndSettle();
     expect(find.byType(TradeSheet), findsNothing);
@@ -185,10 +194,10 @@ void main() {
     await createMarket(
       closesAt: DateTime.now().subtract(const Duration(seconds: 1)),
     );
-    await mount(tester);
+    final l10n = await mount(tester);
 
-    expect(find.text('待开奖'), findsOneWidget);
-    expect(find.textContaining('后截止'), findsNothing);
+    expect(find.text(l10n.g_ui3_pred_awaiting), findsOneWidget);
+    expect(find.textContaining(l10n.g_ui3_pred_closes_in('')), findsNothing);
     await tester.tap(find.text('YES'));
     await tester.pumpAndSettle();
     expect(find.byType(TradeSheet), findsNothing);
@@ -201,9 +210,9 @@ void main() {
     await createMarket(
       closesAt: DateTime.now().add(const Duration(seconds: 5)),
     );
-    await mount(tester);
+    final l10n = await mount(tester);
 
-    final countdown = find.textContaining('后截止');
+    final countdown = find.textContaining(l10n.g_ui3_pred_closes_in(''));
     expect(countdown, findsOneWidget);
     expect(
       tester.widget<Text>(countdown).style?.color,
@@ -224,9 +233,9 @@ void main() {
       collateralIn: 20,
     );
     await repository.resolveMarket(market.id, market.outcomes.first.id);
-    await mount(tester);
+    final l10n = await mount(tester);
 
-    await tester.tap(find.text('赎回奖金'));
+    await tester.tap(find.text(l10n.g_ui3_pred_redeem_winnings));
     await tester.pumpAndSettle();
     expect(find.textContaining('redemption unavailable'), findsOneWidget);
     expect(tester.takeException(), isNull);

@@ -11,14 +11,15 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
 
   /// Pill-shaped action button (blue bg, white text, fully rounded)
   Widget _pillButton({required String label, required VoidCallback onTap}) {
-    return InkWell(
+    // 44pt hit area around the unchanged 30pt pill; fill is text-safe brand.
+    return AppTapArea(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
         height: ScreenUtil().setWidth(60.0),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
-          color: _tc(AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: BorderRadius.all(
             Radius.circular(ScreenUtil().setWidth(60.0)),
           ),
@@ -72,7 +73,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
-            height: ScreenUtil().setWidth(88.0),
+            height: AppTouch.target,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -103,8 +104,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                     },
                   ),
                 ),
-                InkWell(
+                AppTapArea(
                   onTap: scanQR,
+                  tooltip: S.of(context).g_key_4,
                   child: Container(
                     width: ScreenUtil().setWidth(60.0),
                     height: ScreenUtil().setWidth(60.0),
@@ -296,7 +298,10 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(AppSpacing.space8),
-            height: ScreenUtil().setWidth(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(
+              minHeight: ScreenUtil().setWidth(148.0),
+            ),
             color: _tc(AppThemeKeys.backGroundColor.name),
             child: AppButton(
               label: S.of(context).g_key_48,

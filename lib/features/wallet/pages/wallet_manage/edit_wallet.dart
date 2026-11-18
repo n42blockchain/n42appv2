@@ -71,28 +71,35 @@ class _EditWalletState extends ConsumerState<EditWallet> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              Container(
-                margin: EdgeInsets.all(AppSpacing.space8),
-                color: AppColorTokens.of(context).bgSurface,
-                child: CommInput(
-                  type: InputFieldType.account,
-                  controller: _controller,
-                  autofocus: true,
-                  maxLength: AppConfig.walletNameMaxLength,
+              // Scrolls so the fields stay reachable above the keyboard.
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(AppSpacing.space8),
+                        color: AppColorTokens.of(context).bgSurface,
+                        child: CommInput(
+                          type: InputFieldType.account,
+                          controller: _controller,
+                          autofocus: true,
+                          maxLength: AppConfig.walletNameMaxLength,
+                        ),
+                      ),
+
+                      // Tag section
+                      _buildTagSection(),
+                    ],
+                  ),
                 ),
               ),
-
-              // Tag section
-              _buildTagSection(),
-
-              const Spacer(),
               Divider(
                 height: ScreenUtil().setWidth(1),
                 indent: 0,
                 endIndent: 0,
               ),
+              // No fixed height: a 148px box clamped the button below 44pt.
               Container(
-                height: ScreenUtil().setWidth(148),
                 width: double.infinity,
                 padding: EdgeInsets.all(AppSpacing.space8),
                 child: AppButton(
@@ -152,7 +159,6 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                       onDeleted: () => _removeTag(tag),
                       backgroundColor: blueColor.withValues(alpha: 0.1),
                       side: BorderSide.none,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       visualDensity: VisualDensity.compact,
                     ),
                   )
@@ -176,7 +182,6 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                     onPressed: _tags.length < 5 ? () => _addTag(tag) : null,
                     backgroundColor: Colors.transparent,
                     side: BorderSide(color: subColor.withValues(alpha: 0.3)),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
                   ),
                 )
@@ -189,8 +194,8 @@ class _EditWalletState extends ConsumerState<EditWallet> {
             Row(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 36,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 36),
                     child: TextField(
                       controller: _tagController,
                       style: AppTypography.caption,
@@ -216,14 +221,11 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                SizedBox(
-                  height: 36,
-                  child: TextButton(
-                    onPressed: () => _addTag(_tagController.text),
-                    child: Text(
-                      S.of(context).g_key_token_discovery_add,
-                      style: TextStyle(color: blueColor),
-                    ),
+                TextButton(
+                  onPressed: () => _addTag(_tagController.text),
+                  child: Text(
+                    S.of(context).g_key_token_discovery_add,
+                    style: TextStyle(color: blueColor),
                   ),
                 ),
               ],

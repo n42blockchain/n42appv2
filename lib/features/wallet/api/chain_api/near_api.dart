@@ -4,6 +4,7 @@ import 'near_transaction_hash.dart';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// NEAR Protocol API
@@ -189,6 +190,17 @@ class NearApi {
       final response = await _rpcPost(
         _rpcBody('broadcast_tx_commit', [signedTxBase64]),
       );
+      if (response is Map && response['result'] == null) {
+        // INVALID_TRANSACTION is the node refusing this exact transaction
+        // during validation (bad nonce, expired block hash, insufficient
+        // balance, bad signature...): it never entered the chain or a pool.
+        final error = response['error'];
+        final cause = error is Map ? error['cause'] : null;
+        if (cause is Map && cause['name'] == 'INVALID_TRANSACTION') {
+          return MessageModel.error()
+            ..data = const BroadcastRejected('NEAR rejected the transaction');
+        }
+      }
       if (response is! Map || response['result'] is! Map) return unknown();
       final result = response['result'] as Map;
       final status = result['status'];
@@ -196,6 +208,14 @@ class NearApi {
       // terminal SuccessValue returned after that receipt completes.
       if (status is! Map || status.length != 1) return unknown();
       if (status.containsKey('Failure')) {
+        final transaction = result['transaction'];
+        if (transaction is Map && transaction['hash'] == expectedHash) {
+          // Executed and failed on chain: terminal, it cannot succeed later.
+          return MessageModel.error()
+            ..data = const BroadcastRejected(
+              'NEAR transaction execution failed',
+            );
+        }
         return MessageModel.error()..data = 'NEAR transaction execution failed';
       }
       final value = status['SuccessValue'];
@@ -216,6 +236,23 @@ class NearApi {
       return MessageModel()..data = hash;
     } catch (_) {
       return unknown();
+    }
+  }
+
+  /// Raw JSON-RPC response (both result and error objects preserved), or
+  /// null when the transport failed or the body is not a JSON object.
+  Future<Map<String, dynamic>?> rpcRaw(String method, dynamic params) async {
+    try {
+      final response = await _rpcPost(_rpcBody(method, params));
+      if (response is Map<String, dynamic>) return response;
+      if (response is Map) return Map<String, dynamic>.from(response);
+      if (response is String) {
+        final decoded = jsonDecode(response);
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
+      }
+      return null;
+    } catch (_) {
+      return null;
     }
   }
 

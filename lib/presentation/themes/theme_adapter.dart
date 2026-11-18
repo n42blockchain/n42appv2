@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../core/design_system/app_typography.dart';
+import '../../core/design_system/app_contrast.dart';
 import '../../core/design_system/app_radius.dart';
 
 /// Theme Adapter
@@ -184,6 +185,9 @@ class ThemeAdapter {
         ? (dark ? color.darkColor : color.color)
         : color;
     final primary = apple ? resolve(CupertinoColors.systemBlue) : accent;
+    // Filled buttons carry white labels: use the deeper brand shade that
+    // reaches 4.5:1 with white (system blue alone is ~4.0:1 / ~3.65:1).
+    final primaryFill = AppContrast.fillForWhiteText(primary);
     final colors = AppThemeUtils.palette(base.brightness, accent);
     final foreground = colors[AppThemeKeys.mainTextColor.name]!;
     final surface = colors[AppThemeKeys.itemBgColor.name]!;
@@ -244,15 +248,15 @@ class ThemeAdapter {
         style: button.copyWith(
           backgroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.disabled)
-                ? primary.withValues(alpha: 0.3)
-                : primary,
+                ? primaryFill.withValues(alpha: 0.3)
+                : primaryFill,
           ),
           foregroundColor: const WidgetStatePropertyAll(Colors.white),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: button.copyWith(
-          backgroundColor: WidgetStatePropertyAll(primary),
+          backgroundColor: WidgetStatePropertyAll(primaryFill),
           foregroundColor: const WidgetStatePropertyAll(Colors.white),
           elevation: const WidgetStatePropertyAll(0),
         ),
@@ -265,7 +269,11 @@ class ThemeAdapter {
       ),
       textButtonTheme: TextButtonThemeData(
         style: button.copyWith(
-          foregroundColor: WidgetStatePropertyAll(primary),
+          // Brand labels on page/card backgrounds: system blue alone is
+          // ~4.0:1 on white and ~3.6:1 on the grouped background.
+          foregroundColor: WidgetStatePropertyAll(
+            AppContrast.ensure(primary, [background, surface], darken: !dark),
+          ),
         ),
       ),
       iconButtonTheme: const IconButtonThemeData(
@@ -403,6 +411,16 @@ class AppThemeUtils {
     return colorMap[key] ?? const Color(0xff000000);
   }
 
+  /// Secondary text. Light-mode secondaryLabel measures about 3.4:1 on
+  /// white and 3.3:1 on the grouped background, below the 4.5:1 that
+  /// small text needs (HIG accessibility, color contrast). #6C6C70 keeps
+  /// the same neutral gray at 5.1:1 / 4.6:1; dark mode is unchanged.
+  static const CupertinoDynamicColor _secondaryText =
+      CupertinoDynamicColor.withBrightness(
+        color: Color(0xFF6C6C70),
+        darkColor: Color(0x99EBEBF5),
+      );
+
   /// Existing custom palette with Apple's semantic colors as the default.
   static Map<String, Color> palette(Brightness brightness, Color accent) {
     final dark = brightness == Brightness.dark;
@@ -450,7 +468,7 @@ class AppThemeUtils {
       AppThemeKeys.mainTextColor6,
       AppThemeKeys.itemSubtitleTextColor,
       AppThemeKeys.mainTextColor8,
-    ], CupertinoColors.secondaryLabel);
+    ], _secondaryText);
     set([
       AppThemeKeys.mainTextColor4,
       AppThemeKeys.mainTextColor3,

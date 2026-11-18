@@ -145,7 +145,11 @@ class _FullNodePageState extends State<FullNodePage>
                   ),
                   Container(
                     width: double.infinity,
-                    height: ScreenUtil().setWidth(148),
+                    // minHeight: a fixed box squeezed the button
+                    // to 42pt@375 / 31pt@320.
+                    constraints: BoxConstraints(
+                      minHeight: ScreenUtil().setWidth(148),
+                    ),
                     padding: EdgeInsets.all(AppSpacing.space8),
                     child: AppButton(
                       label: S.of(context).g_key_78,

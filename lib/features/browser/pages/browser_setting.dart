@@ -80,9 +80,18 @@ class _BrowserSettingState extends State<BrowserSetting> {
               ),
               if (widget.webViewController != null)
                 InkWell(
-                  onTap: () => widget.webViewController!.clearLocalStorage(),
+                  onTap: () async {
+                    final confirmed = await AppDialog.confirm(
+                      context,
+                      title: S.of(context).g_browser_key12,
+                      message: S.of(context).g_ui3_clear_browser_cache_confirm,
+                      danger: true,
+                    );
+                    if (!confirmed) return;
+                    await widget.webViewController!.clearLocalStorage();
+                  },
                   child: SizedBox(
-                    height: ScreenUtil().setWidth(100),
+                    height: AppTouch.scaled(100),
                     width: double.infinity,
                     child: Row(
                       children: [

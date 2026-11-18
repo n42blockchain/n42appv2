@@ -250,7 +250,8 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
   'SUI': {
     'api': '',
     'browser': 'https://suiscan.xyz/mainnet/',
-    'rpc': 'https://fullnode.mainnet.sui.io:443',
+    // Public fullnode JSON-RPC is deprecated; Sui is reached via GraphQL.
+    'graphql': 'https://graphql.mainnet.sui.io/graphql',
   },
   'TON': {
     'api': 'https://explorer.tonapi.io/',

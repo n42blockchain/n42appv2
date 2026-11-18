@@ -85,7 +85,12 @@ class _AlertsOverviewSheet extends StatelessWidget {
         subtitle: hasAlert
             ? Text(
                 '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
-                style: AppTypography.caption.copyWith(color: n.color),
+                // Chain hues (e.g. BNB yellow) are ~2:1 as text: fix L only.
+                style: AppTypography.caption.copyWith(
+                  color: AppContrast.ensure(n.color, [
+                    AppColorTokens.of(context).bgBase,
+                  ], darken: Theme.of(context).brightness != Brightness.dark),
+                ),
               )
             : Text(
                 '—',
@@ -187,6 +192,19 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       }
       _showError(err.toString());
     }
+  }
+
+  /// Deleting an alert cannot be undone, so ask first.
+  Future<void> _confirmRemove() async {
+    final s = S.of(context);
+    final ok = await AppDialog.confirm(
+      context,
+      title: s.g_key_113,
+      message: s.g_key_gas_alert,
+      confirmText: s.g_key_113,
+      danger: true,
+    );
+    if (ok && mounted) await _remove();
   }
 
   Future<void> _remove() async {
@@ -428,11 +446,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   Widget _buildSaveButton(BuildContext context, Color blueColor) {
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       child: ElevatedButton(
         onPressed: _saving ? null : _save,
         style: ElevatedButton.styleFrom(
-          backgroundColor: blueColor,
+          backgroundColor: AppContrast.fillForWhiteText(blueColor),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
           disabledBackgroundColor: blueColor.withAlpha(120),
@@ -457,9 +475,9 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   Widget _buildRemoveButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(76),
+      height: AppTouch.scaled(76),
       child: TextButton(
-        onPressed: _saving ? null : _remove,
+        onPressed: _saving ? null : _confirmRemove,
         style: TextButton.styleFrom(
           foregroundColor: AppColorTokens.of(context).danger,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
@@ -493,6 +511,11 @@ class _DirectionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final idleColor = AppColorTokens.of(context).textSubtitle;
+    // Selected label on its own tint: text-safe shade of [color].
+    final surface = AppColorTokens.of(context).bgSurface;
+    final selectedText = AppContrast.ensure(color, [
+      Color.alphaBlend(color.withAlpha(30), surface),
+    ], darken: Theme.of(context).brightness != Brightness.dark);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -500,6 +523,8 @@ class _DirectionButton extends StatelessWidget {
         borderRadius: AppRadius.brSm,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
+          // Grows the 32pt option to a 44pt hit target.
+          constraints: BoxConstraints(minHeight: AppTouch.target),
           padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           decoration: BoxDecoration(
             color: selected ? color.withAlpha(30) : Colors.transparent,
@@ -523,7 +548,7 @@ class _DirectionButton extends StatelessWidget {
                   label,
                   style: AppTypography.caption.copyWith(
                     fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                    color: selected ? color : idleColor,
+                    color: selected ? selectedText : idleColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

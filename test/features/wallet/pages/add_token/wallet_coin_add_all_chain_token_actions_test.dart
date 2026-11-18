@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -236,6 +237,64 @@ void main() {
     expect(wallet.pinnedCoins, ['ETH', 'ETH_USDT']);
     expect(find.byIcon(Icons.add), findsWidgets);
     expect(toasts, isEmpty);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('removing a custom token asks first and keeps it when cancelled', (
+    tester,
+  ) async {
+    const customContract = '0x3333333333333333333333333333333333333333';
+    final customToken = {
+      'coinType': 'ETH',
+      'mKey': customContract.toUpperCase(),
+      'name': 'My Token',
+      'miniName': 'MYTK',
+      'symbol': 'MYTK',
+      'unit': 'mytk',
+      'blockchainType': 'Ethereum',
+      'decimals': 18,
+      'contract': customContract,
+      'isContract': true,
+      'customer': true,
+    };
+    wallet.coinInfo!['ETH']['mainnets'][customContract.toUpperCase()] =
+        customToken;
+    store.coinList.add(CoinModel.fromMap(customToken));
+    await openPage(tester);
+    await selectNetwork(tester, 'Ethereum');
+    await tester.tap(find.text(S.current.g_token_m_key_5));
+    await tester.pumpAndSettle();
+    expect(find.text('MYTK'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.remove).first);
+    await tester.pumpAndSettle();
+    expect(find.text('Remove MYTK?'), findsOneWidget);
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AppDialog),
+        matching: find.text(S.current.g_key_79),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(wallet.coinInfo!['ETH']['mainnets'], hasLength(1));
+    expect(find.text('MYTK'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.remove).first);
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AppDialog),
+        matching: find.text(S.current.g_alert_remove),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(wallet.coinInfo!['ETH']['mainnets'], isEmpty);
+    expect(
+      store.coinList.any(
+        (coin) => coin.coin['mKey'] == customContract.toUpperCase(),
+      ),
+      isFalse,
+    );
     expect(tester.takeException(), isNull);
   });
 }

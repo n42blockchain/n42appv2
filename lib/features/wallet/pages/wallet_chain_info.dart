@@ -306,8 +306,10 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           ],
         ),
         actions: [
-          InkWell(
+          // The margin stays inside the tap area: >= 44pt at 320pt too.
+          AppTapArea(
             onTap: showActionButtonListWidget,
+            tooltip: S.of(context).g_key_m_7,
             child: Container(
               width: su.setWidth(40.0),
               height: su.setWidth(40.0),
@@ -411,7 +413,8 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
             ),
           ),
           if (isEth)
-            InkWell(
+            AppTapArea(
+              tooltip: S.of(context).search,
               onTap: () async {
                 final Widget page = TransactionDetailEth(cm, '');
                 final r = await Navigator.push<bool>(
@@ -441,7 +444,6 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
       return IntrinsicHeight(child: Center(child: EmptyView()));
     }
 
-    final su = ScreenUtil();
     final cm = widget.coinModel;
     final isBtc = cm.config.blockchainType == BlockchainType.Bitcoin.name;
 
@@ -462,7 +464,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               );
             },
             child: Container(
-              height: su.setWidth(80.0),
+              height: AppTouch.scaled(80),
               width: double.infinity,
               alignment: Alignment.center,
               child: Text(

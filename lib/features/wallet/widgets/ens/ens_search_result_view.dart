@@ -126,8 +126,9 @@ class EnsSearchResultView extends StatelessWidget {
           spacing: ScreenUtil().setWidth(12),
           runSpacing: ScreenUtil().setWidth(12),
           children: suggestions.map((name) {
-            return GestureDetector(
+            return AppTapArea(
               onTap: () => onSuggestionTap(name),
+              borderRadius: AppRadius.brMd,
               child: Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: AppSpacing.space4,
@@ -220,10 +221,7 @@ class EnsSearchResultView extends StatelessWidget {
           ElevatedButton(
             onPressed: onRegisterTap,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _themeColor(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              backgroundColor: AppColorTokens.of(context).brandFill,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
@@ -420,25 +418,38 @@ class EnsSearchResultView extends StatelessWidget {
       context,
       AppThemeKeys.itemSubtitleTextColor.name,
     );
-    return GestureDetector(
-      onTap: () => onYearsChanged(years),
-      child: Container(
-        margin: EdgeInsets.only(right: isLast ? 0 : ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: isSelected ? blueColor : itemBgColor,
+    // White label needs the brand fill shade (4.5:1); the chip keeps a
+    // 44pt minimum height and visible ink.
+    final selectedFill = AppColorTokens.of(context).brandFill;
+    return Padding(
+      padding: EdgeInsets.only(right: isLast ? 0 : ScreenUtil().setWidth(12)),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () => onYearsChanged(years),
           borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: isSelected ? blueColor : subtitleColor.withAlpha(50),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: isSelected ? selectedFill : itemBgColor,
+              borderRadius: AppRadius.brMd,
+              border: Border.all(
+                color: isSelected ? selectedFill : subtitleColor.withAlpha(50),
+              ),
+            ),
+            child: Container(
+              constraints: BoxConstraints(minHeight: AppTouch.minTarget),
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+              child: Text(
+                '$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
+                style: AppTypography.caption.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? Colors.white : mainTextColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
-        ),
-        child: Text(
-          '$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-          style: AppTypography.caption.copyWith(
-            fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : mainTextColor,
-          ),
-          textAlign: TextAlign.center,
         ),
       ),
     );

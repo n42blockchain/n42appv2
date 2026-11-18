@@ -65,10 +65,11 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 final isSelected = selectedChain.id == chain.id;
                 return Padding(
                   padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
-                  child: GestureDetector(
+                  child: AppTapArea(
                     onTap: () {
                       selectChain(chain);
                     },
+                    borderRadius: AppRadius.brSm,
                     child: _buildChainChip(chain, isSelected),
                   ),
                 );
@@ -82,6 +83,12 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
 
   Widget _buildChainChip(EnsChainConfig chain, bool isSelected) {
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
+    final c = AppColorTokens.of(context);
+    // Chain hues on their own tint need a 4.5:1 shade for the label.
+    final selectedText = AppContrast.textOnTint(chain.color, [
+      c.bgBase,
+      c.bgSurface,
+    ], dark: Theme.of(context).brightness == Brightness.dark);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space4,
@@ -121,7 +128,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             style: AppTypography.caption.copyWith(
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               color: isSelected
-                  ? chain.color
+                  ? selectedText
                   : _themeColor(AppThemeKeys.mainTextColor.name),
             ),
           ),
@@ -130,7 +137,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             Icon(
               Icons.check_circle,
               size: ScreenUtil().setWidth(18),
-              color: chain.color,
+              color: selectedText,
             ),
           ],
         ],
@@ -243,45 +250,53 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
     required Color color,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: _themeColor(AppThemeKeys.itemBgColor.name),
-          borderRadius: AppRadius.brMd,
-          border: Border.all(color: color.withAlpha(40), width: 1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: ScreenUtil().setWidth(44),
-              height: ScreenUtil().setWidth(44),
-              decoration: BoxDecoration(
-                color: color.withAlpha(25),
-                borderRadius: AppRadius.brMd,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: _themeColor(AppThemeKeys.itemBgColor.name),
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: color.withAlpha(40), width: 1),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: ScreenUtil().setWidth(44),
+                height: ScreenUtil().setWidth(44),
+                decoration: BoxDecoration(
+                  color: color.withAlpha(25),
+                  borderRadius: AppRadius.brMd,
+                ),
+                child: Icon(
+                  icon,
+                  size: ScreenUtil().setWidth(24),
+                  color: color,
+                ),
               ),
-              child: Icon(icon, size: ScreenUtil().setWidth(24), color: color),
-            ),
-            SizedBox(height: AppSpacing.space4),
-            Text(
-              title,
-              style: AppTypography.body.copyWith(
-                fontWeight: FontWeight.w600,
-                color: _themeColor(AppThemeKeys.mainTextColor.name),
+              SizedBox(height: AppSpacing.space4),
+              Text(
+                title,
+                style: AppTypography.body.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: _themeColor(AppThemeKeys.mainTextColor.name),
+                ),
               ),
-            ),
-            SizedBox(height: AppSpacing.space2),
-            Text(
-              subtitle,
-              style: AppTypography.caption.copyWith(
-                color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+              SizedBox(height: AppSpacing.space2),
+              Text(
+                subtitle,
+                style: AppTypography.caption.copyWith(
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -406,7 +421,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             icon: const Icon(Icons.search, size: 20),
             label: Text(S.of(context).g_key_ens_search_register),
             style: ElevatedButton.styleFrom(
-              backgroundColor: blueColor,
+              backgroundColor: AppContrast.fillForWhiteText(blueColor),
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
                 horizontal: AppSpacing.space6,

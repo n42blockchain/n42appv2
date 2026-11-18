@@ -1,3 +1,5 @@
+import 'package:n42_wallet/generated/l10n.dart';
+
 /// 一种直播礼物（TikTok 式金币计价；金币为 play-money 内部账本）。
 class LiveGift {
   const LiveGift({
@@ -30,6 +32,17 @@ const List<LiveGift> kLiveGifts = [
   LiveGift(id: 'diamond', emoji: '💎', label: '钻石', coinPrice: 50),
   LiveGift(id: 'crown', emoji: '👑', label: '皇冠', coinPrice: 99),
 ];
+
+/// Localized display name of [gift]; unknown ids fall back to [LiveGift.label].
+String liveGiftLabel(S s, LiveGift gift) => switch (gift.id) {
+  'rose' => s.g_ui3_live_gift_rose,
+  'like' => s.g_ui3_live_like,
+  'beer' => s.g_ui3_live_gift_cheers,
+  'rocket' => s.g_ui3_live_gift_rocket,
+  'diamond' => s.g_ui3_live_gift_diamond,
+  'crown' => s.g_ui3_live_gift_crown,
+  _ => gift.label,
+};
 
 /// 按 id 取礼物；未知 id 返回 `null`。
 ///

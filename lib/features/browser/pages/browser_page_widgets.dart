@@ -22,7 +22,8 @@ extension _BrowserPageWidgets on _BrowserPageState {
 
     return Container(
       alignment: Alignment.center,
-      height: sw(100.0),
+      // minHeight: lets the 44pt tab buttons fit on 320pt screens.
+      constraints: BoxConstraints(minHeight: sw(100.0)),
       padding: EdgeInsets.only(top: sw(10.0), right: sw(20.0)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,10 +86,11 @@ extension _BrowserPageWidgets on _BrowserPageState {
   Widget _buildAddTabButton(BrowserProvider bValue) {
     final sw = ScreenUtil().setWidth;
 
-    return InkWell(
+    return AppTapArea(
       onTap: () {
         bValue.wListAdd();
       },
+      tooltip: S.of(context).g_a11y_new_tab,
       child: Container(
         height: sw(60.0),
         width: sw(60.0),
@@ -106,10 +108,11 @@ extension _BrowserPageWidgets on _BrowserPageState {
   Widget _buildTabCountButton(BrowserProvider bValue) {
     final sw = ScreenUtil().setWidth;
 
-    return InkWell(
+    return AppTapArea(
       onTap: () {
         bValue.setShowWList(true);
       },
+      tooltip: S.of(context).g_a11y_tabs,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: sw(10.0)),
         height: sw(40),
@@ -160,18 +163,23 @@ extension _BrowserPageWidgets on _BrowserPageState {
   Widget _buildMainToolbar(BrowserProvider bValue) {
     return Container(
       alignment: Alignment.center,
-      height: ScreenUtil().setWidth(100.0),
-      child: Row(
-        children: [
-          _toolbarAssetButton("close", onTap: () => Navigator.pop(context)),
+      height: AppTouch.scaled(100),
+      child: _toolbarRow([
+          _toolbarAssetButton(
+            "close",
+            tooltip: S.of(context).g_a11y_close,
+            onTap: () => Navigator.pop(context),
+          ),
           _toolbarAssetButton(
             "refresh",
+            tooltip: S.of(context).g_key_bridge_refresh,
             onTap: () async {
               await bValue.wvcList[bValue.wListIndex].reload();
             },
           ),
           _toolbarAssetButton(
             "arrow-left",
+            tooltip: S.of(context).g_key_nft_220,
             colorKey: bValue.canBack
                 ? AppThemeKeys.mainTextColor.name
                 : AppThemeKeys.itemBorderColor.name,
@@ -189,6 +197,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           ),
           _toolbarAssetButton(
             "arrow-right",
+            tooltip: S.of(context).g_a11y_forward,
             colorKey: bValue.canForward
                 ? AppThemeKeys.mainTextColor.name
                 : AppThemeKeys.itemBorderColor.name,
@@ -203,6 +212,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           ),
           _toolbarAssetButton(
             bValue.collect ? "star" : "star_border",
+            tooltip: S.of(context).g_browser_key5,
             onTap: () {
               if (bValue.collect) {
                 bValue.deleteBrowserCollectionUrl();
@@ -213,19 +223,23 @@ extension _BrowserPageWidgets on _BrowserPageState {
           ),
           _toolbarIconButton(
             Icons.history,
+            tooltip: S.of(context).g_browser_key18,
             onTap: () => _navigateAndLoad(bValue, const BrowserHistoryPage()),
           ),
           _toolbarAssetButton(
             "note",
+            tooltip: S.of(context).g_browser_key3,
             onTap: () => _navigateAndLoad(bValue, BrowserCollectionList()),
           ),
           if (Platform.isAndroid)
             _toolbarIconButton(
               Icons.explore,
+              tooltip: S.of(context).g_browser_key24,
               onTap: () => _navigateAndLoad(bValue, const DAppDirectoryPage()),
             ),
           _toolbarAssetButton(
             "setting",
+            tooltip: S.of(context).g_key_94,
             onTap: () async {
               final wv = bValue.wvcList[bValue.wListIndex];
               await Navigator.push(
@@ -241,8 +255,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           if (ref.watch(wcpBridgeProvider).walletConnectState ==
               WalletConnectState.connect)
             _buildWalletConnectButton(),
-        ],
-      ),
+      ]),
     );
   }
 
@@ -250,6 +263,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
     final sw = ScreenUtil().setWidth;
     return _toolbarButton(
       onTap: () => WalletConnectSheet.show(context, ""),
+      tooltip: S.of(context).g_wc_sessions,
       child: Image.asset(
         "assets/wallet/WalletConnect.png",
         width: sw(40.0),
@@ -265,13 +279,21 @@ extension _BrowserPageWidgets on _BrowserPageState {
 
     return Container(
       alignment: Alignment.center,
-      height: sw(100.0),
+      height: AppTouch.scaled(100),
       child: Row(
         children: [
           _tabToolbarItem(
             alignment: Alignment.centerLeft,
             margin: EdgeInsets.only(left: sp(30.0)),
             onTap: () async {
+              final confirmed = await AppDialog.confirm(
+                context,
+                title: S.of(context).g_browser_key16,
+                message: S.of(context).g_ui3_close_all_tabs_confirm,
+                confirmText: S.of(context).g_browser_key16,
+                danger: true,
+              );
+              if (!confirmed || !mounted) return;
               bValue.cleanWList();
             },
             child: Text(
@@ -289,6 +311,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
             },
             child: Image.asset(
               "assets/browser/add.png",
+              semanticLabel: S.of(context).g_a11y_new_tab,
               color: _mainTextColor(),
               width: sw(40.0),
               height: sw(40.0),
@@ -327,12 +350,11 @@ extension _BrowserPageWidgets on _BrowserPageState {
         onTap: onTap,
         child: Container(
           alignment: alignment,
-          height: sw(80.0),
+          height: AppTouch.target,
           margin: margin,
-          padding: EdgeInsets.symmetric(
-            horizontal: sw(10.0),
-            vertical: sw(20.0),
-          ),
+          // No vertical padding: alignment centers the label, and 130% text
+          // no longer overflows the 44pt row.
+          padding: EdgeInsets.symmetric(horizontal: sw(10.0)),
           child: child,
         ),
       ),
@@ -342,6 +364,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
   /// Toolbar button with an asset image from `assets/browser/`.
   Widget _toolbarAssetButton(
     String assetName, {
+    required String tooltip,
     VoidCallback? onTap,
     String? colorKey,
   }) {
@@ -353,6 +376,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
 
     return _toolbarButton(
       onTap: onTap,
+      tooltip: tooltip,
       child: Image.asset(
         "assets/browser/$assetName.png",
         color: color,
@@ -363,31 +387,64 @@ extension _BrowserPageWidgets on _BrowserPageState {
   }
 
   /// Toolbar button with a Material icon.
-  Widget _toolbarIconButton(IconData icon, {VoidCallback? onTap}) {
+  Widget _toolbarIconButton(
+    IconData icon, {
+    required String tooltip,
+    VoidCallback? onTap,
+  }) {
     final sw = ScreenUtil().setWidth;
 
     return _toolbarButton(
       onTap: onTap,
+      tooltip: tooltip,
       child: Icon(icon, color: _mainTextColor(), size: sw(40.0)),
     );
   }
 
+  /// Spreads toolbar buttons evenly, but never narrower than the 44pt minimum:
+  /// when the screen is too narrow for that, the row scrolls horizontally.
+  Widget _toolbarRow(List<Widget> buttons) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final minWidth = AppTouch.minTarget * buttons.length;
+        if (constraints.maxWidth >= minWidth) {
+          return Row(children: buttons);
+        }
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: minWidth,
+            child: Row(children: buttons),
+          ),
+        );
+      },
+    );
+  }
+
   /// Shared toolbar button layout used by both asset and icon variants.
-  Widget _toolbarButton({VoidCallback? onTap, required Widget child}) {
+  Widget _toolbarButton({
+    VoidCallback? onTap,
+    required String tooltip,
+    required Widget child,
+  }) {
     final sw = ScreenUtil().setWidth;
 
     return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: Alignment.center,
-          height: sw(80.0),
-          width: sw(60.0),
-          padding: EdgeInsets.symmetric(
-            horizontal: sw(10.0),
-            vertical: sw(20.0),
+      child: Tooltip(
+        message: tooltip,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            alignment: Alignment.center,
+            // 44pt on every width (sw(80) is 40pt@375, 34pt@320).
+            height: AppTouch.target,
+            width: sw(60.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: sw(10.0),
+              vertical: sw(20.0),
+            ),
+            child: child,
           ),
-          child: child,
         ),
       ),
     );

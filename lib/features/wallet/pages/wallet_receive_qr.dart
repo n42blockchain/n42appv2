@@ -361,7 +361,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(S.of(context).g_key_119), // "Copy"
+        content: Text(S.of(context).g_key_hw_address_copied),
         duration: const Duration(seconds: 1),
         behavior: SnackBarBehavior.floating,
       ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// 进场横幅："xxx 来了"。监听进场事件流，逐条淡入淡出显示。
 class EnterRoomBanner extends StatefulWidget {
@@ -27,7 +28,9 @@ class _EnterRoomBannerState extends State<EnterRoomBanner> {
 
   void _onEnter(String userId) {
     if (!mounted) return;
-    setState(() => _text = '${_shortName(userId)} 来了');
+    setState(
+      () => _text = S.of(context).g_ui3_live_user_joined(_shortName(userId)),
+    );
     _hideTimer?.cancel();
     _hideTimer = Timer(const Duration(seconds: 3), () {
       if (mounted) setState(() => _text = null);

@@ -120,6 +120,13 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   }
 
   Future<void> _removeFromHistory(String keyword) async {
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_ui3_remove_search_history_title,
+      confirmText: S.of(context).g_alert_remove,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     final updated = _history.where((e) => e != keyword).toList();
     final previous = List<String>.from(_history);
     setState(() => _history = updated);
@@ -134,6 +141,13 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   }
 
   Future<void> _clearHistory() async {
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: S.of(context).g_ui3_clear_search_history_title,
+      confirmText: S.of(context).g_key_batch_clear_all,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     final previous = List<String>.from(_history);
     setState(() => _history = []);
     try {
@@ -320,10 +334,8 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-      constraints: BoxConstraints(
-        minHeight: ScreenUtil().setWidth(100.0),
-        maxHeight: ScreenUtil().setWidth(100.0),
-      ),
+      // No max height: the field grows with Dynamic Type instead of clipping.
+      constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(100.0)),
       decoration: BoxDecoration(
         borderRadius: AppRadius.brMd,
         color: AppColorTokens.of(context).bgSurface,
@@ -371,12 +383,14 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
           ),
           // 有文字时显示清除按钮，否则显示搜索触发按钮
           if (_inputCtrl.text.isNotEmpty)
-            GestureDetector(
+            AppTapArea(
               onTap: () {
                 _inputCtrl.clear();
                 setState(() => _searchResults = []);
                 _focusNode.requestFocus();
               },
+              tooltip: S.of(context).g_a11y_clear_text,
+              customBorder: const CircleBorder(),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
                 child: Icon(
@@ -387,30 +401,49 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
               ),
             )
           else
-            InkWell(
-              onTap: () {
-                _closeKeyboard();
-                _runSearch(waValue);
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-                height: ScreenUtil().setWidth(60.0),
-                decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainButtonBgColor.name,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(ScreenUtil().setWidth(60.0)),
-                  ),
+            // The pill stays 60px tall; the hit area grows to 44pt and the
+            // pill is painted with Ink so the splash shows on top of it.
+            // Transparent Material: the field fill would hide the Ink pill.
+            Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                onTap: () {
+                  _closeKeyboard();
+                  _runSearch(waValue);
+                },
+                borderRadius: BorderRadius.all(
+                  Radius.circular(ScreenUtil().setWidth(60.0)),
                 ),
-                alignment: Alignment.center,
-                child: Text(
-                  S.of(context).search,
-                  style: AppTypography.bodySm.copyWith(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainButtonTextColor.name,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: AppTouch.minTarget,
+                  ),
+                  child: Center(
+                    widthFactor: 1,
+                    heightFactor: 1,
+                    child: Ink(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space4,
+                      ),
+                      height: ScreenUtil().setWidth(60.0),
+                      decoration: BoxDecoration(
+                        color: AppColorTokens.of(context).brandFill,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(ScreenUtil().setWidth(60.0)),
+                        ),
+                      ),
+                      child: Center(
+                        widthFactor: 1,
+                        child: Text(
+                          S.of(context).search,
+                          style: AppTypography.bodySm.copyWith(
+                            color: AppThemeUtils.getColorByKey(
+                              context,
+                              AppThemeKeys.mainButtonTextColor.name,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -33,61 +33,67 @@ class SmartAccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typeColor = _getAccountTypeColor(account.type);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: AppRadius.brMd,
-          border: Border.all(color: typeColor.withAlpha(40)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 顶部：账户类型和状态
-            Row(
-              children: [
-                _buildAccountTypeIcon(context),
-                SizedBox(width: AppSpacing.space4),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        account.displayName,
-                        style: AppTypography.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
-                      ),
-                      Text(
-                        account.type.displayName,
-                        style: AppTypography.caption.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                DeploymentStatusIndicator(state: account.state),
-              ],
+    // Ink + InkWell on a transparent Material keeps the pressed state
+    // visible above the gradient.
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            SizedBox(height: AppSpacing.space4),
-
-            // 地址
-            _buildAddressRow(context),
-
-            // 详细信息
-            if (showDetails) ...[
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: typeColor.withAlpha(40)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 顶部：账户类型和状态
+              Row(
+                children: [
+                  _buildAccountTypeIcon(context),
+                  SizedBox(width: AppSpacing.space4),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          account.displayName,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
+                        ),
+                        Text(
+                          account.type.displayName,
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DeploymentStatusIndicator(state: account.state),
+                ],
+              ),
               SizedBox(height: AppSpacing.space4),
-              _buildDetailsSection(context),
+
+              // 地址
+              _buildAddressRow(context),
+
+              // 详细信息
+              if (showDetails) ...[
+                SizedBox(height: AppSpacing.space4),
+                _buildDetailsSection(context),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -133,7 +139,8 @@ class SmartAccountCard extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
+          AppTapArea(
+            tooltip: S.of(context).g_key_119,
             onTap: () {
               Clipboard.setData(ClipboardData(text: account.address));
               ScaffoldMessenger.of(context).showSnackBar(

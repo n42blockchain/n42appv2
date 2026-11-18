@@ -198,22 +198,36 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                               _keystoreController.text = text;
                             }
                           },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSpacing.space4,
+                          borderRadius: AppRadius.brMd,
+                          // 30pt pill, 44pt hit area; Ink keeps the splash
+                          // visible on the filled pill.
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minHeight: AppTouch.minTarget,
                             ),
-                            height: ScreenUtil().setWidth(60.0),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: AppColorTokens.of(context).brand,
-                              borderRadius: AppRadius.brMd,
-                            ),
-                            child: Text(
-                              S.of(context).g_key_166,
-                              style: AppTypography.bodySm.copyWith(
-                                color: AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.mainWhiteColor.name,
+                            child: Center(
+                              widthFactor: 1,
+                              heightFactor: 1,
+                              child: Ink(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.space4,
+                                ),
+                                height: ScreenUtil().setWidth(60.0),
+                                decoration: BoxDecoration(
+                                  color: AppColorTokens.of(context).brandFill,
+                                  borderRadius: AppRadius.brMd,
+                                ),
+                                child: Center(
+                                  widthFactor: 1,
+                                  child: Text(
+                                    S.of(context).g_key_166,
+                                    style: AppTypography.bodySm.copyWith(
+                                      color: AppThemeUtils.getColorByKey(
+                                        context,
+                                        AppThemeKeys.mainWhiteColor.name,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -232,10 +246,7 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                         controller: _keystoreController,
                         maxLines: 30,
                         style: AppTypography.bodySm.copyWith(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.ff888888.name,
-                          ),
+                          color: AppColorTokens.of(context).textItem,
                         ),
                       ),
                     ),
@@ -325,7 +336,10 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    SizedBox(height: ScreenUtil().setWidth(148)),
+                    // Room for the bottom bar: 48pt button + padding.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -341,9 +355,10 @@ class _ImportPrivatekeyState extends ConsumerState<ImportPrivatekey> {
                     indent: 0,
                     endIndent: 0,
                   ),
+                  // No fixed height: a 148px box clamped the button to
+                  // 42pt (32pt at 320pt width).
                   Container(
                     padding: EdgeInsets.all(AppSpacing.space8),
-                    height: ScreenUtil().setWidth(148),
                     width: double.infinity,
                     color: AppColorTokens.of(context).bgBase,
                     child: AppButton(

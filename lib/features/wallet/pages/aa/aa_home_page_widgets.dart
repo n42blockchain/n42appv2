@@ -228,57 +228,61 @@ extension _AAHomePageWidgets on _AAHomePageState {
     final isDisabled = onTap == null;
     final sw = ScreenUtil().setWidth;
 
-    return GestureDetector(
-      onTap: isDisabled
-          ? () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    disabledHint ?? S.of(context).g_key_aa_create_first,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: isDisabled
+            ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      disabledHint ?? S.of(context).g_key_aa_create_first,
+                    ),
+                  ),
+                );
+              }
+            : onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.all(sw(20)),
+          decoration: BoxDecoration(
+            color: _itemBgColor(),
+            borderRadius: AppRadius.brMd,
+            border: Border.all(
+              color: isDisabled
+                  ? AppColorTokens.of(context).textTertiary.withAlpha(30)
+                  : color.withAlpha(40),
+            ),
+          ),
+          child: Opacity(
+            opacity: isDisabled ? 0.5 : 1.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _iconBox(
+                  sw(44),
+                  sw(12),
+                  color,
+                  Icon(icon, size: sw(24), color: color),
+                ),
+                SizedBox(height: sw(12)),
+                Text(
+                  title,
+                  style: AppTypography.bodyStrong.copyWith(
+                    color: _mainTextColor(),
                   ),
                 ),
-              );
-            }
-          : onTap,
-      child: Container(
-        padding: EdgeInsets.all(sw(20)),
-        decoration: BoxDecoration(
-          color: _itemBgColor(),
-          borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: isDisabled
-                ? AppColorTokens.of(context).textTertiary.withAlpha(30)
-                : color.withAlpha(40),
-          ),
-        ),
-        child: Opacity(
-          opacity: isDisabled ? 0.5 : 1.0,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _iconBox(
-                sw(44),
-                sw(12),
-                color,
-                Icon(icon, size: sw(24), color: color),
-              ),
-              SizedBox(height: sw(12)),
-              Text(
-                title,
-                style: AppTypography.bodyStrong.copyWith(
-                  color: _mainTextColor(),
+                SizedBox(height: sw(4)),
+                Text(
+                  subtitle,
+                  style: AppTypography.caption.copyWith(
+                    color: _subtitleTextColor(),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              SizedBox(height: sw(4)),
-              Text(
-                subtitle,
-                style: AppTypography.caption.copyWith(
-                  color: _subtitleTextColor(),
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

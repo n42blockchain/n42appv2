@@ -17,6 +17,8 @@ import 'chain_sender.dart';
 import '../../utils/cardano/signing_inputs.dart';
 import '../../utils/cardano/signed_transfer.dart';
 
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
+
 /// Cardano (ADA) sender — uses Blockfrost API.
 class AdaSender implements ChainSender {
   final Trustdart _trustdart;
@@ -151,6 +153,14 @@ class AdaSender implements ChainSender {
       params.decimals,
     );
     final useMaxAmount = params.sendMax && valuePrice == chainBalance;
+    // A quoted maximum was reviewed for an exact spendable balance. If that
+    // balance moved, never fall back to an exact transfer of the old balance:
+    // the amount would differ from the one the user confirmed.
+    if (params.sendMax &&
+        !useMaxAmount &&
+        params.expectedFeeBaseUnits != null) {
+      return SendResult.fail(S.current.g_audit_quote_changed);
+    }
     if (valuePrice <= BigInt.zero || valuePrice > chainBalance) {
       return SendResult.fail(
         inputs.excludesNativeAssets
@@ -245,6 +255,10 @@ class AdaSender implements ChainSender {
       signed.amount.toString(),
       params.decimals,
     ).toDouble();
+    final signedTtl = cardanoSignedTtl(signed.encoded);
+    if (signedTtl != null && signedTtl.toString() == ttl) {
+      params.onExpiryProof?.call(MemoExpiryProof.cardano(ttl: signedTtl));
+    }
     try {
       await params.beforeBroadcast?.call(signed.txHash);
     } catch (_) {
@@ -278,6 +292,10 @@ class AdaSender implements ChainSender {
         signed.encoded,
         isTest: params.isTest,
       );
+      final rejection = sendMm.data;
+      if (sendMm.error && rejection is BroadcastRejected) {
+        return SendResult.rejected(signed.txHash, rejection.reason);
+      }
       if (sendMm.error ||
           sendMm.data is! String ||
           (sendMm.data as String).toLowerCase() != signed.txHash) {

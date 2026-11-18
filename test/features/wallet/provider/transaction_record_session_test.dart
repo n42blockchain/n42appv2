@@ -251,6 +251,33 @@ void main() {
       },
     );
   }
+  for (final (settled, written) in [(1, 1), (2, 1), (-1, 0)]) {
+    test('Aptos history settles through its journal: $settled', () async {
+      final db = _Database();
+      final resolver = _Resolver();
+      final settledRecords = <String>[];
+      final provider = TransactionRecordItemProvider(
+        database: db,
+        resolver: resolver,
+        userUuid: () => 'alice',
+        aptSettler: (record) async {
+          settledRecords.add(record.txHash);
+          return settled;
+        },
+      );
+      addTearDown(provider.dispose);
+      final record = TransationRecordModel()
+        ..userUuid = 'alice'
+        ..coinMiniName = 'APT'
+        ..txHash = '0x${'ab' * 32}';
+      final result = await provider.checkUndoneTrReturn(record);
+      expect(settledRecords, [record.txHash]);
+      // Aptos rows never reach the generic resolver (it cannot settle them).
+      expect(resolver.calls, 0);
+      expect(db.connection.writes, written);
+      expect(result?.state, settled == -1 ? null : settled);
+    });
+  }
   test('foreign account is neither queued nor queried', () async {
     final resolver = _Resolver();
     final provider = TransactionRecordItemProvider(

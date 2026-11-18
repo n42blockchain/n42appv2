@@ -10,27 +10,79 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 import 'sui_transaction_message.dart';
+import 'sui_transfer_plan.dart';
 import '../../pages/send/sui_amount_utils.dart';
 
 /// Sui chain sender.
 class SuiSender implements ChainSender {
   final Trustdart _trustdart;
   final SuiApi Function(bool) _apiFactory;
+  final Object? Function() _ownerIdentity;
+  final String? Function() _readMnemonic;
   bool _sending = false;
 
-  SuiSender({Trustdart? trustdart, SuiApi Function(bool)? apiFactory})
-    : _trustdart = trustdart ?? Trustdart(),
-      _apiFactory = apiFactory ?? ((isTest) => SuiApi(isTest: isTest));
+  static Object? _currentOwner() {
+    try {
+      if (!globalWapAdapter.isWalletReady) return null;
+      return (
+        AppGlobals.walletStorageUuid,
+        AppGlobals.userInfo,
+        globalWapAdapter.walletIndex,
+        globalWapAdapter.walletInfo,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String? _currentMnemonic() {
+    try {
+      return globalWapAdapter.isWalletReady
+          ? globalWapAdapter.walletInfo.mnemonic
+          : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  SuiSender({
+    Trustdart? trustdart,
+    SuiApi Function(bool)? apiFactory,
+    Object? Function()? ownerIdentity,
+    String? Function()? readMnemonic,
+  }) : _trustdart = trustdart ?? Trustdart(),
+       _apiFactory = apiFactory ?? ((isTest) => SuiApi(isTest: isTest)),
+       _ownerIdentity = ownerIdentity ?? _currentOwner,
+       _readMnemonic = readMnemonic ?? _currentMnemonic;
 
   @override
   Future<SendResult> send(SendParams params) async {
     if (_sending) return const SendResult.fail('A transfer is already pending');
     _sending = true;
     try {
-      return await _send(params);
+      // Capture the signing account before any asynchronous preparation so a
+      // wallet switch can never sign with the replacement account's mnemonic.
+      final owner = _ownerIdentity();
+      final mnemonic = params.privateKey == null ? _readMnemonic() : null;
+      bool signerIsCurrent() {
+        try {
+          return _ownerIdentity() == owner &&
+              (params.privateKey != null ||
+                  (owner != null && mnemonic == _readMnemonic()));
+        } catch (_) {
+          return false;
+        }
+      }
+
+      if (!signerIsCurrent() ||
+          (params.privateKey ?? mnemonic ?? '').trim().isEmpty) {
+        return const SendResult.fail('Wallet is not ready');
+      }
+      return await _send(params, mnemonic, signerIsCurrent);
     } catch (_) {
       return const SendResult.fail('Unable to prepare or send Sui transfer');
     } finally {
@@ -38,7 +90,11 @@ class SuiSender implements ChainSender {
     }
   }
 
-  Future<SendResult> _send(SendParams params) async {
+  Future<SendResult> _send(
+    SendParams params,
+    String? mnemonic,
+    bool Function() signerIsCurrent,
+  ) async {
     if (params.contractAddress.isNotEmpty) {
       return const SendResult.fail(
         'Sui token transfers require a token-specific transaction',
@@ -91,29 +147,22 @@ class SuiSender implements ChainSender {
       return SendResult.fail(S.current.g_key_wallet_m5('SUI'));
     }
 
-    // Get owned objects (coins) for gas
-    final ownedObjects = await suiApi.getOwnedObjects(params.fromAddress);
-
-    if (ownedObjects.isEmpty) {
-      return const SendResult.fail('No spendable Sui coins');
+    // Coins first; the SIP-58 address balance covers any shortfall.
+    final request = await prepareSuiTransfer(
+      api: suiApi,
+      fromAddress: params.fromAddress,
+      toAddress: params.toAddress,
+      amount: valuePrice,
+      gasBudget: totalGas,
+      referenceGasPrice: gasPrice,
+    );
+    final signMap = request.signMap;
+    if (signMap == null) {
+      return SendResult.fail(request.error ?? 'No spendable Sui funds');
     }
-    final signMap = <String, dynamic>{
-      'type': 'SUI_TRANSFER',
-      'amount': valuePrice.toString(),
-      'toAddress': params.toAddress,
-      'fromAddress': params.fromAddress,
-      'gasBudget': totalGas.toString(),
-      'referenceGasPrice': gasPrice.toString(),
-      'utxo': ownedObjects.map((o) {
-        final data = (o as Map)['data'] as Map;
-        return {
-          'objectId': data['objectId'],
-          'version': data['version'],
-          'objectDigest': data['digest'],
-        };
-      }).toList(),
-    };
-
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Sui signing');
+    }
     String signStr;
     if (params.privateKey == null) {
       if (!AppGlobals.appContext.mounted) {
@@ -123,7 +172,7 @@ class SuiSender implements ChainSender {
         CoinType.SUI.name,
         params.path,
         signMap,
-        mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
+        mnemonic: mnemonic!,
       );
     } else {
       signStr = await _trustdart.signTransaction(
@@ -135,17 +184,37 @@ class SuiSender implements ChainSender {
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
+    if (!signerIsCurrent()) {
+      return const SendResult.fail('Wallet changed before Sui submission');
+    }
 
     final signed = SuiSignedTransaction.parse(signStr);
     if (signed == null) {
       return const SendResult.fail('Invalid Sui signing output');
     }
-    final sendMm = await suiApi.submit(signed.transaction, signed.signature);
-    if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
+    // From here on the signed coins may be spent: a transport error, timeout
+    // or unconfirmed reply is an unknown outcome, never a plain failure that
+    // invites signing the same coin objects again.
+    final digest = suiTransactionDigest(signed.transaction);
+    SendResult unknown(Object? reason) => SendResult.uncertain(
+      digest,
+      'Sui transfer outcome is unknown; check transaction $digest'
+      '${reason == null ? '' : ' ($reason)'}',
+      actualAmount: adjustedAmount,
+    );
+    final MessageModel sendMm;
+    try {
+      sendMm = await suiApi.submit(signed.transaction, signed.signature);
+    } catch (_) {
+      return unknown(null);
+    }
+    if (sendMm.error) return unknown(sendMm.data);
 
     final txHash = _extractSuiTxHash(sendMm.data);
-    if (txHash == null || txHash.isEmpty) {
-      return const SendResult.fail('Missing Sui transaction digest');
+    if (txHash == null || txHash.isEmpty) return unknown(null);
+    if (txHash != digest) {
+      // The node confirmed a transaction, but not the one signed here.
+      return unknown('node returned $txHash');
     }
     return SendResult.ok(txHash, actualAmount: adjustedAmount);
   }

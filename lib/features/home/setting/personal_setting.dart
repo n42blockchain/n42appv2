@@ -65,7 +65,8 @@ class _PersonalSettingState extends State<PersonalSetting> {
       child: Text(
         text,
         style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).brand,
+          // Brand label text needs the 4.5:1 shade on the page background.
+          color: AppColorTokens.of(context).brandOnTint,
         ),
       ),
     );

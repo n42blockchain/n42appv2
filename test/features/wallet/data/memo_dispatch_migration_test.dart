@@ -51,9 +51,12 @@ void main() {
     await connection.close();
     final app = AppDatabase();
     connection = await app.database;
-    expect(await connection.getVersion(), 9);
+    expect(await connection.getVersion(), 10);
     final row = (await connection.query('TransationRecord')).single;
     expect(row['memoDispatchPhase'], isNull);
+    // Legacy rows carry no expiry proof: only a receipt or the user's explicit
+    // dismissal can resolve them.
+    expect(row['memoExpiry'], isNull);
     expect(row['txHash'], legacy.txHash);
     await expectLater(
       app.reserveMemoTransaction(legacy, trackDispatch: true),

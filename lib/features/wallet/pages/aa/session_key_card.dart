@@ -155,7 +155,8 @@ class SessionKeyCard extends StatelessWidget {
 
   Widget _buildAddressRow(BuildContext context) {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
-    return GestureDetector(
+    return AppTapArea(
+      borderRadius: AppRadius.brSm,
       onTap: () {
         Clipboard.setData(ClipboardData(text: keyData.keyAddress));
         ScaffoldMessenger.of(context).showSnackBar(

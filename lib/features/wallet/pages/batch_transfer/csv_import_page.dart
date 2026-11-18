@@ -129,7 +129,6 @@ class _CsvImportPageState extends State<CsvImportPage>
   Widget _buildBottomBar() {
     final itemBg = AppColorTokens.of(context).bgSurface;
     final subText = AppColorTokens.of(context).textSubtitle;
-    final blue = AppColorTokens.of(context).brand;
 
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
@@ -179,7 +178,7 @@ class _CsvImportPageState extends State<CsvImportPage>
                         ? _importData
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: blue,
+                      backgroundColor: AppColorTokens.of(context).brandFill,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(
                         vertical: AppSpacing.space4,

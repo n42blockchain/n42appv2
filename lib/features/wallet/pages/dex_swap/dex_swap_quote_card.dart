@@ -202,9 +202,18 @@ class DexQuoteCard extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final mainText = AppColorTokens.of(context).textPrimary;
-    final warningColor = AppColorTokens.of(context).warning;
-    return GestureDetector(
+    final c = AppColorTokens.of(context);
+    final warningColor = c.warning;
+    // Orange on its own 20% tint is ~2:1; use a 4.5:1 shade for the label.
+    final warningText = AppContrast.textOnTint(
+      warningColor,
+      [c.bgBase, c.bgSurface, c.bgElevated],
+      dark: Theme.of(context).brightness == Brightness.dark,
+      alpha: 0.2,
+    );
+    return AppTapArea(
       onTap: onTap,
+      borderRadius: AppRadius.brMd,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space4,
@@ -223,7 +232,7 @@ class DexQuoteCard extends StatelessWidget {
         child: Text(
           label,
           style: AppTypography.caption.copyWith(
-            color: selected ? warningColor : mainText,
+            color: selected ? warningText : mainText,
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

@@ -17,7 +17,7 @@ Widget stakingDefaultLogo(BuildContext context, StakingProtocol protocol) {
     width: ScreenUtil().setWidth(56),
     height: ScreenUtil().setWidth(56),
     decoration: BoxDecoration(
-      color: AppColorTokens.of(context).brand,
+      color: AppColorTokens.of(context).brandFill,
       shape: BoxShape.circle,
     ),
     child: Center(

@@ -1,0 +1,17 @@
+{
+  "data": null,
+  "errors": [
+    {
+      "message": "Failed to parse \"String\": Expected digest to be 32B, but got 3B",
+      "locations": [
+        {
+          "line": 3,
+          "column": 23
+        }
+      ],
+      "path": [
+        "transaction"
+      ]
+    }
+  ]
+}

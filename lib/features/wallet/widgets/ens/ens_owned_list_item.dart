@@ -21,111 +21,115 @@ class EnsOwnedListItem extends StatelessWidget {
     final isExpiringSoon = ownedEns.isExpiringSoon;
     final isExpired = ownedEns.isExpired;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
-          borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: isExpired
-                ? AppColorTokens.of(context).danger.withAlpha(50)
-                : isExpiringSoon
-                ? AppColorTokens.of(context).warning.withAlpha(50)
-                : AppColorTokens.of(context).brand.withAlpha(30),
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
+            border: Border.all(
+              color: isExpired
+                  ? AppColorTokens.of(context).danger.withAlpha(50)
+                  : isExpiringSoon
+                  ? AppColorTokens.of(context).warning.withAlpha(50)
+                  : AppColorTokens.of(context).brand.withAlpha(30),
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            // 头像
-            _buildAvatar(context),
-            SizedBox(width: AppSpacing.space4),
+          child: Row(
+            children: [
+              // 头像
+              _buildAvatar(context),
+              SizedBox(width: AppSpacing.space4),
 
-            // 域名信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        ownedEns.name,
-                        style: AppTypography.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColorTokens.of(context).textPrimary,
+              // 域名信息
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          ownedEns.name,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
                         ),
-                      ),
-                      if (ownedEns.isPrimary) ...[
+                        if (ownedEns.isPrimary) ...[
+                          SizedBox(width: AppSpacing.space2),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.space2,
+                              vertical: AppSpacing.space2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColorTokens.of(context).success
+                                  .withAlpha(30),
+                              borderRadius: AppRadius.brSm,
+                            ),
+                            child: Text(
+                              S.of(context).g_key_ens_primary,
+                              style: AppTypography.captionSm.copyWith(
+                                color: AppColorTokens.of(context).success,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    SizedBox(height: AppSpacing.space2),
+                    Row(
+                      children: [
+                        Icon(
+                          isExpired
+                              ? Icons.error_outline
+                              : isExpiringSoon
+                              ? Icons.warning_amber
+                              : Icons.access_time,
+                          size: ScreenUtil().setWidth(16),
+                          color: isExpired
+                              ? AppColorTokens.of(context).danger
+                              : isExpiringSoon
+                              ? AppColorTokens.of(context).warning
+                              : AppColorTokens.of(context).textSubtitle,
+                        ),
                         SizedBox(width: AppSpacing.space2),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: AppSpacing.space2,
-                            vertical: AppSpacing.space2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColorTokens.of(context).success
-                                .withAlpha(30),
-                            borderRadius: AppRadius.brSm,
-                          ),
+                        Flexible(
                           child: Text(
-                            S.of(context).g_key_ens_primary,
-                            style: AppTypography.captionSm.copyWith(
-                              color: AppColorTokens.of(context).success,
-                              fontWeight: FontWeight.w500,
+                            isExpired
+                                ? S.of(context).g_key_ens_expired
+                                : isExpiringSoon
+                                ? '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'
+                                : ownedEns.formattedExpiresAt,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.caption.copyWith(
+                              color: isExpired
+                                  ? AppColorTokens.of(context).danger
+                                  : isExpiringSoon
+                                  ? AppColorTokens.of(context).warning
+                                  : AppColorTokens.of(context).textSubtitle,
                             ),
                           ),
                         ),
                       ],
-                    ],
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  Row(
-                    children: [
-                      Icon(
-                        isExpired
-                            ? Icons.error_outline
-                            : isExpiringSoon
-                            ? Icons.warning_amber
-                            : Icons.access_time,
-                        size: ScreenUtil().setWidth(16),
-                        color: isExpired
-                            ? AppColorTokens.of(context).danger
-                            : isExpiringSoon
-                            ? AppColorTokens.of(context).warning
-                            : AppColorTokens.of(context).textSubtitle,
-                      ),
-                      SizedBox(width: AppSpacing.space2),
-                      Flexible(
-                        child: Text(
-                          isExpired
-                              ? S.of(context).g_key_ens_expired
-                              : isExpiringSoon
-                              ? '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'
-                              : ownedEns.formattedExpiresAt,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.caption.copyWith(
-                            color: isExpired
-                                ? AppColorTokens.of(context).danger
-                                : isExpiringSoon
-                                ? AppColorTokens.of(context).warning
-                                : AppColorTokens.of(context).textSubtitle,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // 箭头
-            Icon(
-              Icons.chevron_right,
-              size: ScreenUtil().setWidth(28),
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
-          ],
+              // 箭头
+              Icon(
+                Icons.chevron_right,
+                size: ScreenUtil().setWidth(28),
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
+            ],
+          ),
         ),
       ),
     );

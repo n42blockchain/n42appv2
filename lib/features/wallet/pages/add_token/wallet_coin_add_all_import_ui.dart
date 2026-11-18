@@ -58,17 +58,19 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
           if (isEditing)
             Container(
               padding: EdgeInsets.all(ScreenUtil().setWidth(19.0)),
-              width: ScreenUtil().setWidth(78.0),
-              height: ScreenUtil().setWidth(78.0),
+              width: AppTouch.scaled(78),
+              height: AppTouch.scaled(78),
               child: const CircularProgressIndicator(),
             )
           else
-            InkWell(
+            AppTapArea(
               onTap: () => removeCustomerCoinToken(rowValue),
+              tooltip: S.of(context).g_alert_remove,
+              customBorder: const CircleBorder(),
               child: Container(
                 padding: EdgeInsets.all(AppSpacing.space4),
-                width: ScreenUtil().setWidth(80.0),
-                height: ScreenUtil().setWidth(80.0),
+                width: AppTouch.scaled(80),
+                height: AppTouch.scaled(80),
                 child: Icon(
                   Icons.remove,
                   color: AppThemeUtils.getColorByKey(
@@ -122,7 +124,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
 
   Widget addButtonWidget() {
     return SizedBox(
-      height: ScreenUtil().setWidth(88.0),
+      height: AppTouch.target,
       width: double.infinity,
       child: AppButton(
         label: S.of(context).g_key_159,
@@ -134,7 +136,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
 
   Widget importButtonWidget() {
     final isLoading = load == Load.loading;
-    final btnH = ScreenUtil().setWidth(88.0);
+    final btnH = AppTouch.target;
     return SizedBox(
       height: btnH,
       width: double.infinity,

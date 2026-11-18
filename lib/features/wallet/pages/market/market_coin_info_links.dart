@@ -88,7 +88,7 @@ Widget _buildLinkRow(
   return InkWell(
     onTap: () => openUrl(context, item.url),
     child: SizedBox(
-      height: ScreenUtil().setWidth(96),
+      height: AppTouch.scaled(96),
       child: Row(
         children: [
           Image.asset(
@@ -149,7 +149,7 @@ Widget _buildBrowserRows(
         (url) => InkWell(
           onTap: () => openUrl(context, url),
           child: SizedBox(
-            height: ScreenUtil().setWidth(96),
+            height: AppTouch.scaled(96),
             child: Row(
               children: [
                 SizedBox(width: ScreenUtil().setWidth(70)),

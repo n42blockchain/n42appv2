@@ -68,48 +68,53 @@ Future<bool?> tipsDialog4(
           ),
 
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
-          SizedBox(
-            height: ScreenUtil().setWidth(80),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Center(
-                      child: Text(
-                        S.of(context).g_key_79,
-                        style: AppTypography.body.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(color: AppColorTokens.of(context).border, width: 1),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: Container(
-                      color: Colors.transparent,
+          // Transparent Material above the card fill so the buttons' ink is
+          // visible (it was painted under the opaque Container before).
+          Material(
+            type: MaterialType.transparency,
+            child: SizedBox(
+              height: AppTouch.scaled(80),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(false);
+                      },
                       child: Center(
                         child: Text(
-                          S.of(context).g_key_78,
-                          style: AppTypography.headline.copyWith(
-                            // color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor),
-                            color: AppColorTokens.of(context).brand,
-                            fontWeight: FontWeight.w400,
+                          S.of(context).g_key_79,
+                          style: AppTypography.body.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Container(color: AppColorTokens.of(context).border, width: 1),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(true);
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Text(
+                            S.of(context).g_key_78,
+                            style: AppTypography.headline.copyWith(
+                              // color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor),
+                              color: AppColorTokens.of(context).brandOnTint,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -261,6 +261,28 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
   }
 
   /// 小型复制图标（compact / full / addressOnly 共用）
+  /// Gives a tappable display a hit area of at least 44pt in height with
+  /// visible ink; a non-interactive display is returned unchanged.
+  Widget _tapTarget({required VoidCallback? onTap, required Widget child}) {
+    if (onTap == null) return child;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brSm,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: AppTouch.minTarget),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            widthFactor: 1,
+            heightFactor: 1,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildCopyIcon(double size, Color color) {
     return Padding(
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
@@ -278,7 +300,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     final displayText =
         _ensName ?? AddressValidator.getAddressPreview(widget.address);
 
-    return GestureDetector(
+    return _tapTarget(
       onTap: widget.onTap ?? (widget.showCopy ? _copyAddress : null),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -316,7 +338,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     double fontSize,
     double avatarSize,
   ) {
-    return GestureDetector(
+    return _tapTarget(
       onTap: widget.onTap ?? (widget.showCopy ? _copyAddress : null),
       child: Row(
         children: [
@@ -384,74 +406,82 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     double fontSize,
     double avatarSize,
   ) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface.withValues(alpha: 0.5),
-          borderRadius: AppRadius.brMd,
-          border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
-        ),
-        child: Row(
-          children: [
-            _buildAvatar(avatarSize * 1.2),
-            SizedBox(width: AppSpacing.space4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_isLoading)
-                    _buildLoadingIndicator(fontSize)
-                  else if (_ensName != null) ...[
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.verified,
-                          size: fontSize,
-                          color: AppColorTokens.of(context).success,
-                        ),
-                        SizedBox(width: AppSpacing.space2),
-                        Expanded(
-                          child: Text(
-                            _ensName!,
-                            style: TextStyle(
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.w600,
-                              color: textColor,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: AppColorTokens.of(context).bgSurface.withValues(alpha: 0.5),
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
+          ),
+          child: Row(
+            children: [
+              _buildAvatar(avatarSize * 1.2),
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (_isLoading)
+                      _buildLoadingIndicator(fontSize)
+                    else if (_ensName != null) ...[
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.verified,
+                            size: fontSize,
+                            color: AppColorTokens.of(context).success,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: AppSpacing.space2),
+                          Expanded(
+                            child: Text(
+                              _ensName!,
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                fontWeight: FontWeight.w600,
+                                color: textColor,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: AppSpacing.space2),
+                    ],
+                    SelectableText(
+                      widget.address,
+                      style: TextStyle(
+                        fontSize: fontSize * 0.8,
+                        color: subtitleColor,
+                        fontFamily: 'monospace',
+                      ),
+                      maxLines: 2,
                     ),
-                    SizedBox(height: AppSpacing.space2),
                   ],
-                  SelectableText(
-                    widget.address,
-                    style: TextStyle(
-                      fontSize: fontSize * 0.8,
-                      color: subtitleColor,
-                      fontFamily: 'monospace',
-                    ),
-                    maxLines: 2,
-                  ),
-                ],
-              ),
-            ),
-            if (widget.showCopy)
-              IconButton(
-                onPressed: _copyAddress,
-                icon: Icon(
-                  Icons.copy_rounded,
-                  color: subtitleColor,
-                  size: fontSize * 1.2,
                 ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
               ),
-          ],
+              if (widget.showCopy)
+                IconButton(
+                  onPressed: _copyAddress,
+                  tooltip: S.of(context).g_key_119,
+                  icon: Icon(
+                    Icons.copy_rounded,
+                    color: subtitleColor,
+                    size: fontSize * 1.2,
+                  ),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: AppTouch.target,
+                    minHeight: AppTouch.target,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -459,7 +489,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
 
   /// 仅地址模式
   Widget _buildAddressOnly(Color textColor, double fontSize) {
-    return GestureDetector(
+    return _tapTarget(
       onTap: widget.showCopy ? _copyAddress : widget.onTap,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -503,7 +533,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
           style: TextStyle(
             fontSize: size * 0.5,
             fontWeight: FontWeight.w600,
-            color: blueColor,
+            color: AppColorTokens.of(context).brandOnTintAt(0.2),
           ),
         ),
       ),

@@ -216,10 +216,10 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     final data = connectV2.actionDataMap;
     return _actionDetailWidget(
       items: [
-        ("Network", data?['network'] ?? ""),
-        ("From", data?['from'] ?? ""),
-        ("To", data?['to'] ?? ""),
-        ("Data", data?['data'] ?? ""),
+        (S.of(context).g_mining_key84, data?['network'] ?? ""),
+        (S.of(context).g_key_75, data?['from'] ?? ""),
+        (S.of(context).g_key_38, data?['to'] ?? ""),
+        (S.of(context).g_ui3_data, data?['data'] ?? ""),
       ],
       button: _stateButton(
         connectV2,
@@ -235,9 +235,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     final data = connectV2.actionDataMap;
     return _actionDetailWidget(
       items: [
-        ("Network", data?['network'] ?? ""),
-        ("Address", data?['from'] ?? ""),
-        ("Data", data?['data'] ?? ""),
+        (S.of(context).g_mining_key84, data?['network'] ?? ""),
+        (S.of(context).g_key_address, data?['from'] ?? ""),
+        (S.of(context).g_ui3_data, data?['data'] ?? ""),
       ],
       button: _stateButton(
         connectV2,
@@ -323,7 +323,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   Widget bottomBar({required Widget child}) {
     final su = ScreenUtil();
     return Container(
-      height: su.setWidth(150),
+      // minHeight, not height: the fixed box squeezed the 44pt buttons to
+      // 37.5pt on 320pt screens.
+      constraints: BoxConstraints(minHeight: su.setWidth(150)),
       width: double.infinity,
       padding: EdgeInsets.only(
         bottom: su.setWidth(36.0),
@@ -374,7 +376,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   }) {
     return SizedBox(
       width: double.infinity,
-      height: ScreenUtil().setWidth(88.0),
+      height: AppTouch.target,
       child: AppButton(label: title, onPressed: onTap, variant: variant),
     );
   }
@@ -383,7 +385,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     final su = ScreenUtil();
     return bottomBar(
       child: Container(
-        height: su.setWidth(88),
+        height: AppTouch.target,
         width: double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -548,12 +550,14 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 );
               },
               child: SizedBox(
-                height: ScreenUtil().setWidth(60),
+                // 44pt link row (was 30pt@375, 25.6pt@320).
+                height: AppTouch.target,
                 width: double.infinity,
                 child: Text(
                   dAppWebUrl,
                   style: AppTypography.bodySm.copyWith(
-                    color: _themeColor(AppThemeKeys.mainBlueColor),
+                    // brandOnTint: >= 4.5:1 (plain brand is ~4.0:1).
+                    color: AppColorTokens.of(context).brandOnTint,
                     decoration: TextDecoration.underline,
                   ),
                   maxLines: 1,

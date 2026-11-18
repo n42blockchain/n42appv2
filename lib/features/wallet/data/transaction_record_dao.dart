@@ -1,6 +1,8 @@
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
+import 'package:n42_wallet/features/wallet/services/apt_submission_journal.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,6 +24,15 @@ bool _validMemoHash(Object? chain, String hash) {
 class PendingMemoTransactionException implements Exception {
   const PendingMemoTransactionException();
 }
+
+/// Dispatch phase of a pending ADA/XLM/EGLD/NEAR row whose outcome could not
+/// be determined and which the user chose to stop waiting for. The row keeps
+/// state=0 (its outcome is still unknown and it is still polled), but it no
+/// longer reserves the sender.
+const memoPhaseDismissed = 'dismissed';
+
+const _blockingMemoWhere =
+    "userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0 AND (memoDispatchPhase IS NULL OR memoDispatchPhase<>'$memoPhaseDismissed')";
 
 /// 本地交易记录（含 BTC UTXO 记录）的类型化 DAO。
 ///
@@ -133,10 +144,14 @@ extension TransactionRecordDao on AppDatabase {
         );
         values['memoDispatchPhase'] = 'reserved';
       }
+      final expiry = record.memoExpiry;
+      if (expiry != null && expiry.isNotEmpty) values['memoExpiry'] = expiry;
+      // A row the user explicitly dismissed stays pending history (it is
+      // still polled and may still resolve) but no longer blocks a send.
       final pending = await txn.query(
         'TransationRecord',
         columns: ['trId'],
-        where: 'userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0',
+        where: _blockingMemoWhere,
         whereArgs: [
           values['userUuid'],
           values['coinMiniName'],
@@ -152,6 +167,51 @@ extension TransactionRecordDao on AppDatabase {
         conflictAlgorithm: ConflictAlgorithm.rollback,
       );
     });
+  }
+
+  /// Pending rows that currently reserve this sender (oldest first). Used to
+  /// show the user what is blocking a new send.
+  Future<List<TransationRecordModel>> selectBlockingMemoTransactions({
+    required String userUuid,
+    required String coinMiniName,
+    required String from,
+    required int isTest,
+  }) {
+    return queryList(
+      'TransationRecord',
+      TransationRecordModel.fromMap,
+      where: _blockingMemoWhere,
+      whereArgs: [userUuid, coinMiniName, from, isTest],
+      orderBy: 'trId asc',
+    );
+  }
+
+  /// The user confirmed, after a warning that the original may still land,
+  /// that the unresolved rows reserving this sender should stop blocking new
+  /// sends. Their state stays 0, so a later chain result still updates them;
+  /// nothing is reported as failed.
+  Future<int> dismissPendingMemoTransactions({
+    required String userUuid,
+    required String coinMiniName,
+    required String from,
+    required int isTest,
+  }) async {
+    if (!{'ADA', 'XLM', 'EGLD', 'NEAR', 'SUI'}.contains(coinMiniName) ||
+        userUuid.isEmpty ||
+        from.isEmpty ||
+        ![0, 1].contains(isTest)) {
+      throw ArgumentError('Invalid memo transaction dismissal');
+    }
+    final db = await database;
+    return db.update(
+      'TransationRecord',
+      {'memoDispatchPhase': memoPhaseDismissed},
+      // A 'reserved' row never reached the broadcast API and is replaced by
+      // the next tracked reservation; it is left to that path.
+      where:
+          "userUuid=? AND coinMiniName=? AND from1=? AND isTest=? AND state=0 AND (memoDispatchPhase IS NULL OR memoDispatchPhase='dispatching')",
+      whereArgs: [userUuid, coinMiniName, from, isTest],
+    );
   }
 
   /// Persist possible dispatch before invoking the network. Failure or a lost
@@ -184,6 +244,43 @@ extension TransactionRecordDao on AppDatabase {
           ],
         ) ==
         1;
+  }
+
+  /// Close the exact pending row as failed after the submission API explicitly
+  /// refused that signed transaction (SendResult.rejected). The row is kept
+  /// as failed history. Timeout/not-found is never sufficient for this call.
+  Future<bool> markMemoTransactionRejected(
+    TransationRecordModel record,
+    String reason,
+  ) async {
+    final values = Map<String, Object?>.from(record.toMapDb());
+    final id = record.trId;
+    final hash = values['txHash'] as String;
+    if (id <= 0 ||
+        !{'ADA', 'XLM', 'EGLD', 'NEAR'}.contains(values['coinMiniName']) ||
+        !_validMemoHash(values['coinMiniName'], hash)) {
+      return false;
+    }
+    final db = await database;
+    final updated = await db.update(
+      'TransationRecord',
+      {'state': 2, 'errorMessage': reason},
+      where: 'trId=? AND txHash=? AND userUuid=? AND walletIndex=? AND coinMiniName=? AND coinId=? AND from1=? AND to1=? AND price=? AND contract=? AND isTest=? AND state=0',
+      whereArgs: [
+        id,
+        hash,
+        values['userUuid'],
+        values['walletIndex'],
+        values['coinMiniName'],
+        values['coinId'],
+        values['from1'],
+        values['to1'],
+        values['price'],
+        values['contract'],
+        values['isTest'],
+      ],
+    );
+    return updated == 1;
   }
 
   /// Release only the exact pending row after a sender proves no broadcast API
@@ -276,6 +373,21 @@ extension TransactionRecordDao on AppDatabase {
       return previous['trId'] as int;
     });
   }
+
+  /// Journal reconciliation writer shared by the send page, the sender and
+  /// the history poller.
+  Future<void> completeAptFromReceipt(
+    AptPendingSubmission pending,
+    AptTransactionReceipt receipt,
+  ) => completeAptTransactionRecord(
+    chainId: pending.chainId,
+    sender: pending.sender,
+    hash: pending.hash,
+    success: receipt.status == AptTransactionStatus.succeeded,
+    neverSubmitted:
+        !pending.submissionAttempted &&
+        receipt.status == AptTransactionStatus.notSubmitted,
+  );
 
   /// Complete existing records; never invent a payment on recovery.
   /// A proven unsubmitted reservation removes only local pending history so

@@ -123,7 +123,9 @@ class _IapPageState extends State<IapPage> {
       if (!started && mounted) {
         setState(() => _pending.remove(product.id));
         ToastUtils.showError(
-          S.of(context).g_iap_failed('Purchase could not be started'),
+          S
+              .of(context)
+              .g_iap_failed(S.of(context).g_ui3_iap_purchase_not_started),
         );
       }
     } catch (e) {
@@ -157,10 +159,8 @@ class _IapPageState extends State<IapPage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bg = AppColorTokens.of(context).bgBase;
     final textPrimary = AppColorTokens.of(context).textPrimary;
-    final textSecondary = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor3.name,
-    );
+    // mainTextColor3 (tertiary label) was 1.7:1 on white.
+    final textSecondary = AppColorTokens.of(context).textSecondary;
 
     return Scaffold(
       backgroundColor: bg,
@@ -378,54 +378,60 @@ class _IapPageState extends State<IapPage> {
           ),
           SizedBox(width: AppSpacing.space4),
           // 价格 + 购买
-          GestureDetector(
-            onTap: isPending ? null : () => _buy(product),
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space6,
-                vertical: AppSpacing.space4,
-              ),
-              decoration: BoxDecoration(
-                gradient: isPending
-                    ? null
-                    : const LinearGradient(
-                        colors: [Color(0xFF1565C0), Color(0xFF7B1FA2)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                color: isPending
-                    ? AppColorTokens.of(context).textTertiary
-                          .withValues(alpha: 0.3)
-                    : null,
-                borderRadius: AppRadius.brMd,
-              ),
-              child: isPending
-                  ? SizedBox(
-                      width: ScreenUtil().setWidth(36),
-                      height: ScreenUtil().setWidth(36),
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          product.price,
-                          style: AppTypography.caption.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
+          // Transparent Material above the card fill so the press ink
+          // shows; Ink paints the gradient under the splash.
+          Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: isPending ? null : () => _buy(product),
+              borderRadius: AppRadius.brMd,
+              child: Ink(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.space6,
+                  vertical: AppSpacing.space4,
+                ),
+                decoration: BoxDecoration(
+                  gradient: isPending
+                      ? null
+                      : const LinearGradient(
+                          colors: [Color(0xFF1565C0), Color(0xFF7B1FA2)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                        Text(
-                          S.of(context).g_iap_title,
-                          style: AppTypography.captionSm.copyWith(
-                            color: Colors.white.withValues(alpha: 0.85),
-                          ),
+                  color: isPending
+                      ? AppColorTokens.of(context).textTertiary
+                            .withValues(alpha: 0.3)
+                      : null,
+                  borderRadius: AppRadius.brMd,
+                ),
+                child: isPending
+                    ? SizedBox(
+                        width: ScreenUtil().setWidth(36),
+                        height: ScreenUtil().setWidth(36),
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            product.price,
+                            style: AppTypography.caption.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            S.of(context).g_iap_title,
+                            style: AppTypography.captionSm.copyWith(
+                              color: Colors.white.withValues(alpha: 0.85),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
             ),
           ),
         ],
@@ -440,26 +446,36 @@ class _RetryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    // InkWell + Ink for a visible pressed state; >= 44pt tall (38.8pt at
+    // 320pt width before).
+    return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space16,
-          vertical: ScreenUtil().setWidth(22),
-        ),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF1565C0), Color(0xFF7B1FA2)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      borderRadius: AppRadius.brMd,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: AppTouch.minTarget),
+        child: Ink(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space16,
+            vertical: ScreenUtil().setWidth(22),
           ),
-          borderRadius: AppRadius.brMd,
-        ),
-        child: Text(
-          S.of(context).g_iap_retry,
-          style: AppTypography.bodySm.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1565C0), Color(0xFF7B1FA2)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: AppRadius.brMd,
+          ),
+          child: Center(
+            widthFactor: 1,
+            heightFactor: 1,
+            child: Text(
+              S.of(context).g_iap_retry,
+              style: AppTypography.bodySm.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ),
       ),

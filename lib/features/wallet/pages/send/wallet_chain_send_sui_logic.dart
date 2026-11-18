@@ -160,16 +160,23 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         errorMessage = S.current.g_key_134;
         return false;
       }
-      final signData = <String, dynamic>{
-        "type": "SUI_TRANSFER",
-        "fromAddress": widget.coinModel.address,
-        "referenceGasPrice": gasPrice.toString(),
-        "gasBudget": suiTransferGasBudget.toString(),
-        "toAddress": toAddr,
-        "amount": exactAmount.toString(),
-        "utxo": utxos,
-      };
       final SuiApi suiApi = SuiApi(isTest: widget.coinModel.isTest);
+      // Same funding plan as the sender: coins first, then the address
+      // balance, so the simulated transaction has the submitted shape.
+      final request = await prepareSuiTransfer(
+        api: suiApi,
+        fromAddress: widget.coinModel.address,
+        toAddress: toAddr,
+        amount: exactAmount,
+        gasBudget: suiTransferGasBudget,
+        referenceGasPrice: gasPrice,
+      );
+      if (!mounted) return false;
+      final signData = request.signMap;
+      if (signData == null) {
+        errorMessage = request.error ?? S.current.g_key_wallet_m6;
+        return false;
+      }
       final String path = getPathWithIndex(
         widget.coinModel.config.pathForAddrType(widget.coinModel.addrType)!,
         widget.coinModel.pathIndex,
@@ -422,7 +429,15 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         (record) => AppDatabase().insertTransationRecord(record);
     _signing = true;
     bool completedWithExit = false;
+    bool offerDismiss = false;
     try {
+      // An earlier send from this address whose outcome the chain has not
+      // settled may still execute and lock or spend the same coin objects.
+      if (await _hasUnresolvedSend(trModel)) {
+        offerDismiss = ownerIsCurrent();
+        return;
+      }
+      if (!ownerIsCurrent()) return;
       final coinType = widget.coinModel.config.coinType;
       // 派生参数必须跟随发起账户：token 模型的 addrType/pathIndex 复制自其所
       // 属主链账户，而 chainModel 只是「首个 coinType 匹配」的主链模型，多账
@@ -475,6 +490,20 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
         Navigator.pop(context);
+      } else if (!result.definitelyNotSubmitted &&
+          !result.definitelyRejected &&
+          (result.txHash ?? '').isNotEmpty) {
+        // Unknown outcome after submission: the signed coin objects may
+        // already be spent. Keep the digest in pending history and never sign
+        // them again from this page.
+        trModel.txHash = result.txHash!;
+        _acceptedHash = trModel.txHash;
+        errorMessage = result.error ?? trModel.txHash;
+        trModel.trId = await writeRecord(trModel);
+        if (trModel.trId <= 0) throw StateError('Transaction was not saved');
+        if (!ownerIsCurrent()) return;
+        ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
+        ToastUtils.show(errorMessage);
       } else {
         if (!ownerIsCurrent()) return;
         errorMessage = result.error ?? '';
@@ -491,6 +520,80 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       _signing = false;
       load = Load.finish;
       if (mounted && !completedWithExit) setState(() {});
+      // Not awaited: the send attempt is over; the dialog only offers a choice.
+      if (offerDismiss && mounted) _offerDismissPending(trModel).ignore();
+    }
+  }
+
+  /// Earlier sends from [trModel]'s address that are still pending are first
+  /// checked on chain; confirmed or failed ones are saved and stop blocking.
+  /// Returns true when any of them is still unresolved (or not dismissed).
+  /// A lookup failure throws, so the send stops rather than proceeding.
+  Future<bool> _hasUnresolvedSend(TransationRecordModel trModel) async {
+    final pending =
+        await (widget.pendingTransactions?.call(trModel) ??
+            AppDatabase().selectBlockingMemoTransactions(
+              userUuid: trModel.userUuid,
+              coinMiniName: trModel.coinMiniName,
+              from: trModel.from1,
+              isTest: trModel.isTest,
+            ));
+    if (pending.isEmpty) return false;
+    final resolver = widget.stateResolver ?? TransactionStateResolver();
+    final settled = await Future.wait(
+      pending.map((record) async {
+        final (state, reason) = await resolver.resolveStateWithReason(record);
+        if (state != 1 && state != 2) return false;
+        final closed = TransationRecordModel.fromMap(record.toMap())
+          ..state = state;
+        if (state == 2 && reason != null) closed.errorMessage = reason;
+        final saved =
+            await (widget.saveResolvedTransaction?.call(closed) ??
+                AppDatabase().updateTransationRecordTxhash(closed));
+        return saved > 0;
+      }),
+    );
+    return settled.contains(false);
+  }
+
+  /// Same choice as the memo chains: the earlier send keeps state 0 and is
+  /// still checked; it only stops blocking new sends from this address.
+  Future<void> _offerDismissPending(TransationRecordModel trModel) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(S.current.g_memo_pending_unknown_title),
+        content: Text(S.current.g_memo_pending_unknown_body),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(S.current.g_memo_pending_keep_waiting),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(S.current.g_memo_pending_dismiss),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      final dismissed =
+          await (widget.dismissPendingTransactions?.call(trModel) ??
+              AppDatabase().dismissPendingMemoTransactions(
+                userUuid: trModel.userUuid,
+                coinMiniName: trModel.coinMiniName,
+                from: trModel.from1,
+                isTest: trModel.isTest,
+              ));
+      if (!mounted) return;
+      ToastUtils.show(
+        dismissed > 0
+            ? S.current.g_memo_pending_dismissed
+            : S.current.g_key_bridge_tx_pending,
+      );
+    } catch (_) {
+      if (mounted) ToastUtils.show(S.current.g_key_bridge_tx_pending);
     }
   }
 

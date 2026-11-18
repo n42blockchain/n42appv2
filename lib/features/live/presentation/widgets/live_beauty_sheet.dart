@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 import '../../domain/live_beauty_settings.dart';
 
@@ -27,8 +28,18 @@ class _LiveBeautySheetState extends State<LiveBeautySheet> {
     widget.onChanged(next);
   }
 
+  String _filterLabel(S s, LiveFilterPreset filter) => switch (filter) {
+    LiveFilterPreset.none => s.g_ui3_live_filter_original,
+    LiveFilterPreset.natural => s.g_ui3_live_filter_natural,
+    LiveFilterPreset.warm => s.g_ui3_live_filter_warm,
+    LiveFilterPreset.cool => s.g_ui3_live_filter_cool,
+    LiveFilterPreset.vivid => s.g_ui3_live_filter_vivid,
+    LiveFilterPreset.mono => s.g_ui3_live_filter_mono,
+  };
+
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return SafeArea(
       top: false,
       child: Padding(
@@ -38,27 +49,27 @@ class _LiveBeautySheetState extends State<LiveBeautySheet> {
           children: [
             Row(
               children: [
-                Text('美颜与滤镜', style: AppTypography.title),
+                Text(s.g_ui3_live_beauty, style: AppTypography.title),
                 const Spacer(),
                 TextButton(
                   onPressed: () => _update(const LiveBeautySettings.off()),
-                  child: const Text('恢复原图'),
+                  child: Text(s.g_ui3_live_beauty_reset),
                 ),
               ],
             ),
             _BeautySlider(
-              label: '磨皮',
+              label: s.g_ui3_live_smooth,
               value: _settings.smooth,
               onChanged: (value) => _update(_settings.copyWith(smooth: value)),
             ),
             _BeautySlider(
-              label: '美白',
+              label: s.g_ui3_live_brighten,
               value: _settings.brightness,
               onChanged: (value) =>
                   _update(_settings.copyWith(brightness: value)),
             ),
             _BeautySlider(
-              label: '红润',
+              label: s.g_ui3_live_rosy,
               value: _settings.rosy,
               onChanged: (value) => _update(_settings.copyWith(rosy: value)),
             ),
@@ -75,7 +86,7 @@ class _LiveBeautySheetState extends State<LiveBeautySheet> {
                   return Semantics(
                     button: true,
                     selected: selected,
-                    label: '${filter.label}滤镜',
+                    label: s.g_ui3_live_filter_named(_filterLabel(s, filter)),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () => _update(
@@ -102,7 +113,7 @@ class _LiveBeautySheetState extends State<LiveBeautySheet> {
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(filter.label),
+                        child: Text(_filterLabel(s, filter)),
                       ),
                     ),
                   );
@@ -111,7 +122,7 @@ class _LiveBeautySheetState extends State<LiveBeautySheet> {
             ),
             if (_settings.filter != LiveFilterPreset.none)
               _BeautySlider(
-                label: '滤镜',
+                label: s.g_ui3_live_filter,
                 value: _settings.filterStrength,
                 onChanged: (value) =>
                     _update(_settings.copyWith(filterStrength: value)),
@@ -126,7 +137,7 @@ class _LiveBeautySheetState extends State<LiveBeautySheet> {
                 child: OutlinedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.compare),
-                  label: const Text('按住查看原图'),
+                  label: Text(s.g_ui3_live_hold_compare),
                 ),
               ),
             ),

@@ -293,7 +293,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
     return ElevatedButton(
       onPressed: _isConnecting ? null : _connectTrezor,
       style: ElevatedButton.styleFrom(
-        backgroundColor: blueColor,
+        backgroundColor: AppContrast.fillForWhiteText(blueColor),
         foregroundColor: Colors.white,
         disabledBackgroundColor: blueColor.withAlpha(100),
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),

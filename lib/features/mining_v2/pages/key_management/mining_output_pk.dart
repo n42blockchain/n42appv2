@@ -222,7 +222,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
           child: Container(
             margin: EdgeInsets.all(AppSpacing.space8),
             width: double.infinity,
-            height: ScreenUtil().setWidth(88),
+            height: AppTouch.target,
             child: AppButton(
               label: _showEncryptResult
                   ? S.of(context).g_mining_key_101

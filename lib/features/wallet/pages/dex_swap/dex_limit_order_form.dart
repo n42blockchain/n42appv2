@@ -233,7 +233,7 @@ class _DexLimitOrderFormState extends State<_LimitOrderForm> {
             child: ElevatedButton(
               onPressed: _canSubmit ? _submit : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColorTokens.of(context).brand,
+                backgroundColor: AppColorTokens.of(context).brandFill,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -266,50 +266,55 @@ class _DexLimitOrderFormState extends State<_LimitOrderForm> {
     required DexTokenModel? token,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      onTap: _submitLoad == Load.loading ? null : onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space4,
-        ),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  color: AppColorTokens.of(context).textSubtitle,
-                  fontWeight: FontWeight.w400,
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: _submitLoad == Load.loading ? null : onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Ink(
+          // 12pt vertical padding: the row reaches the 44pt minimum.
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space6,
+          ),
+          decoration: BoxDecoration(
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                token?.symbol ?? S.of(context).g_key_bridge_select,
-                textAlign: TextAlign.end,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.headline.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColorTokens.of(context).textPrimary,
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  token?.symbol ?? S.of(context).g_key_bridge_select,
+                  textAlign: TextAlign.end,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.headline.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Directionality.of(context) == TextDirection.rtl
-                  ? Icons.chevron_left
-                  : Icons.chevron_right,
-              size: 20,
-              color: AppColorTokens.of(context).textSubtitle,
-            ),
-          ],
+              const SizedBox(width: 4),
+              Icon(
+                Directionality.of(context) == TextDirection.rtl
+                    ? Icons.chevron_left
+                    : Icons.chevron_right,
+                size: 20,
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -368,13 +373,12 @@ class _DexLimitOrderFormState extends State<_LimitOrderForm> {
               onSelected: _submitLoad == Load.loading
                   ? null
                   : (_) => setState(() => _expiresIn = e.value),
-              selectedColor: AppColorTokens.of(context).brand,
+              selectedColor: AppColorTokens.of(context).brandFill,
               labelStyle: AppTypography.caption.copyWith(
                 color: _expiresIn == e.value ? Colors.white : null,
               ),
+              // Default density + padded target keep the 48pt hit area.
               side: BorderSide.none,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
             ),
           ),
         ),

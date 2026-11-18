@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/live/domain/live_beauty_settings.dart';
 import 'package:n42_wallet/features/live/presentation/widgets/live_beauty_sheet.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -39,6 +41,14 @@ void main() {
       ScreenUtilInit(
         designSize: const Size(390, 844),
         builder: (_, _) => MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
           home: Scaffold(
             body: LiveBeautySheet(
               initial: latest,
@@ -50,17 +60,18 @@ void main() {
       ),
     );
 
-    expect(find.text('磨皮'), findsOneWidget);
-    expect(find.text('美白'), findsOneWidget);
-    expect(find.text('红润'), findsOneWidget);
-    expect(find.text('自然'), findsOneWidget);
-    expect(find.text('暖阳'), findsOneWidget);
-    expect(find.text('清冷'), findsOneWidget);
-    expect(find.text('鲜明'), findsOneWidget);
-    expect(find.text('黑白'), findsOneWidget);
-    expect(find.text('按住查看原图'), findsOneWidget);
+    final l10n = S.of(tester.element(find.byType(LiveBeautySheet)));
+    expect(find.text(l10n.g_ui3_live_smooth), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_brighten), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_rosy), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_filter_natural), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_filter_warm), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_filter_cool), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_filter_vivid), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_filter_mono), findsOneWidget);
+    expect(find.text(l10n.g_ui3_live_hold_compare), findsOneWidget);
 
-    await tester.tap(find.text('恢复原图'));
+    await tester.tap(find.text(l10n.g_ui3_live_beauty_reset));
     await tester.pump();
     expect(latest.isEnabled, isFalse);
   });

@@ -44,6 +44,9 @@ class _Card extends ConsumerStatefulWidget {
 class _CardState extends ConsumerState<_Card> {
   Timer? _ticker;
 
+  /// Blocks a second redeem while the first one is in flight.
+  bool _redeeming = false;
+
   @override
   void initState() {
     super.initState();
@@ -160,18 +163,31 @@ class _CardState extends ConsumerState<_Card> {
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: position.claimed
+                  onPressed: position.claimed || _redeeming
                       ? null
                       : () => _redeem(context, ref),
-                  child: Text(
-                    market.status == MarketStatus.cancelled ? '领取退款' : '赎回奖金',
-                  ),
+                  child: _redeeming
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          market.status == MarketStatus.cancelled
+                              ? S.of(context).g_ui3_pred_claim_refund
+                              : S.of(context).g_ui3_pred_redeem_winnings,
+                        ),
                 ),
               ),
             ),
           SizedBox(height: AppSpacing.space2),
           Text(
-            '成交量 ${market.totalVolume.toStringAsFixed(0)} $symbol',
+            S
+                .of(context)
+                .g_ui3_pred_volume(
+                  market.totalVolume.toStringAsFixed(0),
+                  symbol,
+                ),
             style: AppTypography.captionSm.copyWith(
               color: AppColorTokens.onOverlayTertiary,
             ),
@@ -182,6 +198,8 @@ class _CardState extends ConsumerState<_Card> {
   }
 
   Future<void> _redeem(BuildContext context, WidgetRef ref) async {
+    if (_redeeming) return;
+    setState(() => _redeeming = true);
     try {
       await ref.read(predictionRepositoryProvider).redeem(widget.market.id);
     } catch (e) {
@@ -196,6 +214,8 @@ class _CardState extends ConsumerState<_Card> {
           ),
         );
       }
+    } finally {
+      if (mounted) setState(() => _redeeming = false);
     }
   }
 
@@ -214,9 +234,13 @@ class _CountdownText extends StatelessWidget {
     final remain = closesAt.difference(DateTime.now());
     final secs = remain.inSeconds;
     final text = secs <= 0
-        ? '已截止'
-        : '${(secs ~/ 60).toString().padLeft(2, '0')}:'
-              '${(secs % 60).toString().padLeft(2, '0')} 后截止';
+        ? S.of(context).g_ui3_pred_closed
+        : S
+              .of(context)
+              .g_ui3_pred_closes_in(
+                '${(secs ~/ 60).toString().padLeft(2, '0')}:'
+                '${(secs % 60).toString().padLeft(2, '0')}',
+              );
     return Row(
       children: [
         const Icon(
@@ -268,6 +292,8 @@ class _OutcomeRow extends StatelessWidget {
             : null,
         borderRadius: AppRadius.brMd,
         child: Container(
+          // Row grows from ~38 to 44pt so the whole outcome is a full target.
+          constraints: const BoxConstraints(minHeight: 44),
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.space4,
             vertical: AppSpacing.space4,
@@ -295,7 +321,9 @@ class _OutcomeRow extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(right: AppSpacing.space4),
                   child: Text(
-                    '持 ${heldShares.toStringAsFixed(1)}',
+                    S
+                        .of(context)
+                        .g_ui3_pred_held(heldShares.toStringAsFixed(1)),
                     style: AppTypography.captionSm.copyWith(
                       color: AppColorTokens.highlight,
                     ),
@@ -334,23 +362,24 @@ class _StatusTag extends StatelessWidget {
     late final String text;
     late final Color color;
     // 本地到点优先显示"待开奖"，即便后端尚未推送停盘。
+    final s = S.of(context);
     if (market.isOpen && !tradable) {
-      text = '待开奖';
+      text = s.g_ui3_pred_awaiting;
       color = AppColorTokens.warningOnOverlay;
     } else {
       switch (market.status) {
         case MarketStatus.open:
-          text = '进行中';
+          text = s.g_key_bridge_status_in_progress;
           color = AppColorTokens.successOnOverlay;
         case MarketStatus.closed:
-          text = '待开奖';
+          text = s.g_ui3_pred_awaiting;
           color = AppColorTokens.warningOnOverlay;
         case MarketStatus.resolved:
           final w = market.outcomeById(market.resolvedOutcomeId ?? '');
-          text = '已开奖：${w?.label ?? ''}';
+          text = s.g_pred_result_label(w?.label ?? '');
           color = AppColorTokens.brandOnOverlay;
         case MarketStatus.cancelled:
-          text = '已取消';
+          text = s.g_iap_cancelled;
           color = AppColorTokens.onOverlayTertiary;
       }
     }

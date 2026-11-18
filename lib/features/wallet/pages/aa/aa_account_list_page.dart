@@ -122,7 +122,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreate,
-        backgroundColor: AppColorTokens.of(context).brand,
+        backgroundColor: AppColorTokens.of(context).brandFill,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -200,7 +200,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     return switch (status) {
       null => c.brand,
       SmartAccountState.deployed => c.success,
-      SmartAccountState.notDeployed => c.textTertiary,
+      SmartAccountState.notDeployed => c.textSubtitle,
       SmartAccountState.deploying => c.warning,
       SmartAccountState.error => c.danger,
     };
@@ -229,8 +229,9 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final mainTextColor = AppColorTokens.of(context).textPrimary;
 
-    return GestureDetector(
+    return AppTapArea(
       onTap: onTap,
+      borderRadius: AppRadius.brMd,
       child: Container(
         margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
         padding: EdgeInsets.symmetric(

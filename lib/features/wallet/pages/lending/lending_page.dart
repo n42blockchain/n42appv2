@@ -76,9 +76,9 @@ class _LendingPageState extends State<LendingPage>
           indicatorColor: AppColorTokens.of(context).brand,
           labelColor: AppColorTokens.of(context).textPrimary,
           unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
-          tabs: const [
-            Tab(text: 'Supply'),
-            Tab(text: 'Borrow'),
+          tabs: [
+            Tab(text: S.of(context).g_ui3_supply),
+            Tab(text: S.of(context).g_ui3_borrow),
           ],
         ),
       ),
@@ -109,8 +109,8 @@ class _LendingPageState extends State<LendingPage>
             SizedBox(height: AppSpacing.space4),
             Text(
               AaveService.isAvailable(widget.chainId)
-                  ? 'No markets available'
-                  : 'Aave V3 not available on this chain',
+                  ? S.of(context).g_ui3_no_markets
+                  : S.of(context).g_ui3_aave_unavailable,
               style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
             ),
           ],
@@ -158,7 +158,7 @@ class _LendingPageState extends State<LendingPage>
                 : reserve.symbol,
             style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColorTokens.of(context).brand,
+              color: AppColorTokens.of(context).brandOnTint,
             ),
           ),
         ),
@@ -187,7 +187,9 @@ class _LendingPageState extends State<LendingPage>
               ),
             ),
             Text(
-              isSupply ? 'Supply APY' : 'Borrow APR',
+              isSupply
+                  ? S.of(context).g_ui3_supply_apy
+                  : S.of(context).g_ui3_borrow_apr,
               style: AppTypography.captionSm.copyWith(
                 color: AppColorTokens.of(context).textSubtitle,
               ),

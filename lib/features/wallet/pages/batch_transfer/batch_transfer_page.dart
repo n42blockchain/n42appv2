@@ -115,6 +115,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
           IconButton(
             icon: const Icon(Icons.help_outline),
             onPressed: _showHelp,
+            tooltip: S.of(context).g_key_batch_help_title,
           ),
         ],
       ),
@@ -171,19 +172,21 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     final amountStr = _amountController.text.trim();
     final memo = _memoController.text.trim();
 
-    if (address.isEmpty) return _showSnackBar('Please enter an address');
+    final s = S.of(context);
+    if (address.isEmpty) return _showSnackBar(s.g_key_address_2);
     if (!FeatureAddressUtils.isValidEvmAddress(address)) {
-      return _showSnackBar('Invalid address format');
+      return _showSnackBar(s.g_key_t_50);
     }
-    if (amountStr.isEmpty) return _showSnackBar('Please enter an amount');
+    if (amountStr.isEmpty) return _showSnackBar(s.g_ui3_enter_amount);
 
     final amount = _parseAmount(amountStr);
-    if (amount <= BigInt.zero) return _showSnackBar('Invalid amount');
+    if (amount <= BigInt.zero) return _showSnackBar(s.g_ui3_invalid_amount);
 
     if (widget.batchTransferProvider.totalAmount + amount > widget.balance) {
       return _showSnackBar(
         S.of(context).g_key_batch_insufficient_balance(widget.tokenSymbol),
         bg: AppColorTokens.of(context).warning,
+        fg: AppColorTokens.of(context).onWarningFill,
       );
     }
 
@@ -198,9 +201,13 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     _memoController.clear();
   }
 
-  void _showSnackBar(String message, {Color? bg}) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message), backgroundColor: bg));
+  void _showSnackBar(String message, {Color? bg, Color? fg}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: TextStyle(color: fg)),
+        backgroundColor: bg,
+      ),
+    );
   }
 
   BigInt _parseAmount(String amountStr) {
@@ -304,7 +311,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
 
     final path = currentPath();
     if (path == null) {
-      provider.setError('Chain not supported');
+      provider.setError(l10n.g_key_bridge_chain_not_supported);
       return;
     }
     bool signingCurrent() =>
@@ -316,7 +323,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
     bool checkSigningCurrent() {
       if (signingCurrent()) return true;
       if (_ownerCurrent() && provider.isTransactionCurrent(revision)) {
-        provider.setError('Wallet signing configuration changed');
+        provider.setError(l10n.g_ui3_signing_config_changed);
       }
       return false;
     }
@@ -342,7 +349,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       if (address is! String ||
           !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address) ||
           address.toLowerCase() != widget.fromAddress.trim().toLowerCase()) {
-        provider.setError('Signing key does not match sender address');
+        provider.setError(l10n.g_ui3_signing_key_mismatch);
         return;
       }
       final signedTx = await trustdart.signTransaction(
@@ -368,7 +375,10 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(l10n.g_key_140),
-            backgroundColor: AppColorTokens.of(context).success,
+            // Text-safe green: white on system green is ~2.2:1.
+            backgroundColor: AppContrast.fillForWhiteText(
+              AppColorTokens.of(context).success,
+            ),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -428,7 +438,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).g_history_export_error),
-          backgroundColor: AppColorTokens.of(context).danger,
+          backgroundColor: AppColorTokens.of(context).dangerFill,
           behavior: SnackBarBehavior.floating,
         ),
       );

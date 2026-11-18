@@ -136,7 +136,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     if (_operations.isEmpty) return S.current.g_key_aa_no_operations;
     for (int i = 0; i < _operations.length; i++) {
       if (!_operations[i].isValid()) {
-        return 'Operation #${i + 1}: invalid address or amount';
+        return S.current.g_ui3_batch_operation_invalid('${i + 1}');
       }
     }
     return null;
@@ -155,7 +155,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     }
     final calls = _buildExecuteCalls();
     if (calls == null || calls.isEmpty) {
-      onError('Failed to build operations');
+      onError(S.current.g_ui3_batch_build_failed);
       return null;
     }
     return calls;

@@ -27,6 +27,9 @@ class SwapAstSummary extends StatefulWidget {
 }
 
 class _SwapAstSummaryState extends State<SwapAstSummary> {
+  /// Blocks a second confirm tap while the verification page is open.
+  bool _verifying = false;
+
   Color _color(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
@@ -61,89 +64,109 @@ class _SwapAstSummaryState extends State<SwapAstSummary> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final sw = ScreenUtil().setWidth;
     final noteStyle = AppTypography.bodySm.copyWith(
-      color: _color(AppThemeKeys.mainTextColor3),
+      // Fee notes are informative text: tertiary (~1.7:1) is too faint.
+      color: _color(AppThemeKeys.itemSubtitleTextColor),
     );
 
     return Scaffold(
       appBar: AppBarWidget(text: s.g_swap_key_28),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.space8,
-          AppSpacing.space8,
-          AppSpacing.space8,
-          0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space8,
-                vertical: AppSpacing.space6,
-              ),
-              decoration: BoxDecoration(
-                color: _color(AppThemeKeys.itemBgColor),
-                borderRadius: AppRadius.brSm,
+      // Scrolls when the content (larger text, small screens) does not fit;
+      // the Spacer still pins the actions to the bottom otherwise.
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.space8,
+                AppSpacing.space8,
+                AppSpacing.space8,
+                0,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _summaryRow(s.g_key_48, '${widget.send} ${widget.payCoin}'),
-                  _summaryRow(
-                    s.g_key_33,
-                    '${widget.receive} ${CoinType.N.name}',
-                  ),
-                  _summaryRow(
-                    s.g_swap_key_29,
-                    '${widget.balance} ${CoinType.N.name}',
-                  ),
-                  _summaryRow(
-                    s.g_swap_key_30,
-                    widget.date,
-                    bottomPadding: false,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: ScreenUtil().setHeight(102)),
-            Text(s.g_swap_key_31(CoinType.N.name), style: noteStyle),
-            SizedBox(height: AppSpacing.space4),
-            Text(s.g_swap_key_32, style: noteStyle),
-            const Spacer(),
-            Container(
-              height: sw(88),
-              margin: EdgeInsets.only(bottom: AppSpacing.space12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AppButton(
-                      label: s.g_key_79,
-                      onPressed: () => Navigator.pop(context),
-                      variant: AppButtonVariant.secondary,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.space8,
+                      vertical: AppSpacing.space6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _color(AppThemeKeys.itemBgColor),
+                      borderRadius: AppRadius.brSm,
+                    ),
+                    child: Column(
+                      children: [
+                        _summaryRow(
+                          s.g_key_48,
+                          '${widget.send} ${widget.payCoin}',
+                        ),
+                        _summaryRow(
+                          s.g_key_33,
+                          '${widget.receive} ${CoinType.N.name}',
+                        ),
+                        _summaryRow(
+                          s.g_swap_key_29,
+                          '${widget.balance} ${CoinType.N.name}',
+                        ),
+                        _summaryRow(
+                          s.g_swap_key_30,
+                          widget.date,
+                          bottomPadding: false,
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(width: AppSpacing.space8),
-                  Expanded(
-                    child: AppButton(
-                      label: s.g_key_78,
-                      onPressed: () async {
-                        final r = await Navigator.push<bool>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => WalletSecurityVerification(),
+                  SizedBox(height: ScreenUtil().setHeight(102)),
+                  Text(s.g_swap_key_31(CoinType.N.name), style: noteStyle),
+                  SizedBox(height: AppSpacing.space4),
+                  Text(s.g_swap_key_32, style: noteStyle),
+                  const Spacer(),
+                  Container(
+                    height: AppTouch.target,
+                    margin: EdgeInsets.only(bottom: AppSpacing.space12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: AppButton(
+                            label: s.g_key_79,
+                            onPressed: () => Navigator.pop(context),
+                            variant: AppButtonVariant.secondary,
                           ),
-                        );
-                        if (!context.mounted) return;
-                        if (r == true) Navigator.pop(context, true);
-                      },
+                        ),
+                        SizedBox(width: AppSpacing.space8),
+                        Expanded(
+                          child: AppButton(
+                            label: s.g_key_78,
+                            onPressed: _verifying
+                                ? null
+                                : () async {
+                                    setState(() => _verifying = true);
+                                    final r = await Navigator.push<bool>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            WalletSecurityVerification(),
+                                      ),
+                                    );
+                                    if (!context.mounted) return;
+                                    if (r == true) {
+                                      Navigator.pop(context, true);
+                                      return;
+                                    }
+                                    setState(() => _verifying = false);
+                                  },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

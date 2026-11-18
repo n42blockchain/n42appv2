@@ -1,7 +1,6 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BoardItem extends StatelessWidget {
   final String action;
@@ -15,14 +14,11 @@ class BoardItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: ScreenUtil().setWidth(80),
+        height: AppTouch.scaled(80),
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainButtonBgColor.name,
-          ),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: AppRadius.brXl,
         ),
         child: FittedBox(

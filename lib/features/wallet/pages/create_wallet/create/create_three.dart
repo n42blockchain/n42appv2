@@ -55,7 +55,7 @@ class _CreateThreeState extends State<CreateThree> {
   Widget _buildProgressBar(Color color) {
     return Container(
       height: ScreenUtil().setWidth(10.0),
-      width: ScreenUtil().setWidth(88.0),
+      width: AppTouch.target,
       decoration: BoxDecoration(borderRadius: AppRadius.brSm, color: color),
     );
   }
@@ -122,7 +122,10 @@ class _CreateThreeState extends State<CreateThree> {
                     _buildUserHandList(),
                     SizedBox(height: ScreenUtil().setWidth(50.0)),
                     _buildGridView(),
-                    SizedBox(height: ScreenUtil().setWidth(148.0)),
+                    // Room for the bottom bar: 48pt button + padding.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -174,7 +177,9 @@ class _CreateThreeState extends State<CreateThree> {
         crossAxisCount: 3,
         mainAxisSpacing: ScreenUtil().setWidth(20.0),
         crossAxisSpacing: ScreenUtil().setWidth(20.0),
-        childAspectRatio: 2.4,
+        // Fixed 44pt rows: the 2.4 aspect ratio gave 40pt tiles at 375pt
+        // and 33pt at 320pt.
+        mainAxisExtent: AppTouch.target,
       ),
       itemBuilder: (context, index) {
         if (index >= userHandList.length) {
@@ -187,12 +192,21 @@ class _CreateThreeState extends State<CreateThree> {
         }
         final item = userHandList[index];
         final isWrong = item.word != mnemonicWordsList[index];
-        return Stack(
+        void removeWord() {
+          messMnemonicWordsList
+                  .firstWhere((e) => e.index == item.index)
+                  .isSelected =
+              false;
+          userHandList.removeAt(index);
+          setState(() {});
+        }
+
+        final tile = Stack(
           fit: StackFit.expand,
           children: [
             Container(
               decoration: BoxDecoration(
-                color: _tc(AppThemeKeys.mainButtonBgColor.name),
+                color: AppColorTokens.of(context).brandFill,
                 borderRadius: borderRadius,
               ),
               child: Center(
@@ -215,14 +229,7 @@ class _CreateThreeState extends State<CreateThree> {
                     ScreenUtil().setWidth(10.0) * -1,
                   ),
                   child: GestureDetector(
-                    onTap: () {
-                      messMnemonicWordsList
-                              .firstWhere((e) => e.index == item.index)
-                              .isSelected =
-                          false;
-                      userHandList.removeAt(index);
-                      setState(() {});
-                    },
+                    onTap: removeWord,
                     child: Container(
                       width: ScreenUtil().setWidth(36.0),
                       height: ScreenUtil().setWidth(36.0),
@@ -241,6 +248,18 @@ class _CreateThreeState extends State<CreateThree> {
               ),
           ],
         );
+        if (!isWrong) return tile;
+        // The 18pt X badge is too small to hit; the whole wrong tile
+        // removes the word as well.
+        return Semantics(
+          button: true,
+          label: S.of(context).g_alert_remove,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: removeWord,
+            child: tile,
+          ),
+        );
       },
     );
   }
@@ -255,7 +274,9 @@ class _CreateThreeState extends State<CreateThree> {
         crossAxisCount: 3,
         mainAxisSpacing: ScreenUtil().setWidth(20.0),
         crossAxisSpacing: ScreenUtil().setWidth(20.0),
-        childAspectRatio: 2.4,
+        // Fixed 44pt rows: the 2.4 aspect ratio gave 40pt tiles at 375pt
+        // and 33pt at 320pt.
+        mainAxisExtent: AppTouch.target,
       ),
       itemBuilder: (context, index) {
         final item = messMnemonicWordsList[index];

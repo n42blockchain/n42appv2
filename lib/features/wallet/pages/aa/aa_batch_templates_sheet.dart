@@ -65,6 +65,8 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
+                    tooltip: MaterialLocalizations.of(context)
+                        .closeButtonTooltip,
                     icon: const Icon(Icons.close),
                   ),
                 ],
@@ -159,7 +161,9 @@ class _TemplateItem extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Text(
-                  '${template.operations.length} operations · ${template.chainSymbol}',
+                  '${template.operations.length} '
+                  '${S.of(context).g_key_aa_operations} · '
+                  '${template.chainSymbol}',
                   style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
@@ -175,7 +179,18 @@ class _TemplateItem extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: onDelete,
+            // Deleting a saved template cannot be undone: confirm first.
+            onPressed: () async {
+              final confirmed = await AppDialog.confirm(
+                context,
+                title: S.of(context).g_key_113,
+                message: template.name,
+                confirmText: S.of(context).g_key_113,
+                danger: true,
+              );
+              if (confirmed) onDelete();
+            },
+            tooltip: S.of(context).g_key_113,
             icon: Icon(
               Icons.delete_outline,
               color: AppColorTokens.of(context).danger,
@@ -183,8 +198,8 @@ class _TemplateItem extends StatelessWidget {
             ),
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(
-              maxWidth: ScreenUtil().setWidth(36),
-              maxHeight: ScreenUtil().setWidth(36),
+              minWidth: AppTouch.target,
+              minHeight: AppTouch.target,
             ),
           ),
         ],

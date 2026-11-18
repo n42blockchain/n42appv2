@@ -198,75 +198,118 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m75(value) =>
       "RPC చైన్ ఐడి ${value} అని తెలియజేసింది, మీరు నమోదు చేసిన విలువతో సరిపోవు.";
 
-  static String m76(asset, contract, address) =>
+  static String m76(address, asset) =>
+      "గ్రహీత చిరునామా ${address} ఆస్తి ${asset}కు ఆప్ట్-ఇన్ చేయలేదు, కాబట్టి దాన్ని స్వీకరించలేదు.";
+
+  static String m77(action) => "${action}ను ఆమోదించు";
+
+  static String m78(name) => "${name} · ఆస్తి ప్రదర్శన సెట్టింగ్‌లు";
+
+  static String m79(index) => "ఆపరేషన్ #${index}: చెల్లని చిరునామా లేదా మొత్తం";
+
+  static String m80(action) => "${action}ను నిర్ధారించు";
+
+  static String m81(key) => "పబ్లిక్ కీ: ${key}";
+
+  static String m82(count) => "${count} పరికరాలు కనుగొనబడ్డాయి";
+
+  static String m83(name) => "${name} ఫిల్టర్";
+
+  static String m84(name, gift) => "${name} ${gift} పంపారు";
+
+  static String m85(reason) => "లోడ్ చేయడం విఫలమైంది: ${reason}";
+
+  static String m86(name) => "${name} చేరారు";
+
+  static String m87(count) => "${count} వీక్షకులు";
+
+  static String m88(value) => "${value} కోసం పేరెంట్ చైన్ లేదు";
+
+  static String m89(time) => "${time}లో ముగుస్తుంది";
+
+  static String m90(shares) => "కలిగి ఉన్నవి: ${shares}";
+
+  static String m91(amount, symbol) => "వాల్యూమ్ ${amount} ${symbol}";
+
+  static String m92(name) => "${name}ను తీసివేయాలా?";
+
+  static String m93(host) =>
+      "అంతర్జాతీయీకరించిన RPC హోస్ట్‌నేమ్: ${host}\\nఈ పేరు మరొక సేవను పోలి ఉండవచ్చు. ASCII హోస్ట్‌నేమ్‌ను విడిగా ధృవీకరించండి.";
+
+  static String m94(amount, symbol, protocol) =>
+      "${protocol} ద్వారా ${amount} ${symbol} స్టేక్ చేయాలా? ఇది మీ వాలెట్ నుండి ఆన్-చైన్ లావాదేవీని పంపుతుంది.";
+
+  static String m95(name, decimals) => "${name} · ${decimals} దశాంశ స్థానాలు";
+
+  static String m96(asset, contract, address) =>
       "యాక్టివ్ సంపత్తి ${asset} (${contract}) అకౌంట్ ${address}లో చేర్చబడలేదు.";
 
-  static String m77(imported, skipped) =>
+  static String m97(imported, skipped) =>
       "వాలెట్లు దిగుమతి చేయబడించాయి: ${imported}. దాటించబడించాయి: ${skipped}.";
 
-  static String m78(value) => "బ్యాలెన్స్: ${value}";
+  static String m98(value) => "బ్యాలెన్స్: ${value}";
 
-  static String m79(value) => "బేస్ ఫీ: ${value} గ్వీ";
+  static String m99(value) => "బేస్ ఫీ: ${value} గ్వీ";
 
-  static String m80(value) =>
+  static String m100(value) =>
       "${value} సెకన్లలో క్లిప్‌బోర్డ్ స్వయంగా క్లియర్ అవుతుంది";
 
-  static String m81(value) => "పంక్తి ${value}: ఫీల్డ్ లేవు";
+  static String m101(value) => "పంక్తి ${value}: ఫీల్డ్ లేవు";
 
-  static String m82(value) => "${value} రోజులు";
+  static String m102(value) => "${value} రోజులు";
 
-  static String m83(value) => "${value} కి కనెక్ట్ అయ్యింది";
+  static String m103(value) => "${value} కి కనెక్ట్ అయ్యింది";
 
-  static String m84(value) => "గేస్: ${value}";
+  static String m104(value) => "గేస్: ${value}";
 
-  static String m85(value) => "${value} గంటలు";
+  static String m105(value) => "${value} గంటలు";
 
-  static String m86(value) =>
+  static String m106(value) =>
       "సరిపోయే ప్రయోజనాలు దిగుమతి చేయబడించాయి (${value})";
 
-  static String m87(quote, base) => "లిమిట్ ధర (${quote} ప్రతి ${base})";
+  static String m107(quote, base) => "లిమిట్ ధర (${quote} ప్రతి ${base})";
 
-  static String m88(value) => "లిమిట్ ${value}";
+  static String m108(value) => "లిమిట్ ${value}";
 
-  static String m89(value) => "మార్కెట్లు (${value})";
+  static String m109(value) => "మార్కెట్లు (${value})";
 
-  static String m90(value) => "స్వల్ప బ్యాలెన్స్: ${value}";
+  static String m110(value) => "స్వల్ప బ్యాలెన్స్: ${value}";
 
-  static String m91(value) => "లావాదేవీలు (${value})";
+  static String m111(value) => "లావాదేవీలు (${value})";
 
-  static String m92(value) => "పొజిషన్లు (${value})";
+  static String m112(value) => "పొజిషన్లు (${value})";
 
-  static String m93(value) => "ప్రయోజనాలు: ${value}";
+  static String m113(value) => "ప్రయోజనాలు: ${value}";
 
-  static String m94(value) => "టోకెన్ కనబడింది: ${value}";
+  static String m114(value) => "టోకెన్ కనబడింది: ${value}";
 
-  static String m95(value) => "టోకెన్: ${value}";
+  static String m115(value) => "టోకెన్: ${value}";
 
-  static String m96(value) => "లావాదేవీ: ${value}";
+  static String m116(value) => "లావాదేవీ: ${value}";
 
-  static String m97(valid, issues) =>
+  static String m117(valid, issues) =>
       "సరిగా ఉన్నవి: ${valid}. సమస్యలు: ${issues}.";
 
-  static String m98(value) => "… మరియు ${value} మరింత సమస్యలు";
+  static String m118(value) => "… మరియు ${value} మరింత సమస్యలు";
 
-  static String m99(volume, interest) =>
+  static String m119(volume, interest) =>
       "పరిమాణం: ${volume} · ఆసక్తి: ${interest}";
 
-  static String m100(value) => "వాలెట్ ${value}";
+  static String m120(value) => "వాలెట్ ${value}";
 
-  static String m101(value) => "${value} గంటల క్రితం అప్డేట్ చేయబడింది";
+  static String m121(value) => "${value} గంటల క్రితం అప్డేట్ చేయబడింది";
 
-  static String m102(value) => "${value} నిమిషాల క్రితం అప్డేట్ చేయబడింది";
+  static String m122(value) => "${value} నిమిషాల క్రితం అప్డేట్ చేయబడింది";
 
-  static String m103(number) => "బ్లాక్ సంఖ్య ${number}";
+  static String m123(number) => "బ్లాక్ సంఖ్య ${number}";
 
-  static String m104(index) => "పరికరం ${index}";
+  static String m124(index) => "పరికరం ${index}";
 
-  static String m105(value) => "${value} మిల్లీసెకన్లు";
+  static String m125(value) => "${value} మిల్లీసెకన్లు";
 
-  static String m106(count) => "${count} లావాదేవీలు";
+  static String m126(count) => "${count} లావాదేవీలు";
 
-  static String m107(value) => "0~${value} అక్షరాలు";
+  static String m127(value) => "0~${value} అక్షరాలు";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -289,6 +332,47 @@ class MessageLookup extends MessageLookupByLibrary {
       "కొత్త పరికరం లాగిన్",
     ),
     "file": MessageLookupByLibrary.simpleMessage("ఫైల్"),
+    "g_a11y_add_path": MessageLookupByLibrary.simpleMessage(
+      "డెరివేషన్ పాత్‌ను జోడించండి",
+    ),
+    "g_a11y_clear": MessageLookupByLibrary.simpleMessage("క్లియర్ చేయి"),
+    "g_a11y_clear_search": MessageLookupByLibrary.simpleMessage(
+      "శోధనను క్లియర్ చేయి",
+    ),
+    "g_a11y_clear_text": MessageLookupByLibrary.simpleMessage(
+      "వచనాన్ని క్లియర్ చేయి",
+    ),
+    "g_a11y_close": MessageLookupByLibrary.simpleMessage("మూసివేయి"),
+    "g_a11y_export_key": MessageLookupByLibrary.simpleMessage(
+      "కీని ఎగుమతి చేయండి",
+    ),
+    "g_a11y_flashlight": MessageLookupByLibrary.simpleMessage("ఫ్లాష్‌లైట్"),
+    "g_a11y_forward": MessageLookupByLibrary.simpleMessage("ముందుకు"),
+    "g_a11y_group_by_collection": MessageLookupByLibrary.simpleMessage(
+      "సేకరణ వారీగా సమూహపరచు",
+    ),
+    "g_a11y_hide_password": MessageLookupByLibrary.simpleMessage(
+      "పాస్‌వర్డ్ దాచు",
+    ),
+    "g_a11y_new_tab": MessageLookupByLibrary.simpleMessage("కొత్త ట్యాబ్"),
+    "g_a11y_previous": MessageLookupByLibrary.simpleMessage("మునుపటి"),
+    "g_a11y_reverse_tokens": MessageLookupByLibrary.simpleMessage(
+      "టోకెన్‌లను తారుమారు చేయి",
+    ),
+    "g_a11y_scroll_to_bottom": MessageLookupByLibrary.simpleMessage(
+      "కిందికి స్క్రోల్ చేయి",
+    ),
+    "g_a11y_scroll_to_top": MessageLookupByLibrary.simpleMessage(
+      "పైకి స్క్రోల్ చేయి",
+    ),
+    "g_a11y_show_password": MessageLookupByLibrary.simpleMessage(
+      "పాస్‌వర్డ్ చూపించు",
+    ),
+    "g_a11y_stop": MessageLookupByLibrary.simpleMessage("ఆపు"),
+    "g_a11y_swap_direction": MessageLookupByLibrary.simpleMessage(
+      "దిశను మార్చు",
+    ),
+    "g_a11y_tabs": MessageLookupByLibrary.simpleMessage("ట్యాబ్‌లు"),
     "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
       "సేవ్ చేసిన బ్యాలెన్స్ · రిఫ్రెష్ విఫలమైంది",
     ),
@@ -2810,6 +2894,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("ట్రెండింగ్"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("వీక్షణ జాబితా"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "వేచి ఉండటం ఆపు",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "మీరు మళ్లీ పంపవచ్చు. మునుపటి లావాదేవీ ఇంకా తనిఖీ చేయబడుతోంది.",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "వేచి ఉండటం కొనసాగించు",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "ఈ చిరునామా నుండి చేసిన మునుపటి బదిలీ ఇంకా నిర్ధారించబడలేదు, దాని ఫలితాన్ని ఇంకా నిర్ణయించలేము, కాబట్టి కొత్త బదిలీలు నిలిపివేయబడ్డాయి. మీరు దాని కోసం వేచి ఉండటం ఆపివేస్తే, అది చరిత్రలో పెండింగ్‌గా ఉంటుంది, తనిఖీ కొనసాగుతుంది. హెచ్చరిక: అది ఇంకా చెయిన్‌లో పూర్తి కావచ్చు, కాబట్టి మళ్లీ పంపితే మీరు రెండుసార్లు చెల్లించాల్సి రావచ్చు. ముందుగా బ్లాక్ ఎక్స్‌ప్లోరర్‌లో మునుపటి లావాదేవీని తనిఖీ చేయండి.",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "మునుపటి లావాదేవీ స్థితి తెలియదు",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "వాలిడేటర్ ఇనాక్టివిటీ స్కోర్ ఎక్కువగా ఉంది. పెనాల్టీలను నివారించడానికి మీ నోడ్ స్థితిని తనిఖీ చేయండి.",
     ),
@@ -3332,6 +3431,519 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("జాగ్రత్త"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("అధిక ప్రమాదం"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("సురక్షితమైనది"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "నిర్ధారించబడలేదు",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "చెయిన్ నుండి ఇంకా నిర్ధారణ రాలేదు, ఫలితం తెలియదు. ఇది ఇంకా తనిఖీ చేయబడుతోంది, ఇంకా పూర్తి కావచ్చు. మళ్లీ పంపే ముందు బ్లాక్ ఎక్స్‌ప్లోరర్‌లో దీన్ని తనిఖీ చేయండి.",
+    ),
+    "g_ui3_aave_unavailable": MessageLookupByLibrary.simpleMessage(
+      "ఈ చైన్‌లో Aave V3 అందుబాటులో లేదు",
+    ),
+    "g_ui3_account_security": MessageLookupByLibrary.simpleMessage(
+      "ఖాతా భద్రత",
+    ),
+    "g_ui3_activation_time": MessageLookupByLibrary.simpleMessage(
+      "యాక్టివేషన్ సమయం",
+    ),
+    "g_ui3_address_or_ens": MessageLookupByLibrary.simpleMessage(
+      "చిరునామా లేదా ENS పేరు",
+    ),
+    "g_ui3_algo_recipient_no_asset": m76,
+    "g_ui3_approve_action": m77,
+    "g_ui3_approve_failed": MessageLookupByLibrary.simpleMessage(
+      "ఆమోదం విఫలమైంది",
+    ),
+    "g_ui3_asset_controls_body": MessageLookupByLibrary.simpleMessage(
+      "ఈ సెట్టింగ్‌లు ఈ వాలెట్‌లోని ప్రదర్శనను మాత్రమే ప్రభావితం చేస్తాయి. దాచడం వల్ల అనుమతులు రద్దు కావు, బ్యాలెన్స్‌లు మారవు. క్వారంటైన్ చేస్తే వాలెట్ జాబితా నుండి ఈ ఆస్తిని తెరవడం కూడా నిలిపివేయబడుతుంది. DApp పరస్పర చర్యలు బ్లాక్ చేయబడవు.",
+    ),
+    "g_ui3_asset_controls_title": m78,
+    "g_ui3_asset_display_controls": MessageLookupByLibrary.simpleMessage(
+      "ఆస్తి ప్రదర్శన సెట్టింగ్‌లు",
+    ),
+    "g_ui3_asset_display_local_note": MessageLookupByLibrary.simpleMessage(
+      "స్థానిక ఎంపికలు మాత్రమే. చెయిన్‌లోని బ్యాలెన్స్‌లు, అనుమతులు మారవు.",
+    ),
+    "g_ui3_asset_hidden_reviewed": MessageLookupByLibrary.simpleMessage(
+      "దాచిన మరియు సమీక్షలోని ఆస్తులు",
+    ),
+    "g_ui3_asset_hide": MessageLookupByLibrary.simpleMessage(
+      "జాబితా నుండి దాచు",
+    ),
+    "g_ui3_asset_mark_review": MessageLookupByLibrary.simpleMessage(
+      "సమీక్ష కోసం గుర్తించు",
+    ),
+    "g_ui3_asset_marked_review_hint": MessageLookupByLibrary.simpleMessage(
+      "మీరు దీన్ని సమీక్ష కోసం గుర్తించారు. సమీక్షించడానికి లేదా పునరుద్ధరించడానికి ఎక్కువసేపు నొక్కండి.",
+    ),
+    "g_ui3_asset_quarantine": MessageLookupByLibrary.simpleMessage(
+      "జాబితా నుండి క్వారంటైన్ చేయి",
+    ),
+    "g_ui3_asset_restore": MessageLookupByLibrary.simpleMessage(
+      "పునరుద్ధరించు",
+    ),
+    "g_ui3_asset_restore_display": MessageLookupByLibrary.simpleMessage(
+      "సాధారణ ప్రదర్శనను పునరుద్ధరించు",
+    ),
+    "g_ui3_asset_restore_failed": MessageLookupByLibrary.simpleMessage(
+      "ఆస్తి ప్రదర్శనను పునరుద్ధరించలేకపోయాం.",
+    ),
+    "g_ui3_asset_save_failed": MessageLookupByLibrary.simpleMessage(
+      "ఆస్తి ప్రదర్శన ప్రాధాన్యతను సేవ్ చేయలేకపోయాం.",
+    ),
+    "g_ui3_asset_state_hidden": MessageLookupByLibrary.simpleMessage(
+      "దాచబడింది",
+    ),
+    "g_ui3_asset_state_quarantined": MessageLookupByLibrary.simpleMessage(
+      "క్వారంటైన్‌లో ఉంది",
+    ),
+    "g_ui3_backup_phrase_unavailable": MessageLookupByLibrary.simpleMessage(
+      "ఈ వాలెట్‌కు రికవరీ పదబంధం ఏదీ సేవ్ చేయబడలేదు.",
+    ),
+    "g_ui3_batch_build_failed": MessageLookupByLibrary.simpleMessage(
+      "ఆపరేషన్లను రూపొందించలేకపోయాము",
+    ),
+    "g_ui3_batch_nft_transfer": MessageLookupByLibrary.simpleMessage(
+      "బ్యాచ్ NFT బదిలీ",
+    ),
+    "g_ui3_batch_operation_invalid": m79,
+    "g_ui3_borrow": MessageLookupByLibrary.simpleMessage("అప్పు తీసుకో"),
+    "g_ui3_borrow_apr": MessageLookupByLibrary.simpleMessage("అప్పు APR"),
+    "g_ui3_borrow_submitted": MessageLookupByLibrary.simpleMessage(
+      "అప్పు అభ్యర్థన సమర్పించబడింది",
+    ),
+    "g_ui3_calldata_required": MessageLookupByLibrary.simpleMessage(
+      "Calldata తప్పనిసరి",
+    ),
+    "g_ui3_chain_config_invalid": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని చైన్ కాన్ఫిగరేషన్",
+    ),
+    "g_ui3_chain_config_missing_parent": MessageLookupByLibrary.simpleMessage(
+      "పేరెంట్ చైన్ కాన్ఫిగరేషన్ లేదు",
+    ),
+    "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
+      "బ్రౌజర్‌లో కాష్ చేసిన సైట్ డేటాను క్లియర్ చేయాలా? సైట్‌లు మళ్లీ సైన్ ఇన్ చేయమని అడగవచ్చు.",
+    ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "ఇటీవలి శోధనలను క్లియర్ చేయాలా?",
+    ),
+    "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
+      "అన్ని ట్యాబ్‌లను మూసివేయాలా?",
+    ),
+    "g_ui3_confirm_action": m80,
+    "g_ui3_copy_template": MessageLookupByLibrary.simpleMessage(
+      "టెంప్లేట్‌ను కాపీ చేయి",
+    ),
+    "g_ui3_csv_address_desc": MessageLookupByLibrary.simpleMessage(
+      "తప్పనిసరి — EVM చిరునామా (0x + 40 హెక్స్ అక్షరాలు)",
+    ),
+    "g_ui3_csv_amount_desc": MessageLookupByLibrary.simpleMessage(
+      "తప్పనిసరి — దశాంశ సంఖ్య (ఉదా. 1.5)",
+    ),
+    "g_ui3_csv_columns": MessageLookupByLibrary.simpleMessage("నిలువు వరుసలు"),
+    "g_ui3_csv_example": MessageLookupByLibrary.simpleMessage("ఉదాహరణ"),
+    "g_ui3_csv_memo_desc": MessageLookupByLibrary.simpleMessage(
+      "ఐచ్ఛికం — లేబుల్ లేదా గమనిక",
+    ),
+    "g_ui3_csv_rule_blank": MessageLookupByLibrary.simpleMessage(
+      "ఖాళీ పంక్తులు విస్మరించబడతాయి",
+    ),
+    "g_ui3_csv_rule_comments": MessageLookupByLibrary.simpleMessage(
+      "#తో ప్రారంభమయ్యే పంక్తులు వ్యాఖ్యలు, అవి విస్మరించబడతాయి",
+    ),
+    "g_ui3_csv_rule_duplicates": MessageLookupByLibrary.simpleMessage(
+      "నకిలీ చిరునామాలు గుర్తించబడతాయి",
+    ),
+    "g_ui3_csv_rule_header": MessageLookupByLibrary.simpleMessage(
+      "హెడర్ వరుస (address,amount,memo) ఐచ్ఛికం — స్వయంచాలకంగా గుర్తించబడుతుంది",
+    ),
+    "g_ui3_csv_rules": MessageLookupByLibrary.simpleMessage("నియమాలు"),
+    "g_ui3_data": MessageLookupByLibrary.simpleMessage("డేటా"),
+    "g_ui3_delete_bookmark_confirm": MessageLookupByLibrary.simpleMessage(
+      "ఈ బుక్‌మార్క్‌ను తొలగించాలా?",
+    ),
+    "g_ui3_delete_trade_confirm": MessageLookupByLibrary.simpleMessage(
+      "ఈ ట్రేడ్ రికార్డ్‌ను తొలగించాలా?",
+    ),
+    "g_ui3_delete_validator_key_confirm": MessageLookupByLibrary.simpleMessage(
+      "ఈ పరికరం నుండి ఈ వాలిడేటర్ కీని తొలగించాలా? మీ వద్ద బ్యాకప్ ఉందని నిర్ధారించుకోండి.",
+    ),
+    "g_ui3_enter_amount": MessageLookupByLibrary.simpleMessage(
+      "దయచేసి మొత్తాన్ని నమోదు చేయండి",
+    ),
+    "g_ui3_falcon_auth_reason": MessageLookupByLibrary.simpleMessage(
+      "Falcon వాలెట్ చర్యను అధీకృతం చేయండి",
+    ),
+    "g_ui3_falcon_backup_password": MessageLookupByLibrary.simpleMessage(
+      "బ్యాకప్ పాస్‌వర్డ్ (12+ అక్షరాలు)",
+    ),
+    "g_ui3_falcon_backup_to_restore": MessageLookupByLibrary.simpleMessage(
+      "పునరుద్ధరించాల్సిన ఎన్‌క్రిప్ట్ చేసిన బ్యాకప్",
+    ),
+    "g_ui3_falcon_backup_verified": MessageLookupByLibrary.simpleMessage(
+      "ఎన్‌క్రిప్ట్ చేసిన బ్యాకప్ ధృవీకరించబడింది",
+    ),
+    "g_ui3_falcon_confirm_offline_signature":
+        MessageLookupByLibrary.simpleMessage(
+          "ఆఫ్‌లైన్ సంతకాన్ని నిర్ధారించండి",
+        ),
+    "g_ui3_falcon_confirm_transaction": MessageLookupByLibrary.simpleMessage(
+      "Falcon లావాదేవీని నిర్ధారించండి",
+    ),
+    "g_ui3_falcon_copy_result": MessageLookupByLibrary.simpleMessage(
+      "ఫలితాన్ని కాపీ చేయండి",
+    ),
+    "g_ui3_falcon_create_account": MessageLookupByLibrary.simpleMessage(
+      "Falcon ఖాతాను సృష్టించండి",
+    ),
+    "g_ui3_falcon_export_backup": MessageLookupByLibrary.simpleMessage(
+      "ఎన్‌క్రిప్ట్ చేసిన బ్యాకప్‌ను ఎగుమతి చేయండి",
+    ),
+    "g_ui3_falcon_library_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Falcon నేటివ్ లైబ్రరీ అందుబాటులో లేదు",
+    ),
+    "g_ui3_falcon_network_not_enabled": MessageLookupByLibrary.simpleMessage(
+      "ఈ నెట్‌వర్క్‌లో Falcon-512 లావాదేవీలు ప్రారంభించబడలేదు. ఆఫ్‌లైన్ సంతకం అందుబాటులో ఉంది.",
+    ),
+    "g_ui3_falcon_notice": MessageLookupByLibrary.simpleMessage(
+      "Falcon-512 లావాదేవీలకు స్పష్టంగా మద్దతిచ్చే నెట్‌వర్క్‌ను మాత్రమే ఉపయోగించండి. నిధులు జమ చేసే ముందు RPC మరియు బ్యాకప్‌ను ధృవీకరించండి. Falcon కీలకు వేరే ఎన్‌క్రిప్ట్ చేసిన బ్యాకప్ అవసరం; మీ EVM రికవరీ ఫ్రేజ్ వాటిని పునరుద్ధరించలేదు. సమర్పణ అనిశ్చితంగా ఉంటే, మరో చెల్లింపుకు ముందు దాని స్థితిని తనిఖీ చేయండి.",
+    ),
+    "g_ui3_falcon_operation_failed": MessageLookupByLibrary.simpleMessage(
+      "చర్య విఫలమైంది. ఇన్‌పుట్‌లు, బ్యాకప్ పాస్‌వర్డ్, పరికర ప్రామాణీకరణను తనిఖీ చేయండి. పంపడానికి ప్రయత్నించి ఉంటే, మళ్లీ ప్రయత్నించే ముందు మునుపటి సమర్పణ స్థితిని తనిఖీ చేయండి.",
+    ),
+    "g_ui3_falcon_owner_changed": MessageLookupByLibrary.simpleMessage(
+      "వాలెట్ యజమాని మారారు",
+    ),
+    "g_ui3_falcon_public_key": m81,
+    "g_ui3_falcon_query_previous": MessageLookupByLibrary.simpleMessage(
+      "మునుపటి సమర్పణను తనిఖీ చేయండి",
+    ),
+    "g_ui3_falcon_query_previous_first": MessageLookupByLibrary.simpleMessage(
+      "మరో చెల్లింపుకు ముందు మునుపటి సమర్పణ స్థితిని తనిఖీ చేయండి.",
+    ),
+    "g_ui3_falcon_restore_account": MessageLookupByLibrary.simpleMessage(
+      "Falcon ఖాతాను పునరుద్ధరించండి",
+    ),
+    "g_ui3_falcon_review_send": MessageLookupByLibrary.simpleMessage(
+      "సమీక్షించి పంపండి",
+    ),
+    "g_ui3_falcon_review_sign_offline": MessageLookupByLibrary.simpleMessage(
+      "సమీక్షించి ఆఫ్‌లైన్‌లో సంతకం చేయండి",
+    ),
+    "g_ui3_falcon_sign_and_send": MessageLookupByLibrary.simpleMessage(
+      "సంతకం చేసి పంపండి",
+    ),
+    "g_ui3_falcon_verify_backup": MessageLookupByLibrary.simpleMessage(
+      "సేవ్ చేసిన బ్యాకప్‌ను ధృవీకరించండి",
+    ),
+    "g_ui3_hw_bt_disabled_message": MessageLookupByLibrary.simpleMessage(
+      "మీ హార్డ్‌వేర్ వాలెట్‌కు కనెక్ట్ చేయడానికి పరికర సెట్టింగ్‌లలో బ్లూటూత్‌ను ఆన్ చేయండి.",
+    ),
+    "g_ui3_hw_bt_disabled_title": MessageLookupByLibrary.simpleMessage(
+      "బ్లూటూత్ ఆఫ్‌లో ఉంది",
+    ),
+    "g_ui3_hw_bt_permission_message": MessageLookupByLibrary.simpleMessage(
+      "హార్డ్‌వేర్ వాలెట్‌ల కోసం స్కాన్ చేయడానికి బ్లూటూత్ అనుమతిని ఇవ్వండి.",
+    ),
+    "g_ui3_hw_bt_permission_title": MessageLookupByLibrary.simpleMessage(
+      "బ్లూటూత్ అనుమతి అవసరం",
+    ),
+    "g_ui3_hw_devices_found": m82,
+    "g_ui3_hw_ledger_device": MessageLookupByLibrary.simpleMessage(
+      "Ledger పరికరం",
+    ),
+    "g_ui3_hw_no_devices": MessageLookupByLibrary.simpleMessage(
+      "పరికరాలు ఏవీ కనుగొనబడలేదు",
+    ),
+    "g_ui3_hw_scan_again": MessageLookupByLibrary.simpleMessage(
+      "మళ్లీ స్కాన్ చేయండి",
+    ),
+    "g_ui3_hw_search_complete": MessageLookupByLibrary.simpleMessage(
+      "శోధన పూర్తయింది",
+    ),
+    "g_ui3_hw_searching": MessageLookupByLibrary.simpleMessage(
+      "పరికరాల కోసం వెతుకుతోంది...",
+    ),
+    "g_ui3_hw_stop_scan": MessageLookupByLibrary.simpleMessage("స్కాన్ ఆపండి"),
+    "g_ui3_iap_purchase_not_started": MessageLookupByLibrary.simpleMessage(
+      "కొనుగోలును ప్రారంభించలేకపోయాము",
+    ),
+    "g_ui3_idhub_approve_login_prompt": MessageLookupByLibrary.simpleMessage(
+      "మీ N42 గుర్తింపుతో సైన్-ఇన్‌ను ఆమోదించాలా?",
+    ),
+    "g_ui3_idhub_approved": MessageLookupByLibrary.simpleMessage(
+      "ఆమోదించబడింది. ఇతర పరికరానికి తిరిగి వెళ్లండి.",
+    ),
+    "g_ui3_idhub_bind": MessageLookupByLibrary.simpleMessage("లింక్ చేయి"),
+    "g_ui3_idhub_bind_prompt": MessageLookupByLibrary.simpleMessage(
+      "ఈ వాలెట్‌ను మీ N42 గుర్తింపుకు లింక్ చేయాలా?",
+    ),
+    "g_ui3_idhub_bind_wallet": MessageLookupByLibrary.simpleMessage(
+      "వాలెట్ లింక్",
+    ),
+    "g_ui3_idhub_bind_wallet_title": MessageLookupByLibrary.simpleMessage(
+      "వాలెట్‌ను లింక్ చేయండి",
+    ),
+    "g_ui3_idhub_bound": MessageLookupByLibrary.simpleMessage(
+      "వాలెట్ లింక్ చేయబడింది. ఇతర పరికరానికి తిరిగి వెళ్లండి.",
+    ),
+    "g_ui3_idhub_load_failed": MessageLookupByLibrary.simpleMessage(
+      "ఈ అభ్యర్థనను లోడ్ చేయలేకపోయాం.",
+    ),
+    "g_ui3_idhub_login_request": MessageLookupByLibrary.simpleMessage(
+      "లాగిన్ అభ్యర్థన",
+    ),
+    "g_ui3_idhub_request": MessageLookupByLibrary.simpleMessage("అభ్యర్థన"),
+    "g_ui3_idhub_server": MessageLookupByLibrary.simpleMessage("సర్వర్"),
+    "g_ui3_idhub_sign_failed": MessageLookupByLibrary.simpleMessage(
+      "సంతకం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    ),
+    "g_ui3_idhub_sign_in": MessageLookupByLibrary.simpleMessage("సైన్ ఇన్"),
+    "g_ui3_idhub_type_mismatch": MessageLookupByLibrary.simpleMessage(
+      "ఈ అభ్యర్థన రకం స్కాన్ చేసిన కోడ్‌తో సరిపోలడం లేదు.",
+    ),
+    "g_ui3_idhub_unlock_wallet": MessageLookupByLibrary.simpleMessage(
+      "మీ వాలెట్‌ను అన్‌లాక్ చేసి, ఆపై ఈ అభ్యర్థనను మళ్లీ తెరవండి.",
+    ),
+    "g_ui3_idhub_untrusted_server": MessageLookupByLibrary.simpleMessage(
+      "ఈ అభ్యర్థన నమ్మదగని సర్వర్‌ను సూచిస్తున్నందున బ్లాక్ చేయబడింది.",
+    ),
+    "g_ui3_idhub_wallet_changed": MessageLookupByLibrary.simpleMessage(
+      "సక్రియ వాలెట్ మారింది. ఈ అభ్యర్థనను మళ్లీ తెరవండి.",
+    ),
+    "g_ui3_invalid_amount": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని మొత్తం",
+    ),
+    "g_ui3_invalid_coin_config": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని కాయిన్ కాన్ఫిగరేషన్",
+    ),
+    "g_ui3_invalid_tx_hash": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని లావాదేవీ హాష్",
+    ),
+    "g_ui3_invalid_tx_receipt": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని లావాదేవీ రసీదు",
+    ),
+    "g_ui3_lending": MessageLookupByLibrary.simpleMessage("రుణాలు"),
+    "g_ui3_limit": MessageLookupByLibrary.simpleMessage("లిమిట్"),
+    "g_ui3_live_beauty": MessageLookupByLibrary.simpleMessage(
+      "బ్యూటీ & ఫిల్టర్లు",
+    ),
+    "g_ui3_live_beauty_reset": MessageLookupByLibrary.simpleMessage(
+      "అసలుకు రీసెట్ చేయండి",
+    ),
+    "g_ui3_live_brighten": MessageLookupByLibrary.simpleMessage("ప్రకాశం"),
+    "g_ui3_live_browse_hint": MessageLookupByLibrary.simpleMessage(
+      "లైవ్ రూమ్‌లను లోడ్ చేయడానికి రిఫ్రెష్ నొక్కండి",
+    ),
+    "g_ui3_live_browse_title": MessageLookupByLibrary.simpleMessage(
+      "లైవ్ రూమ్‌లను చూడండి",
+    ),
+    "g_ui3_live_coins_insufficient": MessageLookupByLibrary.simpleMessage(
+      "నాణేలు సరిపోవు. ముందుగా టాప్ అప్ చేయండి.",
+    ),
+    "g_ui3_live_connecting": MessageLookupByLibrary.simpleMessage(
+      "కనెక్ట్ అవుతోంది…",
+    ),
+    "g_ui3_live_empty": MessageLookupByLibrary.simpleMessage(
+      "లైవ్ రూమ్‌లు లేవు",
+    ),
+    "g_ui3_live_end": MessageLookupByLibrary.simpleMessage("లైవ్ ముగించండి"),
+    "g_ui3_live_end_confirm": MessageLookupByLibrary.simpleMessage(
+      "ఈ లైవ్ స్ట్రీమ్‌ను ముగించాలా? వీక్షకులు డిస్‌కనెక్ట్ అవుతారు.",
+    ),
+    "g_ui3_live_enter": MessageLookupByLibrary.simpleMessage("ప్రవేశించండి"),
+    "g_ui3_live_filter": MessageLookupByLibrary.simpleMessage("ఫిల్టర్"),
+    "g_ui3_live_filter_cool": MessageLookupByLibrary.simpleMessage("కూల్"),
+    "g_ui3_live_filter_mono": MessageLookupByLibrary.simpleMessage(
+      "నలుపు తెలుపు",
+    ),
+    "g_ui3_live_filter_named": m83,
+    "g_ui3_live_filter_natural": MessageLookupByLibrary.simpleMessage("సహజం"),
+    "g_ui3_live_filter_original": MessageLookupByLibrary.simpleMessage("అసలు"),
+    "g_ui3_live_filter_vivid": MessageLookupByLibrary.simpleMessage("వైబ్రంట్"),
+    "g_ui3_live_filter_warm": MessageLookupByLibrary.simpleMessage("వార్మ్"),
+    "g_ui3_live_gift": MessageLookupByLibrary.simpleMessage("బహుమతి"),
+    "g_ui3_live_gift_cheers": MessageLookupByLibrary.simpleMessage("చీర్స్"),
+    "g_ui3_live_gift_crown": MessageLookupByLibrary.simpleMessage("కిరీటం"),
+    "g_ui3_live_gift_diamond": MessageLookupByLibrary.simpleMessage("వజ్రం"),
+    "g_ui3_live_gift_rocket": MessageLookupByLibrary.simpleMessage("రాకెట్"),
+    "g_ui3_live_gift_rose": MessageLookupByLibrary.simpleMessage("గులాబీ"),
+    "g_ui3_live_gift_sent": m84,
+    "g_ui3_live_hold_compare": MessageLookupByLibrary.simpleMessage(
+      "అసలును చూడటానికి నొక్కి పట్టుకోండి",
+    ),
+    "g_ui3_live_like": MessageLookupByLibrary.simpleMessage("లైక్"),
+    "g_ui3_live_list": MessageLookupByLibrary.simpleMessage("లైవ్ స్ట్రీమ్‌లు"),
+    "g_ui3_live_load_failed": m85,
+    "g_ui3_live_mute": MessageLookupByLibrary.simpleMessage("మ్యూట్ చేయండి"),
+    "g_ui3_live_pause_video": MessageLookupByLibrary.simpleMessage(
+      "వీడియోను పాజ్ చేయండి",
+    ),
+    "g_ui3_live_permission_required": MessageLookupByLibrary.simpleMessage(
+      "లైవ్‌కు వెళ్లడానికి కెమెరా మరియు మైక్రోఫోన్ యాక్సెస్ అవసరం",
+    ),
+    "g_ui3_live_resume_video": MessageLookupByLibrary.simpleMessage(
+      "వీడియోను కొనసాగించండి",
+    ),
+    "g_ui3_live_room_id_copied": MessageLookupByLibrary.simpleMessage(
+      "రూమ్ ID కాపీ చేయబడింది",
+    ),
+    "g_ui3_live_rosy": MessageLookupByLibrary.simpleMessage("గులాబీ ఛాయ"),
+    "g_ui3_live_say_something": MessageLookupByLibrary.simpleMessage(
+      "ఏదైనా చెప్పండి…",
+    ),
+    "g_ui3_live_send_gift": MessageLookupByLibrary.simpleMessage(
+      "బహుమతి పంపండి",
+    ),
+    "g_ui3_live_smooth": MessageLookupByLibrary.simpleMessage("స్మూత్"),
+    "g_ui3_live_start": MessageLookupByLibrary.simpleMessage(
+      "లైవ్‌కు వెళ్లండి",
+    ),
+    "g_ui3_live_starting": MessageLookupByLibrary.simpleMessage(
+      "ప్రారంభమవుతోంది…",
+    ),
+    "g_ui3_live_switch_camera": MessageLookupByLibrary.simpleMessage(
+      "కెమెరాను మార్చండి",
+    ),
+    "g_ui3_live_top_up": MessageLookupByLibrary.simpleMessage("టాప్ అప్"),
+    "g_ui3_live_torch_off": MessageLookupByLibrary.simpleMessage(
+      "ఫ్లాష్‌లైట్ ఆఫ్ చేయండి",
+    ),
+    "g_ui3_live_torch_on": MessageLookupByLibrary.simpleMessage(
+      "ఫ్లాష్‌లైట్ ఆన్ చేయండి",
+    ),
+    "g_ui3_live_torch_unsupported": MessageLookupByLibrary.simpleMessage(
+      "ఫ్లాష్‌లైట్‌ను సపోర్ట్ చేసే వెనుక కెమెరాకు మారండి",
+    ),
+    "g_ui3_live_unmute": MessageLookupByLibrary.simpleMessage(
+      "అన్‌మ్యూట్ చేయండి",
+    ),
+    "g_ui3_live_user_joined": m86,
+    "g_ui3_live_video_unavailable": MessageLookupByLibrary.simpleMessage(
+      "వీడియో అందుబాటులో లేదు. ఇతర లైవ్ ఫీచర్లు పనిచేస్తాయి.",
+    ),
+    "g_ui3_live_viewers": m87,
+    "g_ui3_live_waiting_video": MessageLookupByLibrary.simpleMessage(
+      "వీడియో కోసం వేచి ఉంది…",
+    ),
+    "g_ui3_long": MessageLookupByLibrary.simpleMessage("లాంగ్"),
+    "g_ui3_market": MessageLookupByLibrary.simpleMessage("మార్కెట్"),
+    "g_ui3_method": MessageLookupByLibrary.simpleMessage("మెథడ్"),
+    "g_ui3_min_balance": MessageLookupByLibrary.simpleMessage(
+      "కనీస బ్యాలెన్స్",
+    ),
+    "g_ui3_missing_parent_chain": m88,
+    "g_ui3_nft_transfer_unsupported": MessageLookupByLibrary.simpleMessage(
+      "NFT బదిలీకి మద్దతు లేదు",
+    ),
+    "g_ui3_no_markets": MessageLookupByLibrary.simpleMessage(
+      "మార్కెట్లు ఏవీ అందుబాటులో లేవు",
+    ),
+    "g_ui3_no_trending_data": MessageLookupByLibrary.simpleMessage(
+      "ట్రెండింగ్ డేటా లేదు",
+    ),
+    "g_ui3_no_wallet_for_chain": MessageLookupByLibrary.simpleMessage(
+      "ఈ చైన్ కోసం వాలెట్ ఖాతా కనుగొనబడలేదు",
+    ),
+    "g_ui3_phone": MessageLookupByLibrary.simpleMessage("ఫోన్"),
+    "g_ui3_pick_file": MessageLookupByLibrary.simpleMessage(
+      "ఫైల్‌ను ఎంచుకోండి",
+    ),
+    "g_ui3_pred_awaiting": MessageLookupByLibrary.simpleMessage(
+      "ఫలితం కోసం వేచి ఉంది",
+    ),
+    "g_ui3_pred_claim_refund": MessageLookupByLibrary.simpleMessage(
+      "రీఫండ్ పొందండి",
+    ),
+    "g_ui3_pred_closed": MessageLookupByLibrary.simpleMessage("ముగిసింది"),
+    "g_ui3_pred_closes_in": m89,
+    "g_ui3_pred_held": m90,
+    "g_ui3_pred_redeem_winnings": MessageLookupByLibrary.simpleMessage(
+      "గెలుపు మొత్తాన్ని రీడీమ్ చేయండి",
+    ),
+    "g_ui3_pred_resolve": MessageLookupByLibrary.simpleMessage(
+      "ఫలితం ప్రకటించండి",
+    ),
+    "g_ui3_pred_volume": m91,
+    "g_ui3_receipt_lookup_failed": MessageLookupByLibrary.simpleMessage(
+      "రసీదు శోధన విఫలమైంది",
+    ),
+    "g_ui3_remove_asset_message": MessageLookupByLibrary.simpleMessage(
+      "ఇది ఇకపై ఈ వాలెట్‌లో కనిపించదు. చెయిన్‌లోని మీ ఆస్తులపై ప్రభావం ఉండదు.",
+    ),
+    "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "ఈ ఇటీవలి శోధనను తీసివేయాలా?",
+    ),
+    "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
+      "RPC జెనెసిస్ బ్లాక్‌ను ధృవీకరించలేకపోయాము. నెట్‌వర్క్ జోడించబడలేదు.",
+    ),
+    "g_ui3_rpc_idn_hostname_warning": m93,
+    "g_ui3_rpc_url_not_configured": MessageLookupByLibrary.simpleMessage(
+      "RPC URL కాన్ఫిగర్ చేయబడలేదు",
+    ),
+    "g_ui3_search_coin": MessageLookupByLibrary.simpleMessage(
+      "కాయిన్‌ను శోధించండి",
+    ),
+    "g_ui3_search_failed": MessageLookupByLibrary.simpleMessage(
+      "శోధన విఫలమైంది",
+    ),
+    "g_ui3_sell": MessageLookupByLibrary.simpleMessage("అమ్ము"),
+    "g_ui3_send_failed_retry": MessageLookupByLibrary.simpleMessage(
+      "పంపడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    ),
+    "g_ui3_short": MessageLookupByLibrary.simpleMessage("షార్ట్"),
+    "g_ui3_signing_config_changed": MessageLookupByLibrary.simpleMessage(
+      "వాలెట్ సంతకం కాన్ఫిగరేషన్ మారింది",
+    ),
+    "g_ui3_signing_key_mismatch": MessageLookupByLibrary.simpleMessage(
+      "సంతకం కీ పంపినవారి చిరునామాతో సరిపోలలేదు",
+    ),
+    "g_ui3_similar_address_body": MessageLookupByLibrary.simpleMessage(
+      "ఈ చిరునామా ఇటీవలి గ్రహీత చిరునామాను పోలి ఉంది, కానీ వేరుగా ఉంది.",
+    ),
+    "g_ui3_similar_address_note": MessageLookupByLibrary.simpleMessage(
+      "మూలం: స్థానిక పంపిన చరిత్ర, ఇప్పుడే తనిఖీ చేయబడింది. ఇది సారూప్యత హెచ్చరిక మాత్రమే, మోసానికి రుజువు కాదు.",
+    ),
+    "g_ui3_similar_address_title": MessageLookupByLibrary.simpleMessage(
+      "గ్రహీత పూర్తి చిరునామాను తనిఖీ చేయండి",
+    ),
+    "g_ui3_stake_confirm_message": m94,
+    "g_ui3_supply": MessageLookupByLibrary.simpleMessage("సరఫరా చేయి"),
+    "g_ui3_supply_apy": MessageLookupByLibrary.simpleMessage("సరఫరా APY"),
+    "g_ui3_supply_submitted": MessageLookupByLibrary.simpleMessage(
+      "సరఫరా సమర్పించబడింది",
+    ),
+    "g_ui3_token": MessageLookupByLibrary.simpleMessage("టోకెన్"),
+    "g_ui3_token_added": MessageLookupByLibrary.simpleMessage(
+      "విజయవంతంగా జోడించబడింది",
+    ),
+    "g_ui3_token_already_exists": MessageLookupByLibrary.simpleMessage(
+      "ఇప్పటికే ఉంది",
+    ),
+    "g_ui3_token_contract_invalid": MessageLookupByLibrary.simpleMessage(
+      "చెల్లని టోకెన్ కాంట్రాక్ట్ చిరునామా",
+    ),
+    "g_ui3_token_contract_required": MessageLookupByLibrary.simpleMessage(
+      "టోకెన్ కాంట్రాక్ట్ చిరునామా తప్పనిసరి",
+    ),
+    "g_ui3_token_name_decimals": m95,
+    "g_ui3_turn_off": MessageLookupByLibrary.simpleMessage("ఆఫ్ చేయి"),
+    "g_ui3_turn_off_verification_message": MessageLookupByLibrary.simpleMessage(
+      "దీని సేవ్ చేసిన సెటప్ తీసివేయబడుతుంది. మళ్లీ ఆన్ చేయడానికి మీరు దీన్ని మళ్లీ సెటప్ చేయాలి.",
+    ),
+    "g_ui3_turn_off_verification_title": MessageLookupByLibrary.simpleMessage(
+      "ఈ ధృవీకరణను ఆఫ్ చేయాలా?",
+    ),
+    "g_ui3_tx_not_found": MessageLookupByLibrary.simpleMessage(
+      "లావాదేవీ కనుగొనబడలేదు",
+    ),
+    "g_ui3_unknown": MessageLookupByLibrary.simpleMessage("తెలియదు"),
+    "g_ui3_update_account_email": MessageLookupByLibrary.simpleMessage(
+      "ఖాతా ఇమెయిల్‌ను అప్‌డేట్ చేయండి",
+    ),
+    "g_ui3_uptime": MessageLookupByLibrary.simpleMessage("అప్‌టైమ్"),
+    "g_ui3_ws_status": MessageLookupByLibrary.simpleMessage("WS స్థితి"),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "Aave V3 లోనింగ్",
     ),
@@ -3341,7 +3953,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
       "ఈ సంపత్తిని చేర్చడానికి నెట్‌వర్క్ ఫీజు అవసరం. కొనసాగించడానికి చేర్చు బటన్ నొక్కండి.",
     ),
-    "g_ui_algo_asset_missing": m76,
+    "g_ui_algo_asset_missing": m96,
     "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
       "బ్యాలెన్స్, పోర్ట్‌ఫోలియో, గ్యాస్ గురించి అడగండి",
     ),
@@ -3379,7 +3991,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
       "బ్యాకప్ తిరిగి సేకరించలేము. పాస్‌వర్డ్ మరియు బ్యాకప్ ఫైల్ సరిగా ఉన్నాయో తనిఖీ చేసి, తిరిగి ప్రయత్నించండి.",
     ),
-    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_result": m97,
     "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
       "వాలెట్ లను దిగుమతి చేయి",
     ),
@@ -3428,8 +4040,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
       "ఈ బ్యాకప్ మీ ప్రైవేట్ కీలు / మెనోనిక్స్, వాలెట్ పాస్‌వర్డ్ మరియు వాలెట్ సెట్టింగ్స్ ను కలిగి ఉంటుంది. బ్యాకప్ ఫైల్ మరియు పాస్‌వర్డ్ ను సురక్షితంగా ఉంచండి. ఎవరికీ దీనిని పంచుకోకండి.",
     ),
-    "g_ui_balance_value": m78,
-    "g_ui_base_fee_value": m79,
+    "g_ui_balance_value": m98,
+    "g_ui_base_fee_value": m99,
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "N42 ప్రోటోకాల్ ద్వారా N కొనుగోలు చేయండి",
     ),
@@ -3446,7 +4058,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
       "అనుమతి సరిచూస్తున్న...",
     ),
-    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_clear": m100,
     "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
       "క్లిప్‌బోర్డ్ ఖాళీగా ఉంది",
     ),
@@ -3468,16 +4080,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
       "డేటా పంక్తులు కనబడలేదు (హెడర్ మాత్రమే గుర్తించబడింది).",
     ),
-    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_missing_fields": m101,
     "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
       "టిప్పణులు తీసివేసిన తరువాత డేటా కనబడలేదు.",
     ),
     "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("స్వంత ట్యాగ్..."),
-    "g_ui_days": m82,
+    "g_ui_days": m102,
     "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
       "ప్రయోగ ట్యాగ్",
     ),
-    "g_ui_device_connected": m83,
+    "g_ui_device_connected": m103,
     "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
       "Uniswap / 1inch / Jupiter ద్వారా టోకెన్లను మార్పిడి చేయండి",
     ),
@@ -3508,9 +4120,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
       "తదుపరి బ్లాక్ గ్యాస్ అంచనా",
     ),
-    "g_ui_gas_value": m84,
-    "g_ui_hours": m85,
-    "g_ui_import_valid": m86,
+    "g_ui_gas_value": m104,
+    "g_ui_hours": m105,
+    "g_ui_import_valid": m106,
     "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
       "సరైన ఇమెయిల్ చిరునామాను నమోదు చేయండి",
     ),
@@ -3522,17 +4134,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "లిమిట్ ఆర్డర్లు",
     ),
     "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("లిమిట్ ధర"),
-    "g_ui_limit_price_pair": m87,
-    "g_ui_limit_value": m88,
+    "g_ui_limit_price_pair": m107,
+    "g_ui_limit_value": m108,
     "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
       "లిక్విడేషన్ ధర",
     ),
     "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("వాడకం"),
-    "g_ui_markets_count": m89,
+    "g_ui_markets_count": m109,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("మెమో"),
     "g_ui_mempool": MessageLookupByLibrary.simpleMessage("మెంపూల్"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("సందేశం"),
-    "g_ui_min_balance_value": m90,
+    "g_ui_min_balance_value": m110,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
       "మెనిమోనిక్ వాలెట్",
     ),
@@ -3589,7 +4201,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage(
       "ప్రకటించబడింది",
     ),
-    "g_ui_orders_count": m91,
+    "g_ui_orders_count": m111,
     "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
       "లిమిట్ ఆర్డర్లను లోడ్ చేయలేకపోయాము",
     ),
@@ -3606,12 +4218,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "ప్రముఖ టోకెన్లు",
     ),
     "g_ui_position_size": MessageLookupByLibrary.simpleMessage("పరిమాణం"),
-    "g_ui_positions_count": m92,
+    "g_ui_positions_count": m112,
     "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
       "ప్రైవేట్ కీ వాలెట్",
     ),
     "g_ui_read_only": MessageLookupByLibrary.simpleMessage("చదవడానికి మాత్రమే"),
-    "g_ui_recipients_count": m93,
+    "g_ui_recipients_count": m113,
     "g_ui_room_id": MessageLookupByLibrary.simpleMessage("రూమ్ ఐడి"),
     "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
       "సేవ్ విఫలమైంది. మళ్లీ ప్రయత్నించండి.",
@@ -3630,21 +4242,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
       "టోకెన్ కాంట్రాక్ట్ (0x...)",
     ),
-    "g_ui_token_found": m94,
+    "g_ui_token_found": m114,
     "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
       "టోకెన్ సమాచారం వెతుకుతున్నది…",
     ),
     "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
       "టోకెన్ జాబితాలో కనిపించలేదు — సింబల్ & దశలను చేయండి",
     ),
-    "g_ui_token_value": m95,
+    "g_ui_token_value": m115,
     "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
       "లావాదేవీని తొలగించలేకపోయాము. మళ్లీ ప్రయత్నించండి.",
     ),
     "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
       "లావాదేవీని సేవ్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.",
     ),
-    "g_ui_transaction_hash_value": m96,
+    "g_ui_transaction_hash_value": m116,
     "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage(
       "తెలియని స్థితి",
     ),
@@ -3652,11 +4264,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
       "ఇమెయిల్ అప్‌డేట్ చేయి",
     ),
-    "g_ui_validation_counts": m97,
+    "g_ui_validation_counts": m117,
     "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
       "సరిపోయే సమస్యలు",
     ),
-    "g_ui_validation_more": m98,
+    "g_ui_validation_more": m118,
     "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
       "నిరూపణ కోడ్",
     ),
@@ -3667,7 +4279,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "మార్కెట్ డేటాను చూడండి",
     ),
     "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("24 గంటల పరిమాణం"),
-    "g_ui_volume_interest": m99,
+    "g_ui_volume_interest": m119,
     "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("వాలెట్ AI"),
     "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
       "ప్రారంభించడానికి వాలెట్ సృష్టించండి లేదా దానిని దిగుమతి చేయండి",
@@ -3678,7 +4290,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
       "వాలెట్ లోడ్ అవుతోంది...",
     ),
-    "g_ui_wallet_number": m100,
+    "g_ui_wallet_number": m120,
     "g_version_later": MessageLookupByLibrary.simpleMessage("తరువాత"),
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "బ్యాలెన్స్ నింపబడలేదు",
@@ -3699,11 +4311,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
       "సేవ్ చేసిన ధరలు",
     ),
-    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_hours": m121,
     "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
       "ఇప్పుడే అప్డేట్ చేయబడింది",
     ),
-    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_minutes": m122,
     "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
       "పార్షియల్ ధరలు",
     ),
@@ -3770,7 +4382,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "నేపథ్యంలో పాజ్ చేయబడింది",
     ),
-    "miningV3Block": m103,
+    "miningV3Block": m123,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("బ్లాక్ హాష్"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage(
       "సర్టిఫికెట్ పొందిన బ్లాక్‌లు",
@@ -3793,7 +4405,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
       "బ్లాక్ హాష్‌ను కాపీ చేయండి",
     ),
-    "miningV3Device": m104,
+    "miningV3Device": m124,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage("సెషన్ సమయం"),
     "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
       "ధృవీకరించిన బ్లాక్‌లు, సర్టిఫికెట్లను చూడటానికి మైనింగ్ ప్రారంభించండి.",
@@ -3821,7 +4433,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "డిఫాల్ట్ నోడ్ స్థానిక టెస్ట్‌నెట్‌లో ఉంది. మీరు అనుకూల చిరునామాను కూడా నమోదు చేయవచ్చు.",
     ),
-    "miningV3Milliseconds": m105,
+    "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("ధృవీకరణ నోడ్"),
     "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
       "నోడ్ చిరునామా",
@@ -3899,7 +4511,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("నమోదైన సమయం"),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("మైనింగ్"),
-    "miningV3Transactions": m106,
+    "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
       "లావాదేవీలు",
     ),
@@ -3913,7 +4525,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "ధృవీకరించిన బ్లాక్‌లు",
     ),
     "next": MessageLookupByLibrary.simpleMessage("తదుపరి"),
-    "nicknameMessage": m107,
+    "nicknameMessage": m127,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "ప్రొఫైల్‌ని సవరించండి",
     ),

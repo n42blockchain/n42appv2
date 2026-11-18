@@ -28,11 +28,12 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
             ),
           ),
           SizedBox(height: AppSpacing.space4),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColorTokens.of(context).bgSurface,
-              borderRadius: AppRadius.brMd,
-            ),
+          // Material (not a decorated Container) so the rows' InkWell
+          // splash is painted above the card fill and stays visible.
+          Material(
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
+            clipBehavior: Clip.antiAlias,
             child: Column(children: children),
           ),
         ],

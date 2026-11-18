@@ -225,7 +225,10 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
           ],
         ),
         body: SafeArea(
-          child: InkWell(
+          // Tapping outside a field closes the keyboard; not a button, so no
+          // ink splash or button semantics on the whole page.
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: closeKeyboard,
             child: Container(
               padding: EdgeInsets.all(_sw(30.0)),
@@ -247,7 +250,8 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
       margin: EdgeInsets.symmetric(vertical: _sw(20.0)),
-      constraints: BoxConstraints(minHeight: _sw(100.0), maxHeight: _sw(100.0)),
+      // No max height: the field grows with Dynamic Type instead of clipping.
+      constraints: BoxConstraints(minHeight: _sw(100.0)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(_sw(20.0)),
         color: _themeColor(AppThemeKeys.itemBgColor),
@@ -279,23 +283,40 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               onSubmitted: (_) => seachCoin(),
             ),
           ),
-          InkWell(
-            onTap: () {
-              closeKeyboard();
-              seachCoin();
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
-              height: _sw(60.0),
-              decoration: BoxDecoration(
-                color: _themeColor(AppThemeKeys.mainButtonBgColor),
-                borderRadius: BorderRadius.circular(_sw(60.0)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).search,
-                style: AppTypography.bodySm.copyWith(
-                  color: _themeColor(AppThemeKeys.mainButtonTextColor),
+          // 30pt pill, 44pt hit area. Transparent Material: the field fill
+          // would hide the Ink pill's splash.
+          Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: () {
+                closeKeyboard();
+                seachCoin();
+              },
+              borderRadius: BorderRadius.circular(_sw(60.0)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: AppTouch.minTarget,
+                ),
+                child: Center(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: Ink(
+                    padding: EdgeInsets.symmetric(horizontal: _sw(20.0)),
+                    height: _sw(60.0),
+                    decoration: BoxDecoration(
+                      color: AppColorTokens.of(context).brandFill,
+                      borderRadius: BorderRadius.circular(_sw(60.0)),
+                    ),
+                    child: Center(
+                      widthFactor: 1,
+                      child: Text(
+                        S.of(context).search,
+                        style: AppTypography.bodySm.copyWith(
+                          color: _themeColor(AppThemeKeys.mainButtonTextColor),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -406,8 +427,13 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
       );
     }
 
-    return InkWell(
+    // 39-40pt visual; AppTapArea grows the hit area to 44pt and labels it.
+    return AppTapArea(
       onTap: () => isAdded ? removeCoin(rowValue) : addCoin(rowValue),
+      tooltip: isAdded
+          ? S.of(context).g_alert_remove
+          : S.of(context).g_key_token_discovery_add,
+      customBorder: const CircleBorder(),
       child: Container(
         padding: EdgeInsets.all(_sw(isAdded ? 20.0 : 19.0)),
         width: _sw(isAdded ? 80.0 : 78.0),

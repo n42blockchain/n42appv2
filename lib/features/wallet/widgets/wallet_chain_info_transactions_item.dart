@@ -6,6 +6,8 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show toEther;
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
@@ -67,6 +69,17 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
 
   bool get _isMempoolTx => transactionModel is MempoolTxItem;
 
+  /// Pending for longer than the resolver's unknown threshold: the chain has
+  /// not given a result, so "pending" would overstate what is known.
+  bool get _isUnconfirmed =>
+      !_isBtcType &&
+      transactionModel is TransationRecordModel &&
+      TransactionStateResolver.isUnconfirmed(transactionModel);
+
+  String get _statusText => _isUnconfirmed
+      ? S.current.g_tx_status_unconfirmed
+      : getBuyStateText(transactionModel.state);
+
   String get _coinTypeForEns {
     final coinType = coinModel?.config.coinType;
     return coinType == null || coinType.isEmpty ? 'ETH' : coinType;
@@ -78,12 +91,15 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
 
     final isOut = _isOutgoing();
 
-    return InkWell(
-      onTap: () => _onItemTap(context),
-      child: Card(
-        margin: EdgeInsets.only(bottom: AppSpacing.space8),
-        color: AppColorTokens.of(context).bgSurface,
-        elevation: 0,
+    // InkWell sits inside the Card: the Card is an opaque Material, so ink
+    // drawn on the page Material underneath it was never visible.
+    return Card(
+      margin: EdgeInsets.only(bottom: AppSpacing.space8),
+      color: AppColorTokens.of(context).bgSurface,
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => _onItemTap(context),
         child: Container(
           padding: EdgeInsets.symmetric(
             vertical: AppSpacing.space8,
@@ -121,6 +137,20 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       ),
     );
   }
+
+  /// [color] shifted until it reaches 4.5:1 on [background].
+  Color _readable(BuildContext context, Color color, Color background) =>
+      AppContrast.ensure(color, [
+        background,
+      ], darken: Theme.of(context).brightness != Brightness.dark);
+
+  /// [color] as text on a [tint] layered over the card surface.
+  Color _readableOnTint(BuildContext context, Color color, Color tint) =>
+      _readable(
+        context,
+        color,
+        Color.alphaBlend(tint, AppColorTokens.of(context).bgSurface),
+      );
 
   Widget _buildTimeRow(BuildContext context) {
     return Row(
@@ -166,12 +196,17 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             children: [
               Text(
                 isOut ? S.of(context).g_key_t_4 : S.of(context).g_key_t_5,
+                // Raw system green is about 2.2:1 on the card.
                 style: AppTypography.bodyStrong.copyWith(
-                  color: AppThemeUtils.getColorByKey(
+                  color: _readable(
                     context,
-                    isOut
-                        ? AppThemeKeys.errorTextColor.name
-                        : AppThemeKeys.rightTextColor.name,
+                    AppThemeUtils.getColorByKey(
+                      context,
+                      isOut
+                          ? AppThemeKeys.errorTextColor.name
+                          : AppThemeKeys.rightTextColor.name,
+                    ),
+                    AppColorTokens.of(context).bgSurface,
                   ),
                 ),
               ),
@@ -203,9 +238,15 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
           ),
         ),
         Text(
-          getBuyStateText(transactionModel.state),
+          _statusText,
           style: AppTypography.body.copyWith(
-            color: AppColorTokens.of(context).textPrimary,
+            color: _isUnconfirmed
+                ? _readable(
+                    context,
+                    AppColorTokens.of(context).warning,
+                    AppColorTokens.of(context).bgSurface,
+                  )
+                : AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -239,7 +280,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                   child: Text(
                     transactionModel.errorMessage,
                     style: AppTypography.caption.copyWith(
-                      color: AppColorTokens.of(context).danger,
+                      color: _readableOnTint(
+                        context,
+                        AppColorTokens.of(context).danger,
+                        AppColorTokens.of(context).dangerBg,
+                      ),
                     ),
                   ),
                 ),
@@ -275,6 +320,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
             isTest: coinModel?.isTest,
+            status: _isBtcType ? null : _statusText,
+            statusHint: _isUnconfirmed
+                ? S.current.g_tx_status_unconfirmed_hint
+                : null,
           ),
         ),
       );
@@ -300,6 +349,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
             isTest: coinModel?.isTest,
+            status: _statusText,
+            statusHint: _isUnconfirmed
+                ? S.current.g_tx_status_unconfirmed_hint
+                : null,
           ),
         ),
       );
@@ -342,7 +395,9 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
         ),
         child: Text(
           label.name,
-          style: AppTypography.captionSm.copyWith(color: tagColor),
+          style: AppTypography.captionSm.copyWith(
+            color: _readableOnTint(context, tagColor, tagColor.withAlpha(20)),
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -390,14 +445,20 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                     S.of(context).g_ui_mempool,
                     style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: warn,
+                      color: _readableOnTint(context, warn, warn.withAlpha(30)),
                     ),
                   ),
                 ),
                 const Spacer(),
                 Text(
                   S.of(context).g_ui_pending_mempool,
-                  style: AppTypography.captionSm.copyWith(color: warn),
+                  style: AppTypography.captionSm.copyWith(
+                    color: _readable(
+                      context,
+                      warn,
+                      AppColorTokens.of(context).bgSurface,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -430,11 +491,15 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                             ? S.of(context).g_key_t_4
                             : S.of(context).g_key_t_5,
                         style: AppTypography.bodyStrong.copyWith(
-                          color: AppThemeUtils.getColorByKey(
+                          color: _readable(
                             context,
-                            isOut
-                                ? AppThemeKeys.errorTextColor.name
-                                : AppThemeKeys.rightTextColor.name,
+                            AppThemeUtils.getColorByKey(
+                              context,
+                              isOut
+                                  ? AppThemeKeys.errorTextColor.name
+                                  : AppThemeKeys.rightTextColor.name,
+                            ),
+                            AppColorTokens.of(context).bgSurface,
                           ),
                         ),
                       ),

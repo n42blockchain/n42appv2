@@ -145,6 +145,7 @@ class _CreatePredictionSheetState extends ConsumerState<CreatePredictionSheet> {
                     ),
                     if (_outcomes.length > 2)
                       IconButton(
+                        tooltip: S.of(context).g_alert_remove,
                         icon: Icon(
                           Icons.remove_circle_outline,
                           color: c.textTertiary,

@@ -147,7 +147,8 @@ class SettingTheme extends ConsumerWidget {
                     child: Text(
                       S.of(context).g_theme_accent_reset,
                       style: AppTypography.bodySm.copyWith(
-                        color: currentAccent,
+                        // 4.5:1 shade of the accent for small text.
+                        color: AppColorTokens.of(context).brandOnTint,
                       ),
                     ),
                   ),
@@ -162,42 +163,52 @@ class SettingTheme extends ConsumerWidget {
             child: Wrap(
               spacing: AppSpacing.space4,
               runSpacing: AppSpacing.space4,
-              children: _presetAccents.map((color) {
+              children: _presetAccents.indexed.map((entry) {
+                final (index, color) = entry;
                 final selected = color.toARGB32() == currentAccent.toARGB32();
-                return Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () =>
-                        ref.read(accentColorProvider.notifier).setAccent(color),
-                    customBorder: const CircleBorder(),
-                    child: AnimatedContainer(
-                      duration: AppMotion.fast,
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: selected ? Colors.white : Colors.transparent,
-                          width: 3,
+                void select() =>
+                    ref.read(accentColorProvider.notifier).setAccent(color);
+                // Color-only swatch: give screen readers a name and state.
+                return Semantics(
+                  button: true,
+                  selected: selected,
+                  label: '${S.of(context).g_theme_accent_color} ${index + 1}',
+                  excludeSemantics: true,
+                  onTap: select,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: select,
+                      customBorder: const CircleBorder(),
+                      child: AnimatedContainer(
+                        duration: AppMotion.fast,
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: selected ? Colors.white : Colors.transparent,
+                            width: 3,
+                          ),
+                          boxShadow: selected
+                              ? [
+                                  BoxShadow(
+                                    color: color.withAlpha(120),
+                                    blurRadius: 8,
+                                    spreadRadius: 2,
+                                  ),
+                                ]
+                              : null,
                         ),
-                        boxShadow: selected
-                            ? [
-                                BoxShadow(
-                                  color: color.withAlpha(120),
-                                  blurRadius: 8,
-                                  spreadRadius: 2,
-                                ),
-                              ]
+                        child: selected
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 22,
+                              )
                             : null,
                       ),
-                      child: selected
-                          ? const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 22,
-                            )
-                          : null,
                     ),
                   ),
                 );
@@ -246,7 +257,7 @@ class _SectionHeader extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.end,
                 style: AppTypography.bodySm.copyWith(
-                  color: AppColorTokens.of(context).brand,
+                  color: AppColorTokens.of(context).brandOnTint,
                 ),
               ),
             ),

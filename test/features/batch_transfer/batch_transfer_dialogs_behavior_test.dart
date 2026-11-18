@@ -212,7 +212,7 @@ void main() {
 
     await tester.tap(find.text('Open result'));
     await tester.pumpAndSettle();
-    expect(find.text('TxHash:'), findsNothing);
+    expect(find.text('${S.current.g_key_wallet_k37}:'), findsNothing);
     await tester.tap(find.text(S.current.g_key_batch_export_csv));
     await tester.pump();
     expect(exports, 1);
@@ -269,7 +269,7 @@ void main() {
       ),
     );
 
-    expect(find.text('TxHash:'), findsOneWidget);
+    expect(find.text('${S.current.g_key_wallet_k37}:'), findsOneWidget);
     expect(find.byIcon(Icons.copy_outlined), findsOneWidget);
     await tester.tap(find.byIcon(Icons.copy_outlined));
     await tester.pump();

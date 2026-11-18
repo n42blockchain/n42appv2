@@ -135,7 +135,7 @@ class NLevelWidget extends StatelessWidget {
                       width: ScreenUtil().setWidth(26),
                       height: ScreenUtil().setWidth(26),
                       decoration: BoxDecoration(
-                        color: AppColorTokens.of(context).brand,
+                        color: AppColorTokens.of(context).brandFill,
                         borderRadius: AppRadius.brSm,
                       ),
                       child: Center(

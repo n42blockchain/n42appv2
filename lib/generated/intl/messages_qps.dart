@@ -213,76 +213,122 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m75(value) =>
       "[# Ťĥé ŖƤÇ ŗéƥöŗťš Çĥàìñ ÌÐ ${value}, ŵĥìçĥ ðöéš ñöť ṁàťçĥ ťĥé ṽàĺüé ýöü éñťéŗéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
 
-  static String m76(asset, contract, address) =>
+  static String m76(address, asset) =>
+      "[# Ťĥé ŗéçìƥìéñť àððŗéšš ${address} ĥàš ñöť öƥťéð ìñ ťö àššéť ${asset} àñð çàññöť ŗéçéìṽé ìť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+
+  static String m77(action) => "[# Àƥƥŗöṽé ${action} ~~~~#]";
+
+  static String m78(name) => "[# ${name} · Àššéť çöñťŗöĺš ~~~~~~~~#]";
+
+  static String m79(index) =>
+      "[# Öƥéŗàťìöñ #${index}: ìñṽàĺìð àððŗéšš öŗ àṁöüñť ~~~~~~~~~~~~~~~~~~~#]";
+
+  static String m80(action) => "[# Çöñƒìŗṁ ${action} ~~~~#]";
+
+  static String m81(key) => "[# Ƥüƀĺìç ķéý: ${key} ~~~~~~#]";
+
+  static String m82(count) => "[# ${count} ðéṽìçé(š) ƒöüñð ~~~~~~~~#]";
+
+  static String m83(name) => "[# ${name} ƒìĺťéŗ ~~~#]";
+
+  static String m84(name, gift) => "[# ${name} šéñť ${gift} ~~~#]";
+
+  static String m85(reason) => "[# Ƒàìĺéð ťö ĺöàð: ${reason} ~~~~~~~~#]";
+
+  static String m86(name) => "[# ${name} ĵöìñéð ~~~#]";
+
+  static String m87(count) => "[# ${count} ṽìéŵéŗš ~~~~#]";
+
+  static String m88(value) =>
+      "[# Ṁìššìñĝ ƥàŗéñť çĥàìñ ƒöŗ ${value} ~~~~~~~~~~~~#]";
+
+  static String m89(time) => "[# Çĺöšéš ìñ ${time} ~~~~~#]";
+
+  static String m90(shares) => "[# Ĥéĺð ${shares} ~~#]";
+
+  static String m91(amount, symbol) => "[# Ṽöĺüṁé ${amount} ${symbol} ~~~~#]";
+
+  static String m92(name) => "[# Ŗéṁöṽé ${name}? ~~~~#]";
+
+  static String m93(host) =>
+      "[# Ìñťéŗñàťìöñàĺìžéð ŖƤÇ ĥöšťñàṁé: ${host}\\ñŤĥìš ñàṁé ṁàý ŗéšéṁƀĺé àñöťĥéŗ šéŗṽìçé. Ṽéŗìƒý ťĥé ÀŠÇÌÌ ĥöšťñàṁé ìñðéƥéñðéñťĺý. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+
+  static String m94(amount, symbol, protocol) =>
+      "[# Šťàķé ${amount} ${symbol} ŵìťĥ ${protocol}? Ťĥìš šéñðš àñ öñ-çĥàìñ ťŗàñšàçťìöñ ƒŗöṁ ýöüŗ ŵàĺĺéť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]";
+
+  static String m95(name, decimals) =>
+      "[# ${name} · ${decimals} ðéçìṁàĺš ~~~~~~#]";
+
+  static String m96(asset, contract, address) =>
       "[# Àššéť ${asset} (${contract}) ĥàš ñöť ƀééñ àððéð ťö àççöüñť ${address}. ~~~~~~~~~~~~~~~~~~~~#]";
 
-  static String m77(imported, skipped) =>
+  static String m97(imported, skipped) =>
       "[# Ŵàĺĺéťš ìṁƥöŗťéð: ${imported}. Šķìƥƥéð: ${skipped}. ~~~~~~~~~~~~~~~#]";
 
-  static String m78(value) => "[# Ɓàĺàñçé: ${value} ~~~~#]";
+  static String m98(value) => "[# Ɓàĺàñçé: ${value} ~~~~#]";
 
-  static String m79(value) => "[# Ɓàšé Ƒéé: ${value} Ĝŵéì ~~~~~~~#]";
+  static String m99(value) => "[# Ɓàšé Ƒéé: ${value} Ĝŵéì ~~~~~~~#]";
 
-  static String m80(value) =>
+  static String m100(value) =>
       "[# Çĺìƥƀöàŗð àüťö-çĺéàŗš ìñ ${value}š ~~~~~~~~~~~~~#]";
 
-  static String m81(value) => "[# Ŗöŵ ${value}: ṁìššìñĝ ƒìéĺðš ~~~~~~~~~~#]";
+  static String m101(value) => "[# Ŗöŵ ${value}: ṁìššìñĝ ƒìéĺðš ~~~~~~~~~~#]";
 
-  static String m82(value) => "[# ${value}ð ~#]";
+  static String m102(value) => "[# ${value}ð ~#]";
 
-  static String m83(value) => "[# Çöññéçťéð ťö ${value} ~~~~~~#]";
+  static String m103(value) => "[# Çöññéçťéð ťö ${value} ~~~~~~#]";
 
-  static String m84(value) => "[# Ĝàš: ${value} ~~#]";
+  static String m104(value) => "[# Ĝàš: ${value} ~~#]";
 
-  static String m85(value) => "[# ${value}ĥ ~#]";
+  static String m105(value) => "[# ${value}ĥ ~#]";
 
-  static String m86(value) =>
+  static String m106(value) =>
       "[# Ìṁƥöŗť ṽàĺìð ŗéçìƥìéñťš (${value}) ~~~~~~~~~~~~~#]";
 
-  static String m87(quote, base) =>
+  static String m107(quote, base) =>
       "[# Ĺìṁìť Ƥŗìçé (${quote} ƥéŗ ${base}) ~~~~~~~~~#]";
 
-  static String m88(value) => "[# Ĺìṁìť ${value} ~~~#]";
+  static String m108(value) => "[# Ĺìṁìť ${value} ~~~#]";
 
-  static String m89(value) => "[# Ṁàŗķéťš (${value}) ~~~~~#]";
+  static String m109(value) => "[# Ṁàŗķéťš (${value}) ~~~~~#]";
 
-  static String m90(value) => "[# Ṁìñìṁüṁ ƀàĺàñçé: ${value} ~~~~~~~~#]";
+  static String m110(value) => "[# Ṁìñìṁüṁ ƀàĺàñçé: ${value} ~~~~~~~~#]";
 
-  static String m91(value) => "[# Öŗðéŗš (${value}) ~~~~#]";
+  static String m111(value) => "[# Öŗðéŗš (${value}) ~~~~#]";
 
-  static String m92(value) => "[# Ƥöšìťìöñš (${value}) ~~~~~~#]";
+  static String m112(value) => "[# Ƥöšìťìöñš (${value}) ~~~~~~#]";
 
-  static String m93(value) => "[# Ŗéçìƥìéñťš: ${value} ~~~~~~#]";
+  static String m113(value) => "[# Ŗéçìƥìéñťš: ${value} ~~~~~~#]";
 
-  static String m94(value) => "[# Ťöķéñ ƒöüñð: ${value} ~~~~~~#]";
+  static String m114(value) => "[# Ťöķéñ ƒöüñð: ${value} ~~~~~~#]";
 
-  static String m95(value) => "[# Ťöķéñ: ${value} ~~~#]";
+  static String m115(value) => "[# Ťöķéñ: ${value} ~~~#]";
 
-  static String m96(value) => "[# Ťŗàñšàçťìöñ: ${value} ~~~~~~#]";
+  static String m116(value) => "[# Ťŗàñšàçťìöñ: ${value} ~~~~~~#]";
 
-  static String m97(valid, issues) =>
+  static String m117(valid, issues) =>
       "[# Ṽàĺìð: ${valid}. Ìššüéš: ${issues}. ~~~~~~~~~#]";
 
-  static String m98(value) => "[# … àñð ${value} ṁöŗé ìššüéš ~~~~~~~~~#]";
+  static String m118(value) => "[# … àñð ${value} ṁöŗé ìššüéš ~~~~~~~~~#]";
 
-  static String m99(volume, interest) =>
+  static String m119(volume, interest) =>
       "[# Ṽöĺ: ${volume} · ÖÌ: ${interest} ~~~~~~#]";
 
-  static String m100(value) => "[# Ŵàĺĺéť ${value} ~~~#]";
+  static String m120(value) => "[# Ŵàĺĺéť ${value} ~~~#]";
 
-  static String m101(value) => "[# Üƥðàťéð ${value}ĥ àĝö ~~~~~~#]";
+  static String m121(value) => "[# Üƥðàťéð ${value}ĥ àĝö ~~~~~~#]";
 
-  static String m102(value) => "[# Üƥðàťéð ${value}ṁ àĝö ~~~~~~#]";
+  static String m122(value) => "[# Üƥðàťéð ${value}ṁ àĝö ~~~~~~#]";
 
-  static String m103(number) => "[# Ɓĺöçķ #${number} ~~~#]";
+  static String m123(number) => "[# Ɓĺöçķ #${number} ~~~#]";
 
-  static String m104(index) => "[# Ðéṽìçé ${index} ~~~#]";
+  static String m124(index) => "[# Ðéṽìçé ${index} ~~~#]";
 
-  static String m105(value) => "[# ${value} ṁš ~#]";
+  static String m125(value) => "[# ${value} ṁš ~#]";
 
-  static String m106(count) => "[# ${count} ťẋ ~#]";
+  static String m126(count) => "[# ${count} ťẋ ~#]";
 
-  static String m107(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
+  static String m127(value) => "[# 0~${value} çĥàŗàçťéŗš ~~~~~~#]";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -313,6 +359,51 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ñéŵ Ðéṽìçé Ĺöĝìñ ~~~~~~~~#]",
     ),
     "file": MessageLookupByLibrary.simpleMessage("[# Ƒìĺé ~~#]"),
+    "g_a11y_add_path": MessageLookupByLibrary.simpleMessage(
+      "[# Àðð ðéŗìṽàťìöñ ƥàťĥ ~~~~~~~~~#]",
+    ),
+    "g_a11y_clear": MessageLookupByLibrary.simpleMessage("[# Çĺéàŗ ~~#]"),
+    "g_a11y_clear_search": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺéàŗ šéàŗçĥ ~~~~~~#]",
+    ),
+    "g_a11y_clear_text": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺéàŗ ťéẋť ~~~~~#]",
+    ),
+    "g_a11y_close": MessageLookupByLibrary.simpleMessage("[# Çĺöšé ~~#]"),
+    "g_a11y_export_key": MessageLookupByLibrary.simpleMessage(
+      "[# Éẋƥöŗť ķéý ~~~~~#]",
+    ),
+    "g_a11y_flashlight": MessageLookupByLibrary.simpleMessage(
+      "[# Ƒĺàšĥĺìĝĥť ~~~~~#]",
+    ),
+    "g_a11y_forward": MessageLookupByLibrary.simpleMessage("[# Ƒöŗŵàŗð ~~~#]"),
+    "g_a11y_group_by_collection": MessageLookupByLibrary.simpleMessage(
+      "[# Ĝŗöüƥ ƀý çöĺĺéçťìöñ ~~~~~~~~~#]",
+    ),
+    "g_a11y_hide_password": MessageLookupByLibrary.simpleMessage(
+      "[# Ĥìðé ƥàššŵöŗð ~~~~~~#]",
+    ),
+    "g_a11y_new_tab": MessageLookupByLibrary.simpleMessage("[# Ñéŵ ťàƀ ~~~#]"),
+    "g_a11y_previous": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥŗéṽìöüš ~~~~#]",
+    ),
+    "g_a11y_reverse_tokens": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéṽéŗšé ťöķéñš ~~~~~~~#]",
+    ),
+    "g_a11y_scroll_to_bottom": MessageLookupByLibrary.simpleMessage(
+      "[# Šçŗöĺĺ ťö ƀöťťöṁ ~~~~~~~~#]",
+    ),
+    "g_a11y_scroll_to_top": MessageLookupByLibrary.simpleMessage(
+      "[# Šçŗöĺĺ ťö ťöƥ ~~~~~~#]",
+    ),
+    "g_a11y_show_password": MessageLookupByLibrary.simpleMessage(
+      "[# Šĥöŵ ƥàššŵöŗð ~~~~~~#]",
+    ),
+    "g_a11y_stop": MessageLookupByLibrary.simpleMessage("[# Šťöƥ ~~#]"),
+    "g_a11y_swap_direction": MessageLookupByLibrary.simpleMessage(
+      "[# Šŵàƥ ðìŗéçťìöñ ~~~~~~~#]",
+    ),
+    "g_a11y_tabs": MessageLookupByLibrary.simpleMessage("[# Ťàƀš ~~#]"),
     "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
       "[# Šàṽéð ƀàĺàñçé · ŗéƒŗéšĥ ƒàìĺéð ~~~~~~~~~~~~~~~#]",
     ),
@@ -3175,6 +3266,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage(
       "[# Ŵàťçĥĺìšť ~~~~#]",
     ),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage(
+      "[# Šťöƥ ŵàìťìñĝ ~~~~~~#]",
+    ),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "[# Ýöü çàñ šéñð àĝàìñ. Ťĥé éàŗĺìéŗ ťŗàñšàçťìöñ ìš šťìĺĺ ƀéìñĝ çĥéçķéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage(
+      "[# Ķééƥ ŵàìťìñĝ ~~~~~~#]",
+    ),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "[# Àñ éàŗĺìéŗ ťŗàñšƒéŗ ƒŗöṁ ťĥìš àððŗéšš ĥàš ñöť ƀééñ çöñƒìŗṁéð àñð ìťš ŗéšüĺť çàññöť ƀé ðéťéŗṁìñéð ýéť, šö ñéŵ ťŗàñšƒéŗš àŗé ƀĺöçķéð. Ìƒ ýöü šťöƥ ŵàìťìñĝ ƒöŗ ìť, ìť ŵìĺĺ šťàý ìñ ýöüŗ ĥìšťöŗý àš ƥéñðìñĝ àñð ŵìĺĺ šťìĺĺ ƀé çĥéçķéð. Ŵàŗñìñĝ: ìť ṁàý šťìĺĺ ƀé çöṁƥĺéťéð öñ çĥàìñ, šö šéñðìñĝ àĝàìñ ṁàý ƥàý ťŵìçé. Çĥéçķ ťĥé éàŗĺìéŗ ťŗàñšàçťìöñ ìñ à ƀĺöçķ éẋƥĺöŗéŗ ƒìŗšť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "[# Éàŗĺìéŗ ťŗàñšàçťìöñ šťàťüš üñķñöŵñ ~~~~~~~~~~~~~~~~~#]",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "[# Ṽàĺìðàťöŗ ìñàçťìṽìťý šçöŗé ìš ĥìĝĥ. Çĥéçķ ýöüŗ ñöðé šťàťüš ťö àṽöìð ƥéñàĺťìéš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -3841,6 +3947,573 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ĥìĝĥ Ŗìšķ ~~~~#]",
     ),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("[# Šàƒé ~~#]"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage(
+      "[# Ñöť çöñƒìŗṁéð ~~~~~~#]",
+    ),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö çöñƒìŗṁàťìöñ ƒŗöṁ ťĥé çĥàìñ ýéť àñð ťĥé ŗéšüĺť ìš üñķñöŵñ. Ìť ìš šťìĺĺ ƀéìñĝ çĥéçķéð àñð ṁàý šťìĺĺ çöṁƥĺéťé. Çĥéçķ ìť ìñ à ƀĺöçķ éẋƥĺöŗéŗ ƀéƒöŗé šéñðìñĝ àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_aave_unavailable": MessageLookupByLibrary.simpleMessage(
+      "[# Ààṽé Ṽ3 ìš ñöť àṽàìĺàƀĺé öñ ťĥìš çĥàìñ ~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_account_security": MessageLookupByLibrary.simpleMessage(
+      "[# Àççöüñť Šéçüŗìťý ~~~~~~~~#]",
+    ),
+    "g_ui3_activation_time": MessageLookupByLibrary.simpleMessage(
+      "[# Àçťìṽàťìöñ Ťìṁé ~~~~~~~#]",
+    ),
+    "g_ui3_address_or_ens": MessageLookupByLibrary.simpleMessage(
+      "[# Àððŗéšš öŗ ÉÑŠ ñàṁé ~~~~~~~~~#]",
+    ),
+    "g_ui3_algo_recipient_no_asset": m76,
+    "g_ui3_approve_action": m77,
+    "g_ui3_approve_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Àƥƥŗöṽàĺ ƒàìĺéð ~~~~~~~#]",
+    ),
+    "g_ui3_asset_controls_body": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥéšé çöñťŗöĺš öñĺý àƒƒéçť ťĥìš ŵàĺĺéť ðìšƥĺàý. Ĥìðìñĝ ðöéš ñöť ŗéṽöķé àƥƥŗöṽàĺš öŗ çĥàñĝé ƀàĺàñçéš. Ɋüàŗàñťìñé àĺšö ðìšàƀĺéš öƥéñìñĝ ťĥìš àššéť ƒŗöṁ ťĥé ŵàĺĺéť ĺìšť. ÐÀƥƥ ìñťéŗàçťìöñš àŗé ñöť ƀĺöçķéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_controls_title": m78,
+    "g_ui3_asset_display_controls": MessageLookupByLibrary.simpleMessage(
+      "[# Àššéť ðìšƥĺàý çöñťŗöĺš ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_display_local_note": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺöçàĺ üšéŗ çĥöìçéš öñĺý. Öñ-çĥàìñ ƀàĺàñçéš àñð àƥƥŗöṽàĺš àŗé üñçĥàñĝéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_hidden_reviewed": MessageLookupByLibrary.simpleMessage(
+      "[# Ĥìððéñ àñð ŗéṽìéŵéð àššéťš ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_hide": MessageLookupByLibrary.simpleMessage(
+      "[# Ĥìðé ƒŗöṁ ĺìšť ~~~~~~~#]",
+    ),
+    "g_ui3_asset_mark_review": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁàŗķ ƒöŗ ŗéṽìéŵ ~~~~~~~#]",
+    ),
+    "g_ui3_asset_marked_review_hint": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁàŗķéð ƒöŗ ŗéṽìéŵ ƀý ýöü. Ĺöñĝ ƥŗéšš ťö ŗéṽìéŵ öŗ ŗéšťöŗé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_quarantine": MessageLookupByLibrary.simpleMessage(
+      "[# Ɋüàŗàñťìñé ƒŗöṁ ĺìšť ~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_restore": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéšťöŗé ~~~#]",
+    ),
+    "g_ui3_asset_restore_display": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéšťöŗé ñöŗṁàĺ ðìšƥĺàý ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_restore_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Çöüĺð ñöť ŗéšťöŗé àššéť ðìšƥĺàý. ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_save_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Çöüĺð ñöť šàṽé àššéť ðìšƥĺàý ƥŗéƒéŗéñçé. ~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_asset_state_hidden": MessageLookupByLibrary.simpleMessage(
+      "[# Ĥìððéñ ~~~#]",
+    ),
+    "g_ui3_asset_state_quarantined": MessageLookupByLibrary.simpleMessage(
+      "[# Ɋüàŗàñťìñéð ~~~~~#]",
+    ),
+    "g_ui3_backup_phrase_unavailable": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ŗéçöṽéŗý ƥĥŗàšé ìš šťöŗéð ƒöŗ ťĥìš ŵàĺĺéť. ~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_batch_build_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Ƒàìĺéð ťö ƀüìĺð öƥéŗàťìöñš ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_batch_nft_transfer": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓàťçĥ ÑƑŤ Ťŗàñšƒéŗ ~~~~~~~~~#]",
+    ),
+    "g_ui3_batch_operation_invalid": m79,
+    "g_ui3_borrow": MessageLookupByLibrary.simpleMessage("[# Ɓöŗŗöŵ ~~~#]"),
+    "g_ui3_borrow_apr": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓöŗŗöŵ ÀƤŖ ~~~~~#]",
+    ),
+    "g_ui3_borrow_submitted": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓöŗŗöŵ šüƀṁìťťéð ~~~~~~~~#]",
+    ),
+    "g_ui3_calldata_required": MessageLookupByLibrary.simpleMessage(
+      "[# Çàĺĺðàťà ìš ŗéɋüìŗéð ~~~~~~~~~~#]",
+    ),
+    "g_ui3_chain_config_invalid": MessageLookupByLibrary.simpleMessage(
+      "[# Ìñṽàĺìð çĥàìñ çöñƒìĝüŗàťìöñ ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_chain_config_missing_parent": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁìššìñĝ ƥàŗéñť çĥàìñ çöñƒìĝüŗàťìöñ ~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺéàŗ çàçĥéð šìťé ðàťà ƒöŗ ťĥé ƀŗöŵšéŗ? Šìťéš ṁàý àšķ ýöü ťö šìĝñ ìñ àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺéàŕ ŕéçéńţ śéàŕçĥéś? ~~~#]",
+    ),
+    "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺöšé àĺĺ ťàƀš? ~~~~~~~#]",
+    ),
+    "g_ui3_confirm_action": m80,
+    "g_ui3_copy_template": MessageLookupByLibrary.simpleMessage(
+      "[# Çöƥý Ťéṁƥĺàťé ~~~~~~#]",
+    ),
+    "g_ui3_csv_address_desc": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéɋüìŗéð — ÉṼṀ àððŗéšš (0ẋ + 40 ĥéẋ) ~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_amount_desc": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéɋüìŗéð — Ðéçìṁàĺ ñüṁƀéŗ (é.ĝ. 1.5) ~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_columns": MessageLookupByLibrary.simpleMessage(
+      "[# Çöĺüṁñš ~~~#]",
+    ),
+    "g_ui3_csv_example": MessageLookupByLibrary.simpleMessage(
+      "[# Éẋàṁƥĺé ~~~#]",
+    ),
+    "g_ui3_csv_memo_desc": MessageLookupByLibrary.simpleMessage(
+      "[# Öƥťìöñàĺ — Ĺàƀéĺ öŗ ñöťé ~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_rule_blank": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓĺàñķ ĺìñéš àŗé ìĝñöŗéð ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_rule_comments": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺìñéš šťàŗťìñĝ ŵìťĥ # àŗé çöṁṁéñťš àñð ŵìĺĺ ƀé ìĝñöŗéð ~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_rule_duplicates": MessageLookupByLibrary.simpleMessage(
+      "[# Ðüƥĺìçàťé àððŗéššéš ŵìĺĺ ƀé ƒĺàĝĝéð ~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_rule_header": MessageLookupByLibrary.simpleMessage(
+      "[# Ĥéàðéŗ ŗöŵ (àððŗéšš,àṁöüñť,ṁéṁö) ìš öƥťìöñàĺ — àüťö-ðéťéçťéð ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_csv_rules": MessageLookupByLibrary.simpleMessage("[# Ŗüĺéš ~~#]"),
+    "g_ui3_data": MessageLookupByLibrary.simpleMessage("[# Ðàťà ~~#]"),
+    "g_ui3_delete_bookmark_confirm": MessageLookupByLibrary.simpleMessage(
+      "[# Ðéĺéťé ťĥìš ƀööķṁàŗķ? ~~~~~~~~~~#]",
+    ),
+    "g_ui3_delete_trade_confirm": MessageLookupByLibrary.simpleMessage(
+      "[# Ðéĺéťé ťĥìš ťŗàðé ŗéçöŗð? ~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_delete_validator_key_confirm": MessageLookupByLibrary.simpleMessage(
+      "[# Ðéĺéťé ťĥìš ṽàĺìðàťöŗ ķéý ƒŗöṁ ťĥìš ðéṽìçé? Ṁàķé šüŗé ýöü ĥàṽé à ƀàçķüƥ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_enter_amount": MessageLookupByLibrary.simpleMessage(
+      "[# Éñťéŗ àñ àṁöüñť ~~~~~~~#]",
+    ),
+    "g_ui3_falcon_auth_reason": MessageLookupByLibrary.simpleMessage(
+      "[# Àüťĥöŗìžé Ƒàĺçöñ ŵàĺĺéť öƥéŗàťìöñ ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_backup_password": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓàçķüƥ ƥàššŵöŗð (12+ çĥàŗàçťéŗš) ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_backup_to_restore": MessageLookupByLibrary.simpleMessage(
+      "[# Éñçŗýƥťéð ƀàçķüƥ ťö ŗéšťöŗé ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_backup_verified": MessageLookupByLibrary.simpleMessage(
+      "[# Éñçŗýƥťéð ƀàçķüƥ ṽéŗìƒìéð ~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_confirm_offline_signature":
+        MessageLookupByLibrary.simpleMessage(
+          "[# Çöñƒìŗṁ öƒƒĺìñé šìĝñàťüŗé ~~~~~~~~~~~~#]",
+        ),
+    "g_ui3_falcon_confirm_transaction": MessageLookupByLibrary.simpleMessage(
+      "[# Çöñƒìŗṁ Ƒàĺçöñ ťŗàñšàçťìöñ ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_copy_result": MessageLookupByLibrary.simpleMessage(
+      "[# Çöƥý ŗéšüĺť ~~~~~#]",
+    ),
+    "g_ui3_falcon_create_account": MessageLookupByLibrary.simpleMessage(
+      "[# Çŗéàťé Ƒàĺçöñ àççöüñť ~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_export_backup": MessageLookupByLibrary.simpleMessage(
+      "[# Éẋƥöŗť éñçŗýƥťéð ƀàçķüƥ ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_library_unavailable": MessageLookupByLibrary.simpleMessage(
+      "[# Ƒàĺçöñ ñàťìṽé ĺìƀŗàŗý üñàṽàìĺàƀĺé ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_network_not_enabled": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥìš ñéťŵöŗķ ĥàš ñöť éñàƀĺéð Ƒàĺçöñ-512 ťŗàñšàçťìöñš. Öƒƒĺìñé šìĝñìñĝ ìš àṽàìĺàƀĺé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_notice": MessageLookupByLibrary.simpleMessage(
+      "[# Üšé öñĺý à ñéťŵöŗķ ťĥàť éẋƥĺìçìťĺý šüƥƥöŗťš Ƒàĺçöñ-512 ťŗàñšàçťìöñš. Ṽéŗìƒý ťĥé ŖƤÇ àñð ƀàçķüƥ ƀéƒöŗé ƒüñðìñĝ. Ƒàĺçöñ ķéýš ŗéɋüìŗé à šéƥàŗàťé éñçŗýƥťéð ƀàçķüƥ; ýöüŗ ÉṼṀ ŗéçöṽéŗý ƥĥŗàšé çàññöť ŗéšťöŗé ťĥéṁ. Ìƒ šüƀṁìššìöñ ìš üñçéŗťàìñ, ɋüéŗý ìťš šťàťüš ƀéƒöŗé àñöťĥéŗ ƥàýṁéñť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_operation_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Öƥéŗàťìöñ ƒàìĺéð. Çĥéçķ ìñƥüťš, ƀàçķüƥ ƥàššŵöŗð àñð ðéṽìçé àüťĥéñťìçàťìöñ. Ìƒ šéñðìñĝ ŵàš àťťéṁƥťéð, ɋüéŗý ťĥé ƥŗéṽìöüš šüƀṁìššìöñ ƀéƒöŗé ŗéťŗýìñĝ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_owner_changed": MessageLookupByLibrary.simpleMessage(
+      "[# Ŵàĺĺéť öŵñéŗ çĥàñĝéð ~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_public_key": m81,
+    "g_ui3_falcon_query_previous": MessageLookupByLibrary.simpleMessage(
+      "[# Ɋüéŗý ƥŗéṽìöüš šüƀṁìššìöñ ~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_query_previous_first": MessageLookupByLibrary.simpleMessage(
+      "[# Ɋüéŗý ťĥé ƥŗéṽìöüš šüƀṁìššìöñ ƀéƒöŗé àñöťĥéŗ ƥàýṁéñť. ~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_restore_account": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéšťöŗé Ƒàĺçöñ àççöüñť ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_review_send": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéṽìéŵ àñð šéñð ~~~~~~~#]",
+    ),
+    "g_ui3_falcon_review_sign_offline": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéṽìéŵ àñð šìĝñ öƒƒĺìñé ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_falcon_sign_and_send": MessageLookupByLibrary.simpleMessage(
+      "[# Šìĝñ àñð šéñð ~~~~~~#]",
+    ),
+    "g_ui3_falcon_verify_backup": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽéŗìƒý šàṽéð ƀàçķüƥ ~~~~~~~~~#]",
+    ),
+    "g_ui3_hw_bt_disabled_message": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥĺéàšé éñàƀĺé Ɓĺüéťööťĥ ìñ ýöüŗ ðéṽìçé šéťťìñĝš ťö çöññéçť ťö ýöüŗ ĥàŗðŵàŗé ŵàĺĺéť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_hw_bt_disabled_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓĺüéťööťĥ Ðìšàƀĺéð ~~~~~~~~~#]",
+    ),
+    "g_ui3_hw_bt_permission_message": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥĺéàšé ĝŗàñť Ɓĺüéťööťĥ ƥéŗṁìššìöñ ťö šçàñ ƒöŗ ĥàŗðŵàŗé ŵàĺĺéťš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_hw_bt_permission_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓĺüéťööťĥ Ƥéŗṁìššìöñ Ŗéɋüìŗéð ~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_hw_devices_found": m82,
+    "g_ui3_hw_ledger_device": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺéðĝéŗ Ðéṽìçé ~~~~~~#]",
+    ),
+    "g_ui3_hw_no_devices": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ðéṽìçéš ƒöüñð ~~~~~~~~#]",
+    ),
+    "g_ui3_hw_scan_again": MessageLookupByLibrary.simpleMessage(
+      "[# Šçàñ Àĝàìñ ~~~~~#]",
+    ),
+    "g_ui3_hw_search_complete": MessageLookupByLibrary.simpleMessage(
+      "[# Šéàŗçĥ çöṁƥĺéťé ~~~~~~~#]",
+    ),
+    "g_ui3_hw_searching": MessageLookupByLibrary.simpleMessage(
+      "[# Šéàŗçĥìñĝ ƒöŗ ðéṽìçéš... ~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_hw_stop_scan": MessageLookupByLibrary.simpleMessage(
+      "[# Šťöƥ Šçàññìñĝ ~~~~~~#]",
+    ),
+    "g_ui3_iap_purchase_not_started": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥüŗçĥàšé çöüĺð ñöť ƀé šťàŗťéð ~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_approve_login_prompt": MessageLookupByLibrary.simpleMessage(
+      "[# Àƥƥŗöṽé šìĝñ-ìñ ŵìťĥ ýöüŗ Ñ42 ìðéñťìťý? ~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_approved": MessageLookupByLibrary.simpleMessage(
+      "[# Àƥƥŗöṽéð. Ŗéťüŗñ ťö ťĥé öťĥéŗ ðéṽìçé. ~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_bind": MessageLookupByLibrary.simpleMessage("[# Ɓìñð ~~#]"),
+    "g_ui3_idhub_bind_prompt": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓìñð ťĥìš ŵàĺĺéť ťö ýöüŗ Ñ42 ìðéñťìťý? ~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_bind_wallet": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓìñð ŵàĺĺéť ~~~~~#]",
+    ),
+    "g_ui3_idhub_bind_wallet_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓìñð Ŵàĺĺéť ~~~~~#]",
+    ),
+    "g_ui3_idhub_bound": MessageLookupByLibrary.simpleMessage(
+      "[# Ŵàĺĺéť ƀöüñð. Ŗéťüŗñ ťö ťĥé öťĥéŗ ðéṽìçé. ~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_load_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Çöüĺð ñöť ĺöàð ťĥìš ŗéɋüéšť. ~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_login_request": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺöĝìñ Ŗéɋüéšť ~~~~~~#]",
+    ),
+    "g_ui3_idhub_request": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéɋüéšť ~~~#]",
+    ),
+    "g_ui3_idhub_server": MessageLookupByLibrary.simpleMessage(
+      "[# Šéŗṽéŗ ~~~#]",
+    ),
+    "g_ui3_idhub_sign_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Šìĝñìñĝ ƒàìĺéð. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_sign_in": MessageLookupByLibrary.simpleMessage(
+      "[# Šìĝñ ìñ ~~~#]",
+    ),
+    "g_ui3_idhub_type_mismatch": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥìš ŗéɋüéšť ťýƥé ðöéš ñöť ṁàťçĥ ťĥé šçàññéð çöðé. ~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_unlock_wallet": MessageLookupByLibrary.simpleMessage(
+      "[# Üñĺöçķ ýöüŗ ŵàĺĺéť, ťĥéñ ŗéöƥéñ ťĥìš ŗéɋüéšť. ~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_untrusted_server": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥìš ŗéɋüéšť ƥöìñťš ťö àñ üñťŗüšťéð šéŗṽéŗ àñð ŵàš ƀĺöçķéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_idhub_wallet_changed": MessageLookupByLibrary.simpleMessage(
+      "[# Àçťìṽé ŵàĺĺéť çĥàñĝéð. Ŗéöƥéñ ťĥìš ŗéɋüéšť. ~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_invalid_amount": MessageLookupByLibrary.simpleMessage(
+      "[# Ìñṽàĺìð àṁöüñť ~~~~~~~#]",
+    ),
+    "g_ui3_invalid_coin_config": MessageLookupByLibrary.simpleMessage(
+      "[# Ìñṽàĺìð çöìñ çöñƒìĝüŗàťìöñ ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_invalid_tx_hash": MessageLookupByLibrary.simpleMessage(
+      "[# Ìñṽàĺìð ťŗàñšàçťìöñ ĥàšĥ ~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_invalid_tx_receipt": MessageLookupByLibrary.simpleMessage(
+      "[# Ìñṽàĺìð ťŗàñšàçťìöñ ŗéçéìƥť ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_lending": MessageLookupByLibrary.simpleMessage("[# Ĺéñðìñĝ ~~~#]"),
+    "g_ui3_limit": MessageLookupByLibrary.simpleMessage("[# Ĺìṁìť ~~#]"),
+    "g_ui3_live_beauty": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓéàüťý & ƒìĺťéŗš ~~~~~~~~#]",
+    ),
+    "g_ui3_live_beauty_reset": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéšéť ťö öŗìĝìñàĺ ~~~~~~~~#]",
+    ),
+    "g_ui3_live_brighten": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓŗìĝĥťéñ ~~~~#]",
+    ),
+    "g_ui3_live_browse_hint": MessageLookupByLibrary.simpleMessage(
+      "[# Ťàƥ Ŗéƒŗéšĥ ťö ĺöàð ĺìṽé ŗööṁš ~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_browse_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ɓŗöŵšé ĺìṽé ŗööṁš ~~~~~~~~#]",
+    ),
+    "g_ui3_live_coins_insufficient": MessageLookupByLibrary.simpleMessage(
+      "[# Ñöť éñöüĝĥ çöìñš. Ťöƥ üƥ ƒìŗšť. ~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_connecting": MessageLookupByLibrary.simpleMessage(
+      "[# Çöññéçťìñĝ… ~~~~~#]",
+    ),
+    "g_ui3_live_empty": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ĺìṽé ŗööṁš ~~~~~~#]",
+    ),
+    "g_ui3_live_end": MessageLookupByLibrary.simpleMessage(
+      "[# Éñð ĺìṽé ~~~~#]",
+    ),
+    "g_ui3_live_end_confirm": MessageLookupByLibrary.simpleMessage(
+      "[# Éñð ťĥìš ĺìṽé šťŗéàṁ? Ṽìéŵéŗš ŵìĺĺ ƀé ðìšçöññéçťéð. ~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_enter": MessageLookupByLibrary.simpleMessage("[# Éñťéŗ ~~#]"),
+    "g_ui3_live_filter": MessageLookupByLibrary.simpleMessage(
+      "[# Ƒìĺťéŗ ~~~#]",
+    ),
+    "g_ui3_live_filter_cool": MessageLookupByLibrary.simpleMessage(
+      "[# Çööĺ ~~#]",
+    ),
+    "g_ui3_live_filter_mono": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁöñö ~~#]",
+    ),
+    "g_ui3_live_filter_named": m83,
+    "g_ui3_live_filter_natural": MessageLookupByLibrary.simpleMessage(
+      "[# Ñàťüŗàĺ ~~~#]",
+    ),
+    "g_ui3_live_filter_original": MessageLookupByLibrary.simpleMessage(
+      "[# Öŗìĝìñàĺ ~~~~#]",
+    ),
+    "g_ui3_live_filter_vivid": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽìṽìð ~~#]",
+    ),
+    "g_ui3_live_filter_warm": MessageLookupByLibrary.simpleMessage(
+      "[# Ŵàŗṁ ~~#]",
+    ),
+    "g_ui3_live_gift": MessageLookupByLibrary.simpleMessage("[# Ĝìƒť ~~#]"),
+    "g_ui3_live_gift_cheers": MessageLookupByLibrary.simpleMessage(
+      "[# Çĥééŗš ~~~#]",
+    ),
+    "g_ui3_live_gift_crown": MessageLookupByLibrary.simpleMessage(
+      "[# Çŗöŵñ ~~#]",
+    ),
+    "g_ui3_live_gift_diamond": MessageLookupByLibrary.simpleMessage(
+      "[# Ðìàṁöñð ~~~#]",
+    ),
+    "g_ui3_live_gift_rocket": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗöçķéť ~~~#]",
+    ),
+    "g_ui3_live_gift_rose": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗöšé ~~#]",
+    ),
+    "g_ui3_live_gift_sent": m84,
+    "g_ui3_live_hold_compare": MessageLookupByLibrary.simpleMessage(
+      "[# Ĥöĺð ťö ṽìéŵ öŗìĝìñàĺ ~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_like": MessageLookupByLibrary.simpleMessage("[# Ĺìķé ~~#]"),
+    "g_ui3_live_list": MessageLookupByLibrary.simpleMessage(
+      "[# Ĺìṽé šťŗéàṁš ~~~~~~#]",
+    ),
+    "g_ui3_live_load_failed": m85,
+    "g_ui3_live_mute": MessageLookupByLibrary.simpleMessage("[# Ṁüťé ~~#]"),
+    "g_ui3_live_pause_video": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥàüšé ṽìðéö ~~~~~#]",
+    ),
+    "g_ui3_live_permission_required": MessageLookupByLibrary.simpleMessage(
+      "[# Çàṁéŗà àñð ṁìçŗöƥĥöñé àççéšš ìš ŗéɋüìŗéð ťö ĝö ĺìṽé ~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_resume_video": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéšüṁé ṽìðéö ~~~~~~#]",
+    ),
+    "g_ui3_live_room_id_copied": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗööṁ ÌÐ çöƥìéð ~~~~~~~#]",
+    ),
+    "g_ui3_live_rosy": MessageLookupByLibrary.simpleMessage("[# Ŗöšý ~~#]"),
+    "g_ui3_live_say_something": MessageLookupByLibrary.simpleMessage(
+      "[# Šàý šöṁéťĥìñĝ… ~~~~~~~#]",
+    ),
+    "g_ui3_live_send_gift": MessageLookupByLibrary.simpleMessage(
+      "[# Šéñð à ĝìƒť ~~~~~#]",
+    ),
+    "g_ui3_live_smooth": MessageLookupByLibrary.simpleMessage(
+      "[# Šṁööťĥ ~~~#]",
+    ),
+    "g_ui3_live_start": MessageLookupByLibrary.simpleMessage(
+      "[# Ĝö ĺìṽé ~~~#]",
+    ),
+    "g_ui3_live_starting": MessageLookupByLibrary.simpleMessage(
+      "[# Šťàŗťìñĝ… ~~~~#]",
+    ),
+    "g_ui3_live_switch_camera": MessageLookupByLibrary.simpleMessage(
+      "[# Šŵìťçĥ çàṁéŗà ~~~~~~#]",
+    ),
+    "g_ui3_live_top_up": MessageLookupByLibrary.simpleMessage(
+      "[# Ťöƥ üƥ ~~~#]",
+    ),
+    "g_ui3_live_torch_off": MessageLookupByLibrary.simpleMessage(
+      "[# Ťüŗñ öƒƒ ƒĺàšĥĺìĝĥť ~~~~~~~~~#]",
+    ),
+    "g_ui3_live_torch_on": MessageLookupByLibrary.simpleMessage(
+      "[# Ťüŗñ öñ ƒĺàšĥĺìĝĥť ~~~~~~~~~#]",
+    ),
+    "g_ui3_live_torch_unsupported": MessageLookupByLibrary.simpleMessage(
+      "[# Šŵìťçĥ ťö à ŗéàŗ çàṁéŗà ťĥàť šüƥƥöŗťš ťĥé ƒĺàšĥĺìĝĥť ~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_unmute": MessageLookupByLibrary.simpleMessage(
+      "[# Üñṁüťé ~~~#]",
+    ),
+    "g_ui3_live_user_joined": m86,
+    "g_ui3_live_video_unavailable": MessageLookupByLibrary.simpleMessage(
+      "[# Ṽìðéö ìš üñàṽàìĺàƀĺé. Öťĥéŗ ĺìṽé ƒéàťüŗéš šťìĺĺ ŵöŗķ. ~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_live_viewers": m87,
+    "g_ui3_live_waiting_video": MessageLookupByLibrary.simpleMessage(
+      "[# Ŵàìťìñĝ ƒöŗ ṽìðéö… ~~~~~~~~~#]",
+    ),
+    "g_ui3_long": MessageLookupByLibrary.simpleMessage("[# Ĺöñĝ ~~#]"),
+    "g_ui3_market": MessageLookupByLibrary.simpleMessage("[# Ṁàŗķéť ~~~#]"),
+    "g_ui3_method": MessageLookupByLibrary.simpleMessage("[# Ṁéťĥöð ~~~#]"),
+    "g_ui3_min_balance": MessageLookupByLibrary.simpleMessage(
+      "[# Ṁìñìṁüṁ ƀàĺàñçé ~~~~~~~#]",
+    ),
+    "g_ui3_missing_parent_chain": m88,
+    "g_ui3_nft_transfer_unsupported": MessageLookupByLibrary.simpleMessage(
+      "[# ÑƑŤ ťŗàñšƒéŗ ìš ñöť šüƥƥöŗťéð ~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_no_markets": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ṁàŗķéťš àṽàìĺàƀĺé ~~~~~~~~~~#]",
+    ),
+    "g_ui3_no_trending_data": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ťŗéñðìñĝ ðàťà ~~~~~~~~#]",
+    ),
+    "g_ui3_no_wallet_for_chain": MessageLookupByLibrary.simpleMessage(
+      "[# Ñö ŵàĺĺéť àççöüñť ƒöüñð ƒöŗ ťĥìš çĥàìñ ~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_phone": MessageLookupByLibrary.simpleMessage("[# Ƥĥöñé ~~#]"),
+    "g_ui3_pick_file": MessageLookupByLibrary.simpleMessage(
+      "[# Ƥìçķ Ƒìĺé ~~~~#]",
+    ),
+    "g_ui3_pred_awaiting": MessageLookupByLibrary.simpleMessage(
+      "[# Àŵàìťìñĝ ŗéšüĺť ~~~~~~~#]",
+    ),
+    "g_ui3_pred_claim_refund": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺàìṁ ŗéƒüñð ~~~~~~#]",
+    ),
+    "g_ui3_pred_closed": MessageLookupByLibrary.simpleMessage(
+      "[# Çĺöšéð ~~~#]",
+    ),
+    "g_ui3_pred_closes_in": m89,
+    "g_ui3_pred_held": m90,
+    "g_ui3_pred_redeem_winnings": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéðééṁ ŵìññìñĝš ~~~~~~~#]",
+    ),
+    "g_ui3_pred_resolve": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéšöĺṽé ~~~#]",
+    ),
+    "g_ui3_pred_volume": m91,
+    "g_ui3_receipt_lookup_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Ŗéçéìƥť ĺööķüƥ ƒàìĺéð ~~~~~~~~~~#]",
+    ),
+    "g_ui3_remove_asset_message": MessageLookupByLibrary.simpleMessage(
+      "[# Ìť ŵìĺĺ ñö ĺöñĝéŗ ƀé šĥöŵñ ìñ ťĥìš ŵàĺĺéť. Ýöüŗ àššéťš öñ çĥàìñ àŗé ñöť àƒƒéçťéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ŕéḿóṽé ţĥíś ŕéçéńţ śéàŕçĥ? ~~~#]",
+    ),
+    "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
+      "[# Çàññöť ṽéŗìƒý ťĥé ŖƤÇ ĝéñéšìš ƀĺöçķ. Ñéťŵöŗķ ŵàš ñöť àððéð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_rpc_idn_hostname_warning": m93,
+    "g_ui3_rpc_url_not_configured": MessageLookupByLibrary.simpleMessage(
+      "[# ŖƤÇ ÜŖĹ ñöť çöñƒìĝüŗéð ~~~~~~~~~~~#]",
+    ),
+    "g_ui3_search_coin": MessageLookupByLibrary.simpleMessage(
+      "[# Šéàŗçĥ ƒöŗ à çöìñ ~~~~~~~~#]",
+    ),
+    "g_ui3_search_failed": MessageLookupByLibrary.simpleMessage(
+      "[# Šéàŗçĥ ƒàìĺéð ~~~~~~#]",
+    ),
+    "g_ui3_sell": MessageLookupByLibrary.simpleMessage("[# Šéĺĺ ~~#]"),
+    "g_ui3_send_failed_retry": MessageLookupByLibrary.simpleMessage(
+      "[# Ƒàìĺéð ťö šéñð. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_short": MessageLookupByLibrary.simpleMessage("[# Šĥöŗť ~~#]"),
+    "g_ui3_signing_config_changed": MessageLookupByLibrary.simpleMessage(
+      "[# Ŵàĺĺéť šìĝñìñĝ çöñƒìĝüŗàťìöñ çĥàñĝéð ~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_signing_key_mismatch": MessageLookupByLibrary.simpleMessage(
+      "[# Šìĝñìñĝ ķéý ðöéš ñöť ṁàťçĥ šéñðéŗ àððŗéšš ~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_similar_address_body": MessageLookupByLibrary.simpleMessage(
+      "[# Ťĥìš àððŗéšš ŗéšéṁƀĺéš à ŗéçéñť ŗéçìƥìéñť ƀüť ìš ðìƒƒéŗéñť. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_similar_address_note": MessageLookupByLibrary.simpleMessage(
+      "[# Šöüŗçé: ĺöçàĺ šéñð ĥìšťöŗý, çĥéçķéð ñöŵ. Ťĥìš ìš à šìṁìĺàŗìťý ŵàŗñìñĝ, ñöť ƥŗööƒ öƒ ƒŗàüð. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_similar_address_title": MessageLookupByLibrary.simpleMessage(
+      "[# Çĥéçķ ťĥé ƒüĺĺ ŗéçìƥìéñť àððŗéšš ~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_stake_confirm_message": m94,
+    "g_ui3_supply": MessageLookupByLibrary.simpleMessage("[# Šüƥƥĺý ~~~#]"),
+    "g_ui3_supply_apy": MessageLookupByLibrary.simpleMessage(
+      "[# Šüƥƥĺý ÀƤÝ ~~~~~#]",
+    ),
+    "g_ui3_supply_submitted": MessageLookupByLibrary.simpleMessage(
+      "[# Šüƥƥĺý šüƀṁìťťéð ~~~~~~~~#]",
+    ),
+    "g_ui3_token": MessageLookupByLibrary.simpleMessage("[# Ťöķéñ ~~#]"),
+    "g_ui3_token_added": MessageLookupByLibrary.simpleMessage(
+      "[# Šüççéššƒüĺĺý àððéð ~~~~~~~~~#]",
+    ),
+    "g_ui3_token_already_exists": MessageLookupByLibrary.simpleMessage(
+      "[# Àĺŗéàðý éẋìšťš ~~~~~~~#]",
+    ),
+    "g_ui3_token_contract_invalid": MessageLookupByLibrary.simpleMessage(
+      "[# Ìñṽàĺìð ťöķéñ çöñťŗàçť àððŗéšš ~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_token_contract_required": MessageLookupByLibrary.simpleMessage(
+      "[# Ťöķéñ çöñťŗàçť àððŗéšš ìš ŗéɋüìŗéð ~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_token_name_decimals": m95,
+    "g_ui3_turn_off": MessageLookupByLibrary.simpleMessage(
+      "[# Ťüŗñ Öƒƒ ~~~~#]",
+    ),
+    "g_ui3_turn_off_verification_message": MessageLookupByLibrary.simpleMessage(
+      "[# Ìťš šàṽéð šéťüƥ ŵìĺĺ ƀé ŗéṁöṽéð. Ýöü ŵìĺĺ ñééð ťö šéť ìť üƥ àĝàìñ ťö ťüŗñ ìť ƀàçķ öñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_turn_off_verification_title": MessageLookupByLibrary.simpleMessage(
+      "[# Ťüŗñ öƒƒ ťĥìš ṽéŗìƒìçàťìöñ? ~~~~~~~~~~~~~#]",
+    ),
+    "g_ui3_tx_not_found": MessageLookupByLibrary.simpleMessage(
+      "[# Ťŗàñšàçťìöñ ñöť ƒöüñð ~~~~~~~~~~#]",
+    ),
+    "g_ui3_unknown": MessageLookupByLibrary.simpleMessage("[# Üñķñöŵñ ~~~#]"),
+    "g_ui3_update_account_email": MessageLookupByLibrary.simpleMessage(
+      "[# Üƥðàťé àççöüñť éṁàìĺ ~~~~~~~~~~#]",
+    ),
+    "g_ui3_uptime": MessageLookupByLibrary.simpleMessage("[# Üƥťìṁé ~~~#]"),
+    "g_ui3_ws_status": MessageLookupByLibrary.simpleMessage(
+      "[# ŴŠ Šťàťüš ~~~~#]",
+    ),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
       "[# Ààṽé Ṽ3 Ĺéñðìñĝ ~~~~~~~#]",
     ),
@@ -3850,7 +4523,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
       "[# Àððìñĝ ťĥìš àššéť ŗéɋüìŗéš à ñéťŵöŗķ ƒéé. Ťàƥ Àðð ťö çöñťìñüé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_ui_algo_asset_missing": m76,
+    "g_ui_algo_asset_missing": m96,
     "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
       "[# Àšķ àƀöüť ƀàĺàñçé, ƥöŗťƒöĺìö, ĝàš ~~~~~~~~~~~~~~~~#]",
     ),
@@ -3890,7 +4563,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
       "[# Çöüĺð ñöť ŗéšťöŗé ťĥé ƀàçķüƥ. Çĥéçķ ťĥé ƥàššŵöŗð àñð ƀàçķüƥ ƒìĺé, ťĥéñ ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_result": m97,
     "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
       "[# Ìṁƥöŗť Ŵàĺĺéťš ~~~~~~~#]",
     ),
@@ -3939,8 +4612,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
       "[# Ťĥìš ƀàçķüƥ çöñťàìñš ýöüŗ ƥŗìṽàťé ķéýš / ṁñéṁöñìçš, ŵàĺĺéť ƥàššŵöŗðš àñð ŵàĺĺéť šéťťìñĝš. Ķééƥ ťĥé ƀàçķüƥ ƒìĺé àñð ƥàššŵöŗð šàƒé. Ñéṽéŗ šĥàŗé ťĥéṁ ŵìťĥ àñýöñé. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_ui_balance_value": m78,
-    "g_ui_base_fee_value": m79,
+    "g_ui_balance_value": m98,
+    "g_ui_base_fee_value": m99,
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "[# Ƥüŗçĥàšé Ñ ṽìà Ñ42 ƥŗöťöçöĺ ~~~~~~~~~~~~~#]",
     ),
@@ -3959,7 +4632,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
       "[# Çĥéçķìñĝ àƥƥŗöṽàĺ… ~~~~~~~~~#]",
     ),
-    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_clear": m100,
     "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
       "[# Çĺìƥƀöàŗð ìš éṁƥťý ~~~~~~~~~#]",
     ),
@@ -3981,18 +4654,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
       "[# Ñö ðàťà ŗöŵš ƒöüñð (öñĺý ĥéàðéŗ ðéťéçťéð). ~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_missing_fields": m101,
     "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
       "[# Ñö ðàťà ƒöüñð àƒťéŗ ŗéṁöṽìñĝ çöṁṁéñťš. ~~~~~~~~~~~~~~~~~~~#]",
     ),
     "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage(
       "[# Çüšťöṁ ťàĝ... ~~~~~~#]",
     ),
-    "g_ui_days": m82,
+    "g_ui_days": m102,
     "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
       "[# Ðéšťìñàťìöñ Ťàĝ ~~~~~~~#]",
     ),
-    "g_ui_device_connected": m83,
+    "g_ui_device_connected": m103,
     "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
       "[# Šŵàƥ ťöķéñš ṽìà Üñìšŵàƥ / 1ìñçĥ / Ĵüƥìťéŗ ~~~~~~~~~~~~~~~~~~~~#]",
     ),
@@ -4027,9 +4700,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
       "[# Ñéẋť Ɓĺöçķ Ĝàš Ƥŗéðìçťìöñ ~~~~~~~~~~~~#]",
     ),
-    "g_ui_gas_value": m84,
-    "g_ui_hours": m85,
-    "g_ui_import_valid": m86,
+    "g_ui_gas_value": m104,
+    "g_ui_hours": m105,
+    "g_ui_import_valid": m106,
     "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
       "[# Éñťéŗ à ṽàĺìð éṁàìĺ àððŗéšš ~~~~~~~~~~~~~#]",
     ),
@@ -4045,19 +4718,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_limit_price": MessageLookupByLibrary.simpleMessage(
       "[# Ĺìṁìť Ƥŗìçé ~~~~~#]",
     ),
-    "g_ui_limit_price_pair": m87,
-    "g_ui_limit_value": m88,
+    "g_ui_limit_price_pair": m107,
+    "g_ui_limit_value": m108,
     "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
       "[# Ĺìɋüìðàťìöñ Ƥŗìçé ~~~~~~~~#]",
     ),
     "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage(
       "[# Üťìĺìžàťìöñ ~~~~~#]",
     ),
-    "g_ui_markets_count": m89,
+    "g_ui_markets_count": m109,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("[# Ṁéṁö ~~#]"),
     "g_ui_mempool": MessageLookupByLibrary.simpleMessage("[# Ṁéṁƥööĺ ~~~#]"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("[# Ṁéššàĝé ~~~#]"),
-    "g_ui_min_balance_value": m90,
+    "g_ui_min_balance_value": m110,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
       "[# Ṁñéṁöñìç ŵàĺĺéť ~~~~~~~#]",
     ),
@@ -4114,7 +4787,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage(
       "[# Ťŗìĝĝéŗéð ~~~~#]",
     ),
-    "g_ui_orders_count": m91,
+    "g_ui_orders_count": m111,
     "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
       "[# Üñàƀĺé ťö ĺöàð ĺìṁìť öŗðéŗš ~~~~~~~~~~~~~#]",
     ),
@@ -4131,14 +4804,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ƥöƥüĺàŗ Ťöķéñš ~~~~~~~#]",
     ),
     "g_ui_position_size": MessageLookupByLibrary.simpleMessage("[# Šìžé ~~#]"),
-    "g_ui_positions_count": m92,
+    "g_ui_positions_count": m112,
     "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
       "[# Ƥŗìṽàťé ķéý ŵàĺĺéť ~~~~~~~~~#]",
     ),
     "g_ui_read_only": MessageLookupByLibrary.simpleMessage(
       "[# Ŗéàð-öñĺý ~~~~#]",
     ),
-    "g_ui_recipients_count": m93,
+    "g_ui_recipients_count": m113,
     "g_ui_room_id": MessageLookupByLibrary.simpleMessage("[# Ŗööṁ ÌÐ ~~~#]"),
     "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
       "[# Šàṽé ƒàìĺéð. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~#]",
@@ -4159,21 +4832,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
       "[# Ťöķéñ Çöñťŗàçť (0ẋ...) ~~~~~~~~~~~#]",
     ),
-    "g_ui_token_found": m94,
+    "g_ui_token_found": m114,
     "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
       "[# Ĺööķìñĝ üƥ ťöķéñ ìñƒö… ~~~~~~~~~~~#]",
     ),
     "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
       "[# Ťöķéñ ñöť ƒöüñð ìñ ĺìšť — ƒìĺĺ šýṁƀöĺ & ðéçìṁàĺš ṁàñüàĺĺý ~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_ui_token_value": m95,
+    "g_ui_token_value": m115,
     "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
       "[# Çöüĺð ñöť ðéĺéťé ťĥé ťŗàðé. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
     "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
       "[# Çöüĺð ñöť šàṽé ťĥé ťŗàðé. Ƥĺéàšé ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "g_ui_transaction_hash_value": m96,
+    "g_ui_transaction_hash_value": m116,
     "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage(
       "[# Üñķñöŵñ šťàťüš ~~~~~~~#]",
     ),
@@ -4181,11 +4854,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
       "[# Üƥðàťé éṁàìĺ ~~~~~~#]",
     ),
-    "g_ui_validation_counts": m97,
+    "g_ui_validation_counts": m117,
     "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
       "[# Ṽàĺìðàťìöñ Ìššüéš ~~~~~~~~#]",
     ),
-    "g_ui_validation_more": m98,
+    "g_ui_validation_more": m118,
     "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
       "[# Ṽéŗìƒìçàťìöñ çöðé ~~~~~~~~#]",
     ),
@@ -4198,7 +4871,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage(
       "[# 24ĥ Ṽöĺüṁé ~~~~~#]",
     ),
-    "g_ui_volume_interest": m99,
+    "g_ui_volume_interest": m119,
     "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage(
       "[# Ŵàĺĺéť ÀÌ ~~~~#]",
     ),
@@ -4211,7 +4884,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
       "[# Ĺöàðìñĝ ŵàĺĺéť... ~~~~~~~~#]",
     ),
-    "g_ui_wallet_number": m100,
+    "g_ui_wallet_number": m120,
     "g_version_later": MessageLookupByLibrary.simpleMessage("[# Ĺàťéŗ ~~#]"),
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "[# Ɓàĺàñçé çöüĺð ñöť ƀé ŗéƒŗéšĥéð ~~~~~~~~~~~~~~~#]",
@@ -4234,11 +4907,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
       "[# Šàṽéð ƥŗìçéš ~~~~~~#]",
     ),
-    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_hours": m121,
     "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
       "[# Üƥðàťéð ñöŵ ~~~~~#]",
     ),
-    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_minutes": m122,
     "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
       "[# Ƥàŗťìàĺ ƥŗìçéš ~~~~~~~#]",
     ),
@@ -4313,7 +4986,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "[# Ƥàüšéð ìñ ƀàçķĝŗöüñð ~~~~~~~~~~#]",
     ),
-    "miningV3Block": m103,
+    "miningV3Block": m123,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage(
       "[# Ɓĺöçķ ĥàšĥ ~~~~~#]",
     ),
@@ -4338,7 +5011,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage(
       "[# Çöƥý ƀĺöçķ ĥàšĥ ~~~~~~~#]",
     ),
-    "miningV3Device": m104,
+    "miningV3Device": m124,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage(
       "[# Šéššìöñ ťìṁé ~~~~~~#]",
     ),
@@ -4372,7 +5045,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "[# Ťĥé ðéƒàüĺť ñöðé ìš öñ ťĥé ĺöçàĺ ťéšťñéť. Ýöü çàñ àĺšö éñťéŗ à çüšťöṁ àððŗéšš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
-    "miningV3Milliseconds": m105,
+    "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage(
       "[# Ṽéŗìƒìçàťìöñ ñöðé ~~~~~~~~#]",
     ),
@@ -4456,7 +5129,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ŗéçöŗðéð ťìṁé ~~~~~~#]",
     ),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("[# Ṁìñìñĝ ~~~#]"),
-    "miningV3Transactions": m106,
+    "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage(
       "[# Ťŗàñšàçťìöñš ~~~~~~#]",
     ),
@@ -4470,7 +5143,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Ṽéŗìƒìéð ƀĺöçķš ~~~~~~~#]",
     ),
     "next": MessageLookupByLibrary.simpleMessage("[# Ñéẋť ~~#]"),
-    "nicknameMessage": m107,
+    "nicknameMessage": m127,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "[# Éðìť Ƥŗöƒìĺé ~~~~~~#]",
     ),

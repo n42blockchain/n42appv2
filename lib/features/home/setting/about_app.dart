@@ -6,7 +6,6 @@ import 'package:n42_wallet/features/home/api/version_api.dart';
 import 'package:n42_wallet/features/home/models/version_info_model.dart';
 import 'package:n42_wallet/features/home/widgets/check_version_alert.dart';
 import 'package:n42_wallet/features/home/widgets/nav_setting_item.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -153,20 +152,20 @@ class _AboutAppState extends State<AboutApp> {
       ("reddit", s.g_key_m_14, "https://www.reddit.com/r/N42Blockchain"),
       ("ins", s.g_key_m_19, "https://www.instagram.com/n42blockchain"),
       ("tiktok", "TikTok", "https://www.tiktok.com/@n42blockchain"),
-      ("snapchat", "snapchat", "https://www.snapchat.com/t/JMpRe83U"),
+      ("snapchat", "Snapchat", "https://www.snapchat.com/t/JMpRe83U"),
       (
         "linkedin",
-        "linkedin",
+        "LinkedIn",
         "https://www.linkedin.com/company/n42blockchain/about/",
       ),
       (
         "whatsapp",
-        "whatsapp",
+        "WhatsApp",
         "https://whatsapp.com/channel/0029Var1z8S8KMqr4FVk1K0e",
       ),
-      ("medium", "medium", "https://medium.com/p/publications/create"),
-      ("line", "line", "https://line.me/ti/p/d-KryNwume"),
-      ("bsky", "bsky", "https://bsky.app/profile/n42blockchain.bsky.social"),
+      ("medium", "Medium", "https://medium.com/p/publications/create"),
+      ("line", "LINE", "https://line.me/ti/p/d-KryNwume"),
+      ("bsky", "Bluesky", "https://bsky.app/profile/n42blockchain.bsky.social"),
     ];
 
     return _buildNavContainer(
@@ -209,10 +208,7 @@ class _AboutAppState extends State<AboutApp> {
               Text(
                 "v ${appVersion ?? ""}",
                 style: AppTypography.body.copyWith(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.ff888888.name,
-                  ),
+                  color: AppColorTokens.of(context).textSecondary,
                 ),
               ),
               SizedBox(height: AppSpacing.space2),
@@ -229,15 +225,14 @@ class _AboutAppState extends State<AboutApp> {
       return Text(
         S.of(context).g_key_v_k4,
         style: AppTypography.bodySm.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.ff888888.name,
-          ),
+          color: AppColorTokens.of(context).textSecondary,
         ),
       );
     }
 
-    return InkWell(
+    // 44pt hit area around the unchanged text link (was 20pt tall).
+    return AppTapArea(
+      borderRadius: AppRadius.brSm,
       onTap: () {
         showDialog(
           barrierDismissible: true,
@@ -254,7 +249,7 @@ class _AboutAppState extends State<AboutApp> {
       child: Text(
         "${S.of(context).g_key_v_k3}(v${versionInfo!.versionName})",
         style: AppTypography.bodySm.copyWith(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandOnTint,
         ),
       ),
     );

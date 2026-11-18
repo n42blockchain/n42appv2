@@ -48,7 +48,8 @@ class BatchInfoCard extends StatelessWidget {
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Text(
-                  '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol',
+                  // Splitting a sentence by spaces breaks CJK; use a label.
+                  '${S.of(context).g_key_aa_chain}: $chainSymbol',
                   style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
@@ -141,6 +142,7 @@ class BatchAddItemForm extends StatelessWidget {
               suffixIcon: IconButton(
                 icon: const Icon(Icons.paste),
                 onPressed: onPasteAddress,
+                tooltip: S.of(context).g_key_166,
               ),
             ),
           ),

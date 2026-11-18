@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_transaction_hash.dart';
@@ -28,6 +29,7 @@ class Api extends NearApi {
   Object nonce = 3;
   Object permission = 'FullAccess';
   String block = Base58Encode(List.filled(32, 2));
+  Object? height;
   bool keyError = false;
   String? queriedKey;
   String? hash = fixtureHash;
@@ -49,7 +51,8 @@ class Api extends NearApi {
   @override
   Future<MessageModel> getGasPrice() async => ok(BigInt.one);
   @override
-  Future<MessageModel> getLatestBlockHash() async => ok({'hash': block});
+  Future<MessageModel> getLatestBlockHash() async =>
+      ok({'hash': block, 'height': height});
   @override
   Future<MessageModel> getAccessKey(String accountId, String publicKey) async {
     queriedKey = publicKey;
@@ -114,7 +117,9 @@ SendParams params({
   BigInt? expectedFee,
   Future<void> Function(String)? beforeBroadcast,
   Future<void> Function(String)? onBroadcastStarting,
+  void Function(String)? onExpiryProof,
 }) => SendParams(
+  onExpiryProof: onExpiryProof,
   sendMax: max,
   expectedFeeBaseUnits: expectedFee,
   beforeBroadcast: beforeBroadcast,
@@ -156,6 +161,38 @@ void main() {
     gate.complete();
     expect((await result).success, isTrue);
     expect(events, ['prepare', 'dispatch', 'send']);
+  });
+  test('expiry proof comes from the signed nonce and reference block', () async {
+    for (final (height, expected) in <(Object?, bool)>[
+      (77, true),
+      (null, false),
+      ('77', false),
+    ]) {
+      final api = Api()..height = height;
+      final proofs = <String>[];
+      final result = await NearSender(
+        trustdart: Signer(),
+        apiFactory: (_) => api,
+      ).send(params(onExpiryProof: proofs.add));
+      expect(result.success, isTrue);
+      expect(proofs.length, expected ? 1 : 0);
+      if (expected) {
+        final proof = MemoExpiryProof.decode(proofs.single, 'NEAR')!;
+        expect(proof['nonce'], '4');
+        expect(proof['height'], '77');
+        expect(proof['publicKey'], api.queriedKey);
+      }
+    }
+    // A signed nonce that differs from the access-key read yields no proof.
+    final api = Api()
+      ..height = 77
+      ..nonce = 5;
+    final proofs = <String>[];
+    await NearSender(
+      trustdart: Signer(),
+      apiFactory: (_) => api,
+    ).send(params(onExpiryProof: proofs.add));
+    expect(proofs, isEmpty);
   });
   for (final stage in ['prepare', 'dispatch']) {
     for (final changeOwner in [false, true]) {

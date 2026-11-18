@@ -92,7 +92,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   bool _ensureChainConfig() {
     if (_coinType.isNotEmpty && _blockchainType.isNotEmpty) return true;
-    errorMessage = 'Invalid coin configuration';
+    errorMessage = S.current.g_ui3_invalid_coin_config;
     ToastUtils.show(errorMessage);
     return false;
   }
@@ -114,7 +114,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         return true;
       });
       if (idx < 0) {
-        errorMessage = 'Missing parent chain for $_coinType';
+        errorMessage = S.current.g_ui3_missing_parent_chain(_coinType);
         ToastUtils.show(errorMessage);
         if (mounted) setState(() => load = Load.finish);
         return;
@@ -490,18 +490,21 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         final proceed = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Check the full recipient address'),
+            title: Text(S.of(context).g_ui3_similar_address_title),
             content: Text(
-              'This address resembles a recent recipient but is different.\n\nRecipient: $toAddr\n\nRecent: $similar\n\nSource: local send history, checked now. This is a similarity warning, not proof of fraud.',
+              '${S.of(context).g_ui3_similar_address_body}\n\n'
+              '${S.of(context).g_wallet_receiver_address}: $toAddr\n\n'
+              '${S.of(context).g_key_coin_search_recent}: $similar\n\n'
+              '${S.of(context).g_ui3_similar_address_note}',
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
+                child: Text(S.of(context).g_key_79),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: const Text('Continue'),
+                child: Text(S.of(context).g_key_batch_continue),
               ),
             ],
           ),
@@ -712,7 +715,7 @@ Future<MessageModel> _callGasEstimateApi({
       : coinModel.config.contract;
   final blockchainType = coinModel.config.blockchainType;
   if (coinType.isEmpty || blockchainType.isEmpty) {
-    return MessageModel.error()..data = 'Invalid coin configuration';
+    return MessageModel.error()..data = S.current.g_ui3_invalid_coin_config;
   }
 
   if (blockchainType == BlockchainType.Tron.name) {

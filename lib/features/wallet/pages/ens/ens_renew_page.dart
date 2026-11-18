@@ -258,13 +258,15 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                   margin: EdgeInsets.only(
                     right: years != 5 ? ScreenUtil().setWidth(12) : 0,
                   ),
+                  // 44pt minimum height (was 36pt).
+                  constraints: BoxConstraints(minHeight: AppTouch.minTarget),
+                  alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   decoration: BoxDecoration(
-                    color: _color(
-                      isSelected
-                          ? AppThemeKeys.mainBlueColor
-                          : AppThemeKeys.itemBgColor,
-                    ),
+                    // Brand fill shade so the white label reaches 4.5:1.
+                    color: isSelected
+                        ? AppColorTokens.of(context).brandFill
+                        : _color(AppThemeKeys.itemBgColor),
                     borderRadius: AppRadius.brMd,
                     border: Border.all(
                       color: isSelected
@@ -367,7 +369,10 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       return ElevatedButton(
         onPressed: () => Navigator.pop(context, true),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColorTokens.of(context).success,
+          // Green darkened until the white label reaches 4.5:1.
+          backgroundColor: AppContrast.fillForWhiteText(
+            AppColorTokens.of(context).success,
+          ),
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
@@ -382,7 +387,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     return ElevatedButton(
       onPressed: _priceInfo != null && !_isRenewing ? _executeRenew : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: _color(AppThemeKeys.mainBlueColor),
+        backgroundColor: AppColorTokens.of(context).brandFill,
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),

@@ -107,6 +107,8 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
           title: Text(S.of(context).g_key_loyalty_title),
           actions: [
             IconButton(
+              tooltip: MaterialLocalizations.of(context)
+                  .refreshIndicatorSemanticLabel,
               onPressed: _loading ? null : _load,
               icon: const Icon(Icons.refresh_rounded),
             ),

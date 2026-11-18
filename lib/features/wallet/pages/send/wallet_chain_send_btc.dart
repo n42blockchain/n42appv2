@@ -121,7 +121,8 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
                       buildBtcFeeCompact(),
                       totalPriceWidgegt(),
                       errorMessageWidget(),
-                      SizedBox(height: ScreenUtil().setWidth(100.0)),
+                      // Clears the bottom send bar (44pt button + padding).
+                      SizedBox(height: AppTouch.target + AppSpacing.space8 * 3),
                     ],
                   ),
                 ),

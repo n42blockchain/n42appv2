@@ -66,94 +66,98 @@ class PaymasterOptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDisabled = !option.isAvailable;
 
-    return GestureDetector(
-      onTap: isDisabled ? null : onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? _getOptionColor(context).withAlpha(20)
-              : AppColorTokens.of(context).bgSurface,
-          borderRadius: AppRadius.brMd,
-          border: Border.all(
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: isDisabled ? null : onTap,
+        borderRadius: AppRadius.brMd,
+        child: Ink(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
             color: isSelected
-                ? _getOptionColor(context)
-                : isDisabled
-                ? AppColorTokens.of(context).border.withAlpha(30)
-                : AppColorTokens.of(context).textSubtitle.withAlpha(30),
-            width: isSelected ? 2 : 1,
+                ? _getOptionColor(context).withAlpha(20)
+                : AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
+            border: Border.all(
+              color: isSelected
+                  ? _getOptionColor(context)
+                  : isDisabled
+                  ? AppColorTokens.of(context).border.withAlpha(30)
+                  : AppColorTokens.of(context).textSubtitle.withAlpha(30),
+              width: isSelected ? 2 : 1,
+            ),
           ),
-        ),
-        child: Opacity(
-          opacity: isDisabled ? 0.5 : 1.0,
-          child: Row(
-            children: [
-              // 图标
-              _buildIcon(context),
-              SizedBox(width: AppSpacing.space4),
+          child: Opacity(
+            opacity: isDisabled ? 0.5 : 1.0,
+            child: Row(
+              children: [
+                // 图标
+                _buildIcon(context),
+                SizedBox(width: AppSpacing.space4),
 
-              // 内容
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          _getTitle(context),
-                          style: AppTypography.bodySm.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: isDisabled
-                                ? AppColorTokens.of(context).textTertiary
-                                : AppColorTokens.of(context).textPrimary,
+                // 内容
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            _getTitle(context),
+                            style: AppTypography.bodySm.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: isDisabled
+                                  ? AppColorTokens.of(context).textTertiary
+                                  : AppColorTokens.of(context).textPrimary,
+                            ),
                           ),
-                        ),
-                        if (option.type == PaymasterType.sponsored) ...[
-                          SizedBox(width: AppSpacing.space2),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSpacing.space2,
-                              vertical: AppSpacing.space2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColorTokens.of(context).success
-                                  .withAlpha(30),
-                              borderRadius: AppRadius.brSm,
-                            ),
-                            child: Text(
-                              S.of(context).g_key_aa_free,
-                              style: AppTypography.captionSm.copyWith(
-                                color: AppColorTokens.of(context).success,
-                                fontWeight: FontWeight.w600,
+                          if (option.type == PaymasterType.sponsored) ...[
+                            SizedBox(width: AppSpacing.space2),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: AppSpacing.space2,
+                                vertical: AppSpacing.space2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColorTokens.of(context).success
+                                    .withAlpha(30),
+                                borderRadius: AppRadius.brSm,
+                              ),
+                              child: Text(
+                                S.of(context).g_key_aa_free,
+                                style: AppTypography.captionSm.copyWith(
+                                  color: AppColorTokens.of(context).success,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ],
-                      ],
-                    ),
-                    SizedBox(height: AppSpacing.space2),
-                    Text(
-                      isDisabled && option.unavailableReason != null
-                          ? option.unavailableReason!
-                          : _getSubtitle(context),
-                      style: AppTypography.caption.copyWith(
-                        color: isDisabled
-                            ? AppColorTokens.of(context).textTertiary
-                            : AppColorTokens.of(context).textSubtitle,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: AppSpacing.space2),
+                      Text(
+                        isDisabled && option.unavailableReason != null
+                            ? option.unavailableReason!
+                            : _getSubtitle(context),
+                        style: AppTypography.caption.copyWith(
+                          color: isDisabled
+                              ? AppColorTokens.of(context).textTertiary
+                              : AppColorTokens.of(context).textSubtitle,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // 选中指示
-              if (isSelected)
-                Icon(
-                  Icons.check_circle,
-                  size: ScreenUtil().setWidth(28),
-                  color: _getOptionColor(context),
-                ),
-            ],
+                // 选中指示
+                if (isSelected)
+                  Icon(
+                    Icons.check_circle,
+                    size: ScreenUtil().setWidth(28),
+                    color: _getOptionColor(context),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

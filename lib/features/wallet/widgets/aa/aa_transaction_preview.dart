@@ -413,7 +413,7 @@ class AATransactionPreview extends StatelessWidget {
           child: ElevatedButton(
             onPressed: isLoading ? null : onConfirm,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _color(context, AppThemeKeys.mainBlueColor),
+              backgroundColor: AppColorTokens.of(context).brandFill,
               foregroundColor: Colors.white,
               padding: buttonPadding,
               shape: RoundedRectangleBorder(borderRadius: buttonRadius),

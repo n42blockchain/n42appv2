@@ -75,17 +75,19 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-      decoration: BoxDecoration(
+      // Material (not a decoration) so the header / option ink stays visible.
+      child: Material(
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(context),
-          _buildSpeedSelector(context),
-          if (widget.showDetails && _isExpanded) _buildDetails(context),
-        ],
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            _buildSpeedSelector(context),
+            if (widget.showDetails && _isExpanded) _buildDetails(context),
+          ],
+        ),
       ),
     );
   }
@@ -193,47 +195,54 @@ class _GasSelectorWidgetState extends State<GasSelectorWidget> {
     );
 
     final blueColor = AppColorTokens.of(context).brand;
+    final blueText = AppColorTokens.of(context).brandOnTint;
     final mainText = AppColorTokens.of(context).textPrimary;
     final subtitleText = AppColorTokens.of(context).textSubtitle;
     final dividerColor = AppColorTokens.of(context).border;
 
     return Expanded(
-      child: GestureDetector(
-        onTap: () => _onSpeedSelected(speed),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: AppSpacing.space4,
-            horizontal: AppSpacing.space4,
-          ),
-          decoration: BoxDecoration(
-            color: isSelected ? blueColor.withAlpha(25) : Colors.transparent,
-            borderRadius: AppRadius.brMd,
-            border: Border.all(
-              color: isSelected ? blueColor : dividerColor,
-              width: isSelected ? 2 : 1,
+      child: Semantics(
+        selected: isSelected,
+        child: InkWell(
+          onTap: () => _onSpeedSelected(speed),
+          borderRadius: AppRadius.brMd,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: AppSpacing.space4,
+              horizontal: AppSpacing.space4,
             ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: ScreenUtil().setWidth(36),
-                color: isSelected ? blueColor : subtitleText,
+            decoration: BoxDecoration(
+              color: isSelected ? blueColor.withAlpha(25) : Colors.transparent,
+              borderRadius: AppRadius.brMd,
+              border: Border.all(
+                color: isSelected ? blueColor : dividerColor,
+                width: isSelected ? 2 : 1,
               ),
-              SizedBox(height: AppSpacing.space2),
-              Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected ? blueColor : mainText,
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  icon,
+                  size: ScreenUtil().setWidth(36),
+                  color: isSelected ? blueColor : subtitleText,
                 ),
-              ),
-              SizedBox(height: AppSpacing.space2),
-              Text(
-                estimatedTime,
-                style: AppTypography.caption.copyWith(color: subtitleText),
-              ),
-            ],
+                SizedBox(height: AppSpacing.space2),
+                Text(
+                  label,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                    color: isSelected ? blueText : mainText,
+                  ),
+                ),
+                SizedBox(height: AppSpacing.space2),
+                Text(
+                  estimatedTime,
+                  style: AppTypography.caption.copyWith(color: subtitleText),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -377,66 +386,70 @@ class GasSelectorCompact extends StatelessWidget {
     final mainText = AppColorTokens.of(context).textPrimary;
     final subtitleText = AppColorTokens.of(context).textSubtitle;
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space8,
-          vertical: AppSpacing.space4,
-        ),
-        margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
+    // The card color sits on a Material so the press ink is visible.
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      child: Material(
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: AppRadius.brMd,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.local_gas_station,
-                  size: ScreenUtil().setWidth(36),
-                  color: blueColor,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.local_gas_station,
+                      size: ScreenUtil().setWidth(36),
+                      color: blueColor,
+                    ),
+                    SizedBox(width: AppSpacing.space4),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _getSpeedLabel(context, gasEstimate.selectedSpeed),
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: mainText,
+                          ),
+                        ),
+                        Text(
+                          estimatedTime,
+                          style: AppTypography.caption.copyWith(
+                            color: subtitleText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(width: AppSpacing.space4),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
                     Text(
-                      _getSpeedLabel(context, gasEstimate.selectedSpeed),
-                      style: AppTypography.body.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: mainText,
-                      ),
+                      '$formatted $unit',
+                      style: AppTypography.body.copyWith(color: mainText),
                     ),
-                    Text(
-                      estimatedTime,
-                      style: AppTypography.caption.copyWith(
-                        color: subtitleText,
+                    if (onTap != null) ...[
+                      SizedBox(width: AppSpacing.space2),
+                      Icon(
+                        Icons.edit,
+                        size: ScreenUtil().setWidth(32),
+                        color: blueColor,
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  '$formatted $unit',
-                  style: AppTypography.body.copyWith(color: mainText),
-                ),
-                if (onTap != null) ...[
-                  SizedBox(width: AppSpacing.space2),
-                  Icon(
-                    Icons.edit,
-                    size: ScreenUtil().setWidth(32),
-                    color: blueColor,
-                  ),
-                ],
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -166,76 +166,84 @@ class BatchTransferSelectPage extends ConsumerWidget {
     final mainText = AppColorTokens.of(context).textPrimary;
     final subtitleText = AppColorTokens.of(context).textSubtitle;
 
-    return GestureDetector(
-      onTap: () => _navigateToBatchTransfer(context, coin),
-      child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
+    // Card color on a Material so the row shows press feedback.
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+      child: Material(
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        child: InkWell(
+          onTap: () => _navigateToBatchTransfer(context, coin),
           borderRadius: AppRadius.brMd,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: ScreenUtil().setWidth(48),
-              height: ScreenUtil().setWidth(48),
-              decoration: BoxDecoration(
-                color: chainColor.withAlpha(30),
-                borderRadius: AppRadius.brLg,
-              ),
-              child: Center(
-                child: Text(
-                  chainSymbol.isNotEmpty ? chainSymbol[0] : '?',
-                  style: AppTypography.caption.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: chainColor,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: AppSpacing.space4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: AppTypography.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: mainText,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    chainSymbol,
-                    style: AppTypography.caption.copyWith(color: subtitleText),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+          child: Padding(
+            padding: EdgeInsets.all(AppSpacing.space4),
+            child: Row(
               children: [
-                Text(
-                  _formatBalance(coin.balance, decimals),
-                  style: AppTypography.bodySm.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: mainText,
+                Container(
+                  width: ScreenUtil().setWidth(48),
+                  height: ScreenUtil().setWidth(48),
+                  decoration: BoxDecoration(
+                    color: chainColor.withAlpha(30),
+                    borderRadius: AppRadius.brLg,
+                  ),
+                  child: Center(
+                    child: Text(
+                      chainSymbol.isNotEmpty ? chainSymbol[0] : '?',
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: chainColor,
+                      ),
+                    ),
                   ),
                 ),
-                Text(
-                  chainSymbol,
-                  style: AppTypography.caption.copyWith(color: subtitleText),
+                SizedBox(width: AppSpacing.space4),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: AppTypography.body.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: mainText,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        chainSymbol,
+                        style: AppTypography.caption.copyWith(
+                          color: subtitleText,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      _formatBalance(coin.balance, decimals),
+                      style: AppTypography.bodySm.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: mainText,
+                      ),
+                    ),
+                    Text(
+                      chainSymbol,
+                      style: AppTypography.caption.copyWith(
+                        color: subtitleText,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: AppSpacing.space2),
+                Icon(Icons.chevron_right, color: subtitleText),
               ],
             ),
-            SizedBox(width: AppSpacing.space2),
-            Icon(Icons.chevron_right, color: subtitleText),
-          ],
+          ),
         ),
       ),
     );

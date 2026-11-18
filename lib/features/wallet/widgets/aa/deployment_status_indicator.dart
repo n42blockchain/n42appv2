@@ -87,7 +87,8 @@ class DeploymentStatusIndicator extends StatelessWidget {
     final c = AppColorTokens.of(context);
     switch (state) {
       case SmartAccountState.notDeployed:
-        return c.textTertiary;
+        // Also the label color: tertiary is too faint for text.
+        return c.textSubtitle;
       case SmartAccountState.deploying:
         return c.warning;
       case SmartAccountState.deployed:

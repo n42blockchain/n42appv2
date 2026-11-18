@@ -61,7 +61,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       if (!mounted) return;
       final fallback = DexFallbackTokens.forChain(widget.chain);
       if (res.error) {
-        final reason = res.data?.toString() ?? 'Load failed';
+        final reason = res.data?.toString() ?? S.of(context).g_key_5;
         if (fallback.isNotEmpty) {
           _applyFallback(fallback, reason);
           return;
@@ -165,7 +165,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       if (res.error) {
         setState(() {
           _remoteSearching = false;
-          _remoteError = 'Search failed';
+          _remoteError = S.of(context).g_ui3_search_failed;
         });
         return;
       }
@@ -173,7 +173,9 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       setState(() {
         _remoteSearching = false;
         _remoteResults = results;
-        if (results.isEmpty) _remoteError = 'Token not found';
+        if (results.isEmpty) {
+          _remoteError = S.of(context).g_key_dex_no_tokens_found;
+        }
       });
     } catch (_) {
       if (!mounted ||
@@ -183,7 +185,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       }
       setState(() {
         _remoteSearching = false;
-        _remoteError = 'Search failed';
+        _remoteError = S.of(context).g_ui3_search_failed;
       });
     }
   }
@@ -218,6 +220,8 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
                 ),
                 suffixIcon: _searchCtrl.text.isNotEmpty
                     ? IconButton(
+                        tooltip: MaterialLocalizations.of(context)
+                            .clearButtonTooltip,
                         icon: Icon(
                           Icons.clear,
                           color: AppColorTokens.of(context).textSubtitle,
@@ -326,8 +330,9 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         final token = tokens[index];
         return InkWell(
           onTap: () => Navigator.pop(context, token),
-          child: SizedBox(
-            height: ScreenUtil().setWidth(110),
+          // Minimum (not fixed) height: two text lines grow at 130%.
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: AppTouch.scaled(110)),
             child: Row(
               children: [
                 SizedBox(

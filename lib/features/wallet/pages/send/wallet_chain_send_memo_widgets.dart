@@ -150,7 +150,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
                       horizontal: su.setWidth(20.0),
                     ),
                     decoration: BoxDecoration(
-                      color: AppColorTokens.of(context).brand,
+                      color: AppColorTokens.of(context).brandFill,
                       borderRadius: BorderRadius.all(
                         Radius.circular(su.setWidth(60.0)),
                       ),
@@ -337,7 +337,10 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
           const Divider(height: 1, indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(AppSpacing.space8),
-            height: ScreenUtil().setWidth(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(
+              minHeight: ScreenUtil().setWidth(148.0),
+            ),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,

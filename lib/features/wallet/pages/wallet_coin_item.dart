@@ -56,13 +56,13 @@ class WalletCoinItem extends ConsumerWidget {
     final choice = await showDialog<String>(
       context: context,
       builder: (context) => SimpleDialog(
-        title: Text('${coinInfo.config.miniName} · Asset controls'),
+        title: Text(
+          S.of(context).g_ui3_asset_controls_title(coinInfo.config.miniName),
+        ),
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              'These controls only affect this wallet display. Hiding does not revoke approvals or change balances. Quarantine also disables opening this asset from the wallet list. DApp interactions are not blocked.',
-            ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(S.of(context).g_ui3_asset_controls_body),
           ),
           if (record != null)
             Padding(
@@ -70,10 +70,10 @@ class WalletCoinItem extends ConsumerWidget {
               child: Text('${record['source']} · ${record['updatedAt']}'),
             ),
           for (final entry in {
-            'visible': 'Restore normal display',
-            'warning': 'Mark for review',
-            'hidden': 'Hide from list',
-            'quarantined': 'Quarantine from list',
+            'visible': S.of(context).g_ui3_asset_restore_display,
+            'warning': S.of(context).g_ui3_asset_mark_review,
+            'hidden': S.of(context).g_ui3_asset_hide,
+            'quarantined': S.of(context).g_ui3_asset_quarantine,
           }.entries)
             SimpleDialogOption(
               onPressed: () => Navigator.pop(context, entry.key),
@@ -86,9 +86,7 @@ class WalletCoinItem extends ConsumerWidget {
       final saved = await wallet.setAssetVisibility(coinInfo, choice);
       if (!saved && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not save asset display preference.'),
-          ),
+          SnackBar(content: Text(S.of(context).g_ui3_asset_save_failed)),
         );
       }
     }
@@ -148,8 +146,18 @@ class WalletCoinItem extends ConsumerWidget {
         extentRatio: 0.2,
         children: [
           SlidableAction(
-            onPressed: (_) {
+            onPressed: (_) async {
               if (!canEdit) return;
+              // Removing an asset or chain from the wallet has no undo.
+              final s = S.of(context);
+              final confirmed = await AppDialog.confirm(
+                context,
+                title: s.g_ui3_remove_asset_title(config.miniName),
+                message: s.g_ui3_remove_asset_message,
+                confirmText: s.g_alert_remove,
+                danger: true,
+              );
+              if (!confirmed || !context.mounted) return;
               final wap = ref.read(wapBridgeProvider);
               if (config.isContract) {
                 wap.removeWalletChainToken(
@@ -164,6 +172,8 @@ class WalletCoinItem extends ConsumerWidget {
             backgroundColor: deleteColor,
             foregroundColor: Colors.white,
             icon: Icons.delete,
+            // Swipe actions carry a visible (and spoken) name, as on iOS.
+            label: S.of(context).g_alert_remove,
             autoClose: true,
           ),
         ],
@@ -205,7 +215,7 @@ class WalletCoinItem extends ConsumerWidget {
                     image: image,
                     mainImage: mainImage,
                     warningText: visibilityState == 'warning'
-                        ? 'Marked for review by you. Long press to review or restore.'
+                        ? S.of(context).g_ui3_asset_marked_review_hint
                         : null,
                     showWarning:
                         visibilityState == 'warning' ||
@@ -279,7 +289,14 @@ class _CoinIcon extends StatelessWidget {
                 child: Icon(
                   Icons.error_rounded,
                   size: ScreenUtil().setWidth(28),
-                  color: AppColorTokens.of(context).warning,
+                  // Plain system orange is about 2:1 on the row; keep the
+                  // status glyph at the 3:1 minimum for meaningful icons.
+                  color: AppContrast.ensure(
+                    AppColorTokens.of(context).warning,
+                    [AppColorTokens.of(context).bgBase],
+                    darken: Theme.of(context).brightness != Brightness.dark,
+                    min: 3,
+                  ),
                 ),
               ),
             ),
@@ -444,7 +461,13 @@ class CoinPercentageBadge extends StatelessWidget {
     final colorKey = isPositive
         ? AppThemeKeys.rightTextColor
         : AppThemeKeys.errorTextColor;
-    final color = AppThemeUtils.getColorByKey(context, colorKey.name);
+    // System green/red text on the list background is about 2:1 / 3.2:1;
+    // shift the shade until the footnote reaches 4.5:1 in both themes.
+    final color = AppContrast.ensure(
+      AppThemeUtils.getColorByKey(context, colorKey.name),
+      [AppColorTokens.of(context).bgBase],
+      darken: Theme.of(context).brightness != Brightness.dark,
+    );
 
     return Text(
       "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",

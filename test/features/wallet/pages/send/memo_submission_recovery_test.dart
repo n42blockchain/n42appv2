@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
@@ -62,6 +63,7 @@ void main() {
       'zero save ID',
       'storage failure',
       'pending reservation',
+      'rejected',
       'projection failure',
       'dispose before ack',
     ]) {
@@ -111,9 +113,12 @@ void main() {
           'dispatch key changed',
           'not submitted',
           'dispose before abort',
+          'rejected',
         ].contains(scenario);
         final dispatchChecks = <(int, String, int)>[];
         var releases = 0;
+        var dismissals = 0;
+        var rejections = 0;
         var saves = 0;
         var broadcasts = 0;
         var submissions = 0;
@@ -127,6 +132,8 @@ void main() {
               persistTransaction: (tr) async {
                 saves++;
                 expect(tr.txHash, hash);
+                // The signed transaction's expiry proof is saved with it.
+                expect(tr.memoExpiry, 'proof-$chain-$submissions');
                 expect(broadcasts, 0);
                 if (scenario == 'pending reservation') {
                   throw const PendingMemoTransactionException();
@@ -146,6 +153,18 @@ void main() {
                 }
                 return scenario != 'dispatch rejected';
               },
+              markTransactionRejected: (tr, reason) async {
+                rejections++;
+                expect(tr.trId, 42);
+                expect(tr.txHash, hash);
+                expect(reason, 'Network refused');
+                return true;
+              },
+              dismissPendingTransactions: (tr) async {
+                dismissals++;
+                expect(tr.txHash, hash);
+                return 1;
+              },
               releaseUnsubmittedTransaction: (tr) async {
                 releases++;
                 expect(tr.trId, 42);
@@ -159,6 +178,7 @@ void main() {
                 submissions++;
                 expect(params.decimalAmountOverride, '1.25');
                 expect(params.expectedFeeBaseUnits, BigInt.from(100));
+                params.onExpiryProof!('proof-$chain-$submissions');
                 try {
                   await params.beforeBroadcast!(hash);
                 } catch (_) {
@@ -186,6 +206,9 @@ void main() {
                   await ack.future;
                 }
                 if (scenario == 'success') return SendResult.ok(hash);
+                if (scenario == 'rejected') {
+                  return SendResult.rejected(hash, 'Network refused');
+                }
                 if (scenario == 'foreign hash') return SendResult.ok(otherHash);
                 return SendResult.uncertain(hash, 'Response lost');
               },
@@ -234,6 +257,22 @@ void main() {
           'storage failure',
           'pending reservation',
         ].contains(scenario);
+        if (scenario == 'pending reservation') {
+          // The blocked send offers to stop waiting for the unknown original.
+          expect(
+            find.text(S.current.g_memo_pending_unknown_title),
+            findsOneWidget,
+          );
+          expect(dismissals, 0);
+          await tester.tap(find.text(S.current.g_memo_pending_dismiss));
+          await tester.pumpAndSettle();
+          expect(dismissals, 1);
+        } else {
+          expect(
+            find.text(S.current.g_memo_pending_unknown_title),
+            findsNothing,
+          );
+        }
         for (final check in dispatchChecks) {
           expect(check, (42, hash, 0));
         }
@@ -255,6 +294,12 @@ void main() {
           await state.signTx(record);
           expect(submissions, 2);
           expect(broadcasts, 0);
+        }
+        // An explicit refusal closes the record as failed and frees the page.
+        expect(rejections, scenario == 'rejected' ? 1 : 0);
+        if (scenario == 'rejected') {
+          await state.signTx(record);
+          expect(submissions, 2);
         }
         expect(tester.takeException(), isNull);
       });

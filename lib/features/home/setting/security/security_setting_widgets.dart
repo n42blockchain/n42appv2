@@ -88,26 +88,30 @@ extension on _SecuritySettingState {
           : AppThemeKeys.itemSubtitleTextColor.name,
     );
     return Container(
-      height: ScreenUtil().setWidth(88.0),
+      // minHeight keeps two-line titles from clipping at large text sizes.
+      constraints: BoxConstraints(minHeight: AppTouch.target),
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: AppTypography.body.copyWith(color: titleColor),
+      // Merge so screen readers announce the title with the switch state.
+      child: MergeSemantics(
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: AppTypography.body.copyWith(color: titleColor),
+              ),
             ),
-          ),
-          Switch.adaptive(
-            key: switchKey,
-            activeTrackColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainButtonBgColor.name,
+            Switch.adaptive(
+              key: switchKey,
+              activeTrackColor: AppThemeUtils.getColorByKey(
+                context,
+                AppThemeKeys.mainButtonBgColor.name,
+              ),
+              value: value,
+              onChanged: enabled ? (v) => valueChange(v) : null,
             ),
-            value: value,
-            onChanged: enabled ? (v) => valueChange(v) : null,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

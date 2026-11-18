@@ -1,0 +1,157 @@
+{
+  "data": {
+    "address": {
+      "objects": {
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "Tjg5GAAAAADMAQCrq6urq6urq6urq6urq6urq6urq6urq6urq6urq6urqwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAARjb2luAAAAAAAAAARDb2luAAAAAAAAAAEAAAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA3N1aQAAAAAAAAADU1VJAAAAAAAAAAAB///////wvb92GztEBdgrrpm/OUebwaOIMGheT5+uHDEZip5xkDzx6g=="
+        },
+        "nodes": [
+          {
+            "address": "0x0417bc211cca7d1492ac9b3d078bc000af5183686adb35c24f9ec141f0614ecf",
+            "version": 349181865,
+            "digest": "GDXB4YpunqvZKzaG1CyA6scEuvuEWLyUCog8rd7Rh4wz",
+            "contents": {
+              "json": {
+                "id": "0x0417bc211cca7d1492ac9b3d078bc000af5183686adb35c24f9ec141f0614ecf",
+                "balance": "1000000000"
+              }
+            }
+          },
+          {
+            "address": "0x2ffe89c48cc06bef344220912bad26505c1e9567df4d0f9174974433c8f345a5",
+            "version": 349181867,
+            "digest": "FoSDFPjfSo16eAi596nbqcPDoqJjrtBo2JmzqLD9ykGB",
+            "contents": {
+              "json": {
+                "id": "0x2ffe89c48cc06bef344220912bad26505c1e9567df4d0f9174974433c8f345a5",
+                "balance": "1000000000"
+              }
+            }
+          },
+          {
+            "address": "0x38c1107e3c647ec465c56a308d7a57ef05183eb4c63f869cd0faffddad7c1ff1",
+            "version": 349181869,
+            "digest": "Cc5nrR3dtUHLACx9q7M4k92vjapt1KcB8CgsK2o9ZwVP",
+            "contents": {
+              "json": {
+                "id": "0x38c1107e3c647ec465c56a308d7a57ef05183eb4c63f869cd0faffddad7c1ff1",
+                "balance": "1000000000"
+              }
+            }
+          },
+          {
+            "address": "0x53d5771df6c30000758d4b27d2333ec0ea3818e8d1694b3b14ea08c6e333be95",
+            "version": 349181869,
+            "digest": "DFoaC6vrPpLvgCULWPfvMFDC2Am6Hw3rwhLsD3zLSkyz",
+            "contents": {
+              "json": {
+                "id": "0x53d5771df6c30000758d4b27d2333ec0ea3818e8d1694b3b14ea08c6e333be95",
+                "balance": "1000000000"
+              }
+            }
+          },
+          {
+            "address": "0xacf10950c4d28034683f38ea94ad33d98cbee4920a09546a05bba5700fe4db34",
+            "version": 349181867,
+            "digest": "8pfaaXRDFk8Pxyh8Dar9oHUoRYqkv9uEWm33XdLYgRYZ",
+            "contents": {
+              "json": {
+                "id": "0xacf10950c4d28034683f38ea94ad33d98cbee4920a09546a05bba5700fe4db34",
+                "balance": "1000000000"
+              }
+            }
+          },
+          {
+            "address": "0x1866c6b685a63e70951da200b5d94bd28679b6c25335b04be7afe8428f59a2d9",
+            "version": 1076035825,
+            "digest": "9od773hxm7G2UAmzuAQKneoyR4D2W61uC4tD4zDcG9zw",
+            "contents": {
+              "json": {
+                "id": "0x1866c6b685a63e70951da200b5d94bd28679b6c25335b04be7afe8428f59a2d9",
+                "balance": "150000000"
+              }
+            }
+          },
+          {
+            "address": "0xb0058954bcfb4335429e32e94e6e467eaca2fb6470f38086c9d094fd038eb384",
+            "version": 26,
+            "digest": "BoLMAYqiJvScKs8fQE8LXBEJASr3sX5JUUWA34Rw9hDq",
+            "contents": {
+              "json": {
+                "id": "0xb0058954bcfb4335429e32e94e6e467eaca2fb6470f38086c9d094fd038eb384",
+                "balance": "100000000"
+              }
+            }
+          },
+          {
+            "address": "0x0540e4efd9973dfb0073bb6d73990d7c3a4e8de443702340961a6e125b9cfda2",
+            "version": 1076035827,
+            "digest": "CTLKjXs6g8uK7EUeCHcP5bCirvcZNwoChc3vCS5dq2fm",
+            "contents": {
+              "json": {
+                "id": "0x0540e4efd9973dfb0073bb6d73990d7c3a4e8de443702340961a6e125b9cfda2",
+                "balance": "10000000"
+              }
+            }
+          },
+          {
+            "address": "0x153046ecf686e1f8ec6adacbb6a06290999ef6a400244831dc0420ff18995c24",
+            "version": 1076035823,
+            "digest": "6ncE368erKUF7Bs5DL4rsztqmsCK3JUaVY3mbQmQbcLg",
+            "contents": {
+              "json": {
+                "id": "0x153046ecf686e1f8ec6adacbb6a06290999ef6a400244831dc0420ff18995c24",
+                "balance": "10000000"
+              }
+            }
+          },
+          {
+            "address": "0xdbe7f8c99700b6c060f737f3b35a1ff842747a44775ee8409ce6b2cc6b1d9468",
+            "version": 1076035826,
+            "digest": "Bbv8exTNLQ4oEaJSEgXZwcq7zMvP5RypKfn7VFFdw4kG",
+            "contents": {
+              "json": {
+                "id": "0xdbe7f8c99700b6c060f737f3b35a1ff842747a44775ee8409ce6b2cc6b1d9468",
+                "balance": "10000000"
+              }
+            }
+          },
+          {
+            "address": "0x1b3d1ccecab816dcd4cf4f703a3104131d29d245f4eb77e6b11b4e946478485b",
+            "version": 881240779,
+            "digest": "7D2hffiHkpioqQi5fm38hriZqyzF4cyoQJ7vdz9kqBeZ",
+            "contents": {
+              "json": {
+                "id": "0x1b3d1ccecab816dcd4cf4f703a3104131d29d245f4eb77e6b11b4e946478485b",
+                "balance": "1000000"
+              }
+            }
+          },
+          {
+            "address": "0x65ba788af34809735315990fa61e126e53249857221e3868151e08fb66cb8a88",
+            "version": 881240778,
+            "digest": "5y24GhKya2LHVQSuwSqXrbdL8Ki8JkSSLRdCQXCNWgGZ",
+            "contents": {
+              "json": {
+                "id": "0x65ba788af34809735315990fa61e126e53249857221e3868151e08fb66cb8a88",
+                "balance": "1000000"
+              }
+            }
+          },
+          {
+            "address": "0x761b3b4405d82bae99bf39479bc1a38830685e4f9fae1c31198a9e71903cf1ea",
+            "version": 881240778,
+            "digest": "ADKjxkG141U7hLK1w5vSkcm5gUtUGj8WxwYmveL2tqbo",
+            "contents": {
+              "json": {
+                "id": "0x761b3b4405d82bae99bf39479bc1a38830685e4f9fae1c31198a9e71903cf1ea",
+                "balance": "1000000"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

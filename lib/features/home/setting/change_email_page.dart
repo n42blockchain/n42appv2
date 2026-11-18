@@ -367,7 +367,8 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
           countdown: _countdown,
           loading: _loading,
           onTap: _resendCode,
-          accentColor: colors.brand,
+          // Small brand text needs the 4.5:1 shade.
+          accentColor: colors.brandOnTint,
           subColor: colors.textSubtitle,
         ),
         SizedBox(height: AppSpacing.space4),
@@ -419,6 +420,13 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
 
   Widget _buildStatus(AppColorTokens colors) {
     final color = _statusIsError ? colors.danger : colors.success;
+    // Status copy sits on a ~9% tint of its own color; shift it to 4.5:1.
+    final textColor = AppContrast.textOnTint(
+      color,
+      [colors.bgBase],
+      dark: Theme.of(context).brightness == Brightness.dark,
+      alpha: 24 / 255,
+    );
     return Container(
       width: double.infinity,
       padding: AppSpacing.cardInset,
@@ -429,7 +437,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
       ),
       child: Text(
         _statusText!,
-        style: AppTypography.bodySm.copyWith(color: color),
+        style: AppTypography.bodySm.copyWith(color: textColor),
       ),
     );
   }
@@ -448,7 +456,7 @@ class _StepPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = active ? colors.brand : colors.textSubtitle;
+    final fg = active ? colors.brandOnTint : colors.textSubtitle;
     return Expanded(
       child: Container(
         alignment: Alignment.center,

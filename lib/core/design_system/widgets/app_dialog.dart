@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../generated/l10n.dart';
 import '../app_color_tokens.dart';
 import '../app_radius.dart';
 import '../app_typography.dart';
@@ -13,7 +14,7 @@ class AppDialog extends StatelessWidget {
     required this.title,
     this.message,
     this.content,
-    this.confirmText = '确定',
+    this.confirmText,
     this.cancelText,
     this.danger = false,
     this.onConfirm,
@@ -25,7 +26,9 @@ class AppDialog extends StatelessWidget {
 
   /// 自定义正文（与 [message] 二选一）。
   final Widget? content;
-  final String confirmText;
+
+  /// Defaults to the localized "Confirm".
+  final String? confirmText;
 
   /// 为 null 时不显示取消按钮（纯提示）。
   final String? cancelText;
@@ -41,7 +44,7 @@ class AppDialog extends StatelessWidget {
     required String title,
     String? message,
     Widget? content,
-    String confirmText = '确定',
+    String? confirmText,
     String? cancelText,
     bool danger = false,
     bool barrierDismissible = true,
@@ -67,8 +70,8 @@ class AppDialog extends StatelessWidget {
     BuildContext context, {
     required String title,
     String? message,
-    String confirmText = '确定',
-    String cancelText = '取消',
+    String? confirmText,
+    String? cancelText,
     bool danger = false,
   }) async {
     final r = await show(
@@ -76,7 +79,7 @@ class AppDialog extends StatelessWidget {
       title: title,
       message: message,
       confirmText: confirmText,
-      cancelText: cancelText,
+      cancelText: cancelText ?? S.of(context).g_key_79,
       danger: danger,
     );
     return r == true;
@@ -108,11 +111,11 @@ class AppDialog extends StatelessWidget {
           onPressed: onConfirm,
           style: danger
               ? FilledButton.styleFrom(
-                  backgroundColor: c.danger,
+                  backgroundColor: c.dangerFill,
                   foregroundColor: Colors.white,
                 )
               : null,
-          child: Text(confirmText),
+          child: Text(confirmText ?? S.of(context).g_key_78),
         ),
       ],
     );

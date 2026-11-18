@@ -73,11 +73,17 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
   }
 
   Widget _buildLeftWidget(String? userImage) {
+    // Every caller opens the drawer here; the tooltip labels the icon-only
+    // control for screen readers. AppTapArea adds visible press feedback.
+    final tooltip = widget.onLeftImageClick == null
+        ? null
+        : MaterialLocalizations.of(context).openAppDrawerTooltip;
     if (widget.onLeftImageUri == null) {
-      return GestureDetector(
+      return AppTapArea(
         key: widget.leftActionKey,
-        behavior: HitTestBehavior.opaque,
         onTap: widget.onLeftImageClick,
+        tooltip: tooltip,
+        customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(6),
           child: Container(
@@ -93,10 +99,11 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         ),
       );
     }
-    return GestureDetector(
+    return AppTapArea(
       key: widget.leftActionKey,
-      behavior: HitTestBehavior.opaque,
       onTap: widget.onLeftImageClick,
+      tooltip: tooltip,
+      customBorder: const CircleBorder(),
       child: Container(
         width: 44,
         height: 44,

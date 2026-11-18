@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/live/presentation/widgets/online_badge.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../prediction/domain/prediction_market.dart';
@@ -90,7 +91,7 @@ class _GoLivePageState extends State<GoLivePage> {
           statuses[Permission.camera]?.isGranted == true &&
           statuses[Permission.microphone]?.isGranted == true;
       if (!granted) {
-        throw StateError('需要摄像头与麦克风权限才能开播');
+        throw StateError(S.of(context).g_ui3_live_permission_required);
       }
 
       // 2. 登录 + 创建直播间（Matrix room）
@@ -191,6 +192,15 @@ class _GoLivePageState extends State<GoLivePage> {
   }
 
   Future<void> _endLive() async {
+    final s = S.of(context);
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: s.g_ui3_live_end,
+      message: s.g_ui3_live_end_confirm,
+      confirmText: s.g_ui3_live_end,
+      danger: true,
+    );
+    if (!confirmed || !mounted) return;
     final roomId = _roomId;
     _heartbeat?.cancel();
     _heartbeat = null;
@@ -239,8 +249,9 @@ class _GoLivePageState extends State<GoLivePage> {
     final supported = await _video.toggleTorch();
     if (!mounted) return;
     if (!supported) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('请切换到支持补光灯的后置摄像头')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_ui3_live_torch_unsupported)),
+      );
     } else {
       setState(() {});
     }
@@ -278,6 +289,7 @@ class _GoLivePageState extends State<GoLivePage> {
           Align(
             alignment: Alignment.topLeft,
             child: IconButton(
+              tooltip: S.of(context).g_a11y_close,
               icon: const Icon(
                 Icons.close,
                 color: AppColorTokens.onOverlayPrimary,
@@ -319,7 +331,11 @@ class _GoLivePageState extends State<GoLivePage> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.fiber_manual_record),
-                  label: Text(_starting ? '开播中…' : '开始直播'),
+                  label: Text(
+                    _starting
+                        ? S.of(context).g_ui3_live_starting
+                        : S.of(context).g_ui3_live_start,
+                  ),
                 ),
               ],
             ),
@@ -365,6 +381,7 @@ class _GoLivePageState extends State<GoLivePage> {
                     ),
                   ),
                 IconButton(
+                  tooltip: S.of(context).g_ui3_live_end,
                   icon: const Icon(
                     Icons.stop_circle,
                     color: AppColorTokens.dangerOnOverlay,
@@ -401,7 +418,7 @@ class _GoLivePageState extends State<GoLivePage> {
             child: Column(
               children: [
                 _CircleButton(
-                  label: '美颜与滤镜',
+                  label: S.of(context).g_ui3_live_beauty,
                   icon: _beauty.isEnabled
                       ? Icons.face_retouching_natural
                       : Icons.face_retouching_off,
@@ -411,7 +428,9 @@ class _GoLivePageState extends State<GoLivePage> {
                 ListenableBuilder(
                   listenable: _video.listenable ?? const _NullListenable(),
                   builder: (context, _) => _CircleButton(
-                    label: _video.isVideoEnabled ? '暂停画面' : '恢复画面',
+                    label: _video.isVideoEnabled
+                        ? S.of(context).g_ui3_live_pause_video
+                        : S.of(context).g_ui3_live_resume_video,
                     icon: _video.isVideoEnabled
                         ? Icons.videocam
                         : Icons.videocam_off,
@@ -420,7 +439,7 @@ class _GoLivePageState extends State<GoLivePage> {
                 ),
                 const SizedBox(height: 10),
                 _CircleButton(
-                  label: '切换摄像头',
+                  label: S.of(context).g_ui3_live_switch_camera,
                   icon: Icons.cameraswitch,
                   onTap: () async {
                     await _video.switchCamera();
@@ -429,7 +448,9 @@ class _GoLivePageState extends State<GoLivePage> {
                 ),
                 const SizedBox(height: 10),
                 _CircleButton(
-                  label: _video.isTorchEnabled ? '关闭补光灯' : '打开补光灯',
+                  label: _video.isTorchEnabled
+                      ? S.of(context).g_ui3_live_torch_off
+                      : S.of(context).g_ui3_live_torch_on,
                   icon: _video.isTorchEnabled
                       ? Icons.flash_on
                       : Icons.flash_off,
@@ -439,7 +460,9 @@ class _GoLivePageState extends State<GoLivePage> {
                 ListenableBuilder(
                   listenable: _video.listenable ?? const _NullListenable(),
                   builder: (context, _) => _CircleButton(
-                    label: _video.isMuted ? '打开麦克风' : '静音',
+                    label: _video.isMuted
+                        ? S.of(context).g_ui3_live_unmute
+                        : S.of(context).g_ui3_live_mute,
                     icon: _video.isMuted ? Icons.mic_off : Icons.mic,
                     onTap: _video.toggleMicrophone,
                   ),
@@ -474,7 +497,7 @@ class _VideoUnavailableBackdrop extends StatelessWidget {
               ),
               SizedBox(height: AppSpacing.space8),
               Text(
-                '视频暂不可用，其他直播功能可继续使用',
+                S.of(context).g_ui3_live_video_unavailable,
                 textAlign: TextAlign.center,
                 style: AppTypography.body.copyWith(
                   color: AppColorTokens.onOverlayPrimary,
@@ -513,8 +536,9 @@ class _RoomIdChip extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Clipboard.setData(ClipboardData(text: roomId));
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('已复制房间号')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(S.of(context).g_ui3_live_room_id_copied)),
+          );
         },
         child: ConstrainedBox(
           // 抬高到可用触控高度（原 ≈26dp < 44dp）。
@@ -565,17 +589,19 @@ class _CircleButton extends StatelessWidget {
       label: label,
       child: Tooltip(
         message: label,
-        child: InkWell(
-          onTap: onTap,
-          customBorder: const CircleBorder(),
-          child: Container(
-            width: 48,
-            height: 48,
-            decoration: const BoxDecoration(
-              color: AppColorTokens.overlay,
-              shape: BoxShape.circle,
+        // Fill on the Material so the ink ripple is not hidden under it.
+        child: Material(
+          color: AppColorTokens.overlay,
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: SizedBox(
+              width: 48,
+              height: 48,
+              child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
             ),
-            child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
           ),
         ),
       ),
@@ -663,7 +689,11 @@ class _BroadcasterPredictionButton extends ConsumerWidget {
         }
       },
       icon: Icon(hasActive ? Icons.gavel : Icons.add_chart),
-      label: Text(hasActive ? '开奖' : '开预测'),
+      label: Text(
+        hasActive
+            ? S.of(context).g_ui3_pred_resolve
+            : S.of(context).g_pred_create_title,
+      ),
     );
   }
 }

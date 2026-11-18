@@ -98,6 +98,7 @@ class _AddressSheetHeader extends StatelessWidget {
           ),
           // IconButton 默认 48dp 命中区（§5 触控红线）
           IconButton(
+            tooltip: S.of(context).g_key_wallet_manage,
             onPressed: () {
               Navigator.push(
                 context,
@@ -150,7 +151,7 @@ class _WalletAddressList extends StatelessWidget {
             },
             child: Container(
               // 列表项最小可点高 ≥48dp（§2.2）
-              height: ScreenUtil().setWidth(96.0),
+              height: AppTouch.scaled(96),
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
@@ -286,7 +287,7 @@ class _AddTokenMenuItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: ScreenUtil().setWidth(88),
+        height: AppTouch.target,
         width: double.infinity,
         alignment: Alignment.center,
         child: Text(
@@ -359,15 +360,26 @@ class BackupReminderBanner extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            width: double.infinity,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              S.of(context).g_key_wallet_c35,
-              style: AppTypography.body.copyWith(
+          // Red body text measured about 3.5:1 on the card; the warning
+          // icon carries the alert and the message uses the primary label.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                size: AppTypography.body.fontSize,
                 color: AppColorTokens.of(context).danger,
               ),
-            ),
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Text(
+                  S.of(context).g_key_wallet_c35,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
+                ),
+              ),
+            ],
           ),
           InkWell(
             onTap: () {
@@ -386,7 +398,7 @@ class BackupReminderBanner extends StatelessWidget {
             },
             child: Container(
               // ≥88.w 命中区（44dp 触控红线）
-              constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+              constraints: BoxConstraints(minHeight: AppTouch.target),
               alignment: Alignment.centerRight,
               child: Text(
                 S.of(context).g_key_wallet_c36,
@@ -413,28 +425,34 @@ class AddTokenFloatingIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brand = AppColorTokens.of(context).brand;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Container(
-          width: ScreenUtil().setWidth(88.0),
-          height: ScreenUtil().setWidth(88.0),
-          alignment: Alignment.center,
+    return Tooltip(
+      message: S.of(context).g_token_m_key_3,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
           child: Container(
-            width: ScreenUtil().setWidth(56.0),
-            height: ScreenUtil().setWidth(56.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColorTokens.of(context).bgElevated,
-              border: Border.all(color: brand),
-            ),
+            width: AppTouch.target,
+            height: AppTouch.target,
             alignment: Alignment.center,
-            child: Icon(
-              Icons.add,
-              color: brand,
-              size: ScreenUtil().setWidth(40.0),
+            // Ink paints the opaque disc on the Material, so the ripple
+            // stays visible on top of it.
+            child: Ink(
+              width: ScreenUtil().setWidth(56.0),
+              height: ScreenUtil().setWidth(56.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColorTokens.of(context).bgElevated,
+                border: Border.all(color: brand),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  color: brand,
+                  size: ScreenUtil().setWidth(40.0),
+                ),
+              ),
             ),
           ),
         ),

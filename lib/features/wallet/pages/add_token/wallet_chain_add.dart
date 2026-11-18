@@ -279,8 +279,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     if (RpcEndpointPolicy.needsHostnameWarning(endpoint)) {
       final approved = await tipsDialog2(
         context,
-        'Internationalized RPC hostname: ${endpoint.host}\n'
-        'This name may resemble another service. Verify the ASCII hostname independently.',
+        S.of(context).g_ui3_rpc_idn_hostname_warning(endpoint.host),
       );
       if (!mounted || approved != true) return;
     }
@@ -343,8 +342,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        errorMessage =
-            'Cannot verify the RPC genesis block. Network was not added.';
+        errorMessage = S.of(context).g_ui3_rpc_genesis_unverified;
         load = Load.finish;
       });
       return;
@@ -456,8 +454,10 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                       ),
                     ),
                     SizedBox(height: AppSpacing.space2),
+                    // 48pt row: the padded chips keep their 48pt hit area
+                    // (a 64px row clamped them to 32pt).
                     SizedBox(
-                      height: ScreenUtil().setWidth(64),
+                      height: kMinInteractiveDimension,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: evmChainPresets.length,
@@ -542,7 +542,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                           focusNode: browserNode,
                           hintText: 'https://…',
                           maxLines: 1,
-                          height: ScreenUtil().setWidth(88.0),
+                          height: AppTouch.target,
                           errorMessage: browserErrorMessage,
                           onEditingComplete: () =>
                               FocusScope.of(context).unfocus(),
@@ -584,8 +584,12 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                     ),
                     Container(
                       margin: EdgeInsets.all(AppSpacing.space8),
-                      height: ScreenUtil().setWidth(88),
-                      child: AppButton(label: s.g_key_159, onPressed: addChain),
+                      height: AppTouch.target,
+                      child: AppButton(
+                        label: s.g_key_159,
+                        onPressed: addChain,
+                        loading: load == Load.loading,
+                      ),
                     ),
                   ],
                 ),

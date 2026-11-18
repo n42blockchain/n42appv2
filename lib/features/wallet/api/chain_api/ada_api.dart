@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/network/base_http.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -29,8 +31,16 @@ class AdaApi {
   final Future<dynamic> Function(String url, Map<String, String> header)?
   _readChainTip;
 
+  final Future<HttpStatusResult> Function(
+    String url,
+    Map<String, String> header,
+  )?
+  _lookup;
+
   AdaApi({
     required this.projectId,
+    Future<HttpStatusResult> Function(String url, Map<String, String> header)?
+    lookup,
     Future<dynamic> Function(String url, Map<String, String> header)?
     readChainTip,
     Future<dynamic> Function(
@@ -48,7 +58,8 @@ class AdaApi {
     submit,
   }) : _submit = submit,
        _readUtxoPage = readUtxoPage,
-       _readChainTip = readChainTip;
+       _readChainTip = readChainTip,
+       _lookup = lookup;
 
   String _base(bool isTest) =>
       RequestUrl().getUrl2(_coinType.name, 'rpc', isTest: isTest);
@@ -202,16 +213,39 @@ class AdaApi {
         'project_id': projectId,
       };
       final url = '${_base(isTest)}/tx/submit';
-      final data = _submit != null
+      final dynamic raw = _submit != null
           ? await _submit(url, bytes, header: header, enableRetry: false)
-          : await BaseApi.requestEmptyH.post(
+          : await BaseApi.requestEmptyH.requestWithStatus(
               url,
-              params: {},
+              method: 'POST',
               data: bytes,
-              defaultReturn: false,
               header: header,
-              enableRetry: false,
             );
+      final response = raw is HttpStatusResult
+          ? raw
+          : HttpStatusResult(200, raw);
+      final status = response.statusCode;
+      if (status == 400) {
+        // Blockfrost answers 400 when the node refused the transaction
+        // (ledger validation failure): it is not in any mempool.
+        final problem = response.jsonObject;
+        if (problem != null &&
+            problem['status_code'] == 400 &&
+            problem['error'] == 'Bad Request') {
+          final message = problem['message'];
+          return _err(
+            BroadcastRejected(
+              message is String && message.isNotEmpty
+                  ? 'Cardano rejected the transaction: $message'
+                  : 'Cardano rejected the transaction',
+            ),
+          );
+        }
+      }
+      if (status == null || status < 200 || status > 202) {
+        return _err('Cardano submission status is unknown');
+      }
+      final data = response.data;
       if (data is! String || !RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(data)) {
         return _err('Invalid Cardano submission response; status is unknown');
       }
@@ -219,6 +253,19 @@ class AdaApi {
     } catch (e) {
       return _err(e);
     }
+  }
+
+  /// Single GET that exposes the HTTP status (no retry, no error mapping) so
+  /// a definite 404 can be told apart from a transport failure.
+  Future<HttpStatusResult> lookup(String path, {required bool isTest}) {
+    final url = '${_base(isTest)}$path';
+    if (_lookup != null) return _lookup(url, _header);
+    return BaseApi.requestEmptyH.requestWithStatus(
+      url,
+      method: 'GET',
+      header: _header,
+      timeout: const Duration(seconds: 15),
+    );
   }
 
   /// 查询交易详情

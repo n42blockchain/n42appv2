@@ -46,6 +46,12 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
   String coinType = 'BTC';
   String coinIcon = '';
   bool editStatus = true;
+
+  /// True while the save request is in flight (blocks double taps).
+  bool _saving = false;
+
+  /// True while the delete request is in flight (blocks double taps).
+  bool _busy = false;
   String errorMessage = "";
 
   static const _noShadow = BoxShadow(
@@ -119,23 +125,26 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
       appBar: AppBarWidget(
         text: S.of(context).g_key_address_4,
         actions: [
-          GestureDetector(
-            child: Container(
+          AppTapArea(
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-              color: Colors.transparent,
-              child: Center(
-                child: Text(
-                  editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
-                  style: AppTypography.headline.copyWith(
-                    color: AppColorTokens.of(context).textPrimary,
-                  ),
+              child: Text(
+                editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
+                style: AppTypography.headline.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
             ),
             onTap: () async {
               if (editStatus) {
                 // 编辑状态 提交数据
-                await handlerData();
+                if (_saving) return;
+                _saving = true;
+                try {
+                  await handlerData();
+                } finally {
+                  _saving = false;
+                }
               } else {
                 setState(() {
                   editStatus = true;
@@ -145,7 +154,16 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
           ),
         ],
       ),
-      body: buildContentList(context),
+      // Scrolls when the keyboard is open; the Spacer still pins the
+      // delete button to the bottom when there is room.
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: buildContentList(context),
+          ),
+        ],
+      ),
     );
   }
 
@@ -165,10 +183,7 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
           Text(
             S.of(context).address_Information,
             style: AppTypography.body.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.ff888888.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           SizedBox(height: AppSpacing.space4),
@@ -204,7 +219,7 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
       child: containerStyle1(
         context,
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-        height: ScreenUtil().setWidth(88.0),
+        height: AppTouch.target,
         child: Row(
           children: [
             SizedBox(
@@ -279,11 +294,15 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
       },
       boxShadow: _noShadow,
       messageMargin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-      rightWidget1: Image.asset(
-        "assets/wallet/scan.png",
-        color: AppColorTokens.of(context).textPrimary,
-        width: ScreenUtil().setWidth(50.0),
-        height: ScreenUtil().setWidth(50.0),
+      // Icon-only field action: the tooltip doubles as its spoken label.
+      rightWidget1: Tooltip(
+        message: S.of(context).g_key_4,
+        child: Image.asset(
+          "assets/wallet/scan.png",
+          color: AppColorTokens.of(context).textPrimary,
+          width: ScreenUtil().setWidth(50.0),
+          height: ScreenUtil().setWidth(50.0),
+        ),
       ),
       rightOnTap1: () async {
         final data = await Navigator.push(
@@ -303,7 +322,7 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(
@@ -391,33 +410,41 @@ class _EditAddressPageState extends ConsumerState<EditAddressPage> {
   }
 
   Widget delete() {
-    return GestureDetector(
-      onTap: () async {
-        final data = await _addressBook.deleteAddressBookItem(info);
-        if (!mounted) return;
-        if (data != 0) {
-          ToastUtils.show(S.of(context).g_key_address_5);
-          eventBus.fire(EventPublic(EventPublicType.refreshData));
-          Navigator.of(context).pop(true);
-        }
-      },
-      child: Container(
-        height: ScreenUtil().setWidth(80.0),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).danger,
-          borderRadius: AppRadius.brMd,
-        ),
-        child: Text(
-          S.of(context).g_key_113,
-          style: AppTypography.headline.copyWith(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainWhiteColor.name,
-            ),
-          ),
-        ),
+    // Irreversible: confirm first; loading blocks a second request.
+    return SizedBox(
+      width: double.infinity,
+      height: AppTouch.scaled(80),
+      child: AppButton(
+        label: S.of(context).g_key_113,
+        variant: AppButtonVariant.danger,
+        loading: _busy,
+        onPressed: _confirmDelete,
       ),
     );
+  }
+
+  Future<void> _confirmDelete() async {
+    if (_busy) return;
+    final s = S.of(context);
+    final ok = await AppDialog.confirm(
+      context,
+      title: s.g_key_113,
+      message: info.name ?? info.address,
+      confirmText: s.g_key_113,
+      danger: true,
+    );
+    if (!ok || !mounted) return;
+    setState(() => _busy = true);
+    try {
+      final data = await _addressBook.deleteAddressBookItem(info);
+      if (!mounted) return;
+      if (data != 0) {
+        ToastUtils.show(s.g_key_address_5);
+        eventBus.fire(EventPublic(EventPublicType.refreshData));
+        Navigator.of(context).pop(true);
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 }

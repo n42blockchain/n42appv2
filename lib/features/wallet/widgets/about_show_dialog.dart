@@ -3,6 +3,7 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_html_css/simple_html_css.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 void aboutShowDialog(BuildContext context, String aboutStr, String title) {
   showModalBottomSheet(
@@ -35,10 +36,11 @@ void aboutShowDialog(BuildContext context, String aboutStr, String title) {
                     ),
                   ),
                 ),
-                InkWell(
+                AppTapArea(
                   onTap: () {
                     Navigator.pop(context);
                   },
+                  tooltip: S.of(context).g_a11y_close,
                   child: Container(
                     width: ScreenUtil().setWidth(50.0),
                     height: ScreenUtil().setWidth(50.0),

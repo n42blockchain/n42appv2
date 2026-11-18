@@ -54,7 +54,7 @@ class _MiningTaskListState extends State<MiningTaskList> {
                 buildItem:
                     (BuildContext context, List<dynamic> results, int index) {
                       var item = results[index];
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () async {
                           Navigator.of(context).push(
                             MaterialPageRoute(

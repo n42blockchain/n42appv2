@@ -31,11 +31,14 @@ class LiveTopBar extends StatelessWidget {
         child: Row(
           children: [
             Container(
+              // No vertical padding: the 44pt follow hit area sets the
+              // height; minHeight keeps the original pill without it.
+              constraints: const BoxConstraints(minHeight: 36),
               padding: EdgeInsets.fromLTRB(
                 AppSpacing.space2,
-                AppSpacing.space2,
+                0,
                 AppSpacing.space4,
-                AppSpacing.space2,
+                0,
               ),
               decoration: const BoxDecoration(
                 color: AppColorTokens.overlay,
@@ -74,6 +77,7 @@ class LiveTopBar extends StatelessWidget {
             const Spacer(),
             OnlineBadge(count: onlineCount),
             IconButton(
+              tooltip: S.of(context).g_a11y_close,
               icon: const Icon(
                 Icons.close,
                 color: AppColorTokens.onOverlayPrimary,
@@ -94,16 +98,21 @@ class _FollowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).colorScheme.primary,
+    final tokens = AppColorTokens.of(context);
+    // 44pt hit area around the unchanged small pill.
+    return AppTapArea(
       borderRadius: AppRadius.brPill,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap:
-            onFollow ??
-            () => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(S.of(context).g_live_follow_wip)),
-            ),
+      onTap:
+          onFollow ??
+          () => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(S.of(context).g_live_follow_wip)),
+          ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          // brandFill keeps the white label at >= 4.5:1 for any accent.
+          color: tokens.brandFill,
+          borderRadius: AppRadius.brPill,
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.space4,
@@ -111,9 +120,7 @@ class _FollowButton extends StatelessWidget {
           ),
           child: Text(
             S.of(context).g_live_follow,
-            style: AppTypography.captionSm.copyWith(
-              color: AppColorTokens.onOverlayPrimary,
-            ),
+            style: AppTypography.captionSm.copyWith(color: tokens.onBrandFill),
           ),
         ),
       ),

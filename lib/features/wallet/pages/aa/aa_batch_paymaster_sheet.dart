@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/paymaster_option_card.dart';
 
 /// Paymaster 选择底部弹层
@@ -39,7 +40,7 @@ class PaymasterSelectionSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Paymaster',
+              S.of(context).g_key_aa_gas_payment,
               style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
@@ -48,23 +49,22 @@ class PaymasterSelectionSheet extends StatelessWidget {
             SizedBox(height: AppSpacing.space4),
             ...options.map((option) {
               final isSelected = option.type == selected.type;
-              return GestureDetector(
-                onTap: () => onSelect(option),
-                child: Container(
-                  margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-                  decoration: isSelected
-                      ? BoxDecoration(
-                          borderRadius: AppRadius.brMd,
-                          border: Border.all(
-                            color: const Color(0xFFFF9800),
-                            width: 2,
-                          ),
-                        )
-                      : null,
-                  child: PaymasterOptionCard(
-                    option: option,
-                    isSelected: isSelected,
-                  ),
+              // The card owns the tap so its ink stays visible.
+              return Container(
+                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+                decoration: isSelected
+                    ? BoxDecoration(
+                        borderRadius: AppRadius.brMd,
+                        border: Border.all(
+                          color: const Color(0xFFFF9800),
+                          width: 2,
+                        ),
+                      )
+                    : null,
+                child: PaymasterOptionCard(
+                  option: option,
+                  isSelected: isSelected,
+                  onTap: () => onSelect(option),
                 ),
               );
             }),

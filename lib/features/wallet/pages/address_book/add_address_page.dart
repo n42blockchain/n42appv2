@@ -49,6 +49,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
 
   String errorMessage = "";
 
+  /// True while the save request is in flight (blocks duplicate entries).
+  bool _saving = false;
+
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
@@ -129,24 +132,22 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       appBar: AppBarWidget(
         text: S.of(context).g_key_112,
         actions: [
-          GestureDetector(
+          AppTapArea(
             onTap: handlerData,
-            child: Container(
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-              color: Colors.transparent,
-              child: Center(
-                child: Text(
-                  S.of(context).g_key_115,
-                  style: AppTypography.body.copyWith(
-                    color: _themeColor(AppThemeKeys.mainBlueColor),
-                  ),
+              child: Text(
+                S.of(context).g_key_115,
+                style: AppTypography.body.copyWith(
+                  color: _themeColor(AppThemeKeys.mainBlueColor),
                 ),
               ),
             ),
           ),
         ],
       ),
-      body: buildContentList(context),
+      // Scrollable so the fields stay reachable with the keyboard open.
+      body: SingleChildScrollView(child: buildContentList(context)),
     );
   }
 
@@ -196,7 +197,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       child: containerStyle1(
         context,
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-        height: ScreenUtil().setWidth(88.0),
+        height: AppTouch.target,
         child: Row(
           children: [
             (coinType == CoinType.N.name)
@@ -213,14 +214,19 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
                     placeholder: "assets/img/list_default.png",
                   ),
             SizedBox(width: AppSpacing.space6),
-            Text(
-              '$coinFullName ($coinName)',
-              style: AppTypography.headline.copyWith(
-                color: _themeColor(AppThemeKeys.mainTextColor),
-                fontWeight: FontWeight.w400,
+            // Expanded + ellipsis: long chain names no longer overflow at
+            // 320pt / 130% text.
+            Expanded(
+              child: Text(
+                '$coinFullName ($coinName)',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.headline.copyWith(
+                  color: _themeColor(AppThemeKeys.mainTextColor),
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            const Spacer(),
             Icon(
               Icons.arrow_forward_ios,
               size: ScreenUtil().setWidth(40.0),
@@ -277,15 +283,19 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
       messageMargin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-      rightWidget1: Container(
-        width: ScreenUtil().setWidth(60.0),
-        height: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-        child: Image.asset(
-          "assets/wallet/scan.png",
-          color: _themeColor(AppThemeKeys.mainBlueColor),
-          width: ScreenUtil().setWidth(50.0),
-          height: ScreenUtil().setWidth(50.0),
+      // Icon-only field action: the tooltip doubles as its spoken label.
+      rightWidget1: Tooltip(
+        message: S.of(context).g_key_4,
+        child: Container(
+          width: ScreenUtil().setWidth(60.0),
+          height: ScreenUtil().setWidth(60.0),
+          padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
+          child: Image.asset(
+            "assets/wallet/scan.png",
+            color: _themeColor(AppThemeKeys.mainBlueColor),
+            width: ScreenUtil().setWidth(50.0),
+            height: ScreenUtil().setWidth(50.0),
+          ),
         ),
       ),
       rightOnTap1: () async {
@@ -303,7 +313,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: _themeColor(AppThemeKeys.mainBlueColor),
+          // Text-safe brand fill (white on plain brand is ~4.0:1).
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(
@@ -351,6 +362,16 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   }
 
   void handlerData() async {
+    if (_saving) return;
+    _saving = true;
+    try {
+      await _save();
+    } finally {
+      _saving = false;
+    }
+  }
+
+  Future<void> _save() async {
     final name = nameController.text.trim();
     final desc = descController.text.trim();
     final address = await addressCheck(addressController.text.trim());

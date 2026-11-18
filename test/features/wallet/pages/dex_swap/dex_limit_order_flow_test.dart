@@ -460,9 +460,20 @@ void main() {
       final action = tester
           .widget<OutlinedButton>(find.byType(OutlinedButton))
           .onPressed!;
+      // Each tap asks for confirmation; confirming both stacked dialogs must
+      // still submit only once.
       action();
       action();
+      await tester.pumpAndSettle();
+      expect(find.byType(FilledButton), findsNWidgets(2));
+      expect(api.cancellations, isEmpty);
+      await tester.tap(find.byType(FilledButton).last);
       await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      await tester.tap(find.byType(FilledButton));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byType(FilledButton), findsNothing);
       expect(api.cancellations, [('one', 'alice')]);
       expect(
         tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed,
@@ -516,6 +527,8 @@ void main() {
     await tester.pumpAndSettle();
     await tapText(tester, 'Cancel Order');
     await tester.pumpAndSettle();
+    await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
     expect(find.text('Cannot cancel'), findsOneWidget);
     expect(
       tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed,
@@ -523,6 +536,8 @@ void main() {
     );
     api.cancel = () async => throw StateError('offline');
     await tapText(tester, 'Cancel Order');
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(FilledButton));
     await tester.pumpAndSettle();
     expect(
       tester.widget<OutlinedButton>(find.byType(OutlinedButton)).onPressed,

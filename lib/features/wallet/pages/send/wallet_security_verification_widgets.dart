@@ -52,18 +52,17 @@ class _PillButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    // 44pt hit area around the unchanged pill.
+    return AppTapArea(
       onTap: onTap,
+      borderRadius: AppRadius.brXl,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: AppSpacing.space2,
           horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainButtonBgColor.name,
-          ),
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: AppRadius.brXl,
         ),
         child: Text(
@@ -108,10 +107,8 @@ class _SetupPromptRow extends StatelessWidget {
           child: Text(
             message,
             style: AppTypography.bodySm.copyWith(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonBgColor.name,
-              ),
+              // Text-safe brand shade (plain brand is ~3.6-4.2:1 here).
+              color: AppColorTokens.of(context).brandOnTint,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -168,7 +165,7 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
 
   Widget _buildBottomBar(bool anyEnabled) {
     final su = ScreenUtil();
-    final h88 = su.setWidth(88.0);
+    final h88 = AppTouch.target;
     final pad30 = su.setWidth(30.0);
 
     Color themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
@@ -177,7 +174,8 @@ extension _SecurityVerificationBuild on _WalletSecurityVerificationState {
       children: [
         Divider(height: su.setWidth(1), indent: 0, endIndent: 0),
         Container(
-          height: su.setWidth(148.0),
+          // Grows past the design height so the 44pt button is never clipped.
+          constraints: BoxConstraints(minHeight: su.setWidth(148.0)),
           padding: EdgeInsets.all(pad30),
           color: themeColor(AppThemeKeys.backGroundColor.name),
           child: Row(

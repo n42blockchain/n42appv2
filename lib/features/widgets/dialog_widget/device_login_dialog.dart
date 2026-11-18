@@ -70,46 +70,51 @@ Future<bool?> deviceLoginDialog(
           ),
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           // 双按钮: "知道了" + "修改密码"
-          SizedBox(
-            height: ScreenUtil().setWidth(80),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        S.of(context).device_login_dismiss,
-                        style: AppTypography.body.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
+          // Transparent Material above the card fill so the buttons' ink is
+          // visible (it was painted under the opaque Container before).
+          Material(
+            type: MaterialType.transparency,
+            child: SizedBox(
+              height: AppTouch.scaled(80),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          S.of(context).device_login_dismiss,
+                          style: AppTypography.body.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Container(color: AppColorTokens.of(context).border, width: 1),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: Container(
-                      color: Colors.transparent,
-                      alignment: Alignment.center,
-                      child: Text(
-                        S.of(context).device_login_change_password,
-                        style: AppTypography.body.copyWith(
-                          color: AppColorTokens.of(context).brand,
+                  Container(color: AppColorTokens.of(context).border, width: 1),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop(true);
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        alignment: Alignment.center,
+                        child: Text(
+                          S.of(context).device_login_change_password,
+                          style: AppTypography.body.copyWith(
+                            color: AppColorTokens.of(context).brandOnTint,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -39,6 +39,8 @@ class _EmptyViewState extends State<EmptyView> {
           children: [
             if (widget.canRefresh)
               IconButton(
+                tooltip: MaterialLocalizations.of(context)
+                    .refreshIndicatorSemanticLabel,
                 onPressed: widget.onPressed,
                 icon: Icon(
                   Icons.wifi_protected_setup_outlined,

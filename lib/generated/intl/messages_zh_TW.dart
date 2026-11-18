@@ -182,70 +182,112 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m75(value) => "RPC 回報的 Chain ID 為 ${value}，與您填寫的不一致。";
 
-  static String m76(asset, contract, address) =>
+  static String m76(address, asset) => "收款地址 ${address} 尚未加入資產 ${asset},無法接收。";
+
+  static String m77(action) => "授權${action}";
+
+  static String m78(name) => "${name} · 資產顯示設定";
+
+  static String m79(index) => "操作 #${index}：地址或金額無效";
+
+  static String m80(action) => "確認${action}";
+
+  static String m81(key) => "公鑰：${key}";
+
+  static String m82(count) => "找到 ${count} 台裝置";
+
+  static String m83(name) => "${name}濾鏡";
+
+  static String m84(name, gift) => "${name} 送出 ${gift}";
+
+  static String m85(reason) => "載入失敗：${reason}";
+
+  static String m86(name) => "${name} 來了";
+
+  static String m87(count) => "${count} 人";
+
+  static String m88(value) => "缺少 ${value} 的父鏈";
+
+  static String m89(time) => "${time} 後截止";
+
+  static String m90(shares) => "持 ${shares}";
+
+  static String m91(amount, symbol) => "成交量 ${amount} ${symbol}";
+
+  static String m92(name) => "移除 ${name}？";
+
+  static String m93(host) =>
+      "國際化 RPC 主機名稱：${host}\\n此名稱可能與其他服務相似，請另行核實其 ASCII 主機名稱。";
+
+  static String m94(amount, symbol, protocol) =>
+      "透過 ${protocol} 質押 ${amount} ${symbol}？這將從您的錢包發送一筆鏈上交易。";
+
+  static String m95(name, decimals) => "${name} · ${decimals} 位小數";
+
+  static String m96(asset, contract, address) =>
       "帳戶 ${address} 尚未新增資產 ${asset}（${contract}）。";
 
-  static String m77(imported, skipped) => "已匯入錢包：${imported}。已略過：${skipped}。";
+  static String m97(imported, skipped) => "已匯入錢包：${imported}。已略過：${skipped}。";
 
-  static String m78(value) => "餘額：${value}";
+  static String m98(value) => "餘額：${value}";
 
-  static String m79(value) => "基礎費用：${value} Gwei";
+  static String m99(value) => "基礎費用：${value} Gwei";
 
-  static String m80(value) => "剪貼簿將於 ${value} 秒後自動清除";
+  static String m100(value) => "剪貼簿將於 ${value} 秒後自動清除";
 
-  static String m81(value) => "第 ${value} 列：缺少欄位";
+  static String m101(value) => "第 ${value} 列：缺少欄位";
 
-  static String m82(value) => "${value} 天";
+  static String m102(value) => "${value} 天";
 
-  static String m83(value) => "已連線至 ${value}";
+  static String m103(value) => "已連線至 ${value}";
 
-  static String m84(value) => "Gas 費用：${value}";
+  static String m104(value) => "Gas 費用：${value}";
 
-  static String m85(value) => "${value} 小時";
+  static String m105(value) => "${value} 小時";
 
-  static String m86(value) => "匯入有效收款人（${value}）";
+  static String m106(value) => "匯入有效收款人（${value}）";
 
-  static String m87(quote, base) => "限價（每 ${base} 的 ${quote} 價格）";
+  static String m107(quote, base) => "限價（每 ${base} 的 ${quote} 價格）";
 
-  static String m88(value) => "限價 ${value}";
+  static String m108(value) => "限價 ${value}";
 
-  static String m89(value) => "行情（${value}）";
+  static String m109(value) => "行情（${value}）";
 
-  static String m90(value) => "最低餘額：${value}";
+  static String m110(value) => "最低餘額：${value}";
 
-  static String m91(value) => "訂單（${value}）";
+  static String m111(value) => "訂單（${value}）";
 
-  static String m92(value) => "持倉（${value}）";
+  static String m112(value) => "持倉（${value}）";
 
-  static String m93(value) => "收款人：${value}";
+  static String m113(value) => "收款人：${value}";
 
-  static String m94(value) => "已找到代幣：${value}";
+  static String m114(value) => "已找到代幣：${value}";
 
-  static String m95(value) => "代幣：${value}";
+  static String m115(value) => "代幣：${value}";
 
-  static String m96(value) => "交易：${value}";
+  static String m116(value) => "交易：${value}";
 
-  static String m97(valid, issues) => "有效：${valid}。問題：${issues}。";
+  static String m117(valid, issues) => "有效：${valid}。問題：${issues}。";
 
-  static String m98(value) => "…另有 ${value} 個問題";
+  static String m118(value) => "…另有 ${value} 個問題";
 
-  static String m99(volume, interest) => "成交量：${volume} · 未平倉量：${interest}";
+  static String m119(volume, interest) => "成交量：${volume} · 未平倉量：${interest}";
 
-  static String m100(value) => "錢包 ${value}";
+  static String m120(value) => "錢包 ${value}";
 
-  static String m101(value) => "${value} 小時前更新";
+  static String m121(value) => "${value} 小時前更新";
 
-  static String m102(value) => "${value} 分鐘前更新";
+  static String m122(value) => "${value} 分鐘前更新";
 
-  static String m103(number) => "區塊 #${number}";
+  static String m123(number) => "區塊 #${number}";
 
-  static String m104(index) => "裝置 ${index}";
+  static String m124(index) => "裝置 ${index}";
 
-  static String m105(value) => "${value} 毫秒";
+  static String m125(value) => "${value} 毫秒";
 
-  static String m106(count) => "${count} 筆交易";
+  static String m126(count) => "${count} 筆交易";
 
-  static String m107(value) => "0~${value} 個字符";
+  static String m127(value) => "0~${value} 個字符";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -262,6 +304,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "device_login_message": m0,
     "device_login_title": MessageLookupByLibrary.simpleMessage("新裝置登入"),
     "file": MessageLookupByLibrary.simpleMessage("文件"),
+    "g_a11y_add_path": MessageLookupByLibrary.simpleMessage("新增衍生路徑"),
+    "g_a11y_clear": MessageLookupByLibrary.simpleMessage("清除"),
+    "g_a11y_clear_search": MessageLookupByLibrary.simpleMessage("清除搜尋"),
+    "g_a11y_clear_text": MessageLookupByLibrary.simpleMessage("清除文字"),
+    "g_a11y_close": MessageLookupByLibrary.simpleMessage("關閉"),
+    "g_a11y_export_key": MessageLookupByLibrary.simpleMessage("匯出金鑰"),
+    "g_a11y_flashlight": MessageLookupByLibrary.simpleMessage("手電筒"),
+    "g_a11y_forward": MessageLookupByLibrary.simpleMessage("前進"),
+    "g_a11y_group_by_collection": MessageLookupByLibrary.simpleMessage("按系列分組"),
+    "g_a11y_hide_password": MessageLookupByLibrary.simpleMessage("隱藏密碼"),
+    "g_a11y_new_tab": MessageLookupByLibrary.simpleMessage("新增分頁"),
+    "g_a11y_previous": MessageLookupByLibrary.simpleMessage("上一個"),
+    "g_a11y_reverse_tokens": MessageLookupByLibrary.simpleMessage("交換幣種"),
+    "g_a11y_scroll_to_bottom": MessageLookupByLibrary.simpleMessage("捲動到底部"),
+    "g_a11y_scroll_to_top": MessageLookupByLibrary.simpleMessage("捲動到頂部"),
+    "g_a11y_show_password": MessageLookupByLibrary.simpleMessage("顯示密碼"),
+    "g_a11y_stop": MessageLookupByLibrary.simpleMessage("停止"),
+    "g_a11y_swap_direction": MessageLookupByLibrary.simpleMessage("交換方向"),
+    "g_a11y_tabs": MessageLookupByLibrary.simpleMessage("分頁"),
     "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
       "快取餘額 · 更新失敗",
     ),
@@ -1902,6 +1963,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_market_search_hint": MessageLookupByLibrary.simpleMessage("搜尋硬幣..."),
     "g_market_trending": MessageLookupByLibrary.simpleMessage("流行趨勢"),
     "g_market_watchlist": MessageLookupByLibrary.simpleMessage("注意列表"),
+    "g_memo_pending_dismiss": MessageLookupByLibrary.simpleMessage("不再等待"),
+    "g_memo_pending_dismissed": MessageLookupByLibrary.simpleMessage(
+      "現在可以再次發送，先前的交易仍會持續查詢。",
+    ),
+    "g_memo_pending_keep_waiting": MessageLookupByLibrary.simpleMessage("繼續等待"),
+    "g_memo_pending_unknown_body": MessageLookupByLibrary.simpleMessage(
+      "此地址先前的一筆轉帳尚未確認，目前無法判斷結果，因此新的轉帳被暫停。若您選擇不再等待，該筆交易仍會以「待處理」保留在紀錄中並持續查詢。警告：它仍可能在鏈上完成，再次發送可能導致重複付款。請先在區塊瀏覽器確認先前的交易。",
+    ),
+    "g_memo_pending_unknown_title": MessageLookupByLibrary.simpleMessage(
+      "先前交易狀態未知",
+    ),
     "g_mining_inactivity_warning": MessageLookupByLibrary.simpleMessage(
       "驗證者閒置分數偏高。請檢查您的節點狀態以避免受罰。",
     ),
@@ -2230,12 +2302,387 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("警告"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高風險"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全的"),
+    "g_tx_status_unconfirmed": MessageLookupByLibrary.simpleMessage("未確認"),
+    "g_tx_status_unconfirmed_hint": MessageLookupByLibrary.simpleMessage(
+      "鏈上尚未確認，結果未知。系統仍在持續查詢，交易仍可能完成。再次發送前請先在區塊瀏覽器中查看。",
+    ),
+    "g_ui3_aave_unavailable": MessageLookupByLibrary.simpleMessage(
+      "此鏈暫不支援 Aave V3",
+    ),
+    "g_ui3_account_security": MessageLookupByLibrary.simpleMessage("帳戶安全"),
+    "g_ui3_activation_time": MessageLookupByLibrary.simpleMessage("啟用時間"),
+    "g_ui3_address_or_ens": MessageLookupByLibrary.simpleMessage("地址或 ENS 名稱"),
+    "g_ui3_algo_recipient_no_asset": m76,
+    "g_ui3_approve_action": m77,
+    "g_ui3_approve_failed": MessageLookupByLibrary.simpleMessage("授權失敗"),
+    "g_ui3_asset_controls_body": MessageLookupByLibrary.simpleMessage(
+      "這些設定只影響本錢包的顯示。隱藏不會撤銷授權，也不會改變餘額。隔離還會禁止從錢包列表開啟此資產。DApp 互動不受限制。",
+    ),
+    "g_ui3_asset_controls_title": m78,
+    "g_ui3_asset_display_controls": MessageLookupByLibrary.simpleMessage(
+      "資產顯示設定",
+    ),
+    "g_ui3_asset_display_local_note": MessageLookupByLibrary.simpleMessage(
+      "僅為本機顯示選擇，鏈上餘額和授權不變。",
+    ),
+    "g_ui3_asset_hidden_reviewed": MessageLookupByLibrary.simpleMessage(
+      "已隱藏和待審查的資產",
+    ),
+    "g_ui3_asset_hide": MessageLookupByLibrary.simpleMessage("從列表隱藏"),
+    "g_ui3_asset_mark_review": MessageLookupByLibrary.simpleMessage("標記待審查"),
+    "g_ui3_asset_marked_review_hint": MessageLookupByLibrary.simpleMessage(
+      "你已將其標記為待審查。長按可查看或恢復。",
+    ),
+    "g_ui3_asset_quarantine": MessageLookupByLibrary.simpleMessage("從列表隔離"),
+    "g_ui3_asset_restore": MessageLookupByLibrary.simpleMessage("恢復"),
+    "g_ui3_asset_restore_display": MessageLookupByLibrary.simpleMessage(
+      "恢復正常顯示",
+    ),
+    "g_ui3_asset_restore_failed": MessageLookupByLibrary.simpleMessage(
+      "無法恢復資產顯示。",
+    ),
+    "g_ui3_asset_save_failed": MessageLookupByLibrary.simpleMessage(
+      "無法儲存資產顯示設定。",
+    ),
+    "g_ui3_asset_state_hidden": MessageLookupByLibrary.simpleMessage("已隱藏"),
+    "g_ui3_asset_state_quarantined": MessageLookupByLibrary.simpleMessage(
+      "已隔離",
+    ),
+    "g_ui3_backup_phrase_unavailable": MessageLookupByLibrary.simpleMessage(
+      "此錢包未儲存助記詞。",
+    ),
+    "g_ui3_batch_build_failed": MessageLookupByLibrary.simpleMessage("建立操作失敗"),
+    "g_ui3_batch_nft_transfer": MessageLookupByLibrary.simpleMessage(
+      "批次轉移 NFT",
+    ),
+    "g_ui3_batch_operation_invalid": m79,
+    "g_ui3_borrow": MessageLookupByLibrary.simpleMessage("借款"),
+    "g_ui3_borrow_apr": MessageLookupByLibrary.simpleMessage("借款年利率"),
+    "g_ui3_borrow_submitted": MessageLookupByLibrary.simpleMessage("借款已提交"),
+    "g_ui3_calldata_required": MessageLookupByLibrary.simpleMessage(
+      "請輸入 Calldata",
+    ),
+    "g_ui3_chain_config_invalid": MessageLookupByLibrary.simpleMessage("鏈設定無效"),
+    "g_ui3_chain_config_missing_parent": MessageLookupByLibrary.simpleMessage(
+      "缺少主鏈設定",
+    ),
+    "g_ui3_clear_browser_cache_confirm": MessageLookupByLibrary.simpleMessage(
+      "清除瀏覽器快取的網站資料？網站可能需要重新登入。",
+    ),
+    "g_ui3_clear_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "清除最近的搜尋紀錄？",
+    ),
+    "g_ui3_close_all_tabs_confirm": MessageLookupByLibrary.simpleMessage(
+      "關閉所有分頁？",
+    ),
+    "g_ui3_confirm_action": m80,
+    "g_ui3_copy_template": MessageLookupByLibrary.simpleMessage("複製範本"),
+    "g_ui3_csv_address_desc": MessageLookupByLibrary.simpleMessage(
+      "必填 — EVM 地址(0x + 40 位十六進位)",
+    ),
+    "g_ui3_csv_amount_desc": MessageLookupByLibrary.simpleMessage(
+      "必填 — 十進位數字(如 1.5)",
+    ),
+    "g_ui3_csv_columns": MessageLookupByLibrary.simpleMessage("欄位"),
+    "g_ui3_csv_example": MessageLookupByLibrary.simpleMessage("範例"),
+    "g_ui3_csv_memo_desc": MessageLookupByLibrary.simpleMessage("選填 — 標籤或備註"),
+    "g_ui3_csv_rule_blank": MessageLookupByLibrary.simpleMessage("空白行將被忽略"),
+    "g_ui3_csv_rule_comments": MessageLookupByLibrary.simpleMessage(
+      "以 # 開頭的行為註解,將被忽略",
+    ),
+    "g_ui3_csv_rule_duplicates": MessageLookupByLibrary.simpleMessage(
+      "重複地址將被標記",
+    ),
+    "g_ui3_csv_rule_header": MessageLookupByLibrary.simpleMessage(
+      "標題列(address,amount,memo)可選,會自動識別",
+    ),
+    "g_ui3_csv_rules": MessageLookupByLibrary.simpleMessage("規則"),
+    "g_ui3_data": MessageLookupByLibrary.simpleMessage("資料"),
+    "g_ui3_delete_bookmark_confirm": MessageLookupByLibrary.simpleMessage(
+      "刪除此書籤？",
+    ),
+    "g_ui3_delete_trade_confirm": MessageLookupByLibrary.simpleMessage(
+      "刪除這筆交易記錄？",
+    ),
+    "g_ui3_delete_validator_key_confirm": MessageLookupByLibrary.simpleMessage(
+      "從此裝置刪除該驗證者金鑰？請確認已備份。",
+    ),
+    "g_ui3_enter_amount": MessageLookupByLibrary.simpleMessage("請輸入金額"),
+    "g_ui3_falcon_auth_reason": MessageLookupByLibrary.simpleMessage(
+      "授權 Falcon 錢包操作",
+    ),
+    "g_ui3_falcon_backup_password": MessageLookupByLibrary.simpleMessage(
+      "備份密碼（至少 12 字元）",
+    ),
+    "g_ui3_falcon_backup_to_restore": MessageLookupByLibrary.simpleMessage(
+      "待恢復的加密備份",
+    ),
+    "g_ui3_falcon_backup_verified": MessageLookupByLibrary.simpleMessage(
+      "加密備份已驗證",
+    ),
+    "g_ui3_falcon_confirm_offline_signature":
+        MessageLookupByLibrary.simpleMessage("確認離線簽名"),
+    "g_ui3_falcon_confirm_transaction": MessageLookupByLibrary.simpleMessage(
+      "確認 Falcon 交易",
+    ),
+    "g_ui3_falcon_copy_result": MessageLookupByLibrary.simpleMessage("複製結果"),
+    "g_ui3_falcon_create_account": MessageLookupByLibrary.simpleMessage(
+      "建立 Falcon 帳戶",
+    ),
+    "g_ui3_falcon_export_backup": MessageLookupByLibrary.simpleMessage(
+      "匯出加密備份",
+    ),
+    "g_ui3_falcon_library_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Falcon 原生程式庫無法使用",
+    ),
+    "g_ui3_falcon_network_not_enabled": MessageLookupByLibrary.simpleMessage(
+      "該網路尚未啟用 Falcon-512 交易，可先使用離線簽名。",
+    ),
+    "g_ui3_falcon_notice": MessageLookupByLibrary.simpleMessage(
+      "僅使用明確支援 Falcon-512 交易的網路。轉入資產前請核對 RPC 並驗證備份。Falcon 金鑰須獨立加密備份，不能透過原 EVM 助記詞恢復。發送結果不明時，請先查詢狀態，勿重複支付。",
+    ),
+    "g_ui3_falcon_operation_failed": MessageLookupByLibrary.simpleMessage(
+      "操作失敗，請檢查輸入、備份密碼及裝置認證。如已嘗試發送，請先查詢上一筆結果，勿重複支付。",
+    ),
+    "g_ui3_falcon_owner_changed": MessageLookupByLibrary.simpleMessage("帳戶已切換"),
+    "g_ui3_falcon_public_key": m81,
+    "g_ui3_falcon_query_previous": MessageLookupByLibrary.simpleMessage(
+      "查詢上一筆發送狀態",
+    ),
+    "g_ui3_falcon_query_previous_first": MessageLookupByLibrary.simpleMessage(
+      "請先查詢上一筆發送結果，再進行新的支付。",
+    ),
+    "g_ui3_falcon_restore_account": MessageLookupByLibrary.simpleMessage(
+      "恢復 Falcon 帳戶",
+    ),
+    "g_ui3_falcon_review_send": MessageLookupByLibrary.simpleMessage("預覽並發送"),
+    "g_ui3_falcon_review_sign_offline": MessageLookupByLibrary.simpleMessage(
+      "預覽並離線簽名",
+    ),
+    "g_ui3_falcon_sign_and_send": MessageLookupByLibrary.simpleMessage("簽名並發送"),
+    "g_ui3_falcon_verify_backup": MessageLookupByLibrary.simpleMessage(
+      "驗證已儲存的備份",
+    ),
+    "g_ui3_hw_bt_disabled_message": MessageLookupByLibrary.simpleMessage(
+      "請在裝置設定中開啟藍牙以連接硬體錢包。",
+    ),
+    "g_ui3_hw_bt_disabled_title": MessageLookupByLibrary.simpleMessage("藍牙已關閉"),
+    "g_ui3_hw_bt_permission_message": MessageLookupByLibrary.simpleMessage(
+      "請授予藍牙權限以搜尋硬體錢包。",
+    ),
+    "g_ui3_hw_bt_permission_title": MessageLookupByLibrary.simpleMessage(
+      "需要藍牙權限",
+    ),
+    "g_ui3_hw_devices_found": m82,
+    "g_ui3_hw_ledger_device": MessageLookupByLibrary.simpleMessage("Ledger 裝置"),
+    "g_ui3_hw_no_devices": MessageLookupByLibrary.simpleMessage("未找到裝置"),
+    "g_ui3_hw_scan_again": MessageLookupByLibrary.simpleMessage("重新掃描"),
+    "g_ui3_hw_search_complete": MessageLookupByLibrary.simpleMessage("搜尋完成"),
+    "g_ui3_hw_searching": MessageLookupByLibrary.simpleMessage("正在搜尋裝置…"),
+    "g_ui3_hw_stop_scan": MessageLookupByLibrary.simpleMessage("停止掃描"),
+    "g_ui3_iap_purchase_not_started": MessageLookupByLibrary.simpleMessage(
+      "無法啟動購買",
+    ),
+    "g_ui3_idhub_approve_login_prompt": MessageLookupByLibrary.simpleMessage(
+      "是否使用您的 N42 身分核准登入？",
+    ),
+    "g_ui3_idhub_approved": MessageLookupByLibrary.simpleMessage(
+      "已核准，請返回另一台裝置。",
+    ),
+    "g_ui3_idhub_bind": MessageLookupByLibrary.simpleMessage("綁定"),
+    "g_ui3_idhub_bind_prompt": MessageLookupByLibrary.simpleMessage(
+      "是否將此錢包綁定到您的 N42 身分？",
+    ),
+    "g_ui3_idhub_bind_wallet": MessageLookupByLibrary.simpleMessage("綁定錢包"),
+    "g_ui3_idhub_bind_wallet_title": MessageLookupByLibrary.simpleMessage(
+      "綁定錢包",
+    ),
+    "g_ui3_idhub_bound": MessageLookupByLibrary.simpleMessage(
+      "錢包已綁定，請返回另一台裝置。",
+    ),
+    "g_ui3_idhub_load_failed": MessageLookupByLibrary.simpleMessage("無法載入此請求。"),
+    "g_ui3_idhub_login_request": MessageLookupByLibrary.simpleMessage("登入請求"),
+    "g_ui3_idhub_request": MessageLookupByLibrary.simpleMessage("請求"),
+    "g_ui3_idhub_server": MessageLookupByLibrary.simpleMessage("伺服器"),
+    "g_ui3_idhub_sign_failed": MessageLookupByLibrary.simpleMessage(
+      "簽名失敗，請重試。",
+    ),
+    "g_ui3_idhub_sign_in": MessageLookupByLibrary.simpleMessage("登入"),
+    "g_ui3_idhub_type_mismatch": MessageLookupByLibrary.simpleMessage(
+      "此請求類型與掃描的條碼不一致。",
+    ),
+    "g_ui3_idhub_unlock_wallet": MessageLookupByLibrary.simpleMessage(
+      "請先解鎖錢包，然後重新開啟此請求。",
+    ),
+    "g_ui3_idhub_untrusted_server": MessageLookupByLibrary.simpleMessage(
+      "此請求指向不受信任的伺服器，已被攔截。",
+    ),
+    "g_ui3_idhub_wallet_changed": MessageLookupByLibrary.simpleMessage(
+      "目前錢包已切換，請重新開啟此請求。",
+    ),
+    "g_ui3_invalid_amount": MessageLookupByLibrary.simpleMessage("金額無效"),
+    "g_ui3_invalid_coin_config": MessageLookupByLibrary.simpleMessage("幣種設定無效"),
+    "g_ui3_invalid_tx_hash": MessageLookupByLibrary.simpleMessage("無效的交易雜湊"),
+    "g_ui3_invalid_tx_receipt": MessageLookupByLibrary.simpleMessage("無效的交易回執"),
+    "g_ui3_lending": MessageLookupByLibrary.simpleMessage("借貸"),
+    "g_ui3_limit": MessageLookupByLibrary.simpleMessage("限價"),
+    "g_ui3_live_beauty": MessageLookupByLibrary.simpleMessage("美顏與濾鏡"),
+    "g_ui3_live_beauty_reset": MessageLookupByLibrary.simpleMessage("恢復原圖"),
+    "g_ui3_live_brighten": MessageLookupByLibrary.simpleMessage("美白"),
+    "g_ui3_live_browse_hint": MessageLookupByLibrary.simpleMessage(
+      "點擊「重新整理」載入直播間",
+    ),
+    "g_ui3_live_browse_title": MessageLookupByLibrary.simpleMessage("查看直播間"),
+    "g_ui3_live_coins_insufficient": MessageLookupByLibrary.simpleMessage(
+      "金幣不足，請先儲值",
+    ),
+    "g_ui3_live_connecting": MessageLookupByLibrary.simpleMessage("連線中…"),
+    "g_ui3_live_empty": MessageLookupByLibrary.simpleMessage("暫無直播間"),
+    "g_ui3_live_end": MessageLookupByLibrary.simpleMessage("結束直播"),
+    "g_ui3_live_end_confirm": MessageLookupByLibrary.simpleMessage(
+      "結束本場直播？觀眾將中斷連線。",
+    ),
+    "g_ui3_live_enter": MessageLookupByLibrary.simpleMessage("進入"),
+    "g_ui3_live_filter": MessageLookupByLibrary.simpleMessage("濾鏡"),
+    "g_ui3_live_filter_cool": MessageLookupByLibrary.simpleMessage("清冷"),
+    "g_ui3_live_filter_mono": MessageLookupByLibrary.simpleMessage("黑白"),
+    "g_ui3_live_filter_named": m83,
+    "g_ui3_live_filter_natural": MessageLookupByLibrary.simpleMessage("自然"),
+    "g_ui3_live_filter_original": MessageLookupByLibrary.simpleMessage("原圖"),
+    "g_ui3_live_filter_vivid": MessageLookupByLibrary.simpleMessage("鮮明"),
+    "g_ui3_live_filter_warm": MessageLookupByLibrary.simpleMessage("暖陽"),
+    "g_ui3_live_gift": MessageLookupByLibrary.simpleMessage("禮物"),
+    "g_ui3_live_gift_cheers": MessageLookupByLibrary.simpleMessage("乾杯"),
+    "g_ui3_live_gift_crown": MessageLookupByLibrary.simpleMessage("皇冠"),
+    "g_ui3_live_gift_diamond": MessageLookupByLibrary.simpleMessage("鑽石"),
+    "g_ui3_live_gift_rocket": MessageLookupByLibrary.simpleMessage("火箭"),
+    "g_ui3_live_gift_rose": MessageLookupByLibrary.simpleMessage("玫瑰"),
+    "g_ui3_live_gift_sent": m84,
+    "g_ui3_live_hold_compare": MessageLookupByLibrary.simpleMessage("按住查看原圖"),
+    "g_ui3_live_like": MessageLookupByLibrary.simpleMessage("按讚"),
+    "g_ui3_live_list": MessageLookupByLibrary.simpleMessage("直播列表"),
+    "g_ui3_live_load_failed": m85,
+    "g_ui3_live_mute": MessageLookupByLibrary.simpleMessage("靜音"),
+    "g_ui3_live_pause_video": MessageLookupByLibrary.simpleMessage("暫停畫面"),
+    "g_ui3_live_permission_required": MessageLookupByLibrary.simpleMessage(
+      "需要相機與麥克風權限才能開播",
+    ),
+    "g_ui3_live_resume_video": MessageLookupByLibrary.simpleMessage("恢復畫面"),
+    "g_ui3_live_room_id_copied": MessageLookupByLibrary.simpleMessage("已複製房間號"),
+    "g_ui3_live_rosy": MessageLookupByLibrary.simpleMessage("紅潤"),
+    "g_ui3_live_say_something": MessageLookupByLibrary.simpleMessage("說點什麼…"),
+    "g_ui3_live_send_gift": MessageLookupByLibrary.simpleMessage("送禮物"),
+    "g_ui3_live_smooth": MessageLookupByLibrary.simpleMessage("磨皮"),
+    "g_ui3_live_start": MessageLookupByLibrary.simpleMessage("開始直播"),
+    "g_ui3_live_starting": MessageLookupByLibrary.simpleMessage("開播中…"),
+    "g_ui3_live_switch_camera": MessageLookupByLibrary.simpleMessage("切換鏡頭"),
+    "g_ui3_live_top_up": MessageLookupByLibrary.simpleMessage("儲值"),
+    "g_ui3_live_torch_off": MessageLookupByLibrary.simpleMessage("關閉補光燈"),
+    "g_ui3_live_torch_on": MessageLookupByLibrary.simpleMessage("開啟補光燈"),
+    "g_ui3_live_torch_unsupported": MessageLookupByLibrary.simpleMessage(
+      "請切換到支援補光燈的後置鏡頭",
+    ),
+    "g_ui3_live_unmute": MessageLookupByLibrary.simpleMessage("開啟麥克風"),
+    "g_ui3_live_user_joined": m86,
+    "g_ui3_live_video_unavailable": MessageLookupByLibrary.simpleMessage(
+      "影像暫不可用，其他直播功能可繼續使用",
+    ),
+    "g_ui3_live_viewers": m87,
+    "g_ui3_live_waiting_video": MessageLookupByLibrary.simpleMessage("等待畫面…"),
+    "g_ui3_long": MessageLookupByLibrary.simpleMessage("做多"),
+    "g_ui3_market": MessageLookupByLibrary.simpleMessage("市價"),
+    "g_ui3_method": MessageLookupByLibrary.simpleMessage("方法"),
+    "g_ui3_min_balance": MessageLookupByLibrary.simpleMessage("最低餘額"),
+    "g_ui3_missing_parent_chain": m88,
+    "g_ui3_nft_transfer_unsupported": MessageLookupByLibrary.simpleMessage(
+      "不支援轉移此 NFT",
+    ),
+    "g_ui3_no_markets": MessageLookupByLibrary.simpleMessage("暫無可用市場"),
+    "g_ui3_no_trending_data": MessageLookupByLibrary.simpleMessage("暫無熱門資料"),
+    "g_ui3_no_wallet_for_chain": MessageLookupByLibrary.simpleMessage(
+      "未找到該鏈的錢包帳戶",
+    ),
+    "g_ui3_phone": MessageLookupByLibrary.simpleMessage("手機號碼"),
+    "g_ui3_pick_file": MessageLookupByLibrary.simpleMessage("選擇檔案"),
+    "g_ui3_pred_awaiting": MessageLookupByLibrary.simpleMessage("待開獎"),
+    "g_ui3_pred_claim_refund": MessageLookupByLibrary.simpleMessage("領取退款"),
+    "g_ui3_pred_closed": MessageLookupByLibrary.simpleMessage("已截止"),
+    "g_ui3_pred_closes_in": m89,
+    "g_ui3_pred_held": m90,
+    "g_ui3_pred_redeem_winnings": MessageLookupByLibrary.simpleMessage("贖回獎金"),
+    "g_ui3_pred_resolve": MessageLookupByLibrary.simpleMessage("開獎"),
+    "g_ui3_pred_volume": m91,
+    "g_ui3_receipt_lookup_failed": MessageLookupByLibrary.simpleMessage(
+      "交易回執查詢失敗",
+    ),
+    "g_ui3_remove_asset_message": MessageLookupByLibrary.simpleMessage(
+      "它將不再顯示在此錢包中，鏈上資產不受影響。",
+    ),
+    "g_ui3_remove_asset_title": m92,
+    "g_ui3_remove_search_history_title": MessageLookupByLibrary.simpleMessage(
+      "移除這筆最近的搜尋紀錄？",
+    ),
+    "g_ui3_rpc_genesis_unverified": MessageLookupByLibrary.simpleMessage(
+      "無法驗證 RPC 創世區塊，未新增網路。",
+    ),
+    "g_ui3_rpc_idn_hostname_warning": m93,
+    "g_ui3_rpc_url_not_configured": MessageLookupByLibrary.simpleMessage(
+      "未設定 RPC 位址",
+    ),
+    "g_ui3_search_coin": MessageLookupByLibrary.simpleMessage("搜尋幣種"),
+    "g_ui3_search_failed": MessageLookupByLibrary.simpleMessage("搜尋失敗"),
+    "g_ui3_sell": MessageLookupByLibrary.simpleMessage("賣出"),
+    "g_ui3_send_failed_retry": MessageLookupByLibrary.simpleMessage("傳送失敗，請重試"),
+    "g_ui3_short": MessageLookupByLibrary.simpleMessage("做空"),
+    "g_ui3_signing_config_changed": MessageLookupByLibrary.simpleMessage(
+      "錢包簽名設定已變更",
+    ),
+    "g_ui3_signing_key_mismatch": MessageLookupByLibrary.simpleMessage(
+      "簽名金鑰與發送地址不符",
+    ),
+    "g_ui3_similar_address_body": MessageLookupByLibrary.simpleMessage(
+      "此地址與最近的收款地址相似,但並不相同。",
+    ),
+    "g_ui3_similar_address_note": MessageLookupByLibrary.simpleMessage(
+      "來源:本機轉帳紀錄,剛剛檢查。這只是相似提醒,並不代表存在詐騙。",
+    ),
+    "g_ui3_similar_address_title": MessageLookupByLibrary.simpleMessage(
+      "請核對完整收款地址",
+    ),
+    "g_ui3_stake_confirm_message": m94,
+    "g_ui3_supply": MessageLookupByLibrary.simpleMessage("存入"),
+    "g_ui3_supply_apy": MessageLookupByLibrary.simpleMessage("存款年化收益率"),
+    "g_ui3_supply_submitted": MessageLookupByLibrary.simpleMessage("存入已提交"),
+    "g_ui3_token": MessageLookupByLibrary.simpleMessage("代幣"),
+    "g_ui3_token_added": MessageLookupByLibrary.simpleMessage("新增成功"),
+    "g_ui3_token_already_exists": MessageLookupByLibrary.simpleMessage("已存在"),
+    "g_ui3_token_contract_invalid": MessageLookupByLibrary.simpleMessage(
+      "代幣合約地址無效",
+    ),
+    "g_ui3_token_contract_required": MessageLookupByLibrary.simpleMessage(
+      "請輸入代幣合約地址",
+    ),
+    "g_ui3_token_name_decimals": m95,
+    "g_ui3_turn_off": MessageLookupByLibrary.simpleMessage("關閉"),
+    "g_ui3_turn_off_verification_message": MessageLookupByLibrary.simpleMessage(
+      "已儲存的設定將被清除，重新開啟時需要重新設定。",
+    ),
+    "g_ui3_turn_off_verification_title": MessageLookupByLibrary.simpleMessage(
+      "關閉此驗證？",
+    ),
+    "g_ui3_tx_not_found": MessageLookupByLibrary.simpleMessage("未找到該交易"),
+    "g_ui3_unknown": MessageLookupByLibrary.simpleMessage("未知"),
+    "g_ui3_update_account_email": MessageLookupByLibrary.simpleMessage(
+      "更新帳戶電子郵件",
+    ),
+    "g_ui3_uptime": MessageLookupByLibrary.simpleMessage("在線率"),
+    "g_ui3_ws_status": MessageLookupByLibrary.simpleMessage("WS 狀態"),
     "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Aave V3 借貸"),
     "g_ui_account_email": MessageLookupByLibrary.simpleMessage("帳戶電子郵件"),
     "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
       "新增此資產需要支付網路費用。點選「新增」以繼續。",
     ),
-    "g_ui_algo_asset_missing": m76,
+    "g_ui_algo_asset_missing": m96,
     "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
       "詢問餘額、投資組合或 Gas 費用",
     ),
@@ -2259,7 +2706,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
       "無法還原備份，請檢查密碼和備份檔案後重試。",
     ),
-    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_result": m97,
     "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage("匯入錢包"),
     "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
       "不是有效的 N42Wallet 備份檔案",
@@ -2302,8 +2749,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
       "此備份包含您的私鑰／助記詞、錢包密碼與錢包設定。請妥善保管備份檔案和密碼，切勿與任何人分享。",
     ),
-    "g_ui_balance_value": m78,
-    "g_ui_base_fee_value": m79,
+    "g_ui_balance_value": m98,
+    "g_ui_base_fee_value": m99,
     "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
       "透過 N42 協議購買 N",
     ),
@@ -2314,7 +2761,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage("取消訂單"),
     "g_ui_change_email": MessageLookupByLibrary.simpleMessage("變更電子郵件"),
     "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage("正在檢查授權…"),
-    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_clear": m100,
     "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage("剪貼簿是空的"),
     "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
       "幣種載入失敗，請重試。",
@@ -2326,12 +2773,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
       "沒有資料列（僅偵測到標題列）。",
     ),
-    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_missing_fields": m101,
     "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage("移除註解後沒有資料。"),
     "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("自訂標籤…"),
-    "g_ui_days": m82,
+    "g_ui_days": m102,
     "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage("目的地標籤"),
-    "g_ui_device_connected": m83,
+    "g_ui_device_connected": m103,
     "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
       "透過 Uniswap / 1inch / Jupiter 兌換代幣",
     ),
@@ -2356,9 +2803,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("可用"),
     "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage("下一區塊 Gas 預測"),
-    "g_ui_gas_value": m84,
-    "g_ui_hours": m85,
-    "g_ui_import_valid": m86,
+    "g_ui_gas_value": m104,
+    "g_ui_hours": m105,
+    "g_ui_import_valid": m106,
     "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage("請輸入有效的電子郵件地址"),
     "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("問題："),
     "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
@@ -2366,15 +2813,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage("限價單"),
     "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("限價"),
-    "g_ui_limit_price_pair": m87,
-    "g_ui_limit_value": m88,
+    "g_ui_limit_price_pair": m107,
+    "g_ui_limit_value": m108,
     "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage("清算價"),
     "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("使用率"),
-    "g_ui_markets_count": m89,
+    "g_ui_markets_count": m109,
     "g_ui_memo": MessageLookupByLibrary.simpleMessage("備註"),
     "g_ui_mempool": MessageLookupByLibrary.simpleMessage("交易記憶池"),
     "g_ui_message": MessageLookupByLibrary.simpleMessage("訊息"),
-    "g_ui_min_balance_value": m90,
+    "g_ui_min_balance_value": m110,
     "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage("助記詞錢包"),
     "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
       "使用社群帳戶登入以建立安全的 MPC 錢包。您的私鑰會拆分為加密分片，無需保管助記詞。",
@@ -2401,17 +2848,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_order_executed": MessageLookupByLibrary.simpleMessage("已執行"),
     "g_ui_order_place": MessageLookupByLibrary.simpleMessage("下限價單"),
     "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage("已觸發"),
-    "g_ui_orders_count": m91,
+    "g_ui_orders_count": m111,
     "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage("無法載入限價單"),
     "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage("兩次密碼不一致"),
     "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage("貼上連線連結"),
     "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage("待處理（交易記憶池）"),
     "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage("熱門代幣"),
     "g_ui_position_size": MessageLookupByLibrary.simpleMessage("數量"),
-    "g_ui_positions_count": m92,
+    "g_ui_positions_count": m112,
     "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage("私鑰錢包"),
     "g_ui_read_only": MessageLookupByLibrary.simpleMessage("唯讀"),
-    "g_ui_recipients_count": m93,
+    "g_ui_recipients_count": m113,
     "g_ui_room_id": MessageLookupByLibrary.simpleMessage("房間 ID"),
     "g_ui_save_failed": MessageLookupByLibrary.simpleMessage("儲存失敗，請重試。"),
     "g_ui_send_code": MessageLookupByLibrary.simpleMessage("傳送驗證碼"),
@@ -2422,37 +2869,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
       "代幣合約（0x…）",
     ),
-    "g_ui_token_found": m94,
+    "g_ui_token_found": m114,
     "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage("正在查詢代幣資訊…"),
     "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
       "清單中找不到代幣，請手動填寫符號與小數位數",
     ),
-    "g_ui_token_value": m95,
+    "g_ui_token_value": m115,
     "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
       "無法刪除交易，請重試。",
     ),
     "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
       "無法儲存交易，請重試。",
     ),
-    "g_ui_transaction_hash_value": m96,
+    "g_ui_transaction_hash_value": m116,
     "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage("未知狀態"),
     "g_ui_update": MessageLookupByLibrary.simpleMessage("更新"),
     "g_ui_update_email": MessageLookupByLibrary.simpleMessage("更新電子郵件"),
-    "g_ui_validation_counts": m97,
+    "g_ui_validation_counts": m117,
     "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage("驗證問題"),
-    "g_ui_validation_more": m98,
+    "g_ui_validation_more": m118,
     "g_ui_verification_code": MessageLookupByLibrary.simpleMessage("驗證碼"),
     "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("驗證驗證碼"),
     "g_ui_view_market": MessageLookupByLibrary.simpleMessage("查看行情資料"),
     "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("24 小時成交量"),
-    "g_ui_volume_interest": m99,
+    "g_ui_volume_interest": m119,
     "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("錢包 AI"),
     "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
       "建立或匯入錢包以開始使用",
     ),
     "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage("錢包載入失敗"),
     "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage("正在載入錢包…"),
-    "g_ui_wallet_number": m100,
+    "g_ui_wallet_number": m120,
     "g_version_later": MessageLookupByLibrary.simpleMessage("之後"),
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage("餘額未能更新"),
     "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage("總價值"),
@@ -2461,11 +2908,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage("單鏈 · 單鏈導入"),
     "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage("置頂幣種"),
     "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage("使用快取行情"),
-    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_hours": m121,
     "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
       "剛剛更新",
     ),
-    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_minutes": m122,
     "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage("部分行情"),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "行情暫不可用",
@@ -2500,7 +2947,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("需要關注"),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("近期平均驗證"),
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage("已在背景暫停"),
-    "miningV3Block": m103,
+    "miningV3Block": m123,
     "miningV3BlockHash": MessageLookupByLibrary.simpleMessage("區塊雜湊"),
     "miningV3Certified": MessageLookupByLibrary.simpleMessage("已認證區塊"),
     "miningV3CertifiedStatus": MessageLookupByLibrary.simpleMessage("已認證"),
@@ -2509,7 +2956,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3ConnectionIssue": MessageLookupByLibrary.simpleMessage("連線已中斷"),
     "miningV3Copied": MessageLookupByLibrary.simpleMessage("已複製區塊雜湊"),
     "miningV3CopyHash": MessageLookupByLibrary.simpleMessage("複製區塊雜湊"),
-    "miningV3Device": m104,
+    "miningV3Device": m124,
     "miningV3Duration": MessageLookupByLibrary.simpleMessage("本次運行時長"),
     "miningV3EmptyBody": MessageLookupByLibrary.simpleMessage(
       "開始挖礦後，即可查看已驗證區塊和認證狀態。",
@@ -2527,7 +2974,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
       "預設使用本地測試網節點，也可輸入自訂節點位址。",
     ),
-    "miningV3Milliseconds": m105,
+    "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("驗證節點"),
     "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("節點位址"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage("連線至節點後即可開始驗證區塊。"),
@@ -2569,13 +3016,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("驗證成功率"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("記錄時間"),
     "miningV3Title": MessageLookupByLibrary.simpleMessage("挖礦"),
-    "miningV3Transactions": m106,
+    "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("交易數量"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("未取得認證"),
     "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage("使用本地測試網"),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("已驗證區塊"),
     "next": MessageLookupByLibrary.simpleMessage("下一個"),
-    "nicknameMessage": m107,
+    "nicknameMessage": m127,
     "personalInformation": MessageLookupByLibrary.simpleMessage("編輯個人資料"),
     "photograph": MessageLookupByLibrary.simpleMessage("照片"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("請輸入地址"),

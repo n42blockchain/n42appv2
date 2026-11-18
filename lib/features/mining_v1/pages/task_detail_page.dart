@@ -127,7 +127,8 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                           ),
                         ),
                       ),
-                      InkWell(
+                      AppTapArea(
+                        tooltip: S.of(context).g_key_119,
                         onTap: () {
                           Clipboard.setData(
                             ClipboardData(

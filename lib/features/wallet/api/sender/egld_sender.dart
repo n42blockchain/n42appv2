@@ -10,12 +10,14 @@ import 'package:n42_wallet/features/wallet/services/egld_transaction_hash.dart';
 
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/network/base_http.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 import 'chain_sender.dart';
 
 /// MultiversX (EGLD) sender.
@@ -73,13 +75,11 @@ class EgldSender implements ChainSender {
   );
 
   static Future<dynamic> _submit(String url, String signed) =>
-      BaseApi.requestEmptyH.post(
+      BaseApi.requestEmptyH.requestWithStatus(
         url,
-        params: {},
+        method: 'POST',
         data: signed,
-        defaultReturn: false,
         header: _header,
-        enableRetry: false,
       );
 
   static const _mainnetUrl = 'https://api.multiversx.com';
@@ -249,6 +249,10 @@ class EgldSender implements ChainSender {
       return const SendResult.fail('Invalid signed transaction');
     }
 
+    // The signed nonce was checked against the account nonce above.
+    params.onExpiryProof?.call(
+      MemoExpiryProof.multiversx(nonce: BigInt.from(nonce)),
+    );
     try {
       await params.beforeBroadcast?.call(localHash);
     } catch (_) {
@@ -284,7 +288,30 @@ class EgldSender implements ChainSender {
       actualAmount: adjustedAmount,
     );
     try {
-      final data = await _broadcast('$base/transactions', signStr);
+      final raw = await _broadcast('$base/transactions', signStr);
+      final response = raw is HttpStatusResult
+          ? raw
+          : HttpStatusResult(200, raw);
+      final status = response.statusCode;
+      if (status == 400) {
+        // The MultiversX API answers 400 when the gateway refused the
+        // transaction (bad nonce, insufficient funds, invalid signature...):
+        // it is not in any pool and the signed bytes can never be executed.
+        final problem = response.jsonObject;
+        final message = problem?['message'];
+        if (problem != null &&
+            problem['statusCode'] == 400 &&
+            problem['error'] == 'Bad Request') {
+          return SendResult.rejected(
+            localHash,
+            message is String && message.isNotEmpty
+                ? 'MultiversX rejected the transaction: $message'
+                : 'MultiversX rejected the transaction',
+          );
+        }
+      }
+      if (status == null || status < 200 || status > 202) return unknown();
+      final data = response.jsonObject;
       if (data is! Map<String, dynamic> ||
           data['txHash'] is! String ||
           (data['txHash'] as String).toLowerCase() != localHash) {

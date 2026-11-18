@@ -13,11 +13,13 @@ import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sui_transaction_message.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sui_transfer_plan.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/provider/transaction_state_resolver.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -49,6 +51,19 @@ class WalletChainSendSui extends ConsumerStatefulWidget {
   final Future<MessageModel?> Function(CoinModel coin)? gasPriceLoader;
   final Future<List<dynamic>> Function(CoinModel coin)? ownedObjectsLoader;
 
+  /// Earlier unresolved sends from the signing address (tests).
+  final Future<List<TransationRecordModel>> Function(TransationRecordModel)?
+  pendingTransactions;
+
+  /// Resolves earlier sends before a new one is signed (tests).
+  final TransactionStateResolver? stateResolver;
+
+  /// Saves an earlier send's chain result (tests).
+  final Future<int> Function(TransationRecordModel)? saveResolvedTransaction;
+
+  /// Stops earlier unresolved sends from blocking new ones (tests).
+  final Future<int> Function(TransationRecordModel)? dismissPendingTransactions;
+
   const WalletChainSendSui(
     this.coinModel, {
     this.initialToAddress,
@@ -56,6 +71,10 @@ class WalletChainSendSui extends ConsumerStatefulWidget {
     this.transactionWriter,
     this.gasPriceLoader,
     this.ownedObjectsLoader,
+    this.pendingTransactions,
+    this.stateResolver,
+    this.saveResolvedTransaction,
+    this.dismissPendingTransactions,
     super.key,
   });
 
@@ -143,7 +162,10 @@ class _WalletChainSendSuiState extends ConsumerState<WalletChainSendSui>
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
             padding: EdgeInsets.all(AppSpacing.space8),
-            height: ScreenUtil().setWidth(148.0),
+            // Grows past the design height so the 44pt button is never clipped.
+            constraints: BoxConstraints(
+              minHeight: ScreenUtil().setWidth(148.0),
+            ),
             color: AppColorTokens.of(context).bgBase,
             child: AppButton(
               label: S.of(context).g_key_48,

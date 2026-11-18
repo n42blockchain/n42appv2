@@ -17,6 +17,10 @@ class _BundledStickerRepository implements IStickerRepository {
   @override
   Future<List<StickerPack>> getInstalledPacks() async => [pack];
 
+  // The picker listens for installed-pack changes; the bundled set is fixed.
+  @override
+  Stream<List<StickerPack>> watchInstalledPacks() => const Stream.empty();
+
   @override
   Stream<List<StickerPack>> watchInstalledPacks() => Stream.value([pack]);
 

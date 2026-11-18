@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fast_base58/fast_base58.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/egld_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/ada_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -17,6 +18,7 @@ import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/memo_expiry_proof.dart';
 
 /// 交易状态解析器 — 纯网络查询，无副作用。
 ///
@@ -26,14 +28,33 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 ///  -1 = 无法确定（RPC 错误、数据尚未就绪）
 ///   0 = 尚未确认（仍在 pending 中）
 class TransactionStateResolver {
+  /// A record still pending this long after it was sent has gone through
+  /// many polling rounds (every 10 s) without a chain result. It is shown as
+  /// "not confirmed" instead of "pending"; its stored state is unchanged and
+  /// it keeps being checked.
+  static const unknownAfter = Duration(minutes: 30);
+
+  /// Whether [record] is pending past [unknownAfter]. Display only.
+  static bool isUnconfirmed(TransationRecordModel record, {DateTime? now}) {
+    if (record.state != 0) return false;
+    final raw = int.tryParse(record.txTime);
+    if (raw == null || raw <= 0) return false;
+    final sentAt = DateTime.fromMillisecondsSinceEpoch(
+      record.txTime.length == 13 ? raw : raw * 1000,
+    );
+    return (now ?? DateTime.now()).difference(sentAt) > unknownAfter;
+  }
+
   final TokenViewApi _tokenViewApi;
 
   final XlmApi _xlmApi;
   final AdaApi _adaApi;
   final EgldApi _egldApi;
   final NearApi Function(bool) _nearApiFactory;
+  final SuiApi Function(bool) _suiApiFactory;
 
   TransactionStateResolver({
+    SuiApi Function(bool)? suiApiFactory,
     TokenViewApi? tokenViewApi,
     XlmApi? xlmApi,
     AdaApi? adaApi,
@@ -43,6 +64,7 @@ class TransactionStateResolver {
        _xlmApi = xlmApi ?? XlmApi(),
        _egldApi = egldApi ?? EgldApi(),
        _nearApiFactory = nearApiFactory ?? ((test) => NearApi(isTest: test)),
+       _suiApiFactory = suiApiFactory ?? ((test) => SuiApi(isTest: test)),
        _adaApi =
            adaApi ??
            AdaApi(
@@ -68,13 +90,15 @@ class TransactionStateResolver {
       case BlockchainType.Ripple:
         return _resolveRipple(trm);
       case BlockchainType.Cardano:
-        return _resolveCardano(trm);
+        return _orNeverLands(trm, 'ADA', _resolveCardano, _cardanoNeverLands);
       case BlockchainType.MultiversX:
-        return _resolveEgld(trm);
+        return _orNeverLands(trm, 'EGLD', _resolveEgld, _egldNeverLands);
       case BlockchainType.Near:
-        return _resolveNear(trm);
+        return _orNeverLands(trm, 'NEAR', _resolveNear, _nearNeverLands);
       case BlockchainType.Stellar:
-        return _resolveStellar(trm);
+        return _orNeverLands(trm, 'XLM', _resolveStellar, _stellarNeverLands);
+      case BlockchainType.Sui:
+        return (await _resolveSuiDetailed(trm)).$1;
       case BlockchainType.Filecoin:
         return _resolveFilecoin(trm);
       case BlockchainType.Harmony:
@@ -87,6 +111,91 @@ class TransactionStateResolver {
       default:
         // Unsupported chain type — return 0 (unknown confirmation count)
         return 0;
+    }
+  }
+
+  /// Resolve [trm] and, for a failure the chain reported itself, its reason.
+  /// Chains without a reason report null.
+  Future<(int, String?)> resolveStateWithReason(
+    TransationRecordModel trm,
+  ) async {
+    if (trm.coin['blockchainType'] == BlockchainType.Sui.name) {
+      return _resolveSuiDetailed(trm);
+    }
+    return (await resolveState(trm), null);
+  }
+
+  static String? _suiAddress(Object? value) {
+    if (value is! String || !RegExp(r'^0x[0-9a-fA-F]{1,64}$').hasMatch(value)) {
+      return null;
+    }
+    return '0x${value.substring(2).toLowerCase().padLeft(64, '0')}';
+  }
+
+  /// Sui (GraphQL `transaction(digest:)`): only the stored digest's own
+  /// effects decide. Success or failure counts once the effects name the
+  /// checkpoint that finalized them; effects without one stay pending. Not
+  /// found (null: never executed, not yet indexed or pruned), GraphQL or
+  /// transport errors and unfamiliar replies are unknown (-1): absence alone
+  /// never proves a Sui transaction can no longer execute.
+  Future<(int, String?)> _resolveSuiDetailed(
+    TransationRecordModel record,
+  ) async {
+    final digest = record.txHash;
+    final network = record.isTest;
+    final sender = _suiAddress(record.from1);
+    try {
+      final bytes = Base58Decode(digest);
+      if (bytes.length != 32 ||
+          Base58Encode(bytes) != digest ||
+          sender == null ||
+          ![0, 1].contains(network) ||
+          record.contract.isNotEmpty) {
+        return (-1, null);
+      }
+      final response = await _suiApiFactory(network == 1)
+          .getTransactionBlock(digest);
+      if (record.txHash != digest ||
+          record.isTest != network ||
+          _suiAddress(record.from1) != sender ||
+          response.error) {
+        return (-1, null);
+      }
+      final data = response.data;
+      if (data is! Map || data['digest'] != digest) return (-1, null);
+      final senderInfo = data['sender'];
+      if (senderInfo is! Map || _suiAddress(senderInfo['address']) != sender) {
+        return (-1, null);
+      }
+      final effects = data['effects'];
+      if (effects is! Map ||
+          (effects['digest'] != null && effects['digest'] != digest)) {
+        return (-1, null);
+      }
+      final checkpoint = effects['checkpoint'];
+      final finalized =
+          SuiApi.amount(
+            checkpoint is Map ? checkpoint['sequenceNumber'] : null,
+          ) !=
+          null;
+      switch (effects['status']) {
+        case 'SUCCESS':
+          return (finalized ? 1 : 0, null);
+        case 'FAILURE':
+          if (!finalized) return (0, null);
+          final failure = effects['executionError'];
+          final error = failure is Map ? failure['message'] : null;
+          return (
+            2,
+            error is String && error.isNotEmpty
+                ? 'Sui transaction failed: $error'
+                : 'Sui transaction failed',
+          );
+        default:
+          return (-1, null);
+      }
+    } catch (_) {
+      return (-1, null);
     }
   }
 
@@ -104,6 +213,274 @@ class TransactionStateResolver {
       if (mm.error) return -1;
       return mm.data as int? ?? 0;
     }
+  }
+
+  // ---------- chain-proven expiry (ADA/XLM/EGLD/NEAR memo sends) ----------
+
+  /// Chain point at which each pending record was first proven unable to
+  /// land, keyed by chain, network, row and hash. A record is closed as failed
+  /// only when a later, independent poll proves it again at an advanced chain
+  /// point, so one lagging node or indexer behind a load balancer cannot fail
+  /// a transaction that actually landed.
+  final Map<String, BigInt> _neverLandsSince = {};
+
+  /// Minimum chain advance between the two proofs.
+  static final Map<String, BigInt> _minimumAdvance = {
+    'XLM': BigInt.from(3), // ledgers (~15 s)
+    'ADA': BigInt.from(60), // slots (~60 s)
+    'EGLD': BigInt.from(3), // metachain blocks (~18 s)
+    'NEAR': BigInt.from(10), // final blocks (~10 s)
+  };
+
+  /// Cardano stability window 3k/f (k = 2160, f = 0.05): blocks older than
+  /// this can no longer be rolled back, so no fork can still include the
+  /// transaction once the tip is this far past its TTL.
+  static final BigInt cardanoStabilitySlots = BigInt.from(129600);
+
+  Future<int> _orNeverLands(
+    TransationRecordModel record,
+    String chain,
+    Future<int> Function(TransationRecordModel) resolve,
+    Future<BigInt?> Function(TransationRecordModel, Map<String, String>) prove,
+  ) async {
+    final hash = record.txHash.toLowerCase();
+    final network = record.isTest;
+    final sender = record.from1;
+    final key = '$chain:$network:${record.trId}:$hash';
+    final state = await resolve(record);
+    final proof = MemoExpiryProof.decode(record.memoExpiry, chain);
+    if (state != -1 ||
+        proof == null ||
+        record.state != 0 ||
+        record.coinMiniName.toUpperCase() != chain ||
+        sender.isEmpty ||
+        ![0, 1].contains(network)) {
+      _neverLandsSince.remove(key);
+      return state;
+    }
+    BigInt? point;
+    try {
+      point = await prove(record, proof);
+    } catch (_) {
+      point = null;
+    }
+    if (record.txHash.toLowerCase() != hash ||
+        record.isTest != network ||
+        record.from1 != sender) {
+      return -1;
+    }
+    if (point == null) {
+      // Unknown again: the next proof must start over.
+      _neverLandsSince.remove(key);
+      return -1;
+    }
+    final first = _neverLandsSince[key];
+    if (first == null || point < first) {
+      _neverLandsSince[key] = point;
+      return -1;
+    }
+    if (point - first >= _minimumAdvance[chain]!) {
+      _neverLandsSince.remove(key);
+      return 2;
+    }
+    return -1;
+  }
+
+  static int? _int(Object? value) => value is int ? value : null;
+
+  static BigInt? _decimal(Object? value) {
+    final text = value is int ? '$value' : value;
+    if (text is! String || !RegExp(r'^(0|[1-9][0-9]{0,30})$').hasMatch(text)) {
+      return null;
+    }
+    return BigInt.parse(text);
+  }
+
+  /// Stellar: a transaction applies only with sequence == account sequence +
+  /// 1. Once the account sequence reached the signed sequence, this envelope
+  /// can never apply; if Horizon (whose history covers the signing ledger)
+  /// does not know the hash, it never did.
+  Future<BigInt?> _stellarNeverLands(
+    TransationRecordModel record,
+    Map<String, String> proof,
+  ) async {
+    final sequence = MemoExpiryProof.unsigned(proof, 'seq');
+    final signedAfter = MemoExpiryProof.unsigned(proof, 'ledger');
+    final hash = record.txHash.toLowerCase();
+    final isTest = record.isTest == 1;
+    if (sequence == null ||
+        signedAfter == null ||
+        !RegExp(r'^[0-9a-f]{64}$').hasMatch(hash)) {
+      return null;
+    }
+    final root = await _xlmApi.lookup('/', isTest: isTest);
+    final rootData = root.jsonObject;
+    final elder = _int(rootData?['history_elder_ledger']);
+    final latest = _int(rootData?['history_latest_ledger']);
+    if (root.statusCode != 200 ||
+        elder == null ||
+        latest == null ||
+        BigInt.from(elder) > signedAfter ||
+        BigInt.from(latest) < signedAfter) {
+      return null;
+    }
+    final account = await _xlmApi.lookup(
+      '/accounts/${record.from1}',
+      isTest: isTest,
+    );
+    final accountData = account.jsonObject;
+    final current = _decimal(accountData?['sequence']);
+    if (account.statusCode != 200 ||
+        accountData?['account_id'] != record.from1 ||
+        current == null ||
+        current < sequence) {
+      return null;
+    }
+    final tx = await _xlmApi.lookup('/transactions/$hash', isTest: isTest);
+    final type = tx.jsonObject?['type'];
+    if (tx.statusCode != 404 ||
+        type is! String ||
+        !type.endsWith('/not_found')) {
+      return null;
+    }
+    return BigInt.from(latest);
+  }
+
+  /// Cardano: a transaction is invalid from its TTL slot on. Once the tip is a
+  /// full stability window past the TTL and the hash is unknown, no chain
+  /// (including any fork) can contain it.
+  Future<BigInt?> _cardanoNeverLands(
+    TransationRecordModel record,
+    Map<String, String> proof,
+  ) async {
+    final ttl = MemoExpiryProof.unsigned(proof, 'ttl');
+    final hash = record.txHash.toLowerCase();
+    final isTest = record.isTest == 1;
+    if (ttl == null ||
+        _adaApi.projectId.trim().isEmpty ||
+        !RegExp(r'^[0-9a-f]{64}$').hasMatch(hash)) {
+      return null;
+    }
+    final tip = await _adaApi.lookup('/blocks/latest', isTest: isTest);
+    final slot = _int(tip.jsonObject?['slot']);
+    if (tip.statusCode != 200 ||
+        slot == null ||
+        BigInt.from(slot) < ttl + cardanoStabilitySlots) {
+      return null;
+    }
+    final tx = await _adaApi.lookup('/txs/$hash', isTest: isTest);
+    if (tx.statusCode != 404 || tx.jsonObject?['status_code'] != 404) {
+      return null;
+    }
+    return BigInt.from(slot);
+  }
+
+  /// MultiversX: a transaction executes only with nonce == account nonce.
+  /// Once the account nonce moved past the signed nonce and the hash is
+  /// unknown, another transaction consumed it and this one can never land.
+  Future<BigInt?> _egldNeverLands(
+    TransationRecordModel record,
+    Map<String, String> proof,
+  ) async {
+    final nonce = MemoExpiryProof.unsigned(proof, 'nonce');
+    final hash = record.txHash.toLowerCase();
+    final isTest = record.isTest == 1;
+    if (nonce == null || !RegExp(r'^[0-9a-f]{64}$').hasMatch(hash)) {
+      return null;
+    }
+    final meta = await _egldApi.lookup(
+      '/blocks?shard=4294967295&size=1&fields=nonce,shard',
+      isTest: isTest,
+    );
+    final blocks = meta.data;
+    final metaNonce =
+        blocks is List && blocks.length == 1 && blocks.single is Map
+        ? _int((blocks.single as Map)['nonce'])
+        : null;
+    if (meta.statusCode != 200 || metaNonce == null) return null;
+    final account = await _egldApi.lookup(
+      '/accounts/${record.from1}',
+      isTest: isTest,
+    );
+    final accountData = account.jsonObject;
+    final current = _int(accountData?['nonce']);
+    if (account.statusCode != 200 ||
+        accountData?['address'] != record.from1 ||
+        current == null ||
+        BigInt.from(current) <= nonce) {
+      return null;
+    }
+    final tx = await _egldApi.lookup('/transactions/$hash', isTest: isTest);
+    if (tx.statusCode != 404 || tx.jsonObject?['statusCode'] != 404) {
+      return null;
+    }
+    return BigInt.from(metaNonce);
+  }
+
+  /// NEAR: a transaction is valid only while its access-key nonce is unused
+  /// and its reference block is within the validity period. When either is
+  /// over at a final height, and the node (whose garbage-collected window
+  /// still covers the reference block) does not know the hash, it never
+  /// landed and cannot land.
+  Future<BigInt?> _nearNeverLands(
+    TransationRecordModel record,
+    Map<String, String> proof,
+  ) async {
+    final nonce = MemoExpiryProof.unsigned(proof, 'nonce');
+    final reference = MemoExpiryProof.unsigned(proof, 'height');
+    final publicKey = proof['publicKey'];
+    final hash = record.txHash;
+    if (nonce == null ||
+        reference == null ||
+        publicKey == null ||
+        !publicKey.startsWith('ed25519:')) {
+      return null;
+    }
+    final api = _nearApiFactory(record.isTest == 1);
+    final config = (await api.rpcRaw('EXPERIMENTAL_protocol_config', {
+      'finality': 'final',
+    }))?['result'];
+    final validity = config is Map
+        ? _int(config['transaction_validity_period'])
+        : null;
+    final epoch = config is Map ? _int(config['epoch_length']) : null;
+    if (validity == null || validity <= 0 || epoch == null || epoch <= 0) {
+      return null;
+    }
+    final block = (await api.rpcRaw('block', {'finality': 'final'}))?['result'];
+    final header = block is Map ? block['header'] : null;
+    final height = header is Map ? _int(header['height']) : null;
+    if (height == null) return null;
+    final current = BigInt.from(height);
+    // Nodes keep about five epochs of history; beyond four epochs an unknown
+    // hash is no longer evidence of anything.
+    if (current < reference ||
+        current - reference > BigInt.from(epoch) * BigInt.from(4)) {
+      return null;
+    }
+    final key = (await api.rpcRaw('query', {
+      'request_type': 'view_access_key',
+      'finality': 'final',
+      'account_id': record.from1,
+      'public_key': publicKey,
+    }))?['result'];
+    final keyNonce = key is Map ? _decimal(key['nonce']) : null;
+    final nonceUsed = keyNonce != null && keyNonce >= nonce;
+    final expired = current > reference + BigInt.from(validity);
+    if (!nonceUsed && !expired) return null;
+    final tx = await api.rpcRaw('tx', {
+      'tx_hash': hash,
+      'sender_account_id': record.from1,
+      'wait_until': 'NONE',
+    });
+    final error = tx?['error'];
+    final cause = error is Map ? error['cause'] : null;
+    if (tx?['result'] != null ||
+        cause is! Map ||
+        cause['name'] != 'UNKNOWN_TRANSACTION') {
+      return null;
+    }
+    return current;
   }
 
   Future<int> _resolveNear(TransationRecordModel record) async {

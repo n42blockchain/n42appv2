@@ -42,7 +42,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             borderRadius: BorderRadius.all(Radius.circular(su.setWidth(8.0))),
             color: _formColor(AppThemeKeys.itemBgColor.name),
           ),
-          height: su.setWidth(88.0),
+          height: AppTouch.target,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -114,8 +114,10 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             },
             trailing: [
               // 扫码按钮
-              InkWell(
+              AppTapArea(
                 onTap: scanQR,
+                tooltip: S.of(context).g_key_4,
+                customBorder: const CircleBorder(),
                 child: Container(
                   width: su.setWidth(60.0),
                   height: su.setWidth(60.0),
@@ -127,32 +129,58 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
                 ),
               ),
               // 粘贴按钮
-              InkWell(
-                onTap: () async {
-                  final cd = await Clipboard.getData(Clipboard.kTextPlain);
-                  if (!mounted) return;
-                  final text = cd?.text;
-                  if (text != null && text != "null") {
-                    tokenEditingController.text = text;
-                    addressCheck(text);
-                    updateView();
-                  }
-                },
-                child: Container(
-                  margin: EdgeInsets.only(left: su.setWidth(10.0)),
-                  height: su.setWidth(60.0),
-                  padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
-                  decoration: BoxDecoration(
-                    color: blueColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(su.setWidth(60.0)),
-                    ),
+              // Transparent Material: the field fill would hide the Ink pill.
+              Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: () async {
+                    final cd = await Clipboard.getData(Clipboard.kTextPlain);
+                    if (!mounted) return;
+                    final text = cd?.text;
+                    if (text != null && text != "null") {
+                      tokenEditingController.text = text;
+                      addressCheck(text);
+                      updateView();
+                    }
+                  },
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(su.setWidth(60.0)),
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    S.of(context).g_key_166,
-                    style: AppTypography.bodySm.copyWith(
-                      color: _formColor(AppThemeKeys.mainWhiteColor.name),
+                  // 30pt pill, 44pt hit area. Ink keeps the splash visible on
+                  // the fill; brandFill carries white text at 4.5:1.
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minHeight: AppTouch.minTarget,
+                    ),
+                    child: Center(
+                      widthFactor: 1,
+                      heightFactor: 1,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: su.setWidth(10.0)),
+                        child: Ink(
+                          height: su.setWidth(60.0),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: su.setWidth(20.0),
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColorTokens.of(context).brandFill,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(su.setWidth(60.0)),
+                            ),
+                          ),
+                          child: Center(
+                            widthFactor: 1,
+                            child: Text(
+                              S.of(context).g_key_166,
+                              style: AppTypography.bodySm.copyWith(
+                                color: _formColor(
+                                  AppThemeKeys.mainWhiteColor.name,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

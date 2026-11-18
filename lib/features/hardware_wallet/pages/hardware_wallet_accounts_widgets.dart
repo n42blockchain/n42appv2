@@ -127,7 +127,7 @@ class _HWCoinSelector extends StatelessWidget {
     final su = ScreenUtil();
 
     return Container(
-      height: su.setWidth(80),
+      height: AppTouch.scaled(80),
       margin: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -347,10 +347,12 @@ class _HWAccountItem extends StatelessWidget {
                 ),
               ),
               IconButton(
+                tooltip: S.of(context).g_key_119,
                 onPressed: () => onCopy(account.address),
                 icon: Icon(Icons.copy, color: blueColor, size: su.setWidth(28)),
               ),
               IconButton(
+                tooltip: S.of(context).g_key_hw_add,
                 onPressed: () => onUse(account),
                 icon: Icon(
                   Icons.add_circle_outline,

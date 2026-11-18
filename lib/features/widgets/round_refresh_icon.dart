@@ -27,22 +27,40 @@ class _RoundRefreshIconState extends State<RoundRefreshIcon> {
 
   @override
   Widget build(BuildContext context) {
+    // Both states keep the 44pt footprint so the spinner does not shift the
+    // layout; the icon itself stays 20pt.
     return isLoading
-        ? Padding(
-            padding: EdgeInsets.all(widget.padding ?? ScreenUtil().setWidth(4)),
-            child: Container(
-              width: widget.width ?? ScreenUtil().setWidth(40),
-              height: widget.height ?? ScreenUtil().setWidth(40),
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: widget.height ?? ScreenUtil().setWidth(40),
-                //如何在flutter中调整CircularProgressIndicator的大小？
-                //https://cloud.tencent.com/developer/ask/sof/339120
-                child: const Center(child: CircularProgressIndicator()),
+        ? ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: AppTouch.target,
+              minHeight: AppTouch.target,
+            ),
+            child: Center(
+              widthFactor: 1,
+              heightFactor: 1,
+              child: Padding(
+                padding: EdgeInsets.all(
+                  widget.padding ?? ScreenUtil().setWidth(4),
+                ),
+                child: Container(
+                  width: widget.width ?? ScreenUtil().setWidth(40),
+                  height: widget.height ?? ScreenUtil().setWidth(40),
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: widget.height ?? ScreenUtil().setWidth(40),
+                    //如何在flutter中调整CircularProgressIndicator的大小？
+                    //https://cloud.tencent.com/developer/ask/sof/339120
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+                ),
               ),
             ),
           )
-        : GestureDetector(
+        : AppTapArea(
+            // Icon-only control: tooltip is also the screen-reader label.
+            tooltip: MaterialLocalizations.of(context)
+                .refreshIndicatorSemanticLabel,
+            customBorder: const CircleBorder(),
             onTap: () async {
               try {
                 setState(() {

@@ -300,8 +300,9 @@ class _WalletSecurityVerificationState
         appBar: AppBarWidget(
           text: widget.title ?? S.of(context).s_key_11,
           actions: [
-            InkWell(
+            AppTapArea(
               onTap: pushSetting,
+              tooltip: S.of(context).g_key_94,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Image.asset(

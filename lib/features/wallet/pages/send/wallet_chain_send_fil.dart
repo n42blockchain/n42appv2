@@ -94,7 +94,8 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
       appBar: AppBarWidget(
         text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
         actions: [
-          InkWell(
+          AppTapArea(
+            tooltip: S.of(context).g_key_108,
             onTap: () async {
               final value = await Navigator.push(
                 context,

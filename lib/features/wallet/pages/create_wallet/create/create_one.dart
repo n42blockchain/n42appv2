@@ -28,7 +28,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
   Widget _stepIndicator(Color color) {
     return Container(
       height: ScreenUtil().setWidth(10.0),
-      width: ScreenUtil().setWidth(88.0),
+      width: AppTouch.target,
       decoration: BoxDecoration(borderRadius: AppRadius.brSm, color: color),
     );
   }
@@ -179,6 +179,7 @@ class _CreateOneState extends ConsumerState<CreateOne> {
                               top: ScreenUtil().setWidth(30.0),
                               bottom: ScreenUtil().setWidth(30.0),
                             ),
+                            color: AppColorTokens.of(context).bgBase,
                             child: AppButton(
                               label: S.of(context).g_key_wallet_c21,
                               variant: AppButtonVariant.secondary,
@@ -199,34 +200,45 @@ class _CreateOneState extends ConsumerState<CreateOne> {
   }
 
   Widget _checkWidget(String value, bool check, void Function(bool?) onTap) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-      child: Row(
-        children: [
-          RoundCheckBox(
-            isChecked: check,
-            size: ScreenUtil().setWidth(50),
-            onTap: onTap,
-            checkedWidget: Center(
-              child: Icon(
-                Icons.check,
-                size: ScreenUtil().setWidth(32),
-                color: Colors.white,
-              ),
+    // The whole row toggles the 25pt check box (>= 44pt tall) and reads as
+    // one checkbox with its label.
+    return MergeSemantics(
+      child: Semantics(
+        checked: check,
+        child: InkWell(
+          onTap: () => onTap(!check),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: AppTouch.minTarget),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
+            child: Row(
+              children: [
+                RoundCheckBox(
+                  isChecked: check,
+                  size: ScreenUtil().setWidth(50),
+                  onTap: onTap,
+                  checkedWidget: Center(
+                    child: Icon(
+                      Icons.check,
+                      size: ScreenUtil().setWidth(32),
+                      color: Colors.white,
+                    ),
+                  ),
+                  checkedColor: AppColorTokens.of(context).brand,
+                  animationDuration: const Duration(milliseconds: 50),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                Expanded(
+                  child: Text(
+                    value,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            checkedColor: AppColorTokens.of(context).brand,
-            animationDuration: const Duration(milliseconds: 50),
           ),
-          SizedBox(width: AppSpacing.space4),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTypography.caption.copyWith(
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

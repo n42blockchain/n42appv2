@@ -76,8 +76,10 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
           ),
           child: Text(S.of(context).g_ui_popular_tokens, style: sectionTitle),
         ),
+        // >= 44pt at narrow widths and grows with Dynamic Type so the
+        // two-line chips do not clip (50pt@375, 42.7pt@320 before).
         SizedBox(
-          height: su.setWidth(100),
+          height: MediaQuery.textScalerOf(context).scale(AppTouch.scaled(100)),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _popularTokens.length,
@@ -113,68 +115,72 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final Color mainText = AppColorTokens.of(context).textPrimary;
     final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
 
-    return GestureDetector(
-      onTap: isAdded
-          ? null
-          : () {
-              if (item['edit'] == true) return;
-              addCoinToken(item);
-            },
-      child: Container(
-        margin: EdgeInsets.only(right: su.setWidth(16)),
-        padding: EdgeInsets.symmetric(
-          horizontal: su.setWidth(20),
-          vertical: su.setWidth(10),
-        ),
-        decoration: BoxDecoration(
-          color: isAdded
-              ? blueColor.withValues(alpha: 0.08)
-              : AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(su.setWidth(40)),
-          border: Border.all(
-            color: isAdded
-                ? blueColor.withValues(alpha: 0.3)
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemBorderColor.name,
-                  ),
+    // InkWell + Ink: visible pressed state on the filled chip.
+    return Padding(
+      padding: EdgeInsets.only(right: su.setWidth(16)),
+      child: InkWell(
+        onTap: isAdded
+            ? null
+            : () {
+                if (item['edit'] == true) return;
+                addCoinToken(item);
+              },
+        borderRadius: BorderRadius.circular(su.setWidth(40)),
+        child: Ink(
+          padding: EdgeInsets.symmetric(
+            horizontal: su.setWidth(20),
+            vertical: su.setWidth(10),
           ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: su.setWidth(40),
-              height: su.setWidth(40),
-              child: ImageNetWork(
-                imageUrl: iconUrl,
-                placeholder: 'assets/img/list_default.png',
+          decoration: BoxDecoration(
+            color: isAdded
+                ? blueColor.withValues(alpha: 0.08)
+                : AppColorTokens.of(context).bgSurface,
+            borderRadius: BorderRadius.circular(su.setWidth(40)),
+            border: Border.all(
+              color: isAdded
+                  ? blueColor.withValues(alpha: 0.3)
+                  : AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.itemBorderColor.name,
+                    ),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: su.setWidth(40),
+                height: su.setWidth(40),
+                child: ImageNetWork(
+                  imageUrl: iconUrl,
+                  placeholder: 'assets/img/list_default.png',
+                ),
               ),
-            ),
-            SizedBox(width: su.setWidth(10)),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  sym,
-                  style: AppTypography.bodySm.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: mainText,
+              SizedBox(width: su.setWidth(10)),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    sym,
+                    style: AppTypography.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: mainText,
+                    ),
                   ),
-                ),
-                Text(
-                  chainName,
-                  style: AppTypography.captionSm.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: subtitleColor,
+                  Text(
+                    chainName,
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: subtitleColor,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(width: su.setWidth(8)),
-            _popularChipTrailingIcon(item, isAdded, su, blueColor),
-          ],
+                ],
+              ),
+              SizedBox(width: su.setWidth(8)),
+              _popularChipTrailingIcon(item, isAdded, su, blueColor),
+            ],
+          ),
         ),
       ),
     );
@@ -300,8 +306,8 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     if (rowValue['edit'] == true) {
       return Container(
         padding: EdgeInsets.all(su.setWidth(19.0)),
-        width: su.setWidth(78.0),
-        height: su.setWidth(78.0),
+        width: AppTouch.scaled(78),
+        height: AppTouch.scaled(78),
         child: CircularProgressIndicator(),
       );
     }
@@ -310,7 +316,11 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
     final bool isAdded = rowValue['isAdd'] == true;
     final bool isContract = rowValue['contract'] != "";
 
-    return InkWell(
+    return AppTapArea(
+      tooltip: isAdded
+          ? S.of(context).g_alert_remove
+          : S.of(context).g_key_token_discovery_add,
+      customBorder: const CircleBorder(),
       onTap: () {
         if (isAdded) {
           isContract ? removeCoinToken(rowValue) : removeCoin(rowValue);
@@ -320,8 +330,8 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
       },
       child: Container(
         padding: EdgeInsets.all(su.setWidth(19.0)),
-        width: su.setWidth(78.0),
-        height: su.setWidth(78.0),
+        width: AppTouch.scaled(78),
+        height: AppTouch.scaled(78),
         child: Icon(isAdded ? Icons.remove : Icons.add, color: buttonBg),
       ),
     );

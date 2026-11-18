@@ -29,14 +29,18 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
             maxLines: 3,
             height: ScreenUtil().setWidth(170.0),
             errorMessage: toErrorMessage,
-            rightWidget1: Container(
-              width: ScreenUtil().setWidth(60.0),
-              height: ScreenUtil().setWidth(60.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
-              child: Icon(
-                Icons.add,
-                size: ScreenUtil().setWidth(50.0),
-                color: AppColorTokens.of(context).brand,
+            // Icon-only field action: the tooltip doubles as its spoken label.
+            rightWidget1: Tooltip(
+              message: S.of(context).g_key_108,
+              child: Container(
+                width: ScreenUtil().setWidth(60.0),
+                height: ScreenUtil().setWidth(60.0),
+                padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
+                child: Icon(
+                  Icons.add,
+                  size: ScreenUtil().setWidth(50.0),
+                  color: AppColorTokens.of(context).brand,
+                ),
               ),
             ),
             rightOnTap1: searchToAddressWidget,
@@ -187,7 +191,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
                       horizontal: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColorTokens.of(context).brand,
+                      color: AppColorTokens.of(context).brandFill,
                       borderRadius: BorderRadius.all(
                         Radius.circular(ScreenUtil().setWidth(60.0)),
                       ),

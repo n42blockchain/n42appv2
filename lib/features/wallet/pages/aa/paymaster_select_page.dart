@@ -375,7 +375,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               child: ElevatedButton(
                 onPressed: _confirm,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
+                  backgroundColor: AppColorTokens.of(context).brandFill,
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),

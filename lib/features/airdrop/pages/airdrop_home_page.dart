@@ -261,7 +261,10 @@ class _CampaignTile extends StatelessWidget {
                   ),
                   Text(
                     status,
-                    style: AppTypography.caption.copyWith(color: colors.brand),
+                    // brandOnTint: >= 4.5:1 (plain brand is ~4.0:1 on white).
+                    style: AppTypography.caption.copyWith(
+                      color: colors.brandOnTint,
+                    ),
                   ),
                 ],
               ),

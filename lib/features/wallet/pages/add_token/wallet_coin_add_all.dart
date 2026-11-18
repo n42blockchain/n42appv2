@@ -141,36 +141,41 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
       child: Scaffold(
         backgroundColor: _color(AppThemeKeys.backGroundColor),
         appBar: AppBar(
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                S.of(context).g_token_m_key_3,
-                style: AppTypography.headline.copyWith(
-                  color: _color(AppThemeKeys.mainTextColor),
-                ),
-              ),
-              InkWell(
-                onTap: showChangeNetwork,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _currentNetworkLabel,
-                      style: AppTypography.headline.copyWith(
-                        fontWeight: FontWeight.w400,
+          // The whole title block opens the network picker: the 22pt
+          // network line alone was too short to tap.
+          title: InkWell(
+            onTap: showChangeNetwork,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: AppTouch.minTarget),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    S.of(context).g_token_m_key_3,
+                    style: AppTypography.headline.copyWith(
+                      color: _color(AppThemeKeys.mainTextColor),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _currentNetworkLabel,
+                        style: AppTypography.headline.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: _color(AppThemeKeys.mainBlueColor),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_drop_down_sharp,
+                        size: su.setWidth(40.0),
                         color: _color(AppThemeKeys.mainBlueColor),
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_sharp,
-                      size: su.setWidth(40.0),
-                      color: _color(AppThemeKeys.mainBlueColor),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
           backgroundColor: _color(AppThemeKeys.backGroundColor),
           actions: [
@@ -188,7 +193,10 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
           ],
         ),
         body: SafeArea(
-          child: InkWell(
+          // Tapping outside a field closes the keyboard; not a button, so no
+          // ink splash or button semantics on the whole page.
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: closeKeyboard,
             child: Column(
               children: [
@@ -245,10 +253,8 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
         borderRadius: BorderRadius.circular(su.setWidth(20.0)),
         color: _color(AppThemeKeys.itemBgColor),
       ),
-      constraints: BoxConstraints(
-        minHeight: su.setWidth(100.0),
-        maxHeight: su.setWidth(100.0),
-      ),
+      // No max height: the field grows with Dynamic Type instead of clipping.
+      constraints: BoxConstraints(minHeight: su.setWidth(100.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -279,23 +285,42 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
               onSubmitted: (_) => seachCoin(),
             ),
           ),
-          InkWell(
-            onTap: () {
-              closeKeyboard();
-              seachCoin();
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
-              height: su.setWidth(60.0),
-              decoration: BoxDecoration(
-                color: _color(AppThemeKeys.mainButtonBgColor),
-                borderRadius: BorderRadius.circular(su.setWidth(60.0)),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).search,
-                style: AppTypography.bodySm.copyWith(
-                  color: _color(AppThemeKeys.mainButtonTextColor),
+          // 30pt pill, 44pt hit area; Ink keeps the splash visible on it.
+          // Transparent Material: the field fill would hide the Ink pill.
+          Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: () {
+                closeKeyboard();
+                seachCoin();
+              },
+              borderRadius: BorderRadius.circular(su.setWidth(60.0)),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: AppTouch.minTarget,
+                ),
+                child: Center(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: Ink(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: su.setWidth(20.0),
+                    ),
+                    height: su.setWidth(60.0),
+                    decoration: BoxDecoration(
+                      color: AppColorTokens.of(context).brandFill,
+                      borderRadius: BorderRadius.circular(su.setWidth(60.0)),
+                    ),
+                    child: Center(
+                      widthFactor: 1,
+                      child: Text(
+                        S.of(context).search,
+                        style: AppTypography.bodySm.copyWith(
+                          color: _color(AppThemeKeys.mainButtonTextColor),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -308,7 +333,8 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   Widget tagWidget() {
     final su = ScreenUtil();
     return Container(
-      height: su.setWidth(100.0),
+      // 50pt at 375pt, never below 44pt at narrower widths.
+      height: AppTouch.scaled(100.0),
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border(

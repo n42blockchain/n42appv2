@@ -239,6 +239,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           ),
           IconButton(
             onPressed: () => Navigator.pop(context),
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
             icon: const Icon(Icons.close),
           ),
         ],
@@ -282,8 +283,9 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       spacing: ScreenUtil().setWidth(10),
       children: _expiryOptions.map((opt) {
         final isSelected = _expiry == opt.duration;
-        return GestureDetector(
+        return AppTapArea(
           onTap: () => setState(() => _expiry = opt.duration),
+          borderRadius: AppRadius.brMd,
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.space4,
@@ -304,7 +306,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: isSelected
-                    ? blueColor
+                    ? c.brandOnTint
                     : _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
               ),
             ),
@@ -324,7 +326,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           child: ElevatedButton(
             onPressed: canCreate ? _submit : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
+              backgroundColor: AppColorTokens.of(context).brandFill,
               foregroundColor: Colors.white,
               disabledBackgroundColor: AppColorTokens.of(context).textTertiary
                   .withAlpha(50),

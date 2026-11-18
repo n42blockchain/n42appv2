@@ -67,11 +67,13 @@ class EnsSubdomainSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
+              tooltip: S.of(context).g_key_bridge_refresh,
               icon: const Icon(Icons.refresh, size: 20),
               onPressed: isLoading ? null : onRefresh,
               color: subtitleColor,
             ),
             IconButton(
+              tooltip: S.of(context).g_key_159,
               icon: const Icon(Icons.add_circle_outline, size: 22),
               onPressed: onCreate,
               color: domainChain.color,
@@ -211,11 +213,13 @@ class _SubdomainItem extends StatelessWidget {
             ),
           ),
           IconButton(
+            tooltip: S.of(context).g_key_119,
             icon: const Icon(Icons.copy_outlined, size: 18),
             onPressed: () => onCopy(sub),
             color: subtitleColor,
           ),
           IconButton(
+            tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
             icon: const Icon(Icons.delete_outline, size: 18),
             onPressed: () => onDelete(sub),
             color: AppColorTokens.of(context).danger.withAlpha(180),

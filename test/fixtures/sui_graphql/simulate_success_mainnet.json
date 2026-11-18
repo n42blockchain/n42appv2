@@ -1,0 +1,18 @@
+{
+  "data": {
+    "simulateTransaction": {
+      "effects": {
+        "status": "SUCCESS",
+        "executionError": null,
+        "gasEffects": {
+          "gasSummary": {
+            "computationCost": 100000,
+            "storageCost": 47872400,
+            "storageRebate": 47594040,
+            "nonRefundableStorageFee": 4760
+          }
+        }
+      }
+    }
+  }
+}

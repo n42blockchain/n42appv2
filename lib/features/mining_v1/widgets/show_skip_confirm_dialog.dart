@@ -71,7 +71,7 @@ class SkipDialogView extends StatelessWidget {
             ),
             SizedBox(height: AppSpacing.space12),
             SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -80,7 +80,8 @@ class SkipDialogView extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).pop(false);
                       },
-                      child: Container(
+                      // Ink keeps the ripple visible above the fill.
+                      child: Ink(
                         decoration: BoxDecoration(
                           color: AppColorTokens.of(context).bgSurface,
                           borderRadius: AppRadius.brSm,
@@ -104,9 +105,10 @@ class SkipDialogView extends StatelessWidget {
                         sureCall?.call();
                         Navigator.of(context).pop(true);
                       },
-                      child: Container(
+                      // Ink keeps the ripple visible above the fill.
+                      child: Ink(
                         decoration: BoxDecoration(
-                          color: AppColorTokens.of(context).brand,
+                          color: AppColorTokens.of(context).brandFill,
                           borderRadius: AppRadius.brSm,
                         ),
                         child: Center(

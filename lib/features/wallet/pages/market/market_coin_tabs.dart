@@ -36,7 +36,7 @@ class _TrendingTab extends StatelessWidget {
     if (coins.isEmpty) {
       return _EmptyState(
         icon: Icons.trending_up_rounded,
-        message: 'No trending data',
+        message: S.of(context).g_ui3_no_trending_data,
         onRefresh: onRefresh,
       );
     }
@@ -124,6 +124,8 @@ class _SearchTab extends StatelessWidget {
               prefixIcon: Icon(Icons.search, color: subColor, size: 26.sp),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
+                      tooltip: MaterialLocalizations.of(context)
+                          .clearButtonTooltip,
                       icon: Icon(Icons.clear, color: subColor, size: 24.sp),
                       onPressed: () {
                         controller.clear();
@@ -152,7 +154,10 @@ class _SearchTab extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     if (loading) return const Center(child: CircularProgressIndicator());
     if (controller.text.trim().isEmpty) {
-      return _EmptyState(icon: Icons.search, message: 'Search for a coin');
+      return _EmptyState(
+        icon: Icons.search,
+        message: S.of(context).g_ui3_search_coin,
+      );
     }
     if (results.isEmpty) {
       return _EmptyState(

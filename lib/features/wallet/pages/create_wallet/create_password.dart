@@ -37,6 +37,9 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
   bool showPwd1 = true;
   bool showPwd2 = true;
 
+  /// Blocks a second tap from pushing CreateFinish twice (two wallets).
+  bool _submitting = false;
+
   @override
   void initState() {
     widget.wInfo.walletName =
@@ -59,7 +62,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
   Widget _stepIndicator() {
     return Container(
       height: ScreenUtil().setWidth(10.0),
-      width: ScreenUtil().setWidth(88.0),
+      width: AppTouch.target,
       decoration: BoxDecoration(
         borderRadius: AppRadius.brSm,
         color: AppColorTokens.of(context).brand,
@@ -77,14 +80,20 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
   );
 
   Widget _buildPasswordToggle(bool obscure) {
-    return Container(
-      width: ScreenUtil().setWidth(50.0),
-      height: ScreenUtil().setWidth(50.0),
-      alignment: Alignment.center,
-      child: Image.asset(
-        'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
-        width: ScreenUtil().setWidth(34.0),
-        color: AppColorTokens.of(context).brand,
+    return Semantics(
+      button: true,
+      label: obscure
+          ? S.of(context).g_a11y_show_password
+          : S.of(context).g_a11y_hide_password,
+      child: Container(
+        width: ScreenUtil().setWidth(50.0),
+        height: ScreenUtil().setWidth(50.0),
+        alignment: Alignment.center,
+        child: Image.asset(
+          'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
+          width: ScreenUtil().setWidth(34.0),
+          color: AppColorTokens.of(context).brand,
+        ),
       ),
     );
   }
@@ -148,10 +157,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                       ),
                       LoginTitle(
                         title: S.of(context).g_key_wallet_c48,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor10.name,
-                        ),
+                        color: AppColorTokens.of(context).textSecondary,
                         must: true,
                       ),
                       _buildFieldContainer(
@@ -174,10 +180,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                       ),
                       LoginTitle(
                         title: S.of(context).login_password,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor10.name,
-                        ),
+                        color: AppColorTokens.of(context).textSecondary,
                         must: true,
                       ),
                       _buildFieldContainer(
@@ -206,10 +209,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                       ),
                       LoginTitle(
                         title: S.of(context).rest_Confirm_password,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainTextColor10.name,
-                        ),
+                        color: AppColorTokens.of(context).textSecondary,
                         must: true,
                       ),
                       _buildFieldContainer(
@@ -236,7 +236,11 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                           },
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(148.0)),
+                      // Room for the bottom bar: 48pt button + padding.
+                      SizedBox(
+                        height:
+                            kMinInteractiveDimension + AppSpacing.space8 * 2,
+                      ),
                     ],
                   ),
                 ),
@@ -255,6 +259,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                       child: AppButton(
                         label: S.of(context).g_key_115,
                         onPressed: () async {
+                          if (_submitting) return;
                           final wName = _titleController.text.trim();
                           final password = _uPasswordController.text.trim();
                           final rPassword = _uPasswordConfirmController.text
@@ -290,7 +295,8 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
 
                           widget.wInfo.password = password;
                           widget.wInfo.walletName = wName;
-                          Navigator.push(
+                          _submitting = true;
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CreateFinish(
@@ -299,6 +305,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                               ),
                             ),
                           );
+                          if (mounted) _submitting = false;
                         },
                       ),
                     ),

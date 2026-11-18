@@ -90,43 +90,51 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
     final c = AppColorTokens.of(context);
     final trendColor = isUp ? c.success : c.danger;
 
-    return GestureDetector(
-      onTap: _navigateToMarketCoinInfo,
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: su.setWidth(30),
-          vertical: su.setWidth(16),
+    final radius = BorderRadius.circular(su.setWidth(16));
+    // Material + InkWell instead of a bare GestureDetector: the card had no
+    // pressed state.
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: su.setWidth(30),
+        vertical: su.setWidth(16),
+      ),
+      child: Material(
+        color: AppColorTokens.of(context).bgSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: radius,
+          side: BorderSide(color: trendColor.withAlpha(40)),
         ),
-        padding: EdgeInsets.all(su.setWidth(20)),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
-          borderRadius: BorderRadius.circular(su.setWidth(16)),
-          border: Border.all(color: trendColor.withAlpha(40), width: 1),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Row 1: Sparkline + 24h change badge
-            Row(
+        child: InkWell(
+          onTap: _navigateToMarketCoinInfo,
+          borderRadius: radius,
+          child: Padding(
+            padding: EdgeInsets.all(su.setWidth(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: _buildSparkline(trendColor, su)),
-                SizedBox(width: su.setWidth(16)),
-                _buildChangeBadge(trendColor, su),
+                // Row 1: Sparkline + 24h change badge
+                Row(
+                  children: [
+                    Expanded(child: _buildSparkline(trendColor, su)),
+                    SizedBox(width: su.setWidth(16)),
+                    _buildChangeBadge(trendColor, su),
+                  ],
+                ),
+                SizedBox(height: su.setWidth(12)),
+                // Row 2: Market Cap | 24h Volume
+                _buildMetricsRow(subtitleColor, textColor, su),
+                SizedBox(height: su.setWidth(8)),
+                // Bottom: link
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    S.of(context).g_ui_view_market,
+                    style: AppTypography.caption.copyWith(color: blueColor),
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: su.setWidth(12)),
-            // Row 2: Market Cap | 24h Volume
-            _buildMetricsRow(subtitleColor, textColor, su),
-            SizedBox(height: su.setWidth(8)),
-            // Bottom: link
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                S.of(context).g_ui_view_market,
-                style: AppTypography.caption.copyWith(color: blueColor),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -183,9 +191,13 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
       ),
       child: Text(
         '$sign${widget.priceChange24h.toStringAsFixed(2)}%',
+        // Raw system green on its 8% tint is about 2:1; keep the hue and
+        // reach 4.5:1.
         style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
-          color: trendColor,
+          color: AppContrast.textOnTint(trendColor, [
+            AppColorTokens.of(context).bgSurface,
+          ], dark: Theme.of(context).brightness == Brightness.dark),
         ),
       ),
     );

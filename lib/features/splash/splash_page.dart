@@ -228,7 +228,8 @@ class _SplashPageState extends State<SplashPage>
         Text(
           '\u00a9 2021-2026 N42 Inc.',
           style: AppTypography.caption.copyWith(
-            color: Colors.white.withValues(alpha: 0.4),
+            // 0.6 white reaches 5.6:1 on the gradient (0.4 was 3.3:1).
+            color: Colors.white.withValues(alpha: 0.6),
           ),
         ),
         SizedBox(height: AppSpacing.space12),

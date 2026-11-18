@@ -47,6 +47,8 @@ class EnsAddressSection extends StatelessWidget {
               ),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
+                      tooltip: MaterialLocalizations.of(context)
+                          .clearButtonTooltip,
                       icon: const Icon(Icons.clear, size: 18),
                       onPressed: () {
                         controller.clear();
@@ -111,7 +113,7 @@ class _RecordField extends StatelessWidget {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          labelText: _labelFor(recordKey),
+          labelText: _labelFor(context, recordKey),
           prefixIcon: Icon(_iconFor(recordKey), size: 20),
           border: OutlineInputBorder(borderRadius: AppRadius.brMd),
           contentPadding: EdgeInsets.symmetric(
@@ -124,14 +126,14 @@ class _RecordField extends StatelessWidget {
     );
   }
 
-  static String _labelFor(String key) => switch (key) {
-    'email' => 'Email',
-    'url' => 'Website',
+  static String _labelFor(BuildContext context, String key) => switch (key) {
+    'email' => S.of(context).login_email,
+    'url' => S.of(context).g_key_m_9,
     'com.twitter' => 'Twitter / X',
     'com.github' => 'GitHub',
     'com.discord' => 'Discord',
     'org.telegram' => 'Telegram',
-    'description' => 'Description',
+    'description' => S.of(context).g_key_nft_description,
     _ => key,
   };
 

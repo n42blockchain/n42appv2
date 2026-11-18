@@ -132,58 +132,63 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final radius = ScreenUtil().setWidth(20);
 
-    return InkWell(
-      onTap: () => Navigator.pop(context, dapp.url),
-      borderRadius: BorderRadius.circular(radius),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space6,
-          vertical: AppSpacing.space4,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius),
-          color: AppColorTokens.of(context).bgSurface,
-        ),
-        child: Row(
-          children: [
-            _buildAvatar(letter),
-            SizedBox(width: AppSpacing.space4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _singleLineText(
-                    dapp.name,
-                    style: AppTypography.headline.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColorTokens.of(context).textPrimary,
-                    ),
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  _singleLineText(
-                    dapp.description,
-                    style: AppTypography.caption.copyWith(color: subtitleColor),
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  _singleLineText(
-                    host,
-                    style: AppTypography.caption.copyWith(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.ff888888.name,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
+      child: InkWell(
+        onTap: () => Navigator.pop(context, dapp.url),
+        borderRadius: BorderRadius.circular(radius),
+        // Ink paints the fill on the Material so the ripple stays visible.
+        child: Ink(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space6,
+            vertical: AppSpacing.space4,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            color: AppColorTokens.of(context).bgSurface,
+          ),
+          child: Row(
+            children: [
+              _buildAvatar(letter),
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _singleLineText(
+                      dapp.name,
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: AppSpacing.space2),
+                    _singleLineText(
+                      dapp.description,
+                      style: AppTypography.caption.copyWith(
+                        color: subtitleColor,
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.space2),
+                    _singleLineText(
+                      host,
+                      style: AppTypography.caption.copyWith(
+                        color: AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.ff888888.name,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Icon(
-              Icons.chevron_right,
-              color: subtitleColor,
-              size: ScreenUtil().setWidth(40),
-            ),
-          ],
+              Icon(
+                Icons.chevron_right,
+                color: subtitleColor,
+                size: ScreenUtil().setWidth(40),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -98,7 +98,10 @@ class _BackupOneState extends State<BackupOne> {
                       topMargin: ScreenUtil().setWidth(40),
                     ),
                     _buildWarningRow(context, S.of(context).g_key_wallet_c42),
-                    SizedBox(height: ScreenUtil().setWidth(148.0)),
+                    // Room for the bottom bar: 48pt button + padding.
+                    SizedBox(
+                      height: kMinInteractiveDimension + AppSpacing.space8 * 2,
+                    ),
                   ],
                 ),
               ),
@@ -110,10 +113,11 @@ class _BackupOneState extends State<BackupOne> {
               child: Column(
                 children: [
                   const Divider(height: 1),
+                  // No fixed height: a 148px box clamped the button to
+                  // 42pt (32pt at 320pt width).
                   Container(
                     padding: EdgeInsets.all(AppSpacing.space8),
                     color: AppColorTokens.of(context).bgBase,
-                    height: ScreenUtil().setWidth(148),
                     child: AppButton(
                       label: S.of(context).g_key_wallet_c43,
                       onPressed: (showMnemonic && mnemonicWordsList.isNotEmpty)
@@ -208,44 +212,48 @@ class _BackupOneState extends State<BackupOne> {
     }
 
     final itemTextColor = AppColorTokens.of(context).textItem;
+    // Ink paints the card on the Material so the press splash shows on it.
     return InkWell(
       onTap: mnemonicWordsList.isEmpty ? null : _revealMnemonic,
-      child: Container(
-        width: double.infinity,
-        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(400)),
-        padding: EdgeInsets.all(AppSpacing.space8),
+      borderRadius: AppRadius.brMd,
+      child: Ink(
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgSurface,
           borderRadius: AppRadius.brMd,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
-              child: Icon(
-                mnemonicWordsList.isEmpty
-                    ? Icons.key_off_outlined
-                    : Icons.visibility_off_outlined,
-                color: itemTextColor,
-                size: ScreenUtil().setWidth(80.0),
+        child: Container(
+          width: double.infinity,
+          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(400)),
+          padding: EdgeInsets.all(AppSpacing.space8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
+                child: Icon(
+                  mnemonicWordsList.isEmpty
+                      ? Icons.key_off_outlined
+                      : Icons.visibility_off_outlined,
+                  color: itemTextColor,
+                  size: ScreenUtil().setWidth(80.0),
+                ),
               ),
-            ),
-            Text(
-              mnemonicWordsList.isEmpty
-                  ? walletBackupPhraseUnavailableMessage
-                  : S.of(context).g_key_wallet_c44,
-              style: AppTypography.body.copyWith(color: itemTextColor),
-              textAlign: TextAlign.center,
-            ),
-            if (mnemonicWordsList.isNotEmpty)
               Text(
-                S.of(context).g_key_wallet_c45,
+                mnemonicWordsList.isEmpty
+                    ? S.of(context).g_ui3_backup_phrase_unavailable
+                    : S.of(context).g_key_wallet_c44,
                 style: AppTypography.body.copyWith(color: itemTextColor),
                 textAlign: TextAlign.center,
               ),
-          ],
+              if (mnemonicWordsList.isNotEmpty)
+                Text(
+                  S.of(context).g_key_wallet_c45,
+                  style: AppTypography.body.copyWith(color: itemTextColor),
+                  textAlign: TextAlign.center,
+                ),
+            ],
+          ),
         ),
       ),
     );

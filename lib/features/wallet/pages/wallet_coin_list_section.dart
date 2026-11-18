@@ -123,32 +123,32 @@ class _CoinListBody extends StatelessWidget {
           if (waValue.assetVisibilityRecords.isNotEmpty)
             TextButton.icon(
               icon: const Icon(Icons.visibility_outlined),
-              label: const Text('Hidden and reviewed assets'),
+              label: Text(S.of(context).g_ui3_asset_hidden_reviewed),
               onPressed: () {
                 final owner = waValue.walletInfo;
                 showDialog<void>(
                   context: context,
                   builder: (dialogContext) => AlertDialog(
-                    title: const Text('Asset display controls'),
+                    title: Text(S.of(context).g_ui3_asset_display_controls),
                     content: SizedBox(
                       width: 360,
                       child: ListView(
                         shrinkWrap: true,
                         children: [
-                          const Text(
-                            'Local user choices only. On-chain balances and approvals are unchanged.',
-                          ),
+                          Text(S.of(context).g_ui3_asset_display_local_note),
                           for (final entry in owner.assetVisibility.entries)
                             if (entry.value is Map)
                               ListTile(
                                 title: Text(
-                                  '${entry.value['name'] ?? entry.key} · ${entry.value['state']}',
+                                  '${entry.value['name'] ?? entry.key} · ${_assetStateLabel(context, entry.value['state'])}',
                                 ),
                                 subtitle: Text(
                                   '${entry.value['source']}\n${entry.value['updatedAt']}',
                                 ),
                                 trailing: TextButton(
-                                  child: const Text('Restore'),
+                                  child: Text(
+                                    S.of(context).g_ui3_asset_restore,
+                                  ),
                                   onPressed: () async {
                                     if (!identical(waValue.walletInfo, owner)) {
                                       Navigator.pop(dialogContext);
@@ -158,15 +158,16 @@ class _CoinListBody extends StatelessWidget {
                                         .restoreAssetVisibility(entry.key);
                                     if (!dialogContext.mounted) return;
                                     if (!saved) {
-                                      ScaffoldMessenger.of(
-                                        dialogContext,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Could not restore asset display.',
-                                          ),
-                                        ),
-                                      );
+                                      ScaffoldMessenger.of(dialogContext)
+                                          .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                S
+                                                    .of(dialogContext)
+                                                    .g_ui3_asset_restore_failed,
+                                              ),
+                                            ),
+                                          );
                                       return;
                                     }
                                     Navigator.pop(dialogContext);
@@ -208,6 +209,14 @@ class _CoinListBody extends StatelessWidget {
     );
   }
 }
+
+/// Localized name of a stored asset display state; unknown values as-is.
+String _assetStateLabel(BuildContext context, Object? state) => switch (state) {
+  'warning' => S.of(context).g_ui3_asset_mark_review,
+  'hidden' => S.of(context).g_ui3_asset_state_hidden,
+  'quarantined' => S.of(context).g_ui3_asset_state_quarantined,
+  _ => '$state',
+};
 
 class _NoSearchResults extends StatelessWidget {
   const _NoSearchResults({required this.hasSearchQuery});
@@ -283,7 +292,7 @@ class _DiscoveryBanner extends StatelessWidget {
               children: [
                 Icon(
                   Icons.manage_search_rounded,
-                  color: blueColor,
+                  color: AppColorTokens.of(context).brandOnTint,
                   size: ScreenUtil().setWidth(36),
                 ),
                 SizedBox(width: AppSpacing.space4),
@@ -291,23 +300,21 @@ class _DiscoveryBanner extends StatelessWidget {
                   child: Text(
                     S.of(context).g_key_token_discovery_banner(count),
                     style: AppTypography.bodySm.copyWith(
-                      color: blueColor,
+                      color: AppColorTokens.of(context).brandOnTint,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                InkWell(
+                AppTapArea(
                   onTap: onDismiss,
+                  tooltip: S.of(context).g_a11y_close,
                   customBorder: const CircleBorder(),
-                  child: SizedBox(
-                    // >=88.w 命中区（44dp 触控红线）
-                    width: ScreenUtil().setWidth(88),
-                    height: ScreenUtil().setWidth(88),
-                    child: Icon(
-                      Icons.close_rounded,
-                      color: blueColor.withValues(alpha: 0.70),
-                      size: ScreenUtil().setWidth(32),
-                    ),
+                  child: Icon(
+                    Icons.close_rounded,
+                    // 70% brand on the tint was about 2.3:1; the on-tint
+                    // brand shade keeps the glyph above 3:1.
+                    color: AppColorTokens.of(context).brandOnTint,
+                    size: ScreenUtil().setWidth(32),
                   ),
                 ),
               ],
@@ -373,8 +380,9 @@ class _PinnedDivider extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
             child: Text(
               S.of(context).g_key_coin_list_separator,
+              // Tertiary label was about 1.7:1; this separator is a label.
               style: AppTypography.captionSm.copyWith(
-                color: AppColorTokens.of(context).textTertiary,
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -416,8 +424,8 @@ class _AllHiddenHint extends StatelessWidget {
               borderRadius: AppRadius.brSm,
               child: Container(
                 constraints: BoxConstraints(
-                  minHeight: ScreenUtil().setWidth(88),
-                  minWidth: ScreenUtil().setWidth(88),
+                  minHeight: AppTouch.target,
+                  minWidth: AppTouch.target,
                 ),
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),

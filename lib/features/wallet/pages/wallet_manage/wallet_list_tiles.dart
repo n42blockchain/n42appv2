@@ -70,7 +70,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
           children: [
             SlidableAction(
               onPressed: (_) => _onManage(info, index),
-              backgroundColor: AppColorTokens.of(context).brand,
+              backgroundColor: AppColorTokens.of(context).brandFill,
               foregroundColor: Colors.white,
               icon: Icons.edit_outlined,
               label: S.of(context).g_key_wallet_manage,
@@ -82,7 +82,7 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
             if (!isActive && info.mainWallet != true)
               SlidableAction(
                 onPressed: (_) => _onDelete(info),
-                backgroundColor: Colors.redAccent,
+                backgroundColor: AppColorTokens.of(context).dangerFill,
                 foregroundColor: Colors.white,
                 icon: Icons.delete_outline,
                 label: S.of(context).g_key_113,
@@ -101,103 +101,114 @@ mixin _WalletListTilesMixin on _WalletListActionsMixin {
   Widget _walletCard(WalletInfo info, int index, bool isActive) {
     final coinKeys = info.coinInfo?.keys.toList() ?? [];
 
-    return GestureDetector(
-      onTap: () => isActive ? _onManage(info, index) : _switchWallet(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space4,
-        ),
-        decoration: BoxDecoration(
-          color: isActive
-              ? AppColorTokens.of(context).brand.withValues(alpha: 0.08)
-              : AppColorTokens.of(context).bgSurface,
+    // InkWell sits on a transparent Material inside the card so the pressed
+    // state is drawn above the card fill.
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: isActive
+            ? AppColorTokens.of(context).brand.withValues(alpha: 0.08)
+            : AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        border: isActive
+            ? Border.all(color: AppColorTokens.of(context).brand, width: 1.5)
+            : Border.all(color: Colors.transparent),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () => isActive ? _onManage(info, index) : _switchWallet(index),
           borderRadius: AppRadius.brMd,
-          border: isActive
-              ? Border.all(color: AppColorTokens.of(context).brand, width: 1.5)
-              : Border.all(color: Colors.transparent),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Image.asset(
-              'assets/img/${isActive ? "ast" : "ast_h"}.png',
-              width: ScreenUtil().setWidth(56),
-            ),
-            SizedBox(width: AppSpacing.space4),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/img/${isActive ? "ast" : "ast_h"}.png',
+                  width: ScreenUtil().setWidth(56),
+                ),
+                SizedBox(width: AppSpacing.space4),
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    info.walletName ?? '-',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.headline.copyWith(
-                      color: AppColorTokens.of(context).textPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: AppSpacing.space2),
-                  Text(
-                    coinKeys.take(3).join(' · ') +
-                        (coinKeys.length > 3 ? ' +${coinKeys.length - 3}' : ''),
-                    style: AppTypography.caption.copyWith(
-                      color: AppColorTokens.of(context).textSubtitle,
-                    ),
-                  ),
-                  if (info.tags.isNotEmpty) ...[
-                    SizedBox(height: AppSpacing.space2),
-                    Wrap(
-                      spacing: 4,
-                      children: info.tags
-                          .map(
-                            (tag) => Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppSpacing.space2,
-                                vertical: AppSpacing.space2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColorTokens.of(context).brand
-                                    .withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                tag,
-                                style: AppTypography.captionSm.copyWith(
-                                  color: AppColorTokens.of(context).brand,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        info.walletName ?? '-',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.space2),
+                      Text(
+                        coinKeys.take(3).join(' · ') +
+                            (coinKeys.length > 3
+                                ? ' +${coinKeys.length - 3}'
+                                : ''),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
+                      ),
+                      if (info.tags.isNotEmpty) ...[
+                        SizedBox(height: AppSpacing.space2),
+                        Wrap(
+                          spacing: 4,
+                          children: info.tags
+                              .map(
+                                (tag) => Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: AppSpacing.space2,
+                                    vertical: AppSpacing.space2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColorTokens.of(context).brand
+                                        .withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    tag,
+                                    style: AppTypography.captionSm.copyWith(
+                                      color: AppColorTokens.of(context)
+                                          .brandOnTint,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
 
-            if (isActive)
-              Icon(
-                Icons.check_circle,
-                color: AppColorTokens.of(context).brand,
-                size: ScreenUtil().setWidth(40),
-              )
-            else
-              Icon(
-                Icons.radio_button_unchecked,
-                color: AppColorTokens.of(context).textSubtitle,
-                size: ScreenUtil().setWidth(36),
-              ),
-          ],
+                if (isActive)
+                  Icon(
+                    Icons.check_circle,
+                    color: AppColorTokens.of(context).brand,
+                    size: ScreenUtil().setWidth(40),
+                  )
+                else
+                  Icon(
+                    Icons.radio_button_unchecked,
+                    color: AppColorTokens.of(context).textSubtitle,
+                    size: ScreenUtil().setWidth(36),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

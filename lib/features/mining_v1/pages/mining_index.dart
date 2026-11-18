@@ -62,7 +62,7 @@ class _MiningIndexState extends State<MiningIndex>
               titleChild: InkWell(
                 onTap: () => showChangeAddress(),
                 child: Container(
-                  height: ScreenUtil().setWidth(80),
+                  height: AppTouch.scaled(80),
                   alignment: Alignment.center,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -99,7 +99,8 @@ class _MiningIndexState extends State<MiningIndex>
               onLeftImageUri: "assets/wallet/menu.png",
               actions: [
                 SizedBox(width: AppSpacing.space2),
-                InkWell(
+                AppTapArea(
+                  tooltip: S.of(context).g_key_94,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const MiningSettings()),
@@ -237,7 +238,7 @@ class _MiningIndexState extends State<MiningIndex>
                         }
                       },
                       child: Container(
-                        height: ScreenUtil().setWidth(80.0),
+                        height: AppTouch.scaled(80),
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [

@@ -71,7 +71,7 @@ void main() {
       await tester.tap(keyText());
       await tester.pumpAndSettle();
       expect(copied, [secret]);
-      expect(find.text(S.current.g_google_auth_key8), findsOneWidget);
+      expect(find.text(S.current.copy), findsOneWidget);
       await tester.tap(find.text(S.current.g_google_auth_key3));
       await tester.pumpAndSettle();
       expect(keyText(), findsNothing);

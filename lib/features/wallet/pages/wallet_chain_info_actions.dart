@@ -65,7 +65,8 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     }
 
     if (rpcUrl.isEmpty) {
-      ToastUtils.showWarning('RPC URL not configured');
+      if (!mounted) return;
+      ToastUtils.showWarning(S.of(context).g_ui3_rpc_url_not_configured);
       return;
     }
 
@@ -144,7 +145,10 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           trailing: Container(
             padding: EdgeInsets.symmetric(horizontal: sw(8), vertical: sw(2)),
             decoration: BoxDecoration(
-              color: AppColorTokens.of(context).success,
+              // White on plain system green is about 2.2:1.
+              color: AppContrast.fillForWhiteText(
+                AppColorTokens.of(context).success,
+              ),
               borderRadius: BorderRadius.circular(sw(6)),
             ),
             child: Text(

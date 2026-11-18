@@ -166,7 +166,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
         return Padding(
           padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
           child: Material(
-            color: Colors.transparent,
+            // Card fill on the Material so the ripple is not hidden.
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
             child: InkWell(
               onTap: () {
                 setState(() {
@@ -189,7 +191,6 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               child: Container(
                 padding: EdgeInsets.all(AppSpacing.space4),
                 decoration: BoxDecoration(
-                  color: AppColorTokens.of(context).bgSurface,
                   borderRadius: AppRadius.brMd,
                   border: isSelected
                       ? Border.all(
@@ -298,7 +299,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           ('MAX', 1.0),
         ]) ...[
           Expanded(
-            child: GestureDetector(
+            // 44pt hit area (with ripple) around the unchanged ~32pt chip.
+            child: AppTapArea(
+              borderRadius: AppRadius.brSm,
               onTap: () {
                 final decimals = _getDecimals();
                 final scaled =
@@ -327,9 +330,11 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 child: Center(
                   child: Text(
                     pct.$1,
+                    // Orange caption was ~2.2:1 on the chip; use the
+                    // primary label color.
                     style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColorTokens.of(context).warning,
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
                 ),

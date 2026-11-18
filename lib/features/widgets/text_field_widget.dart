@@ -28,6 +28,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
   return (borderColor: defaultBorder, textColor: textColor);
 }
 
+/// Danger red shifted to 4.5:1 on the page and card backgrounds, for the
+/// small error copy under a field.
+Color _dangerText(BuildContext context) {
+  final colors = AppColorTokens.of(context);
+  return AppContrast.ensure(colors.danger, [
+    colors.bgBase,
+    colors.bgSurface,
+  ], darken: Theme.of(context).brightness != Brightness.dark);
+}
+
 /// Builds the common message widget shown below a text field.
 Widget? _buildMessageWidget(
   BuildContext context, {
@@ -42,9 +52,7 @@ Widget? _buildMessageWidget(
       width: double.infinity,
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).danger,
-        ),
+        style: AppTypography.body.copyWith(color: _dangerText(context)),
       ),
     );
   }
@@ -56,7 +64,7 @@ Widget? _buildMessageWidget(
       child: Text(
         message,
         style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandOnTint,
         ),
       ),
     );
@@ -82,6 +90,42 @@ InputDecoration _buildInputDecoration({
     focusedBorder: InputBorder.none,
     suffix: suffix,
   );
+}
+
+/// Leading/trailing action inside a decorated field (MAX, address book,
+/// visibility toggles).
+///
+/// The field paints its own filled background, so a bare [InkWell] would
+/// splash on the Material below it and the press would stay invisible. A
+/// transparent [Material] gives the ink a surface above the fill, and the
+/// hit area grows to the 44-point minimum around the unchanged visual.
+/// Decorative slots without [onTap] render as before.
+class _FieldAction extends StatelessWidget {
+  const _FieldAction({required this.onTap, required this.child});
+
+  final VoidCallback? onTap;
+  final Widget child;
+
+  static const double _minTarget = 44;
+
+  @override
+  Widget build(BuildContext context) {
+    if (onTap == null) return child;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brPill,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: _minTarget,
+            minHeight: _minTarget,
+          ),
+          child: Center(widthFactor: 1, heightFactor: 1, child: child),
+        ),
+      ),
+    );
+  }
 }
 
 Widget textFieldStyle2(
@@ -162,7 +206,7 @@ Widget textFieldStyle2(
         child: Row(
           children: [
             if (leftWidget != null)
-              InkWell(onTap: leftOnTap, child: leftWidget),
+              _FieldAction(onTap: leftOnTap, child: leftWidget),
             Expanded(
               child: TextField(
                 controller: controller,
@@ -190,11 +234,11 @@ Widget textFieldStyle2(
               ),
             ),
             if (rightWidget3 != null)
-              InkWell(onTap: rightOnTap3, child: rightWidget3),
+              _FieldAction(onTap: rightOnTap3, child: rightWidget3),
             if (rightWidget1 != null)
-              InkWell(onTap: rightOnTap1, child: rightWidget1),
+              _FieldAction(onTap: rightOnTap1, child: rightWidget1),
             if (rightWidget2 != null)
-              InkWell(onTap: rightOnTap2, child: rightWidget2),
+              _FieldAction(onTap: rightOnTap2, child: rightWidget2),
           ],
         ),
       ),
@@ -275,7 +319,7 @@ Widget textFieldStyle3(
         child: Row(
           children: [
             if (leftWidget != null)
-              InkWell(onTap: leftOnTap, child: leftWidget),
+              _FieldAction(onTap: leftOnTap, child: leftWidget),
             Expanded(
               child: TextField(
                 controller: controller,
@@ -304,9 +348,9 @@ Widget textFieldStyle3(
               ),
             ),
             if (rightWidget1 != null)
-              InkWell(onTap: rightOnTap1, child: rightWidget1),
+              _FieldAction(onTap: rightOnTap1, child: rightWidget1),
             if (rightWidget2 != null)
-              InkWell(onTap: rightOnTap2, child: rightWidget2),
+              _FieldAction(onTap: rightOnTap2, child: rightWidget2),
           ],
         ),
       ),
@@ -336,7 +380,7 @@ Widget textFieldStyle3(
                 child: Text(
                   errorMessage,
                   style: AppTypography.body.copyWith(
-                    color: AppColorTokens.of(context).danger,
+                    color: _dangerText(context),
                   ),
                 ),
               ),

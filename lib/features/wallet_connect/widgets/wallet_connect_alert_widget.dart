@@ -246,20 +246,22 @@ class _WalletConnectAlertWidgetState
   // ── Data rows ─────────────────────────────────────────────────────────────────
 
   Widget _buildTransactionRows(BuildContext context) {
+    final s = S.of(context);
     return _buildDataRows(context, [
-      ('Network', 'network'),
-      ('From', 'from'),
-      ('To', 'to'),
-      ('Gas', 'gas'),
-      ('Data', 'data'),
+      (s.g_mining_key84, 'network'),
+      (s.g_key_75, 'from'),
+      (s.g_key_38, 'to'),
+      (s.g_key_t_7, 'gas'),
+      (s.g_ui3_data, 'data'),
     ]);
   }
 
   Widget _buildMessageRows(BuildContext context) {
+    final s = S.of(context);
     return _buildDataRows(context, [
-      ('Network', 'network'),
-      ('Address', 'from'),
-      ('Data', 'data'),
+      (s.g_mining_key84, 'network'),
+      (s.g_key_address, 'from'),
+      (s.g_ui3_data, 'data'),
     ]);
   }
 
@@ -288,16 +290,21 @@ class _WalletConnectAlertWidgetState
       context,
       cancelLabel: s.g_connect_key3,
       onCancel: () {
+        if (!_isTopRoute) return;
         wcp.cancelTap(cancelState);
         Navigator.pop(context);
       },
       confirmLabel: s.g_key_78,
       onConfirm: () {
+        // A fast double tap must not pop the page under this sheet.
+        if (!_isTopRoute) return;
         isTransaction ? wcp.transactionSignTap() : wcp.messageSignTap();
         Navigator.pop(context);
       },
     );
   }
+
+  bool get _isTopRoute => ModalRoute.of(context)?.isCurrent ?? true;
 
   Widget _buttonRow(
     BuildContext context, {
@@ -324,7 +331,7 @@ class _WalletConnectAlertWidgetState
         children: [
           Expanded(
             child: SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: AppButton(
                 label: cancelLabel,
                 variant: AppButtonVariant.secondary,
@@ -335,7 +342,7 @@ class _WalletConnectAlertWidgetState
           SizedBox(width: AppSpacing.space4),
           Expanded(
             child: SizedBox(
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: AppButton(label: confirmLabel, onPressed: onConfirm),
             ),
           ),

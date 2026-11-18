@@ -27,6 +27,7 @@ class ShareList extends StatelessWidget {
               ),
             ),
             IconButton(
+              tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
               onPressed: () {
                 Navigator.of(context).pop();
               },

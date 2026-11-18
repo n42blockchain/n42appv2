@@ -31,7 +31,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
             context,
             isDark,
             icon: Icons.timer_outlined,
-            label: 'Uptime',
+            label: S.of(context).g_ui3_uptime,
             value: '${node.uptimePercentage.toStringAsFixed(1)}%',
             valueColor: _uptimeColor(context, node.uptimePercentage),
           ),
@@ -108,13 +108,13 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
         children: [
           _buildListTile(
             context,
-            label: 'Activation Time',
+            label: S.of(context).g_ui3_activation_time,
             value: dateFormat.format(node.activatedAt),
           ),
           _divider(context),
           _buildListTileWidget(
             context,
-            label: 'WS Status',
+            label: S.of(context).g_ui3_ws_status,
             trailing: _buildWsStatus(context, mpValue.wsState),
           ),
           if (node.expiresAt != null) ...[
@@ -229,7 +229,7 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
     if (mpValue.showRedemption == true && mpValue.redeem == false) {
       final isLoading = mpValue.exitDepositLoad == Load.loading;
       return SizedBox(
-        height: ScreenUtil().setWidth(88),
+        height: AppTouch.target,
         child: AppButton(
           label: S.of(context).g_mining_key_77,
           loading: isLoading,

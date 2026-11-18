@@ -187,11 +187,11 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
             SizedBox(height: AppSpacing.space12),
             SizedBox(
               width: double.infinity,
-              height: ScreenUtil().setWidth(88),
+              height: AppTouch.target,
               child: ElevatedButton(
                 onPressed: _loading ? null : _submit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: blueColor,
+                  backgroundColor: AppContrast.fillForWhiteText(blueColor),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: _loading

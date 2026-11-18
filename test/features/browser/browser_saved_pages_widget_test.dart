@@ -350,6 +350,9 @@ void main() {
       await tester.tap(find.text('Edited bookmark'));
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.delete).last);
+      await tester.pumpAndSettle();
+      // Deleting now asks for confirmation.
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
       await waitFor(tester, () => find.byType(EmptyView).evaluate().isNotEmpty);
       expect(
         await tester.runAsync(() => database.query('browserCollection')),
@@ -377,6 +380,8 @@ void main() {
       () => find.text('Delete bookmark').evaluate().isNotEmpty,
     );
     await tester.tap(find.byIcon(Icons.delete).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
     await waitFor(
       tester,
       () => find.text('Delete bookmark').evaluate().isEmpty,

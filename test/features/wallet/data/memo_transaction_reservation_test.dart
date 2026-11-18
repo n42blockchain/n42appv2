@@ -38,7 +38,7 @@ void main() {
         )
         .join(', ');
     await connection.execute(
-      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT)',
+      'CREATE TABLE TransationRecord (trId INTEGER PRIMARY KEY AUTOINCREMENT, $columns, memoDispatchPhase TEXT, memoExpiry TEXT)',
     );
     db = _Database(connection);
   });
@@ -441,5 +441,164 @@ void main() {
       await expectLater(db.reserveMemoTransaction(tx), throwsArgumentError);
     }
     expect(await connection.query('TransationRecord'), isEmpty);
+  });
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain dismissing an unresolved send unblocks without failing it', () async {
+      // A legacy row (no dispatch phase) and a dispatched row both block.
+      final legacy = record(chain);
+      legacy.trId = await db.reserveMemoTransaction(legacy);
+      await expectLater(
+        db.reserveMemoTransaction(record(chain, hash: 'cd')),
+        throwsA(isA<PendingMemoTransactionException>()),
+      );
+      expect(
+        await db.selectBlockingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        hasLength(1),
+      );
+      // Another user or sender is never touched.
+      expect(
+        await db.dismissPendingMemoTransactions(
+          userUuid: 'bob',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        0,
+      );
+      expect(
+        await db.dismissPendingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        1,
+      );
+      final row = (await connection.query('TransationRecord')).single;
+      expect(row['state'], 0, reason: 'outcome is still unknown');
+      expect(row['memoDispatchPhase'], memoPhaseDismissed);
+      expect(
+        await db.selectBlockingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        isEmpty,
+      );
+      final next = record(chain, hash: 'cd');
+      next.trId = await db.reserveMemoTransaction(next, trackDispatch: true);
+      expect(next.trId, greaterThan(0));
+      // The dismissed row is still pending history and still resolvable.
+      final legacyRow = TransationRecordModel.fromMap(row)..state = 2;
+      expect(await db.updateTransationRecordTxhash(legacyRow), 1);
+      // A tracked reservation that never reached the network is not dismissed.
+      expect(
+        await db.dismissPendingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: chain,
+          from: 'sender',
+          isTest: 0,
+        ),
+        0,
+      );
+    });
+  }
+
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain explicit rejection closes only the exact row as failed', () async {
+      final sent = record(chain);
+      sent.trId = await db.reserveMemoTransaction(sent);
+      // A different identity never matches.
+      final other = TransationRecordModel.fromMap(sent.toMap())..to1 = 'x';
+      expect(await db.markMemoTransactionRejected(other, 'refused'), isFalse);
+      expect(await db.markMemoTransactionRejected(sent, 'refused'), isTrue);
+      final row = (await connection.query('TransationRecord')).single;
+      expect(row['state'], 2);
+      expect(row['errorMessage'], 'refused');
+      // A terminal row is not touched again and no longer blocks.
+      expect(await db.markMemoTransactionRejected(sent, 'again'), isFalse);
+      final next = record(chain, hash: 'cd');
+      expect(await db.reserveMemoTransaction(next), greaterThan(0));
+    });
+  }
+
+  for (final chain in ['ADA', 'XLM', 'EGLD', 'NEAR']) {
+    test('$chain reservation keeps the signed expiry proof for polling', () async {
+      final sent = record(chain)..memoExpiry = '{"v":1,"chain":"$chain"}';
+      sent.trId = await db.reserveMemoTransaction(sent, trackDispatch: true);
+      final pending = await db.selectTransationRecordUnDone('alice');
+      expect(pending.single.memoExpiry, sent.memoExpiry);
+      // Generic updates never drop or rewrite the proof.
+      expect(sent.toMapDb().containsKey('memoExpiry'), isFalse);
+      final legacy = record(chain, hash: 'cd')..userUuid = 'bob';
+      await db.reserveMemoTransaction(legacy);
+      expect(
+        (await db.selectTransationRecordUnDone('bob')).single.memoExpiry,
+        isNull,
+      );
+    });
+  }
+
+  test('SUI history rows can stop blocking without being failed', () async {
+    // Sui rows are written by the plain history insert, not a reservation.
+    TransationRecordModel sui(String hash) => TransationRecordModel()
+      ..coinMiniName = 'SUI'
+      ..coin = {'blockchainType': 'Sui', 'coinType': 'SUI'}
+      ..to1 = 'recipient'
+      ..price = BigInt.one
+      ..from1 = 'sender'
+      ..userUuid = 'alice'
+      ..txHash = hash;
+    await db.insertTransationRecord(sui('digest-a'));
+    await db.insertTransationRecord(sui('digest-b')..state = 1);
+    Future<List<TransationRecordModel>> blocking() =>
+        db.selectBlockingMemoTransactions(
+          userUuid: 'alice',
+          coinMiniName: 'SUI',
+          from: 'sender',
+          isTest: 0,
+        );
+    expect((await blocking()).map((r) => r.txHash), ['digest-a']);
+    expect(
+      await db.dismissPendingMemoTransactions(
+        userUuid: 'alice',
+        coinMiniName: 'SUI',
+        from: 'sender',
+        isTest: 0,
+      ),
+      1,
+    );
+    expect(await blocking(), isEmpty);
+    final rows = await connection.query('TransationRecord', orderBy: 'trId');
+    expect(rows.map((r) => r['state']), [0, 1]);
+    expect(rows.first['memoDispatchPhase'], memoPhaseDismissed);
+    // Still pending history: a later chain result updates it.
+    final settled = TransationRecordModel.fromMap(rows.first)..state = 1;
+    expect(await db.updateTransationRecordTxhash(settled), 1);
+  });
+
+  test('dismissal rejects other chains and incomplete identities', () async {
+    for (final args in [
+      ('BTC', 'alice', 'sender', 0),
+      ('XLM', '', 'sender', 0),
+      ('XLM', 'alice', '', 0),
+      ('XLM', 'alice', 'sender', 2),
+    ]) {
+      await expectLater(
+        db.dismissPendingMemoTransactions(
+          coinMiniName: args.$1,
+          userUuid: args.$2,
+          from: args.$3,
+          isTest: args.$4,
+        ),
+        throwsArgumentError,
+      );
+    }
   });
 }

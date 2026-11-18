@@ -7,6 +7,9 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+/// White overlay of the card's action pills.
+const double _actionPillAlpha = 0.09;
+
 class WalletBoard extends StatefulWidget {
   final double accountPrice;
   final String? walletName;
@@ -68,8 +71,13 @@ class _WalletBoardState extends State<WalletBoard> {
         vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
-        // Follow the system blue or the user's selected accent.
-        color: AppColorTokens.of(context).brand,
+        // Follow the system blue or the user's selected accent, deepened so
+        // white labels on the card and on its 9% white action pills reach
+        // 4.5:1 (plain system blue: ~4.0:1 light / ~3.65:1 dark).
+        color: AppContrast.fillForWhiteText(
+          AppColorTokens.of(context).brand,
+          whiteOverlay: _actionPillAlpha,
+        ),
         borderRadius: AppRadius.brXl,
         boxShadow: [
           BoxShadow(
@@ -93,7 +101,7 @@ class _WalletBoardState extends State<WalletBoard> {
               height: ScreenUtil().setWidth(200),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.04),
+                color: AppColorTokens.onOverlayPrimary.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -105,7 +113,7 @@ class _WalletBoardState extends State<WalletBoard> {
               height: ScreenUtil().setWidth(120),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.02),
+                color: AppColorTokens.onOverlayPrimary.withValues(alpha: 0.02),
               ),
             ),
           ),
@@ -116,11 +124,12 @@ class _WalletBoardState extends State<WalletBoard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 总资产标签
+                // Supporting text on the brand card uses full white: 70% white
+                // measured about 2.7:1 on system blue, full white about 4:1.
                 Text(
                   S.of(context).g_key_29,
                   style: AppTypography.captionSm.copyWith(
-                    color: AppColorTokens.onOverlaySecondary,
-                    fontWeight: FontWeight.w400,
+                    color: AppColorTokens.onOverlayPrimary,
                   ),
                 ),
                 SizedBox(height: AppSpacing.space2),
@@ -142,7 +151,7 @@ class _WalletBoardState extends State<WalletBoard> {
                       Text(
                         '≈ ¥${oCcyCny.format(cny)}',
                         style: AppTypography.caption.copyWith(
-                          color: AppColorTokens.onOverlaySecondary,
+                          color: AppColorTokens.onOverlayPrimary,
                         ),
                       ),
                     ],
@@ -218,8 +227,8 @@ class _WalletBoardState extends State<WalletBoard> {
         key: key,
         onTap: onTap,
         borderRadius: AppRadius.brLg,
-        highlightColor: Colors.white.withValues(alpha: 0.10),
-        splashColor: Colors.white.withValues(alpha: 0.08),
+        highlightColor: AppColorTokens.onOverlayPrimary.withValues(alpha: 0.10),
+        splashColor: AppColorTokens.onOverlayPrimary.withValues(alpha: 0.08),
         child: _actionBtnBody(label, imagePath),
       ),
     );
@@ -236,7 +245,9 @@ class _WalletBoardState extends State<WalletBoard> {
             vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.09),
+            color: AppColorTokens.onOverlayPrimary.withValues(
+              alpha: _actionPillAlpha,
+            ),
             borderRadius: AppRadius.brMd,
             border: Border.all(color: AppColorTokens.onOverlayBorder),
           ),
@@ -247,7 +258,7 @@ class _WalletBoardState extends State<WalletBoard> {
                 imagePath,
                 width: ScreenUtil().setWidth(36),
                 height: ScreenUtil().setWidth(36),
-                color: Colors.white,
+                color: AppColorTokens.onOverlayPrimary,
               ),
               SizedBox(width: AppSpacing.space4),
               Flexible(
@@ -370,7 +381,7 @@ class _WalletPriceStatusState extends State<WalletPriceStatus>
       label,
       key: const ValueKey('wallet_price_status'),
       style: AppTypography.captionSm.copyWith(
-        color: AppColorTokens.onOverlaySecondary,
+        color: AppColorTokens.onOverlayPrimary,
       ),
     );
   }

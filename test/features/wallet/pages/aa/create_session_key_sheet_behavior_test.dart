@@ -153,6 +153,10 @@ void main() {
     expect(find.text(l10n.g_key_aa_session_amount_limit), findsNothing);
 
     await _scrollTo(tester, find.text(l10n.g_key_aa_session_confirm_risk));
+    // The label can be on screen while the checkbox centre is still under
+    // the pinned create button.
+    await tester.ensureVisible(find.byType(Checkbox).last);
+    await tester.pumpAndSettle();
     await tester.tap(find.byType(Checkbox).last);
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ElevatedButton).last);
@@ -177,6 +181,10 @@ void main() {
     );
 
     await _scrollTo(tester, find.text(l10n.g_key_aa_session_confirm_risk));
+    // The label can be on screen while the checkbox centre is still under
+    // the pinned create button.
+    await tester.ensureVisible(find.byType(Checkbox).last);
+    await tester.pumpAndSettle();
     await tester.tap(find.byType(Checkbox).last);
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ElevatedButton).last);
@@ -201,6 +209,10 @@ void main() {
     );
 
     await _scrollTo(tester, find.text(l10n.g_key_aa_session_confirm_risk));
+    // The label can be on screen while the checkbox centre is still under
+    // the pinned create button.
+    await tester.ensureVisible(find.byType(Checkbox).last);
+    await tester.pumpAndSettle();
     await tester.tap(find.byType(Checkbox).last);
     await tester.pumpAndSettle();
     expect(

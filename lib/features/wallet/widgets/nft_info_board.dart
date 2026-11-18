@@ -192,8 +192,9 @@ class NftInfoBoard extends StatelessWidget {
         ),
         SizedBox(height: AppSpacing.space2),
         if (contractAddress != null)
-          GestureDetector(
+          AppTapArea(
             onTap: () => _copyToClipboard(context, contractAddress!),
+            borderRadius: AppRadius.brSm,
             child: Row(
               children: [
                 Flexible(
@@ -408,6 +409,7 @@ class NftInfoBoard extends StatelessWidget {
       onTap: burnTap,
       borderRadius: AppRadius.brMd,
       child: Container(
+        constraints: BoxConstraints(minHeight: AppTouch.minTarget),
         padding: EdgeInsets.symmetric(
           vertical: AppSpacing.space4,
           horizontal: AppSpacing.space4,

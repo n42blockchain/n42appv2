@@ -60,7 +60,7 @@ class AppDatabase {
     final path = join(directory, "astranet.db");
     return await openDatabase(
       path,
-      version: 9, // v9: durable memo dispatch phase
+      version: 10, // v10: memo chain expiry proof
       onCreate: (Database db, int version) async {
         //交易记录
         await db.execute(
@@ -83,7 +83,8 @@ class AppDatabase {
           "userUuid text," //用户uuid
           "walletIndex int," //钱包id
           "message TEXT," //消息
-          "memoDispatchPhase TEXT"
+          "memoDispatchPhase TEXT,"
+          "memoExpiry TEXT"
           ")",
         );
         //交易记录 btc
@@ -284,6 +285,13 @@ class AppDatabase {
               buy_time_ms INTEGER NOT NULL
             )
           ''');
+        }
+        if (oldVersion < 10) {
+          // NULL means no proof: such rows can only be resolved by a receipt
+          // or explicitly dismissed by the user, never expired.
+          await db.execute(
+            'ALTER TABLE TransationRecord ADD COLUMN memoExpiry TEXT',
+          );
         }
         if (oldVersion < 9) {
           // NULL on legacy rows means unknown, never proof of non-submission.

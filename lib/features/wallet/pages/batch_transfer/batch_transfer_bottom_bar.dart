@@ -78,11 +78,26 @@ class BatchBottomBar extends StatelessWidget {
                   color: AppColorTokens.of(context).danger.withAlpha(20),
                   borderRadius: AppRadius.brSm,
                 ),
-                child: Text(
-                  provider.errorMessage!,
-                  style: AppTypography.caption.copyWith(
-                    color: AppColorTokens.of(context).danger,
-                  ),
+                // Red text on the red tint is ~3.3:1: icon carries the hue,
+                // the message uses the primary text color.
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 16,
+                      color: AppColorTokens.of(context).danger,
+                    ),
+                    SizedBox(width: AppSpacing.space2),
+                    Expanded(
+                      child: Text(
+                        provider.errorMessage!,
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: AppSpacing.space4),
@@ -107,7 +122,7 @@ class BatchBottomBar extends StatelessWidget {
                               provider.state ==
                                   BatchTransferState.awaitingConfirmation
                           ? null
-                          : provider.clearItems,
+                          : () => _confirmClear(context),
                       child: Text(S.of(context).g_key_batch_clear_all),
                     ),
                   ),
@@ -124,7 +139,7 @@ class BatchBottomBar extends StatelessWidget {
                         ? null
                         : onProceed,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColorTokens.of(context).brand,
+                      backgroundColor: AppColorTokens.of(context).brandFill,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(
                         vertical: AppSpacing.space4,
@@ -139,6 +154,18 @@ class BatchBottomBar extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Clearing every recipient cannot be undone, so ask first.
+  Future<void> _confirmClear(BuildContext context) async {
+    final s = S.of(context);
+    final ok = await AppDialog.confirm(
+      context,
+      title: s.g_key_batch_clear_all,
+      confirmText: s.g_key_batch_clear_all,
+      danger: true,
+    );
+    if (ok) provider.clearItems();
   }
 
   Widget _summaryRow(

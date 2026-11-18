@@ -249,7 +249,11 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               children: [
                 Text(
                   status.text,
-                  style: AppTypography.bodyStrong.copyWith(color: status.color),
+                  // Status hues are ~2:1 as text on their tint; the icon
+                  // keeps the hue and the label uses the primary text color.
+                  style: AppTypography.bodyStrong.copyWith(
+                    color: _themeColor(context, AppThemeKeys.mainTextColor),
+                  ),
                 ),
                 if (baseFee != null)
                   Text(
@@ -431,7 +435,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
           SizedBox(height: su.setWidth(20)),
           SizedBox(
             width: double.infinity,
-            height: su.setWidth(88),
+            height: AppTouch.target,
             child: AppButton(
               label: S.of(context).g_key_78,
               onPressed: _onConfirm,

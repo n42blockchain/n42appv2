@@ -198,6 +198,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
           ),
         ),
         IconButton(
+          tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
           onPressed: _creating ? null : () => Navigator.pop(context),
           icon: const Icon(Icons.close),
         ),
@@ -265,11 +266,14 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
 
   Widget _buildCreateButton(BuildContext context) {
     return SizedBox(
-      height: ScreenUtil().setWidth(88),
+      height: AppTouch.target,
       child: ElevatedButton(
         onPressed: _creating ? null : _onCreate,
         style: ElevatedButton.styleFrom(
-          backgroundColor: widget.domainChain.color,
+          // Chain hue darkened until the white label reaches 4.5:1.
+          backgroundColor: AppContrast.fillForWhiteText(
+            widget.domainChain.color,
+          ),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: _creating

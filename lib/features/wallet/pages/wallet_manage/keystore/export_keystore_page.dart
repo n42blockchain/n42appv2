@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -80,7 +79,9 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
     final s = S.of(context);
     final scr = ScreenUtil();
     final pad30 = scr.setWidth(30);
-    final bottomBarHeight = scr.setWidth(148);
+    // 48pt button + padding; a 148px bar clamped the button to 38pt at
+    // 320pt width.
+    final bottomBarHeight = kMinInteractiveDimension + pad30 * 2;
 
     return Scaffold(
       appBar: AppBarWidget(text: s.g_key_ex_keystore),
@@ -102,10 +103,7 @@ class _ExportKeystorePageState extends State<ExportKeystorePage> {
                       SizedBox(height: scr.setWidth(8)),
                       _ClipboardCountdownHint(
                         seconds: _countdown,
-                        textColor: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.ff888888.name,
-                        ),
+                        textColor: AppColorTokens.of(context).textSecondary,
                       ),
                     ],
                     SizedBox(height: bottomBarHeight),

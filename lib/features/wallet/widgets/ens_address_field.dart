@@ -275,7 +275,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
             style: AppTypography.body.copyWith(color: mainTextColor),
             decoration: InputDecoration(
               labelText: widget.labelText,
-              hintText: widget.hintText ?? 'Address or ENS name',
+              hintText: widget.hintText ?? S.of(context).g_ui3_address_or_ens,
               hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: su.setWidth(16),
@@ -380,78 +380,84 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       suffixLength: 4,
     );
 
-    return GestureDetector(
-      onTap: () => _copyAddress(resolvedAddr),
-      child: Container(
-        margin: EdgeInsets.only(top: su.setWidth(8)),
-        padding: EdgeInsets.symmetric(
-          horizontal: su.setWidth(12),
-          vertical: su.setWidth(10),
-        ),
-        decoration: BoxDecoration(
-          color: _successColor.withValues(alpha: 0.1),
+    return Padding(
+      padding: EdgeInsets.only(top: su.setWidth(8)),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () => _copyAddress(resolvedAddr),
           borderRadius: BorderRadius.circular(su.setWidth(8)),
-          border: Border.all(color: _successColor.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          children: [
-            // 头像（有时才显示）或默认的 verified 图标
-            _buildAvatarWidget(),
-            SizedBox(width: su.setWidth(8)),
+          child: Ink(
+            padding: EdgeInsets.symmetric(
+              horizontal: su.setWidth(12),
+              vertical: su.setWidth(10),
+            ),
+            decoration: BoxDecoration(
+              color: _successColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(su.setWidth(8)),
+              border: Border.all(color: _successColor.withValues(alpha: 0.3)),
+            ),
+            child: Row(
+              children: [
+                // 头像（有时才显示）或默认的 verified 图标
+                _buildAvatarWidget(),
+                SizedBox(width: su.setWidth(8)),
 
-            // 地址信息列
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    S.of(context).g_key_ens_resolved_address,
-                    style: AppTypography.captionSm.copyWith(
-                      color: subtitleColor,
+                // 地址信息列
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        S.of(context).g_key_ens_resolved_address,
+                        style: AppTypography.captionSm.copyWith(
+                          color: subtitleColor,
+                        ),
+                      ),
+                      SizedBox(height: su.setWidth(2)),
+                      Text(
+                        shortAddr,
+                        style: AppTypography.bodySm.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: mainTextColor,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // 来源链徽章（若有）
+                if (_resolveResult?.sourceChain != null)
+                  Container(
+                    margin: EdgeInsets.only(left: su.setWidth(4)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: su.setWidth(8),
+                      vertical: su.setWidth(4),
+                    ),
+                    decoration: BoxDecoration(
+                      color: blueColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(su.setWidth(6)),
+                    ),
+                    child: Text(
+                      _resolveResult!.sourceChain!,
+                      style: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColorTokens.of(context).brandOnTint,
+                      ),
                     ),
                   ),
-                  SizedBox(height: su.setWidth(2)),
-                  Text(
-                    shortAddr,
-                    style: AppTypography.bodySm.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: mainTextColor,
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            // 来源链徽章（若有）
-            if (_resolveResult?.sourceChain != null)
-              Container(
-                margin: EdgeInsets.only(left: su.setWidth(4)),
-                padding: EdgeInsets.symmetric(
-                  horizontal: su.setWidth(8),
-                  vertical: su.setWidth(4),
+                SizedBox(width: su.setWidth(6)),
+                Icon(
+                  Icons.copy_rounded,
+                  color: subtitleColor,
+                  size: su.setWidth(20),
                 ),
-                decoration: BoxDecoration(
-                  color: blueColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(su.setWidth(6)),
-                ),
-                child: Text(
-                  _resolveResult!.sourceChain!,
-                  style: AppTypography.captionSm.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: blueColor,
-                  ),
-                ),
-              ),
-
-            SizedBox(width: su.setWidth(6)),
-            Icon(
-              Icons.copy_rounded,
-              color: subtitleColor,
-              size: su.setWidth(20),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

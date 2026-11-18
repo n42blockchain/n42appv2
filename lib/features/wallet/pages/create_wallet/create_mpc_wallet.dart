@@ -205,7 +205,12 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                   child: _buildLoginButton(
                     type: opt.type,
                     icon: opt.icon,
-                    label: opt.label,
+                    // Brand names stay as-is; generic methods are localized.
+                    label: switch (opt.type) {
+                      MpcLoginType.email => S.of(context).login_email,
+                      MpcLoginType.phone => S.of(context).g_ui3_phone,
+                      _ => opt.label,
+                    },
                     color: opt.color,
                     textColor: textColor,
                   ),

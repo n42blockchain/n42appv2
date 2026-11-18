@@ -33,14 +33,18 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
             maxLines: 3,
             height: sw(170.0),
             errorMessage: toErrorMessage,
-            rightWidget1: Container(
-              width: sw(60.0),
-              height: sw(60.0),
-              padding: EdgeInsets.all(sw(5.0)),
-              child: Icon(
-                Icons.add,
-                size: sw(50.0),
-                color: _themeColor(AppThemeKeys.mainBlueColor),
+            // Icon-only field action: the tooltip doubles as its spoken label.
+            rightWidget1: Tooltip(
+              message: S.of(context).g_key_108,
+              child: Container(
+                width: sw(60.0),
+                height: sw(60.0),
+                padding: EdgeInsets.all(sw(5.0)),
+                child: Icon(
+                  Icons.add,
+                  size: sw(50.0),
+                  color: _themeColor(AppThemeKeys.mainBlueColor),
+                ),
               ),
             ),
             rightOnTap1: searchToAddressWidget,
@@ -170,7 +174,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                     height: sw(60.0),
                     padding: EdgeInsets.symmetric(horizontal: sw(20.0)),
                     decoration: BoxDecoration(
-                      color: _themeColor(AppThemeKeys.mainBlueColor),
+                      // Text-safe brand fill (white on plain brand ~4.0:1).
+                      color: AppColorTokens.of(context).brandFill,
                       borderRadius: BorderRadius.all(Radius.circular(sw(60.0))),
                     ),
                     alignment: Alignment.center,

@@ -169,7 +169,7 @@ class _NftListPageState extends State<NftListPage> {
             ? S.of(context).g_key_nft_ordinals_unsupported
             : nft.isSolana
             ? S.of(context).g_key_nft_send_sol_unsupported
-            : 'NFT transfer is not supported',
+            : S.of(context).g_ui3_nft_transfer_unsupported,
       );
       return;
     }
@@ -213,10 +213,12 @@ class _NftListPageState extends State<NftListPage> {
     return Scaffold(
       appBar: AppBarWidget(
         text: _selectionMode
-            ? '${_selectedNftKeys.length} selected'
+            ? MaterialLocalizations.of(context)
+                  .selectedRowCountTitle(_selectedNftKeys.length)
             : S.of(context).g_key_nft_gallery,
         leading: _selectionMode
             ? IconButton(
+                tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 icon: const Icon(Icons.close),
                 onPressed: _clearSelection,
               )

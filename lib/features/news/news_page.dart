@@ -86,55 +86,60 @@ class _NewsPageState extends State<NewsPage> {
     final gap = ScreenUtil().setWidth(30.0);
     final radius = AppRadius.brMd;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(gap),
-        margin: EdgeInsets.only(bottom: gap, left: gap, right: gap),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
+    // Card fill on the Material so the InkWell press is visible (the bare
+    // GestureDetector gave no feedback).
+    return Padding(
+      padding: EdgeInsets.only(bottom: gap, left: gap, right: gap),
+      child: Material(
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: radius,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: radius,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTypography.body.copyWith(
-                      color: AppColorTokens.of(context).textItem,
-                      fontWeight: FontWeight.w600,
-                    ),
+          child: Padding(
+            padding: EdgeInsets.all(gap),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textItem,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.space4),
+                      Text(
+                        time,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.captionSm.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: AppSpacing.space4),
-                  Text(
-                    time,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.captionSm.copyWith(
-                      color: AppColorTokens.of(context).textSubtitle,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: gap),
-            if (imageUrl.isNotEmpty)
-              Container(
-                height: ScreenUtil().setWidth(108.0),
-                width: ScreenUtil().setWidth(160.0),
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: radius),
-                child: ImageNetWork(
-                  key: ValueKey(imageUrl),
-                  imageUrl: imageUrl,
-                  fit: BoxFit.cover,
-                  placeholder: "assets/img/default_img.png",
                 ),
-              ),
-          ],
+                SizedBox(width: gap),
+                if (imageUrl.isNotEmpty)
+                  Container(
+                    height: ScreenUtil().setWidth(108.0),
+                    width: ScreenUtil().setWidth(160.0),
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(borderRadius: radius),
+                    child: ImageNetWork(
+                      key: ValueKey(imageUrl),
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: "assets/img/default_img.png",
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

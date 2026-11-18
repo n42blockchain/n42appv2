@@ -6,6 +6,10 @@ class StellarSpendableBalance {
   final BigInt liabilities;
   final BigInt fee;
   final BigInt nextSequence;
+
+  /// Latest closed ledger observed while preparing the payment, when Horizon
+  /// reported a well-formed one. The payment cannot be applied at or before it.
+  final int? latestLedger;
   BigInt get spendable => balance - reserve - liabilities - fee;
 
   StellarSpendableBalance._(
@@ -14,6 +18,7 @@ class StellarSpendableBalance {
     this.liabilities,
     this.fee,
     this.nextSequence,
+    this.latestLedger,
   );
 
   static final _int64Max = BigInt.parse('9223372036854775807');
@@ -88,12 +93,16 @@ class StellarSpendableBalance {
     final balance = stroops(native.single['balance']);
     final liabilities = stroops(native.single['selling_liabilities']);
     final sequence = _integer(account['sequence'], _int64Max - BigInt.one);
+    final ledgerSequence = ledger['sequence'];
     return StellarSpendableBalance._(
       balance,
       units * base,
       liabilities,
       fee,
       sequence + BigInt.one,
+      ledgerSequence is int && ledgerSequence > 0 && ledgerSequence <= 4294967295
+          ? ledgerSequence
+          : null,
     );
   }
 }

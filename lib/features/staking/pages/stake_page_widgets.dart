@@ -165,7 +165,7 @@ mixin _StakeViewsMixin
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: AppColorTokens.of(context).brand,
+          color: AppColorTokens.of(context).brandFill,
           borderRadius: AppRadius.brMd,
         ),
         labelColor: Colors.white,

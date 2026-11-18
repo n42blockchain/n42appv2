@@ -27,6 +27,11 @@ class TransationRecordModel {
   String? nonce;
   String? message;
 
+  /// ADA/XLM/EGLD/NEAR: chain facts of the signed transaction (see
+  /// MemoExpiryProof). Written only when the memo send reserves its record,
+  /// so it is deliberately not part of the generic column maps.
+  String? memoExpiry;
+
   dynamic other; // 其它信息
   BigInt gasPriceValue = BigInt.zero; // 每个字节多少 gas 费
   int gas = 1;
@@ -67,6 +72,8 @@ class TransationRecordModel {
     userUuid = map['userUuid'];
     walletIndex = map['walletIndex'];
     message = map['message'];
+    final expiry = map['memoExpiry'];
+    memoExpiry = expiry is String ? expiry : null;
   }
 
   // 公共字段（toMapDb 与 toMap 共享）

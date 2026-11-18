@@ -26,7 +26,7 @@ class DexChainChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnBg = _dexColor(context, AppThemeKeys.mainButtonBgColor);
+    final btnBg = AppColorTokens.of(context).brandFill;
     final itemBg = _dexColor(context, AppThemeKeys.itemBgColor);
     final btnText = _dexColor(context, AppThemeKeys.mainButtonTextColor);
     final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
@@ -68,7 +68,7 @@ class DexSlippageRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final btnBg = _dexColor(context, AppThemeKeys.mainButtonBgColor);
+    final btnBg = AppColorTokens.of(context).brandFill;
     final itemBg = _dexColor(context, AppThemeKeys.itemBgColor);
     final btnText = _dexColor(context, AppThemeKeys.mainButtonTextColor);
     final mainText = _dexColor(context, AppThemeKeys.mainTextColor);
@@ -87,8 +87,9 @@ class DexSlippageRow extends StatelessWidget {
         SizedBox(width: AppSpacing.space4),
         ...slippageOptions.map((bps) {
           final selected = selectedBps == bps;
-          return GestureDetector(
+          return AppTapArea(
             onTap: () => onChanged(bps),
+            borderRadius: AppRadius.brSm,
             child: Container(
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
               padding: EdgeInsets.symmetric(
@@ -126,12 +127,14 @@ class DexSwapArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: GestureDetector(
+      child: AppTapArea(
         onTap: onTap,
+        tooltip: S.of(context).g_a11y_reverse_tokens,
+        customBorder: const CircleBorder(),
         child: Container(
           padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
-            color: _dexColor(context, AppThemeKeys.mainButtonBgColor),
+            color: AppColorTokens.of(context).brandFill,
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -254,10 +257,11 @@ class DexPriceChart extends StatelessWidget {
     required Color subText,
   }) {
     final isSelected = selectedPeriodDays == days;
-    return GestureDetector(
+    return AppTapArea(
       onTap: () {
         if (selectedPeriodDays != days) onPeriodChanged(days);
       },
+      borderRadius: AppRadius.brMd,
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
         padding: EdgeInsets.symmetric(
@@ -273,7 +277,9 @@ class DexPriceChart extends StatelessWidget {
         child: Text(
           label,
           style: AppTypography.caption.copyWith(
-            color: isSelected ? blueColor : subText,
+            color: isSelected
+                ? AppColorTokens.of(context).brandOnTint
+                : subText,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -293,7 +299,7 @@ class DexPriceChart extends StatelessWidget {
         height: ScreenUtil().setWidth(100),
         child: Center(
           child: Text(
-            tokenInSymbol == null ? s.g_key_dex_select_token : 'No chart data',
+            tokenInSymbol == null ? s.g_key_dex_select_token : s.g_key_132,
             style: AppTypography.caption.copyWith(color: subText),
           ),
         ),
@@ -350,8 +356,9 @@ class DexAppBarActions extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        InkWell(
+        AppTapArea(
           onTap: onToggleChart,
+          tooltip: S.of(context).g_key_dex_price_chart,
           child: Container(
             margin: EdgeInsets.only(right: ScreenUtil().setWidth(16)),
             child: Icon(
@@ -361,8 +368,9 @@ class DexAppBarActions extends StatelessWidget {
             ),
           ),
         ),
-        InkWell(
+        AppTapArea(
           onTap: onOpenHistory,
+          tooltip: S.of(context).g_browser_key18,
           child: Container(
             margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
             child: Icon(Icons.history, color: blue, size: iconSize),

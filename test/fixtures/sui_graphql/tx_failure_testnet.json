@@ -1,0 +1,20 @@
+{
+  "data": {
+    "transaction": {
+      "digest": "5PLphqsoRBK7hBw7s7Sp4cjXsvS3MfAyyA4gmTUXHC4p",
+      "sender": {
+        "address": "0x54937731ae77d32e4347a5cace80313699343fd3845abcfa1a767b35f191d9cf"
+      },
+      "effects": {
+        "digest": "5PLphqsoRBK7hBw7s7Sp4cjXsvS3MfAyyA4gmTUXHC4p",
+        "status": "FAILURE",
+        "executionError": {
+          "message": "Error in 1st command, from '0xe72630120d1fb15534930a9949872d92e1a80fa1eb6ddb28900d5f909519df81::staking::inner' (instruction 10), abort code: 1"
+        },
+        "checkpoint": {
+          "sequenceNumber": 406403050
+        }
+      }
+    }
+  }
+}
