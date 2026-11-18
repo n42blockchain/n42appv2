@@ -33,9 +33,28 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import '../../test/helpers/widget_test_helpers.dart';
 
 const _enabled = bool.fromEnvironment('N42_DISPOSABLE_WALLET_QA');
+const _outage = bool.fromEnvironment('N42_WALLET_OUTAGE_QA');
 // Public BIP39 zero-entropy vector. Never fund or broadcast from this fixture.
 const _publicPhrase =
     'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
+
+class _OutageHttp extends HttpOverrides {
+  int blocked = 0;
+
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    final client = super.createHttpClient(context);
+    client.findProxy = (_) => 'DIRECT';
+    client.connectionFactory = (uri, proxyHost, proxyPort) {
+      if (uri.host != '127.0.0.1' || proxyHost != null) {
+        blocked++;
+        throw const SocketException('Offline wallet QA blocks external HTTP');
+      }
+      return Socket.startConnect(uri.host, uri.port);
+    };
+    return client;
+  }
+}
 
 class _ImportFixtureStore extends WalletActionProvider {
   _ImportFixtureStore(this.owner)
@@ -86,6 +105,15 @@ void registerWalletImportFixture() {
           reason: 'Wallet fixtures require a disposable simulator.',
         );
         if (!virtual) return; // Never reach storage on a physical device.
+        if (_outage) {
+          final previous = HttpOverrides.current;
+          final network = _OutageHttp();
+          HttpOverrides.global = network;
+          addTearDown(() {
+            HttpOverrides.global = previous;
+            debugPrint('$caseId external HTTP connections blocked: ${network.blocked}');
+          });
+        }
 
         final input = TestWidgetsFlutterBinding.instance.testTextInput;
         if (!input.isRegistered) {
