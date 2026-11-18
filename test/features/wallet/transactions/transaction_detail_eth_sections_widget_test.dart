@@ -69,8 +69,9 @@ void main() {
 
   Future<void> mountReceipt(
     WidgetTester tester,
-    EthDetailLookupForTesting receipt,
-  ) async {
+    EthDetailLookupForTesting receipt, {
+    String? minedBlock,
+  }) async {
     _setPhoneViewport(tester);
     await tester.pumpWidget(
       _app(
@@ -78,17 +79,30 @@ void main() {
           _coin(),
           _hash,
           recordLoaderForTesting: (_, _) async => [_record()],
-          transactionLookupForTesting: (
-            hash, {
-            required coinType,
-            required isTest,
-          }) async => _result(tx(hash)),
+          transactionLookupForTesting:
+              (hash, {required coinType, required isTest}) async => _result({
+                ...tx(hash),
+                if (minedBlock != null) 'blockHash': minedBlock,
+              }),
           receiptLookupForTesting: receipt,
         ),
       ),
     );
     await tester.pumpAndSettle();
   }
+
+  testWidgets('a mined transaction without a receipt cannot be replaced', (
+    tester,
+  ) async {
+    await mountReceipt(
+      tester,
+      (_, {required coinType, required isTest}) async => _result(null),
+      minedBlock: 'observed-block',
+    );
+    expect(find.text('observed-block'), findsOneWidget);
+    expect(find.byType(FilledButton), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   testWidgets('receipt transport error retries without casting error text', (
     tester,

@@ -283,6 +283,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       !_receiptLookupFailed &&
       transactionInfo != null &&
       transactionInfoReceipt == null &&
+      transactionInfo!['blockHash'] == null &&
       (transactionInfo!['nonce'] != null) &&
       // 合约创建交易(to=null)不支持加速——重放会把 initcode 发给自己地址
       (transactionInfo!['to'] != null);
@@ -414,11 +415,12 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       _receiptLookupFailed = true;
       errorMessage = S.of(context).g_key_error_19;
     } else if (data == null) {
+      final hadReceipt = transactionInfoReceipt != null;
       _receiptLookupFailed = false;
       transactionInfoReceipt = null;
       resultStr = 'Pending';
       errorMessage = '';
-      transactionInfo?['blockHash'] = null;
+      if (hadReceipt) transactionInfo?['blockHash'] = null;
     } else if (data is Map<String, dynamic> &&
         _isReceiptSuccess(data['status']) != null &&
         (data['transactionHash'] == null || data['transactionHash'] == hash)) {

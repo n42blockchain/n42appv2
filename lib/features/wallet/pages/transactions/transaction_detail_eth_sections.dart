@@ -44,7 +44,9 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
           divider,
           buildItemWidget(
             s.g_key_wallet_k33,
-            _receiptLookupFailed && transactionInfoReceipt == null
+            transactionInfoReceipt == null &&
+                    (_receiptLookupFailed ||
+                        transactionInfo?['blockHash'] != null)
                 ? s.g_ui_unknown_status
                 : _txDisplayText(s, resultStr),
           ),
