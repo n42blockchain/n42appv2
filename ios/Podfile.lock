@@ -395,8 +395,6 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
-  - nfc_manager (0.0.1):
-    - Flutter
   - open_filex (0.0.2):
     - Flutter
   - package_info_plus (0.4.5):
@@ -551,7 +549,6 @@ DEPENDENCIES:
   - MLKitVision (from `NativeDependencies/MLKitSimulator/MLKitVision.podspec.json`)
   - MLKitXenoCommon (from `NativeDependencies/MLKitSimulator/MLKitXenoCommon.podspec.json`)
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/darwin`)
-  - nfc_manager (from `.symlinks/plugins/nfc_manager/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - pdfx (from `.symlinks/plugins/pdfx/darwin`)
@@ -744,8 +741,6 @@ EXTERNAL SOURCES:
     :podspec: NativeDependencies/MLKitSimulator/MLKitXenoCommon.podspec.json
   mobile_scanner:
     :path: ".symlinks/plugins/mobile_scanner/darwin"
-  nfc_manager:
-    :path: ".symlinks/plugins/nfc_manager/ios"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
   package_info_plus:
@@ -891,7 +886,6 @@ SPEC CHECKSUMS:
   MLKitXenoCommon: 2b4cf0baff153d772e604edcda7313d1493fdb7a
   mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  nfc_manager: 8439e997f8ed801c15d5a79045fb18c562bf6efc
   open_filex: 525447cf3ea460135263a2634042c08479b34502
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   pdfx: 824a9108791a81e400da7d1a903ab73668365072

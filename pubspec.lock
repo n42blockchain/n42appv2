@@ -2077,8 +2077,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: ee5924c59f2c5c91372a1e08b9d6177d66774150
-      resolved-ref: ee5924c59f2c5c91372a1e08b9d6177d66774150
+      ref: a62117e6568f5ac18ae3755f43be5c59606c7990
+      resolved-ref: a62117e6568f5ac18ae3755f43be5c59606c7990
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
@@ -2090,14 +2090,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.6"
-  ndef_record:
-    dependency: transitive
-    description:
-      name: ndef_record
-      sha256: fc889b2e0c362aad8129596669cc62e401e14493f64718d4883f7f11bed01798
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.0"
   nested:
     dependency: transitive
     description:
@@ -2106,22 +2098,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  nfc_manager:
-    dependency: "direct main"
-    description:
-      name: nfc_manager
-      sha256: "65c5825e9c950852c34da88de49854717dd2ddc2f147a9af40c0190d887535da"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.0"
-  nfc_manager_ndef:
-    dependency: transitive
-    description:
-      name: nfc_manager_ndef
-      sha256: "8aacee776120b4d09e3049b26cf4a7397fee3abafc207c0640342ada05c5df7d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   nm:
     dependency: transitive
     description:
@@ -3478,5 +3454,5 @@ packages:
     source: hosted
     version: "3.1.4"
 sdks:
-  dart: ">=3.13.3 <4.0.0"
+  dart: ">=3.13.0 <4.0.0"
   flutter: ">=3.47.0"
