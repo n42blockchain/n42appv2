@@ -35,7 +35,16 @@ class StakePage extends StatefulWidget {
   final StakingProtocol protocol;
   final String? userAddress;
 
-  const StakePage({super.key, required this.protocol, this.userAddress});
+  /// Injected by widget tests to supply positions without network access.
+  @visibleForTesting
+  final StakingProvider? provider;
+
+  const StakePage({
+    super.key,
+    required this.protocol,
+    this.userAddress,
+    this.provider,
+  });
 
   @override
   State<StakePage> createState() => _StakePageState();
@@ -79,7 +88,7 @@ class _StakePageState extends State<StakePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _provider = StakingProvider();
+    _provider = widget.provider ?? StakingProvider();
     _provider.selectProtocol(widget.protocol);
 
     // 加载验证者列表并同步更新实时 APY（所有链都执行）
@@ -98,7 +107,7 @@ class _StakePageState extends State<StakePage>
     _tabController.dispose();
     _amountController.dispose();
     _unstakeAmountController.dispose();
-    _provider.dispose();
+    if (widget.provider == null) _provider.dispose();
     super.dispose();
   }
 

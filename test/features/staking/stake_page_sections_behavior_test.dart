@@ -7,6 +7,7 @@ import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/staking/pages/stake_page.dart';
+import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -15,6 +16,36 @@ import '../../helpers/widget_test_helpers.dart';
 class _Wallet extends Fake implements LegacyWalletActionProviderAdapter {
   @override
   List<CoinModel> coinModels = [];
+}
+
+/// Supplies one staking position and counts unstake attempts without network.
+class _FakeStakingProvider extends StakingProvider {
+  _FakeStakingProvider(this._positionsForTest);
+
+  final List<StakingPosition> _positionsForTest;
+  int unstakeCalls = 0;
+
+  @override
+  List<StakingPosition> get positions => _positionsForTest;
+
+  @override
+  Future<void> loadValidators() async {}
+
+  @override
+  Future<void> loadUserPositions(
+    String address,
+    StakingChainType chainType,
+  ) async {}
+
+  @override
+  Future<StakingTransactionResponse?> buildUnstakeTransaction({
+    required StakingPosition position,
+    required BigInt amount,
+    required String fromAddress,
+  }) async {
+    unstakeCalls++;
+    return null;
+  }
 }
 
 class _OfflineHttpClient implements HttpClient {
@@ -161,4 +192,81 @@ void main() {
     expect(find.byType(WalletSecurityVerification), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'unstake waits for security verification and only unstakes after success',
+    (tester) async {
+      final position = StakingPosition(
+        id: 'sol-stake-account-1',
+        protocol: StakingProtocols.solNative,
+        stakedAmount: BigInt.from(1000000000),
+        rewardsEarned: BigInt.zero,
+        pendingRewards: BigInt.zero,
+        stakedAt: DateTime(2026),
+        status: StakingPositionStatus.active,
+      );
+      final provider = _FakeStakingProvider([position]);
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        wrapForTest(
+          StakePage(
+            protocol: StakingProtocols.solNative,
+            userAddress: 'sol-wallet-address',
+            provider: provider,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(S.current.g_key_stake_unstake).first);
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.textContaining('${S.current.g_key_stake_staked}:'),
+      );
+      await tester.pumpAndSettle();
+
+      final unstakeButton = find.widgetWithText(
+        AppButton,
+        S.current.g_key_stake_unstake,
+      );
+      Future<void> tapUnstake() async {
+        await tester.ensureVisible(unstakeButton);
+        await tester.pumpAndSettle();
+        await tester.tap(unstakeButton);
+        await tester.pumpAndSettle();
+      }
+
+      void resolveVerification(bool? result) {
+        tester
+            .state<NavigatorState>(find.byType(Navigator).last)
+            .pop(result);
+      }
+
+      // Cancel: the verification page returns false, nothing is unstaked.
+      await tapUnstake();
+      expect(find.byType(WalletSecurityVerification), findsOneWidget);
+      expect(provider.unstakeCalls, 0);
+      resolveVerification(false);
+      await tester.pumpAndSettle();
+      expect(find.byType(WalletSecurityVerification), findsNothing);
+      expect(provider.unstakeCalls, 0);
+
+      // Failure: verification is dismissed without a success result.
+      await tapUnstake();
+      expect(find.byType(WalletSecurityVerification), findsOneWidget);
+      resolveVerification(null);
+      await tester.pumpAndSettle();
+      expect(provider.unstakeCalls, 0);
+
+      // Success: only now the unstake transaction is built.
+      await tapUnstake();
+      expect(find.byType(WalletSecurityVerification), findsOneWidget);
+      expect(provider.unstakeCalls, 0);
+      resolveVerification(true);
+      await tester.pumpAndSettle();
+      expect(provider.unstakeCalls, 1);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
