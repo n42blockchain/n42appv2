@@ -4462,6 +4462,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3All": MessageLookupByLibrary.simpleMessage("அனைத்தும்"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("கவனம் தேவை"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "தானியங்கு (பரிந்துரைக்கப்படுகிறது)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "சராசரி சரிபார்ப்பு நேரம்",
     ),
@@ -4517,20 +4520,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "மேலும் பிளாக்குகளைக் காட்டு",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "உள்ளூர் சோதனை வலைப்பின்னல்",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "இயல்புநிலை நோட் உள்ளூர் சோதனை வலைப்பின்னலில் உள்ளது. தனிப்பயன் முகவரியையும் உள்ளிடலாம்.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("சரிபார்ப்பு நோட்"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("நோட் முகவரி"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "பிளாக்குகளைச் சரிபார்க்கத் தொடங்க ஒரு நோட்டுடன் இணையுங்கள்.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "உள்நுழைவுத் தகவல்கள் அல்லது வினவல் அளவுருக்கள் இல்லாத http:// அல்லது https:// நோட் முகவரியை உள்ளிடுங்கள்.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "மைனிங்கை இடைநிறுத்து",
@@ -4590,7 +4583,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("மைனிங்கைத் தொடங்கு"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "நோட் முகவரியைச் சரிபார்த்து மீண்டும் முயலுங்கள்.",
+      "வேறொரு நோடைத் தேர்ந்தெடுத்து மீண்டும் முயலுங்கள்.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "சரிபார்ப்பு வெற்றி",
@@ -4605,9 +4598,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "சான்றளிக்கப்படவில்லை",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "உள்ளூர் சோதனை வலைப்பின்னலைப் பயன்படுத்து",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "சரிபார்க்கப்பட்ட பிளாக்குகள்",

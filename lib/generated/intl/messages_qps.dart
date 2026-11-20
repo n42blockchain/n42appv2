@@ -4980,6 +4980,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "[# Ñééðš àťťéñťìöñ ~~~~~~~#]",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "[# Àüťöṁàťìç (ŗéçöṁṁéñðéð) ~~~~~~~~~~~~#]",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "[# Àṽĝ. ṽéŗìƒìçàťìöñ ~~~~~~~~#]",
     ),
@@ -5039,24 +5042,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "[# Šĥöŵ ṁöŗé ƀĺöçķš ~~~~~~~~#]",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "[# Ĺöçàĺ ťéšťñéť ~~~~~~#]",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "[# Ťĥé ðéƒàüĺť ñöðé ìš öñ ťĥé ĺöçàĺ ťéšťñéť. Ýöü çàñ àĺšö éñťéŗ à çüšťöṁ àððŗéšš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage(
       "[# Ṽéŗìƒìçàťìöñ ñöðé ~~~~~~~~#]",
     ),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "[# Ñöðé àððŗéšš ~~~~~~#]",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "[# Çöññéçť ťö à ñöðé ťö šťàŗť ṽéŗìƒýìñĝ ƀĺöçķš. ~~~~~~~~~~~~~~~~~~~~~~#]",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "[# Éñťéŗ àñ ĥťťƥ:// öŗ ĥťťƥš:// ñöðé àððŗéšš ŵìťĥöüť çŗéðéñťìàĺš öŗ ɋüéŗý ƥàŗàṁéťéŗš. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#]",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "[# Ƥàüšé ṁìñìñĝ ~~~~~~#]",
@@ -5120,7 +5111,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "[# Šťàŗť ṁìñìñĝ ~~~~~~#]",
     ),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "[# Çĥéçķ ťĥé ñöðé àððŗéšš àñð ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~#]",
+      "[# Çĥööšé àñöťĥéŗ ñöðé àñð ťŗý àĝàìñ. ~~~~~~~~~~~~~~~~~~#]",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "[# Ṽéŗìƒìçàťìöñ šüççéšš ~~~~~~~~~~#]",
@@ -5135,9 +5126,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "[# Ñöť çéŗťìƒìéð ~~~~~~#]",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "[# Üšé ĺöçàĺ ťéšťñéť ~~~~~~~~#]",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "[# Ṽéŗìƒìéð ƀĺöçķš ~~~~~~~#]",

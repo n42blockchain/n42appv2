@@ -4290,6 +4290,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3All": MessageLookupByLibrary.simpleMessage("Wszystkie"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("Wymaga uwagi"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Automatycznie (zalecane)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Średni czas weryfikacji",
     ),
@@ -4339,20 +4342,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Pokaż więcej bloków",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Lokalna sieć testowa",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Domyślny węzeł działa w lokalnej sieci testowej. Możesz też podać własny adres.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Węzeł weryfikacji"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Adres węzła"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Połącz się z węzłem, aby rozpocząć weryfikację bloków.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Wpisz adres węzła http:// lub https:// bez danych logowania i parametrów zapytania.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "Wstrzymaj wydobywanie",
@@ -4416,7 +4409,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Rozpocznij wydobywanie",
     ),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Sprawdź adres węzła i spróbuj ponownie.",
+      "Wybierz inny węzeł i spróbuj ponownie.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Udane weryfikacje",
@@ -4429,9 +4422,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Bez certyfikatu",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Użyj lokalnej sieci testowej",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Zweryfikowane bloki",

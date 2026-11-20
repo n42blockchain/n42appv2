@@ -4362,6 +4362,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Richiede attenzione",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Automatico (consigliato)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Verifica media",
     ),
@@ -4419,22 +4422,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Mostra altri blocchi",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Rete di test locale",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Il nodo predefinito si trova sulla rete di test locale. Puoi anche inserire un indirizzo personalizzato.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Nodo di verifica"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "Indirizzo del nodo",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Connettiti a un nodo per iniziare a verificare i blocchi.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Inserisci un indirizzo del nodo http:// o https:// senza credenziali né parametri di query.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "Metti in pausa il mining",
@@ -4492,7 +4483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Avvia mining"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Controlla l’indirizzo del nodo e riprova.",
+      "Scegli un altro nodo e riprova.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Verifiche riuscite",
@@ -4505,9 +4496,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Non certificato",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Usa la rete di test locale",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Blocchi verificati",

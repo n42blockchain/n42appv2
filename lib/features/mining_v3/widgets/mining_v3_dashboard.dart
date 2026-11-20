@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_activity.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
+import 'package:n42_wallet/features/mining_v3/mining_v3_nodes.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 String miningV3Number(BuildContext context, num value) {
@@ -47,12 +48,16 @@ class MiningV3Dashboard extends StatefulWidget {
     required this.onSettings,
     required this.onBlock,
     this.onMenu,
+    this.autoNode = false,
     this.loading = false,
     this.bottomInset = 0,
   });
 
   final MiningV3Engine engine;
   final String endpoint;
+
+  /// The node was assigned automatically rather than picked by the user.
+  final bool autoNode;
   final VoidCallback? onToggle;
   final VoidCallback onSettings;
   final ValueChanged<MiningV3Block> onBlock;
@@ -515,9 +520,14 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
     final url = widget.engine.running || widget.engine.pausedForBackground
         ? widget.engine.endpoint ?? widget.endpoint
         : widget.endpoint;
+    final node = miningV3NodeByUrl(url);
     final uri = Uri.tryParse(url);
     final host = uri?.host ?? '';
-    final title = host.isEmpty
+    // Fleet nodes show only their name; an address appears only for a
+    // development override.
+    final title = node != null
+        ? node.name
+        : host.isEmpty
         ? s.miningV3Configure
         : uri!.hasPort
         ? '$host:${uri.port}'
@@ -540,8 +550,8 @@ class _MiningV3DashboardState extends State<MiningV3Dashboard> {
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Text(
-                  url == miningV3LocalTestnetEndpoint
-                      ? s.miningV3LocalTestnet
+                  node != null && widget.autoNode
+                      ? s.miningV3AutoNode
                       : s.miningV3Node,
                   style: AppTypography.caption.copyWith(color: c.textSecondary),
                 ),

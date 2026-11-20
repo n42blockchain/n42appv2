@@ -4316,6 +4316,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Требует внимания",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Автоматически (рекомендуется)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Среднее время проверки",
     ),
@@ -4365,20 +4368,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Показать ещё блоки",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Локальная тестовая сеть",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Узел по умолчанию находится в локальной тестовой сети. Вы также можете ввести свой адрес.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Узел проверки"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Адрес узла"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Подключитесь к узлу, чтобы начать проверку блоков.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Введите адрес узла http:// или https:// без учётных данных и параметров запроса.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "Приостановить майнинг",
@@ -4436,7 +4429,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Начать майнинг"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Проверьте адрес узла и повторите попытку.",
+      "Выберите другой узел и повторите попытку.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Успешные проверки",
@@ -4449,9 +4442,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Без сертификата",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Использовать локальную тестовую сеть",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Проверенные блоки",

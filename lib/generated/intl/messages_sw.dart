@@ -4344,6 +4344,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Inahitaji kuangaliwa",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Kiotomatiki (inapendekezwa)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Wastani wa uthibitishaji",
     ),
@@ -4395,24 +4398,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Onyesha bloku zaidi",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Mtandao wa majaribio wa ndani",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Nodi chaguomsingi iko kwenye mtandao wa majaribio wa ndani. Unaweza pia kuingiza anwani yako mwenyewe.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage(
       "Nodi ya uthibitishaji",
     ),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "Anwani ya nodi",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Unganisha kwenye nodi ili kuanza kuthibitisha bloku.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Ingiza anwani ya nodi ya http:// au https:// bila taarifa za kuingia au vigezo vya hoja.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("Sitisha uchimbaji"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4466,7 +4457,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Anza uchimbaji"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Angalia anwani ya nodi na ujaribu tena.",
+      "Chagua nodi nyingine na ujaribu tena.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Uthibitishaji uliofaulu",
@@ -4478,9 +4469,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Miamala",
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("Haina cheti"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Tumia mtandao wa majaribio wa ndani",
-    ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Bloku zilizothibitishwa",
     ),

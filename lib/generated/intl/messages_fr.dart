@@ -4418,6 +4418,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Attention requise",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Automatique (recommandé)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Vérification moyenne",
     ),
@@ -4475,24 +4478,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Afficher plus de blocs",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Réseau de test local",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Le nœud par défaut se trouve sur le réseau de test local. Vous pouvez aussi saisir une adresse personnalisée.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage(
       "Nœud de vérification",
     ),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "Adresse du nœud",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Connectez-vous à un nœud pour commencer à vérifier des blocs.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Saisissez une adresse de nœud http:// ou https:// sans identifiants ni paramètres de requête.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "Suspendre le minage",
@@ -4550,7 +4541,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Démarrer le minage"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Vérifiez l’adresse du nœud et réessayez.",
+      "Choisissez un autre nœud et réessayez.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Vérifications réussies",
@@ -4562,9 +4553,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Transactions",
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("Non certifié"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Utiliser le réseau de test local",
-    ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("Blocs vérifiés"),
     "next": MessageLookupByLibrary.simpleMessage("Suivant"),
     "nicknameMessage": m127,

@@ -4111,6 +4111,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "लक्ष देणे आवश्यक",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "स्वयंचलित (शिफारस केलेले)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "सरासरी पडताळणी वेळ",
     ),
@@ -4156,20 +4159,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "आणखी ब्लॉक दाखवा",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "स्थानिक टेस्टनेट",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "डीफॉल्ट नोड स्थानिक टेस्टनेटवर आहे. तुम्ही स्वतःचा पत्ताही टाकू शकता.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("पडताळणी नोड"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("नोडचा पत्ता"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "ब्लॉक पडताळणे सुरू करण्यासाठी नोडशी जोडा.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "लॉगिन माहिती किंवा क्वेरी पॅरामीटर्स नसलेला http:// किंवा https:// नोड पत्ता टाका.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("मायनिंग थांबवा"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4223,7 +4216,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("मायनिंग सुरू करा"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "नोडचा पत्ता तपासा आणि पुन्हा प्रयत्न करा.",
+      "दुसरा नोड निवडा आणि पुन्हा प्रयत्न करा.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "पडताळणी यश दर",
@@ -4236,9 +4229,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "प्रमाणित नाही",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "स्थानिक टेस्टनेट वापरा",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("पडताळलेले ब्लॉक"),
     "next": MessageLookupByLibrary.simpleMessage("पुढे"),

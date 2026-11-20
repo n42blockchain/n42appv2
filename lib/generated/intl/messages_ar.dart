@@ -4104,6 +4104,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3All": MessageLookupByLibrary.simpleMessage("الكل"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("يتطلب الانتباه"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "تلقائي (موصى به)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "متوسط مدة التحقق",
     ),
@@ -4151,20 +4154,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "عرض المزيد من الكتل",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "شبكة الاختبار المحلية",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "العقدة الافتراضية موجودة على شبكة الاختبار المحلية. يمكنك أيضًا إدخال عنوان مخصص.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("عقدة التحقق"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("عنوان العقدة"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "اتصل بعقدة لبدء التحقق من الكتل.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "أدخل عنوان عقدة يبدأ بـ http:// أو https:// دون بيانات اعتماد أو معلمات استعلام.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "إيقاف التعدين مؤقتًا",
@@ -4216,7 +4209,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Signers": MessageLookupByLibrary.simpleMessage("موقِّعو الشهادة"),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("بدء التعدين"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "تحقق من عنوان العقدة وحاول مجددًا.",
+      "اختر عقدة أخرى وحاول مجددًا.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("نجاح التحقق"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("الوقت المسجَّل"),
@@ -4226,9 +4219,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "المعاملات",
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("بلا شهادة"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "استخدام شبكة الاختبار المحلية",
-    ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "الكتل التي تم التحقق منها",
     ),

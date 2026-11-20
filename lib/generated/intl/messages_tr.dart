@@ -4166,6 +4166,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "İlgilenilmesi gerekiyor",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Otomatik (önerilen)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Ortalama doğrulama",
     ),
@@ -4215,20 +4218,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Daha fazla blok göster",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Yerel test ağı",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Varsayılan düğüm yerel test ağındadır. Özel bir adres de girebilirsiniz.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Doğrulama düğümü"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Düğüm adresi"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Blokları doğrulamaya başlamak için bir düğüme bağlanın.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Kimlik bilgileri veya sorgu parametreleri içermeyen bir http:// ya da https:// düğüm adresi girin.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "Madenciliği duraklat",
@@ -4282,7 +4275,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Madenciliği başlat"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Düğüm adresini kontrol edip tekrar deneyin.",
+      "Başka bir düğüm seçip tekrar deneyin.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Doğrulama başarısı",
@@ -4294,9 +4287,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "İşlemler",
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("Sertifikasız"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Yerel test ağını kullan",
-    ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Doğrulanan bloklar",
     ),

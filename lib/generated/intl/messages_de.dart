@@ -4343,6 +4343,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Handlungsbedarf",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Automatisch (empfohlen)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("Ø Prüfzeit"),
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "Im Hintergrund pausiert",
@@ -4394,22 +4397,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Weitere Blöcke anzeigen",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Lokales Testnetz",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Der Standardknoten befindet sich im lokalen Testnetz. Sie können auch eine eigene Adresse eingeben.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Prüfknoten"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "Knotenadresse",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Verbinden Sie sich mit einem Knoten, um Blöcke zu prüfen.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Geben Sie eine http://- oder https://-Knotenadresse ohne Zugangsdaten oder Abfrageparameter ein.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("Mining pausieren"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4463,7 +4454,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Mining starten"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Prüfen Sie die Knotenadresse und versuchen Sie es erneut.",
+      "Wählen Sie einen anderen Knoten und versuchen Sie es erneut.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Erfolgreiche Prüfungen",
@@ -4476,9 +4467,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Nicht zertifiziert",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Lokales Testnetz verwenden",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("Geprüfte Blöcke"),
     "next": MessageLookupByLibrary.simpleMessage("Weiter"),

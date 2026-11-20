@@ -4217,6 +4217,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3All": MessageLookupByLibrary.simpleMessage("سب"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("توجہ درکار ہے"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "خودکار (تجویز کردہ)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "تصدیق کا اوسط وقت",
     ),
@@ -4266,20 +4269,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "مزید بلاکس دکھائیں",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "مقامی ٹیسٹ نیٹ",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "ڈیفالٹ نوڈ مقامی ٹیسٹ نیٹ پر ہے۔ آپ اپنی مرضی کا پتہ بھی درج کر سکتے ہیں۔",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("تصدیقی نوڈ"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("نوڈ کا پتہ"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "بلاکس کی تصدیق شروع کرنے کے لیے نوڈ سے جڑیں۔",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "بغیر لاگ ان کی معلومات یا استفساری پیرامیٹرز کے http:// یا https:// نوڈ کا پتہ درج کریں۔",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("مائننگ موقوف کریں"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4331,7 +4324,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("مائننگ شروع کریں"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "نوڈ کا پتہ چیک کریں اور دوبارہ کوشش کریں۔",
+      "کوئی اور نوڈ منتخب کریں اور دوبارہ کوشش کریں۔",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("کامیاب تصدیق"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("ریکارڈ شدہ وقت"),
@@ -4342,9 +4335,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "سرٹیفکیٹ موجود نہیں",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "مقامی ٹیسٹ نیٹ استعمال کریں",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("تصدیق شدہ بلاکس"),
     "next": MessageLookupByLibrary.simpleMessage("اگلا"),

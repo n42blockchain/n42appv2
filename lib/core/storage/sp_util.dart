@@ -414,16 +414,28 @@ class SPUtil {
     );
   }
 
-  /// The v3 node's mobileverify base URL, or null when never set.
-  Future<String?> getMiningV3Endpoint() async {
+  /// The chosen v3 node id, or `auto`; null when never chosen.
+  Future<String?> getMiningV3Node() async {
     await initPrefs();
-    final url = prefs?.getString(SPkey.miningV3Endpoint.name);
-    return (url == null || url.isEmpty) ? null : url;
+    final id = prefs?.getString(SPkey.miningV3Node.name);
+    return (id == null || id.isEmpty) ? null : id;
   }
 
-  Future<void> setMiningV3Endpoint(String url) async {
+  Future<void> setMiningV3Node(String id) async {
     await initPrefs();
-    await prefs?.setString(SPkey.miningV3Endpoint.name, url);
+    await prefs?.setString(SPkey.miningV3Node.name, id);
+  }
+
+  /// The node id automatically assigned to this device, if any.
+  Future<String?> getMiningV3AutoNode() async {
+    await initPrefs();
+    final id = prefs?.getString(SPkey.miningV3AutoNode.name);
+    return (id == null || id.isEmpty) ? null : id;
+  }
+
+  Future<void> setMiningV3AutoNode(String id) async {
+    await initPrefs();
+    await prefs?.setString(SPkey.miningV3AutoNode.name, id);
   }
 
   // ==================== 通用方法 ====================
@@ -493,7 +505,9 @@ enum SPkey {
   mainChainMining, // 是否使用主链挖矿
   miningUiVersion, // 挖矿 UI 版本：true = V2（默认），false = V1（v3 起只作降级兼容，见 miningEngine）
   miningEngine, // 挖矿引擎 MiningEngineKind.name：v1 / v2 / v3
-  miningV3Endpoint, // v3 mobileverify 节点地址（为空用编译期默认）
+  miningV3Endpoint, // 已废弃：v3 旧版自由填写的节点地址，不再读取
+  miningV3Node, // v3 选中的节点 id，或 auto（自动分配）
+  miningV3AutoNode, // v3 自动分配给本设备的节点 id
   marketWatchlist, // 行情自选列表，JSON List<String> 存 coin symbol（lowercase）
   coinPriceAlerts, // 币价到价提醒配置，JSON Map<coinId, CoinPriceAlertConfig>
   accentColor, // 自定义主色调，存 ARGB int（0 表示默认蓝色）

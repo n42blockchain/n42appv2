@@ -4345,6 +4345,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Requiere atención",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Automático (recomendado)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Verificación media",
     ),
@@ -4400,24 +4403,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Mostrar más bloques",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Red de pruebas local",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "El nodo predeterminado está en la red de pruebas local. También puedes introducir una dirección personalizada.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage(
       "Nodo de verificación",
     ),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "Dirección del nodo",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Conéctate a un nodo para comenzar a verificar bloques.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Introduce una dirección de nodo http:// o https:// sin credenciales ni parámetros de consulta.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("Pausar minería"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4469,7 +4460,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Iniciar minería"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Comprueba la dirección del nodo e inténtalo de nuevo.",
+      "Elige otro nodo e inténtalo de nuevo.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Verificaciones correctas",
@@ -4482,9 +4473,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Sin certificar",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Usar red de pruebas local",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Bloques verificados",

@@ -4204,6 +4204,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Vyžaduje pozornost",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Automaticky (doporučeno)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Průměrná doba ověření",
     ),
@@ -4251,20 +4254,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Zobrazit další bloky",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Místní testovací síť",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Výchozí uzel je v místní testovací síti. Můžete také zadat vlastní adresu.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Ověřovací uzel"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Adresa uzlu"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Připojte se k uzlu a začněte ověřovat bloky.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Zadejte adresu uzlu http:// nebo https:// bez přihlašovacích údajů a parametrů dotazu.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("Pozastavit těžbu"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4314,7 +4307,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Spustit těžbu"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Zkontrolujte adresu uzlu a zkuste to znovu.",
+      "Vyberte jiný uzel a zkuste to znovu.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Úspěšná ověření",
@@ -4327,9 +4320,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Bez certifikátu",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Použít místní testovací síť",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("Ověřené bloky"),
     "next": MessageLookupByLibrary.simpleMessage("Další"),

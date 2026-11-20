@@ -13,6 +13,7 @@ import 'package:flutter_mining/mobileverify.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/features/mining_v3/device_key.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_activity.dart';
+import 'package:n42_wallet/features/mining_v3/mining_v3_nodes.dart';
 
 /// The chain the fleet runs; the miner re-executes blocks under it.
 const miningV3DefaultChain = String.fromEnvironment(
@@ -20,14 +21,14 @@ const miningV3DefaultChain = String.fromEnvironment(
   defaultValue: 'mainnet_qmdb_staggered',
 );
 
-/// Temporary LAN testnet, shared by physical phones and simulators.
-const miningV3LocalTestnetEndpoint = 'http://192.168.0.217:21100';
+/// Development override (`--dart-define=MINING_V3_URL=...`). When set, it
+/// replaces the node selection entirely.
+const miningV3UrlOverride = String.fromEnvironment('MINING_V3_URL');
 
-/// An explicit saved node wins over this build-time/default address.
-const miningV3DefaultEndpoint = String.fromEnvironment(
-  'MINING_V3_URL',
-  defaultValue: miningV3LocalTestnetEndpoint,
-);
+/// The address the debug probe starts with.
+final miningV3DefaultEndpoint = miningV3UrlOverride.isNotEmpty
+    ? miningV3UrlOverride
+    : miningV3Nodes.first.url;
 
 enum MiningV3Phase {
   /// Not running.

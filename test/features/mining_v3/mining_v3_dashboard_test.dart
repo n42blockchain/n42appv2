@@ -5,6 +5,7 @@ import 'package:flutter_mining/mobileverify.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
+import 'package:n42_wallet/features/mining_v3/mining_v3_nodes.dart';
 import 'package:n42_wallet/features/mining_v3/widgets/mining_v3_dashboard.dart';
 import 'package:n42_wallet/features/mining_v3/widgets/mining_v3_connection_sheet.dart';
 import 'package:n42_wallet/features/mining_v3/widgets/mining_v3_block_sheet.dart';
@@ -194,49 +195,46 @@ void main() {
     expect(find.text('Block hash copied'), findsOneWidget);
   });
 
-  testWidgets('node validates credentials and keeps failed save open', (
-    tester,
-  ) async {
+  testWidgets('failed node save keeps the sheet open', (tester) async {
     await mount(
       tester,
       child: Scaffold(
         body: MiningV3ConnectionSheet(
           engine: engine,
-          endpoint: 'https://user:secret@node',
+          selection: miningV3AutoNodeId,
+          autoNode: miningV3Nodes.first,
           onSave: (_) async => throw StateError('disk unavailable'),
         ),
       ),
     );
-    await tester.tap(find.text('Save node'));
+    await tester.tap(find.byKey(const ValueKey('mining_v3_node_fsn-3')));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Enter an http://'), findsOneWidget);
-    await tester.enterText(find.byType(TextFormField), 'https://node/');
     await tester.tap(find.text('Save node'));
     await tester.pumpAndSettle();
     expect(
       find.text('Could not save the node. Please try again.'),
       findsOneWidget,
     );
-    expect(find.byType(TextFormField), findsOneWidget);
+    expect(find.text('Falkenstein 3'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('running node cannot be edited', (tester) async {
+  testWidgets('running node cannot be changed', (tester) async {
     native.status = _active;
     await mount(
       tester,
       child: Scaffold(
         body: MiningV3ConnectionSheet(
           engine: engine,
-          endpoint: 'http://node',
+          selection: 'us-1',
+          autoNode: miningV3Nodes.first,
           onSave: (_) async => fail('must not save'),
         ),
       ),
     );
-    expect(
-      tester.widget<TextFormField>(find.byType(TextFormField)).enabled,
-      isFalse,
-    );
+    for (final tile in tester.widgetList<ListTile>(find.byType(ListTile))) {
+      expect(tile.enabled, isFalse);
+    }
     expect(find.text('Pause mining to change the node.'), findsOneWidget);
   });
 

@@ -3290,6 +3290,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Active": MessageLookupByLibrary.simpleMessage("블록 검증 중"),
     "miningV3All": MessageLookupByLibrary.simpleMessage("전체"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("확인 필요"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage("자동(권장)"),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("평균 검증 시간"),
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "백그라운드에서 일시 중지됨",
@@ -3323,18 +3324,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Latency": MessageLookupByLibrary.simpleMessage("검증 시간"),
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("블록 더 보기"),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage("로컬 테스트넷"),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "기본 노드는 로컬 테스트넷에 있습니다. 사용자 지정 주소도 입력할 수 있습니다.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("검증 노드"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("노드 주소"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "노드에 연결하여 블록 검증을 시작하세요.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "인증 정보나 쿼리 매개변수가 없는 http:// 또는 https:// 노드 주소를 입력하세요.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("채굴 일시 중지"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -3372,7 +3365,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Signers": MessageLookupByLibrary.simpleMessage("인증서 서명자"),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("채굴 시작"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "노드 주소를 확인한 후 다시 시도하세요.",
+      "다른 노드를 선택한 후 다시 시도하세요.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("검증 성공률"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("기록 시각"),
@@ -3380,9 +3373,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("거래"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("미인증"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "로컬 테스트넷 사용",
-    ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("검증된 블록"),
     "next": MessageLookupByLibrary.simpleMessage("다음"),
     "nicknameMessage": m127,

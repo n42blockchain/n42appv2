@@ -2945,6 +2945,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Active": MessageLookupByLibrary.simpleMessage("正在驗證區塊"),
     "miningV3All": MessageLookupByLibrary.simpleMessage("全部"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("需要關注"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage("自動（建議）"),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("近期平均驗證"),
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage("已在背景暫停"),
     "miningV3Block": m123,
@@ -2970,17 +2971,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Latency": MessageLookupByLibrary.simpleMessage("驗證耗時"),
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("顯示更多區塊"),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage("本地測試網"),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "預設使用本地測試網節點，也可輸入自訂節點位址。",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("驗證節點"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("節點位址"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage("連線至節點後即可開始驗證區塊。"),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "請輸入 http:// 或 https:// 節點位址，不含帳密或查詢參數。",
-    ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("暫停挖礦"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
       "請先暫停挖礦，再變更節點。",
@@ -3011,7 +3004,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Signers": MessageLookupByLibrary.simpleMessage("認證簽署數"),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("開始挖礦"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "請檢查節點位址後再試。",
+      "請選擇其他節點後再試。",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("驗證成功率"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("記錄時間"),
@@ -3019,7 +3012,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("交易數量"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("未取得認證"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage("使用本地測試網"),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("已驗證區塊"),
     "next": MessageLookupByLibrary.simpleMessage("下一個"),
     "nicknameMessage": m127,

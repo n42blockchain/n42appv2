@@ -4376,6 +4376,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3All": MessageLookupByLibrary.simpleMessage("అన్నీ"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("శ్రద్ధ అవసరం"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "ఆటోమేటిక్ (సిఫార్సు చేయబడింది)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "సగటు ధృవీకరణ సమయం",
     ),
@@ -4427,22 +4430,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "మరిన్ని బ్లాక్‌లను చూపండి",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "స్థానిక టెస్ట్‌నెట్",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "డిఫాల్ట్ నోడ్ స్థానిక టెస్ట్‌నెట్‌లో ఉంది. మీరు అనుకూల చిరునామాను కూడా నమోదు చేయవచ్చు.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("ధృవీకరణ నోడ్"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage(
-      "నోడ్ చిరునామా",
-    ),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "బ్లాక్‌ల ధృవీకరణ ప్రారంభించడానికి నోడ్‌కు కనెక్ట్ అవ్వండి.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "లాగిన్ వివరాలు లేదా క్వెరీ పరామితులు లేని http:// లేదా https:// నోడ్ చిరునామాను నమోదు చేయండి.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "మైనింగ్ పాజ్ చేయండి",
@@ -4504,7 +4495,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "మైనింగ్ ప్రారంభించండి",
     ),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "నోడ్ చిరునామాను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.",
+      "వేరే నోడ్‌ను ఎంచుకుని మళ్లీ ప్రయత్నించండి.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "ధృవీకరణ విజయం",
@@ -4517,9 +4508,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "సర్టిఫికెట్ లేదు",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "స్థానిక టెస్ట్‌నెట్ ఉపయోగించండి",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "ధృవీకరించిన బ్లాక్‌లు",

@@ -4223,6 +4223,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "Perlu perhatian",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Otomatis (disarankan)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Rata-rata waktu verifikasi",
     ),
@@ -4266,20 +4269,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Tampilkan lebih banyak blok",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Jaringan uji lokal",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Node bawaan berada di jaringan uji lokal. Anda juga dapat memasukkan alamat khusus.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Node verifikasi"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Alamat node"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Hubungkan ke node untuk mulai memverifikasi blok.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Masukkan alamat node http:// atau https:// tanpa kredensial atau parameter kueri.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("Jeda penambangan"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4337,7 +4330,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Mulai menambang"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Periksa alamat node, lalu coba lagi.",
+      "Pilih node lain, lalu coba lagi.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Keberhasilan verifikasi",
@@ -4350,9 +4343,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Belum bersertifikat",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Gunakan jaringan uji lokal",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Blok terverifikasi",

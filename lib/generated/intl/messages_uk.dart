@@ -4312,6 +4312,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Active": MessageLookupByLibrary.simpleMessage("Перевірка блоків"),
     "miningV3All": MessageLookupByLibrary.simpleMessage("Усі"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("Потребує уваги"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Автоматично (рекомендовано)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Середній час перевірки",
     ),
@@ -4359,20 +4362,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Показати ще блоки",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Локальна тестова мережа",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Типовий вузол розташований у локальній тестовій мережі. Ви також можете ввести власну адресу.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Вузол перевірки"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Адреса вузла"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Підключіться до вузла, щоб почати перевірку блоків.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Введіть адресу вузла http:// або https:// без облікових даних і параметрів запиту.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage(
       "Призупинити майнінг",
@@ -4432,7 +4425,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Почати майнінг"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Перевірте адресу вузла й повторіть спробу.",
+      "Виберіть інший вузол і повторіть спробу.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Успішні перевірки",
@@ -4445,9 +4438,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Без сертифіката",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Використовувати локальну тестову мережу",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Перевірені блоки",

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_activity.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
+import 'package:n42_wallet/features/mining_v3/mining_v3_nodes.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_providers.dart';
 import 'package:n42_wallet/features/mining_v3/widgets/mining_v3_block_sheet.dart';
 import 'package:n42_wallet/features/mining_v3/widgets/mining_v3_connection_sheet.dart';
@@ -20,21 +23,42 @@ class MiningV3Page extends ConsumerStatefulWidget {
 }
 
 class _MiningV3PageState extends ConsumerState<MiningV3Page> {
-  String _endpoint = '';
+  /// [miningV3AutoNodeId] or the id of a node the user picked.
+  String _selection = miningV3AutoNodeId;
+
+  /// The node this device is assigned to when [_selection] is auto.
+  MiningV3Node _autoNode = miningV3Nodes.first;
   bool _loading = true;
+
+  String get _endpoint => miningV3UrlOverride.isNotEmpty
+      ? miningV3UrlOverride
+      : (miningV3NodeById(_selection) ?? _autoNode).url;
 
   @override
   void initState() {
     super.initState();
-    _loadEndpoint();
+    _loadNode();
   }
 
-  Future<void> _loadEndpoint() async {
-    final stored = await ref.read(spUtilProvider).getMiningV3Endpoint();
-    final running = ref.read(miningV3EngineProvider).endpoint;
+  Future<void> _loadNode() async {
+    final prefs = ref.read(spUtilProvider);
+    final stored = await prefs.getMiningV3Node();
+    var auto = miningV3NodeById(await prefs.getMiningV3AutoNode());
+    if (auto == null) {
+      // Spread devices across the fleet; the choice sticks to this device.
+      auto = miningV3Nodes[Random().nextInt(miningV3Nodes.length)];
+      try {
+        await prefs.setMiningV3AutoNode(auto.id);
+      } catch (_) {
+        // Not persisted: a new node is assigned next time, which still works.
+      }
+    }
     if (!mounted) return;
     setState(() {
-      _endpoint = stored ?? running ?? miningV3DefaultEndpoint;
+      _autoNode = auto!;
+      _selection = miningV3NodeById(stored) != null
+          ? stored!
+          : miningV3AutoNodeId;
       _loading = false;
     });
   }
@@ -43,10 +67,11 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
     context,
     builder: (_) => MiningV3ConnectionSheet(
       engine: engine,
-      endpoint: engine.endpoint ?? _endpoint,
+      selection: _selection,
+      autoNode: _autoNode,
       onSave: (value) async {
-        await ref.read(spUtilProvider).setMiningV3Endpoint(value);
-        if (mounted) setState(() => _endpoint = value);
+        await ref.read(spUtilProvider).setMiningV3Node(value);
+        if (mounted) setState(() => _selection = value);
       },
     ),
   );
@@ -82,6 +107,7 @@ class _MiningV3PageState extends ConsumerState<MiningV3Page> {
     return MiningV3Dashboard(
       engine: engine,
       endpoint: _endpoint,
+      autoNode: _selection == miningV3AutoNodeId,
       loading: _loading,
       // The home navigation overlays the tab content on narrow screens.
       bottomInset: ResponsiveUtils.useSideNavigation(context)

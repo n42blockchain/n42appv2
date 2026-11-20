@@ -4150,6 +4150,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3All": MessageLookupByLibrary.simpleMessage("Tất cả"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("Cần chú ý"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "Tự động (khuyên dùng)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "Thời gian xác minh trung bình",
     ),
@@ -4199,20 +4202,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage(
       "Hiển thị thêm khối",
     ),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Mạng thử nghiệm cục bộ",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "Nút mặc định nằm trên mạng thử nghiệm cục bộ. Bạn cũng có thể nhập địa chỉ tùy chỉnh.",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("Nút xác minh"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("Địa chỉ nút"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "Kết nối với một nút để bắt đầu xác minh khối.",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "Nhập địa chỉ nút http:// hoặc https:// không có thông tin xác thực hay tham số truy vấn.",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("Tạm dừng khai thác"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4270,7 +4263,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("Bắt đầu khai thác"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "Kiểm tra địa chỉ nút rồi thử lại.",
+      "Chọn một nút khác rồi thử lại.",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "Tỷ lệ xác minh thành công",
@@ -4283,9 +4276,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "Chưa có chứng nhận",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "Dùng mạng thử nghiệm cục bộ",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage(
       "Khối đã xác minh",

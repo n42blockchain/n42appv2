@@ -3397,6 +3397,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Active": MessageLookupByLibrary.simpleMessage("ブロックを検証中"),
     "miningV3All": MessageLookupByLibrary.simpleMessage("すべて"),
     "miningV3Attention": MessageLookupByLibrary.simpleMessage("確認が必要"),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage("自動（推奨）"),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage("平均検証時間"),
     "miningV3BackgroundPaused": MessageLookupByLibrary.simpleMessage(
       "バックグラウンドで一時停止中",
@@ -3428,18 +3429,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Latency": MessageLookupByLibrary.simpleMessage("検証時間"),
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("さらにブロックを表示"),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage("ローカルテストネット"),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "既定のノードはローカルテストネット上にあります。独自のアドレスも入力できます。",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("検証ノード"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("ノードアドレス"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "ノードに接続してブロックの検証を開始します。",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "認証情報やクエリパラメーターを含まない http:// または https:// のノードアドレスを入力してください。",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("マイニングを一時停止"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -3475,7 +3468,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Signers": MessageLookupByLibrary.simpleMessage("証明書の署名者"),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("マイニング開始"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "ノードアドレスを確認して、もう一度お試しください。",
+      "別のノードを選んで、もう一度お試しください。",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage("検証成功率"),
     "miningV3Time": MessageLookupByLibrary.simpleMessage("記録時刻"),
@@ -3483,9 +3476,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Transactions": m126,
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("取引"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage("証明書未取得"),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "ローカルテストネットを使用",
-    ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("検証済みブロック"),
     "next": MessageLookupByLibrary.simpleMessage("次へ"),
     "nicknameMessage": m127,

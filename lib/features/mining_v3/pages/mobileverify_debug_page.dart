@@ -10,7 +10,7 @@ import 'package:n42_wallet/core/storage/secure_preferences.dart';
 import 'package:n42_wallet/features/mining_v3/mobileverify_probe.dart';
 import 'package:n42_wallet/features/mining_v3/mining_v3_engine.dart';
 
-const _defaultBaseUrl = miningV3DefaultEndpoint;
+final _defaultBaseUrl = miningV3DefaultEndpoint;
 const _defaultChain = miningV3DefaultChain;
 
 class MobileVerifyDebugPage extends StatefulWidget {

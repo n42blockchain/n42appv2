@@ -4236,6 +4236,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3Attention": MessageLookupByLibrary.simpleMessage(
       "মনোযোগ প্রয়োজন",
     ),
+    "miningV3AutoNode": MessageLookupByLibrary.simpleMessage(
+      "স্বয়ংক্রিয় (প্রস্তাবিত)",
+    ),
     "miningV3AverageTime": MessageLookupByLibrary.simpleMessage(
       "গড় যাচাইয়ের সময়",
     ),
@@ -4281,20 +4284,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Latency": MessageLookupByLibrary.simpleMessage("যাচাইয়ের সময়"),
     "miningV3LoadMore": MessageLookupByLibrary.simpleMessage("আরও ব্লক দেখান"),
-    "miningV3LocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "স্থানীয় টেস্টনেট",
-    ),
-    "miningV3LocalTestnetHint": MessageLookupByLibrary.simpleMessage(
-      "ডিফল্ট নোডটি স্থানীয় টেস্টনেটে রয়েছে। আপনি নিজস্ব ঠিকানাও লিখতে পারেন।",
-    ),
     "miningV3Milliseconds": m125,
     "miningV3Node": MessageLookupByLibrary.simpleMessage("যাচাই নোড"),
-    "miningV3NodeAddress": MessageLookupByLibrary.simpleMessage("নোডের ঠিকানা"),
     "miningV3NodeHint": MessageLookupByLibrary.simpleMessage(
       "ব্লক যাচাই শুরু করতে একটি নোডের সঙ্গে সংযোগ করুন।",
-    ),
-    "miningV3NodeInvalid": MessageLookupByLibrary.simpleMessage(
-      "লগইন তথ্য বা কোয়েরি প্যারামিটার ছাড়া http:// অথবা https:// নোডের ঠিকানা লিখুন।",
     ),
     "miningV3Pause": MessageLookupByLibrary.simpleMessage("মাইনিং বিরতি দিন"),
     "miningV3PauseForSettings": MessageLookupByLibrary.simpleMessage(
@@ -4344,7 +4337,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "miningV3Start": MessageLookupByLibrary.simpleMessage("মাইনিং শুরু করুন"),
     "miningV3StartIssueHint": MessageLookupByLibrary.simpleMessage(
-      "নোডের ঠিকানা যাচাই করে আবার চেষ্টা করুন।",
+      "অন্য একটি নোড বেছে নিয়ে আবার চেষ্টা করুন।",
     ),
     "miningV3SuccessRate": MessageLookupByLibrary.simpleMessage(
       "যাচাই সফলতার হার",
@@ -4355,9 +4348,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "miningV3TransactionsLabel": MessageLookupByLibrary.simpleMessage("লেনদেন"),
     "miningV3Uncertified": MessageLookupByLibrary.simpleMessage(
       "সনদপ্রাপ্ত নয়",
-    ),
-    "miningV3UseLocalTestnet": MessageLookupByLibrary.simpleMessage(
-      "স্থানীয় টেস্টনেট ব্যবহার করুন",
     ),
     "miningV3Verified": MessageLookupByLibrary.simpleMessage("যাচাইকৃত ব্লক"),
     "next": MessageLookupByLibrary.simpleMessage("পরবর্তী"),

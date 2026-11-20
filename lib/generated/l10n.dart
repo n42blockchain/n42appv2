@@ -14983,31 +14983,11 @@ class S {
     );
   }
 
-  /// `Node address`
-  String get miningV3NodeAddress {
-    return Intl.message(
-      'Node address',
-      name: 'miningV3NodeAddress',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Connect to a node to start verifying blocks.`
   String get miningV3NodeHint {
     return Intl.message(
       'Connect to a node to start verifying blocks.',
       name: 'miningV3NodeHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Enter an http:// or https:// node address without credentials or query parameters.`
-  String get miningV3NodeInvalid {
-    return Intl.message(
-      'Enter an http:// or https:// node address without credentials or query parameters.',
-      name: 'miningV3NodeInvalid',
       desc: '',
       args: [],
     );
@@ -15048,10 +15028,10 @@ class S {
     );
   }
 
-  /// `Check the node address and try again.`
+  /// `Choose another node and try again.`
   String get miningV3StartIssueHint {
     return Intl.message(
-      'Check the node address and try again.',
+      'Choose another node and try again.',
       name: 'miningV3StartIssueHint',
       desc: '',
       args: [],
@@ -15188,31 +15168,11 @@ class S {
     );
   }
 
-  /// `Local testnet`
-  String get miningV3LocalTestnet {
+  /// `Automatic (recommended)`
+  String get miningV3AutoNode {
     return Intl.message(
-      'Local testnet',
-      name: 'miningV3LocalTestnet',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Use local testnet`
-  String get miningV3UseLocalTestnet {
-    return Intl.message(
-      'Use local testnet',
-      name: 'miningV3UseLocalTestnet',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The default node is on the local testnet. You can also enter a custom address.`
-  String get miningV3LocalTestnetHint {
-    return Intl.message(
-      'The default node is on the local testnet. You can also enter a custom address.',
-      name: 'miningV3LocalTestnetHint',
+      'Automatic (recommended)',
+      name: 'miningV3AutoNode',
       desc: '',
       args: [],
     );

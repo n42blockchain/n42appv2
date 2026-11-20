@@ -43,9 +43,7 @@ void main() {
           s.miningV3Node,
           s.miningV3Configure,
           s.miningV3Settings,
-          s.miningV3NodeAddress,
           s.miningV3NodeHint,
-          s.miningV3NodeInvalid,
           s.miningV3PauseForSettings,
           s.miningV3Save,
           s.miningV3ConnectionIssue,
@@ -64,9 +62,7 @@ void main() {
           s.g_setting_mining_v3_label,
           s.miningV3IOSForegroundHint,
           s.miningV3BackgroundPaused,
-          s.miningV3LocalTestnet,
-          s.miningV3UseLocalTestnet,
-          s.miningV3LocalTestnetHint,
+          s.miningV3AutoNode,
         ];
         for (final label in labels) {
           expect(label.trim(), isNotEmpty, reason: '$locale');
