@@ -147,6 +147,26 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('rapid send presses open only one transaction review', (
+    tester,
+  ) async {
+    final state = await openPage(tester);
+    prepareReview(state);
+    await tester.pump();
+
+    final review = tester
+        .widget<ElevatedButton>(find.byType(ElevatedButton))
+        .onPressed!;
+    review();
+    review();
+    await tester.pumpAndSettle();
+
+    final l10n = S.of(tester.element(find.byType(AATransactionPreview)));
+    await tester.tap(find.text(l10n.g_key_79));
+    await tester.pumpAndSettle();
+    expect(find.byType(AATransactionPreview), findsNothing);
+  });
+
   testWidgets('zero amount does not open a transaction review', (tester) async {
     final state = await openPage(tester);
     prepareReview(state, amount: '0');

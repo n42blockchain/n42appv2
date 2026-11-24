@@ -11,6 +11,7 @@ mixin _AASendLogicMixin on State<AASendPage> {
   PaymasterOption selectedPaymaster = PaymasterOption.none;
   bool isEstimating = false;
   bool isSending = false;
+  bool _sendFlowActive = false;
 
   BigInt? estimatedGas;
   BigInt? maxFeePerGas;
@@ -168,7 +169,8 @@ mixin _AASendLogicMixin on State<AASendPage> {
     estimateGas();
   }
 
-  void showTransactionPreview() {
+  Future<void> showTransactionPreview() async {
+    if (_sendFlowActive) return;
     final toAddress = toController.text.trim();
     if (!_addrRegex.hasMatch(toAddress)) {
       ScaffoldMessenger.of(context)
@@ -179,27 +181,30 @@ mixin _AASendLogicMixin on State<AASendPage> {
     if (amount <= 0) {
       return;
     }
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => AATransactionPreview(
-        data: AATransactionPreviewData(
-          fromAddress: widget.account.address,
-          toAddress: toController.text,
-          amount: amountController.text,
-          tokenSymbol: selectedToken,
-          estimatedGas: estimatedGas,
-          maxFeePerGas: maxFeePerGas,
-          isGasSponsored: selectedPaymaster.type == PaymasterType.sponsored,
+    _sendFlowActive = true;
+    try {
+      final confirmed = await showModalBottomSheet<bool>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AATransactionPreview(
+          data: AATransactionPreviewData(
+            fromAddress: widget.account.address,
+            toAddress: toController.text,
+            amount: amountController.text,
+            tokenSymbol: selectedToken,
+            estimatedGas: estimatedGas,
+            maxFeePerGas: maxFeePerGas,
+            isGasSponsored: selectedPaymaster.type == PaymasterType.sponsored,
+          ),
+          onConfirm: () => Navigator.pop(context, true),
+          onCancel: () => Navigator.pop(context, false),
         ),
-        onConfirm: () {
-          Navigator.pop(context);
-          _sendTransaction();
-        },
-        onCancel: () => Navigator.pop(context),
-      ),
-    );
+      );
+      if (mounted && confirmed == true) await _sendTransaction();
+    } finally {
+      _sendFlowActive = false;
+    }
   }
 
   Future<void> _sendTransaction() async {
