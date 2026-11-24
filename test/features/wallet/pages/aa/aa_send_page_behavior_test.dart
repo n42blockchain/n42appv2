@@ -167,16 +167,18 @@ void main() {
     expect(find.byType(AATransactionPreview), findsNothing);
   });
 
-  testWidgets('zero amount does not open a transaction review', (tester) async {
-    final state = await openPage(tester);
-    prepareReview(state, amount: '0');
-    await tester.pump();
+  for (final amount in ['0', 'NaN', 'Infinity']) {
+    testWidgets('$amount does not open a transaction review', (tester) async {
+      final state = await openPage(tester);
+      prepareReview(state, amount: amount);
+      await tester.pump();
 
-    await tester.ensureVisible(find.byType(ElevatedButton));
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
+      await tester.ensureVisible(find.byType(ElevatedButton));
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
 
-    expect(find.byType(AATransactionPreview), findsNothing);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AATransactionPreview), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

@@ -177,8 +177,9 @@ mixin _AASendLogicMixin on State<AASendPage> {
           .showSnackBar(SnackBar(content: Text(S.of(context).g_key_t_50)));
       return;
     }
-    final amount = double.tryParse(amountController.text.trim()) ?? 0.0;
-    if (amount <= 0) {
+    final amountText = amountController.text.trim();
+    final amount = double.tryParse(amountText);
+    if (amount == null || !amount.isFinite || amount <= 0) {
       return;
     }
     _sendFlowActive = true;
@@ -190,8 +191,8 @@ mixin _AASendLogicMixin on State<AASendPage> {
         builder: (context) => AATransactionPreview(
           data: AATransactionPreviewData(
             fromAddress: widget.account.address,
-            toAddress: toController.text,
-            amount: amountController.text,
+            toAddress: toAddress,
+            amount: amountText,
             tokenSymbol: selectedToken,
             estimatedGas: estimatedGas,
             maxFeePerGas: maxFeePerGas,
@@ -201,13 +202,18 @@ mixin _AASendLogicMixin on State<AASendPage> {
           onCancel: () => Navigator.pop(context, false),
         ),
       );
-      if (mounted && confirmed == true) await _sendTransaction();
+      if (mounted && confirmed == true) {
+        await _sendTransaction(toAddress: toAddress, amount: amount);
+      }
     } finally {
       _sendFlowActive = false;
     }
   }
 
-  Future<void> _sendTransaction() async {
+  Future<void> _sendTransaction({
+    required String toAddress,
+    required double amount,
+  }) async {
     // Paymaster 代付当前没有真实的 pm_getPaymasterData 集成（见
     // paymaster_select_page 的探测逻辑）——选了代付却静默按自付 gas 发送
     // 会让用户被扣费。在此如实拦截，而不是假装代付生效。
@@ -237,8 +243,8 @@ mixin _AASendLogicMixin on State<AASendPage> {
       AATransferParams(
         chainSymbol: _chainSymbol(),
         fromAddress: widget.walletAddress,
-        toAddress: toController.text.trim(),
-        value: double.tryParse(amountController.text.trim()) ?? 0.0,
+        toAddress: toAddress,
+        value: amount,
         smartAccount: widget.account,
       ),
     );
