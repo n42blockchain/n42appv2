@@ -69,13 +69,8 @@ mixin _AASendLogicMixin on State<AASendPage> {
 
   /// 余额的人类可读字符串（最多 6 位小数，去尾零）。未查到显示 '—'。
   String formatNativeBalance() {
-    final bal = nativeBalance;
-    if (bal == null) return '—';
-    final divisor = BigInt.from(10).pow(18);
-    final intPart = bal ~/ divisor;
-    final frac = bal.remainder(divisor).toString().padLeft(18, '0');
-    final frac6 = frac.substring(0, 6).replaceAll(RegExp(r'0+$'), '');
-    return frac6.isEmpty ? '$intPart' : '$intPart.$frac6';
+    final balance = nativeBalance;
+    return balance == null ? '—' : formatWei(balance);
   }
 
   String _chainSymbol() {
@@ -272,10 +267,5 @@ mixin _AASendLogicMixin on State<AASendPage> {
     }
   }
 
-  String formatGasCost() {
-    if (estimatedGas == null || maxFeePerGas == null) return '-';
-    final cost = estimatedGas! * maxFeePerGas!;
-    final ethValue = cost / BigInt.from(10).pow(18);
-    return '${ethValue.toStringAsFixed(6)} ETH';
-  }
+  String formatGasCost() => formatAaGasCost(estimatedGas, maxFeePerGas) ?? '-';
 }

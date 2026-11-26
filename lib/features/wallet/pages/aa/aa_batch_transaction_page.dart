@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:n42_wallet/features/wallet/aa/provider/batch_template_provider.dart';
+import 'package:n42_wallet/features/wallet/aa/utils/gas_estimator.dart';
 import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_add_operation_sheet.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_paymaster_sheet.dart';
@@ -398,17 +399,8 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     );
   }
 
-  // ── Gas Cost Formatter ─────────────────────────────────────────────────────
-
-  String _formatGasCost() {
-    if (_estimatedTotalGas == null || _estimatedMaxFeePerGas == null) {
-      return '-';
-    }
-    final cost = _estimatedTotalGas! * _estimatedMaxFeePerGas!;
-    // cost in wei → ETH
-    final ethValueStr = (cost / BigInt.from(10).pow(18)).toStringAsFixed(6);
-    return '$ethValueStr ETH';
-  }
+  String _formatGasCost() =>
+      formatAaGasCost(_estimatedTotalGas, _estimatedMaxFeePerGas) ?? '-';
 
   // ── Build ──────────────────────────────────────────────────────────────────
 

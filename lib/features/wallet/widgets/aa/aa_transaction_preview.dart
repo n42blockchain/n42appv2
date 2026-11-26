@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/aa/utils/gas_estimator.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';
 
 /// AA 交易预览数据
@@ -34,13 +35,8 @@ class AATransactionPreviewData {
     this.batchOperations,
   });
 
-  static final BigInt _weiPerEth = BigInt.from(10).pow(18);
-
-  String get formattedGasCost {
-    if (estimatedGas == null || maxFeePerGas == null) return '~';
-    final ethValue = (estimatedGas! * maxFeePerGas!) / _weiPerEth;
-    return '${ethValue.toStringAsFixed(6)} ETH';
-  }
+  String get formattedGasCost =>
+      formatAaGasCost(estimatedGas, maxFeePerGas) ?? '~';
 }
 
 /// AA 交易预览组件

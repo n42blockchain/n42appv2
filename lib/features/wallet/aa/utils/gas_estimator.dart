@@ -10,6 +10,15 @@ import '../models/user_operation.dart';
 import '../models/smart_account.dart';
 import '../bundler/bundler_client.dart';
 
+final _weiPerEth = BigInt.from(10).pow(18);
+
+/// Formats a gas estimate priced in wei per gas.
+String? formatAaGasCost(BigInt? gas, BigInt? maxFeePerGas) {
+  if (gas == null || maxFeePerGas == null) return null;
+  final eth = (gas * maxFeePerGas) / _weiPerEth;
+  return '${eth.toStringAsFixed(6)} ETH';
+}
+
 /// Utility class for AA-specific gas estimation
 ///
 /// Handles the complexity of estimating gas for UserOperations,
