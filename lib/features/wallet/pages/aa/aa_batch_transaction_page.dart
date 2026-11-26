@@ -56,8 +56,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   bool _isSending = false;
 
   /// 真实 Gas 估算结果（单位：wei）
-  BigInt? _estimatedTotalGas;
-  BigInt? _estimatedMaxFeePerGas;
+  String? _gasCost;
   String? _estimateError;
 
   late final String _chainSymbol;
@@ -174,8 +173,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   }
 
   void _clearGasEstimation() {
-    _estimatedTotalGas = null;
-    _estimatedMaxFeePerGas = null;
+    _gasCost = null;
     _estimateError = null;
   }
 
@@ -207,16 +205,16 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       setState(() {
         _isEstimating = false;
         _estimateError = hasError ? estimation.errorMessage : null;
-        _estimatedTotalGas = hasError ? null : estimation.gasLimit;
-        _estimatedMaxFeePerGas = hasError ? null : estimation.gasPrice;
+        _gasCost = hasError
+            ? null
+            : formatAaGasCost(estimation.gasLimit, estimation.gasPrice) ?? '-';
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _isEstimating = false;
         _estimateError = e.toString();
-        _estimatedTotalGas = null;
-        _estimatedMaxFeePerGas = null;
+        _gasCost = null;
       });
     }
   }
@@ -285,8 +283,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   void _clearAll() {
     setState(() {
       _operations.clear();
-      _estimatedTotalGas = null;
-      _estimatedMaxFeePerGas = null;
+      _gasCost = null;
       _estimateError = null;
     });
   }
@@ -399,9 +396,6 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
     );
   }
 
-  String _formatGasCost() =>
-      formatAaGasCost(_estimatedTotalGas, _estimatedMaxFeePerGas) ?? '-';
-
   // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
@@ -411,9 +405,8 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
       selectedPaymaster: _selectedPaymaster,
       isEstimating: _isEstimating,
       isSending: _isSending,
-      estimatedTotalGas: _estimatedTotalGas,
       estimateError: _estimateError,
-      formatGasCost: _formatGasCost,
+      gasCost: _gasCost,
       onShowTemplates: _showTemplatesSheet,
       onAddOperation: _showAddOperationSheet,
       onSaveTemplate: _saveTemplate,

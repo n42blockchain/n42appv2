@@ -275,6 +275,10 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
   Widget buildGasSection() {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
 
+    final cost = estimatedGas == null
+        ? null
+        : formatAaGasCost(estimatedGas, maxFeePerGas) ?? '-';
+
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
@@ -315,16 +319,13 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               AAGasEstimateValue(
                 isEstimating: isEstimating,
                 isSponsored: isSponsored,
-                cost: estimatedGas == null ? null : formatGasCost(),
+                cost: cost,
               ),
             ],
           ),
-          if (isSponsored && estimatedGas != null) ...[
+          if (isSponsored && cost != null) ...[
             SizedBox(height: AppSpacing.space2),
-            GasSponsorshipBadge(
-              isSponsored: true,
-              savedAmount: formatGasCost(),
-            ),
+            GasSponsorshipBadge(isSponsored: true, savedAmount: cost),
           ],
         ],
       ),

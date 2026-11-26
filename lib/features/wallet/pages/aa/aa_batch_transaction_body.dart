@@ -23,9 +23,8 @@ class AABatchTransactionBody extends StatelessWidget {
   final PaymasterOption selectedPaymaster;
   final bool isEstimating;
   final bool isSending;
-  final BigInt? estimatedTotalGas;
   final String? estimateError;
-  final String Function() formatGasCost;
+  final String? gasCost;
 
   // callbacks
   final VoidCallback onShowTemplates;
@@ -42,9 +41,8 @@ class AABatchTransactionBody extends StatelessWidget {
     required this.selectedPaymaster,
     required this.isEstimating,
     required this.isSending,
-    required this.estimatedTotalGas,
     required this.estimateError,
-    required this.formatGasCost,
+    required this.gasCost,
     required this.onShowTemplates,
     required this.onAddOperation,
     required this.onSaveTemplate,
@@ -309,6 +307,7 @@ class AABatchTransactionBody extends StatelessWidget {
 
   Widget _buildGasSection(BuildContext context) {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
+    final cost = gasCost;
 
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
@@ -343,16 +342,13 @@ class AABatchTransactionBody extends StatelessWidget {
               AAGasEstimateValue(
                 isEstimating: isEstimating,
                 isSponsored: isSponsored,
-                cost: estimatedTotalGas == null ? null : formatGasCost(),
+                cost: cost,
               ),
             ],
           ),
-          if (isSponsored && estimatedTotalGas != null) ...[
+          if (isSponsored && cost != null) ...[
             SizedBox(height: AppSpacing.space2),
-            GasSponsorshipBadge(
-              isSponsored: true,
-              savedAmount: formatGasCost(),
-            ),
+            GasSponsorshipBadge(isSponsored: true, savedAmount: cost),
           ],
         ],
       ),

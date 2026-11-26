@@ -266,6 +266,4 @@ mixin _AASendLogicMixin on State<AASendPage> {
       );
     }
   }
-
-  String formatGasCost() => formatAaGasCost(estimatedGas, maxFeePerGas) ?? '-';
 }
