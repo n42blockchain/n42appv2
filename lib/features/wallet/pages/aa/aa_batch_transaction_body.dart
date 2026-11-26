@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
+import 'package:n42_wallet/features/wallet/widgets/aa/aa_gas_estimate_value.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/paymaster_option_card.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -339,7 +340,11 @@ class AABatchTransactionBody extends StatelessWidget {
                   ),
                 ),
               ),
-              _buildGasValue(context, isSponsored),
+              AAGasEstimateValue(
+                isEstimating: isEstimating,
+                isSponsored: isSponsored,
+                cost: estimatedTotalGas == null ? null : formatGasCost(),
+              ),
             ],
           ),
           if (isSponsored && estimatedTotalGas != null) ...[
@@ -350,34 +355,6 @@ class AABatchTransactionBody extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-
-  Widget _buildGasValue(BuildContext context, bool isSponsored) {
-    if (isEstimating) {
-      final size = ScreenUtil().setWidth(20);
-      return SizedBox(
-        width: size,
-        height: size,
-        child: const CircularProgressIndicator(strokeWidth: 2),
-      );
-    }
-    if (estimatedTotalGas != null) {
-      return Text(
-        isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-        style: AppTypography.bodySm.copyWith(
-          fontWeight: FontWeight.w600,
-          color: isSponsored
-              ? AppColorTokens.of(context).success
-              : _themeColor(context, AppThemeKeys.mainTextColor),
-        ),
-      );
-    }
-    return Text(
-      '-',
-      style: AppTypography.bodySm.copyWith(
-        color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
       ),
     );
   }

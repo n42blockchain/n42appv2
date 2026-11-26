@@ -312,7 +312,11 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   ],
                 ),
               ),
-              _buildGasValue(isSponsored),
+              AAGasEstimateValue(
+                isEstimating: isEstimating,
+                isSponsored: isSponsored,
+                cost: estimatedGas == null ? null : formatGasCost(),
+              ),
             ],
           ),
           if (isSponsored && estimatedGas != null) ...[
@@ -325,26 +329,6 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         ],
       ),
     );
-  }
-
-  Widget _buildGasValue(bool isSponsored) {
-    if (isEstimating) {
-      return SizedBox(
-        width: ScreenUtil().setWidth(20),
-        height: ScreenUtil().setWidth(20),
-        child: const CircularProgressIndicator(strokeWidth: 2),
-      );
-    }
-    if (estimatedGas != null) {
-      return Text(
-        isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-        style: AppTypography.bodySm.copyWith(
-          fontWeight: FontWeight.w600,
-          color: isSponsored ? AppColorTokens.of(context).success : _mainText,
-        ),
-      );
-    }
-    return Text('-', style: AppTypography.bodySm.copyWith(color: _subText));
   }
 
   // ─── Send Button ────────────────────────────────────────────────────
