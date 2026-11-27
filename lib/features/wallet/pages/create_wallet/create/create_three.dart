@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class CreateThree extends StatefulWidget {
@@ -36,7 +37,7 @@ class _CreateThreeState extends State<CreateThree> {
     widget.wInfo.coinInfo = chainUrlMap;
     if (mounted) {
       setState(() {
-        mnemonicWordsList = mnemonicWords.split(" ");
+        mnemonicWordsList = parseBackupMnemonicWords(mnemonicWords);
         final list = dataUtils.shuffle(mnemonicWordsList);
         messMnemonicWordsList = List.generate(
           list.length,

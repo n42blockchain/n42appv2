@@ -7,6 +7,7 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 part 'create_two_widgets.dart';
@@ -41,7 +42,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
     );
     if (mounted) {
       setState(() {
-        mnemonicWordsList = mnemonicWords.split(" ");
+        mnemonicWordsList = parseBackupMnemonicWords(mnemonicWords);
       });
     }
   }
