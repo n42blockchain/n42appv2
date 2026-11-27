@@ -506,26 +506,6 @@ void main() {
     });
   });
 
-  group('EntryPointVersionAdapter – requiresV08', () {
-    test('returns true for UserOp with EIP-7702 auth', () {
-      final userOp = _minimalUserOp(eip7702Auth: Uint8List.fromList([0x01]));
-      expect(EntryPointVersionAdapter.requiresV08(userOp), true);
-    });
-
-    test('returns false for standard UserOp', () {
-      expect(EntryPointVersionAdapter.requiresV08(_minimalUserOp()), false);
-    });
-  });
-
-  group('EntryPointVersionAdapter – upgradeToV08', () {
-    test('preserves all UserOp fields', () {
-      final userOp = _minimalUserOp();
-      final upgraded = EntryPointVersionAdapter.upgradeToV08(userOp);
-      expect(upgraded.sender, userOp.sender);
-      expect(upgraded.nonce, userOp.nonce);
-    });
-  });
-
   group('EntryPointVersionAdapter – getGasPenaltyThreshold', () {
     test('v07 threshold is zero (all unused gas penalised)', () {
       expect(
@@ -654,12 +634,6 @@ void main() {
   // ══════════════════════════════════════════════════════════════════════════
   // V08MigrationHelper
   // ══════════════════════════════════════════════════════════════════════════
-
-  group('V08MigrationHelper – canMigrate', () {
-    test('always returns true (v0.8 is backwards compatible)', () {
-      expect(V08MigrationHelper.canMigrate(_testAddr, 1), true);
-    });
-  });
 
   group('V08MigrationHelper – shouldUseEIP7702', () {
     test('returns false when account is already deployed', () {

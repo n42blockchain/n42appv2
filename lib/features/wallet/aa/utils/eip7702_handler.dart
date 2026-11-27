@@ -303,20 +303,6 @@ class EntryPointVersionAdapter {
         : AAConfig.entryPointV07;
   }
 
-  /// Check if operation requires v0.8
-  static bool requiresV08(UserOperation userOp) {
-    return userOp.hasEIP7702Auth;
-  }
-
-  /// Upgrade UserOperation from v0.7 to v0.8 format
-  ///
-  /// v0.8 is backwards compatible with v0.7, so this mainly involves
-  /// ensuring the operation is sent to the correct EntryPoint.
-  static UserOperation upgradeToV08(UserOperation userOp) {
-    // v0.8 format is the same as v0.7 for non-EIP-7702 operations
-    return userOp;
-  }
-
   /// Add EIP-7702 authorization to an existing UserOperation
   static UserOperation addEIP7702Auth({
     required UserOperation userOp,
@@ -374,12 +360,6 @@ class EntryPointVersionAdapter {
 /// Migration helper for transitioning accounts from v0.7 to v0.8
 class V08MigrationHelper {
   V08MigrationHelper._();
-
-  /// Check if an existing SimpleAccount can be migrated to v0.8
-  static bool canMigrate(String accountAddress, int chainId) {
-    // v0.8 is backwards compatible, existing accounts work with v0.8 EntryPoint
-    return true;
-  }
 
   /// Check if account should use EIP-7702 instead
   ///

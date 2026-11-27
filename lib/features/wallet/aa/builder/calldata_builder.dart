@@ -32,8 +32,8 @@ class CalldataBuilder {
     );
 
     // Encode parameters
-    final targetEncoded = _encodeAddress(target);
-    final valueEncoded = _encodeUint256(value);
+    final targetEncoded = encodeAddressWord(target);
+    final valueEncoded = encodeUint256Word(value);
     final dataEncoded = _encodeBytes(data);
 
     // Combine: selector + target + value + data
@@ -96,13 +96,13 @@ class CalldataBuilder {
     result.setAll(offset, selector);
     offset += 4;
 
-    result.setAll(offset, _encodeUint256(targetsOffset));
+    result.setAll(offset, encodeUint256Word(targetsOffset));
     offset += 32;
 
-    result.setAll(offset, _encodeUint256(valuesOffset));
+    result.setAll(offset, encodeUint256Word(valuesOffset));
     offset += 32;
 
-    result.setAll(offset, _encodeUint256(datasOffset));
+    result.setAll(offset, encodeUint256Word(datasOffset));
     offset += 32;
 
     result.setAll(offset, targetsEncoded);
@@ -220,13 +220,13 @@ class CalldataBuilder {
     final selector = hexToBytes(selectorHex.replaceFirst('0x', ''));
     final result = Uint8List(4 + 64);
     result.setAll(0, selector);
-    result.setAll(4, _encodeAddress(address));
-    result.setAll(36, _encodeUint256(value));
+    result.setAll(4, encodeAddressWord(address));
+    result.setAll(36, encodeUint256Word(value));
     return result;
   }
 
   /// Encode an address to 32 bytes (left-padded)
-  static Uint8List _encodeAddress(String address) {
+  static Uint8List encodeAddressWord(String address) {
     final bytes = hexToBytes(address.replaceFirst('0x', '').padLeft(40, '0'));
     final result = Uint8List(32);
     result.setAll(12, bytes); // Left-pad with 12 zeros
@@ -234,7 +234,7 @@ class CalldataBuilder {
   }
 
   /// Encode a uint256 to 32 bytes
-  static Uint8List _encodeUint256(BigInt value) {
+  static Uint8List encodeUint256Word(BigInt value) {
     final result = Uint8List(32);
     final valueBytes = intToBytes(value);
     final start = 32 - valueBytes.length;
@@ -247,10 +247,10 @@ class CalldataBuilder {
   /// Encode dynamic bytes with offset and length
   static Uint8List _encodeBytes(Uint8List data) {
     // Offset to data (always 32 for single bytes parameter after fixed params)
-    final offset = _encodeUint256(BigInt.from(32));
+    final offset = encodeUint256Word(BigInt.from(32));
 
     // Length of data
-    final length = _encodeUint256(BigInt.from(data.length));
+    final length = encodeUint256Word(BigInt.from(data.length));
 
     // Data (padded to 32-byte boundary)
     final paddedLength = ((data.length + 31) ~/ 32) * 32;
@@ -266,43 +266,29 @@ class CalldataBuilder {
     return result;
   }
 
-  /// Encode an array of addresses
-  static Uint8List _encodeAddressArray(List<String> addresses) {
-    // Length
-    final length = _encodeUint256(BigInt.from(addresses.length));
-
-    // Encode each address
-    final addressesEncoded = Uint8List(addresses.length * 32);
-    for (var i = 0; i < addresses.length; i++) {
-      addressesEncoded.setAll(i * 32, _encodeAddress(addresses[i]));
+  /// Encode a dynamic array of static 32-byte words: length word, then each item.
+  static Uint8List _encodeWordArray<T>(
+    List<T> items,
+    Uint8List Function(T) encodeItem,
+  ) {
+    final encoded = Uint8List(items.length * 32);
+    for (var i = 0; i < items.length; i++) {
+      encoded.setAll(i * 32, encodeItem(items[i]));
     }
 
-    // Combine
-    final result = Uint8List(32 + addressesEncoded.length);
-    result.setAll(0, length);
-    result.setAll(32, addressesEncoded);
-
+    final result = Uint8List(32 + encoded.length);
+    result.setAll(0, encodeUint256Word(BigInt.from(items.length)));
+    result.setAll(32, encoded);
     return result;
   }
+
+  /// Encode an array of addresses
+  static Uint8List _encodeAddressArray(List<String> addresses) =>
+      _encodeWordArray(addresses, encodeAddressWord);
 
   /// Encode an array of uint256
-  static Uint8List _encodeUint256Array(List<BigInt> values) {
-    // Length
-    final length = _encodeUint256(BigInt.from(values.length));
-
-    // Encode each value
-    final valuesEncoded = Uint8List(values.length * 32);
-    for (var i = 0; i < values.length; i++) {
-      valuesEncoded.setAll(i * 32, _encodeUint256(values[i]));
-    }
-
-    // Combine
-    final result = Uint8List(32 + valuesEncoded.length);
-    result.setAll(0, length);
-    result.setAll(32, valuesEncoded);
-
-    return result;
-  }
+  static Uint8List _encodeUint256Array(List<BigInt> values) =>
+      _encodeWordArray(values, encodeUint256Word);
 
   /// Encode an array of bytes
   static Uint8List _encodeBytesArray(List<Uint8List> bytesArray) {
@@ -324,13 +310,13 @@ class CalldataBuilder {
     var offset = 0;
 
     // Array length
-    result.setAll(offset, _encodeUint256(BigInt.from(bytesArray.length)));
+    result.setAll(offset, encodeUint256Word(BigInt.from(bytesArray.length)));
     offset += 32;
 
     // Calculate and write offsets
     var dataOffset = bytesArray.length * 32; // Start after all offsets
     for (var i = 0; i < bytesArray.length; i++) {
-      result.setAll(offset, _encodeUint256(BigInt.from(dataOffset)));
+      result.setAll(offset, encodeUint256Word(BigInt.from(dataOffset)));
       offset += 32;
       dataOffset += 32 + paddedLengths[i]; // length + padded data
     }
@@ -338,7 +324,7 @@ class CalldataBuilder {
     // Write each bytes element
     for (var i = 0; i < bytesArray.length; i++) {
       // Length
-      result.setAll(offset, _encodeUint256(BigInt.from(bytesArray[i].length)));
+      result.setAll(offset, encodeUint256Word(BigInt.from(bytesArray[i].length)));
       offset += 32;
 
       // Data (padded)

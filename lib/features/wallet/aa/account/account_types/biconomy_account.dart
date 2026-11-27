@@ -11,6 +11,7 @@ import 'package:web3dart/web3dart.dart';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
 
+import '../../builder/calldata_builder.dart';
 import '../../core/aa_config.dart';
 
 /// Helper for Biconomy Nexus v1 (ERC-7579 modular) account type.
@@ -119,9 +120,9 @@ class BiconomyAccountHelper {
     //   [64:96]  bootstrapCalldata length
     //   [96:...]  bootstrapCalldata data + padding
 
-    final bootstrapPadded = _addressToBytes32(nexusBootstrapAddress);
-    final calldataOffset = _uint256ToBytes32(BigInt.from(64));
-    final calldataLength = _uint256ToBytes32(
+    final bootstrapPadded = CalldataBuilder.encodeAddressWord(nexusBootstrapAddress);
+    final calldataOffset = CalldataBuilder.encodeUint256Word(BigInt.from(64));
+    final calldataLength = CalldataBuilder.encodeUint256Word(
       BigInt.from(bootstrapCalldata.length),
     );
     final padding = (32 - bootstrapCalldata.length % 32) % 32;
@@ -186,7 +187,7 @@ class BiconomyAccountHelper {
     //   [128:160] struct.initData[0..31] = ownerAddr right-padded
 
     // initData for K1Validator = abi.encode(ownerAddress) = 32 bytes
-    final ownerEncoded = _addressToBytes32(owner);
+    final ownerEncoded = CalldataBuilder.encodeAddressWord(owner);
 
     // struct BootstrapConfig in memory:
     //   offset to struct from outer param head = 32
@@ -195,23 +196,23 @@ class BiconomyAccountHelper {
     //     offset to initData within struct      = 64 (pointing past the two 32-byte head slots)
     //     initData.length = 32
     //     initData data   = ownerEncoded (32 bytes)
-    final structModule = _addressToBytes32(k1ValidatorAddress);
+    final structModule = CalldataBuilder.encodeAddressWord(k1ValidatorAddress);
     const structInitDataRelOffset = 64; // 2 * 32 bytes past struct start
 
     final calldata = Uint8List(4 + 5 * 32);
     var pos = 0;
     calldata.setAll(pos, selector);
     pos += 4;
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32)));
+    calldata.setAll(pos, CalldataBuilder.encodeUint256Word(BigInt.from(32)));
     pos += 32; // offset to struct
     calldata.setAll(pos, structModule);
     pos += 32; // struct.module
     calldata.setAll(
       pos,
-      _uint256ToBytes32(BigInt.from(structInitDataRelOffset)),
+      CalldataBuilder.encodeUint256Word(BigInt.from(structInitDataRelOffset)),
     );
     pos += 32; // relative offset
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32)));
+    calldata.setAll(pos, CalldataBuilder.encodeUint256Word(BigInt.from(32)));
     pos += 32; // initData.length
     calldata.setAll(pos, ownerEncoded); // initData bytes
 
@@ -243,9 +244,9 @@ class BiconomyAccountHelper {
   ) {
     final selectorFull = keccak256(Uint8List.fromList(utf8.encode(signature)));
     final selector = selectorFull.sublist(0, 4);
-    final saltBytes = _uint256ToBytes32(bytes32Value);
-    final offset = _uint256ToBytes32(BigInt.from(64));
-    final length = _uint256ToBytes32(BigInt.from(bytesArg.length));
+    final saltBytes = CalldataBuilder.encodeUint256Word(bytes32Value);
+    final offset = CalldataBuilder.encodeUint256Word(BigInt.from(64));
+    final length = CalldataBuilder.encodeUint256Word(BigInt.from(bytesArg.length));
     final padding = (32 - bytesArg.length % 32) % 32;
     final padded = Uint8List(bytesArg.length + padding);
     padded.setAll(0, bytesArg);
@@ -265,20 +266,6 @@ class BiconomyAccountHelper {
   }
 
   // ── Private: ABI encoding utilities ────────────────────────────────────────
-
-  Uint8List _addressToBytes32(String addr) {
-    final out = Uint8List(32);
-    final addrBytes = hexToBytes(addr.replaceFirst('0x', '').padLeft(40, '0'));
-    out.setAll(12, addrBytes);
-    return out;
-  }
-
-  Uint8List _uint256ToBytes32(BigInt v) {
-    final out = Uint8List(32);
-    final vBytes = intToBytes(v);
-    if (vBytes.isNotEmpty) out.setAll(32 - vBytes.length, vBytes);
-    return out;
-  }
 
   // ── Private: eth_call ───────────────────────────────────────────────────────
 

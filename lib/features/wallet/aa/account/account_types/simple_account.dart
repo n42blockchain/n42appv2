@@ -52,7 +52,7 @@ class SimpleAccountHelper {
     // where initCode = proxy creation code + implementation address + owner
 
     // Simplified calculation matching SimpleAccountFactory.getAddress
-    final ownerBytes = _addressToBytes32(owner);
+    final ownerBytes = CalldataBuilder.encodeAddressWord(owner);
     final saltBytes = _bigIntToBytes32(salt);
 
     // Create the salt used by the factory
@@ -122,7 +122,7 @@ class SimpleAccountHelper {
     // withdrawDepositTo(address,uint256)
     // Function selector: 0x4d44560d
     final selector = hexToBytes('4d44560d');
-    final addressEncoded = _addressToBytes32(withdrawAddress);
+    final addressEncoded = CalldataBuilder.encodeAddressWord(withdrawAddress);
     final amountEncoded = _bigIntToBytes32(amount);
 
     final result = Uint8List(4 + 64);
@@ -159,15 +159,6 @@ class SimpleAccountHelper {
   }
 
   // Helper methods
-
-  Uint8List _addressToBytes32(String address) {
-    final bytes = Uint8List(32);
-    final addrBytes = hexToBytes(
-      address.replaceFirst('0x', '').padLeft(40, '0'),
-    );
-    bytes.setAll(12, addrBytes);
-    return bytes;
-  }
 
   Uint8List _bigIntToBytes32(BigInt value) {
     final bytes = Uint8List(32);
