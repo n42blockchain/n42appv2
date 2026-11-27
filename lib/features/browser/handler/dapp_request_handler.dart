@@ -297,9 +297,18 @@ class DAppRequestHandler {
 
   // ── Transaction methods ────────────────────────────────────────────────────
 
-  Future<String> _handleSendTransaction(
+  /// Shared prelude for eth_sendTransaction / eth_signTransaction: checks the
+  /// from address, asks for approval, then resolves the signing key and client.
+  Future<
+    (
+      Map<String, dynamic>,
+      web3.EthPrivateKey,
+      web3.Web3Client,
+    )
+  > _prepareTx(
     List<dynamic> params,
     String origin,
+    String method,
     void Function() validateRequest,
   ) async {
     if (params.isEmpty) {
@@ -317,7 +326,7 @@ class DAppRequestHandler {
 
     final approved = await _requestApproval(
       origin: origin,
-      method: 'eth_sendTransaction',
+      method: method,
       details: txMap,
     );
     if (!approved) throw {'code': 4001, 'message': 'User rejected'};
@@ -327,6 +336,20 @@ class DAppRequestHandler {
     validateRequest();
     final web3client = await _getWeb3Client();
     validateRequest();
+    return (txMap, privateKey, web3client);
+  }
+
+  Future<String> _handleSendTransaction(
+    List<dynamic> params,
+    String origin,
+    void Function() validateRequest,
+  ) async {
+    final (txMap, privateKey, web3client) = await _prepareTx(
+      params,
+      origin,
+      'eth_sendTransaction',
+      validateRequest,
+    );
 
     final transaction = _buildTransaction(txMap);
     final cm = ethCoinModels[_selectedChainIndex];
@@ -345,31 +368,12 @@ class DAppRequestHandler {
     String origin,
     void Function() validateRequest,
   ) async {
-    if (params.isEmpty) {
-      throw {'code': -32602, 'message': 'Invalid params'};
-    }
-    final txMap = params[0] as Map<String, dynamic>;
-
-    // Validate the from address matches our wallet to prevent spoofing
-    final txFrom = (txMap['from'] as String?)?.toLowerCase();
-    if (txFrom != null &&
-        txFrom.isNotEmpty &&
-        txFrom != address.toLowerCase()) {
-      throw {'code': -32602, 'message': 'From address does not match wallet'};
-    }
-
-    final approved = await _requestApproval(
-      origin: origin,
-      method: 'eth_signTransaction',
-      details: txMap,
+    final (txMap, privateKey, web3client) = await _prepareTx(
+      params,
+      origin,
+      'eth_signTransaction',
+      validateRequest,
     );
-    if (!approved) throw {'code': 4001, 'message': 'User rejected'};
-    validateRequest();
-
-    final privateKey = await _getPrivateKey();
-    validateRequest();
-    final web3client = await _getWeb3Client();
-    validateRequest();
 
     final transaction = _buildTransaction(txMap);
     final signed = await web3client.signTransaction(
