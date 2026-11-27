@@ -222,13 +222,4 @@ class AddressValidator {
     }
     return '${address.substring(0, prefixLength)}...${address.substring(address.length - suffixLength)}';
   }
-
-  /// Check if address might be a contract
-  ///
-  /// Note: This requires an on-chain call to verify
-  Future<bool> isContractAddress(String coinType, String address) async {
-    // This would require an on-chain call to check code at address
-    // For now, return false as a safe default
-    return false;
-  }
 }

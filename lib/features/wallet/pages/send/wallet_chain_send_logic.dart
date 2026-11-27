@@ -365,25 +365,17 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
     // 余额校验
     final BigInt valueBi = ethToWeiString(value, decimals);
-    if (_blockchainType == BlockchainType.Ripple.name) {
-      final reserveAmount = ethToWeiString('10', decimals);
-      if (valueBi + totalGasPrice > coinModel.balance - reserveAmount) {
-        _setAmountError(S.of(context).g_key_47);
-        return;
-      }
-    } else if (!_isContract) {
-      if (valueBi + totalGasPrice > coinModel.balance) {
-        _setAmountError(S.of(context).g_key_47);
-        return;
-      }
-      transferValue = valueBi;
-    } else {
-      if (valueBi > coinModel.balance) {
-        _setAmountError(S.of(context).g_key_47);
-        return;
-      }
-      transferValue = valueBi;
+    final isRipple = _blockchainType == BlockchainType.Ripple.name;
+    // Ripple keeps a 10-unit reserve; the fee applies to everything except contract calls.
+    final reserve = isRipple ? ethToWeiString('10', decimals) : BigInt.zero;
+    final chargesFee = isRipple || !_isContract;
+    final required =
+        valueBi + (chargesFee ? totalGasPrice : BigInt.zero) + reserve;
+    if (required > coinModel.balance) {
+      _setAmountError(S.of(context).g_key_47);
+      return;
     }
+    if (!isRipple) transferValue = valueBi;
     amountErrorMessage = '';
     setState(() {});
   }

@@ -187,8 +187,10 @@ class _SwapAstHomeState extends ConsumerState<SwapAstHome> {
     getBalanceChainPay();
     getBalancePay();
 
-    if (!await getCoinPrice() || !mounted) return;
-    if (!await getGasPrice() || !mounted) return;
+    // Independent network reads: fetch in parallel, then apply in order.
+    final results = await Future.wait([getCoinPrice(), getGasPrice()]);
+    if (!results[0] || !mounted) return;
+    if (!results[1] || !mounted) return;
     await estimateGasEth();
   }
 

@@ -307,26 +307,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
 
   Future<void> _onItemTap(BuildContext context) async {
     if (_isBtcType || readOnly) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => TransactionDetailPage(
-            from: _isBtcType
-                ? transactionModel.address
-                : transactionModel.from1,
-            to: transactionModel.to1,
-            txHash: transactionModel.txHash,
-            value: _amountLabel,
-            coinType: transactionModel.coin['coinType'],
-            time: transactionModel.getTxTimeStr(),
-            isTest: coinModel?.isTest,
-            status: _isBtcType ? null : _statusText,
-            statusHint: _isUnconfirmed
-                ? S.current.g_tx_status_unconfirmed_hint
-                : null,
-          ),
-        ),
-      );
+      _openDetailPage(context);
       return;
     }
 
@@ -338,25 +319,31 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     } else if (blockchainType == BlockchainType.Tron.name) {
       _pushAndCallback(context, TransactionDetailTrx(coinModel!, txHash));
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => TransactionDetailPage(
-            from: transactionModel.from1,
-            to: transactionModel.to1,
-            txHash: txHash,
-            value: _amountLabel,
-            coinType: transactionModel.coin['coinType'],
-            time: transactionModel.getTxTimeStr(),
-            isTest: coinModel?.isTest,
-            status: _statusText,
-            statusHint: _isUnconfirmed
-                ? S.current.g_tx_status_unconfirmed_hint
-                : null,
-          ),
-        ),
-      );
+      _openDetailPage(context);
     }
+  }
+
+  /// Generic detail page. BTC-type rows show the input address as sender and
+  /// no status; other rows show the stored sender and status.
+  void _openDetailPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TransactionDetailPage(
+          from: _isBtcType ? transactionModel.address : transactionModel.from1,
+          to: transactionModel.to1,
+          txHash: transactionModel.txHash,
+          value: _amountLabel,
+          coinType: transactionModel.coin['coinType'],
+          time: transactionModel.getTxTimeStr(),
+          isTest: coinModel?.isTest,
+          status: _isBtcType ? null : _statusText,
+          statusHint: _isUnconfirmed
+              ? S.current.g_tx_status_unconfirmed_hint
+              : null,
+        ),
+      ),
+    );
   }
 
   /// 获取交易状态文本

@@ -48,11 +48,9 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2>
     super.initState();
     _eventSubscription = eventBus.on().listen((event) async {
       if (event is! EventPublic) return;
-      if (event.type == EventPublicType.selectWallet) {
-        await initDataWallet(EventPublicType.selectWallet);
-      }
-      if (event.type == EventPublicType.selectMiningWallet) {
-        await initDataWallet(EventPublicType.selectMiningWallet);
+      if (event.type == EventPublicType.selectWallet ||
+          event.type == EventPublicType.selectMiningWallet) {
+        await initDataWallet(event.type);
       }
     });
   }

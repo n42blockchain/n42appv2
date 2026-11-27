@@ -325,6 +325,9 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                         validator.logoUri,
                         width: logoSize,
                         height: logoSize,
+                        // Decode at display size, not the full-resolution logo.
+                        cacheWidth: (logoSize * MediaQuery.devicePixelRatioOf(context)).round(),
+                        cacheHeight: (logoSize * MediaQuery.devicePixelRatioOf(context)).round(),
                         errorBuilder: (_, _, _) =>
                             _buildDefaultValidatorLogo(context, validator),
                       )

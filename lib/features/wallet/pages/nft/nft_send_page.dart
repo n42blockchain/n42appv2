@@ -306,6 +306,11 @@ class _NftSendPageState extends State<NftSendPage> {
                     nft.imageUrl!,
                     width: ScreenUtil().setWidth(80),
                     height: ScreenUtil().setWidth(80),
+                    // Decode at display size, not the full-resolution image.
+                    cacheWidth:
+                        (ScreenUtil().setWidth(80) *
+                                MediaQuery.devicePixelRatioOf(context))
+                            .round(),
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stack) =>
                         _imgPlaceholder(blueColor),
