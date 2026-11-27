@@ -10,6 +10,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/wallet/services/ens_expiry_reminder_service.dart';
+import 'package:n42_wallet/shared/utils/hash_display.dart';
 
 /// ENS 续费成功结果卡片
 ///
@@ -108,7 +109,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                 S
                     .of(context)
                     .g_ui_transaction_hash_value(
-                      _shortenHash(widget.renewResult.txHash!),
+                      shortenHashForDisplay(widget.renewResult.txHash!),
                     ),
                 style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
@@ -160,10 +161,5 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
 
   String _formatDate(DateTime date) {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
-
-  String _shortenHash(String hash) {
-    if (hash.length <= 16) return hash;
-    return '${hash.substring(0, 10)}...${hash.substring(hash.length - 6)}';
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
+import 'package:n42_wallet/shared/utils/hash_display.dart';
 
 /// ENS 购买页各注册步骤的内容区域
 ///
@@ -255,7 +256,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
                 S
                     .of(context)
                     .g_ui_transaction_hash_value(
-                      _shortenHash(registerResult!.txHash!),
+                      shortenHashForDisplay(registerResult!.txHash!),
                     ),
                 style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
@@ -302,11 +303,6 @@ class EnsPurchaseStepContent extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _shortenHash(String hash) {
-    if (hash.length <= 16) return hash;
-    return '${hash.substring(0, 10)}...${hash.substring(hash.length - 6)}';
   }
 }
 

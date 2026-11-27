@@ -9,6 +9,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/shared/utils/hash_display.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -293,7 +294,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             ),
             Expanded(
               child: Text(
-                _shortenHash(hash),
+                shortenHashForDisplay(hash, prefixLen: 8),
                 style: AppTypography.caption.copyWith(
                   color: blueColor,
                   decoration: TextDecoration.underline,
@@ -355,11 +356,6 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   }
 
   // ─── 工具方法 ─────────────────────────────────────────────────────────────
-
-  String _shortenHash(String hash) {
-    if (hash.length <= 16) return hash;
-    return '${hash.substring(0, 8)}...${hash.substring(hash.length - 6)}';
-  }
 
   /// 根据 chainId 返回区块链浏览器 URL
   String _explorerUrl(int chainId, String txHash) {
