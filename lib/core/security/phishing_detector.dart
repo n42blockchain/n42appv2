@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart' show compute, visibleForTesting;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -215,13 +215,8 @@ class PhishingDetector {
       if (file == null || !file.existsSync()) return;
 
       final cachedJson = await file.readAsString();
-      final map = jsonDecode(cachedJson) as Map<String, dynamic>;
-      final blacklist = (map['blacklist'] is List)
-          ? (map['blacklist'] as List<dynamic>).whereType<String>().toList()
-          : <String>[];
-      final whitelist = (map['whitelist'] is List)
-          ? (map['whitelist'] as List<dynamic>).whereType<String>().toList()
-          : <String>[];
+      // Multi-MB list: decode off the UI isolate.
+      final (blacklist, whitelist) = await compute(_parseLists, cachedJson);
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);
       AppLogger.d(
@@ -265,13 +260,8 @@ class PhishingDetector {
       final body = await response.transform(utf8.decoder).join();
       client.close();
 
-      final map = jsonDecode(body) as Map<String, dynamic>;
-      final blacklist = (map['blacklist'] is List)
-          ? (map['blacklist'] as List<dynamic>).whereType<String>().toList()
-          : <String>[];
-      final whitelist = (map['whitelist'] is List)
-          ? (map['whitelist'] as List<dynamic>).whereType<String>().toList()
-          : <String>[];
+      // Multi-MB list: decode off the UI isolate.
+      final (blacklist, whitelist) = await compute(_parseLists, body);
 
       _blocklist.addAll(blacklist);
       _whitelist.addAll(whitelist);
@@ -306,4 +296,12 @@ enum PhishingCheckResult {
 
   /// URL is on the phishing blocklist — block and warn user.
   phishing,
+}
+
+/// Parses the `{blacklist, whitelist}` JSON; top-level so [compute] can run it.
+(List<String>, List<String>) _parseLists(String json) {
+  final map = jsonDecode(json) as Map<String, dynamic>;
+  List<String> strings(Object? v) =>
+      v is List ? v.whereType<String>().toList() : <String>[];
+  return (strings(map['blacklist']), strings(map['whitelist']));
 }

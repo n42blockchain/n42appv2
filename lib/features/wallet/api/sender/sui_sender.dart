@@ -114,16 +114,19 @@ class SuiSender implements ChainSender {
     }
     final suiApi = _apiFactory(params.isTest);
 
-    // Get balance
-    final mmb = await suiApi.getBalanceSui(params.fromAddress);
+    // Balance and gas price are independent reads: fetch together, check in order.
+    final reads = await Future.wait([
+      suiApi.getBalanceSui(params.fromAddress),
+      suiApi.getGasPriceSui(),
+    ]);
+    final mmb = reads[0];
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
       return SendResult.fail(S.current.g_key_wallet_m5('SUI'));
     }
 
-    // Get gas price
-    final mmg = await suiApi.getGasPriceSui();
+    final mmg = reads[1];
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
     if (gasPrice <= BigInt.zero || gasPrice > maxU64) {

@@ -311,17 +311,18 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                                   FlTouchEvent event,
                                   PieTouchResponse? response,
                                 ) {
-                                  setState(() {
-                                    if (!event.isInterestedForInteractions ||
-                                        response == null ||
-                                        response.touchedSection == null) {
-                                      _touchedIndex = -1;
-                                    } else {
-                                      _touchedIndex = response
-                                          .touchedSection!
-                                          .touchedSectionIndex;
-                                    }
-                                  });
+                                  final index =
+                                      (!event.isInterestedForInteractions ||
+                                          response == null ||
+                                          response.touchedSection == null)
+                                      ? -1
+                                      : response
+                                            .touchedSection!
+                                            .touchedSectionIndex;
+                                  // Pointer moves fire per frame; rebuild
+                                  // the page only when the section changes.
+                                  if (index == _touchedIndex) return;
+                                  setState(() => _touchedIndex = index);
                                 },
                           ),
                         ),

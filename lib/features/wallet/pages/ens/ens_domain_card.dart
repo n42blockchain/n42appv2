@@ -97,6 +97,11 @@ class _EnsAvatar extends StatelessWidget {
         ownedEns.avatar!,
         width: ScreenUtil().setWidth(80),
         height: ScreenUtil().setWidth(80),
+        // Decode at display width, not full source resolution.
+        cacheWidth:
+            (ScreenUtil().setWidth(80) *
+                    MediaQuery.devicePixelRatioOf(context))
+                .round(),
         fit: BoxFit.cover,
         errorBuilder: (_, _, _) => defaultAvatar,
       ),

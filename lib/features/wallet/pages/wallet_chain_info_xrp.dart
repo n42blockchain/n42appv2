@@ -152,7 +152,6 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
       wap.walletMap[widget.coinModel.config.coinType]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
-      await fetchCoinBalance(widget.coinModel, wap);
       widget.coinModel.address = null;
       await buildCoinWallet(widget.coinModel, wap);
       await fetchCoinBalance(widget.coinModel, wap);
@@ -192,12 +191,17 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     getTransactionDataNetwork(loadType);
   }
 
+  // Fire one next-page request per entry into the bottom zone, not per tick.
+  bool _inBottomZone = false;
+
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final pixel = _scrollController.position.pixels;
-    if (pixel > maxScroll - 200) {
+    final inZone = pixel > maxScroll - 200;
+    if (inZone && !_inBottomZone) {
       _refreshTransactions(Load.nextPage);
     }
+    _inBottomZone = inZone;
   }
 
   void _initData() {

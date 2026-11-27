@@ -364,18 +364,14 @@ class AATransferHandler extends BaseTransferHandler {
   ) async {
     final smartAccount = params.smartAccount;
 
-    // Get nonce from EntryPoint
-    final nonce = await _getNonce(
-      smartAccount.address,
-      chainConfig,
-      isTest: params.isTest,
-    );
-
-    // Get gas prices
-    final gasPrices = await _getGasPrices(
-      params.chainSymbol,
-      isTest: params.isTest,
-    );
+    // Nonce (EntryPoint) and gas prices are independent reads: fetch together.
+    final reads = await Future.wait<Object>([
+      _getNonce(smartAccount.address, chainConfig, isTest: params.isTest),
+      _getGasPrices(params.chainSymbol, isTest: params.isTest),
+    ]);
+    final nonce = reads[0] as BigInt;
+    final gasPrices =
+        reads[1] as ({BigInt maxFeePerGas, BigInt maxPriorityFeePerGas});
 
     // Build call data
     Uint8List callData;
@@ -608,37 +604,19 @@ class AATransferHandler extends BaseTransferHandler {
         return _gasError('Bundler network does not match smart account');
       }
       final estimate = await bundler.estimateUserOperationGas(userOp);
-      final gasPrices = await _getGasPrices(
-        params.chainSymbol,
-        isTest: params.isTest,
-      );
+      // _buildUserOperation already fetched the gas prices into userOp.
+      final maxFeePerGas = userOp.maxFeePerGas;
       final totalGas = estimate.totalGas;
 
       return GasEstimation(
         gasLimit: totalGas,
-        gasPrice: gasPrices.maxFeePerGas,
-        totalFee: totalGas * gasPrices.maxFeePerGas,
+        gasPrice: maxFeePerGas,
+        totalFee: totalGas * maxFeePerGas,
       );
     } catch (e) {
       return _gasError(e.toString());
     } finally {
       _releaseBundler(bundler);
-    }
-  }
-
-  /// Check if smart account is deployed
-  Future<bool> isAccountDeployed(String address) async {
-    try {
-      final ethApi = EthAPI.init(_chainSymbol, _getRpcUrl(), '');
-      final result = await ethApi.getCode(address);
-
-      if (!result.error && result.data != null) {
-        return SmartAccountFactory.isDeployed(result.data.toString());
-      }
-      return false;
-    } catch (e) {
-      AppLogger.w('AATransferHandler', 'error checking account deployment: $e');
-      return false;
     }
   }
 

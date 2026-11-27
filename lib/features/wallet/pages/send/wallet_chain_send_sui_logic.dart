@@ -67,8 +67,9 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
         contract: widget.coinModel.config.isContract,
       ),
     );
-    await getBalance();
-    await getGasPrice();
+    // Balance and gas price are independent; each sets load to loading on
+    // entry and finish on exit, so the flag still ends at finish.
+    await Future.wait([getBalance(), getGasPrice()]);
     await getOwnerObjects();
   }
 
@@ -238,11 +239,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
     final isInt = regular.regularNums(value);
     final isDouble = regular.regularDouble(value);
-    if (coin['decimals'] == 0 && !isInt) {
-      setError(S.of(context).g_key_134);
-      return;
-    }
-    if (!isDouble && !isInt) {
+    if ((coin['decimals'] == 0 || !isDouble) && !isInt) {
       setError(S.of(context).g_key_134);
       return;
     }

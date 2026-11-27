@@ -141,15 +141,14 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
         _tokenViewApi.getPendingStat(chain),
       ]);
       if (!mounted || generation != _refreshGeneration) return;
-      setState(() {
-        final symbol = _chainToSymbol(chain);
-        if (results[0] != null) {
-          _gasPredictions[symbol] = results[0] as GasNextBlockPrediction;
-        }
-        if (results[1] != null) {
-          _mempoolData[symbol] = results[1] as MempoolCongestion;
-        }
-      });
+      // Painted once by _fetchAllGasData.
+      final symbol = _chainToSymbol(chain);
+      if (results[0] != null) {
+        _gasPredictions[symbol] = results[0] as GasNextBlockPrediction;
+      }
+      if (results[1] != null) {
+        _mempoolData[symbol] = results[1] as MempoolCongestion;
+      }
     } catch (e) {
       AppLogger.w(
         'GasTracker',
@@ -174,6 +173,8 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
 
       final client = http.Client();
       try {
+        // Independent of eth_gasPrice and never throws: start it now.
+        final eip1559Future = _fetchEip1559(client, rpcUrl);
         final gasPriceHex = await _rpcCall(
           client,
           rpcUrl,
@@ -186,22 +187,21 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
         final gasPrice = BigInt.parse(gasPriceHex.substring(2), radix: 16);
         final gasPriceGwei = gasPrice.toDouble() / 1e9;
 
-        final eip1559 = await _fetchEip1559(client, rpcUrl);
+        final eip1559 = await eip1559Future;
 
+        // State is written here and painted once by _fetchAllGasData.
         if (mounted && generation == _refreshGeneration) {
-          setState(() {
-            _gasData[network.symbol] = NetworkGasData(
-              gasPrice: gasPriceGwei,
-              baseFee: eip1559.$1 != null ? eip1559.$1!.toDouble() / 1e9 : null,
-              priorityFee: eip1559.$2 != null
-                  ? eip1559.$2!.toDouble() / 1e9
-                  : null,
-              lastUpdated: DateTime.now(),
-            );
-            final hist = _history.putIfAbsent(network.symbol, () => []);
-            hist.add(gasPriceGwei);
-            if (hist.length > 60) hist.removeAt(0);
-          });
+          _gasData[network.symbol] = NetworkGasData(
+            gasPrice: gasPriceGwei,
+            baseFee: eip1559.$1 != null ? eip1559.$1!.toDouble() / 1e9 : null,
+            priorityFee: eip1559.$2 != null
+                ? eip1559.$2!.toDouble() / 1e9
+                : null,
+            lastUpdated: DateTime.now(),
+          );
+          final hist = _history.putIfAbsent(network.symbol, () => []);
+          hist.add(gasPriceGwei);
+          if (hist.length > 60) hist.removeAt(0);
         }
       } finally {
         client.close();

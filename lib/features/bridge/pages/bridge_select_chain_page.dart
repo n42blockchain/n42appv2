@@ -194,6 +194,11 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                         chain.logoUri,
                         width: ScreenUtil().setWidth(48),
                         height: ScreenUtil().setWidth(48),
+                        // Decode at display width, not full source resolution.
+                        cacheWidth:
+                            (ScreenUtil().setWidth(48) *
+                                    MediaQuery.devicePixelRatioOf(context))
+                                .round(),
                         errorBuilder: (ctx, err, stack) =>
                             _buildChainInitial(context, chain),
                       )
