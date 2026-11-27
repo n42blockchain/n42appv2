@@ -15,15 +15,23 @@ bool historyIsOutgoing(Object record, TransactionHistoryScope scope) =>
       _ => throw ArgumentError('Unsupported transaction record'),
     };
 
-/// Quote every cell and neutralize spreadsheet formulas, including after spaces.
-String historyCsvCell(String value) {
+final _formulaLeadPattern = RegExp(r'^[=+@\-]');
+final _controlLeadPattern = RegExp(r'^[\t\r\n]');
+
+/// Prefix an apostrophe when a cell would be read as a spreadsheet formula,
+/// including after leading spaces.
+String csvNeutralizeFormula(String value) {
   final trimmed = value.trimLeft();
-  if (RegExp(r'^[=+@\-]').hasMatch(trimmed) ||
-      RegExp(r'^[\t\r\n]').hasMatch(value)) {
-    value = "'$value";
+  if (_formulaLeadPattern.hasMatch(trimmed) ||
+      _controlLeadPattern.hasMatch(value)) {
+    return "'$value";
   }
-  return '"${value.replaceAll('"', '""')}"';
+  return value;
 }
+
+/// Quote every cell and neutralize spreadsheet formulas.
+String historyCsvCell(String value) =>
+    '"${csvNeutralizeFormula(value).replaceAll('"', '""')}"';
 
 class TransactionHistoryCsv {
   static const header =

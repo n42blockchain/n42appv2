@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import '../services/batch_submission_journal.dart';
 
 import 'package:n42_wallet/features/wallet/api/batch_transfer_api.dart';
+import 'package:n42_wallet/features/wallet/data/transaction_history_csv.dart';
 import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 
 /// 批量转账状态
@@ -523,10 +524,12 @@ class BatchTransferProvider extends ChangeNotifier {
 
   /// RFC-4180 CSV 字段转义：含逗号、双引号、换行时加引号包裹
   static final _csvSpecialChars = RegExp(r'[,"\r\n]');
+  /// Formula-neutralized first, so memos and errors cannot inject spreadsheet formulas.
   static String _escapeCsvField(String field) {
-    if (_csvSpecialChars.hasMatch(field)) {
-      return '"${field.replaceAll('"', '""')}"';
+    final value = csvNeutralizeFormula(field);
+    if (_csvSpecialChars.hasMatch(value)) {
+      return '"${value.replaceAll('"', '""')}"';
     }
-    return field;
+    return value;
   }
 }
