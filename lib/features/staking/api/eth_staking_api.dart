@@ -207,68 +207,6 @@ class EthStakingApi {
     }
   }
 
-  /// 获取 stETH 到 ETH 的兑换率
-  Future<MessageModel> getStEthToEthRate() async {
-    try {
-      // 调用 getPooledEthByShares 方法
-      // 传入 1e18 (1 stETH) 获取对应的 ETH 数量
-      final rpc = _getRpc();
-      if (rpc == null) {
-        return MessageModel()
-          ..error = false
-          ..data = 1.0;
-      }
-
-      const selector = '0x7a28fb88'; // getPooledEthByShares
-      final oneStEth = BigInt.from(10)
-          .pow(18)
-          .toRadixString(16)
-          .padLeft(64, '0');
-
-      final response = await _ethCall(rpc, '$selector$oneStEth');
-
-      // 转换为浮点数比率，无数据时默认 1:1
-      final rate = (response['result'] != null)
-          ? _hexToBigInt(response['result'].toString()).toDouble() / 1e18
-          : 1.0;
-
-      return MessageModel()
-        ..error = false
-        ..data = rate;
-    } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = 1.0;
-    }
-  }
-
-  /// 获取 Lido 协议统计数据
-  Future<MessageModel> getLidoStats() async {
-    try {
-      final response = await BaseApi.requestEmptyH.get(
-        '$_lidoStatsApi/v1/protocol/steth/stats',
-        params: {},
-        header: _headers,
-      );
-
-      if (response is Map) {
-        return MessageModel()
-          ..error = false
-          ..data = {
-            'totalStaked': response['data']?['totalPooledEther'] ?? '0',
-            'totalStakers': response['data']?['uniqueHolders'] ?? 0,
-            'apr': response['data']?['apr'] ?? 4.0,
-          };
-      }
-
-      return MessageModel()
-        ..error = true
-        ..data = 'Failed to get stats';
-    } catch (e) {
-      return MessageModel.error()..data = e.toString();
-    }
-  }
-
   static BigInt _hexToBigInt(String hexStr) {
     final cleaned = hexStr.startsWith('0x') || hexStr.startsWith('0X')
         ? hexStr.substring(2)

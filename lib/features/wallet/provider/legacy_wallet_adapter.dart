@@ -122,18 +122,6 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
     );
   }
 
-  /// Refresh wallet list from Riverpod
-  Future<void> refreshFromRiverpod() async {
-    await _container.read(walletListProvider.notifier).refresh();
-  }
-
-  /// Sync current wallet data to Riverpod
-  /// Call this after wallet modifications in legacy code
-  Future<void> syncToRiverpod() async {
-    // Force refresh Riverpod wallet list
-    await _container.read(walletListProvider.notifier).refresh();
-  }
-
   @override
   void dispose() {
     _walletListSubscription.close();
@@ -141,20 +129,4 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
     _miningIndexSubscription.close();
     super.dispose();
   }
-}
-
-/// Extension to make it easier to use the adapter
-extension WalletActionProviderAdapterExtension
-    on LegacyWalletActionProviderAdapter {
-  /// Get Riverpod wallet list
-  AsyncValue<List<WalletInfoData>> get riverpodWalletList =>
-      _container.read(walletListProvider);
-
-  /// Get current wallet from Riverpod
-  WalletInfoData? get currentRiverpodWallet =>
-      _container.read(currentWalletProvider);
-
-  /// Get mining wallet from Riverpod
-  WalletInfoData? get miningRiverpodWallet =>
-      _container.read(miningWalletProvider);
 }

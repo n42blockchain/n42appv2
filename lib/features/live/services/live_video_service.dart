@@ -50,9 +50,6 @@ class LiveVideoService {
   /// 供 UI 监听会话变化的 [Listenable]（隐藏 n42_chat src 类型）。
   Listenable? get listenable => _service;
 
-  /// 是否已在会议中。
-  bool get isInMeeting => _service?.isInMeeting ?? false;
-
   /// 主播视频轨道（观众端渲染用）。优先按 [_broadcasterId] 精确匹配；仅当
   /// 匹配不到时（如房间创建事件尚未同步到本地）才退回"任意有画面的远端
   /// 参与者"这一宽松兜底，避免因锚点缺失导致完全无法显示画面。

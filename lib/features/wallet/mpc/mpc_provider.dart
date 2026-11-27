@@ -114,9 +114,6 @@ class MpcProviderRegistry {
   MpcProvider? get defaultProvider =>
       _providers.isNotEmpty ? _providers.values.first : null;
 
-  /// 所有已注册的 provider ID
-  List<String> get availableProviders => _providers.keys.toList();
-
   /// 释放所有 provider
   void disposeAll() {
     for (final p in _providers.values) {

@@ -23,16 +23,6 @@ class MiningCacheUtils {
     return tempDir?.path;
   }
 
-  /// 获取国家code
-  /// CN(中国)
-  static String? getCountryCode() {
-    final List<Locale> systemLocales =
-        WidgetsBinding.instance.platformDispatcher.locales;
-    String? isoCountryCode = systemLocales.first.countryCode;
-    AppLogger.d('MiningCache', 'isoCountryCode: $isoCountryCode');
-    return isoCountryCode;
-  }
-
   /// 从节点配置获取指定 key 的值（ipAddress / socket）
   static Future<String> _getNodeValue(String key) async {
     Map? nodeMap = await SPUtil().getCurrNodeAddress();
