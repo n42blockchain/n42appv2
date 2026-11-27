@@ -279,56 +279,12 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         ? null
         : formatAaGasCost(estimatedGas, maxFeePerGas) ?? '-';
 
-    return Container(
-      padding: EdgeInsets.all(AppSpacing.space4),
-      decoration: BoxDecoration(
-        color: isSponsored
-            ? AppColorTokens.of(context).success.withAlpha(15)
-            : _itemBg,
-        borderRadius: AppRadius.brMd,
-        border: isSponsored
-            ? Border.all(
-                color: AppColorTokens.of(context).success.withAlpha(30),
-              )
-            : null,
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.local_gas_station,
-                      size: ScreenUtil().setWidth(22),
-                      color: _subText,
-                    ),
-                    SizedBox(width: AppSpacing.space2),
-                    Flexible(
-                      child: Text(
-                        S.of(context).g_key_aa_estimated_gas,
-                        style: AppTypography.caption.copyWith(color: _subText),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              AAGasEstimateValue(
-                isEstimating: isEstimating,
-                isSponsored: isSponsored,
-                cost: cost,
-              ),
-            ],
-          ),
-          if (isSponsored && cost != null) ...[
-            SizedBox(height: AppSpacing.space2),
-            GasSponsorshipBadge(isSponsored: true, savedAmount: cost),
-          ],
-        ],
-      ),
+    return AAGasEstimateCard(
+      title: S.of(context).g_key_aa_estimated_gas,
+      icon: Icons.local_gas_station,
+      isEstimating: isEstimating,
+      isSponsored: isSponsored,
+      cost: cost,
     );
   }
 
