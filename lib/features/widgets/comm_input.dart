@@ -95,8 +95,7 @@ class _CommInputState extends State<CommInput> {
             controller: widget.controller,
             obscureText: obscure,
             keyboardType:
-                (widget.keyboardType != null &&
-                    widget.keyboardType == TextInputType.number)
+                widget.keyboardType == TextInputType.number
                 ? const TextInputType.numberWithOptions(decimal: true)
                 : TextInputType.text,
             autofocus: widget.autofocus,

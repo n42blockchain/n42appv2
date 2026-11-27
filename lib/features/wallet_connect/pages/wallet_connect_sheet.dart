@@ -78,7 +78,7 @@ class _WalletConnectSheetState extends ConsumerState<WalletConnectSheet>
     // the sheet so pageOpen becomes false. Subsequent transaction requests will
     // then be handled by showAlertWidget() instead of rendering inside this sheet.
     ref.listen<WalletConnectProvider>(wcpBridgeProvider, (prev, next) {
-      if (!widget.uri.isNotEmpty) return;
+      if (widget.uri.isEmpty) return;
       final prevState = prev?.walletConnectState;
       final nextState = next.walletConnectState;
       if (prevState != WalletConnectState.connect &&

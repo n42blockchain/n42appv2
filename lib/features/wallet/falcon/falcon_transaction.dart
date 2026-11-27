@@ -46,47 +46,31 @@ final class FalconTransaction {
   final String recipient;
   final Uint8List _publicKey;
   Uint8List get publicKey => Uint8List.fromList(_publicKey);
-  Uint8List get signingPreimage => Uint8List.fromList([
-    5,
-    ...encode([
-      chainId,
-      nonce,
-      tipCap,
-      feeCap,
-      gas,
-      hexToBytes(recipient),
-      value,
-      Uint8List(0),
-      <Object>[],
-      0,
-      0,
-      _publicKey,
-    ]),
-  ]);
+  /// RLP fields shared by the signing preimage and the signed wire form.
+  List<Object> get _fields => [
+    chainId,
+    nonce,
+    tipCap,
+    feeCap,
+    gas,
+    hexToBytes(recipient),
+    value,
+    Uint8List(0),
+    <Object>[],
+    0,
+    0,
+    _publicKey,
+  ];
+
+  Uint8List get signingPreimage =>
+      Uint8List.fromList([5, ...encode(_fields)]);
 
   /// Canonical N42 0x05 v1 wire form, admitted only after network activation.
   Uint8List encodeSigned(Uint8List signature) {
     if (signature.length != 666) {
       throw ArgumentError('Expected padded Falcon-512 signature');
     }
-    return Uint8List.fromList([
-      5,
-      ...encode([
-        chainId,
-        nonce,
-        tipCap,
-        feeCap,
-        gas,
-        hexToBytes(recipient),
-        value,
-        Uint8List(0),
-        <Object>[],
-        0,
-        0,
-        _publicKey,
-        signature,
-      ]),
-    ]);
+    return Uint8List.fromList([5, ...encode([..._fields, signature])]);
   }
 
   Uint8List get digest => keccak256(signingPreimage);

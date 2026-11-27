@@ -34,6 +34,29 @@ class WalletSigner {
     return SigningResult(rawTx: rawTx);
   }
 
+  /// Runs a raw-transaction signer, requiring a non-empty result and mapping
+  /// platform errors to [TransactionException].
+  Future<SigningResult> _signRaw({
+    required String coin,
+    required String operation,
+    required String failure,
+    required Future<String> Function() sign,
+  }) async {
+    try {
+      return _requireRawTransaction(
+        rawTx: await sign(),
+        coin: coin,
+        operation: operation,
+      );
+    } on PlatformException catch (e) {
+      throw TransactionException(
+        message: '$failure: ${e.message}',
+        code: 'SIGNING_FAILED',
+        originalError: e,
+      );
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Transaction signing
   // ---------------------------------------------------------------------------
@@ -46,28 +69,20 @@ class WalletSigner {
     String mnemonic = '',
     String privateKey = '',
     String passphrase = '',
-  }) async {
-    try {
-      final rawTx = await _trustdart.signTransaction(
+  }) {
+    return _signRaw(
+      coin: coin,
+      operation: 'Transaction signing',
+      failure: 'Transaction signing failed for $coin',
+      sign: () => _trustdart.signTransaction(
         coin,
         path,
         txData,
         mnemonic: mnemonic,
         pk: privateKey,
         passphrase: passphrase,
-      );
-      return _requireRawTransaction(
-        rawTx: rawTx,
-        coin: coin,
-        operation: 'Transaction signing',
-      );
-    } on PlatformException catch (e) {
-      throw TransactionException(
-        message: 'Transaction signing failed for $coin: ${e.message}',
-        code: 'SIGNING_FAILED',
-        originalError: e,
-      );
-    }
+      ),
+    );
   }
 
   /// Sign a transaction with gas estimation variant (_g suffix).
@@ -78,28 +93,20 @@ class WalletSigner {
     String mnemonic = '',
     String privateKey = '',
     String passphrase = '',
-  }) async {
-    try {
-      final rawTx = await _trustdart.signTransactionG(
+  }) {
+    return _signRaw(
+      coin: coin,
+      operation: 'Transaction signing (gas)',
+      failure: 'Transaction signing (gas) failed for $coin',
+      sign: () => _trustdart.signTransactionG(
         coin,
         path,
         txData,
         mnemonic: mnemonic,
         pk: privateKey,
         passphrase: passphrase,
-      );
-      return _requireRawTransaction(
-        rawTx: rawTx,
-        coin: coin,
-        operation: 'Transaction signing (gas)',
-      );
-    } on PlatformException catch (e) {
-      throw TransactionException(
-        message: 'Transaction signing (gas) failed for $coin: ${e.message}',
-        code: 'SIGNING_FAILED',
-        originalError: e,
-      );
-    }
+      ),
+    );
   }
 
   /// Sign a BTC P2WSH transaction.
@@ -109,28 +116,20 @@ class WalletSigner {
     String mnemonic = '',
     String privateKey = '',
     String passphrase = '',
-  }) async {
-    try {
-      final rawTx = await _trustdart.signTransactionBtcP2wsh(
+  }) {
+    return _signRaw(
+      coin: 'BTC',
+      operation: 'BTC P2WSH signing',
+      failure: 'BTC P2WSH signing failed',
+      sign: () => _trustdart.signTransactionBtcP2wsh(
         'BTC',
         path,
         txData,
         mnemonic: mnemonic,
         pk: privateKey,
         passphrase: passphrase,
-      );
-      return _requireRawTransaction(
-        rawTx: rawTx,
-        coin: 'BTC',
-        operation: 'BTC P2WSH signing',
-      );
-    } on PlatformException catch (e) {
-      throw TransactionException(
-        message: 'BTC P2WSH signing failed: ${e.message}',
-        code: 'SIGNING_FAILED',
-        originalError: e,
-      );
-    }
+      ),
+    );
   }
 
   /// Sign a transaction returning byte array result (e.g. Solana, Aptos).

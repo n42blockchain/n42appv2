@@ -16,5 +16,5 @@ abstract final class AppSpacing {
 
   /// 标准卡片内距。
   static EdgeInsets get cardInset =>
-      EdgeInsets.symmetric(horizontal: space6, vertical: space6);
+      EdgeInsets.all(space6);
 }
