@@ -13,12 +13,15 @@ class ZenApi {
 
   static MessageModel _err(dynamic e) => MessageModel.error()..data = e;
 
-  /// 获取地址信息（余额、txid 列表等）
-  Future<MessageModel> getAddress(String address, {bool isTest = false}) async {
+  /// GET 一个 JSON 端点，成功返回 data，失败返回 error 消息
+  static Future<MessageModel> _getJson(
+    String url, {
+    Map<String, dynamic> params = const {},
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
-        '${_base(isTest)}addr/$address',
-        params: {},
+        url,
+        params: params,
         defaultReturn: false,
         header: {'Content-Type': 'application/json'},
       );
@@ -28,20 +31,13 @@ class ZenApi {
     }
   }
 
+  /// 获取地址信息（余额、txid 列表等）
+  Future<MessageModel> getAddress(String address, {bool isTest = false}) =>
+      _getJson('${_base(isTest)}addr/$address');
+
   /// 获取地址 UTXO 列表（构造交易所需）
-  Future<MessageModel> getUtxos(String address, {bool isTest = false}) async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_base(isTest)}addr/$address/utxo',
-        params: {},
-        defaultReturn: false,
-        header: {'Content-Type': 'application/json'},
-      );
-      return MessageModel()..data = data;
-    } catch (e) {
-      return _err(e);
-    }
-  }
+  Future<MessageModel> getUtxos(String address, {bool isTest = false}) =>
+      _getJson('${_base(isTest)}addr/$address/utxo');
 
   /// 广播已签名交易（raw hex）
   Future<MessageModel> sendTransaction(
@@ -67,53 +63,17 @@ class ZenApi {
   }
 
   /// 查询交易详情
-  Future<MessageModel> getTransaction(
-    String txId, {
-    bool isTest = false,
-  }) async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_base(isTest)}tx/$txId',
-        params: {},
-        defaultReturn: false,
-        header: {'Content-Type': 'application/json'},
-      );
-      return MessageModel()..data = data;
-    } catch (e) {
-      return _err(e);
-    }
-  }
+  Future<MessageModel> getTransaction(String txId, {bool isTest = false}) =>
+      _getJson('${_base(isTest)}tx/$txId');
 
   /// 估算手续费（返回 ZEN/KB，nbBlocks=目标确认块数）
-  Future<MessageModel> estimateFee({
-    int nbBlocks = 2,
-    bool isTest = false,
-  }) async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
+  Future<MessageModel> estimateFee({int nbBlocks = 2, bool isTest = false}) =>
+      _getJson(
         '${_base(isTest)}utils/estimatefee',
         params: {'nbBlocks': nbBlocks},
-        defaultReturn: false,
-        header: {'Content-Type': 'application/json'},
       );
-      return MessageModel()..data = data;
-    } catch (e) {
-      return _err(e);
-    }
-  }
 
   /// 查询区块信息（by hash）
-  Future<MessageModel> getBlock(String blockHash, {bool isTest = false}) async {
-    try {
-      final data = await BaseApi.requestEmptyH.get(
-        '${_base(isTest)}block/$blockHash',
-        params: {},
-        defaultReturn: false,
-        header: {'Content-Type': 'application/json'},
-      );
-      return MessageModel()..data = data;
-    } catch (e) {
-      return _err(e);
-    }
-  }
+  Future<MessageModel> getBlock(String blockHash, {bool isTest = false}) =>
+      _getJson('${_base(isTest)}block/$blockHash');
 }

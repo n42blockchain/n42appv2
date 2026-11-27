@@ -27,8 +27,6 @@ class SimpleHashNftApi {
     'BTC': 'bitcoin', // Bitcoin Ordinals
   };
 
-  Map<String, dynamic> get _authHeader => const {};
-
   ({String chain, String contractAddress, String tokenId})? _parseNftId(
     String nftId,
   ) {
@@ -71,7 +69,6 @@ class SimpleHashNftApi {
         final raw = await BaseApi.requestEmptyH.get<dynamic>(
           '$_base/by_owner',
           params: params,
-          header: _authHeader,
         );
 
         if (raw == null || raw is! Map) break;
@@ -112,7 +109,6 @@ class SimpleHashNftApi {
           'contract_address': parsed.contractAddress,
           'token_id': parsed.tokenId,
         },
-        header: _authHeader,
       );
       if (raw == null || raw is! Map<String, dynamic>) return null;
       return NftModel.fromSimpleHash(raw);
